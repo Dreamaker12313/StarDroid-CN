@@ -10,7 +10,7 @@ StarDroid adapts the OpenBW engine for Android devices. Play campaigns, set up c
 
 Put together by **ToadWarrior**.
 
-[Download the APK](https://github.com/kinopiowarrior/StarDroid/raw/refs/heads/main/distribution/StarDroid-1.0.apk) · [Download source](https://github.com/kinopiowarrior/StarDroid/archive/refs/heads/main.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
+[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0/StarDroid-1.0.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0/StarDroid-1.0-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
 
 ## Features
 
@@ -27,7 +27,7 @@ StarDroid is an unofficial fan project. **Game data is not included.** You need 
 
 ## Install
 
-1. Download **[StarDroid-1.0.apk](https://github.com/kinopiowarrior/StarDroid/raw/refs/heads/main/distribution/StarDroid-1.0.apk)** on your Android device. The source-code ZIP is for development, not installation.
+1. Download **[StarDroid-1.0.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0/StarDroid-1.0.apk)** on your Android device. The source-code ZIP is for development, not installation.
 2. Open the APK on your Android device. If Android asks, allow the browser or file manager you are using to install apps from that source.
 3. Launch **StarDroid**. The import screen appears automatically when required files are missing.
 4. Tap **Import game files**, choose the files below, and let importing finish. You can select multiple files if your file picker supports it.
@@ -58,7 +58,7 @@ This release targets classic game data. A modern launcher installation or Remast
 - Enough free space for imported archives and campaign/media content; these are much larger than the APK.
 - Bluetooth for local multiplayer. Wi-Fi Direct is optional and depends on Android version and hardware support.
 
-The [download checksum](distribution/SHA256SUMS.txt) records the SHA-256 of the published APK.
+The [download checksums](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0/SHA256SUMS.txt) records the SHA-256 of the published APK.
 
 ## Quick start
 
