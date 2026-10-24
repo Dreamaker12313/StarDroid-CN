@@ -1,0 +1,10 @@
+{
+  "version": "0.26",
+  "passed": true,
+  "checks": [
+    "NATIVE_CONTROLS_OK Lair, disabled technology, Egg target, Chrysalis, Extractor placement/HP/gas, original build thump, silent beacon transfer, audible victory (95990 nonzero samples)",
+    "NATIVE_TOUCH_OK targeting, resize, cancellation and building after zoom",
+    "NATIVE_MEDIA_OK 320x308 / 2082 frames / 479581 audible samples"
+  ],
+  "cleanEngineReconstructionMatches": true
+}

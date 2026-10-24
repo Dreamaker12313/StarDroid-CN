@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "Mission 1 export under 48 MB heap; every imported/served entry matches original bundle",
+    "Mission 2 export under 48 MB heap; every imported/served entry matches original bundle",
+    "Mission 3 export under 48 MB heap; every imported/served entry matches original bundle",
+    "Wrong mission rejected without replacing the installed Mission 1 bundle",
+    "Mixed-mission manifest rejected without replacing the installed Mission 2 bundle"
+  ],
+  "archiveBytes": 601389682,
+  "mission1": {
+    "entries": 9,
+    "bytes": 1177663,
+    "missing": [
+      "campaign\\terran\\terran01\\staredit\\wav\\t1m00uma.wav",
+      "campaign\\terran\\terran01\\staredit\\wav\\t1m40ura.wav",
+      "campaign\\terran\\terran01\\staredit\\wav\\tm60tgo.wav"
+    ]
+  },
+  "mission2": {
+    "entries": 22,
+    "bytes": 1962730,
+    "missing": [
+      "campaign\\terran\\terran02\\staredit\\wav\\tmawht02.wav",
+      "campaign\\terran\\terran02\\staredit\\wav\\tmawht03.wav"
+    ]
+  },
+  "mission3": {
+    "entries": 17,
+    "bytes": 2162701,
+    "missing": []
+  }
+}

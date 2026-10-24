@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "descriptionFixtures": 115,
+  "output": "PASS 132110 checks; 2070 tooltip layouts across three widths and text sizes, two command sizes; Hive, long descriptions/requirements and responsive hover/hold/slide\n",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "tests/run_tooltip56.py": "9d5c21a77ea3a6f93a38ee7dcb1657eb62067f32308ee095976198c3c618715f"
+  }
+}

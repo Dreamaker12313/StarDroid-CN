@@ -1,0 +1,4137 @@
+{
+  "version": "0.37",
+  "passed": true,
+  "scope": "Static original CHK references, trigger type coverage and mission catalog routing",
+  "originalMaps": true,
+  "originalCoreAssets": false,
+  "fullPlaythrough": false,
+  "mapCount": 64,
+  "triggerCount": 1869,
+  "conditionRecords": 2758,
+  "actionRecords": 9561,
+  "issues": [],
+  "knownPresentationGaps": [
+    {
+      "mission": "expterran02",
+      "actions": [
+        {
+          "trigger": 6,
+          "action": 21,
+          "title": "Battlecruisers Acquired"
+        },
+        {
+          "trigger": 61,
+          "action": 17,
+          "title": "Battlecruisers Acquired"
+        }
+      ]
+    },
+    {
+      "mission": "expterran03",
+      "actions": [
+        {
+          "trigger": 30,
+          "action": 36,
+          "title": "Zerg Hives Remaining"
+        }
+      ]
+    },
+    {
+      "mission": "expzerg01",
+      "actions": [
+        {
+          "trigger": 63,
+          "action": 37,
+          "title": "Hives to Rescue"
+        }
+      ]
+    },
+    {
+      "mission": "expzerg03",
+      "actions": [
+        {
+          "trigger": 17,
+          "action": 19,
+          "title": "Minerals Mined"
+        }
+      ]
+    },
+    {
+      "mission": "expzerg06",
+      "actions": [
+        {
+          "trigger": 34,
+          "action": 21,
+          "title": "UED Scientists"
+        }
+      ]
+    },
+    {
+      "mission": "terran01",
+      "actions": [
+        {
+          "trigger": 5,
+          "action": 17,
+          "title": "of 10 Marines"
+        }
+      ]
+    },
+    {
+      "mission": "terrantutorial",
+      "actions": [
+        {
+          "trigger": 7,
+          "action": 19,
+          "title": "of 100 Gas"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "This static audit does not simulate combat or pathfinding.",
+    "This static audit inventories script names; real-data simulation is reported separately.",
+    "Leaderboard actions are skipped; corresponding objective triggers still run."
+  ],
+  "maps": [
+    {
+      "mission": "expbonus",
+      "title": "Dark Origin",
+      "sha256": "6dd16b341f1dd2fabbbc28ed8a06d1b22df6e5f225e0b2baa9597da3c24a3c99",
+      "triggers": 36,
+      "conditionRecords": 39,
+      "actionRecords": 189,
+      "conditions": {
+        "22": 12,
+        "2": 5,
+        "11": 4,
+        "3": 18
+      },
+      "actions": {
+        "12": 1,
+        "47": 36,
+        "41": 3,
+        "4": 13,
+        "8": 5,
+        "9": 1,
+        "2": 1,
+        "30": 8,
+        "7": 30,
+        "31": 7,
+        "25": 4,
+        "10": 4,
+        "5": 4,
+        "6": 3,
+        "13": 4,
+        "1": 1,
+        "16": 11,
+        "44": 8,
+        "46": 17,
+        "23": 3,
+        "11": 14,
+        "26": 1,
+        "50": 1,
+        "3": 2,
+        "24": 2,
+        "15": 2,
+        "57": 2,
+        "38": 1
+      },
+      "victoryTriggers": [
+        9
+      ],
+      "defeatTriggers": [
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "BONUS SCENARIO : \"THE DARK ORIGIN\"\r\n- Investigate the energy signature.\r\n- Zeratul must survive."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 1,
+          "target": "expzerg10"
+        },
+        {
+          "trigger": 2,
+          "target": "expbonus"
+        },
+        {
+          "trigger": 9,
+          "target": "expzerg10"
+        }
+      ],
+      "aiScripts": {
+        "EnBk": 3,
+        "ReHe": 8,
+        "Rscu": 1,
+        "+Vi2": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss01",
+      "title": "Escape from Aiur",
+      "sha256": "ef8153dbfc7d9216207aaac7cda7a2950980cdb35a9c72612a67dc7b76a09e67",
+      "triggers": 117,
+      "conditionRecords": 183,
+      "actionRecords": 467,
+      "conditions": {
+        "22": 9,
+        "3": 122,
+        "11": 48,
+        "21": 3,
+        "2": 1
+      },
+      "actions": {
+        "16": 2,
+        "26": 2,
+        "47": 114,
+        "13": 42,
+        "44": 30,
+        "4": 56,
+        "3": 37,
+        "12": 1,
+        "11": 30,
+        "25": 20,
+        "8": 45,
+        "30": 8,
+        "7": 6,
+        "31": 8,
+        "10": 2,
+        "28": 2,
+        "24": 1,
+        "5": 2,
+        "9": 1,
+        "2": 1,
+        "46": 39,
+        "43": 7,
+        "23": 4,
+        "49": 1,
+        "51": 1,
+        "48": 1,
+        "6": 1,
+        "57": 2,
+        "1": 1
+      },
+      "victoryTriggers": [
+        103
+      ],
+      "defeatTriggers": [
+        21
+      ],
+      "objectives": [
+        {
+          "trigger": 4,
+          "text": "PROTOSS 1: \"ESCAPE FROM AIUR\"\r\n- Bring Zeratul to the warp gate.\r\n- Zeratul must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "PB1A": 1,
+        "PB1B": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss02",
+      "title": "Dunes of Shakuras",
+      "sha256": "07725cd6a26052101ecfef735105c204309a40518de1a232736aefb268f01011",
+      "triggers": 30,
+      "conditionRecords": 55,
+      "actionRecords": 157,
+      "conditions": {
+        "22": 3,
+        "2": 7,
+        "11": 31,
+        "3": 12,
+        "21": 2
+      },
+      "actions": {
+        "47": 30,
+        "26": 3,
+        "12": 2,
+        "57": 3,
+        "13": 22,
+        "25": 5,
+        "44": 4,
+        "10": 2,
+        "5": 2,
+        "11": 33,
+        "7": 15,
+        "6": 2,
+        "1": 1,
+        "2": 2,
+        "15": 3,
+        "16": 1,
+        "24": 1,
+        "4": 2,
+        "30": 5,
+        "31": 5,
+        "39": 4,
+        "38": 1,
+        "28": 1,
+        "8": 1,
+        "9": 1,
+        "27": 1,
+        "3": 3,
+        "48": 1,
+        "43": 1
+      },
+      "victoryTriggers": [
+        2
+      ],
+      "defeatTriggers": [
+        4,
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "PROTOSS 2: \"DUNES OF SHAKURAS\"\r\n- Establish a base and find the Dark Templar."
+        },
+        {
+          "trigger": 20,
+          "text": "PROTOSS 2: \"DUNES OF SHAKURAS\"\r\n- Destroy the Zerg base."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "+Vi1": 1,
+        "PB2A": 1,
+        "SuiR": 2
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss03",
+      "title": "Legacy of the Xel'Naga",
+      "sha256": "d4d49e69460b587bc55af2852409366ccff1ed433a101535ac391b288f74bbf8",
+      "triggers": 41,
+      "conditionRecords": 52,
+      "actionRecords": 173,
+      "conditions": {
+        "22": 9,
+        "2": 3,
+        "11": 17,
+        "12": 2,
+        "3": 21
+      },
+      "actions": {
+        "12": 1,
+        "26": 4,
+        "47": 41,
+        "2": 1,
+        "16": 7,
+        "13": 11,
+        "30": 3,
+        "7": 11,
+        "31": 3,
+        "57": 7,
+        "39": 4,
+        "23": 2,
+        "44": 7,
+        "3": 4,
+        "11": 10,
+        "46": 16,
+        "8": 7,
+        "15": 5,
+        "4": 5,
+        "25": 10,
+        "48": 7,
+        "10": 4,
+        "24": 1,
+        "5": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        36
+      ],
+      "defeatTriggers": [
+        1
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "PROTOSS 3: \"LEGACY OF THE XEL'NAGA\"\r\n- Destroy the Zerg cerebrates."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "PB3C": 1,
+        "PB3A": 1,
+        "+Vi2": 2,
+        "PB3F": 4,
+        "-Vi2": 2,
+        "TB7B": 1,
+        "+Vi3": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss04",
+      "title": "The Quest for Uraj",
+      "sha256": "f495e751fb3975fa7a701f5a250d554dadee5776a7a2d35c038980883293c863",
+      "triggers": 29,
+      "conditionRecords": 35,
+      "actionRecords": 137,
+      "conditions": {
+        "22": 9,
+        "2": 7,
+        "11": 9,
+        "3": 9,
+        "15": 1
+      },
+      "actions": {
+        "12": 1,
+        "47": 28,
+        "15": 1,
+        "4": 16,
+        "30": 3,
+        "7": 6,
+        "31": 3,
+        "8": 13,
+        "46": 7,
+        "10": 1,
+        "26": 4,
+        "25": 1,
+        "24": 1,
+        "3": 2,
+        "13": 11,
+        "11": 4,
+        "44": 8,
+        "16": 20,
+        "5": 2,
+        "9": 1,
+        "2": 2,
+        "1": 1,
+        "38": 1
+      },
+      "victoryTriggers": [
+        24
+      ],
+      "defeatTriggers": [
+        19,
+        22
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "PROTOSS 4:\"THE QUEST FOR URAJ\"\r\n- Bring Kerrigan to the Uraj crystal.\r\n- Kerrigan must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "+Vi2": 1,
+        "PB4A": 1,
+        "PB4B": 1,
+        "PB4C": 1,
+        "EnBk": 14,
+        "Enmy": 1,
+        "TARE": 1,
+        "TB7A": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss05",
+      "title": "The Battle of Braxis",
+      "sha256": "b32673a2c6b5aa4479202df8ddc408c2cca29cca094b77e357fb1f930103b963",
+      "triggers": 102,
+      "conditionRecords": 202,
+      "actionRecords": 475,
+      "conditions": {
+        "22": 7,
+        "2": 5,
+        "11": 98,
+        "3": 88,
+        "21": 4
+      },
+      "actions": {
+        "47": 102,
+        "12": 1,
+        "15": 1,
+        "4": 2,
+        "5": 1,
+        "8": 2,
+        "9": 1,
+        "2": 2,
+        "1": 1,
+        "16": 24,
+        "13": 92,
+        "48": 58,
+        "44": 94,
+        "28": 62,
+        "27": 5,
+        "30": 4,
+        "7": 5,
+        "31": 4,
+        "39": 4,
+        "11": 7,
+        "3": 1,
+        "57": 2
+      },
+      "victoryTriggers": [
+        3
+      ],
+      "defeatTriggers": [
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "PROTOSS 5: \"THE BATTLE OF BRAXIS\"\r\n- Destroy all power generators to \r\n  pierce the UED blockade.\r\n- Artanis must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "+Vi3": 1,
+        "EnBk": 24
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss06",
+      "title": "Return to Char",
+      "sha256": "4eb75410295fe4ac68a4c45e0179a91afb72d0078bf98a808461a7c54a62f611",
+      "triggers": 24,
+      "conditionRecords": 39,
+      "actionRecords": 102,
+      "conditions": {
+        "22": 6,
+        "12": 1,
+        "2": 7,
+        "11": 12,
+        "3": 13
+      },
+      "actions": {
+        "47": 24,
+        "26": 4,
+        "12": 1,
+        "44": 5,
+        "10": 2,
+        "48": 1,
+        "7": 3,
+        "24": 1,
+        "16": 5,
+        "2": 5,
+        "13": 13,
+        "39": 2,
+        "23": 1,
+        "11": 4,
+        "25": 9,
+        "3": 2,
+        "57": 5,
+        "46": 6,
+        "8": 1,
+        "43": 1,
+        "30": 2,
+        "31": 2,
+        "1": 2,
+        "15": 1
+      },
+      "victoryTriggers": [
+        15,
+        16
+      ],
+      "defeatTriggers": [
+        4
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "PROTOSS 6: \"RETURN TO CHAR\"\r\n- Retrieve the Khalis crystal with a\r\n  probe or drone.\r\n              - OR -\r\n- Do enough damage to the Overmind\r\n  to send it into remission."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "PB6A": 1,
+        "PB6B": 1,
+        "PB6C": 1,
+        "PB6D": 1,
+        "PB6E": 1,
+        "+Vi0": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss07",
+      "title": "The Insurgent",
+      "sha256": "44b57433f843a111d02e565fb8976a2396a228bf08ef058c5c0a1a9c6d5ef274",
+      "triggers": 29,
+      "conditionRecords": 43,
+      "actionRecords": 229,
+      "conditions": {
+        "22": 5,
+        "2": 2,
+        "11": 20,
+        "3": 15,
+        "21": 1
+      },
+      "actions": {
+        "47": 29,
+        "26": 3,
+        "16": 3,
+        "12": 1,
+        "4": 28,
+        "30": 3,
+        "7": 17,
+        "31": 3,
+        "13": 20,
+        "15": 3,
+        "57": 5,
+        "2": 1,
+        "44": 6,
+        "25": 9,
+        "11": 32,
+        "23": 24,
+        "24": 4,
+        "48": 2,
+        "10": 1,
+        "46": 19,
+        "8": 8,
+        "3": 5,
+        "1": 1,
+        "27": 1,
+        "22": 1
+      },
+      "victoryTriggers": [
+        24
+      ],
+      "defeatTriggers": [
+        3
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "PROTOSS 7: \"THE INSURGENT\"\r\n- Kill the traitor Aldaris."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "PB7A": 1,
+        "PB7B": 1,
+        "PB7C": 1,
+        "+Vi7": 1,
+        "-Vi7": 1,
+        "+Vi2": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expprotoss08",
+      "title": "Countdown",
+      "sha256": "600dbf632ff6a1b2987e482912312f29189cde3a3c3a599b13c2c6d4b56e5acb",
+      "triggers": 20,
+      "conditionRecords": 34,
+      "actionRecords": 144,
+      "conditions": {
+        "22": 4,
+        "2": 2,
+        "11": 18,
+        "15": 2,
+        "3": 3,
+        "1": 3,
+        "4": 2
+      },
+      "actions": {
+        "12": 2,
+        "26": 7,
+        "30": 5,
+        "7": 6,
+        "31": 5,
+        "47": 20,
+        "16": 12,
+        "13": 13,
+        "2": 4,
+        "4": 11,
+        "5": 4,
+        "8": 4,
+        "9": 4,
+        "44": 2,
+        "24": 2,
+        "10": 1,
+        "25": 2,
+        "6": 1,
+        "14": 1,
+        "48": 1,
+        "43": 1,
+        "46": 33,
+        "1": 1,
+        "3": 1,
+        "57": 1
+      },
+      "victoryTriggers": [
+        11
+      ],
+      "defeatTriggers": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "PROTOSS 8: \"COUNTDOWN\"\r\n- Bring Artanis and Zeratul to the Temple.\r\n- Protect the Temple from the Zerg.\r\n- Artanis and Zeratul must survive."
+        },
+        {
+          "trigger": 10,
+          "text": "PROTOSS 8: \"COUNTDOWN\"\r\n- Save the Temple from being destroyed."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "PB8A": 1,
+        "PB8B": 1,
+        "PB8C": 1,
+        "PB8D": 1,
+        "PB5C": 1,
+        "PB8E": 1,
+        "PB8F": 1,
+        "PB5A": 1,
+        "Enmy": 2,
+        "PB5B": 1,
+        "HaHe": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expterran01",
+      "title": "First Strike",
+      "sha256": "48b3dee553ae2e0b2747b9cd4b85f5a4dfc982dc89bb523fad015acdc4c7b5ab",
+      "triggers": 12,
+      "conditionRecords": 13,
+      "actionRecords": 73,
+      "conditions": {
+        "22": 3,
+        "12": 1,
+        "3": 1,
+        "11": 4,
+        "2": 4
+      },
+      "actions": {
+        "12": 2,
+        "26": 2,
+        "47": 12,
+        "30": 1,
+        "7": 9,
+        "31": 1,
+        "16": 12,
+        "44": 9,
+        "10": 1,
+        "5": 3,
+        "4": 6,
+        "6": 1,
+        "13": 3,
+        "48": 1,
+        "43": 1,
+        "24": 2,
+        "8": 2,
+        "9": 2,
+        "2": 2,
+        "1": 1
+      },
+      "victoryTriggers": [
+        11
+      ],
+      "defeatTriggers": [
+        9,
+        10
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 1: \"FIRST STRIKE\"\r\n- Destroy the enemy command center."
+        },
+        {
+          "trigger": 7,
+          "text": "TERRAN 1: \"FIRST STRIKE\"\r\n- Destroy the enemy command center.\r\n- Duran must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "TB1A": 1,
+        "EnBk": 11
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expterran02",
+      "title": "The Dylarian Shipyards",
+      "sha256": "dda5b662bd21a7335f076a56a65690b35e441a1a0fe6aebc84676f0951934108",
+      "triggers": 89,
+      "conditionRecords": 184,
+      "actionRecords": 674,
+      "conditions": {
+        "11": 102,
+        "2": 13,
+        "21": 10,
+        "22": 7,
+        "3": 45,
+        "15": 4,
+        "1": 1,
+        "23": 2
+      },
+      "actions": {
+        "47": 89,
+        "1": 1,
+        "2": 3,
+        "5": 2,
+        "9": 1,
+        "8": 19,
+        "4": 17,
+        "12": 1,
+        "15": 3,
+        "32": 1,
+        "21": 1,
+        "13": 95,
+        "38": 36,
+        "25": 42,
+        "48": 29,
+        "27": 40,
+        "46": 69,
+        "28": 23,
+        "7": 36,
+        "30": 10,
+        "31": 10,
+        "44": 52,
+        "11": 47,
+        "24": 13,
+        "10": 6,
+        "45": 4,
+        "26": 1,
+        "16": 2,
+        "3": 9,
+        "43": 4,
+        "17": 1,
+        "14": 2,
+        "39": 4,
+        "6": 1
+      },
+      "victoryTriggers": [
+        0
+      ],
+      "defeatTriggers": [
+        1,
+        2,
+        3
+      ],
+      "objectives": [
+        {
+          "trigger": 4,
+          "text": "TERRAN 2: \"THE DYLARIAN SHIPYARDS\"\r\n- Steal battlecruisers.\r\n- Defeat the Dominion strike force."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "+Vi2": 1,
+        "-Vi2": 1,
+        "TB2B": 1,
+        "EnBk": 1,
+        "SuiR": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": [
+        {
+          "trigger": 6,
+          "action": 21,
+          "title": "Battlecruisers Acquired"
+        },
+        {
+          "trigger": 61,
+          "action": 17,
+          "title": "Battlecruisers Acquired"
+        }
+      ]
+    },
+    {
+      "mission": "expterran03",
+      "title": "Ruins of Tarsonis",
+      "sha256": "76516a763fe806b2a4e2c6814c4fcd3e05f51a21c8aa8817837a74b4fcf9ff38",
+      "triggers": 37,
+      "conditionRecords": 50,
+      "actionRecords": 189,
+      "conditions": {
+        "22": 11,
+        "12": 2,
+        "2": 11,
+        "11": 8,
+        "5": 1,
+        "3": 17
+      },
+      "actions": {
+        "12": 2,
+        "47": 30,
+        "30": 5,
+        "8": 10,
+        "28": 4,
+        "44": 6,
+        "7": 17,
+        "4": 23,
+        "24": 4,
+        "31": 4,
+        "9": 6,
+        "13": 7,
+        "26": 6,
+        "2": 3,
+        "5": 1,
+        "16": 7,
+        "3": 10,
+        "48": 8,
+        "46": 14,
+        "15": 3,
+        "10": 1,
+        "43": 1,
+        "11": 7,
+        "25": 1,
+        "50": 6,
+        "1": 1,
+        "36": 1,
+        "32": 1
+      },
+      "victoryTriggers": [
+        26
+      ],
+      "defeatTriggers": [
+        4,
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 3: \"RUINS OF TARSONIS\"\r\n- Bring Duran to the Psi Disrupter.\r\n- Duran must survive."
+        },
+        {
+          "trigger": 1,
+          "text": "TERRAN 3: \"RUINS OF TARSONIS\"\r\n- Destroy Zerg hives to disable Zerg broods.\r\n- Bring Duran to the Psi Disrupter after\r\n  Zerg hives are destroyed.\r\n- Duran must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Ally": 1,
+        "TB3C": 1,
+        "TB3A": 1,
+        "TB3D": 1,
+        "TB3B": 1,
+        "EnBk": 2,
+        "+Vi1": 1,
+        "+Vi6": 1,
+        "-Vi1": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": [
+        {
+          "trigger": 30,
+          "action": 36,
+          "title": "Zerg Hives Remaining"
+        }
+      ]
+    },
+    {
+      "mission": "expterran04",
+      "title": "Assault on Korhal",
+      "sha256": "988d5c2c1692a63038a3e7a895dd0d35fe9cf3696523e37858f4b5f69f9a8401",
+      "triggers": 31,
+      "conditionRecords": 59,
+      "actionRecords": 105,
+      "conditions": {
+        "22": 7,
+        "2": 1,
+        "11": 25,
+        "3": 26
+      },
+      "actions": {
+        "47": 31,
+        "12": 1,
+        "26": 4,
+        "41": 4,
+        "2": 1,
+        "16": 25,
+        "13": 23,
+        "30": 2,
+        "7": 2,
+        "31": 2,
+        "1": 2,
+        "25": 1,
+        "4": 1,
+        "39": 6
+      },
+      "victoryTriggers": [
+        4,
+        22
+      ],
+      "defeatTriggers": [
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 4: \"ASSAULT ON KORHAL\"\r\n- Destroy the enemy physics labs\r\n                 -OR-\r\n- Destroy the enemy nuclear silos."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 1,
+          "target": "expterran05a"
+        },
+        {
+          "trigger": 2,
+          "target": "expterran04"
+        },
+        {
+          "trigger": 4,
+          "target": "expterran05a"
+        },
+        {
+          "trigger": 22,
+          "target": "expterran05b"
+        }
+      ],
+      "aiScripts": {
+        "TB4C": 1,
+        "TB4D": 1,
+        "TB4A": 1,
+        "TB4B": 1,
+        "EnBk": 21
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expterran05a",
+      "title": "Emperor's Fall (Ground Zero)",
+      "sha256": "c957cb9946b7e756be3fbbbcee27438891695522612bc3f9e7ced880ae7e07ef",
+      "triggers": 53,
+      "conditionRecords": 67,
+      "actionRecords": 381,
+      "conditions": {
+        "22": 10,
+        "11": 19,
+        "2": 4,
+        "12": 23,
+        "3": 11
+      },
+      "actions": {
+        "47": 53,
+        "12": 1,
+        "26": 6,
+        "41": 3,
+        "57": 2,
+        "16": 33,
+        "2": 1,
+        "48": 4,
+        "11": 26,
+        "4": 29,
+        "44": 78,
+        "10": 4,
+        "30": 5,
+        "7": 28,
+        "31": 5,
+        "28": 8,
+        "8": 4,
+        "46": 41,
+        "23": 2,
+        "24": 4,
+        "25": 9,
+        "13": 22,
+        "3": 6,
+        "43": 4,
+        "39": 1,
+        "1": 1,
+        "50": 1
+      },
+      "victoryTriggers": [
+        48
+      ],
+      "defeatTriggers": [
+        6
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 5A: \"EMPEROR'S FALL (GROUND ZERO)\"\r\n- Destroy Mengsk's command center."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 1,
+          "target": "expterran06"
+        },
+        {
+          "trigger": 6,
+          "target": "expterran05a"
+        },
+        {
+          "trigger": 48,
+          "target": "expterran06"
+        }
+      ],
+      "aiScripts": {
+        "TB2A": 1,
+        "TB5A": 1,
+        "TB5B": 1,
+        "TB5C": 1,
+        "EnBk": 18,
+        "NuHe": 3,
+        "ReHe": 8
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expterran05b",
+      "title": "Emperor's Fall (Birds of War)",
+      "sha256": "ef5270cc733291603cc1646dff1ce03f40dc310a6025d4ea99ebe53ff88d5a20",
+      "triggers": 29,
+      "conditionRecords": 32,
+      "actionRecords": 249,
+      "conditions": {
+        "22": 10,
+        "2": 4,
+        "12": 6,
+        "11": 8,
+        "3": 4
+      },
+      "actions": {
+        "47": 26,
+        "12": 1,
+        "26": 4,
+        "41": 3,
+        "57": 4,
+        "13": 8,
+        "16": 29,
+        "2": 1,
+        "46": 26,
+        "30": 7,
+        "8": 15,
+        "31": 7,
+        "28": 18,
+        "4": 20,
+        "11": 31,
+        "10": 3,
+        "44": 13,
+        "25": 5,
+        "3": 2,
+        "24": 1,
+        "7": 21,
+        "43": 2,
+        "50": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        28
+      ],
+      "defeatTriggers": [
+        7
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 5B: \"EMPEROR'S FALL (BIRDS OF WAR)\"\r\n- Destroy Mengsk's Command Center."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 1,
+          "target": "expterran06"
+        },
+        {
+          "trigger": 7,
+          "target": "expterran05b"
+        },
+        {
+          "trigger": 28,
+          "target": "expterran06"
+        }
+      ],
+      "aiScripts": {
+        "TB5D": 1,
+        "TB5E": 1,
+        "TB5F": 1,
+        "EnBk": 18,
+        "ReHe": 6,
+        "DWHe": 1,
+        "NuHe": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expterran06",
+      "title": "Emperor's Flight",
+      "sha256": "54d0997fa091fc6ffb6e16491fda29281ed89d2e5b3d0e0be3f2b2d7c14c4e17",
+      "triggers": 74,
+      "conditionRecords": 84,
+      "actionRecords": 357,
+      "conditions": {
+        "22": 14,
+        "3": 33,
+        "12": 9,
+        "11": 21,
+        "2": 7
+      },
+      "actions": {
+        "47": 70,
+        "12": 1,
+        "57": 14,
+        "26": 5,
+        "16": 5,
+        "13": 9,
+        "30": 2,
+        "7": 22,
+        "31": 2,
+        "44": 29,
+        "10": 4,
+        "5": 1,
+        "11": 12,
+        "6": 1,
+        "46": 38,
+        "25": 14,
+        "8": 18,
+        "4": 44,
+        "22": 1,
+        "1": 1,
+        "2": 1,
+        "15": 7,
+        "43": 5,
+        "48": 26,
+        "24": 2,
+        "39": 10,
+        "3": 5,
+        "38": 7,
+        "50": 1
+      },
+      "victoryTriggers": [
+        7
+      ],
+      "defeatTriggers": [
+        8
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 6: \"EMPEROR'S FLIGHT\"\r\n- Destroy Raynor's command center."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "TB6D": 1,
+        "TB6B": 1,
+        "TB6A": 1,
+        "ZARx": 1,
+        "+Vi2": 2,
+        "-Vi2": 1,
+        "TB7F": 1,
+        "+Vi6": 2,
+        "+Vi7": 1,
+        "+Vi3": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expterran07",
+      "title": "Patriot's Blood",
+      "sha256": "c6835b14e8362a4edd66305b3821788386fa8b1deeffb39867d56a55884c508d",
+      "triggers": 209,
+      "conditionRecords": 353,
+      "actionRecords": 915,
+      "conditions": {
+        "22": 9,
+        "12": 1,
+        "11": 139,
+        "3": 189,
+        "2": 12,
+        "1": 3
+      },
+      "actions": {
+        "39": 1,
+        "47": 177,
+        "44": 35,
+        "4": 47,
+        "42": 94,
+        "16": 1,
+        "23": 2,
+        "49": 1,
+        "46": 69,
+        "15": 2,
+        "13": 128,
+        "12": 2,
+        "7": 68,
+        "10": 11,
+        "5": 8,
+        "8": 37,
+        "1": 1,
+        "30": 28,
+        "31": 26,
+        "3": 85,
+        "43": 9,
+        "25": 19,
+        "6": 7,
+        "9": 6,
+        "28": 2,
+        "24": 9,
+        "48": 13,
+        "26": 1,
+        "11": 10,
+        "38": 2,
+        "2": 3,
+        "57": 8,
+        "22": 2,
+        "14": 1
+      },
+      "victoryTriggers": [
+        6
+      ],
+      "defeatTriggers": [
+        150,
+        165,
+        193
+      ],
+      "objectives": [
+        {
+          "trigger": 5,
+          "text": "TERRAN 7: \"PATRIOT'S BLOOD\"\r\n- Find and kill Admiral Stukov.\r\n- Duran must survive."
+        },
+        {
+          "trigger": 164,
+          "text": "- Get to the override terminal before time\r\n  runs out."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Enmy": 1,
+        "Rscu": 2
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expterran08",
+      "title": "To Chain the Beast",
+      "sha256": "b1d19c2323564ba64c252c1d5ba4705ffd6fbc69f8ed3cf36936ecb0da8d4197",
+      "triggers": 61,
+      "conditionRecords": 81,
+      "actionRecords": 272,
+      "conditions": {
+        "22": 16,
+        "2": 11,
+        "11": 37,
+        "12": 2,
+        "21": 2,
+        "3": 10,
+        "5": 1,
+        "4": 2
+      },
+      "actions": {
+        "47": 61,
+        "26": 7,
+        "12": 1,
+        "16": 9,
+        "2": 4,
+        "57": 7,
+        "43": 4,
+        "13": 36,
+        "10": 2,
+        "30": 8,
+        "7": 22,
+        "31": 7,
+        "27": 4,
+        "3": 13,
+        "44": 4,
+        "38": 3,
+        "46": 28,
+        "25": 6,
+        "48": 5,
+        "15": 2,
+        "4": 7,
+        "22": 3,
+        "8": 6,
+        "11": 18,
+        "24": 2,
+        "5": 1,
+        "1": 1,
+        "49": 1
+      },
+      "victoryTriggers": [
+        50
+      ],
+      "defeatTriggers": [
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 8: \"TO CHAIN THE BEAST\"\r\n- Bring a medic to each of the\r\n  beacons surrounding the Overmind.\r\n- Kill Zerg cerebrates to weaken\r\n  the Overmind's defenses."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "EnBk": 1,
+        "TB8A": 1,
+        "ZARE": 1,
+        "TB8B": 1,
+        "ZARx": 1,
+        "TB8E": 1,
+        "TB8F": 1,
+        "TB8C": 1,
+        "JYDg": 1,
+        "+Vi1": 1,
+        "+Vi2": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg01",
+      "title": "Vile Disruption",
+      "sha256": "9f308010673e284524a98138aef2a21a96fa135cd2a5360b5a4d04914985fe55",
+      "triggers": 73,
+      "conditionRecords": 97,
+      "actionRecords": 438,
+      "conditions": {
+        "22": 16,
+        "3": 50,
+        "11": 24,
+        "21": 1,
+        "15": 1,
+        "2": 5
+      },
+      "actions": {
+        "47": 73,
+        "13": 33,
+        "43": 13,
+        "44": 67,
+        "11": 49,
+        "46": 66,
+        "38": 5,
+        "27": 7,
+        "48": 13,
+        "7": 13,
+        "4": 49,
+        "8": 29,
+        "28": 1,
+        "3": 3,
+        "39": 1,
+        "10": 1,
+        "1": 1,
+        "12": 1,
+        "57": 5,
+        "37": 1,
+        "32": 1,
+        "5": 1,
+        "9": 1,
+        "2": 2,
+        "30": 1,
+        "31": 1
+      },
+      "victoryTriggers": [
+        59
+      ],
+      "defeatTriggers": [
+        64,
+        65
+      ],
+      "objectives": [
+        {
+          "trigger": 61,
+          "text": "ZERG 1: \"DISRUPTION\"\r\n- Rescue all hives from destruction."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {},
+      "validReferences": true,
+      "skippedLeaderboardActions": [
+        {
+          "trigger": 63,
+          "action": 37,
+          "title": "Hives to Rescue"
+        }
+      ]
+    },
+    {
+      "mission": "expzerg02",
+      "title": "Reign of Fire",
+      "sha256": "32985e8804ca7e667c26a95b44f8c0f171586a899cd1acf0b6abb06a666309c3",
+      "triggers": 78,
+      "conditionRecords": 97,
+      "actionRecords": 339,
+      "conditions": {
+        "2": 10,
+        "22": 20,
+        "15": 2,
+        "11": 24,
+        "3": 41
+      },
+      "actions": {
+        "47": 74,
+        "26": 3,
+        "16": 12,
+        "23": 8,
+        "44": 13,
+        "13": 15,
+        "4": 32,
+        "46": 59,
+        "12": 1,
+        "10": 5,
+        "24": 7,
+        "30": 6,
+        "7": 10,
+        "31": 6,
+        "25": 8,
+        "3": 21,
+        "8": 24,
+        "11": 11,
+        "43": 1,
+        "38": 1,
+        "57": 10,
+        "1": 1,
+        "39": 1,
+        "22": 3,
+        "2": 1,
+        "48": 6
+      },
+      "victoryTriggers": [
+        47
+      ],
+      "defeatTriggers": [
+        66
+      ],
+      "objectives": [
+        {
+          "trigger": 5,
+          "text": "ZERG 2: \"REIGN OF FIRE\"\r\n- Destroy the Psi Disrupter."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "ZB2A": 1,
+        "ZB2B": 1,
+        "EnBk": 9,
+        "Enmy": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg03",
+      "title": "The Kel-Morian Combine",
+      "sha256": "3d4db669c12a60a60ee7edcebcaf77ebc79fd2e30e2418dc37dcb2701efa8eb2",
+      "triggers": 23,
+      "conditionRecords": 30,
+      "actionRecords": 125,
+      "conditions": {
+        "22": 9,
+        "2": 11,
+        "11": 1,
+        "4": 6,
+        "3": 1,
+        "5": 2
+      },
+      "actions": {
+        "47": 23,
+        "26": 7,
+        "30": 11,
+        "7": 14,
+        "31": 11,
+        "4": 7,
+        "8": 2,
+        "9": 2,
+        "12": 1,
+        "41": 9,
+        "16": 26,
+        "5": 1,
+        "2": 2,
+        "13": 1,
+        "1": 6,
+        "19": 1,
+        "32": 1
+      },
+      "victoryTriggers": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "defeatTriggers": [
+        8,
+        9
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "ZERG 3: \"THE KEL-MORIAN COMBINE\"\r\n- Obtain 10,000 minerals.\r\n- Fenix must survive.\r\n\r\nOPTIONAL OBJECTIVE\r\n- Infest command centers for\r\n  next mission."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 2,
+          "target": "expzerg04a"
+        },
+        {
+          "trigger": 8,
+          "target": "expzerg03"
+        },
+        {
+          "trigger": 9,
+          "target": "expzerg03"
+        },
+        {
+          "trigger": 11,
+          "target": "expzerg04a"
+        },
+        {
+          "trigger": 12,
+          "target": "expzerg04b"
+        },
+        {
+          "trigger": 13,
+          "target": "expzerg04c"
+        },
+        {
+          "trigger": 14,
+          "target": "expzerg04d"
+        },
+        {
+          "trigger": 15,
+          "target": "expzerg04e"
+        },
+        {
+          "trigger": 16,
+          "target": "expzerg04f"
+        }
+      ],
+      "aiScripts": {
+        "ZB3A": 1,
+        "EnBk": 21,
+        "ZB3B": 1,
+        "ZB3C": 1,
+        "ZB3D": 1,
+        "ZB3E": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": [
+        {
+          "trigger": 17,
+          "action": 19,
+          "title": "Minerals Mined"
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04a",
+      "title": "The Liberation of Korhal",
+      "sha256": "9fa70aa9def47962d6fe6a2e597a021a90bea81f2fefeae58297df285d2a66f6",
+      "triggers": 9,
+      "conditionRecords": 10,
+      "actionRecords": 53,
+      "conditions": {
+        "22": 5,
+        "2": 2,
+        "11": 2,
+        "5": 1
+      },
+      "actions": {
+        "47": 9,
+        "12": 1,
+        "26": 5,
+        "16": 21,
+        "41": 3,
+        "2": 1,
+        "13": 1,
+        "30": 2,
+        "7": 4,
+        "31": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        8
+      ],
+      "defeatTriggers": [
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 4: \"THE LIBERATION OF KORHAL\"\r\n- Destroy all enemy bases."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 4,
+          "target": "expzerg05"
+        },
+        {
+          "trigger": 5,
+          "target": "expzerg04a"
+        },
+        {
+          "trigger": 8,
+          "target": "expzerg05"
+        }
+      ],
+      "aiScripts": {
+        "ZB4A": 1,
+        "EnBk": 17,
+        "ZB4B": 1,
+        "ZB4C": 1,
+        "ZB4D": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg04b",
+      "title": "The Liberation of Korhal",
+      "sha256": "57ed718ac4cf2f60460411f91b2a6e7c29d865f956a740fd3e9a4cb1d76693b8",
+      "triggers": 9,
+      "conditionRecords": 10,
+      "actionRecords": 53,
+      "conditions": {
+        "22": 5,
+        "2": 2,
+        "11": 2,
+        "5": 1
+      },
+      "actions": {
+        "47": 9,
+        "12": 1,
+        "26": 5,
+        "16": 21,
+        "41": 3,
+        "2": 1,
+        "13": 1,
+        "30": 2,
+        "7": 4,
+        "31": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        8
+      ],
+      "defeatTriggers": [
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 4: \"THE LIBERATION OF KORHAL\"\r\n- Destroy all enemy bases."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 4,
+          "target": "expzerg05"
+        },
+        {
+          "trigger": 5,
+          "target": "expzerg04b"
+        },
+        {
+          "trigger": 8,
+          "target": "expzerg05"
+        }
+      ],
+      "aiScripts": {
+        "ZB4A": 1,
+        "EnBk": 17,
+        "ZB4B": 1,
+        "ZB4C": 1,
+        "ZB4D": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg04c",
+      "title": "The Liberation of Korhal",
+      "sha256": "e18eb7d59029b5f62895a13da98f592252f1512eb9913bf63acf04c7b43b3f94",
+      "triggers": 9,
+      "conditionRecords": 10,
+      "actionRecords": 53,
+      "conditions": {
+        "22": 5,
+        "2": 2,
+        "11": 2,
+        "5": 1
+      },
+      "actions": {
+        "47": 9,
+        "12": 1,
+        "26": 5,
+        "16": 21,
+        "41": 3,
+        "2": 1,
+        "13": 1,
+        "30": 2,
+        "7": 4,
+        "31": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        8
+      ],
+      "defeatTriggers": [
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 4: \"THE LIBERATION OF KORHAL\"\r\n- Destroy all enemy bases."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 4,
+          "target": "expzerg05"
+        },
+        {
+          "trigger": 5,
+          "target": "expzerg04c"
+        },
+        {
+          "trigger": 8,
+          "target": "expzerg05"
+        }
+      ],
+      "aiScripts": {
+        "ZB4A": 1,
+        "EnBk": 17,
+        "ZB4B": 1,
+        "ZB4C": 1,
+        "ZB4D": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg04d",
+      "title": "The Liberation of Korhal",
+      "sha256": "70f52da6ec0ca0dc48d6d60f829f0099c85ce12e55187ff318846eb70e44fd94",
+      "triggers": 9,
+      "conditionRecords": 10,
+      "actionRecords": 53,
+      "conditions": {
+        "22": 5,
+        "2": 2,
+        "11": 2,
+        "5": 1
+      },
+      "actions": {
+        "47": 9,
+        "12": 1,
+        "26": 5,
+        "16": 21,
+        "41": 3,
+        "2": 1,
+        "13": 1,
+        "30": 2,
+        "7": 4,
+        "31": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        8
+      ],
+      "defeatTriggers": [
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 4: \"THE LIBERATION OF KORHAL\"\r\n- Destroy all enemy bases."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 4,
+          "target": "expzerg05"
+        },
+        {
+          "trigger": 5,
+          "target": "expzerg04d"
+        },
+        {
+          "trigger": 8,
+          "target": "expzerg05"
+        }
+      ],
+      "aiScripts": {
+        "ZB4A": 1,
+        "EnBk": 17,
+        "ZB4B": 1,
+        "ZB4C": 1,
+        "ZB4D": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg04e",
+      "title": "The Liberation of Korhal",
+      "sha256": "c27d7cd80d28cf6b9d8151a765001e7883827809675a37d8005c775fc9eed1dd",
+      "triggers": 9,
+      "conditionRecords": 10,
+      "actionRecords": 53,
+      "conditions": {
+        "22": 5,
+        "2": 2,
+        "11": 2,
+        "5": 1
+      },
+      "actions": {
+        "47": 9,
+        "12": 1,
+        "26": 5,
+        "16": 21,
+        "41": 3,
+        "2": 1,
+        "13": 1,
+        "30": 2,
+        "7": 4,
+        "31": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        8
+      ],
+      "defeatTriggers": [
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 4: \"THE LIBERATION OF KORHAL\"\r\n- Destroy all enemy bases."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 4,
+          "target": "expzerg05"
+        },
+        {
+          "trigger": 5,
+          "target": "expzerg04e"
+        },
+        {
+          "trigger": 8,
+          "target": "expzerg05"
+        }
+      ],
+      "aiScripts": {
+        "ZB4A": 1,
+        "EnBk": 17,
+        "ZB4B": 1,
+        "ZB4C": 1,
+        "ZB4D": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg04f",
+      "title": "The Liberation of Korhal",
+      "sha256": "50f61e57b89027c7c72bef0d6ccb6a15b9886f119cf77587cf4715f4e7e9dc93",
+      "triggers": 9,
+      "conditionRecords": 10,
+      "actionRecords": 53,
+      "conditions": {
+        "22": 5,
+        "2": 2,
+        "11": 2,
+        "5": 1
+      },
+      "actions": {
+        "47": 9,
+        "12": 1,
+        "26": 5,
+        "16": 21,
+        "41": 3,
+        "2": 1,
+        "13": 1,
+        "30": 2,
+        "7": 4,
+        "31": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        8
+      ],
+      "defeatTriggers": [
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 4: \"THE LIBERATION OF KORHAL\"\r\n- Destroy all enemy bases."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 4,
+          "target": "expzerg05"
+        },
+        {
+          "trigger": 5,
+          "target": "expzerg04f"
+        },
+        {
+          "trigger": 8,
+          "target": "expzerg05"
+        }
+      ],
+      "aiScripts": {
+        "ZB4A": 1,
+        "EnBk": 17,
+        "ZB4B": 1,
+        "ZB4C": 1,
+        "ZB4D": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg05",
+      "title": "True Colors",
+      "sha256": "cd85a53ed3c9345dd4f8987421b5709d8bf87faa7d038fe149790151c70ac6b9",
+      "triggers": 27,
+      "conditionRecords": 44,
+      "actionRecords": 149,
+      "conditions": {
+        "22": 5,
+        "11": 15,
+        "2": 11,
+        "1": 1,
+        "3": 10,
+        "12": 2
+      },
+      "actions": {
+        "47": 27,
+        "12": 1,
+        "26": 4,
+        "15": 1,
+        "57": 13,
+        "48": 2,
+        "10": 3,
+        "7": 26,
+        "44": 5,
+        "24": 3,
+        "28": 1,
+        "4": 4,
+        "5": 5,
+        "6": 5,
+        "13": 8,
+        "1": 1,
+        "2": 1,
+        "14": 1,
+        "16": 19,
+        "30": 3,
+        "31": 3,
+        "46": 8,
+        "49": 2,
+        "51": 1,
+        "3": 2
+      },
+      "victoryTriggers": [
+        5
+      ],
+      "defeatTriggers": [
+        7
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 5: \"TRUE COLORS\"\r\n- Destroy the enemy bases.\r\n- Kill Duke\r\n- Kill Fenix"
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "+Vi4": 1,
+        "EnBk": 14,
+        "ZB5A": 1,
+        "ZB5B": 1,
+        "ZB5C": 1,
+        "ZB5D": 1,
+        "ZB5E": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg06",
+      "title": "Fury of the Swarm",
+      "sha256": "dc0529f66c56a650cf3c5d1eb5a9addaf00e6d97c9473d91ba9fc31422c9af14",
+      "triggers": 73,
+      "conditionRecords": 117,
+      "actionRecords": 241,
+      "conditions": {
+        "22": 5,
+        "2": 33,
+        "11": 53,
+        "3": 17,
+        "12": 9
+      },
+      "actions": {
+        "47": 73,
+        "26": 5,
+        "12": 2,
+        "13": 14,
+        "4": 2,
+        "5": 1,
+        "1": 1,
+        "2": 1,
+        "16": 5,
+        "3": 12,
+        "38": 6,
+        "46": 32,
+        "25": 6,
+        "23": 4,
+        "44": 12,
+        "11": 8,
+        "30": 1,
+        "28": 6,
+        "7": 3,
+        "24": 1,
+        "31": 1,
+        "8": 1,
+        "9": 1,
+        "21": 1,
+        "32": 1,
+        "57": 10,
+        "27": 31
+      },
+      "victoryTriggers": [
+        1
+      ],
+      "defeatTriggers": [
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 6: \"FURY OF THE SWARM\"\r\n- Destroy the renegade zerg."
+        },
+        {
+          "trigger": 34,
+          "text": "ZERG 6: \"FURY OF THE SWARM\"\r\n- Kill all UED Scientists."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "ZB6A": 1,
+        "ZB6C": 1,
+        "ZB6B": 1,
+        "ZB6D": 1,
+        "ZB6E": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": [
+        {
+          "trigger": 34,
+          "action": 21,
+          "title": "UED Scientists"
+        }
+      ]
+    },
+    {
+      "mission": "expzerg07",
+      "title": "Drawing of the Web",
+      "sha256": "2541f8af8528b0db42520ec3e1e138e1cb9f67b2be12a4e60d06edc3fa2ccfdb",
+      "triggers": 14,
+      "conditionRecords": 19,
+      "actionRecords": 118,
+      "conditions": {
+        "22": 4,
+        "2": 2,
+        "3": 5,
+        "11": 7,
+        "1": 1
+      },
+      "actions": {
+        "47": 14,
+        "26": 4,
+        "12": 1,
+        "2": 2,
+        "16": 2,
+        "4": 10,
+        "5": 2,
+        "8": 1,
+        "9": 1,
+        "48": 6,
+        "30": 5,
+        "7": 13,
+        "31": 5,
+        "13": 8,
+        "43": 1,
+        "6": 1,
+        "14": 1,
+        "54": 1,
+        "55": 1,
+        "44": 11,
+        "10": 1,
+        "23": 25,
+        "22": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        13
+      ],
+      "defeatTriggers": [
+        1,
+        4
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 7: \"DRAWING OF THE WEB\"\r\n- Bring Duran to each zerg beacon.\r\n- Duran must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "ZB7A": 1,
+        "ZB7B": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg08",
+      "title": "To Slay the Beast",
+      "sha256": "22ac125001ebb5835a697f3186160d3bdfd2de8913e24ff9eb3adb25ba41423a",
+      "triggers": 33,
+      "conditionRecords": 48,
+      "actionRecords": 172,
+      "conditions": {
+        "22": 12,
+        "12": 1,
+        "2": 13,
+        "11": 16,
+        "3": 6
+      },
+      "actions": {
+        "47": 33,
+        "12": 1,
+        "26": 4,
+        "57": 21,
+        "48": 4,
+        "13": 8,
+        "2": 4,
+        "16": 15,
+        "46": 17,
+        "3": 3,
+        "39": 2,
+        "25": 13,
+        "44": 2,
+        "10": 2,
+        "4": 6,
+        "11": 15,
+        "15": 3,
+        "8": 7,
+        "30": 1,
+        "7": 9,
+        "31": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        31
+      ],
+      "defeatTriggers": [
+        4,
+        9,
+        10,
+        11
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 8: \"TO SLAY THE BEAST\"\r\n- Destroy the Overmind with Dark Templar.\r\n- Must be able to make Dark Templar."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "ZB8A": 1,
+        "ZB8B": 1,
+        "ZB8C": 1,
+        "EnBk": 8,
+        "ZB8D": 1,
+        "ZB8E": 1,
+        "+Vi2": 1,
+        "+Vi0": 1,
+        "+Vi1": 1,
+        "ReHe": 2
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg09",
+      "title": "The Reckoning",
+      "sha256": "f7987c26f0b990d5b13e3e5dbd0f3788d11cf8bbe67c73aa5904bdbfc591b9a9",
+      "triggers": 31,
+      "conditionRecords": 55,
+      "actionRecords": 245,
+      "conditions": {
+        "22": 8,
+        "11": 29,
+        "2": 4,
+        "1": 2,
+        "23": 2,
+        "3": 10
+      },
+      "actions": {
+        "47": 31,
+        "26": 4,
+        "12": 1,
+        "41": 5,
+        "14": 1,
+        "13": 15,
+        "2": 3,
+        "4": 21,
+        "5": 4,
+        "30": 4,
+        "7": 10,
+        "31": 4,
+        "6": 3,
+        "10": 3,
+        "44": 8,
+        "54": 1,
+        "11": 27,
+        "46": 10,
+        "15": 4,
+        "8": 7,
+        "48": 1,
+        "25": 19,
+        "57": 8,
+        "16": 41,
+        "43": 1,
+        "49": 1,
+        "23": 1,
+        "9": 1,
+        "24": 2,
+        "1": 1,
+        "50": 1,
+        "3": 2
+      },
+      "victoryTriggers": [
+        24
+      ],
+      "defeatTriggers": [
+        3,
+        4
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 9: \"THE RECKONING\"\r\n- Destroy the Protoss base within 30 minutes.\r\n- Recover the Matriarch and Zeratul."
+        }
+      ],
+      "nextScenarioRoutes": [
+        {
+          "trigger": 1,
+          "target": "expzerg10"
+        },
+        {
+          "trigger": 3,
+          "target": "expzerg09"
+        },
+        {
+          "trigger": 4,
+          "target": "expzerg09"
+        },
+        {
+          "trigger": 19,
+          "target": "expbonus"
+        },
+        {
+          "trigger": 20,
+          "target": "expzerg10"
+        }
+      ],
+      "aiScripts": {
+        "+Vi0": 1,
+        "+Vi2": 1,
+        "+Vi7": 1,
+        "ZB9A": 1,
+        "-Vi2": 1,
+        "ZB9B": 1,
+        "ZB9C": 1,
+        "EnBk": 10,
+        "ReHe": 28
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "expzerg10",
+      "title": "Omega",
+      "sha256": "856026e96c23b5080bfb11a185fb86bdb8accf4f46c4113bfd3588192d97fbc4",
+      "triggers": 19,
+      "conditionRecords": 33,
+      "actionRecords": 78,
+      "conditions": {
+        "22": 6,
+        "2": 14,
+        "23": 3,
+        "11": 6,
+        "4": 2,
+        "15": 2
+      },
+      "actions": {
+        "47": 19,
+        "12": 1,
+        "26": 7,
+        "2": 5,
+        "9": 1,
+        "4": 1,
+        "1": 1,
+        "16": 25,
+        "3": 2,
+        "13": 6,
+        "30": 3,
+        "7": 4,
+        "31": 3
+      },
+      "victoryTriggers": [
+        3
+      ],
+      "defeatTriggers": [
+        1,
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "ZERG 10: \"OMEGA\"\r\n- Destroy all enemy forces."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "ZB0A": 1,
+        "ZB0B": 1,
+        "ZB0C": 1,
+        "ZB0D": 1,
+        "ZB0E": 1,
+        "ZB0F": 1,
+        "EnBk": 17,
+        "ZB1F": 2
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss01",
+      "title": "First Strike",
+      "sha256": "374a08c6d15bbd32280091e54164047b12c6ffc526d12d0663a0c7df18784188",
+      "triggers": 13,
+      "conditionRecords": 22,
+      "actionRecords": 56,
+      "conditions": {
+        "2": 12,
+        "11": 3,
+        "3": 5,
+        "12": 2
+      },
+      "actions": {
+        "2": 2,
+        "10": 4,
+        "11": 1,
+        "30": 5,
+        "7": 5,
+        "31": 5,
+        "4": 9,
+        "13": 3,
+        "25": 1,
+        "5": 2,
+        "8": 5,
+        "9": 5,
+        "28": 1,
+        "1": 1,
+        "26": 3,
+        "16": 1,
+        "12": 1,
+        "3": 2
+      },
+      "victoryTriggers": [
+        5
+      ],
+      "defeatTriggers": [
+        0,
+        3
+      ],
+      "objectives": [
+        {
+          "trigger": 9,
+          "text": "PROTOSS 1: \"FIRST STRIKE\"\r\n- Meet Fenix at Antioch.\r\n- Destroy the Zerg base.\r\n- Fenix must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Pro1": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss02",
+      "title": "Into the Flames",
+      "sha256": "c2a1faa77faaa8f85d178da8d5502a9235749240244b7403d240bff9b220fe24",
+      "triggers": 8,
+      "conditionRecords": 9,
+      "actionRecords": 51,
+      "conditions": {
+        "2": 6,
+        "11": 1,
+        "12": 1,
+        "1": 1
+      },
+      "actions": {
+        "2": 2,
+        "4": 5,
+        "5": 2,
+        "8": 5,
+        "9": 5,
+        "26": 2,
+        "14": 1,
+        "12": 2,
+        "38": 1,
+        "10": 1,
+        "30": 2,
+        "7": 2,
+        "31": 2,
+        "1": 1,
+        "16": 1,
+        "11": 14,
+        "13": 1,
+        "28": 2
+      },
+      "victoryTriggers": [
+        3
+      ],
+      "defeatTriggers": [
+        0,
+        1
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "PROTOSS 2: \"INTO THE FLAMES\"\r\n- Distract the Zerg while\r\n  Fenix gets into position.\r\n- Kill the Zerg Cerebrate.\r\n- Fenix must survive."
+        },
+        {
+          "trigger": 5,
+          "text": "PROTOSS 2: \"INTO THE FLAMES\"\r\n- Kill the Zerg Cerebrate.\r\n- Fenix must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Pro2": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss03",
+      "title": "Higher Ground",
+      "sha256": "6e73084830bd7c49da9dfeeb11e11b9e589b066b3e4290836cd2baf4415762e6",
+      "triggers": 5,
+      "conditionRecords": 5,
+      "actionRecords": 17,
+      "conditions": {
+        "2": 4,
+        "12": 1
+      },
+      "actions": {
+        "2": 1,
+        "26": 4,
+        "12": 1,
+        "4": 2,
+        "5": 1,
+        "30": 1,
+        "7": 2,
+        "31": 1,
+        "6": 1,
+        "1": 1,
+        "16": 2
+      },
+      "victoryTriggers": [
+        2
+      ],
+      "defeatTriggers": [
+        0
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "PROTOSS 3: \"HIGHER GROUND\"\r\n- Destroy the Zerg colonies."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Pr3R": 1,
+        "Pr3G": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss04",
+      "title": "The Hunt for Tassadar",
+      "sha256": "9cf4f218e0b29b7e61743fd6383dab6c3aec4a5e12c6fade0b0fc37ae44c67b3",
+      "triggers": 13,
+      "conditionRecords": 16,
+      "actionRecords": 153,
+      "conditions": {
+        "2": 5,
+        "11": 8,
+        "3": 2,
+        "12": 1
+      },
+      "actions": {
+        "2": 3,
+        "4": 15,
+        "5": 4,
+        "8": 11,
+        "9": 3,
+        "10": 2,
+        "30": 3,
+        "7": 12,
+        "6": 1,
+        "31": 3,
+        "13": 3,
+        "1": 1,
+        "12": 2,
+        "26": 2,
+        "11": 87,
+        "16": 1
+      },
+      "victoryTriggers": [
+        4
+      ],
+      "defeatTriggers": [
+        0,
+        1,
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 5,
+          "text": "PROTOSS 4: \"THE HUNT FOR TASSADAR\"\r\n- Bring Tassadar and Raynor to the Beacon."
+        },
+        {
+          "trigger": 11,
+          "text": "PROTOSS 4: \"THE HUNT FOR TASSADAR\"\r\n- Find Tassadar.\r\n- Bring Tassadar to the Beacon."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Pro4": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss05",
+      "title": "Choosing Sides",
+      "sha256": "0911c2cf8b484c266e26ed3c439cd917e0dc0cd9a7cb62985bc4800f7b64afe5",
+      "triggers": 11,
+      "conditionRecords": 12,
+      "actionRecords": 42,
+      "conditions": {
+        "2": 2,
+        "12": 3,
+        "11": 2,
+        "3": 4,
+        "15": 1
+      },
+      "actions": {
+        "2": 2,
+        "4": 4,
+        "5": 2,
+        "8": 1,
+        "9": 1,
+        "12": 1,
+        "26": 3,
+        "30": 1,
+        "11": 11,
+        "10": 1,
+        "7": 3,
+        "6": 1,
+        "31": 1,
+        "13": 4,
+        "22": 1,
+        "43": 1,
+        "1": 1,
+        "15": 1,
+        "16": 2
+      },
+      "victoryTriggers": [
+        4
+      ],
+      "defeatTriggers": [
+        0,
+        1
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "PROTOSS 5: \"CHOOSING SIDES\"\r\n- Bring Tassadar and two Zealots to the installation entrance."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Suic": 1,
+        "Pr5I": 1,
+        "Pr5B": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss06",
+      "title": "Into the Darkness",
+      "sha256": "30f0a374867c7b57cf51e5c445041020eebbe4a1fcbc074359a581a5bc5f5eee",
+      "triggers": 23,
+      "conditionRecords": 25,
+      "actionRecords": 93,
+      "conditions": {
+        "2": 3,
+        "3": 19,
+        "11": 2,
+        "12": 1
+      },
+      "actions": {
+        "2": 2,
+        "42": 18,
+        "4": 4,
+        "8": 12,
+        "9": 5,
+        "10": 4,
+        "11": 18,
+        "22": 2,
+        "13": 3,
+        "15": 1,
+        "30": 6,
+        "5": 1,
+        "7": 9,
+        "31": 6,
+        "1": 1,
+        "12": 1
+      },
+      "victoryTriggers": [
+        14
+      ],
+      "defeatTriggers": [
+        0,
+        7
+      ],
+      "objectives": [
+        {
+          "trigger": 22,
+          "text": "PROTOSS 6: \"INTO THE DARKNESS\"\r\n- Rescue Zeratul.\r\n- Tassadar must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Suic": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss07",
+      "title": "Homeland",
+      "sha256": "a813922890e6eafe4feda27b591715c465e98e8ee40e3717b5c2b0735e403a83",
+      "triggers": 10,
+      "conditionRecords": 10,
+      "actionRecords": 52,
+      "conditions": {
+        "2": 8,
+        "12": 1,
+        "11": 1
+      },
+      "actions": {
+        "2": 4,
+        "4": 11,
+        "5": 5,
+        "8": 4,
+        "9": 3,
+        "12": 1,
+        "26": 3,
+        "30": 2,
+        "7": 5,
+        "6": 1,
+        "31": 2,
+        "38": 1,
+        "10": 1,
+        "11": 3,
+        "1": 1,
+        "16": 3,
+        "13": 2
+      },
+      "victoryTriggers": [
+        5
+      ],
+      "defeatTriggers": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "objectives": [
+        {
+          "trigger": 4,
+          "text": "PROTOSS 7: \"HOMELAND\"\r\n- Destroy the heart of the Conclave.\r\n- Fenix, Zeratul and Tassadar must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Pro7": 1,
+        "Pr7B": 1,
+        "Pr7S": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss08",
+      "title": "The Trial of Tassadar",
+      "sha256": "4ee5b213ce8e46b5a3b1ab3e815767a91b0b1f720d503cb203548730ce0efc37",
+      "triggers": 8,
+      "conditionRecords": 9,
+      "actionRecords": 68,
+      "conditions": {
+        "2": 6,
+        "11": 1,
+        "12": 1,
+        "3": 1
+      },
+      "actions": {
+        "2": 3,
+        "4": 7,
+        "5": 3,
+        "8": 5,
+        "9": 3,
+        "11": 24,
+        "26": 3,
+        "12": 1,
+        "13": 1,
+        "10": 2,
+        "30": 2,
+        "7": 8,
+        "31": 2,
+        "1": 1,
+        "16": 3
+      },
+      "victoryTriggers": [
+        4
+      ],
+      "defeatTriggers": [
+        0,
+        1,
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 3,
+          "text": "PROTOSS 8: \"THE TRIAL OF TASSADAR\"\r\n- Destroy the Stasis Cell.\r\n- Fenix and Raynor must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Pro8": 1,
+        "Pr8B": 1,
+        "Pr8D": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss09",
+      "title": "Shadow Hunters",
+      "sha256": "5af7dd1b80328ee75501b18e54c5f8849c320ca247e3380e1aae1349d4a8a15c",
+      "triggers": 12,
+      "conditionRecords": 17,
+      "actionRecords": 36,
+      "conditions": {
+        "2": 6,
+        "12": 1,
+        "3": 6,
+        "11": 4
+      },
+      "actions": {
+        "2": 3,
+        "4": 4,
+        "5": 2,
+        "8": 2,
+        "9": 2,
+        "12": 1,
+        "26": 4,
+        "13": 2,
+        "23": 4,
+        "39": 4,
+        "11": 2,
+        "3": 2,
+        "1": 1,
+        "16": 3
+      },
+      "victoryTriggers": [
+        8
+      ],
+      "defeatTriggers": [
+        0,
+        1,
+        2
+      ],
+      "objectives": [
+        {
+          "trigger": 3,
+          "text": "PROTOSS 9: \"SHADOW HUNTERS\"\r\n- Use Zeratul to destroy the Zerg Cerebrates.\r\n- Zeratul and Fenix must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Pro9": 1,
+        "Pr9W": 1,
+        "Pr9Y": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "protoss10",
+      "title": "Eye of the Storm",
+      "sha256": "e8bc84347cd8810d423e76c8e739612de777f579dd287eca2ef5bc620ff4ebdd",
+      "triggers": 8,
+      "conditionRecords": 8,
+      "actionRecords": 73,
+      "conditions": {
+        "12": 3,
+        "11": 1,
+        "2": 4
+      },
+      "actions": {
+        "26": 3,
+        "12": 1,
+        "11": 28,
+        "13": 1,
+        "30": 2,
+        "10": 5,
+        "7": 3,
+        "31": 2,
+        "4": 7,
+        "5": 4,
+        "8": 3,
+        "9": 3,
+        "2": 3,
+        "38": 2,
+        "1": 1,
+        "16": 5
+      },
+      "victoryTriggers": [
+        5
+      ],
+      "defeatTriggers": [
+        2,
+        3,
+        4
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "PROTOSS 10: \"EYE OF THE STORM\"\r\n- Destroy the Overmind.\r\n- Tassadar, Raynor, and \r\n  Zeratul must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "P10o": 1,
+        "P10C": 1,
+        "Pr10": 3
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran01",
+      "title": "Wasteland",
+      "sha256": "4b0e5009c4ae80cfb4cb13ede30842db0aa05bb3be2eedad695fb093fa5786f6",
+      "triggers": 9,
+      "conditionRecords": 14,
+      "actionRecords": 43,
+      "conditions": {
+        "2": 10,
+        "12": 3,
+        "4": 1
+      },
+      "actions": {
+        "2": 3,
+        "1": 1,
+        "10": 2,
+        "5": 3,
+        "30": 3,
+        "4": 7,
+        "7": 3,
+        "31": 3,
+        "6": 1,
+        "12": 3,
+        "8": 5,
+        "9": 5,
+        "26": 1,
+        "38": 1,
+        "32": 1,
+        "17": 1
+      },
+      "victoryTriggers": [
+        1
+      ],
+      "defeatTriggers": [
+        0,
+        4,
+        8
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "TERRAN 1: \"WASTELAND\"\r\n- Build a Barracks.\r\n- Train 10 Marines.\r\n- Raynor must survive."
+        },
+        {
+          "trigger": 3,
+          "text": "TERRAN 1: \"WASTELAND\"\r\n- Find Raynor.\r\n- Build a Barracks.\r\n- Train 10 Marines."
+        },
+        {
+          "trigger": 6,
+          "text": "TERRAN 1: \"WASTELAND\"\r\n- Find Raynor.\r\n- Build a Barracks.\r\n- Train 10 Marines."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {},
+      "validReferences": true,
+      "skippedLeaderboardActions": [
+        {
+          "trigger": 5,
+          "action": 17,
+          "title": "of 10 Marines"
+        }
+      ]
+    },
+    {
+      "mission": "terran02",
+      "title": "Backwater Station",
+      "sha256": "d8a7f6b70422ff32e4fd3f6293de4013f883e0761814d4496ffd18b7eb13dfce",
+      "triggers": 15,
+      "conditionRecords": 24,
+      "actionRecords": 77,
+      "conditions": {
+        "1": 1,
+        "2": 3,
+        "3": 14,
+        "11": 6
+      },
+      "actions": {
+        "26": 1,
+        "12": 1,
+        "30": 10,
+        "7": 14,
+        "31": 10,
+        "8": 4,
+        "11": 9,
+        "10": 2,
+        "4": 9,
+        "5": 2,
+        "9": 1,
+        "2": 1,
+        "13": 8,
+        "23": 2,
+        "43": 1,
+        "38": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        14
+      ],
+      "defeatTriggers": [
+        6
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 2: \"BACKWATER STATION\"\r\n- Eradicate the alien infestation.\r\n- Raynor must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {},
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran03",
+      "title": "Desperate Alliance",
+      "sha256": "9d83a8bde18c38ee12f54f4c5253bed5466027fc612141e9a7415c94d3346737",
+      "triggers": 10,
+      "conditionRecords": 17,
+      "actionRecords": 66,
+      "conditions": {
+        "1": 8,
+        "11": 5,
+        "5": 1,
+        "2": 3
+      },
+      "actions": {
+        "26": 2,
+        "12": 1,
+        "14": 1,
+        "13": 1,
+        "4": 12,
+        "10": 3,
+        "30": 7,
+        "7": 9,
+        "31": 7,
+        "28": 4,
+        "11": 12,
+        "5": 2,
+        "1": 2,
+        "16": 1,
+        "2": 1,
+        "15": 1
+      },
+      "victoryTriggers": [
+        4,
+        6
+      ],
+      "defeatTriggers": [
+        7
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 3: \"DESPERATE ALLIANCE\"\r\n- Survive for 30 minutes."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Ter3": 1,
+        "Suic": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran04",
+      "title": "The Jacobs Installation",
+      "sha256": "a48e1d1682f0a6e68eeec4ef0fc82efc48e70a11b4315de8c091079c68e10601",
+      "triggers": 36,
+      "conditionRecords": 43,
+      "actionRecords": 151,
+      "conditions": {
+        "12": 2,
+        "2": 3,
+        "11": 8,
+        "3": 30
+      },
+      "actions": {
+        "12": 1,
+        "2": 2,
+        "30": 9,
+        "38": 2,
+        "10": 3,
+        "5": 3,
+        "7": 10,
+        "6": 2,
+        "31": 9,
+        "9": 18,
+        "8": 22,
+        "4": 15,
+        "11": 4,
+        "13": 5,
+        "1": 1,
+        "42": 20,
+        "22": 1,
+        "28": 10,
+        "39": 7,
+        "3": 7
+      },
+      "victoryTriggers": [
+        4
+      ],
+      "defeatTriggers": [
+        1,
+        22
+      ],
+      "objectives": [
+        {
+          "trigger": 0,
+          "text": "TERRAN 4: \"THE JACOBS INSTALLATION\"\r\n- Retrieve the data discs from the\r\n  Confederate Network.\r\n- Raynor must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {},
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran05",
+      "title": "Revolution",
+      "sha256": "35cd98bc0590c0f36e5d8f75e41a29b254db2d6cf8dec5480e6ffd7602609829",
+      "triggers": 17,
+      "conditionRecords": 20,
+      "actionRecords": 85,
+      "conditions": {
+        "2": 7,
+        "3": 6,
+        "12": 1,
+        "11": 6
+      },
+      "actions": {
+        "2": 3,
+        "13": 6,
+        "12": 2,
+        "26": 2,
+        "11": 17,
+        "22": 2,
+        "5": 4,
+        "10": 3,
+        "30": 4,
+        "7": 11,
+        "31": 4,
+        "6": 2,
+        "4": 7,
+        "8": 4,
+        "9": 4,
+        "15": 1,
+        "16": 5,
+        "39": 2,
+        "24": 1,
+        "1": 1
+      },
+      "victoryTriggers": [
+        12
+      ],
+      "defeatTriggers": [
+        0,
+        6,
+        7
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "TERRAN 5: \"REVOLUTION\"\r\n- Bring Kerrigan to the Antigan \r\n  Command Center.\r\n- Defend the Antigan rebels.\r\n- Raynor and Kerrigan must\r\n  survive."
+        },
+        {
+          "trigger": 11,
+          "text": "TERRAN 5: \"REVOLUTION\"\r\n- Destroy the Confederate base.\r\n- Raynor and Kerrigan must\r\n  survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Rscu": 1,
+        "Ter5": 1,
+        "Te5H": 1,
+        "EnBk": 2,
+        "ClrC": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran06",
+      "title": "Norad II",
+      "sha256": "80dd42e4d4540d0340113b92aae02120b9919a5dac359b010607ec7c26e72ead",
+      "triggers": 20,
+      "conditionRecords": 31,
+      "actionRecords": 80,
+      "conditions": {
+        "2": 4,
+        "3": 9,
+        "12": 7,
+        "11": 9,
+        "15": 2
+      },
+      "actions": {
+        "2": 3,
+        "10": 3,
+        "5": 3,
+        "30": 2,
+        "7": 12,
+        "31": 2,
+        "1": 1,
+        "12": 1,
+        "26": 3,
+        "4": 5,
+        "8": 3,
+        "9": 3,
+        "13": 6,
+        "16": 2,
+        "15": 1,
+        "11": 30
+      },
+      "victoryTriggers": [
+        1
+      ],
+      "defeatTriggers": [
+        0,
+        3,
+        4
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "TERRAN 6: \"NORAD II\"\r\n- Protect Battlecruiser Norad II.\r\n- Bring Raynor and 2 dropships \r\n  to Norad II."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Ter6": 1,
+        "Te6b": 1,
+        "Rscu": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran08",
+      "title": "The Trump Card",
+      "sha256": "dab280d946f059845ba3084da11f159091bfbc24c4cd54eb2a352ff1a165f515",
+      "triggers": 10,
+      "conditionRecords": 12,
+      "actionRecords": 38,
+      "conditions": {
+        "2": 3,
+        "12": 6,
+        "3": 3
+      },
+      "actions": {
+        "5": 2,
+        "8": 3,
+        "9": 3,
+        "4": 1,
+        "2": 2,
+        "12": 1,
+        "38": 1,
+        "11": 7,
+        "26": 2,
+        "30": 2,
+        "7": 5,
+        "31": 2,
+        "10": 1,
+        "1": 1,
+        "16": 5
+      },
+      "victoryTriggers": [
+        2
+      ],
+      "defeatTriggers": [
+        0,
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "TERRAN 7: \"THE TRUMP CARD\"\r\n- Bring the Psi Emitter to the enemy base.\r\n- Kerrigan must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Ter8": 1,
+        "EnBk": 4
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran09",
+      "title": "The Big Push",
+      "sha256": "083be62ec869ddf049f816eaf873355c57381b869581717234f3499b39ab23c7",
+      "triggers": 13,
+      "conditionRecords": 13,
+      "actionRecords": 37,
+      "conditions": {
+        "2": 6,
+        "12": 2,
+        "3": 1,
+        "11": 2,
+        "15": 2
+      },
+      "actions": {
+        "2": 2,
+        "4": 5,
+        "5": 2,
+        "30": 2,
+        "7": 7,
+        "31": 2,
+        "1": 1,
+        "26": 4,
+        "12": 1,
+        "8": 1,
+        "9": 2,
+        "16": 2,
+        "13": 6
+      },
+      "victoryTriggers": [
+        1
+      ],
+      "defeatTriggers": [
+        0,
+        3
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "TERRAN 8: \"THE BIG PUSH\"\r\n-Eliminate the Confederate forces.\r\n-Duke must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Tr9H": 1,
+        "Tr9L": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran11",
+      "title": "New Gettysburg",
+      "sha256": "1b55e907af8c4c5c6c5e0adcc775b8fe82e263d7afb9eba70ded40d11d5e412c",
+      "triggers": 11,
+      "conditionRecords": 13,
+      "actionRecords": 91,
+      "conditions": {
+        "2": 6,
+        "12": 2,
+        "15": 1,
+        "5": 1,
+        "11": 3
+      },
+      "actions": {
+        "43": 1,
+        "13": 2,
+        "4": 6,
+        "30": 3,
+        "7": 14,
+        "31": 3,
+        "1": 1,
+        "12": 2,
+        "26": 5,
+        "5": 3,
+        "6": 1,
+        "8": 2,
+        "9": 2,
+        "2": 3,
+        "16": 3,
+        "11": 37,
+        "15": 2,
+        "3": 1
+      },
+      "victoryTriggers": [
+        0
+      ],
+      "defeatTriggers": [
+        3,
+        4,
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "- Wipe out the invading Protoss fleet.\r\n- All Zerg buildings must survive.\r\n- Kerrigan must survive."
+        },
+        {
+          "trigger": 2,
+          "text": "TERRAN 9: \"NEW GETTYSBURG\"\r\n- Destroy the Protoss force.\r\n- All Zerg buildings must survive.\r\n- Kerrigan must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "T11z": 1,
+        "T11a": 1,
+        "T11b": 1,
+        "SuiR": 2
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terran12",
+      "title": "The Hammer Falls",
+      "sha256": "2a3efca711b5a75ffd0ea569802fe0bd4dbfcfbfa0b0f308d897c0dca698fd7d",
+      "triggers": 7,
+      "conditionRecords": 7,
+      "actionRecords": 19,
+      "conditions": {
+        "2": 5,
+        "12": 2
+      },
+      "actions": {
+        "2": 2,
+        "1": 1,
+        "26": 4,
+        "30": 1,
+        "7": 2,
+        "31": 1,
+        "12": 1,
+        "4": 2,
+        "5": 1,
+        "8": 1,
+        "9": 1,
+        "16": 2
+      },
+      "victoryTriggers": [
+        1
+      ],
+      "defeatTriggers": [
+        0,
+        4
+      ],
+      "objectives": [
+        {
+          "trigger": 3,
+          "text": "TERRAN 10: \"THE HAMMER FALLS\"\r\n- Destroy the Ion Cannon.\r\n- Raynor must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "T12N": 1,
+        "T12P": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "terrantutorial",
+      "title": "Boot Camp",
+      "sha256": "4aafcfe93cc42cb642fde912a459a6c89b0cd6a1f8160c93cac3c34dd0b13af1",
+      "triggers": 11,
+      "conditionRecords": 29,
+      "actionRecords": 77,
+      "conditions": {
+        "2": 12,
+        "12": 1,
+        "11": 11,
+        "4": 4,
+        "3": 1
+      },
+      "actions": {
+        "2": 1,
+        "26": 1,
+        "12": 1,
+        "4": 7,
+        "30": 7,
+        "7": 13,
+        "31": 7,
+        "8": 6,
+        "9": 7,
+        "13": 17,
+        "10": 3,
+        "11": 1,
+        "22": 1,
+        "1": 1,
+        "32": 1,
+        "19": 1,
+        "38": 2
+      },
+      "victoryTriggers": [
+        6
+      ],
+      "defeatTriggers": [
+        0
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "TUTORIAL: BOOT CAMP\r\n- Build 3 Supply Depots\r\n- Build a Refinery\r\n- Gather 100 Vespene Gas"
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {},
+      "validReferences": true,
+      "skippedLeaderboardActions": [
+        {
+          "trigger": 7,
+          "action": 19,
+          "title": "of 100 Gas"
+        }
+      ]
+    },
+    {
+      "mission": "zerg01",
+      "title": "Among the Ruins",
+      "sha256": "f4794b4f8fc90f6ea9c4a585faa2c0a1de25450311256c7329a288d4dcd826ad",
+      "triggers": 13,
+      "conditionRecords": 24,
+      "actionRecords": 57,
+      "conditions": {
+        "2": 14,
+        "12": 2,
+        "11": 6,
+        "4": 2
+      },
+      "actions": {
+        "2": 1,
+        "12": 2,
+        "26": 2,
+        "30": 9,
+        "7": 10,
+        "4": 9,
+        "31": 9,
+        "8": 2,
+        "9": 2,
+        "1": 1,
+        "16": 1,
+        "13": 6,
+        "11": 1,
+        "22": 1,
+        "28": 1
+      },
+      "victoryTriggers": [
+        2
+      ],
+      "defeatTriggers": [
+        0
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "ZERG 1: \"AMONG THE RUINS\"\r\n- Create a Spawning Pool.\r\n- Create a Hydralisk Den.\r\n- Protect the Chrysalis."
+        },
+        {
+          "trigger": 11,
+          "text": "- Create a Spawning Pool.\r\n- Create a Hydralisk Den.\r\n- Protect the Chrysalis.\r\n- Destroy the Terran encampment."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zer1": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg02",
+      "title": "Egression",
+      "sha256": "5819629c7bf99c941ab64225de24e4aa60c5164ad5c00345258aa62fe6a0eadf",
+      "triggers": 9,
+      "conditionRecords": 13,
+      "actionRecords": 33,
+      "conditions": {
+        "2": 3,
+        "3": 4,
+        "12": 1,
+        "11": 4,
+        "1": 1
+      },
+      "actions": {
+        "2": 2,
+        "5": 2,
+        "30": 3,
+        "7": 3,
+        "31": 3,
+        "1": 1,
+        "12": 1,
+        "26": 2,
+        "3": 3,
+        "38": 1,
+        "14": 2,
+        "13": 4,
+        "4": 3,
+        "9": 1,
+        "8": 1,
+        "16": 1
+      },
+      "victoryTriggers": [
+        1
+      ],
+      "defeatTriggers": [
+        0,
+        6
+      ],
+      "objectives": [
+        {
+          "trigger": 3,
+          "text": "ZERG 2: \"EGRESSION\"\r\n- Bring the Chrysalis to the beacon."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zer2": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg03",
+      "title": "The Swarm",
+      "sha256": "a62ddf17410b37aa406aaf6a0024edb1aae9f69521e5abeab7a537baf638f7d7",
+      "triggers": 6,
+      "conditionRecords": 6,
+      "actionRecords": 21,
+      "conditions": {
+        "2": 4,
+        "12": 1,
+        "11": 1
+      },
+      "actions": {
+        "13": 2,
+        "26": 3,
+        "16": 1,
+        "12": 1,
+        "4": 3,
+        "5": 2,
+        "30": 1,
+        "7": 3,
+        "31": 1,
+        "1": 1,
+        "8": 1,
+        "9": 1,
+        "2": 1
+      },
+      "victoryTriggers": [
+        4
+      ],
+      "defeatTriggers": [
+        5
+      ],
+      "objectives": [
+        {
+          "trigger": 3,
+          "text": "ZERG 3: \"THE NEW DOMINION\"\r\n- Protect the Chrysalis.\r\n- Eliminate the Terran Presence."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zer3": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg04",
+      "title": "Agent of the Swarm",
+      "sha256": "535c6d75f4225224abf36965627d7e7889c3e3b245a97d95843933d5cfb9de2a",
+      "triggers": 7,
+      "conditionRecords": 10,
+      "actionRecords": 86,
+      "conditions": {
+        "2": 4,
+        "11": 2,
+        "12": 2,
+        "1": 2
+      },
+      "actions": {
+        "4": 17,
+        "5": 6,
+        "8": 3,
+        "9": 3,
+        "2": 2,
+        "13": 2,
+        "26": 2,
+        "14": 1,
+        "12": 2,
+        "30": 6,
+        "11": 7,
+        "10": 5,
+        "7": 13,
+        "31": 5,
+        "22": 3,
+        "25": 2,
+        "6": 3,
+        "23": 1,
+        "1": 1,
+        "16": 2
+      },
+      "victoryTriggers": [
+        4
+      ],
+      "defeatTriggers": [
+        0,
+        6
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "ZERG 4: \"AGENTS OF THE SWARM\"\r\n- Protect the Chrysalis until it is \r\n  ready to hatch."
+        },
+        {
+          "trigger": 3,
+          "text": "- Infest or destroy Raynor's Command Center.\r\n- Kerrigan must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zer4": 1,
+        "Ze4S": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg05",
+      "title": "The Amerigo",
+      "sha256": "d758f917aebef2775b76bf90a5637fc7308ef4540334b05567e3c0caa6666e45",
+      "triggers": 36,
+      "conditionRecords": 42,
+      "actionRecords": 143,
+      "conditions": {
+        "2": 1,
+        "12": 1,
+        "3": 32,
+        "11": 6,
+        "7": 1,
+        "17": 1
+      },
+      "actions": {
+        "4": 10,
+        "5": 2,
+        "8": 19,
+        "9": 18,
+        "2": 1,
+        "12": 1,
+        "30": 8,
+        "7": 12,
+        "31": 8,
+        "13": 6,
+        "28": 5,
+        "11": 13,
+        "10": 1,
+        "6": 1,
+        "1": 1,
+        "39": 3,
+        "3": 3,
+        "42": 31
+      },
+      "victoryTriggers": [
+        5
+      ],
+      "defeatTriggers": [
+        0
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "ZERG 5: \"THE AMERIGO\"\r\n- Bring Kerrigan to the Supercomputer.\r\n- Kerrigan must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {},
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg06",
+      "title": "The Dark Templar",
+      "sha256": "f441dcbdc4878d16a0e71790464d9ef8d677aad0c85e2463d0fa4ff2616af1f1",
+      "triggers": 9,
+      "conditionRecords": 13,
+      "actionRecords": 60,
+      "conditions": {
+        "2": 4,
+        "12": 2,
+        "3": 4,
+        "11": 3
+      },
+      "actions": {
+        "2": 2,
+        "12": 2,
+        "26": 2,
+        "13": 2,
+        "30": 3,
+        "7": 7,
+        "31": 3,
+        "4": 10,
+        "11": 3,
+        "38": 2,
+        "10": 3,
+        "23": 9,
+        "5": 4,
+        "1": 1,
+        "8": 2,
+        "9": 2,
+        "6": 2,
+        "16": 1
+      },
+      "victoryTriggers": [
+        5
+      ],
+      "defeatTriggers": [
+        0,
+        6
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "ZERG 6: \"THE DARK TEMPLAR\"\r\n- Exterminate the Protoss intruders.\r\n- Kerrigan must survive."
+        },
+        {
+          "trigger": 7,
+          "text": "- Bring Kerrigan to Tassadar's challenge, alone."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zer6": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg07",
+      "title": "The Culling",
+      "sha256": "2c39850f5a902c369130da3ebfce6d32d087e1d1d8fca1204ef6ef2f9a1b5e9d",
+      "triggers": 8,
+      "conditionRecords": 8,
+      "actionRecords": 15,
+      "conditions": {
+        "2": 2,
+        "12": 2,
+        "11": 1,
+        "3": 3
+      },
+      "actions": {
+        "2": 1,
+        "26": 3,
+        "12": 1,
+        "1": 1,
+        "16": 4,
+        "4": 1,
+        "13": 4
+      },
+      "victoryTriggers": [
+        2
+      ],
+      "defeatTriggers": [
+        0
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "ZERG 7: \"THE CULLING\"\r\n- Eradicate every last remnant of the Garm Brood."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zr7a": 1,
+        "Zr7s": 2,
+        "Zr7g": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg08",
+      "title": "Eye for an Eye",
+      "sha256": "ea8af2d5458e5c27ad53419a80420f32619c60a7830eefd4742b767f3dc0cac2",
+      "triggers": 39,
+      "conditionRecords": 55,
+      "actionRecords": 134,
+      "conditions": {
+        "2": 14,
+        "12": 17,
+        "11": 14,
+        "3": 9,
+        "5": 1
+      },
+      "actions": {
+        "2": 5,
+        "4": 10,
+        "5": 3,
+        "8": 6,
+        "9": 6,
+        "13": 34,
+        "12": 1,
+        "26": 3,
+        "10": 5,
+        "30": 4,
+        "7": 6,
+        "31": 4,
+        "3": 13,
+        "28": 3,
+        "6": 1,
+        "16": 8,
+        "11": 16,
+        "43": 3,
+        "38": 2,
+        "1": 1
+      },
+      "victoryTriggers": [
+        24
+      ],
+      "defeatTriggers": [
+        0,
+        1,
+        15,
+        16,
+        17
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "ZERG 8: \"EYE FOR AN EYE\"\r\n- Destroy the Protoss bases.\r\n- Let no Dark Templar escape.\r\n- Kerrigan must survive."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zer8": 1,
+        "Ze8T": 1,
+        "MvTe": 6
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg09",
+      "title": "The Invasion of Aiur",
+      "sha256": "fd99e4670f57110dd7720777a188d6447c7e23a02334c691f90790c5752f8205",
+      "triggers": 14,
+      "conditionRecords": 16,
+      "actionRecords": 63,
+      "conditions": {
+        "2": 4,
+        "3": 6,
+        "12": 1,
+        "11": 4,
+        "1": 1
+      },
+      "actions": {
+        "2": 1,
+        "10": 3,
+        "30": 3,
+        "7": 4,
+        "4": 6,
+        "31": 3,
+        "1": 1,
+        "12": 3,
+        "26": 4,
+        "25": 1,
+        "8": 4,
+        "9": 3,
+        "14": 1,
+        "13": 5,
+        "11": 2,
+        "38": 1,
+        "16": 18
+      },
+      "victoryTriggers": [
+        1
+      ],
+      "defeatTriggers": [
+        0
+      ],
+      "objectives": [
+        {
+          "trigger": 2,
+          "text": "ZERG 9: \"THE INVASION OF AIUR\"\r\n- Bring a Drone to the Khaydarin Crystal Formation."
+        },
+        {
+          "trigger": 3,
+          "text": "ZERG 9: \"THE INVASION OF AIUR\"\r\n- Hold off the protoss forces while the\r\n  drone harvests the Khaydarin Crystal."
+        },
+        {
+          "trigger": 4,
+          "text": "ZERG 9: \"THE INVASION OF AIUR\"\r\n- Bring Khaydarin Crystal to the Beacon."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Zer9": 1,
+        "Z9ly": 1,
+        "Z9ry": 1,
+        "VluA": 13,
+        "Z9lo": 1,
+        "Z9ro": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    },
+    {
+      "mission": "zerg10",
+      "title": "Full Circle",
+      "sha256": "7d9befb178c53014bc7c7efdcb6ed208a0aa7c97b4a37141cbca5345fd6d15fb",
+      "triggers": 10,
+      "conditionRecords": 10,
+      "actionRecords": 33,
+      "conditions": {
+        "2": 5,
+        "12": 1,
+        "5": 1,
+        "3": 1,
+        "15": 1,
+        "11": 1
+      },
+      "actions": {
+        "2": 1,
+        "26": 4,
+        "4": 5,
+        "12": 2,
+        "30": 2,
+        "7": 2,
+        "11": 2,
+        "10": 2,
+        "31": 2,
+        "8": 1,
+        "9": 1,
+        "5": 1,
+        "1": 1,
+        "16": 5,
+        "13": 2
+      },
+      "victoryTriggers": [
+        3
+      ],
+      "defeatTriggers": [
+        0
+      ],
+      "objectives": [
+        {
+          "trigger": 1,
+          "text": "ZERG 10: \"FULL CIRCLE\"\r\n- Destroy the Protoss Temple."
+        },
+        {
+          "trigger": 2,
+          "text": "ZERG 10: \"FULL CIRCLE\"\r\n- Bring Khaydarin Crystal to the \r\n  remains of the Protoss Temple."
+        }
+      ],
+      "nextScenarioRoutes": [],
+      "aiScripts": {
+        "Z10b": 1,
+        "Z10a": 1,
+        "Z10d": 1,
+        "Z10c": 1,
+        "Z10e": 1
+      },
+      "validReferences": true,
+      "skippedLeaderboardActions": []
+    }
+  ],
+  "sourceSha256": {
+    "tests/audit_campaign_maps.py": "4eb778a43669282175620d6b62046a65ce9b5bb3a629ceb2a7615699c024932d",
+    "app/src/main/assets/native/missions.json": "96b8a781ef517e72afda0bb09a311b30d681686862c4370bd04ce0c9d17ccb57"
+  }
+}

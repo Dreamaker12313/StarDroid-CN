@@ -1,0 +1,58 @@
+{
+  "checks": [
+    "Music imported by actual Java code plays in briefing, ducks voice, pauses/resumes, switches to in-game track and advances playlist",
+    "Volume, specific track, music switch, global mute, and manual pause retained across native suspend/resume",
+    "Console within 640 × 360 viewport",
+    "Console within 900 × 412 viewport",
+    "Console within 1280 × 720 viewport"
+  ],
+  "errors": [],
+  "logs": [],
+  "originalWav": {
+    "bytes": 1164692,
+    "duration": 26.409251700680272,
+    "channels": 1
+  },
+  "briefingMusic": {
+    "enabled": true,
+    "volume": 0.3,
+    "muted": false,
+    "paused": false,
+    "ducked": false,
+    "phase": "briefing",
+    "track": "music\\trdyroom.wav",
+    "playing": true,
+    "time": 0.475357,
+    "loading": false,
+    "tracks": 3,
+    "packedBytes": 132690,
+    "error": null
+  },
+  "music": {
+    "enabled": true,
+    "volume": 0.45,
+    "muted": false,
+    "paused": false,
+    "ducked": true,
+    "phase": "game",
+    "track": "music\\terran1.wav",
+    "playing": true,
+    "time": 1.384751,
+    "loading": false,
+    "tracks": 3,
+    "packedBytes": 132554,
+    "error": null
+  },
+  "console": {
+    "race": 1,
+    "originalConsole": true,
+    "commandIcons": 5,
+    "minimap": {
+      "x": 4,
+      "y": 652,
+      "w": 64,
+      "h": 64
+    },
+    "selectedType": 0
+  }
+}

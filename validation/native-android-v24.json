@@ -1,0 +1,230 @@
+{
+  "version": "0.24",
+  "android": "9",
+  "abi": "x86_64",
+  "title": {
+    "page": "main",
+    "modal": "",
+    "failure": ""
+  },
+  "chooser": {
+    "page": "main",
+    "modal": "choose",
+    "failure": ""
+  },
+  "broodwar": {
+    "page": "campaign",
+    "modal": "",
+    "failure": ""
+  },
+  "briefing": {
+    "page": "briefing",
+    "modal": "",
+    "failure": ""
+  },
+  "briefingFontHeight": 16,
+  "briefingDrag": true,
+  "hatchery": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "larva": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "disabledCommandTouch": true,
+  "egg": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "egg-paused": {
+    "page": "game",
+    "modal": "menu",
+    "failure": ""
+  },
+  "options": {
+    "page": "game",
+    "modal": "options",
+    "failure": ""
+  },
+  "chrysalis": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "hatchery-before-morph": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "lairMorphTouch": true,
+  "lair": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "audioTrackPlaying": true,
+  "mixedNonzeroSamples": 16383,
+  "victory": {
+    "page": "game",
+    "modal": "outcome",
+    "failure": ""
+  },
+  "results": {
+    "page": "results",
+    "modal": "",
+    "failure": ""
+  },
+  "skirmish": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "terran-queue": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "protoss-health-shields": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "widescreen": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "portraitVariantsAndOpacity": true,
+  "cinematic": {
+    "page": "movie",
+    "modal": "",
+    "failure": ""
+  },
+  "passed": true,
+  "apkSha256": "f70e57db555580d8aea846295a441eb38d3d6982104f6d492dd1f8155f76c127",
+  "emulator": "37.2.12",
+  "image": "Android 9 API 28 AOSP x86_64 r04",
+  "display": "960x640 @ 160dpi",
+  "acceleration": "Software CPU / SwiftShader; no KVM",
+  "baseline023Passed": true,
+  "retainedImportedFilesAfterUpdate": {
+    "coreMpqs": 3,
+    "zipBundles": 70
+  },
+  "botFramesAtLeast": 2400,
+  "botUnitsAtCheckpoint": {
+    "Egg": 3,
+    "Drone": 4,
+    "Spawning Pool": 1,
+    "Overlord": 1,
+    "Hatchery": 1
+  },
+  "surfaceSuspendResume": true,
+  "physicalDeviceTested": false,
+  "fullCampaignPlaythroughs": false,
+  "audibleSpeakerOutputVerified": false,
+  "testFixtureControls": [
+    "diagnostic unit selection",
+    "controlled resources",
+    "instant Lair morph",
+    "forced victory",
+    "cinematic seek for screenshot"
+  ],
+  "screenshotsInspected": [
+    "title",
+    "briefing",
+    "hatchery",
+    "egg",
+    "chrysalis",
+    "lair",
+    "results",
+    "terran-queue",
+    "protoss-health-shields",
+    "widescreen",
+    "cinematic"
+  ],
+  "screenshots": [
+    {
+      "name": "briefing",
+      "sha256": "7633918c3beea892c474130568fe499b34da0a1cf9145ea960835896d232b0e0"
+    },
+    {
+      "name": "broodwar",
+      "sha256": "10290832c28219bf6aa9f740e7a0993cb2931eef2883a9646c96ba28f686009b"
+    },
+    {
+      "name": "chooser",
+      "sha256": "fb69470114bfc896260017153a83914ca4a8f4286636bb63d69e209b316ea996"
+    },
+    {
+      "name": "chrysalis",
+      "sha256": "0ac4ef6ecc121d8bbed65b4efa4822944f02b63fbd2ecc3977362251625cfc16"
+    },
+    {
+      "name": "cinematic",
+      "sha256": "453bb9d89cf2025548c74bffc02f271c1c0d3efa6568951f520a6e1710043335"
+    },
+    {
+      "name": "egg-paused",
+      "sha256": "cd36d14add5ebd116197243db012c30ff751eceacb3b00578a17499cdf9716f0"
+    },
+    {
+      "name": "egg",
+      "sha256": "88bf83fe3f88bd3303006b2798039b88c728b3db9a10143ded0c0fcaad46c9d7"
+    },
+    {
+      "name": "hatchery-before-morph",
+      "sha256": "d6b229cb0efb0daa9cb35a3c81d7f8cf7ef0663908fa3889953fab495695dc7e"
+    },
+    {
+      "name": "hatchery",
+      "sha256": "5a3f066f63860590339d5b0913e57ba69e00b6713acc003c6515b4ac4da2a476"
+    },
+    {
+      "name": "lair",
+      "sha256": "dacdc9a4c0769b0061cabb3a7c5bb10f8aba18e5c8fdf1d7d8f18d1bfcc01601"
+    },
+    {
+      "name": "larva",
+      "sha256": "2b57336d50f2d090499893d79f917a92384cb51ae4dbaec6bebeb63abf6f096e"
+    },
+    {
+      "name": "options",
+      "sha256": "35c9589ffd9d9d100ccd4805b76962649ead426fca686b787d4e851d9cb19fd6"
+    },
+    {
+      "name": "protoss-health-shields",
+      "sha256": "89574f665f4f96157a0c92856c3be2e01f31bdc97ea2849ed400f23705e90ff3"
+    },
+    {
+      "name": "results",
+      "sha256": "c1de0f3869e4cd2f6031e44fe69ad0f44d0add72d732278ce2f19c716a31e805"
+    },
+    {
+      "name": "skirmish",
+      "sha256": "6429c75a3f7b8037ef703a189256cfce09ce591aca14b854f614243d62614ede"
+    },
+    {
+      "name": "terran-queue",
+      "sha256": "0bd48831a5c755594207651e239786de24879b9c7e559ab08fb56e8fa033bd2b"
+    },
+    {
+      "name": "title",
+      "sha256": "6539433b2bae1e60e58972dba40765249acaad2515d71826b028f113537b3277"
+    },
+    {
+      "name": "victory",
+      "sha256": "b33ea8e1013feb9427c7b12f2f9c5a0283bc34ad62cdc7a7477ac6a2939c1aa3"
+    },
+    {
+      "name": "widescreen",
+      "sha256": "5c4fe6c712817e23907c7152a2f60064e0e7e6dab4cde2234a0d638630cc8db1"
+    }
+  ],
+  "appErrorLogEmpty": true,
+  "androidCrashBufferEmpty": true
+}

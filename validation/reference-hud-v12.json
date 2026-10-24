@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Original dlgs/terran.grp Menu/terrain/dialog frames; 96×96 mission minimap centered without stretching; touch and keyboard terrain toggles agree and preserve green local unit markers on a black background; five framed units arranged 3+2; bitmap timer; menu pauses gameplay"
+  ],
+  "errors": [],
+  "layouts": [],
+  "minimap": {
+    "bounds": {
+      "x": 22,
+      "y": 363,
+      "width": 96,
+      "height": 96
+    },
+    "unitPixels": 149,
+    "art": "dlgs/terran.grp"
+  }
+}

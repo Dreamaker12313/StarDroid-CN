@@ -1,0 +1,190 @@
+{
+  "version": "0.25",
+  "android": "9",
+  "abi": "x86_64",
+  "title": {
+    "page": "main",
+    "modal": "",
+    "failure": ""
+  },
+  "chooser": {
+    "page": "main",
+    "modal": "choose",
+    "failure": ""
+  },
+  "registry": {
+    "page": "registry",
+    "modal": "",
+    "failure": ""
+  },
+  "campaign": {
+    "page": "campaign",
+    "modal": "",
+    "failure": ""
+  },
+  "stationaryFiguresAndAttachedLabels": true,
+  "missions": {
+    "page": "campaign",
+    "modal": "missions",
+    "failure": ""
+  },
+  "custom": {
+    "page": "custom",
+    "modal": "",
+    "failure": ""
+  },
+  "mapValidationAndExplicitStart": true,
+  "customMapStart": true,
+  "practiceWithoutComputer": true,
+  "customComputerUnits": "3657\tSCV\t0\t1080\t264\t3\n3658\tSCV\t0\t1056\t264\t3\n3659\tSCV\t0\t1032\t264\t3\n3660\tSCV\t0\t1008\t264\t3\n3661\tCommand Center\t0\t1056\t208\t23\n3656\tLarva\t2\t1057\t1853\t77\n3662\tDrone\t2\t1204\t1890\t87\n3663\tDrone\t2\t1108\t1940\t87\n3664\tDrone\t2\t1080\t1940\t87\n3665\tDrone\t2\t1003\t1940\t87\n3666\tOverlord\t2\t610\t1389\t6\n3667\tLarva\t2\t997\t1851\t77\n3668\tLarva\t2\t1019\t1849\t77\n3669\tHatchery\t2\t1056\t1808\t23\n3670\tMineral Field\t11\t1888\t80\t23\n3671\tMineral Field\t11\t1952\t80\t23\n3672\tMineral Field\t11\t1984\t112\t23\n3673\tMineral Field\t11\t1984\t144\t23\n3674\tMineral Field\t11\t2016\t176\t23\n3675\tMineral Field\t11\t1984\t208\t23\n3676\tMineral Field\t11\t2016\t240\t23\n3677\tMineral Field\t11\t32\t1808\t23\n3678\tMineral Field\t11\t64\t1840\t23\n3679\tMineral Field\t11\t2016\t1808\t23\n3680\tMineral Field\t11\t1984\t1840\t23\n3681\tMineral Field\t11\t2016\t1872\t23\n3682\tMineral Field\t11\t1984\t1904\t23\n3683\tMineral Field\t11\t1984\t1936\t23\n3684\tMineral Field\t11\t1952\t1968\t23\n3685\tMineral Field\t11\t1888\t1968\t23\n3686\tMineral Field\t11\t32\t1872\t23\n3687\tMineral Field\t11\t64\t1904\t23\n3688\tMineral Field\t11\t64\t1936\t23\n3689\tMineral Field\t11\t96\t1968\t23\n3690\tMineral Field\t11\t160\t1968\t23\n3691\tMineral Field\t11\t32\t240\t23\n3692\tMineral Field\t11\t64\t208\t23\n3693\tMineral Field\t11\t32\t176\t23\n3694\tMineral Field\t11\t64\t144\t23\n3695\tMineral Field\t11\t64\t112\t23\n3696\tMineral Field\t11\t96\t80\t23\n3697\tMineral Field\t11\t160\t80\t23\n3698\tMineral Field\t11\t1152\t48\t23\n3699\tMineral Field\t11\t1216\t48\t23\n3700\tMineral Field\t11\t1280\t144\t23\n3701\tMineral Field\t11\t1248\t112\t23\n3702\tMineral Field\t11\t1248\t80\t23\n3703\tMineral Field\t11\t1088\t16\t23\n3704\tMineral Field\t11\t1056\t48\t23\n3705\tMineral Field\t11\t960\t48\t23\n3706\tMineral Field\t11\t1024\t16\t23\n3707\tMineral Field\t11\t64\t1104\t23\n3708\tMineral Field\t11\t64\t976\t23\n3709\tMineral Field\t11\t64\t1040\t23\n3710\tMineral Field\t11\t64\t1136\t23\n3711\tMineral Field\t11\t96\t1168\t23\n3712\tMineral Field\t11\t160\t1168\t23\n3713\tMineral Field\t11\t32\t1072\t23\n3714\tMineral Field\t11\t32\t1008\t23\n3715\tMineral Field\t11\t32\t944\t23\n3716\tMineral Field\t11\t2016\t976\t23\n3717\tMineral Field\t11\t1984\t1008\t23\n3718\tMineral Field\t11\t2016\t1040\t23\n3719\tMineral Field\t11\t1984\t1072\t23\n3720\tMineral Field\t11\t2016\t1104\t23\n3721\tMineral Field\t11\t1952\t1200\t23\n3722\tMineral Field\t11\t1984\t1168\t23\n3723\tMineral Field\t11\t1984\t1136\t23\n3724\tMineral Field\t11\t1984\t944\t23\n3725\tVespene Geyser\t11\t832\t192\t23\n3726\tVespene Geyser\t11\t256\t832\t23\n3727\tMineral Field\t11\t1024\t2000\t23\n3728\tMineral Field\t11\t1088\t2000\t23\n3729\tMineral Field\t11\t1280\t1872\t23\n3730\tMineral Field\t11\t1248\t1904\t23\n3731\tMineral Field\t11\t1248\t1936\t23\n3732\tMineral Field\t11\t1216\t1968\t23\n3733\tMineral Field\t11\t1152\t1968\t23\n3734\tMineral Field\t11\t1056\t1968\t23\n3735\tMineral Field\t11\t960\t1968\t23\n3736\tVespene Geyser\t11\t832\t1824\t23\n3737\tVespene Geyser\t11\t1792\t864\t23\n3738\tVespene Geyser\t11\t256\t1984\t23\n3739\tVespene Geyser\t11\t256\t64\t23\n3740\tVespene Geyser\t11\t1792\t1984\t23\n3741\tVespene Geyser\t11\t1792\t64\t23\n3742\tPsi Disrupter\t11\t720\t1064\t23\n3743\tPsi Disrupter\t11\t720\t984\t23\n3744\tPsi Disrupter\t11\t1096\t1328\t23\n3745\tPsi Disrupter\t11\t952\t1328\t23\n3746\tPsi Disrupter\t11\t1328\t1064\t23\n3747\tPsi Disrupter\t11\t1328\t984\t23\n3748\tPsi Disrupter\t11\t1096\t720\t23\n2049\tPsi Disrupter\t11\t952\t720\t23\n",
+  "customComputerSlot": 2,
+  "protoss-briefing": {
+    "page": "briefing",
+    "modal": "",
+    "failure": ""
+  },
+  "untruncatedBriefingRecordings": 11,
+  "protoss-speaking": {
+    "page": "briefing",
+    "modal": "",
+    "failure": ""
+  },
+  "briefing": {
+    "page": "briefing",
+    "modal": "",
+    "failure": ""
+  },
+  "hatchery": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "larva": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "menu": {
+    "page": "game",
+    "modal": "menu",
+    "failure": ""
+  },
+  "options": {
+    "page": "game",
+    "modal": "options",
+    "failure": ""
+  },
+  "sound": {
+    "page": "game",
+    "modal": "sound",
+    "failure": ""
+  },
+  "speed": {
+    "page": "game",
+    "modal": "speed",
+    "failure": ""
+  },
+  "speed16x": true,
+  "video": {
+    "page": "game",
+    "modal": "video",
+    "failure": ""
+  },
+  "orderLines": true,
+  "testing": {
+    "page": "game",
+    "modal": "testing",
+    "failure": ""
+  },
+  "terran-group": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "wireTouch": {
+    "gesture": "command",
+    "hit": 3740,
+    "before": "3740\tSCV\t60\t60\t0\t7\t13\n3741\tSCV\t60\t60\t0\t7\t13\n3743\tSCV\t60\t60\t0\t7\t13\n3744\tSCV\t60\t60\t0\t7\t13\n3745\tSCV\t60\t60\t0\t7\t13\n"
+  },
+  "wireTouchAfter": "3740\tSCV\t60\t60\t0\t7\t13\n",
+  "groupWireTileSelection": true,
+  "beforeTarget": {
+    "cursor": 1,
+    "touchAction": 2,
+    "card": "SCV\tHP 60/60\t\t\nm\tMove\t1\t-1\t0\t0\t1\t\t\t0\t-1\t-1\t-1\ns\tStop\t1\t-1\t0\t0\t1\t\t\t1\t-1\t-1\t-1\na\tAttack\t1\t-1\t0\t0\t1\t\t\t0\t-1\t-1\t-1\nh\tHold\t1\t-1\t0\t0\t1\t\t\t0\t-1\t-1\t-1\np\tPatrol\t1\t-1\t0\t0\t1\t\t\t0\t-1\t-1\t-1\ng\tGather\t1\t-1\t0\t0\t1\t\t\t0\t-1\t-1\t-1\nr\tRepair\t1\t-1\t0\t0\t1\t\t\t0\t-1\t-1\t-1\nb\tBuild\t1\t-1\t0\t0\t1\t\t\t0\t-1\t-1\t-1"
+  },
+  "panBoxAimPinchAndCancel": true,
+  "placement": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "placementPreviewAndCancel": true,
+  "placementConfirmed": true,
+  "victory": {
+    "page": "game",
+    "modal": "outcome",
+    "failure": ""
+  },
+  "results": {
+    "page": "results",
+    "modal": "",
+    "failure": ""
+  },
+  "passed": true,
+  "apkSha256": "f23a7817e737b40c1720a2f38342fefefd179efcbe660d26f9be4613cfa10a14",
+  "emulator": "37.2.12",
+  "image": "system-images;android-28;default;x86_64",
+  "display": "960x640 @160dpi",
+  "acceleration": "Software CPU emulation / SwiftShader, no KVM",
+  "physicalDeviceTested": false,
+  "fullCampaignPlaythroughs": false,
+  "audibleSpeakerOutputVerified": false,
+  "testFixtureControls": [
+    "diagnostic selection",
+    "resources",
+    "map reveal",
+    "instant production",
+    "forced outcome"
+  ],
+  "screenshotsInspected": [
+    "placement",
+    "terran-group",
+    "victory",
+    "results",
+    "protoss-speaking",
+    "sound",
+    "campaign",
+    "custom",
+    "options",
+    "larva"
+  ],
+  "capturedScenes": [
+    "briefing",
+    "campaign",
+    "chooser",
+    "custom",
+    "hatchery",
+    "larva",
+    "menu",
+    "missions",
+    "options",
+    "placement",
+    "protoss-briefing",
+    "protoss-speaking",
+    "registry",
+    "results",
+    "sound",
+    "speed",
+    "terran-group",
+    "testing",
+    "title",
+    "victory",
+    "video"
+  ],
+  "alternateComputerOrdersObserved": {
+    "slot": 2,
+    "dronesWithOrder87": 4
+  },
+  "appErrorLogForFinalProcessEmpty": true
+}

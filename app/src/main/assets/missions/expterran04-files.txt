@@ -1,0 +1,9 @@
+campaign\expterran\terran04\staredit\scenario.chk
+campaign\expterran\terran04\staredit\wav\combeep0.wav
+campaign\expterran\terran04\staredit\wav\t4b00gal.wav
+campaign\expterran\terran04\staredit\wav\t4b01stu.wav
+campaign\expterran\terran04\staredit\wav\t4b02dur.wav
+campaign\expterran\terran04\staredit\wav\t4b03stu.wav
+campaign\expterran\terran04\staredit\wav\t4b04gal.wav
+campaign\expterran\terran04\staredit\wav\t4m00stu.wav
+campaign\expterran\terran04\staredit\wav\t4m10stu.wav

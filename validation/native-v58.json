@@ -1,0 +1,177 @@
+{
+  "passed": true,
+  "physicalDevices": false,
+  "cases": [
+    {
+      "case": "heroes",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 20 cost=100/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 19 cost=100/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 16 cost=50/150 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 28 cost=465/350 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 23 cost=225/150 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 99 cost=40/125 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 104 cost=40/125 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 51 cost=100/300 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 53 cost=100/35 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 48 cost=335/335 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 54 cost=50/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 55 cost=135/135 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 77 cost=165/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 78 cost=250/100 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 75 cost=290/235 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 79 cost=65/200 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 82 cost=465/335 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 88 cost=415/190 six-button card, queue, save, train, death cap\n"
+    },
+    {
+      "case": "merge",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS Tassadar/Zeratul merge, complete hero Archon, save, paired cap/death release, Duke siege cap and supply\n"
+    },
+    {
+      "case": "teams",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 4, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 4, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS four native perspectives: teams, vision, saved rules, shared victory and defeat, default-off isolation\n"
+    },
+    {
+      "case": "legacy",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS previous schema 2 save compatibility\n"
+    },
+    {
+      "case": "power",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS power expansion=0 disabled building types=13 unit/building/upgrade dependencies=17 original red status and sound; retail completed-tech counting\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS power expansion=1 disabled building types=13 unit/building/upgrade dependencies=17 original red status and sound; retail completed-tech counting\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS actual Pylon construction/destruction and saved power state\n"
+    },
+    {
+      "case": "addons",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS all 6 addon types: actual lift, neutral tech/card, enemy landing capture, owner census, save round trip\n"
+    },
+    {
+      "case": "sound",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS original Ultralisk selection/annoyed/normal cycle; original score fill/end composed to 2200 ms; playback clock; independent complete lobby sounds\n"
+    },
+    {
+      "case": "victory",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 3, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 3, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 3, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 3, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 3, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 3, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 5, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 5, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 5, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 5, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 5, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 5, units=5, fog_player=2\nPASS 48 victory cases: original/BW, 3 difficulties, 3 races, Melee/FFA, mixed/all-human network perspectives\n"
+    },
+    {
+      "case": "cargo",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS Bunker/Dropship/Shuttle/transport Overlord empty, full and unload command states\n"
+    },
+    {
+      "case": "detection",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nPASS reactive detection for three races, Comsat energy, campaign existing detectors only, scripted movement retained\n"
+    },
+    {
+      "case": "deplete-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nDEPLETED 0 0 1\t13\t0\t1\t0\t50\t0\t75\t0\nDEPLETED 0 3000 1\t388\t0\t6\t0\t298\t0\t23\t0\nDEPLETED 0 6000 1\t763\t0\t15\t0\t794\t0\t19\t0\nDEPLETED 0 9000 1\t1138\t4\t19\t0\t1466\t24\t66\t24\nDEPLETED 0 12000 1\t1513\t8\t37\t0\t3034\t528\t184\t428\nDEPLETED 0 15000 1\t1563\t11\t57\t2\t5098\t1672\t248\t972\nDEPLETED 0 18000 1\t1837\t15\t70\t5\t7170\t2936\t245\t961\nDEPLETED 0 21000 1\t2212\t16\t95\t7\t9242\t4232\t342\t1082\nDEPLETED 0 24000 1\t2475\t17\t109\t11\t10466\t5520\t341\t1745\nDEPLETED 0 27000 1\t2534\t19\t111\t12\t10542\t6256\t17\t2481\nRECOVERY race=0 minerals=11348 bases=3\nPASS depleted main recovery race=0\n"
+    },
+    {
+      "case": "deplete-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nDEPLETED 1 0 1\t50\t0\t1\t0\t50\t0\t75\t0\nDEPLETED 1 3000 1\t54\t0\t6\t0\t314\t0\t89\t0\nDEPLETED 1 6000 1\t429\t4\t13\t0\t818\t0\t43\t0\nDEPLETED 1 9000 1\t804\t6\t16\t0\t1546\t0\t121\t0\nDEPLETED 1 12000 1\t1179\t12\t30\t0\t2866\t480\t366\t480\nDEPLETED 1 15000 1\t1554\t22\t46\t1\t4930\t1400\t430\t1000\nDEPLETED 1 18000 1\t1676\t27\t55\t4\t6986\t2680\t761\t1255\nDEPLETED 1 21000 1\t1874\t27\t61\t4\t9058\t3976\t2433\t2401\nDEPLETED 1 24000 1\t2249\t27\t61\t5\t10386\t5272\t3661\t3597\nDEPLETED 1 27000 1\t2624\t32\t61\t5\t10598\t5976\t3373\t4201\nRECOVERY race=1 minerals=11844 bases=3\nPASS depleted main recovery race=1\n"
+    },
+    {
+      "case": "deplete-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nDEPLETED 2 0 1\t33\t0\t1\t0\t50\t0\t75\t0\nDEPLETED 2 3000 1\t37\t2\t5\t0\t322\t0\t47\t0\nDEPLETED 2 6000 1\t412\t3\t13\t0\t834\t0\t59\t0\nDEPLETED 2 9000 1\t787\t5\t16\t0\t1562\t0\t137\t0\nDEPLETED 2 12000 1\t1162\t14\t29\t0\t2930\t424\t355\t424\nDEPLETED 2 15000 1\t1537\t20\t41\t0\t5018\t1352\t543\t1152\nDEPLETED 2 18000 1\t1557\t28\t52\t4\t7058\t2624\t433\t1524\nDEPLETED 2 21000 1\t1857\t28\t57\t6\t9138\t3912\t1663\t2462\nDEPLETED 2 24000 1\t2232\t28\t57\t6\t10458\t5208\t2633\t3408\nDEPLETED 2 27000 1\t2607\t31\t66\t8\t10614\t6000\t89\t3025\nRECOVERY race=2 minerals=12148 bases=3\nPASS depleted main recovery race=2\n"
+    },
+    {
+      "case": "macro-0-0-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t597\t9\t20\t0\t2138\t720\t213\t270\nAI 12000 1\t1103\t11\t30\t1\t5370\t1992\t1720\t567\nAI 18000 1\t1853\t11\t36\t1\t8618\t3272\t4368\t1247\nAI 24000 1\t2603\t11\t49\t4\t11750\t4568\t6650\t2343\nAI 30000 1\t2928\t15\t79\t7\t13670\t5162\t5620\t1587\nAI 36000 1\t3259\t122\t95\t11\t14294\t5342\t3969\t142\nAI 42000 1\t4009\t127\t121\t13\t15894\t5622\t3269\t72\nAI 48000 1\t4759\t130\t170\t16\t22918\t7848\t6868\t1373\nAI 54000 1\t5509\t131\t193\t18\t30782\t10708\t13182\t3833\nMACRO race=0 level=0 bases=5 upgrades=13 attacks=21 types=35,37,38,39,41,42,43,44,45,46,47,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-0-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t525\t7\t22\t0\t2290\t560\t190\t35\nAI 12000 1\t747\t10\t36\t1\t5578\t1840\t1353\t90\nAI 18000 1\t772\t22\t61\t5\t8826\t3120\t2426\t395\nAI 24000 1\t1357\t44\t79\t8\t11830\t4384\t3380\t509\nAI 30000 1\t2107\t52\t101\t10\t13498\t5128\t2798\t53\nAI 36000 1\t2857\t57\t120\t13\t14246\t5298\t2046\t23\nAI 42000 1\t3607\t66\t195\t13\t18870\t6926\t1120\t151\nAI 48000 1\t4357\t66\t229\t16\t26198\t11016\t6573\t4016\nAI 54000 1\t5107\t69\t250\t18\t33350\t14754\t12025\t7554\nMACRO race=0 level=1 bases=5 upgrades=16 attacks=21 types=35,37,38,39,41,42,43,44,45,46,47,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-0-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t568\t8\t19\t0\t2122\t568\t47\t218\nAI 12000 1\t894\t11\t52\t5\t5154\t1840\t4\t265\nAI 18000 1\t990\t21\t83\t10\t8282\t3120\t132\t95\nAI 24000 1\t1740\t30\t123\t13\t13050\t5384\t950\t159\nAI 30000 1\t2490\t36\t178\t17\t17230\t7474\t330\t849\nAI 36000 1\t3240\t38\t224\t23\t23414\t10888\t2389\t2538\nAI 42000 1\t3990\t44\t246\t26\t29514\t14160\t6739\t5310\nAI 48000 1\t4740\t47\t264\t27\t34898\t17702\t11173\t8452\nAI 54000 1\t5490\t55\t278\t27\t40290\t20986\t15815\t11736\nMACRO race=0 level=2 bases=6 upgrades=21 attacks=27 types=35,37,38,39,41,42,43,44,45,46,47,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-1-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t217\t12\t22\t0\t2314\t688\t114\t388\nAI 12000 1\t439\t16\t30\t2\t5674\t1920\t2474\t1245\nAI 18000 1\t732\t17\t36\t3\t9090\t3200\t5190\t2175\nAI 24000 1\t988\t18\t39\t3\t12282\t4472\t7607\t3297\nAI 30000 1\t1738\t57\t66\t3\t15470\t6124\t7945\t3624\nAI 36000 1\t2210\t63\t80\t4\t21006\t8262\t10631\t4612\nAI 42000 1\t2528\t65\t90\t5\t27046\t12278\t15321\t8128\nAI 48000 1\t2958\t66\t95\t5\t31794\t16900\t19219\t12250\nAI 54000 1\t3235\t66\t100\t6\t37178\t21350\t24353\t16700\nMACRO race=1 level=0 bases=6 upgrades=11 attacks=7 types=0,1,2,3,4,5,6,7,8,9,12,32,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-1-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t386\t12\t22\t0\t2314\t680\t189\t455\nAI 12000 1\t546\t18\t33\t2\t5586\t1896\t1436\t996\nAI 18000 1\t965\t29\t60\t3\t11426\t4280\t4276\t1955\nAI 24000 1\t1185\t29\t63\t3\t17862\t6856\t10087\t4106\nAI 30000 1\t1786\t153\t69\t4\t22246\t8876\t12946\t5051\nAI 36000 1\t2270\t163\t81\t4\t24962\t10340\t13812\t5890\nAI 42000 1\t2401\t167\t86\t5\t29162\t12450\t16487\t7475\nAI 48000 1\t3044\t168\t91\t6\t34554\t16278\t20929\t10703\nAI 54000 1\t3399\t170\t95\t6\t39142\t20740\t24517\t14865\nMACRO race=1 level=1 bases=6 upgrades=14 attacks=6 types=0,1,2,3,4,5,6,7,8,9,12,32,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-1-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t420\t12\t18\t0\t2298\t656\t373\t456\nAI 12000 1\t1170\t33\t52\t3\t6202\t2088\t452\t1038\nAI 18000 1\t1490\t34\t70\t6\t12786\t4648\t5836\t3298\nAI 24000 1\t2240\t35\t75\t7\t18474\t7224\t11024\t5674\nAI 30000 1\t2990\t167\t80\t10\t22718\t9162\t15018\t7562\nAI 36000 1\t3740\t178\t95\t11\t25138\t10530\t15638\t8555\nAI 42000 1\t4408\t195\t132\t15\t29538\t12666\t15238\t8791\nAI 48000 1\t4805\t200\t154\t18\t35394\t16572\t18344\t10947\nAI 54000 1\t4943\t203\t172\t23\t40566\t21090\t20741\t13715\nMACRO race=1 level=2 bases=6 upgrades=16 attacks=24 types=0,1,2,3,4,5,6,7,8,9,12,32,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-2-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t212\t15\t19\t0\t2578\t592\t403\t392\nAI 12000 1\t696\t18\t29\t1\t6234\t1880\t2009\t955\nAI 18000 1\t703\t22\t31\t2\t9770\t3152\t4070\t1377\nAI 24000 1\t1417\t40\t61\t5\t13638\t5112\t3438\t862\nAI 30000 1\t1981\t48\t88\t8\t18462\t7368\t4257\t1618\nAI 36000 1\t2304\t53\t105\t11\t23910\t10684\t5865\t4259\nAI 42000 1\t3054\t62\t116\t13\t28482\t14714\t7647\t7989\nAI 48000 1\t3804\t64\t122\t15\t33698\t19360\t11248\t12485\nAI 54000 1\t4554\t65\t122\t15\t38946\t23454\t15656\t16579\nMACRO race=2 level=0 bases=6 upgrades=13 attacks=15 types=64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-2-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t402\t17\t19\t0\t2570\t592\t170\t192\nAI 12000 1\t986\t26\t34\t1\t6226\t1840\t776\t140\nAI 18000 1\t1041\t39\t53\t4\t12034\t4096\t3609\t846\nAI 24000 1\t1791\t42\t57\t4\t17482\t6680\t7707\t2355\nAI 30000 1\t2541\t50\t74\t6\t21854\t8972\t9359\t3097\nAI 36000 1\t3291\t55\t93\t9\t25402\t11840\t9582\t5115\nAI 42000 1\t3887\t61\t109\t12\t29578\t15160\t9913\t7585\nAI 48000 1\t4188\t65\t126\t15\t33678\t19142\t10373\t10867\nAI 54000 1\t4938\t69\t134\t17\t37798\t23248\t11878\t14648\nMACRO race=2 level=1 bases=6 upgrades=17 attacks=17 types=64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-2-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t407\t15\t18\t0\t2554\t592\t554\t492\nAI 12000 1\t754\t40\t46\t5\t6562\t2088\t12\t513\nAI 18000 1\t1477\t44\t52\t7\t12450\t4624\t4875\t2499\nAI 24000 1\t2227\t50\t54\t7\t17022\t7184\t7872\t3884\nAI 30000 1\t2977\t65\t76\t10\t21302\t9496\t7452\t3121\nAI 36000 1\t3625\t78\t111\t17\t24674\t12372\t5249\t4397\nAI 42000 1\t4047\t85\t141\t21\t29370\t16178\t4435\t6778\nAI 48000 1\t4797\t85\t143\t23\t34290\t20530\t8290\t11080\nAI 54000 1\t5547\t88\t145\t25\t38542\t24528\t10977\t15028\nMACRO race=2 level=2 bases=6 upgrades=20 attacks=26 types=64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-0-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t598\t5\t20\t0\t2218\t784\t193\t284\nAI 12000 1\t1019\t8\t39\t2\t5466\t2056\t741\t106\nAI 18000 1\t1049\t21\t53\t3\t8722\t3328\t2472\t103\nAI 24000 1\t1334\t40\t74\t7\t11766\t4568\t3816\t643\nAI 30000 1\t2084\t48\t96\t9\t13510\t5170\t3335\t70\nAI 36000 1\t2834\t54\t127\t11\t14786\t5488\t2386\t13\nAI 42000 1\t3584\t60\t190\t13\t20210\t7568\t2585\t118\nAI 48000 1\t4334\t62\t209\t16\t27098\t11174\t8048\t3349\nAI 54000 1\t5084\t66\t233\t18\t33926\t15680\t12976\t7655\nMACRO race=0 level=0 bases=5 upgrades=15 attacks=21 types=35,37,38,39,41,42,43,44,45,46,47,62,103,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-0-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t528\t7\t22\t0\t2290\t560\t190\t35\nAI 12000 1\t750\t10\t36\t1\t5578\t1840\t1353\t90\nAI 18000 1\t775\t21\t55\t5\t8794\t3128\t2644\t253\nAI 24000 1\t1360\t35\t80\t8\t11822\t4408\t3347\t308\nAI 30000 1\t2110\t42\t98\t10\t13630\t5138\t3405\t88\nAI 36000 1\t2860\t48\t133\t12\t15414\t5422\t2639\t22\nAI 42000 1\t3610\t57\t188\t14\t20518\t7460\t2693\t10\nAI 48000 1\t4360\t61\t208\t17\t27838\t10590\t7988\t2515\nAI 54000 1\t5110\t66\t227\t19\t35026\t14870\t13826\t6445\nMACRO race=0 level=1 bases=6 upgrades=18 attacks=22 types=35,37,38,39,41,42,43,44,45,46,47,62,103,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-0-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t571\t8\t19\t0\t2122\t568\t47\t218\nAI 12000 1\t1084\t14\t42\t4\t5186\t1840\t336\t65\nAI 18000 1\t1406\t24\t73\t9\t8258\t3120\t383\t70\nAI 24000 1\t1939\t35\t128\t15\t12498\t4984\t473\t134\nAI 30000 1\t2499\t45\t177\t19\t16598\t7020\t273\t720\nAI 36000 1\t3249\t46\t211\t24\t22454\t10314\t1879\t1864\nAI 42000 1\t3999\t47\t222\t26\t28098\t14454\t6123\t5404\nAI 48000 1\t4749\t49\t224\t26\t33266\t18762\t10991\t9512\nAI 54000 1\t5499\t49\t224\t26\t38934\t23178\t16659\t13928\nMACRO race=0 level=2 bases=6 upgrades=23 attacks=26 types=35,37,38,39,41,42,43,44,45,46,47,62,103,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-1-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t220\t12\t22\t0\t2314\t680\t164\t380\nAI 12000 1\t539\t16\t32\t1\t5730\t1960\t2230\t1035\nAI 18000 1\t859\t16\t35\t2\t9218\t3248\t5268\t2023\nAI 24000 1\t1609\t17\t35\t2\t12442\t4528\t7942\t3153\nAI 30000 1\t1782\t31\t70\t3\t15870\t5990\t7770\t3140\nAI 36000 1\t2319\t39\t88\t4\t22518\t8972\t11568\t4972\nAI 42000 1\t2661\t43\t107\t5\t29990\t12556\t17240\t7831\nAI 48000 1\t2962\t45\t112\t5\t36346\t17180\t22446\t12055\nAI 54000 1\t3282\t46\t117\t6\t43538\t21948\t29188\t16723\nMACRO race=1 level=0 bases=6 upgrades=12 attacks=7 types=0,1,2,3,4,5,6,7,8,9,12,32,34,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-1-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t417\t14\t22\t0\t2322\t680\t247\t480\nAI 12000 1\t655\t20\t35\t2\t5578\t1904\t1028\t754\nAI 18000 1\t965\t28\t62\t3\t11442\t4384\t3992\t1809\nAI 24000 1\t1188\t29\t64\t3\t17530\t6952\t9430\t3952\nAI 30000 1\t1885\t105\t70\t3\t21854\t8946\t12804\t5371\nAI 36000 1\t2276\t125\t71\t4\t24290\t10248\t14190\t5748\nAI 42000 1\t2782\t138\t88\t5\t28562\t11560\t15187\t6010\nAI 48000 1\t3157\t139\t92\t5\t34154\t15242\t20079\t9292\nAI 54000 1\t3477\t140\t95\t6\t39502\t19250\t24527\t12950\nMACRO race=1 level=1 bases=6 upgrades=15 attacks=6 types=0,1,2,3,4,5,6,7,8,9,12,32,34,58,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-1-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t426\t12\t18\t0\t2298\t656\t373\t456\nAI 12000 1\t1176\t38\t49\t3\t6098\t2096\t298\t596\nAI 18000 1\t1496\t40\t60\t5\t11578\t4648\t4778\t2798\nAI 24000 1\t2246\t41\t67\t6\t16214\t7224\t8614\t5024\nAI 30000 1\t2996\t209\t67\t7\t20358\t9250\t12758\t7050\nAI 36000 1\t3746\t218\t77\t8\t23730\t10554\t14580\t8254\nAI 42000 1\t4496\t228\t93\t9\t27346\t12186\t16396\t9511\nAI 48000 1\t4815\t237\t117\t13\t32354\t15246\t17254\t9671\nAI 54000 1\t4949\t244\t137\t18\t37686\t19122\t19386\t11772\nMACRO race=1 level=2 bases=6 upgrades=15 attacks=21 types=0,1,2,3,4,5,6,7,8,9,12,32,34,58,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-2-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t214\t15\t19\t0\t2578\t592\t403\t392\nAI 12000 1\t698\t18\t30\t1\t6226\t1880\t1851\t855\nAI 18000 1\t705\t23\t30\t2\t9754\t3160\t4129\t1335\nAI 24000 1\t1130\t42\t61\t6\t13590\t5048\t2115\t248\nAI 30000 1\t1558\t52\t89\t8\t18974\t7590\t4299\t965\nAI 36000 1\t2308\t57\t104\t11\t25054\t10688\t7904\t3713\nAI 42000 1\t3058\t70\t115\t12\t30546\t14246\t11571\t7021\nAI 48000 1\t3808\t80\t115\t13\t36954\t17640\t17979\t10415\nAI 54000 1\t4558\t90\t115\t13\t43470\t20648\t24495\t13423\nMACRO race=2 level=0 bases=5 upgrades=14 attacks=13 types=60,61,64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-2-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t402\t17\t19\t0\t2570\t592\t170\t192\nAI 12000 1\t986\t26\t34\t1\t6226\t1840\t776\t140\nAI 18000 1\t1041\t38\t54\t4\t11978\t4112\t3553\t837\nAI 24000 1\t1791\t41\t58\t4\t17498\t6680\t7723\t2280\nAI 30000 1\t2541\t52\t78\t6\t21830\t9090\t8465\t2790\nAI 36000 1\t3291\t59\t95\t9\t25834\t12600\t8824\t5725\nAI 42000 1\t3605\t64\t113\t12\t32114\t16284\t11389\t8459\nAI 48000 1\t4191\t67\t123\t15\t38002\t20564\t14537\t12239\nAI 54000 1\t4941\t70\t123\t15\t43734\t24584\t18929\t16259\nMACRO race=2 level=1 bases=6 upgrades=18 attacks=15 types=60,61,64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-2-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t409\t15\t18\t0\t2554\t592\t554\t492\nAI 12000 1\t756\t40\t46\t5\t6594\t2096\t69\t446\nAI 18000 1\t1479\t43\t52\t7\t12458\t4624\t4933\t2474\nAI 24000 1\t2229\t49\t57\t8\t17134\t7168\t8309\t3968\nAI 30000 1\t2979\t66\t75\t10\t21494\t9472\t7844\t3172\nAI 36000 1\t3665\t79\t101\t17\t25614\t12568\t5974\t4243\nAI 42000 1\t4049\t84\t120\t21\t31010\t16208\t7190\t6808\nAI 48000 1\t4799\t84\t120\t21\t36554\t20528\t11879\t11128\nAI 54000 1\t5549\t85\t120\t21\t41826\t24534\t15911\t15134\nMACRO race=2 level=2 bases=6 upgrades=20 attacks=21 types=60,61,64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    }
+  ],
+  "limitations": "Real engine and imported original data on host. Eighteen 60000-frame AI scenarios cover all races/difficulties in both expansions; three depleted-main scenarios use 30000 frames. Physical device audio, input, radio and performance still need testing. Bounded maps cannot establish every campaign or map behavior.",
+  "sourceSha256": {
+    "tests/native_revision58.cpp": "80481feb3c0148f7eb435f2c45522fab1c087cfcb9085fc22e2af64aafac3cc3",
+    "tests/native_revision57.cpp": "24e771cd88ae1ab7892cfe3489cee823332137683403a07ec9e3e46fd96a6b8b",
+    "tests/native_revision56.cpp": "5545e7fa9eceefcd51c00c9da5b67f76b44d27eb980876123cc00641b3ee86d1",
+    "tests/native_revision55.cpp": "81f0a4baaa91df81d60da81e68c3183601f03e39923735c036dbfb3ab4cb6645",
+    "tests/run_native58.py": "f0b0d8dcb7de6d331ee278cc6c4425cff4e0b0532a3b1c45f7d54e5db6f67c85",
+    "tests/create_room_map55.py": "f03d3a977ef1e1c775d354926f10c008ff5f857658451f030e6abc5ddb17ebac",
+    "patches/native-polish58.patch": "613bf7009bc1bbd6229b1b95c602a0ac9f1c353d0007f09a3cd1891729c5ae33",
+    "scripts/prepare_native.py": "75b454dabffd8d57c3856b1a2ba7038136b6ef06e5f5ce3e60048e44592bcccd",
+    "native/runtime.cpp": "e270feff9df0491567e2d564ec95a64497dae6b31d67d0381d7896b626a4d531",
+    "native/hero_mode.h": "5588cc60fd05fc3db42f61400ed9983706d6523a8c734733a0f082282f501824",
+    "native/audio.h": "6437ac032b9961e0c1cc91c84056be268682ada3754614c9385441930fabf46a",
+    "native/save_state.h": "d6026805e57b02d24f370841ea79d8165162b1465659af63462a8cbf1dc1584d",
+    "native/multiplayer.h": "8977888202fd0df30ac19cc37decc6c96a7bc7423749c3b42bfdbf581b0eae6f"
+  }
+}

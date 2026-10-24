@@ -1,0 +1,8 @@
+campaign\protoss\protoss03\staredit\scenario.chk
+campaign\protoss\protoss03\staredit\wav\p3b00ufe.wav
+campaign\protoss\protoss03\staredit\wav\p3b01pad.wav
+campaign\protoss\protoss03\staredit\wav\p3b02pad.wav
+campaign\protoss\protoss03\staredit\wav\p3b03ufe.wav
+campaign\protoss\protoss03\staredit\wav\p3m00ufe.wav
+campaign\protoss\protoss03\staredit\wav\p3m01pad.wav
+campaign\protoss\protoss03\staredit\wav\p3m02pad.wav

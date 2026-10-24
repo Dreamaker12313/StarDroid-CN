@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "checks": [
+    "pristine source is unpatched",
+    "gameplay patch applies",
+    "applied patch is detected",
+    "ordered presentation and feedback patches apply",
+    "feedback patch is idempotent",
+    "fresh reconstruction is byte-identical"
+  ],
+  "sourceSha256": {
+    "UPSTREAM.json": "33afc9db197e6c6d693c05dc792cb8cd10332ee76f1969aa392ee713049c71af",
+    "patches/campaign.patch": "3e5601478ad8302f66eea45052239e28238fdee3c79eb0c5d623042c35fcc43a",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "scripts/prepare_native.py": "f46b78fe3cb4253e145bdd7a935882aa644bd72b0a6fb29c3f88a6b30af0c3b2",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "scripts/prepare_feedback.py": "b15e627e5d16c7dcb881186746311ba64f599f216b81549b40f7db1f42b2a694",
+    "tests/native_patch_preparation.py": "aacf3b6f8c048bb7aff4f9d68c1997b6f6b09895b31c33598acdc7dfaa54e5ed"
+  }
+}

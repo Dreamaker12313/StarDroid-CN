@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "version": "1.0",
+  "versionCode": 66,
+  "physicalDeviceTested": false,
+  "output": [
+    "PASS 22 exit classification, size, cause-chain, stack and OOM-report checks",
+    "PASS 12 write diagnostics checks",
+    "PASS 3 read diagnostics checks"
+  ],
+  "limitations": "Host Android API fakes exercise SDK guards, scoped history reads, unavailable/empty history, reason labels, original uncaught-handler delegation and persistence across separate JVMs. Actual Vivo/Android exit records and native signal traces require device testing.",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/AppDiagnostics.java": "832da40c66463c151d259100b269a687c62644c72ad361f1c3549d78faea58e2",
+    "app/src/main/java/org/openbw/androidtest/ExitReport.java": "bc302ece7eb0ee273f35a81aa0e63c9b256a55501f318b5fd14adc6b830ff93b",
+    "tests/ExitReportTest.java": "27c878c4b185c0329f75de0a901353c0b7d57a151b6587369960982d563c652a",
+    "tests/run_diagnostics1.py": "2986d43959b9abff179f8baa42a2bc086d9bc68d2e8f830ce9731e236d18d07e",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "2e4537fd48f4ad43788564f36dd7abb635751b81495bc32d7156f0be5e023a0c",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "207f096b6337f3e45113a0105e70aa659be70558f5c5aed3e99d97e647801434"
+  }
+}

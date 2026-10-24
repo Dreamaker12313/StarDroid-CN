@@ -1,0 +1,30 @@
+{
+  "version": "0.49",
+  "googlePlayServicesRequired": true,
+  "nativeEngineReusedFrom": "0.48",
+  "upgradeIdentityFrom048Verified": true,
+  "packageVerified": true,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "sha256": "dde182e25ded66ca6013fb56a2f9fa8464e200bc5e880d26b2a72acb91599b79",
+  "bytes": 4022534,
+  "abis": [
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "jniMethodsVerified": 32,
+  "librarySha256": {
+    "arm64-v8a/libopenbw.so": "fd1274622b227ec6a052fe83f7fa48128395af793fb57fbd1c8e2fb3e1d08db4",
+    "arm64-v8a/libsmacker.so": "0367b4556df5e889a50811f71e5c959e415536043ff6671edc2c8740d83b6a41",
+    "x86_64/libopenbw.so": "4d6dbc8fde7e9f889649dbb63559a93c0511245da44230e1bdf4876b340d4329",
+    "x86_64/libsmacker.so": "1e9290284e163c100429d7546094a4e77456d651c3783898ab68b6ac241c64c2"
+  },
+  "reports": [
+    "native-multiplayer-v47.json",
+    "nearby-protocol-v49.json"
+  ],
+  "lintErrors": 0,
+  "lintWarnings": 9,
+  "androidHardwareTested": false,
+  "nearbyRadioTested": false,
+  "releaseReady": false
+}

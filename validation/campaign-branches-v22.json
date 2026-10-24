@@ -1,0 +1,64 @@
+{
+  "missions": {
+    "expterran04-PhysicsLab": {
+      "action": {
+        "destroyed": 4
+      },
+      "result": {
+        "outcome": 1,
+        "next": "expterran05a",
+        "scenario": "terran05a.scx",
+        "error": ""
+      }
+    },
+    "expterran04-NuclearSilo": {
+      "action": {
+        "destroyed": 6
+      },
+      "result": {
+        "outcome": 1,
+        "next": "expterran05b",
+        "scenario": "terran05b.scx",
+        "error": ""
+      }
+    },
+    "expzerg03": {
+      "action": {
+        "minerals": 10000
+      },
+      "result": {
+        "outcome": 1,
+        "next": "expzerg04a",
+        "scenario": "zerg04a.scx",
+        "error": ""
+      }
+    },
+    "expprotoss06": {
+      "action": {
+        "probe": 3699
+      },
+      "result": {
+        "outcome": 1,
+        "next": "expprotoss07",
+        "scenario": "",
+        "error": ""
+      }
+    },
+    "expterran07": {
+      "duran": [
+        {
+          "id": 5535,
+          "name": "Samir Duran",
+          "owner": 2,
+          "x": 80,
+          "y": 80,
+          "order": 3
+        }
+      ]
+    }
+  },
+  "checks": [
+    "Original T4 Physics Lab/Nuclear Silo branches, Z3 Exact(0) infestation branch, P6 Khalis ground location, and T7 Duran entrance. Diagnostic movement/resources/combat used; objectives and outcome triggers are original."
+  ],
+  "errors": []
+}

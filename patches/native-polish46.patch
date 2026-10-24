@@ -1,0 +1,154 @@
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -75,6 +75,7 @@
+ data_loading::mpq_file<data_loading::js_file_reader<>>* g_mission = nullptr;
+ #include "campaign_catalog.h"
+ bool g_campaign_expansion = false;
++bool g_skirmish_expansion = true; // Legacy callers/saves used Brood War melee rules.
+ a_unordered_map<int, a_vector<uint8_t>> g_mission_sounds;
+ a_vector<uint8_t> g_empty_sound;
+ a_string g_campaign_prefix = "campaign/terran/terran01/";
+@@ -145,16 +146,7 @@
+ 				if (p.controller == player_t::controller_computer) p.controller = player_t::controller_computer_game;
+ 			}
+ 		});
+-		// The imported classic campaign missions are original StarCraft. Old CHKs do
+-		// not disable types added later by Brood War; enforce that game mode in
+-		// the simulation as well as in the command card.
+-		if (!g_campaign_expansion) for (int p = 0; p < 12; ++p) {
+-			for (const auto& type : g_ui->game_st.unit_types.vec)
+-				if (type.is_broodwar) load.game_st.unit_type_allowed[p][type.id] = false;
+-			for (const auto& type : g_ui->game_st.upgrade_types.vec)
+-				if (type.is_broodwar) load.game_st.max_upgrade_levels[p][type.id] = 0;
+-			for (int i = 24; i < 44; ++i) load.game_st.tech_available[p][(TechTypes)i] = false;
+-		}
++
+ 	} else {
+ 	setup_melee_slots(g_ui->player.st(), [&](a_vector<uint8_t>& out, a_string fn) {
+ 		map_loader(out, fn);
+@@ -163,6 +155,22 @@
+ 		if (low.find("scenario.chk") != a_string::npos) g_ui->rep_map = out;
+ 	}, slots, n, &rep_seed0);
+ 	}
++
++    // Classic restrictions apply to every owner, including the AI and practice
++    // games, regardless of whether the terrain was imported from an SCM or SCX.
++    if (!(campaign ? g_campaign_expansion : g_skirmish_expansion)) {
++      game_load_functions rules(g_ui->player.st());
++      for (int p=0;p<12;++p) {
++        for (const auto& type : g_ui->game_st.unit_types.vec)
++            if (type.is_broodwar) rules.game_st.unit_type_allowed[p][type.id]=false;
++        for (const auto& type : g_ui->game_st.upgrade_types.vec)
++            if (type.is_broodwar) {rules.game_st.max_upgrade_levels[p][type.id]=0;g_ui->st.upgrade_levels[p][type.id]=0;}
++        for (int i=24;i<44;++i) {
++            rules.game_st.tech_available[p][(TechTypes)i]=false;
++            g_ui->st.tech_researched[p][(TechTypes)i]=false;
++        }
++      }
++    }
+ 
+ 	if (g_campaign) {
+ 		const char* names[]={"scripts/aiscript.bin","scripts/bwscript.bin"};
+@@ -178,7 +186,10 @@
+         const uint32_t zerg[]={0x784f4c5au,0x78454d5au,0x7849485au}; // ZLOx / ZMEx / ZHIx
+         const auto race=g_ui->st.players[original_ai_slot].race;
+         const auto* scripts=race==race_t::zerg?zerg:race==race_t::protoss?protoss:terran;
+-        g_campaign->ai_start(original_ai_slot,scripts[std::max(0,std::min(2,g_terran_ai_level))],0);
++        uint32_t script=scripts[std::max(0,std::min(2,g_terran_ai_level))];
++        // The original archives contain separate Classic and expansion scripts.
++        if(!g_skirmish_expansion) script=(script&0x00ffffffu)|((g_terran_ai_level==1?uint32_t('D'):uint32_t('f'))<<24);
++        g_campaign->ai_start(original_ai_slot,script,0);
+         if(!g_campaign->ai_error.empty())error("Skirmish AI: %s",g_campaign->ai_error.c_str());
+     }
+ 
+@@ -612,7 +623,7 @@
+ 	for (auto& v : g_ui->rep.history) hist += v.size();
+ 	g_ui->rep_out.reserve(g_ui->rep.map_data_size + hist + (size_t)(1 << 20));
+ 	auto w = data_loading::make_vector_writer(g_ui->rep_out);
+-	replay_saver_functions(g_ui->rep).save_replay(g_ui->player.st().current_frame, w);
++	replay_saver_functions(g_ui->rep).save_replay(g_ui->player.st().current_frame, w, g_skirmish_expansion);
+ 	return g_ui->rep_out.data();
+ }
+ OPENBW_EXPORT(openbw_replay_len) int openbw_replay_len() { return g_ui ? (int)g_ui->rep_out.size() : 0; }
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -413,6 +413,7 @@
+     }
+     bool ai_produce(int owner,int type) {
+         auto& a=towns[owner]; const auto* ut=get_unit_type(UnitTypes(type)); action_functions af(st,ai_actions);
++        if(!game_st.unit_type_allowed[owner][ut->id])return false;
+         if(melee_ai&&(type==68||type==63)) {
+             unit_t* first=nullptr;
+             for(auto* u:ptr(st.player_units[owner]))if(unit_is(u,UnitTypes(type==68?67:61))&&!unit_dying(u)&&u_completed(u)&&!u_order_not_interruptible(u)&&!u_iscript_nobrk(u)&&!ai_attacking(a,u)) {
+@@ -687,6 +688,7 @@
+         // Reissue only idle attackers, allowing normal targeting/pathfinding to run.
+         for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u)&&!u_burrowed(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+         auto req=a.builds;
++        auto allowed_requests=[&](){req.erase(std::remove_if(req.begin(),req.end(),[&](const request& r){return !game_st.unit_type_allowed[owner][UnitTypes(r.type)];}),req.end());};
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+         if(melee_ai && st.players[owner].race==race_t::terran) {
+             // Campaign scripts start with an established economy. A melee start
+@@ -699,7 +701,7 @@
+             int techTime=6500+(2-melee_ai_level)*3500;
+             if(ai_clock>techTime){ai_request(req,9,1,88);ai_request(req,1,2,87);}
+             if(ai_clock>techTime+4500)ai_request(req,12,melee_ai_level==2?2:1,89);
+-            ai_melee_prerequisites(req);
++            allowed_requests(); ai_melee_prerequisites(req);
+             if(bases>1)ai_request(req,110,bases,94);
+             ai_expand(owner);ai_support(owner);ai_resume_construction(owner);
+         }
+@@ -711,7 +713,7 @@
+             if(ai_clock>techTime){ai_request(req,84,2,88);ai_request(req,61,2,86);ai_request(req,67,2,85);}
+             if(ai_clock>techTime+4500){ai_request(req,83,1,87);ai_request(req,60,2,84);ai_request(req,70,2,83);ai_request(req,72,melee_ai_level==2?2:1,89);}
+             if(ai_clock>techTime+9000){ai_request(req,71,1,86);ai_request(req,68,2,85);}
+-            ai_protoss_prerequisites(req);
++            allowed_requests(); ai_protoss_prerequisites(req);
+             if(bases>1)ai_request(req,157,bases,94);
+             int psi=0;bool unpowered=false;
+             for(auto* b:ptr(st.player_units[owner]))if(!unit_dying(b)&&ut_requires_psionic_matrix(b)) {++psi;if(u_completed(b)&&!is_in_psionic_matrix(owner,b->position))unpowered=true;}
+@@ -733,7 +735,7 @@
+             if(ai_clock>2400){ai_request(req,37,8,50);ai_request(req,38,4,55);}
+             if(ai_clock>techTime){ai_request(req,43,4,84);ai_request(req,103,2,87);ai_request(req,45,1,83);ai_request(a.techs,int(TechTypes::Lurker_Aspect),1,90);ai_request(a.techs,int(TechTypes::Ensnare),1,80);}
+             if(ai_clock>techTime+4500){ai_request(req,39,melee_ai_level==2?3:1,88);ai_request(req,46,1,86);ai_request(req,44,2,89);ai_request(req,62,1,85);ai_request(req,47,4,82);}
+-            ai_zerg_prerequisites(owner,req);
++            allowed_requests(); ai_zerg_prerequisites(owner,req);
+             if(bases>1)ai_request(req,149,bases,94);
+             // Local Hatcheries provide larvae even where expansion starts are
+             // cramped; the expansion manager separately finds fresh resources.
+@@ -743,6 +745,7 @@
+         }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
++        allowed_requests();
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
+         int accepted=0;
+         for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type)))
+@@ -755,7 +758,7 @@
+             else if(reserve&&!has_available_resources_for(owner,target))break;
+         }
+         action_functions af(st,ai_actions);
+-        for(auto r:a.techs)if(!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
++        for(auto r:a.techs)if(game_st.tech_available[owner][TechTypes(r.type)]&&!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
+         for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
+     }
+     void on_scenario_attack(unit_t* victim, unit_t* source) override {
+--- a/replay_saver.h
++++ b/replay_saver.h
+@@ -560,7 +560,7 @@
+ 	}
+ 	
+ 	template<typename writer_T>
+-	void save_replay(int current_frame, writer_T& w) {
++	void save_replay(int current_frame, writer_T& w, bool expansion = true) {
+ 		std::array<uint8_t, 633> game_info_buffer;
+ 		data_loading::data_writer<> giw(game_info_buffer.data(), game_info_buffer.data() + game_info_buffer.size());
+ 		
+@@ -570,7 +570,7 @@
+ 			for (; i != max_size; ++i) giw.put<uint8_t>(0);
+ 		};
+ 		
+-		giw.put<uint8_t>(1); // is broodwar
++		giw.put<uint8_t>(expansion ? 1 : 0); // rules used by this match
+ 		giw.put<uint32_t>(current_frame); // frame count
+ 		giw.put<uint16_t>(0); // campaign id
+ 		giw.put<uint8_t>(0); // command byte ?

@@ -1,0 +1,24 @@
+{
+  "runtime": "native desktop C++ using the same simulation, mixer and decoder sources as Android",
+  "passed": true,
+  "checks": [
+    "Zerg 2 Lair command visibility and completed morph through native command stream",
+    "Mission-available Mutalisk disabled without a Spire",
+    "Drone Egg target identity and icon",
+    "Young Chrysalis without placeholder armor details",
+    "Extractor placement and completed HP/gas display",
+    "Native placement voice PCM matches original ZBldgPlc.wav",
+    "Beacon ownership changes without rescue or new-unit notification",
+    "Victory WAV produces 95990 nonzero samples",
+    "Introduction decodes 320x308, 2082 frames; first five seconds produce 479581 nonzero samples",
+    "Targeted order, zoom resize/reset, Build submenu cancellation and subsequent placement cursor"
+  ],
+  "limitations": "Controlled commands, resources and instant production; not a physical Android test.",
+  "log": "openbw_init: map 'Z2) Egression' 3072x3072, slot 3 of 1, units=17, fog_player=3\nNATIVE_CONTROLS_OK Lair, disabled technology, Egg target, Chrysalis, Extractor placement/HP/gas, original build thump, silent beacon transfer, audible victory (95990 nonzero samples)\nopenbw_init: map 'T1) Wasteland' 2048x2048, slot 1 of 1, units=12, fog_player=1\nNATIVE_TOUCH resize zoom in\nNATIVE_TOUCH resize reset\nNATIVE_TOUCH build after cancel\nNATIVE_TOUCH_OK targeting, resize, cancellation and building after zoom\nNATIVE_MEDIA_OK 320x308 / 2082 frames / 479581 audible samples\n",
+  "sourceVersion": "0.25",
+  "nativeTouchResizeCancelBuild": true,
+  "sources": {
+    "tests/native_controls.cpp": "bbd65d5eeed9305c7932c7fe953d99a4bcb6a34bf1a6bc35ab9476cb8c40813a",
+    "native/runtime.cpp": "e4fe7dceaf8070c70009b34fdb7f73231005cc82d1c35562a3fb1c450cd1e962"
+  }
+}

@@ -1,0 +1,408 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -3562,7 +3562,7 @@
+ 		bb.to = bb.from + u->unit_type->placement_size + xy(64, 64);
+ 		xy pos = u->sprite->position - u->unit_type->placement_size / 2;
+ 		return find_unit_noexpand(bb, [&](unit_t* n) {
+-			if (!ut_addon(n)) return false;
++			if (!ut_addon(n) || unit_dying(n)) return false;
+ 			if (n->owner != 11) return false;
+ 			if (!unit_can_attach_addon(u, n)) return false;
+ 			xy npos = n->sprite->position - n->unit_type->placement_size / 2 - n->unit_type->addon_position;
+@@ -17521,6 +17521,25 @@
+ 	bool player_has_completed_unit(int owner, UnitTypes unit_type_id) const {
+ 		return st.completed_unit_counts.at(owner).at(unit_type_id) != 0;
+ 	}
++    // Tech prerequisites use functional buildings. Keep census/trigger counts
++    // unchanged: an unpowered building still exists and can still be destroyed.
++    bool unit_unpowered(const unit_t* u) const {
++        return ut_building(u) && ut_requires_psionic_matrix(u) && u_disabled(u);
++    }
++    bool addon_is_attached(const unit_t* addon) const {
++        if (!ut_addon(addon) || addon->owner >= 8 || unit_dying(addon)) return false;
++        for (auto* parent : ptr(st.player_units[addon->owner]))
++            if (u_grounded_building(parent) && !ut_addon(parent) && !unit_dying(parent)
++                && parent->building.addon == addon && unit_can_attach_addon(parent, addon)) return true;
++        return false;
++    }
++    bool player_has_active_tech(int owner, UnitTypes type) const {
++        if (!player_has_completed_unit(owner, type)) return false;
++        for (auto* u : ptr(st.player_units[owner]))
++            if (unit_is(u, type) && u_completed(u) && !unit_dying(u) && !u_hallucination(u)
++                && !unit_unpowered(u) && (!ut_addon(u) || addon_is_attached(u))) return true;
++        return false;
++    }
+ 	bool player_tech_available(int owner, TechTypes tech_id) const {
+ 		return game_st.tech_available.at(owner).at(tech_id);
+ 	}
+@@ -17549,7 +17568,9 @@
+ 		return ut_building(u) ? u->building.addon : nullptr;
+ 	}
+ 	bool unit_has_addon(const unit_t* u, UnitTypes unit_type_id) const {
+-		return ut_building(u) && u->building.addon && unit_is(u->building.addon, unit_type_id);
++		return u_grounded_building(u) && u->building.addon && u->building.addon->owner == u->owner
++            && u_completed(u->building.addon) && !unit_dying(u->building.addon)
++            && unit_is(u->building.addon, unit_type_id);
+ 	}
+ 	bool unit_is_building_addon(const unit_t* u) const {
+ 		if (u->secondary_order_type->id == Orders::BuildAddon) {
+@@ -17594,6 +17615,7 @@
+ 	}
+ 
+ 	bool unit_can_build(const unit_t* u, const unit_type_t* unit_type) const {
++        if (ut_addon(u) && !addon_is_attached(u)) return false;
+ 		if (!u_completed(u)) return false;
+ 		if (unit_is_disabled(u)) return false;
+ 		if (u_hallucination(u)) return false;
+@@ -17613,7 +17635,7 @@
+ 			if (!unit_is(u, UnitTypes::Terran_Barracks)) return false;
+ 			if (unit_is_building_addon(u) || unit_is_building_protoss_thing(u)) return false;
+ 			if (!u_grounded_building(u)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Terran_Covert_Ops)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Terran_Covert_Ops)) return false;
+ 			if (!player_has_completed_unit(owner, UnitTypes::Terran_Academy)) return false;
+ 			return true;
+ 		case UnitTypes::Terran_Vulture:
+@@ -17661,7 +17683,7 @@
+ 			if (unit_is_building_addon(u) || unit_is_building_protoss_thing(u)) return false;
+ 			if (!u_grounded_building(u)) return false;
+ 			if (!unit_has_addon(u, UnitTypes::Terran_Control_Tower)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Terran_Physics_Lab)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Terran_Physics_Lab)) return false;
+ 			return true;
+ 		case UnitTypes::Terran_Firebat:
+ 			if (!unit_is(u, UnitTypes::Terran_Barracks)) return false;
+@@ -17746,11 +17768,11 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Dragoon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Gateway)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_High_Templar:
+ 			if (!unit_is(u, UnitTypes::Protoss_Gateway)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Shuttle:
+ 			if (!unit_is(u, UnitTypes::Protoss_Robotics_Facility)) return false;
+@@ -17760,11 +17782,11 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Arbiter:
+ 			if (!unit_is(u, UnitTypes::Protoss_Stargate)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Arbiter_Tribunal)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Arbiter_Tribunal)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Carrier:
+ 			if (!unit_is(u, UnitTypes::Protoss_Stargate)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Interceptor:
+ 			if (!unit_is_carrier(u)) return false;
+@@ -17772,7 +17794,7 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Reaver:
+ 			if (!unit_is(u, UnitTypes::Protoss_Robotics_Facility)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Robotics_Support_Bay)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Robotics_Support_Bay)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Scarab:
+ 			if (!unit_is_reaver(u)) return false;
+@@ -17780,14 +17802,14 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Observer:
+ 			if (!unit_is(u, UnitTypes::Protoss_Robotics_Facility)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Observatory)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Observatory)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Corsair:
+ 			if (!unit_is(u, UnitTypes::Protoss_Stargate)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Dark_Templar:
+ 			if (!unit_is(u, UnitTypes::Protoss_Gateway)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			return true;
+ 		case UnitTypes::Terran_Command_Center:
+ 			if (!unit_is(u, UnitTypes::Terran_SCV)) return false;
+@@ -17803,7 +17825,7 @@
+ 			if (!unit_is(u, UnitTypes::Terran_Command_Center)) return false;
+ 			if (unit_addon(u)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Terran_Covert_Ops)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Terran_Covert_Ops)) return false;
+ 			return true;
+ 		case UnitTypes::Terran_Supply_Depot:
+ 			if (!unit_is(u, UnitTypes::Terran_SCV)) return false;
+@@ -17957,7 +17979,7 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Robotics_Facility:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Pylon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+@@ -17967,52 +17989,52 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Observatory:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Gateway:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Nexus)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Nexus)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Photon_Cannon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Forge)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Forge)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Citadel_of_Adun:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Cybernetics_Core:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Gateway)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Gateway)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Templar_Archives:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Citadel_of_Adun)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Citadel_of_Adun)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Forge:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Nexus)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Nexus)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Stargate:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Fleet_Beacon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Stargate)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Stargate)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Arbiter_Tribunal:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Stargate)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Stargate)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Robotics_Support_Bay:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Shield_Battery:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Gateway)) return false;
++			if (!player_has_active_tech(owner, UnitTypes::Protoss_Gateway)) return false;
+ 			return true;
+ 		default:
+ 			return false;
+@@ -18473,6 +18495,7 @@
+ 	}
+ 
+ 	bool unit_can_research(const unit_t* u, const tech_type_t* tech) const {
++        if (ut_addon(u) && !addon_is_attached(u)) return false;
+ 		if (!u_completed(u)) return false;
+ 		if (u_hallucination(u)) return false;
+ 		if (unit_is_disabled(u)) return false;
+@@ -18608,6 +18631,7 @@
+ 	}
+ 
+ 	bool unit_can_upgrade(const unit_t* u, const upgrade_type_t* upgrade) const {
++        if (ut_addon(u) && !addon_is_attached(u)) return false;
+ 		if (!u_completed(u)) return false;
+ 		if (u_hallucination(u)) return false;
+ 		if (unit_is_disabled(u)) return false;
+@@ -18667,14 +18691,14 @@
+ 			if (!unit_is(u, UnitTypes::Protoss_Forge)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Ground_Armor) != 0) {
+-				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++				if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Protoss_Air_Armor:
+ 			if (!unit_is(u, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Air_Armor) != 0) {
+-				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
++				if (!player_has_active_tech(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Terran_Infantry_Weapons:
+@@ -18741,21 +18765,21 @@
+ 			if (!unit_is(u, UnitTypes::Protoss_Forge)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Ground_Weapons) != 0) {
+-				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++				if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Protoss_Air_Weapons:
+ 			if (!unit_is(u, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Air_Weapons) != 0) {
+-				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
++				if (!player_has_active_tech(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Protoss_Plasma_Shields:
+ 			if (!unit_is(u, UnitTypes::Protoss_Forge)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Plasma_Shields) != 0) {
+-				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++				if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::U_238_Shells:
+@@ -18919,6 +18943,7 @@
+ 	}
+ 
+ 	bool unit_tech_available(const unit_t* u, const tech_type_t* tech, bool ignore_research) const {
++        if (ut_addon(u) && !addon_is_attached(u)) return false;
+ 		if (!u_completed(u)) return false;
+ 		if (u_hallucination(u)) return false;
+ 		if (unit_is_disabled(u)) return false;
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -663,6 +663,7 @@
+ 		return r;
+ 	}
+ 
++	uint64_t sound_play_serial = 0; // UI only: count sounds that actually started.
+ 	virtual void play_sound(int id, xy position, const unit_t* source_unit, bool add_race_index) override {
+ 		if (global_volume == 0) return;
+ 		if (!sound_audible(source_unit, position)) return;   // nothing heard through the fog
+@@ -736,6 +737,7 @@
+ 			auto* c = get_sound_channel(sound_type->priority);
+ 			if (c) {
+ 				native_sound::play(c - sound_channels.data(), &*s, (128 - 4) * (volume * global_volume / 100) / 100, pan);
++				++sound_play_serial;
+ 				c->playing = true;
+ 				c->sound_type = sound_type;
+ 				c->flags = sound_type->flags;
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -262,7 +262,9 @@
+ 	bool campaign_speech_muted = false;
+ 	bool paused = false;                          // frozen: ignore game input (camera still ok)
+ 	int mouse_x = -1, mouse_y = -1;   // off-screen until the first move, so edge-scroll stays idle at startup
+-	int sound_rotation = 0;                       // rotates through a unit's ack sound range
++	uint32_t sound_rotation = 0x739ad25bu;         // local voice RNG; never simulation RNG
++    int previous_ack_sound = -1;
++    std::chrono::steady_clock::time_point last_selection_ack{};
+ 	unit_id ack_unit;                             // unit last (re)selected, for annoyed escalation
+ 	int ack_count = 0;                            // consecutive same-unit selections
+ 	int menu = 0;                                 // command card: 0 = root, 1 = build submenu
+@@ -488,13 +490,18 @@
+ 
+ 	// Play one of a unit's voice-ack sounds (first..last inclusive), the way the
+ 	// original game client did on select/order — the sim never plays these.
+-	void play_unit_ack(unit_t* u, int first, int last) {
+-		if (spectator || campaign_speech_muted) return;
+-		if (!u || first <= 0 || last <= 0) return;
+-        if(last<first)std::swap(first,last);
+-		int id = first + (sound_rotation++ % (last - first + 1));
+-		play_sound(id, xy(), u, false); // Selected-unit speech is global, including off-screen commands.
+-	}
++    bool play_unit_ack(unit_t* u, int first, int last) {
++        if (spectator || campaign_speech_muted || !u || first <= 0 || last <= 0) return false;
++        if (last < first) std::swap(first, last);
++        sound_rotation = sound_rotation * 1664525u + 1013904223u;
++        int id = first + ((sound_rotation >> 8) % (last - first + 1));
++        if (id == previous_ack_sound && first != last) id = id == last ? first : id + 1;
++        auto before = sound_play_serial;
++        play_sound(id, xy(), u, false);
++        if (sound_play_serial == before) return false;
++        previous_ack_sound = id;
++        return true;
++    }
+ 
+ 	// Selection ack: the unit's "what" line, escalating to its "pissed"
+ 	// (annoyed) lines when the same single unit is clicked repeatedly.
+@@ -550,17 +557,25 @@
+ 			xy r = u->building.rally.pos;
+ 			if (r != xy() && !close_xy(r, u->sprite->position)) show_marker(r);
+ 		}
+-		if (current_selection.size() == 1 && get_unit_id(u) == ack_unit) ++ack_count;
+-		else { ack_unit = get_unit_id(u); ack_count = 0; }
+-		const unit_type_t* ut = u->unit_type;
+-        // Four ordinary acknowledgements, the original ordered annoyed lines,
+-        // then return to normal. Never leave a unit stuck in its annoyed set.
+-        int annoyed=ut->first_pissed_sound>0?std::abs(ut->last_pissed_sound-ut->first_pissed_sound)+1:0;
+-        if(ut_building(u) || ack_count>=4+annoyed)ack_count=0;
+-        if(ack_count>=4 && annoyed) {
+-            int sound=std::min(ut->first_pissed_sound,ut->last_pissed_sound)+ack_count-4;
+-            play_unit_ack(u,sound,sound);
+-        } else play_unit_ack(u,ut->first_what_sound,ut->last_what_sound);
++        bool same = current_selection.size() == 1 && get_unit_id(u) == ack_unit;
++        if (!same) { ack_unit = get_unit_id(u); ack_count = 0; }
++        const auto now = std::chrono::steady_clock::now();
++        // Retail's ten-tick selection debounce. Suppressed/inaudible clicks
++        // must not silently advance the annoyed sequence.
++        if (same && now - last_selection_ack < std::chrono::milliseconds(420)) { refresh_card(); return; }
++        const unit_type_t* ut = u->unit_type;
++        int annoyed = ut->first_pissed_sound > 0 ? std::abs(ut->last_pissed_sound - ut->first_pissed_sound) + 1 : 0;
++        if (ut_building(u)) ack_count = 0;
++        bool played;
++        if (u_completed(u) && unit_unpowered(u)) played = play_unit_ack(u, 116, 116); // Misc/PPwrDown.wav
++        else if (ack_count >= 4 && ack_count < 4 + annoyed) {
++            int sound = std::min(ut->first_pissed_sound, ut->last_pissed_sound) + ack_count - 4;
++            played = play_unit_ack(u, sound, sound);
++        } else played = play_unit_ack(u, ut->first_what_sound, ut->last_what_sound);
++        if (played) {
++            last_selection_ack = now;
++            ack_count = ut_building(u) || ack_count >= 4 + annoyed ? 0 : ack_count + 1;
++        }
+ 		refresh_card();
+ 	}
+ 
+@@ -1206,7 +1221,8 @@
+ 	}
+ 	const char* card_for_unit(unit_t* u, UnitTypes id) {
+ 		using U = UnitTypes;
+-        if (archon_merging(u)) return unit_name(id);
++        if (archon_merging(u) || (u_completed(u) && unit_unpowered(u))
++            || (ut_addon(u) && !addon_is_attached(u))) return unit_name(id);
+ 		// A Terran SCV mid-construction shows only Cancel (Esc), like the original — all the
+ 		// normal worker actions are hidden. Cancel halts the build via Stop: the worker walks
+ 		// free and the building is left as an unfinished shell (resume by right-clicking it
+@@ -1430,6 +1446,7 @@
+ 		fx_add(sel->maelstrom_timer,              "Maelstrom");
+ 		fx_add(sel->blinded_by,                   "Blind");
+ 		fx_add(sel->parasite_flags,               "Parasited");
++        if (u_completed(sel) && unit_unpowered(sel)) fx = stat_name(829); // original red Unpowered
+ 		card_text += '\t'; card_text += fx.c_str();
+ 		for (auto& c : card) {
+ 			// Icon frame for build/train buttons is the unit id; -1 for plain orders.
+@@ -1504,7 +1521,7 @@
+ 			u->unit_type->shield_points,
+ 			ut_has_energy(u) && !u_hallucination(u) ? u->energy.integer_part() : -1,
+ 			unit_max_energy(u).integer_part(),ut_building(u) ? 1 : 0,
+-			ut_detector(u) && !u_hallucination(u) ? 1 : 0, supplied,
++			ut_detector(u) && !u_hallucination(u) && !unit_unpowered(u) ? 1 : 0, supplied,
+ 			st.supply_used[u->owner][ri].raw_value / 2,
+ 			std::min<int>(200,st.supply_available[u->owner][ri].raw_value / 2),ri,cargo ? 1 : 0);
+ 		auto weapon = [&](const weapon_type_t* w, int hits) {
+@@ -1577,7 +1594,7 @@
+ 		if (!u || current_selection.size() != 1 || (!spectator && u->owner != my_player)) return status_text.c_str();
+ 		// Workers use build_queue internally for a destination building, not a
+ 		// production queue. A Drone walking to morph still shows its normal stats.
+-		if (ut_worker(u)) return status_text.c_str();
++		if (ut_worker(u) || (u_completed(u) && unit_unpowered(u))) return status_text.c_str();
+ 		auto pct = [](int done, int total) { return total > 0 ? 100 * done / total : 0; };
+ 		if (archon_merging(u)) {
+             int bt = u->unit_type->build_time;

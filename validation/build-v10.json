@@ -1,0 +1,34 @@
+{
+  "version": "0.10",
+  "versionCode": 11,
+  "package": "org.openbw.androidtest",
+  "apk": "OpenBW-Android-0.10.apk",
+  "bytes": 3497336,
+  "sha256": "fb7a85dfc1609091879849c40dfa81a86277ced7be00d26f587aeabef934c8c3",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "buildChecks": [
+    "APK signature",
+    "zipalign",
+    "ZIP CRC",
+    "package/version metadata",
+    "byte-for-byte packaged assets",
+    "source ZIP CRC and all included bytes",
+    "proprietary asset/reference capture exclusion"
+  ],
+  "testEnvironment": "Desktop Chromium touch emulation; no Android device/emulator",
+  "passed": [
+    "interface-v10.json",
+    "menu-navigation-v10.json",
+    "font-startup-v10.json",
+    "hud-v10.json",
+    "interface-import-v10.txt"
+  ],
+  "engineChanges": "Only menu-decoder.wasm rebuilt for 356x304 original campaign clips. Five other WASM modules byte-identical to 0.9. Native interface importer expanded to copy five small CD palette files.",
+  "limitations": [
+    "Android device check still needed",
+    "Registry local identities; no save-game or original profile compatibility",
+    "Reconstructed panel easing/glass blend/fades and name modal layout",
+    "No expansion chooser, intro text crawl, FMVs, later missions, Zerg/Protoss campaign gameplay or save/load",
+    "Interface re-import required for campaign frame"
+  ]
+}

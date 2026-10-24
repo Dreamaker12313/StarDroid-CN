@@ -1,0 +1,2 @@
+PASS OpenBW-Story.zip: original entries, validated atomic install, local serving, corrupt/wrong-format rejection
+PASS OpenBW-Cinematics.zip: original entries, validated atomic install, local serving, corrupt/wrong-format rejection

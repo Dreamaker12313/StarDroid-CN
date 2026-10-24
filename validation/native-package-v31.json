@@ -1,0 +1,118 @@
+{
+  "package": "org.openbw.androidtest",
+  "versionName": "0.31",
+  "versionCode": 32,
+  "apkSha256": "b3fbb865781457836db94062a652257c9eda3393c3818db5d77d85d05ffa2816",
+  "apkBytes": 8837534,
+  "testApkSha256": "357cb61842e589b4328b6aaa97ae2f44f0c7d513124081f81a2b598655e380ab",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "updateCertificateMatches": true,
+  "v2Signature": true,
+  "v3Signature": true,
+  "zipCRC": true,
+  "zipAligned16KiB": true,
+  "assetByteMatches": 72,
+  "webViewClassReferenced": false,
+  "webRuntimeAssetsPackaged": false,
+  "jniMethodsPerArchitecture": 22,
+  "libraries": [
+    {
+      "abi": "arm64-v8a",
+      "file": "libopenbw.so",
+      "sha256": "84cb48f752b820efdfbd6892d10d75f4162603223cb1f5c028f5aaf4176c5272",
+      "bytes": 4157088,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libsmacker.so",
+        "libjnigraphics.so",
+        "libdl.so",
+        "libm.so",
+        "libc.so"
+      ]
+    },
+    {
+      "abi": "arm64-v8a",
+      "file": "libsmacker.so",
+      "sha256": "9d39f24dbf05fa356d3a79b8525f59fa685426980ac9f07df99bd123d9b5c2aa",
+      "bytes": 32576,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libdl.so",
+        "libc.so"
+      ]
+    },
+    {
+      "abi": "x86_64",
+      "file": "libopenbw.so",
+      "sha256": "2cb1165cfa5ef26e3f8e6c64a3010d0631f29d526cadf46e7b4af14358405ea8",
+      "bytes": 4381264,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libsmacker.so",
+        "libjnigraphics.so",
+        "libdl.so",
+        "libm.so",
+        "libc.so"
+      ]
+    },
+    {
+      "abi": "x86_64",
+      "file": "libsmacker.so",
+      "sha256": "8150f4a80bd34fe4f1b7842bf111cb9fd99b3f44a3758da17cf6eb33021d4b4d",
+      "bytes": 34792,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libdl.so",
+        "libc.so"
+      ]
+    }
+  ],
+  "androidSuites": {
+    "android": false,
+    "parity": false,
+    "polish": false,
+    "feedback": false,
+    "gameplay-android": false
+  },
+  "freshGameplayMatrixVerified": false,
+  "nativePresentationVerified": false,
+  "combinedImportVerified": false,
+  "nativePatchPreparationVerified": true,
+  "feedbackHostVerified": true,
+  "revisionAndroidVerified": false,
+  "missionExportAndroidVerified": true,
+  "packageIntegrityPassed": true,
+  "releaseReady": false,
+  "missingOriginalDataEvidence": [
+    "android",
+    "parity",
+    "polish",
+    "feedback",
+    "gameplay-android",
+    "gameplay",
+    "presentation",
+    "import"
+  ],
+  "gameplayChecks": 0,
+  "hardwareTested": false
+}

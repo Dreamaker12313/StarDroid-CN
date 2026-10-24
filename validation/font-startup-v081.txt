@@ -1,0 +1,4 @@
+PASS valid
+PASS missing
+PASS unreadable
+PASS ["valid font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8","missing font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8","unreadable font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8"]

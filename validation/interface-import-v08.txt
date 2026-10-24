@@ -1,0 +1,11 @@
+Reading original fonts…
+Importing original fonts: 1 / 8
+Importing original fonts: 2 / 8
+Importing original fonts: 3 / 8
+Importing original fonts: 4 / 8
+Importing original fonts: 5 / 8
+Importing original fonts: 6 / 8
+Importing original fonts: 7 / 8
+Importing original fonts: 8 / 8
+Missing-fonts archive rejected: No original fonts found. Select the large StarCraft.mpq or the original Install.exe.
+PASS: fonts export, validated install, local serving, safe replacement, missing-font handling.

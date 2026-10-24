@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
+  "output": "PASS 12405 checks, 1728 edge/zoom/side-control positions: migration, setting persistence, fixed fallback, placement coordinates, actual Build/Cancel callbacks and three-race renders",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "d35c8c6c2b326f8da80ba3cc4a6cc16b79cee452618f01c568175799983efda2",
+    "app/src/main/java/org/openbw/androidtest/PlacementButtons.java": "200a8d2cd04d9411520e280644ddacb5c0560e67114f129560e69aa22274c247",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "79b36bb96f8104a027a8d53e0dcc01de41958696fa2f797bb1e5bb793f36eb12",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "tests/run_placement60.py": "815e67ad8901ca00b3e53911781a48153c1e96dca4bee4ea195296885ce0da42"
+  }
+}

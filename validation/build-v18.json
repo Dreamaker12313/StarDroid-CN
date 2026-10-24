@@ -1,0 +1,76 @@
+{
+  "version": "0.18",
+  "versionCode": 19,
+  "package": "org.openbw.androidtest",
+  "apkSha256": "7c5fe0cde3b083e6000b68498d3af527bdd84032a0f86b8c0ce1c2958474df95",
+  "bytes": 3654239,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "checks": [
+    "APK v2 and v3 signatures verified",
+    "Retains original package and signing certificate",
+    "ZIP alignment and CRC verified",
+    "All packaged assets byte-match tested working files",
+    "All seven WASM hashes match ENGINE-BUILD.json",
+    "Clean-source patch matches all 11 modified engine files"
+  ],
+  "engine": {
+    "version": "0.18",
+    "sdk": "wasi-sdk-33.0-x86_64-linux",
+    "patchSha256": "6815808632a7f2deb508d5e3a6f17cccfbee54720a3aaa3276861ff03615cb66",
+    "binaries": [
+      {
+        "file": "openbw.wasm",
+        "size": 2388035,
+        "sha256": "79d9cffc0b7108f2a7d9a97b635da710528cdf3c94170a2cf55b97e09324d3ba"
+      },
+      {
+        "file": "openbw-campaign.wasm",
+        "size": 2388035,
+        "sha256": "79d9cffc0b7108f2a7d9a97b635da710528cdf3c94170a2cf55b97e09324d3ba"
+      },
+      {
+        "file": "openbw-bot.wasm",
+        "size": 6150147,
+        "sha256": "ec3c4948e56d447024ec2294cbc92549ccf8eb5eab97adab0a89b2fdd7ade20c"
+      },
+      {
+        "file": "media-decoder.wasm",
+        "size": 665157,
+        "sha256": "57cf86b9153081a1dc850b93c8e24250e35b144e6022cb5488bac10be23ac1be"
+      },
+      {
+        "file": "portrait-decoder.wasm",
+        "size": 285594,
+        "sha256": "26b628f3f36d30ae998e850269adbc06a8fdf856fac6cf371635d47e83317cb0"
+      },
+      {
+        "file": "menu-decoder.wasm",
+        "size": 285433,
+        "sha256": "9400381a97bfec5c04970be2234dd84ef2b9b890175e8a2c6890a26a6a51b9d2"
+      },
+      {
+        "file": "cinematic-decoder.wasm",
+        "size": 287265,
+        "sha256": "c167ce8fd74bb51267476a6b8abaf01e8c8a510b2421953aabcc7281c12d503f"
+      }
+    ],
+    "botDependencies": [
+      {
+        "name": "bwapi",
+        "commit": "48124ba8ed1b4d52b3dfd52acbaf34afb9a37fe2",
+        "repository": "https://github.com/OpenBW/bwapi",
+        "file": "vendor/bwapi-48124ba8ed1b.tar.gz",
+        "sha256": "d568d51d16e048e2a209566ba5d4fa8f337df4b0e9a482aa81703f020df2649f"
+      },
+      {
+        "name": "ZZZKBot",
+        "commit": "7183e37b6b416ea53c1040c83e639a3a3c395eed",
+        "repository": "https://github.com/chriscoxe/ZZZKBot",
+        "file": "vendor/ZZZKBot-7183e37b6b41.tar.gz",
+        "sha256": "8ce57dc621d2adb4211dfaa1a5c51956471c7038e359b4d0d2a2b874276f238d"
+      }
+    ],
+    "cmake": "4.4.0",
+    "sourceDateEpoch": 1791849600
+  }
+}

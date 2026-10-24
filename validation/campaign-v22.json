@@ -1,0 +1,249 @@
+{
+  "missions": {
+    "zerg02": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t29\t1\t1\t1\t5104\t5232\t4904\t5232\n",
+        "error": "",
+        "outcome": 0,
+        "units": 151,
+        "voices": 1,
+        "next": "zerg03"
+      },
+      "hatchery": {
+        "race": 0,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button",
+            "youwin",
+            "youlose"
+          ],
+          "decoded": 4,
+          "played": 4,
+          "lastPlayed": "swishout",
+          "paused": false,
+          "error": ""
+        },
+        "originalConsole": true,
+        "originalFonts": [
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "32",
+          "50",
+          "16x"
+        ],
+        "speechFont": "font10",
+        "timerFont": "font16",
+        "resourceFrames": [
+          0,
+          1,
+          4
+        ],
+        "commandIcons": 4,
+        "minimap": {
+          "x": 4,
+          "y": 380,
+          "w": 96,
+          "h": 96
+        },
+        "minimapTerrain": true,
+        "dialogArt": "dlgs/zerg.grp",
+        "selectedType": 131,
+        "details": [],
+        "commandSlots": [
+          {
+            "label": "Lair · 150 minerals / 100 gas",
+            "slot": 6
+          },
+          {
+            "label": "Burrowing · 100 minerals / 100 gas",
+            "slot": 2
+          },
+          {
+            "label": "Set Rally Point",
+            "slot": 5
+          },
+          {
+            "label": "Select Larva",
+            "slot": 0
+          }
+        ],
+        "submenu": false
+      },
+      "larva": {
+        "race": 0,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button",
+            "youwin",
+            "youlose"
+          ],
+          "decoded": 4,
+          "played": 4,
+          "lastPlayed": "swishout",
+          "paused": false,
+          "error": ""
+        },
+        "originalConsole": true,
+        "originalFonts": [
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "32",
+          "50",
+          "16x"
+        ],
+        "speechFont": "font10",
+        "timerFont": "font16",
+        "resourceFrames": [
+          0,
+          1,
+          4
+        ],
+        "commandIcons": 11,
+        "minimap": {
+          "x": 4,
+          "y": 380,
+          "w": 96,
+          "h": 96
+        },
+        "minimapTerrain": true,
+        "dialogArt": "dlgs/zerg.grp",
+        "selectedType": 35,
+        "details": [
+          {
+            "kind": "armor",
+            "icon": 297,
+            "level": 0,
+            "base": 10,
+            "bonus": 0,
+            "hits": 1
+          }
+        ],
+        "commandSlots": [
+          {
+            "label": "Zergling · 50 minerals",
+            "slot": 1
+          },
+          {
+            "label": "Hydralisk · 75 minerals / 25 gas",
+            "slot": 3
+          },
+          {
+            "label": "Drone · 50 minerals",
+            "slot": 0
+          },
+          {
+            "label": "Overlord · 100 minerals",
+            "slot": 2
+          },
+          {
+            "label": "Mutalisk · 100 minerals / 100 gas",
+            "slot": 4
+          },
+          {
+            "label": "Scourge · 25 minerals / 75 gas",
+            "slot": 5
+          }
+        ],
+        "submenu": false
+      },
+      "locked": {
+        "disabled": true,
+        "classes": "cmd off"
+      },
+      "egg": {
+        "kind": 4,
+        "target": 41,
+        "slots": [
+          {
+            "label": "Cancel Drone",
+            "image": true
+          }
+        ]
+      },
+      "chrysalis": {
+        "details": [],
+        "unit": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=1 [ttl=56 kind=1 pos=336,128]\nselection=1\ncamera=544,288\nselected_owner=11 selection_palette=8\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=1 first=Young Chrysalis\nprimary=none\n"
+      },
+      "settings": {
+        "page": "sound",
+        "w": 542.800048828125,
+        "h": 486.75,
+        "style": 4333
+      },
+      "victorySound": true
+    }
+  },
+  "checks": [
+    "Zerg 2: Lair command, disabled Mutalisk, Egg target icon, no Chrysalis armor, blue settings and original victory sound.",
+    "Original/Expansion chooser and original expansion campaign artwork."
+  ],
+  "errors": [],
+  "title": {
+    "page": "campaign",
+    "game": "broodwar",
+    "loaded": true,
+    "animations": [
+      "glue/expcampaign/disk.smk",
+      "glue/expcampaign/xterr.smk",
+      "glue/expcampaign/xterron.smk",
+      "glue/expcampaign/xzerg.smk",
+      "glue/expcampaign/xzergon.smk",
+      "glue/expcampaign/xprot.smk",
+      "glue/expcampaign/xproton.smk",
+      "glue/mainmenu/single.smk",
+      "glue/mainmenu/singleon.smk",
+      "glue/mainmenu/multi.smk",
+      "glue/mainmenu/multion.smk",
+      "glue/mainmenu/editor.smk",
+      "glue/mainmenu/editoron.smk",
+      "glue/mainmenu/exit.smk",
+      "glue/mainmenu/exiton.smk",
+      "glue/campaign/disk.smk",
+      "glue/campaign/terr.smk",
+      "glue/campaign/terron.smk",
+      "glue/campaign/zerg.smk",
+      "glue/campaign/zergon.smk",
+      "glue/campaign/prot.smk",
+      "glue/campaign/proton.smk"
+    ],
+    "originalFont": true,
+    "campaignPalette": true,
+    "suspended": false,
+    "lastFrameTime": 4657.6,
+    "transitioning": false,
+    "slideAmount": 0,
+    "profiles": 1,
+    "modal": false,
+    "sounds": {
+      "available": [
+        "mousedown2",
+        "mouseover",
+        "swishin",
+        "swishlock",
+        "swishout"
+      ],
+      "decoded": 4,
+      "played": 8,
+      "lastPlayed": "swishlock",
+      "paused": false,
+      "error": ""
+    }
+  }
+}

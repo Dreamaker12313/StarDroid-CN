@@ -1,0 +1,96 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -504,7 +504,9 @@
+ 		return u_status_flag(u, unit_t::status_flag_no_collide);
+ 	}
+ 	bool u_invincible(const unit_t* u) const {
+-		return u_status_flag(u, unit_t::status_flag_invincible);
++		// Mission beacons are markers, including flag beacons; Fleet Beacon is
++		// a normal tech building. Scripted removal still uses kill_unit directly.
++		return unit_is_special_beacon(u) || u_status_flag(u, unit_t::status_flag_invincible);
+ 	}
+ 	bool u_ready_to_attack(const unit_t* u) const {
+ 		return u_status_flag(u, unit_t::status_flag_ready_to_attack);
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -368,7 +368,26 @@
+ 	double last_recall_ms = -1e9;   // ui_now at the last recall, for double-tap timing
+ 	static constexpr double GROUP_DBLTAP_MS = 300;   // recenter only within this window
+ 
++	void prune_selection() {
++		current_selection.erase(std::remove_if(current_selection.begin(), current_selection.end(), [&](unit_id id) {
++			auto* u = get_unit(id);
++			return !u || unit_dying(u);
++		}), current_selection.end());
++	}
++
++	int group_count(int n) {
++		if (n < 0 || n >= 10) return 0;
++		int count = 0;
++		for (auto id : groups[n]) {
++			auto* u = get_unit(id);
++			if (u && !unit_dying(u) && u->owner == my_player) ++count;
++		}
++		return count;
++	}
++
+ 	void assign_group(int n) {
++		if (n < 0 || n >= 10) return;
++		prune_selection();
+ 		auto& g = groups[n];
+ 		g.clear();
+ 		for (auto uid : current_selection) {
+@@ -391,6 +410,7 @@
+ 	}
+ 
+ 	void recall_group(int n) {
++		if (n < 0 || n >= 10) return;
+ 		// Center only on a genuine double-tap — the same group again within the window. A slow
+ 		// second press just reselects, as in the original (the camera doesn't jump).
+ 		bool refocus = (n == last_recalled_group && ui_now - last_recall_ms < GROUP_DBLTAP_MS);
+@@ -398,7 +418,7 @@
+ 		current_selection_clear();
+ 		for (auto uid : groups[n]) {
+ 			unit_t* u = get_unit(uid);   // skips units that have since died
+-			if (u && u->owner == my_player) current_selection_add(u);
++			if (u && !unit_dying(u) && u->owner == my_player) current_selection_add(u);
+ 		}
+ 		if (current_selection.empty()) { last_recalled_group = -1; on_selection(false); return; }
+ 		if (refocus) center_on_selection();   // don't re-ack on a recenter
+@@ -2329,7 +2349,7 @@
+ 	}
+ 
+ 	// Single selections use the big 64x64 console wireframe, groups the 32x32 tiles.
+-	int wire_box() { return current_selection.size() == 1 ? 64 : 32; }
++	int wire_box() { prune_selection(); return current_selection.size() == 1 ? 64 : 32; }
+ 
+ 	unit_t* selected_nth(size_t i) {
+ 		size_t n = 0;
+@@ -2356,6 +2376,7 @@
+ 	// One line per selected unit: "id \t name \t hp \t maxhp \t state". `state` changes iff
+ 	// the tile must be redrawn. Shown for single selections too, as in the original.
+ 	const char* wires() {
++		prune_selection();
+ 		wires_text.clear();
+ 		size_t n = 0;
+ 		for (auto uid : current_selection) {
+@@ -2985,6 +3006,7 @@
+ 	}
+ 
+ 	void update() {
++		prune_selection();
+ 		clamp_viewport();
+ 		ui_functions::update();   // processes input first, so edge_scroll sees the fresh cursor
+ 		edge_scroll();
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -2230,6 +2230,9 @@
+ 		if (screen_pos.x < 0) screen_pos.x = 0;
+ 
+ 		uint8_t* data = (uint8_t*)indexed_surface->lock();
++		// A viewport can extend past the map beneath the Android console. Clear
++		// the indexed canvas too: clearing only RGBA leaves last frame's terrain.
++		memset(data, 0, indexed_surface->pitch * indexed_surface->h);
+ 		draw_tiles(data, indexed_surface->pitch);
+ 		draw_sprites(data, indexed_surface->pitch);
+ 		if (fog_player >= 0) draw_fog(data, indexed_surface->pitch);

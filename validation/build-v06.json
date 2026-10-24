@@ -1,0 +1,17 @@
+{
+  "version": "0.6",
+  "versionCode": 6,
+  "package": "org.openbw.androidtest",
+  "apk": "OpenBW-Android-0.6.apk",
+  "bytes": 3365283,
+  "sha256": "552f8ed8fb7d2c08fc7a986a461d0c98a4502eca1e1e91bb5516eec83b5d7370",
+  "signerCertificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "checks": [
+    "Android Java compilation, aapt/dex packaging",
+    "APK v2/v3 signatures, alignment, ZIP CRC, every bundled asset byte",
+    "Same package/signing key as previous versions",
+    "Pinned archive + patch clean rebuild matches campaign/plain WASM hash",
+    "Desktop campaign AI/mission/portrait/cheat/cancel/bot regressions pass"
+  ],
+  "androidDeviceTested": false
+}

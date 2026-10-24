@@ -1,0 +1,40 @@
+{
+  "apkSha256": "b48d0b66a513070ae82ca3fdedff1ef145c1aff0f7c7a6a25510e872843803d9",
+  "testApkSha256": "3fae893bc69affd89417446b7eb3a8cc971bd9ab325b73a4dad44a138a591bef",
+  "version": "0.29",
+  "android": "9",
+  "abi": "x86_64",
+  "originalGameAssets": false,
+  "movieImportGuidanceAndCounts": true,
+  "readableCommandHints": true,
+  "continuousSpeechTimedScroll": true,
+  "slidingPanelBackgroundMask": true,
+  "slightlySlowerMenuTiming": true,
+  "movieInventoryChecksPayloads": true,
+  "nativeLibraryAndMixerLoad": true,
+  "appIsForegroundWithoutSystemDialog": true,
+  "passed": true,
+  "environment": {
+    "api": 28,
+    "emulator": "37.3.4",
+    "resolution": "1280x720",
+    "cpuAcceleration": false,
+    "graphics": "SwiftShader",
+    "physicalDevice": false
+  },
+  "scope": "No original game archives; UI logic and JNI loading only. No original-map visual/audio verification.",
+  "emulatorNote": "Initial screenshots were obscured by a System UI stall. Dismissed it and reran with a foreground-window check; final captures are unobstructed.",
+  "sourceSha256": {
+    "tests/NativeRevisionInstrumentation.java": "e6dc7c8183f6b2c3874904a48b40efda2bfa557eeb77c2422ef262abdb396f02",
+    "tests/NativeFeedbackInstrumentation.java": "77844a96b7579847247c8cbfb0c3f0606a7575429408432a1299351c943cd0b7",
+    "tests/AndroidManifest.xml": "582ced13a5f6e3edd6a1701be5e4624fc39245ec508bcfe03b8b751a604fc0ac",
+    "tests/build_instrumentation.py": "1ad7ce2814801e2f4b18d7df31892809e30b766a8f84cef228c31f0d5528a32e",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "6eafa71f7b2132b1a5144a95b116569b579a63cb9227842c81e9f800c6ca26b3",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "28a151fc46d79f34b22642bf96a450c8d90d6a81f24220d6e37a939a8aafe7f8",
+    "app/src/main/java/org/openbw/androidtest/BriefingText.java": "13a47b2c0bcf77cce60d3debd1dfd1c1bed55748c3d928eb4c57defaa6341880",
+    "app/src/main/java/org/openbw/androidtest/MenuPanel.java": "33e2f834a9ea57163ccaa1ed8dad67e86926e797375963980b5e511ac66c2e36",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "d3aa6e498f8ada75632c1760811d5052490367a5a72cb2e0886a2b062b234196",
+    "app/src/main/java/org/openbw/androidtest/StoryData.java": "534b7ddb4fee85667d8f017bb785abc32f7fc9a3236e0e74a0de4dce3255d349"
+  },
+  "appErrorLog": "--------- beginning of main\n--------- beginning of system\n"
+}

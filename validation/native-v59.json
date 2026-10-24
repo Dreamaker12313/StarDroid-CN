@@ -1,0 +1,289 @@
+{
+  "passed": true,
+  "physicalDevices": false,
+  "cases": [
+    {
+      "case": "loss-reuse",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS duplicate death guarded until recycling, then stale ID released\n"
+    },
+    {
+      "case": "image-reuse",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS recycled image clears frozen position for identical save continuation\n"
+    },
+    {
+      "case": "times",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nTIME expansion=0 hero=20 frames=360\nTIME expansion=0 hero=19 frames=450\nTIME expansion=0 hero=16 frames=750\nTIME expansion=0 hero=28 frames=2000\nTIME expansion=0 hero=23 frames=750\nTIME expansion=0 hero=99 frames=750\nTIME expansion=0 hero=104 frames=750\nTIME expansion=0 hero=51 frames=750\nTIME expansion=0 hero=53 frames=420\nTIME expansion=0 hero=48 frames=900\nTIME expansion=0 hero=54 frames=420\nTIME expansion=0 hero=55 frames=600\nTIME expansion=0 hero=77 frames=600\nTIME expansion=0 hero=78 frames=750\nTIME expansion=0 hero=75 frames=750\nTIME expansion=0 hero=79 frames=750\nTIME expansion=0 hero=82 frames=2100\nTIME expansion=0 hero=88 frames=1200\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nTIME expansion=1 hero=20 frames=360\nTIME expansion=1 hero=19 frames=450\nTIME expansion=1 hero=16 frames=750\nTIME expansion=1 hero=28 frames=2000\nTIME expansion=1 hero=23 frames=750\nTIME expansion=1 hero=99 frames=750\nTIME expansion=1 hero=104 frames=750\nTIME expansion=1 hero=51 frames=750\nTIME expansion=1 hero=53 frames=420\nTIME expansion=1 hero=48 frames=900\nTIME expansion=1 hero=54 frames=420\nTIME expansion=1 hero=55 frames=600\nTIME expansion=1 hero=77 frames=600\nTIME expansion=1 hero=78 frames=750\nTIME expansion=1 hero=75 frames=750\nTIME expansion=1 hero=79 frames=750\nTIME expansion=1 hero=82 frames=2100\nTIME expansion=1 hero=88 frames=1200\nPASS all 18 hero build times exactly match their counterparts in both expansions\n"
+    },
+    {
+      "case": "spire",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS ordinary and Greater Spire both research level 3 air attack/armor with completed Hive, both expansions\n"
+    },
+    {
+      "case": "heroes",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 20 cost=100/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 19 cost=100/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 16 cost=50/150 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 28 cost=465/350 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 23 cost=225/150 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 99 cost=40/125 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 104 cost=40/125 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 51 cost=100/300 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 53 cost=100/35 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 48 cost=335/335 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 54 cost=50/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 55 cost=135/135 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 77 cost=165/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 78 cost=250/100 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 75 cost=290/235 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 79 cost=65/200 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 82 cost=465/335 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 88 cost=415/190 six-button card, queue, save, train, death cap\n"
+    },
+    {
+      "case": "merge",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS Tassadar/Zeratul merge, complete hero Archon, save, paired cap/death release, Duke siege cap and supply\n"
+    },
+    {
+      "case": "teams",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 4, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 4, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS four native perspectives: teams, vision, saved rules, shared victory and defeat, default-off isolation\n"
+    },
+    {
+      "case": "legacy",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS previous schema 2 save compatibility\n"
+    },
+    {
+      "case": "power",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS power expansion=0 disabled building types=13 unit/building/upgrade dependencies=17 original red status and sound; retail completed-tech counting\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS power expansion=1 disabled building types=13 unit/building/upgrade dependencies=17 original red status and sound; retail completed-tech counting\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS actual Pylon construction/destruction and saved power state\n"
+    },
+    {
+      "case": "addons",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS all 6 addon types: actual lift, neutral tech/card, enemy landing capture, owner census, save round trip\n"
+    },
+    {
+      "case": "sound",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS original Ultralisk selection/annoyed/normal cycle; original score fill/end composed to 2200 ms; playback clock; independent complete lobby sounds\n"
+    },
+    {
+      "case": "victory",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 3, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 3, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 3, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 3, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 3, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 3, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 5, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 5, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 5, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 5, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 5, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 5, units=5, fog_player=2\nPASS 48 victory cases: original/BW, 3 difficulties, 3 races, Melee/FFA, mixed/all-human network perspectives\n"
+    },
+    {
+      "case": "cargo",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS Bunker/Dropship/Shuttle/transport Overlord empty, full and unload command states\n"
+    },
+    {
+      "case": "detection",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nPASS reactive detection for three races, Comsat energy, campaign existing detectors only, scripted movement retained\n"
+    },
+    {
+      "case": "deplete-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nDEPLETED 0 0 1\t13\t0\t1\t0\t50\t0\t75\t0\nDEPLETED 0 3000 1\t388\t0\t6\t0\t298\t0\t23\t0\nDEPLETED 0 6000 1\t763\t0\t15\t0\t794\t0\t19\t0\nDEPLETED 0 9000 1\t1138\t4\t19\t0\t1466\t24\t66\t24\nDEPLETED 0 12000 1\t1513\t8\t37\t0\t3034\t528\t184\t428\nDEPLETED 0 15000 1\t1563\t11\t57\t2\t5098\t1672\t248\t972\nDEPLETED 0 18000 1\t1837\t15\t70\t5\t7170\t2936\t245\t961\nDEPLETED 0 21000 1\t2212\t16\t95\t7\t9242\t4232\t342\t1082\nDEPLETED 0 24000 1\t2475\t17\t109\t11\t10466\t5520\t341\t1745\nDEPLETED 0 27000 1\t2534\t19\t111\t12\t10542\t6256\t17\t2481\nRECOVERY race=0 minerals=11348 bases=3\nPASS depleted main recovery race=0\n"
+    },
+    {
+      "case": "deplete-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nDEPLETED 1 0 1\t50\t0\t1\t0\t50\t0\t75\t0\nDEPLETED 1 3000 1\t54\t0\t6\t0\t314\t0\t89\t0\nDEPLETED 1 6000 1\t429\t4\t13\t0\t818\t0\t43\t0\nDEPLETED 1 9000 1\t804\t6\t16\t0\t1546\t0\t121\t0\nDEPLETED 1 12000 1\t1179\t12\t30\t0\t2866\t480\t366\t480\nDEPLETED 1 15000 1\t1554\t22\t46\t1\t4930\t1400\t430\t1000\nDEPLETED 1 18000 1\t1676\t27\t55\t4\t6986\t2680\t761\t1255\nDEPLETED 1 21000 1\t1874\t27\t61\t4\t9058\t3976\t2433\t2401\nDEPLETED 1 24000 1\t2249\t27\t61\t5\t10386\t5272\t3661\t3597\nDEPLETED 1 27000 1\t2624\t32\t61\t5\t10598\t5976\t3373\t4201\nRECOVERY race=1 minerals=11844 bases=3\nPASS depleted main recovery race=1\n"
+    },
+    {
+      "case": "deplete-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nDEPLETED 2 0 1\t33\t0\t1\t0\t50\t0\t75\t0\nDEPLETED 2 3000 1\t37\t2\t5\t0\t322\t0\t47\t0\nDEPLETED 2 6000 1\t412\t3\t13\t0\t834\t0\t59\t0\nDEPLETED 2 9000 1\t787\t5\t16\t0\t1562\t0\t137\t0\nDEPLETED 2 12000 1\t1162\t14\t29\t0\t2930\t424\t355\t424\nDEPLETED 2 15000 1\t1537\t20\t41\t0\t5018\t1352\t543\t1152\nDEPLETED 2 18000 1\t1557\t28\t52\t4\t7058\t2624\t433\t1524\nDEPLETED 2 21000 1\t1857\t28\t57\t6\t9138\t3912\t1663\t2462\nDEPLETED 2 24000 1\t2232\t28\t57\t6\t10458\t5208\t2633\t3408\nDEPLETED 2 27000 1\t2607\t31\t66\t8\t10614\t6000\t89\t3025\nRECOVERY race=2 minerals=12148 bases=3\nPASS depleted main recovery race=2\n"
+    },
+    {
+      "case": "hero-ai-0-0-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=0 level=0 bw=0 id=54 frame=2964\nHERO race=0 level=0 bw=0 id=53 frame=5892\nECON 6000 1\t597\t6\t19\t0\t1770\t368\t70\t183\nHERO race=0 level=0 bw=0 id=104 frame=9894\nECON 12000 1\t1042\t15\t40\t2\t4882\t1616\t317\t31\nHERO race=0 level=0 bw=0 id=55 frame=14280\nECON 18000 1\t1067\t15\t56\t3\t8210\t2904\t2060\t84\nECON 24000 1\t1328\t16\t79\t7\t11234\t4192\t2834\t22\nHERO race=0 level=0 bw=0 id=51 frame=24654\nECON 30000 1\t2078\t28\t114\t9\t13542\t5096\t2317\t26\nECON 36000 1\t2828\t34\t171\t12\t16878\t5990\t1803\t170\nHERO race=0 level=0 bw=0 id=48 frame=39852\nECON 42000 1\t3578\t36\t227\t14\t23574\t8740\t3614\t1185\nECON 48000 1\t4328\t36\t247\t17\t30490\t12786\t9105\t4856\nECON 54000 1\t5078\t39\t266\t19\t37010\t17210\t14050\t8955\nRESULT race=0 level=0 bw=0 first=2964 heroes=6 producers=3 parallel=1 bases=5 upgrades=13\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-0-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=0 level=1 bw=0 id=54 frame=3444\nHERO race=0 level=1 bw=0 id=53 frame=5820\nECON 6000 1\t732\t5\t19\t0\t1754\t472\t4\t187\nHERO race=0 level=1 bw=0 id=104 frame=9150\nHERO race=0 level=1 bw=0 id=55 frame=11712\nECON 12000 1\t849\t8\t41\t1\t4770\t1744\t345\t49\nECON 18000 1\t874\t9\t64\t5\t8106\t3032\t1331\t37\nECON 24000 1\t1357\t10\t85\t8\t11066\t4328\t2216\t308\nHERO race=0 level=1 bw=0 id=51 frame=26238\nECON 30000 1\t2107\t14\t106\t10\t13494\t5134\t2469\t39\nECON 36000 1\t2857\t21\t153\t13\t16038\t5870\t1438\t25\nHERO race=0 level=1 bw=0 id=48 frame=41508\nECON 42000 1\t3607\t30\t241\t15\t21822\t8082\t1712\t627\nECON 48000 1\t4357\t34\t281\t18\t29454\t11358\t7044\t3553\nECON 54000 1\t5107\t37\t306\t20\t37374\t14300\t13264\t6295\nRESULT race=0 level=1 bw=0 first=3444 heroes=6 producers=3 parallel=1 bases=5 upgrades=16\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-0-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=0 level=2 bw=0 id=54 frame=4092\nECON 6000 1\t568\t8\t13\t0\t1506\t440\t381\t390\nHERO race=0 level=2 bw=0 id=53 frame=6492\nECON 12000 1\t1266\t14\t43\t4\t4578\t1768\t303\t783\nHERO race=0 level=2 bw=0 id=104 frame=13110\nHERO race=0 level=2 bw=0 id=55 frame=15936\nECON 18000 1\t1778\t21\t83\t9\t9754\t3936\t929\t366\nHERO race=0 level=2 bw=0 id=51 frame=19590\nHERO race=0 level=2 bw=0 id=48 frame=23796\nECON 24000 1\t1809\t25\t121\t16\t13966\t6232\t1031\t2\nECON 30000 1\t2490\t29\t168\t20\t17806\t8444\t546\t239\nECON 36000 1\t3240\t29\t204\t26\t21966\t10022\t1481\t492\nECON 42000 1\t3990\t32\t223\t29\t25058\t11178\t3098\t1523\nECON 48000 1\t4740\t35\t231\t29\t29890\t13534\t7380\t3879\nECON 54000 1\t5490\t35\t237\t29\t35530\t16762\t12870\t7107\nRESULT race=0 level=2 bw=0 first=4092 heroes=6 producers=3 parallel=1 bases=4 upgrades=21\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-1-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=1 level=0 bw=0 id=20 frame=3072\nECON 6000 1\t217\t7\t17\t0\t1610\t400\t135\t400\nHERO race=1 level=0 bw=0 id=19 frame=9618\nHERO race=1 level=0 bw=0 id=23 frame=10542\nECON 12000 1\t536\t13\t27\t1\t4826\t1664\t1276\t689\nECON 18000 1\t1286\t13\t27\t1\t8258\t2952\t4608\t1877\nECON 24000 1\t2036\t13\t27\t1\t11594\t4232\t7694\t2907\nECON 30000 1\t2719\t14\t33\t2\t13550\t5124\t9200\t3699\nECON 36000 1\t3012\t162\t39\t3\t14206\t5264\t9156\t3789\nHERO race=1 level=0 bw=0 id=16 frame=41358\nHERO race=1 level=0 bw=0 id=99 frame=41358\nECON 42000 1\t3238\t177\t75\t3\t16854\t6214\t7674\t2889\nHERO race=1 level=0 bw=0 id=28 frame=44000\nECON 48000 1\t3878\t181\t84\t4\t23070\t9356\t11690\t5031\nECON 54000 1\t4196\t184\t95\t5\t29054\t12958\t16074\t8033\nRESULT race=1 level=0 bw=0 first=3072 heroes=6 producers=3 parallel=1 bases=5 upgrades=11\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-1-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=1 level=1 bw=0 id=20 frame=3072\nECON 6000 1\t329\t6\t15\t1\t1570\t400\t70\t400\nHERO race=1 level=1 bw=0 id=19 frame=10290\nHERO race=1 level=1 bw=0 id=23 frame=11238\nECON 12000 1\t734\t15\t35\t1\t4474\t1640\t49\t740\nECON 18000 1\t1053\t23\t56\t2\t10178\t3888\t3703\t2388\nECON 24000 1\t1803\t23\t56\t2\t16838\t6472\t10263\t4872\nECON 30000 1\t2327\t29\t61\t3\t21502\t8658\t13877\t6858\nHERO race=1 level=1 bw=0 id=99 frame=33150\nHERO race=1 level=1 bw=0 id=16 frame=33918\nECON 36000 1\t2685\t45\t81\t3\t25202\t10938\t13497\t6813\nHERO race=1 level=1 bw=0 id=28 frame=36440\nECON 42000 1\t3049\t50\t86\t4\t31522\t14696\t18067\t9171\nECON 48000 1\t3199\t50\t92\t5\t37546\t18888\t23516\t12963\nECON 54000 1\t3886\t56\t98\t5\t42702\t23046\t27022\t16321\nRESULT race=1 level=1 bw=0 first=3072 heroes=6 producers=3 parallel=1 bases=6 upgrades=14\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-1-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=1 level=2 bw=0 id=20 frame=3072\nECON 6000 1\t420\t5\t15\t0\t1618\t408\t243\t408\nHERO race=1 level=2 bw=0 id=19 frame=10338\nHERO race=1 level=2 bw=0 id=23 frame=11838\nECON 12000 1\t1170\t21\t45\t3\t5434\t1704\t9\t754\nECON 18000 1\t1920\t22\t52\t5\t11434\t4248\t5259\t3048\nECON 24000 1\t2670\t22\t52\t5\t17054\t6832\t10629\t5382\nECON 30000 1\t3420\t183\t59\t6\t21190\t9018\t14215\t7468\nECON 36000 1\t4170\t189\t69\t7\t23918\t10460\t15393\t8685\nECON 42000 1\t4913\t197\t82\t8\t27922\t12308\t17197\t10033\nHERO race=1 level=2 bw=0 id=99 frame=43566\nHERO race=1 level=2 bw=0 id=16 frame=44334\nHERO race=1 level=2 bw=0 id=28 frame=47120\nECON 48000 1\t5240\t210\t109\t11\t32890\t15812\t18185\t10287\nECON 54000 1\t5990\t217\t148\t15\t37806\t19890\t19126\t12640\nRESULT race=1 level=2 bw=0 first=3072 heroes=6 producers=3 parallel=1 bases=6 upgrades=15\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-2-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=2 level=0 bw=0 id=77 frame=3984\nECON 6000 1\t212\t7\t18\t0\t2170\t472\t155\t472\nHERO race=2 level=0 bw=0 id=78 frame=9078\nECON 12000 1\t343\t14\t30\t2\t5730\t1736\t1065\t736\nECON 18000 1\t667\t14\t30\t2\t9314\t3024\t4149\t1524\nHERO race=2 level=0 bw=0 id=88 frame=23760\nECON 24000 1\t1417\t25\t41\t4\t12694\t4280\t4614\t2115\nHERO race=2 level=0 bw=0 id=79 frame=25950\nHERO race=2 level=0 bw=0 id=82 frame=27012\nHERO race=2 level=0 bw=0 id=75 frame=27294\nECON 30000 1\t1664\t42\t81\t7\t16878\t6876\t2053\t766\nECON 36000 1\t2304\t47\t98\t10\t23462\t10036\t5787\t3451\nECON 42000 1\t3054\t51\t107\t12\t29550\t13712\t10250\t6877\nECON 48000 1\t3804\t54\t113\t14\t33642\t18156\t13467\t11171\nECON 54000 1\t4554\t55\t113\t14\t37294\t21986\t16719\t15001\nRESULT race=2 level=0 bw=0 first=3984 heroes=6 producers=3 parallel=1 bases=6 upgrades=13\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-2-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=2 level=1 bw=0 id=77 frame=3984\nECON 6000 1\t402\t7\t18\t0\t2170\t472\t55\t372\nHERO race=2 level=1 bw=0 id=78 frame=8838\nHERO race=2 level=1 bw=0 id=79 frame=10998\nECON 12000 1\t722\t15\t30\t1\t5770\t1736\t790\t586\nHERO race=2 level=1 bw=0 id=75 frame=12846\nHERO race=2 level=1 bw=0 id=88 frame=15048\nECON 18000 1\t1041\t22\t48\t4\t10354\t3912\t1744\t737\nECON 24000 1\t1791\t22\t48\t4\t15382\t6504\t6047\t2604\nHERO race=2 level=1 bw=0 id=82 frame=28836\nECON 30000 1\t2541\t38\t70\t4\t19430\t8850\t5915\t3115\nECON 36000 1\t3291\t47\t89\t7\t24970\t11730\t8480\t4445\nECON 42000 1\t3608\t53\t106\t10\t29498\t15228\t9858\t7143\nECON 48000 1\t4188\t55\t114\t12\t35522\t19660\t14457\t11200\nECON 54000 1\t4938\t55\t114\t12\t41506\t23816\t20441\t15356\nRESULT race=2 level=1 bw=0 first=3984 heroes=6 producers=3 parallel=1 bases=6 upgrades=17\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-0-2-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=2 level=2 bw=0 id=77 frame=3984\nECON 6000 1\t407\t6\t17\t0\t2162\t472\t397\t472\nHERO race=2 level=2 bw=0 id=78 frame=9990\nECON 12000 1\t1157\t21\t48\t4\t6322\t2176\t107\t1676\nECON 18000 1\t1477\t24\t57\t7\t12874\t4728\t4384\t2828\nECON 24000 1\t2227\t27\t61\t7\t18354\t7296\t9314\t5296\nHERO race=2 level=2 bw=0 id=79 frame=27512\nHERO race=2 level=2 bw=0 id=75 frame=28454\nECON 30000 1\t2977\t44\t84\t9\t22742\t9520\t9282\t4710\nHERO race=2 level=2 bw=0 id=88 frame=32160\nECON 36000 1\t3727\t51\t101\t14\t26250\t12000\t7060\t3590\nECON 42000 1\t4477\t62\t110\t17\t30754\t14086\t7639\t4651\nHERO race=2 level=2 bw=0 id=82 frame=42559\nECON 48000 1\t4797\t69\t125\t23\t36042\t17750\t8937\t7715\nECON 54000 1\t5547\t69\t125\t23\t40998\t22742\t12953\t12707\nRESULT race=2 level=2 bw=0 first=3984 heroes=6 producers=3 parallel=1 bases=6 upgrades=20\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-0-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=0 level=0 bw=1 id=54 frame=3444\nHERO race=0 level=0 bw=1 id=53 frame=5820\nECON 6000 1\t598\t5\t20\t0\t1754\t472\t4\t287\nHERO race=0 level=0 bw=1 id=104 frame=10062\nECON 12000 1\t1076\t11\t39\t1\t4850\t1736\t360\t176\nHERO race=0 level=0 bw=1 id=55 frame=13344\nECON 18000 1\t1109\t11\t55\t3\t8170\t3024\t1970\t54\nECON 24000 1\t1334\t14\t73\t7\t11186\t4320\t3136\t100\nHERO race=0 level=0 bw=1 id=51 frame=24318\nECON 30000 1\t2084\t200\t95\t9\t13498\t5120\t3723\t75\nECON 36000 1\t2834\t204\t115\t12\t14942\t5250\t3592\t55\nECON 42000 1\t3584\t210\t173\t14\t19894\t6894\t3359\t79\nHERO race=0 level=0 bw=1 id=48 frame=42780\nECON 48000 1\t4334\t210\t199\t17\t27558\t10826\t8498\t2686\nECON 54000 1\t5084\t213\t222\t19\t34682\t14934\t13822\t6594\nRESULT race=0 level=0 bw=1 first=3444 heroes=6 producers=3 parallel=1 bases=5 upgrades=15\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-0-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=0 level=1 bw=1 id=54 frame=3444\nHERO race=0 level=1 bw=1 id=53 frame=5820\nECON 6000 1\t732\t5\t19\t0\t1754\t472\t4\t187\nHERO race=0 level=1 bw=1 id=104 frame=9150\nHERO race=0 level=1 bw=1 id=55 frame=11712\nECON 12000 1\t852\t8\t41\t1\t4770\t1744\t345\t49\nECON 18000 1\t877\t10\t62\t5\t8082\t3032\t1507\t37\nHERO race=0 level=1 bw=1 id=51 frame=22422\nECON 24000 1\t1360\t12\t77\t8\t11098\t4312\t2773\t117\nECON 30000 1\t2110\t20\t115\t10\t13586\t5230\t1986\t135\nHERO race=0 level=1 bw=1 id=48 frame=35916\nECON 36000 1\t2860\t24\t175\t13\t19326\t7278\t2566\t123\nECON 42000 1\t3610\t24\t217\t15\t25198\t11138\t5638\t3083\nECON 48000 1\t4360\t26\t236\t18\t30778\t15172\t9743\t6942\nECON 54000 1\t5110\t26\t254\t20\t36834\t20376\t14599\t11946\nRESULT race=0 level=1 bw=1 first=3444 heroes=6 producers=3 parallel=1 bases=5 upgrades=18\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-0-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=0 level=2 bw=1 id=54 frame=4092\nECON 6000 1\t571\t8\t13\t0\t1506\t440\t381\t390\nHERO race=0 level=2 bw=1 id=53 frame=6492\nECON 12000 1\t1245\t14\t45\t3\t4522\t1688\t7\t428\nHERO race=0 level=2 bw=1 id=104 frame=12366\nHERO race=0 level=2 bw=1 id=55 frame=15840\nHERO race=0 level=2 bw=1 id=51 frame=17502\nECON 18000 1\t1834\t18\t81\t7\t9370\t3712\t620\t67\nHERO race=0 level=2 bw=1 id=48 frame=23844\nECON 24000 1\t2001\t23\t122\t14\t13542\t6272\t732\t117\nECON 30000 1\t2499\t29\t153\t18\t17398\t8412\t863\t82\nECON 36000 1\t3249\t33\t219\t23\t21846\t9962\t111\t232\nECON 42000 1\t3999\t36\t248\t26\t26602\t12206\t2917\t2026\nECON 48000 1\t4749\t36\t252\t27\t32402\t15436\t8617\t5256\nECON 54000 1\t5499\t37\t258\t27\t37986\t17962\t13751\t7782\nRESULT race=0 level=2 bw=1 first=4092 heroes=6 producers=3 parallel=1 bases=5 upgrades=23\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-1-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=1 level=0 bw=1 id=20 frame=3072\nECON 6000 1\t220\t7\t17\t0\t1610\t400\t135\t400\nHERO race=1 level=0 bw=1 id=19 frame=9618\nHERO race=1 level=0 bw=1 id=23 frame=10542\nECON 12000 1\t539\t13\t28\t1\t4786\t1664\t911\t339\nECON 18000 1\t1289\t14\t28\t1\t8266\t2936\t4191\t1511\nECON 24000 1\t2039\t20\t37\t1\t11558\t4216\t6308\t2441\nHERO race=1 level=0 bw=1 id=16 frame=27918\nHERO race=1 level=0 bw=1 id=99 frame=27918\nECON 30000 1\t2359\t34\t65\t2\t15710\t6184\t6880\t2359\nHERO race=1 level=0 bw=1 id=28 frame=30200\nECON 36000 1\t2520\t39\t76\t3\t21366\t8250\t10986\t4375\nECON 42000 1\t3003\t41\t87\t4\t27810\t12154\t15580\t7179\nECON 48000 1\t3321\t45\t97\t5\t32962\t16636\t19282\t11161\nECON 54000 1\t3712\t45\t102\t5\t38898\t20840\t24468\t14865\nRESULT race=1 level=0 bw=1 first=3072 heroes=6 producers=3 parallel=1 bases=5 upgrades=12\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-1-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=1 level=1 bw=1 id=20 frame=3072\nECON 6000 1\t332\t6\t15\t1\t1570\t400\t70\t400\nHERO race=1 level=1 bw=1 id=19 frame=10554\nHERO race=1 level=1 bw=1 id=23 frame=11982\nECON 12000 1\t737\t14\t34\t1\t4498\t1664\t73\t514\nECON 18000 1\t1056\t21\t60\t2\t9666\t3792\t2941\t2242\nECON 24000 1\t1188\t21\t63\t3\t15798\t6384\t8698\t4634\nECON 30000 1\t1938\t55\t73\t3\t20158\t8548\t11583\t6548\nHERO race=1 level=1 bw=1 id=99 frame=33438\nHERO race=1 level=1 bw=1 id=16 frame=34206\nECON 36000 1\t2688\t67\t84\t3\t24614\t11372\t12859\t6697\nHERO race=1 level=1 bw=1 id=28 frame=36224\nECON 42000 1\t3094\t72\t89\t4\t29386\t15234\t15406\t9309\nECON 48000 1\t3256\t74\t96\t5\t35162\t19634\t20407\t13259\nECON 54000 1\t3907\t76\t102\t5\t40910\t24034\t24755\t17059\nRESULT race=1 level=1 bw=1 first=3072 heroes=6 producers=3 parallel=1 bases=6 upgrades=15\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-1-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=1 level=2 bw=1 id=20 frame=3072\nECON 6000 1\t426\t5\t15\t0\t1618\t408\t243\t408\nHERO race=1 level=2 bw=1 id=19 frame=10338\nHERO race=1 level=2 bw=1 id=23 frame=11838\nECON 12000 1\t1176\t18\t45\t3\t5418\t1696\t43\t596\nECON 18000 1\t1926\t20\t59\t5\t11930\t4216\t5055\t2566\nECON 24000 1\t2676\t20\t59\t5\t18222\t6808\t11097\t4908\nECON 30000 1\t3032\t202\t67\t7\t22474\t8990\t14849\t7065\nECON 36000 1\t3746\t203\t67\t7\t24322\t10348\t16297\t8423\nECON 42000 1\t4496\t216\t77\t8\t28026\t11708\t18701\t9533\nHERO race=1 level=2 bw=1 id=99 frame=47190\nHERO race=1 level=2 bw=1 id=16 frame=47958\nECON 48000 1\t5246\t242\t109\t10\t32378\t14078\t18488\t9578\nHERO race=1 level=2 bw=1 id=28 frame=50998\nECON 54000 1\t5959\t252\t147\t14\t36502\t18488\t17572\t11238\nRESULT race=1 level=2 bw=1 first=3072 heroes=6 producers=3 parallel=1 bases=6 upgrades=16\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-2-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=2 level=0 bw=1 id=77 frame=3984\nECON 6000 1\t214\t7\t18\t0\t2170\t472\t155\t472\nHERO race=2 level=0 bw=1 id=78 frame=9078\nECON 12000 1\t345\t14\t30\t2\t5730\t1736\t1065\t736\nECON 18000 1\t669\t14\t30\t2\t9314\t3024\t4149\t1524\nHERO race=2 level=0 bw=1 id=88 frame=23760\nECON 24000 1\t1419\t24\t41\t4\t12742\t4256\t4837\t2016\nHERO race=2 level=0 bw=1 id=75 frame=25302\nHERO race=2 level=0 bw=1 id=79 frame=25302\nHERO race=2 level=0 bw=1 id=82 frame=28356\nECON 30000 1\t2169\t46\t81\t6\t16950\t6756\t3375\t946\nECON 36000 1\t2474\t52\t98\t10\t23878\t9700\t6503\t2390\nECON 42000 1\t3058\t64\t103\t12\t30374\t13500\t11474\t5665\nECON 48000 1\t3808\t73\t113\t14\t34578\t17556\t14228\t9421\nECON 54000 1\t4558\t77\t113\t14\t38090\t21600\t17340\t13465\nRESULT race=2 level=0 bw=1 first=3984 heroes=6 producers=3 parallel=1 bases=6 upgrades=14\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-2-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=2 level=1 bw=1 id=77 frame=3984\nECON 6000 1\t402\t7\t18\t0\t2170\t472\t55\t372\nHERO race=2 level=1 bw=1 id=78 frame=8838\nHERO race=2 level=1 bw=1 id=79 frame=10998\nECON 12000 1\t722\t15\t30\t1\t5770\t1736\t790\t586\nHERO race=2 level=1 bw=1 id=75 frame=12846\nHERO race=2 level=1 bw=1 id=88 frame=15072\nECON 18000 1\t1041\t22\t48\t4\t10346\t3912\t1761\t662\nECON 24000 1\t1791\t22\t48\t4\t15374\t6496\t5889\t2346\nHERO race=2 level=1 bw=1 id=82 frame=28812\nECON 30000 1\t2541\t36\t69\t4\t19366\t8820\t5901\t2985\nECON 36000 1\t3291\t41\t89\t7\t25002\t11714\t8487\t4179\nECON 42000 1\t3881\t49\t104\t10\t29970\t14848\t10580\t6463\nECON 48000 1\t4191\t52\t116\t13\t36282\t19336\t14842\t10426\nECON 54000 1\t4941\t52\t116\t13\t42566\t23548\t21126\t14638\nRESULT race=2 level=1 bw=1 first=3984 heroes=6 producers=3 parallel=1 bases=5 upgrades=18\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "hero-ai-1-2-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nECON 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nHERO race=2 level=2 bw=1 id=77 frame=3984\nECON 6000 1\t409\t6\t17\t0\t2162\t472\t397\t472\nHERO race=2 level=2 bw=1 id=78 frame=9990\nECON 12000 1\t1159\t21\t48\t4\t6322\t2176\t107\t1676\nECON 18000 1\t1479\t24\t57\t7\t12874\t4728\t4384\t2828\nECON 24000 1\t2229\t27\t61\t7\t18354\t7296\t9314\t5296\nHERO race=2 level=2 bw=1 id=79 frame=27529\nHERO race=2 level=2 bw=1 id=75 frame=28454\nECON 30000 1\t2979\t49\t88\t10\t22630\t9502\t8505\t4202\nHERO race=2 level=2 bw=1 id=88 frame=31200\nHERO race=2 level=2 bw=1 id=82 frame=35454\nECON 36000 1\t3729\t65\t108\t16\t26634\t12444\t5969\t3259\nECON 42000 1\t4127\t72\t126\t20\t32170\t16022\t8055\t6087\nECON 48000 1\t4799\t73\t126\t20\t37714\t20394\t13299\t10159\nECON 54000 1\t5549\t76\t126\t20\t42014\t24812\t17099\t14577\nRESULT race=2 level=2 bw=1 first=3984 heroes=6 producers=3 parallel=1 bases=6 upgrades=20\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation\n"
+    },
+    {
+      "case": "macro-0-0-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t597\t9\t20\t0\t2138\t720\t213\t270\nAI 12000 1\t1103\t11\t30\t1\t5370\t1992\t1720\t567\nAI 18000 1\t1853\t11\t36\t1\t8618\t3272\t4368\t1247\nAI 24000 1\t2603\t11\t49\t4\t11750\t4568\t6650\t2343\nAI 30000 1\t2928\t15\t79\t7\t13670\t5162\t5620\t1587\nAI 36000 1\t3259\t34\t108\t11\t14310\t5340\t2960\t15\nAI 42000 1\t4009\t41\t179\t13\t18814\t6902\t2489\t752\nAI 48000 1\t4759\t41\t206\t16\t26078\t10712\t8053\t4362\nAI 54000 1\t5509\t44\t233\t18\t33578\t14874\t13578\t8299\nMACRO race=0 level=0 bases=5 upgrades=13 attacks=21 types=35,37,38,39,41,42,43,44,45,46,47,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-0-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t525\t7\t22\t0\t2290\t560\t190\t35\nAI 12000 1\t747\t10\t36\t1\t5562\t1840\t1337\t90\nAI 18000 1\t772\t22\t61\t5\t8818\t3120\t2393\t370\nAI 24000 1\t1357\t44\t79\t8\t11814\t4392\t3589\t742\nAI 30000 1\t2107\t53\t104\t10\t13566\t5110\t2666\t35\nAI 36000 1\t2857\t54\t119\t13\t14086\t5298\t1886\t73\nAI 42000 1\t3607\t65\t181\t15\t18342\t6668\t1042\t43\nAI 48000 1\t4357\t66\t206\t18\t25622\t10472\t6672\t3347\nAI 54000 1\t5107\t68\t226\t20\t32618\t14748\t12018\t7423\nMACRO race=0 level=1 bases=5 upgrades=16 attacks=22 types=35,37,38,39,41,42,43,44,45,46,47,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-0-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t568\t8\t20\t0\t2138\t560\t13\t210\nAI 12000 1\t894\t13\t50\t5\t5146\t1840\t46\t215\nAI 18000 1\t990\t22\t82\t11\t8226\t3096\t76\t121\nAI 24000 1\t1740\t34\t128\t14\t13002\t5152\t402\t127\nAI 30000 1\t2490\t42\t176\t16\t18270\t7218\t920\t343\nAI 36000 1\t3240\t42\t212\t22\t25182\t11150\t4907\t3250\nAI 42000 1\t3990\t45\t223\t24\t31406\t15050\t10081\t6950\nAI 48000 1\t4740\t45\t223\t24\t37354\t19312\t15829\t11012\nAI 54000 1\t5490\t45\t223\t24\t43658\t23346\t22133\t15046\nMACRO race=0 level=2 bases=5 upgrades=21 attacks=24 types=35,37,38,39,41,42,43,44,45,46,47,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-1-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t217\t12\t22\t0\t2314\t688\t114\t388\nAI 12000 1\t439\t16\t30\t2\t5674\t1920\t2474\t1245\nAI 18000 1\t732\t17\t36\t3\t9090\t3200\t5190\t2175\nAI 24000 1\t988\t18\t39\t3\t12282\t4472\t7607\t3297\nAI 30000 1\t1738\t57\t66\t3\t15470\t6124\t7945\t3624\nAI 36000 1\t2210\t63\t80\t4\t21006\t8262\t10631\t4612\nAI 42000 1\t2528\t65\t90\t5\t27046\t12278\t15321\t8128\nAI 48000 1\t2958\t66\t95\t5\t31794\t16900\t19219\t12250\nAI 54000 1\t3235\t66\t100\t6\t37178\t21350\t24353\t16700\nMACRO race=1 level=0 bases=6 upgrades=11 attacks=7 types=0,1,2,3,4,5,6,7,8,9,12,32,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-1-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t386\t12\t22\t0\t2314\t680\t189\t455\nAI 12000 1\t546\t18\t33\t2\t5586\t1896\t1436\t996\nAI 18000 1\t965\t29\t60\t3\t11426\t4280\t4276\t1955\nAI 24000 1\t1185\t29\t63\t3\t17862\t6856\t10087\t4106\nAI 30000 1\t1786\t153\t69\t4\t22246\t8876\t12946\t5051\nAI 36000 1\t2270\t163\t81\t4\t24962\t10340\t13812\t5890\nAI 42000 1\t2401\t167\t86\t5\t29162\t12450\t16487\t7475\nAI 48000 1\t3044\t168\t91\t6\t34554\t16278\t20929\t10703\nAI 54000 1\t3399\t170\t95\t6\t39142\t20740\t24517\t14865\nMACRO race=1 level=1 bases=6 upgrades=14 attacks=6 types=0,1,2,3,4,5,6,7,8,9,12,32,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-1-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t420\t12\t18\t0\t2298\t656\t373\t456\nAI 12000 1\t1170\t33\t52\t3\t6202\t2088\t452\t1038\nAI 18000 1\t1490\t34\t70\t6\t12786\t4648\t5836\t3298\nAI 24000 1\t2240\t35\t75\t7\t18474\t7224\t11024\t5674\nAI 30000 1\t2990\t167\t80\t10\t22718\t9162\t15018\t7562\nAI 36000 1\t3740\t178\t95\t11\t25138\t10530\t15638\t8555\nAI 42000 1\t4408\t195\t132\t15\t29538\t12666\t15238\t8791\nAI 48000 1\t4805\t200\t154\t18\t35394\t16572\t18344\t10947\nAI 54000 1\t4943\t203\t172\t23\t40566\t21090\t20741\t13715\nMACRO race=1 level=2 bases=6 upgrades=16 attacks=24 types=0,1,2,3,4,5,6,7,8,9,12,32,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-2-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t212\t15\t19\t0\t2578\t592\t403\t392\nAI 12000 1\t696\t18\t29\t1\t6234\t1880\t2009\t955\nAI 18000 1\t703\t22\t31\t2\t9770\t3152\t4070\t1377\nAI 24000 1\t1417\t40\t61\t5\t13638\t5112\t3438\t862\nAI 30000 1\t1981\t48\t88\t8\t18462\t7368\t4257\t1618\nAI 36000 1\t2304\t53\t105\t11\t23910\t10684\t5865\t4259\nAI 42000 1\t3054\t62\t116\t13\t28482\t14714\t7647\t7989\nAI 48000 1\t3804\t64\t122\t15\t33698\t19360\t11248\t12485\nAI 54000 1\t4554\t65\t122\t15\t38946\t23454\t15656\t16579\nMACRO race=2 level=0 bases=6 upgrades=13 attacks=15 types=64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-2-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t402\t17\t19\t0\t2570\t592\t170\t192\nAI 12000 1\t986\t26\t35\t1\t6218\t1848\t668\t148\nAI 18000 1\t1041\t35\t57\t4\t12074\t4136\t3774\t986\nAI 24000 1\t1791\t38\t60\t5\t17554\t6664\t7904\t2314\nAI 30000 1\t2541\t46\t78\t7\t21854\t8824\t9179\t2749\nAI 36000 1\t3278\t55\t96\t10\t25554\t11950\t9304\t4975\nAI 42000 1\t3438\t61\t115\t13\t30738\t16032\t11438\t8082\nAI 48000 1\t4188\t64\t128\t16\t36066\t20304\t14616\t11854\nAI 54000 1\t4938\t66\t131\t17\t40542\t24764\t18317\t16264\nMACRO race=2 level=1 bases=6 upgrades=17 attacks=18 types=64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-0-2-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t407\t15\t18\t0\t2554\t592\t554\t492\nAI 12000 1\t754\t40\t46\t5\t6562\t2088\t12\t513\nAI 18000 1\t1477\t44\t52\t7\t12450\t4624\t4875\t2499\nAI 24000 1\t2227\t50\t54\t7\t17022\t7184\t7872\t3884\nAI 30000 1\t2977\t65\t76\t10\t21302\t9496\t7452\t3121\nAI 36000 1\t3625\t78\t111\t17\t24674\t12372\t5249\t4397\nAI 42000 1\t4047\t85\t141\t21\t29370\t16178\t4435\t6778\nAI 48000 1\t4797\t85\t143\t23\t34290\t20530\t8290\t11080\nAI 54000 1\t5547\t88\t145\t25\t38542\t24528\t10977\t15028\nMACRO race=2 level=2 bases=6 upgrades=20 attacks=26 types=64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-0-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t598\t5\t20\t0\t2218\t784\t193\t284\nAI 12000 1\t1019\t8\t39\t2\t5474\t2056\t749\t106\nAI 18000 1\t1049\t20\t53\t3\t8730\t3328\t2480\t103\nAI 24000 1\t1334\t39\t74\t7\t11798\t4560\t3898\t635\nAI 30000 1\t2084\t45\t104\t9\t13506\t5162\t2956\t87\nAI 36000 1\t2834\t50\t129\t12\t14470\t5404\t1970\t29\nAI 42000 1\t3584\t57\t202\t14\t19694\t7396\t1769\t196\nAI 48000 1\t4334\t59\t238\t17\t27174\t11060\t6599\t3060\nAI 54000 1\t5084\t62\t262\t19\t34190\t15302\t11715\t7102\nMACRO race=0 level=0 bases=5 upgrades=15 attacks=21 types=35,37,38,39,41,42,43,44,45,46,47,62,103,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-0-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t528\t7\t22\t0\t2290\t560\t190\t35\nAI 12000 1\t750\t10\t36\t1\t5562\t1840\t1337\t90\nAI 18000 1\t775\t20\t59\t5\t8818\t3120\t2393\t20\nAI 24000 1\t1360\t36\t80\t8\t11838\t4384\t3363\t284\nAI 30000 1\t2110\t43\t104\t10\t13638\t5130\t2938\t5\nAI 36000 1\t2860\t43\t120\t13\t14086\t5328\t2311\t28\nAI 42000 1\t3610\t47\t149\t15\t15414\t5626\t1164\t101\nAI 48000 1\t4360\t55\t204\t18\t21622\t7682\t3122\t257\nAI 54000 1\t5110\t59\t223\t20\t29342\t10716\t8817\t2566\nMACRO race=0 level=1 bases=5 upgrades=18 attacks=21 types=35,37,38,39,41,42,43,44,45,46,47,62,103,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-0-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t571\t8\t20\t0\t2138\t560\t13\t210\nAI 12000 1\t1084\t12\t45\t4\t5138\t1840\t263\t90\nAI 18000 1\t1282\t21\t83\t11\t8282\t3112\t32\t287\nAI 24000 1\t1749\t35\t127\t15\t12666\t5280\t316\t655\nAI 30000 1\t2068\t45\t168\t18\t17686\t7194\t861\t144\nAI 36000 1\t2818\t45\t204\t24\t24934\t10942\t4684\t2317\nAI 42000 1\t3568\t48\t219\t27\t31626\t14856\t9651\t5506\nAI 48000 1\t4318\t49\t221\t27\t37970\t18904\t15695\t9354\nAI 54000 1\t5068\t49\t221\t27\t44330\t23136\t22055\t13586\nMACRO race=0 level=2 bases=5 upgrades=23 attacks=27 types=35,37,38,39,41,42,43,44,45,46,47,62,103,131,132,133,135,136,137,138,139,140,141,142,149,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-1-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t220\t12\t22\t0\t2314\t680\t164\t380\nAI 12000 1\t539\t16\t32\t1\t5730\t1960\t2230\t1035\nAI 18000 1\t859\t16\t35\t2\t9218\t3248\t5268\t2023\nAI 24000 1\t1609\t17\t35\t2\t12442\t4528\t7942\t3153\nAI 30000 1\t1782\t31\t70\t3\t15870\t5990\t7770\t3140\nAI 36000 1\t2319\t39\t88\t4\t22518\t8972\t11568\t4972\nAI 42000 1\t2661\t43\t107\t5\t29990\t12556\t17240\t7831\nAI 48000 1\t2962\t45\t112\t5\t36346\t17180\t22446\t12055\nAI 54000 1\t3282\t46\t117\t6\t43538\t21948\t29188\t16723\nMACRO race=1 level=0 bases=6 upgrades=12 attacks=7 types=0,1,2,3,4,5,6,7,8,9,12,32,34,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-1-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t417\t14\t22\t0\t2322\t680\t247\t480\nAI 12000 1\t655\t20\t35\t2\t5578\t1904\t1028\t754\nAI 18000 1\t965\t28\t62\t3\t11442\t4384\t3992\t1809\nAI 24000 1\t1188\t29\t64\t3\t17530\t6952\t9430\t3952\nAI 30000 1\t1885\t105\t70\t3\t21854\t8946\t12804\t5371\nAI 36000 1\t2276\t125\t71\t4\t24290\t10248\t14190\t5748\nAI 42000 1\t2782\t138\t88\t5\t28562\t11560\t15187\t6010\nAI 48000 1\t3157\t139\t92\t5\t34154\t15242\t20079\t9292\nAI 54000 1\t3477\t140\t95\t6\t39502\t19250\t24527\t12950\nMACRO race=1 level=1 bases=6 upgrades=15 attacks=6 types=0,1,2,3,4,5,6,7,8,9,12,32,34,58,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-1-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t426\t12\t18\t0\t2298\t656\t373\t456\nAI 12000 1\t1176\t38\t49\t3\t6098\t2096\t298\t596\nAI 18000 1\t1496\t40\t60\t5\t11578\t4648\t4778\t2798\nAI 24000 1\t2246\t41\t67\t6\t16214\t7224\t8614\t5024\nAI 30000 1\t2996\t209\t67\t7\t20358\t9250\t12758\t7050\nAI 36000 1\t3746\t218\t77\t8\t23730\t10554\t14580\t8254\nAI 42000 1\t4496\t228\t93\t9\t27346\t12186\t16396\t9511\nAI 48000 1\t4815\t237\t117\t13\t32354\t15246\t17254\t9671\nAI 54000 1\t4949\t244\t137\t18\t37686\t19122\t19386\t11772\nMACRO race=1 level=2 bases=6 upgrades=15 attacks=21 types=0,1,2,3,4,5,6,7,8,9,12,32,34,58,106,107,109,110,111,112,113,114,115,116,117,118,120,122,123,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-2-0",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t214\t15\t19\t0\t2578\t592\t403\t392\nAI 12000 1\t698\t18\t30\t1\t6226\t1880\t1851\t855\nAI 18000 1\t705\t23\t30\t2\t9754\t3160\t4129\t1335\nAI 24000 1\t1130\t42\t61\t6\t13590\t5048\t2115\t248\nAI 30000 1\t1558\t52\t89\t8\t18974\t7590\t4299\t965\nAI 36000 1\t2308\t57\t104\t11\t25054\t10688\t7904\t3713\nAI 42000 1\t3058\t70\t115\t12\t30546\t14246\t11571\t7021\nAI 48000 1\t3808\t80\t115\t13\t36954\t17640\t17979\t10415\nAI 54000 1\t4558\t90\t115\t13\t43470\t20648\t24495\t13423\nMACRO race=2 level=0 bases=5 upgrades=14 attacks=13 types=60,61,64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-2-1",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t402\t17\t19\t0\t2570\t592\t170\t192\nAI 12000 1\t986\t26\t35\t1\t6218\t1848\t668\t148\nAI 18000 1\t1041\t34\t57\t4\t12002\t4120\t3677\t820\nAI 24000 1\t1791\t36\t60\t6\t17546\t6688\t8571\t2688\nAI 30000 1\t2541\t46\t81\t8\t21902\t9086\t8802\t3261\nAI 36000 1\t3291\t55\t97\t11\t25642\t11976\t9517\t5051\nAI 42000 1\t3893\t63\t113\t14\t29906\t15128\t10706\t7353\nAI 48000 1\t4191\t64\t120\t16\t33882\t19198\t13682\t11123\nAI 54000 1\t4941\t67\t120\t16\t38934\t23288\t18234\t15213\nMACRO race=2 level=1 bases=6 upgrades=18 attacks=16 types=60,61,64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    },
+    {
+      "case": "macro-1-2-2",
+      "passed": true,
+      "output": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nAI 0 1\t2\t0\t0\t0\t50\t0\t50\t0\nAI 6000 1\t409\t15\t18\t0\t2554\t592\t554\t492\nAI 12000 1\t756\t40\t46\t5\t6594\t2096\t69\t446\nAI 18000 1\t1479\t43\t52\t7\t12458\t4624\t4933\t2474\nAI 24000 1\t2229\t49\t57\t8\t17134\t7168\t8309\t3968\nAI 30000 1\t2979\t66\t75\t10\t21494\t9472\t7844\t3172\nAI 36000 1\t3665\t79\t101\t17\t25614\t12568\t5974\t4243\nAI 42000 1\t4049\t84\t120\t21\t31010\t16208\t7190\t6808\nAI 48000 1\t4799\t84\t120\t21\t36554\t20528\t11879\t11128\nAI 54000 1\t5549\t85\t120\t21\t41826\t24534\t15911\t15134\nMACRO race=2 level=2 bases=6 upgrades=20 attacks=21 types=60,61,64,65,66,67,68,70,71,72,73,83,84,85,154,155,156,157,159,160,163,164,165,166,167,169,170,171,\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS macro expansion, upgrades, advanced unit, attacks and exact saved continuation\n"
+    }
+  ],
+  "limitations": "Real engine and imported original data on host. Eighteen 60000-frame Hero Mode scenarios and eighteen ordinary 60000-frame AI scenarios cover all races/difficulties in both expansions; three depleted-main scenarios use 30000 frames. Physical device audio, input, radio and performance still need testing. Bounded maps cannot establish every campaign or map behavior.",
+  "sourceSha256": {
+    "tests/native_revision59.cpp": "24d61ae5b768ed6dc2add39b0b7363e8ae85a5a0528c4e48f90ebf3071425491",
+    "tests/native_revision58.cpp": "23f1587bd16b279f0015148173c301fb9898f9f382580f39390209b3c4841d26",
+    "tests/native_revision57.cpp": "24e771cd88ae1ab7892cfe3489cee823332137683403a07ec9e3e46fd96a6b8b",
+    "tests/native_revision56.cpp": "5545e7fa9eceefcd51c00c9da5b67f76b44d27eb980876123cc00641b3ee86d1",
+    "tests/native_revision55.cpp": "81f0a4baaa91df81d60da81e68c3183601f03e39923735c036dbfb3ab4cb6645",
+    "tests/run_native59.py": "29633b5d43a9691275df4aad1d589f5d33f906cd675198efbd4d2cc8238d36f4",
+    "tests/create_room_map55.py": "f03d3a977ef1e1c775d354926f10c008ff5f857658451f030e6abc5ddb17ebac",
+    "patches/native-polish59.patch": "d8c014bcc48bcc725da55237ae2926ad993c700c522f6f6c1a9bb657b8fa66ca",
+    "patches/native-polish58.patch": "613bf7009bc1bbd6229b1b95c602a0ac9f1c353d0007f09a3cd1891729c5ae33",
+    "scripts/prepare_native.py": "2bacbec781ec5f6450e131def04a3e6bdb3557e48eb754ab30b1be2eea7c7653",
+    "native/runtime.cpp": "e270feff9df0491567e2d564ec95a64497dae6b31d67d0381d7896b626a4d531",
+    "native/hero_mode.h": "371cce07d5ff3fffbd9fd7244f47b21bff83306fabd210e75b869eae38ea80c7",
+    "native/audio.h": "6437ac032b9961e0c1cc91c84056be268682ada3754614c9385441930fabf46a",
+    "native/save_state.h": "d6026805e57b02d24f370841ea79d8165162b1465659af63462a8cbf1dc1584d",
+    "native/multiplayer.h": "8977888202fd0df30ac19cc37decc6c96a7bc7423749c3b42bfdbf581b0eae6f"
+  }
+}

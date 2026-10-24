@@ -1,0 +1,76 @@
+{
+  "version": "0.15",
+  "versionCode": 16,
+  "package": "org.openbw.androidtest",
+  "apk": {
+    "file": "OpenBW-Android-0.15.apk",
+    "bytes": 3625056,
+    "sha256": "955a38aa034a3693b0dc5505e9fe9fb9d5fd6e177286c98cae25701da67eac33"
+  },
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "missions": [
+    {
+      "id": "terran01",
+      "code": 1,
+      "race": 1,
+      "player": 1,
+      "title": "Wasteland"
+    },
+    {
+      "id": "terran02",
+      "code": 2,
+      "race": 1,
+      "player": 1,
+      "title": "Backwater Station"
+    },
+    {
+      "id": "terran03",
+      "code": 3,
+      "race": 1,
+      "player": 1,
+      "title": "Desperate Alliance"
+    },
+    {
+      "id": "terran04",
+      "code": 4,
+      "race": 1,
+      "player": 0,
+      "title": "The Jacobs Installation"
+    },
+    {
+      "id": "zerg01",
+      "code": 101,
+      "race": 0,
+      "player": 3,
+      "title": "Among the Ruins"
+    },
+    {
+      "id": "protoss01",
+      "code": 201,
+      "race": 2,
+      "player": 7,
+      "title": "First Strike"
+    }
+  ],
+  "checks": [
+    "APK assets equal the tested host and WASM files; ZIP CRC passes",
+    "Original package and signing certificate retained for in-place update",
+    "Campaign engine rebuilt from the pinned archive and reviewed patch; binary hash matches",
+    "All seven module hashes recorded; four media decoders unchanged",
+    "Targeted UI, menu/music, Start animation and mobile layout checks pass",
+    "All six original mission bundles export, validate and serve locally; wrong-destination import rejected",
+    "New mission victory/defeat triggers verified with controlled movement/destruction and construction cheats",
+    "Terran installation doors, teleport, defense switch and plans triggers verified",
+    "Protoss base rescue, Probe training, Pylon construction and removal trigger verified",
+    "Zerg construction, enemy wave, victory and defeat verified",
+    "Skirmish bot module loads and runs 600 live lockstep ticks"
+  ],
+  "reports": [
+    "ui-lifecycle-v15.json",
+    "interface-v15.json",
+    "campaign-expansion-v15.json",
+    "bot-v15.json"
+  ],
+  "physicalAndroidTest": false,
+  "fullManualMissionPlaythrough": false
+}

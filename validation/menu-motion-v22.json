@@ -1,0 +1,448 @@
+{
+  "checks": [
+    "Actual menu panels move on every frame, enter in ~560ms with rapid initial travel and a gentle stop; exit + entry ~880ms; labels stay attached"
+  ],
+  "missions": {},
+  "errors": [],
+  "registry": [
+    {
+      "now": 1732.9,
+      "page": "registry",
+      "amount": 0.9136814783618797
+    },
+    {
+      "now": 1749.6,
+      "page": "registry",
+      "amount": 0.8320048808935406
+    },
+    {
+      "now": 1766.2,
+      "page": "registry",
+      "amount": 0.7557913020510655
+    },
+    {
+      "now": 1782.9,
+      "page": "registry",
+      "amount": 0.6839641746993433
+    },
+    {
+      "now": 1799.6,
+      "page": "registry",
+      "amount": 0.6168383613281251
+    },
+    {
+      "now": 1816.2,
+      "page": "registry",
+      "amount": 0.5546162866766124
+    },
+    {
+      "now": 1832.9,
+      "page": "registry",
+      "amount": 0.49638995594934365
+    },
+    {
+      "now": 1849.6,
+      "page": "registry",
+      "amount": 0.44238851905862797
+    },
+    {
+      "now": 1866.2,
+      "page": "registry",
+      "amount": 0.3927400823444329
+    },
+    {
+      "now": 1882.9,
+      "page": "registry",
+      "amount": 0.34668814062499953
+    },
+    {
+      "now": 1899.6,
+      "page": "registry",
+      "amount": 0.3043846725981687
+    },
+    {
+      "now": 1916.2,
+      "page": "registry",
+      "amount": 0.2658920075676474
+    },
+    {
+      "now": 1932.9,
+      "page": "registry",
+      "amount": 0.23058804723943127
+    },
+    {
+      "now": 1949.6,
+      "page": "registry",
+      "amount": 0.19855614045986714
+    },
+    {
+      "now": 1966.2,
+      "page": "registry",
+      "amount": 0.1698013808593749
+    },
+    {
+      "now": 1982.8,
+      "page": "registry",
+      "amount": 0.1439660986185769
+    },
+    {
+      "now": 1999.5,
+      "page": "registry",
+      "amount": 0.12076307871720116
+    },
+    {
+      "now": 2016.2,
+      "page": "registry",
+      "amount": 0.10019752073273491
+    },
+    {
+      "now": 2032.9,
+      "page": "registry",
+      "amount": 0.08211030033709898
+    },
+    {
+      "now": 2049.5,
+      "page": "registry",
+      "amount": 0.066430125
+    },
+    {
+      "now": 2066.2,
+      "page": "registry",
+      "amount": 0.0528097457008474
+    },
+    {
+      "now": 2082.9,
+      "page": "registry",
+      "amount": 0.04119128384657422
+    },
+    {
+      "now": 2099.6,
+      "page": "registry",
+      "amount": 0.031415615109101735
+    },
+    {
+      "now": 2116.3,
+      "page": "registry",
+      "amount": 0.023323615160349753
+    },
+    {
+      "now": 2132.9,
+      "page": "registry",
+      "amount": 0.016791263347303187
+    },
+    {
+      "now": 2149.6,
+      "page": "registry",
+      "amount": 0.011581525390624958
+    },
+    {
+      "now": 2182.9,
+      "page": "registry",
+      "amount": 0.004639557352405177
+    },
+    {
+      "now": 2199.6,
+      "page": "registry",
+      "amount": 0.002569342559903376
+    },
+    {
+      "now": 2216.2,
+      "page": "registry",
+      "amount": 0.0012361163048925095
+    },
+    {
+      "now": 2249.6,
+      "page": "registry",
+      "amount": 0.00010838513005650974
+    },
+    {
+      "now": 2266.2,
+      "page": "registry",
+      "amount": 0.000005866783208796633
+    }
+  ],
+  "campaign": [
+    {
+      "now": 2332.9,
+      "page": "registry",
+      "amount": 0.14853402902221902
+    },
+    {
+      "now": 2349.6,
+      "page": "registry",
+      "amount": 0.2815796540527352
+    },
+    {
+      "now": 2366.2,
+      "page": "registry",
+      "amount": 0.399322509765625
+    },
+    {
+      "now": 2382.8,
+      "page": "registry",
+      "amount": 0.5034420988769552
+    },
+    {
+      "now": 2399.5,
+      "page": "registry",
+      "amount": 0.5952891582336436
+    },
+    {
+      "now": 2416.2,
+      "page": "registry",
+      "amount": 0.675048828125
+    },
+    {
+      "now": 2432.9,
+      "page": "registry",
+      "amount": 0.7435739154968272
+    },
+    {
+      "now": 2449.6,
+      "page": "registry",
+      "amount": 0.8017172272949222
+    },
+    {
+      "now": 2466.2,
+      "page": "registry",
+      "amount": 0.850067138671875
+    },
+    {
+      "now": 2482.9,
+      "page": "registry",
+      "amount": 0.8900547351989752
+    },
+    {
+      "now": 2499.5,
+      "page": "registry",
+      "amount": 0.9220429118957523
+    },
+    {
+      "now": 2516.2,
+      "page": "registry",
+      "amount": 0.947265625
+    },
+    {
+      "now": 2532.8,
+      "page": "registry",
+      "amount": 0.9662625944824222
+    },
+    {
+      "now": 2549.5,
+      "page": "registry",
+      "amount": 0.980111256011963
+    },
+    {
+      "now": 2566.2,
+      "page": "registry",
+      "amount": 0.989532470703125
+    },
+    {
+      "now": 2582.8,
+      "page": "registry",
+      "amount": 0.9953529875488282
+    },
+    {
+      "now": 2599.5,
+      "page": "registry",
+      "amount": 0.9984914897766114
+    },
+    {
+      "now": 2616.2,
+      "page": "registry",
+      "amount": 0.999755859375
+    },
+    {
+      "now": 2632.9,
+      "page": "registry",
+      "amount": 0.9999989032897949
+    },
+    {
+      "now": 2649.6,
+      "page": "campaign",
+      "amount": 1
+    },
+    {
+      "now": 2666.2,
+      "page": "campaign",
+      "amount": 0.913681478361881
+    },
+    {
+      "now": 2682.8,
+      "page": "campaign",
+      "amount": 0.8324788677113688
+    },
+    {
+      "now": 2699.5,
+      "page": "campaign",
+      "amount": 0.7557913020510655
+    },
+    {
+      "now": 2716.2,
+      "page": "campaign",
+      "amount": 0.6839641746993443
+    },
+    {
+      "now": 2732.8,
+      "page": "campaign",
+      "amount": 0.6172266355685121
+    },
+    {
+      "now": 2749.5,
+      "page": "campaign",
+      "amount": 0.5546162866766124
+    },
+    {
+      "now": 2766.1,
+      "page": "campaign",
+      "amount": 0.4967258841734238
+    },
+    {
+      "now": 2782.9,
+      "page": "campaign",
+      "amount": 0.4423885190586274
+    },
+    {
+      "now": 2799.5,
+      "page": "campaign",
+      "amount": 0.3927400823444329
+    },
+    {
+      "now": 2816.2,
+      "page": "campaign",
+      "amount": 0.3466881406250002
+    },
+    {
+      "now": 2832.9,
+      "page": "campaign",
+      "amount": 0.30438467259816826
+    },
+    {
+      "now": 2849.5,
+      "page": "campaign",
+      "amount": 0.2658920075676474
+    },
+    {
+      "now": 2866.1,
+      "page": "campaign",
+      "amount": 0.23078955149303015
+    },
+    {
+      "now": 2882.8,
+      "page": "campaign",
+      "amount": 0.19873852514577206
+    },
+    {
+      "now": 2899.5,
+      "page": "campaign",
+      "amount": 0.1698013808593749
+    },
+    {
+      "now": 2916.2,
+      "page": "campaign",
+      "amount": 0.14381899430575806
+    },
+    {
+      "now": 2932.8,
+      "page": "campaign",
+      "amount": 0.12076307871720082
+    },
+    {
+      "now": 2949.5,
+      "page": "campaign",
+      "amount": 0.10019752073273491
+    },
+    {
+      "now": 2966.2,
+      "page": "campaign",
+      "amount": 0.0821103003370992
+    },
+    {
+      "now": 2982.9,
+      "page": "campaign",
+      "amount": 0.06634229320221374
+    },
+    {
+      "now": 2999.5,
+      "page": "campaign",
+      "amount": 0.05280974570084718
+    },
+    {
+      "now": 3016.2,
+      "page": "campaign",
+      "amount": 0.041191283846574445
+    },
+    {
+      "now": 3032.8,
+      "page": "campaign",
+      "amount": 0.03146898250728847
+    },
+    {
+      "now": 3049.5,
+      "page": "campaign",
+      "amount": 0.02336737427683122
+    },
+    {
+      "now": 3066.2,
+      "page": "campaign",
+      "amount": 0.016791263347303187
+    },
+    {
+      "now": 3082.9,
+      "page": "campaign",
+      "amount": 0.011581525390624958
+    },
+    {
+      "now": 3099.5,
+      "page": "campaign",
+      "amount": 0.007599724973806454
+    },
+    {
+      "now": 3116.2,
+      "page": "campaign",
+      "amount": 0.004639557352405288
+    },
+    {
+      "now": 3132.8,
+      "page": "campaign",
+      "amount": 0.0025794052478134155
+    },
+    {
+      "now": 3149.5,
+      "page": "campaign",
+      "amount": 0.0012361163048925095
+    },
+    {
+      "now": 3166.1,
+      "page": "campaign",
+      "amount": 0.0004687094285258375
+    },
+    {
+      "now": 3182.8,
+      "page": "campaign",
+      "amount": 0.00010960750728861157
+    },
+    {
+      "now": 3199.5,
+      "page": "campaign",
+      "amount": 0.000005866783208796633
+    }
+  ],
+  "labels": [
+    {
+      "id": "campaign-load",
+      "transform": "translateX(0px)",
+      "labelInWidget": true
+    },
+    {
+      "id": "campaign-replay",
+      "transform": "translateX(0px)",
+      "labelInWidget": true
+    },
+    {
+      "id": "campaign-cancel",
+      "transform": "translateX(0px)",
+      "labelInWidget": true
+    }
+  ]
+}

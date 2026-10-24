@@ -1,0 +1,1271 @@
+{
+  "version": "1.0",
+  "versionCode": 70,
+  "status": "earlier-placement-scroll-and-setting-host-validated",
+  "ndk": "r27d",
+  "api": 26,
+  "targetApi": 35,
+  "ecj": "3.33.0",
+  "sourceDateEpoch": 1791849600,
+  "nativeEngineRebuilt": false,
+  "sources": {
+    "HISTORY.md": "6ad2c8f6a69ceef97982eef9e40f82f40f24aea16c3842c861dca571fbd2beb4",
+    "README.md": "458efcd920c318f292d8e9b2f52dcac9ed3b2fc2cc1ddb0b6b5b42ed8d626e1a",
+    "UPSTREAM.json": "6b81e721c7193682a68fef987b38feee4315c6705207cf89d44ef546bd3898e9",
+    "VALIDATION.md": "3e67a4fa9f9dd22cfdd7b3ce95a48a313d35149600b4eb3ab9894d4699e61c95",
+    "app/build.gradle": "fe1c54678569a6a7270df06a390907906938a5261d42b09cab692fc746ede6c9",
+    "app/src/main/AndroidManifest.xml": "ebf2ab77e656fe5984ad95fc2f09279fa2780154c92c4005e7b066930b17567a",
+    "app/src/main/assets/game/index.html": "479a1efb368302481f8c3801640b35a75c10dbad9447d5bbd4af82cee704fb91",
+    "app/src/main/assets/game/menus.js": "7cf2c75ff2d36c08f44cfe65ab8717313cff1fcba1290a04597afd354e17628f",
+    "app/src/main/assets/game/testing.js": "4d27d767251336acff60317a3cffbf5ea60c2e0f53fe57a0fb18a58337ba46e4",
+    "app/src/main/assets/game/title.html": "ba0acbdb625ee7d7e40d2d99cef735917c5f668bb2daf5fcece8b9093b080553",
+    "app/src/main/assets/native/commands.json": "29fb6aea657c1fb557d20dbdf704dd5995026ad45f6dc5dce40d64da2e0e3509",
+    "app/src/main/java/org/openbw/androidtest/AppDiagnostics.java": "8250e05671828c00fec3cf0b0a46fdbfe46335690f626f0549065b71b86850c1",
+    "app/src/main/java/org/openbw/androidtest/BriefingText.java": "6edf3ad69e6cf11adfcc9154b01cceed97ffd5b5f7d89f30caa55d3a51ad42e8",
+    "app/src/main/java/org/openbw/androidtest/CameraPan.java": "4ffff04674daa6935e9371e9040321b7823c3fb434dab84b2bd37d417d4a6871",
+    "app/src/main/java/org/openbw/androidtest/CampaignCatalog.java": "5126fcd1d4b4f860b133ecd54da440cf2b5630e2b45641dcf753b0c0c7fdd321",
+    "app/src/main/java/org/openbw/androidtest/CampaignData.java": "0c428aa5ec5c490128569e99e9d494f4e4b84bb4c56eb669ad94e4ec8a503056",
+    "app/src/main/java/org/openbw/androidtest/CinematicCatalog.java": "25ffead113330188b087c9cfb7da7cde75147e41d0fe901a8a44811bfa7fc594",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+    "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+    "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
+    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "5a63c15d7eb2545f4ca1902bac43a196557d7515ed742211a7cd75b8b252d3b7",
+    "app/src/main/java/org/openbw/androidtest/ExitReport.java": "bc302ece7eb0ee273f35a81aa0e63c9b256a55501f318b5fd14adc6b830ff93b",
+    "app/src/main/java/org/openbw/androidtest/GameContent.java": "039073a80187c4a4fd2807221081f1f6c2ed58cdb6a3c21bfd7b6c60c446c47c",
+    "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "923ae62bcd069266550aaebb7e35e8cfac50a476c13fa2bf02b0b1edea8206b9",
+    "app/src/main/java/org/openbw/androidtest/LocalPermissions.java": "e4d333cfd977a120671afc7467b8c1cfe47011df27185112fe91281c4cec97f6",
+    "app/src/main/java/org/openbw/androidtest/LocalTransport.java": "30c94db549694a5b8f40aaf3161bffd560ab4253623635f92e88b3be883a584d",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "2e4537fd48f4ad43788564f36dd7abb635751b81495bc32d7156f0be5e023a0c",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "2131d7d524735f4f32ce185101d5d2c9c9ef5d701863c134cdac11b028df2db7",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/MenuPanel.java": "6525c0a02a2ae912ff4800c9746722b6c5b49bb70ca5ba298ca6d57bdf3bfbcb",
+    "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "e5d1bf46606950dbb96b48e62720829c67a390584afd97c5446dd802c8a40da3",
+    "app/src/main/java/org/openbw/androidtest/MissionExport.java": "5aeeafaf11f8e0b06cebc59a5b6dd777d8dbd4cf90b1980a3d2ef2dda4759e81",
+    "app/src/main/java/org/openbw/androidtest/MusicData.java": "bd192578dccc51adfab7df8a1b6746ea1f8d1ce4f21af70011a96afdcfe1a421",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/NativeAudio.java": "c6b1628380a8e140b56e746cef1a2e951a1f529ac2155a8c12eb3529039ad123",
+    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "20d6d314e7fcf9df0c1ab2f8a4ab7027801d4b9c8286727bbd52b8255527067a",
+    "app/src/main/java/org/openbw/androidtest/NativeCampaign.java": "1c0253a251d249759d21585e63715c44128acc7df0bb6b73f6960384f8beffa4",
+    "app/src/main/java/org/openbw/androidtest/NativeCrashTrace.java": "3501b47a292e77348165ecd8ac26fd7b85ccdf15fc63166cf0529ebf16581fa6",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "fdc5f814efff146cd896c02defc3d201f0c11ee441a87dbfb12906a2e25b52d0",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "app/src/main/java/org/openbw/androidtest/NativeMapArchive.java": "6dcbed76bca127d923e23f7d9ea3551d6cab42103d2f5b83c183d129b48b8569",
+    "app/src/main/java/org/openbw/androidtest/NativeMapPreview.java": "7f77090c49c185b626ae52ecd564dc7feb487a898ad0de0d9dcb3e75c642dec1",
+    "app/src/main/java/org/openbw/androidtest/NativeMaps.java": "7c4894217c67a29baca1493802e32d9e991fbe5c0d1580cbbf56649d9bdedd2b",
+    "app/src/main/java/org/openbw/androidtest/NativeNearby.java": "2f41f7661d7b4eb20fe48a077f75fd54e2bb55209430103e82d8aa534d94a156",
+    "app/src/main/java/org/openbw/androidtest/NativePortrait.java": "bc7ee2745746de7bfedab97eb5d7d41e80352135a381ec000af0bf35727db38e",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "3b054eb9e0275493bcc2976e5917ec2356ec5a8d7475a07151f166527128887c",
+    "app/src/main/java/org/openbw/androidtest/NativeSaves.java": "c3f722f409593741672acf1490152d3b3ec722b6286c346173dbfd5f023c4702",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "0f2907f6c8e645abbce433ddfdc1723112f594067d38033d9e4378ac150a6e97",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCache.java": "2f49e859ea90f02d7547b9c6329ca10b1c59f586b3614f1ee1999890dbc250f2",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+    "app/src/main/java/org/openbw/androidtest/PlacementButtons.java": "230491ae1d965610c57f538d116294ccc1f6cf6d1e2b4675cd8becb70799871c",
+    "app/src/main/java/org/openbw/androidtest/ProjectFiles.java": "b762639c742f539346bcc2e92810dfb46089949590e84aa81f0b23de5a073622",
+    "app/src/main/java/org/openbw/androidtest/RoomMatch.java": "a2b0dc4ba7deb1980c0a0024c3e88d06812e224cb824875e746d4667e1200f02",
+    "app/src/main/java/org/openbw/androidtest/RoomProtocol.java": "9313a994833b1a5cc60d407b81273f9259f7cf9adc2c5f130aaf0e359c22cfc9",
+    "app/src/main/java/org/openbw/androidtest/RoomSnapshot.java": "343bb7fb799fb22882cff994338215d068327b00f896f9acd372a8e1ce3c6de1",
+    "app/src/main/java/org/openbw/androidtest/StoryData.java": "d9c3765a44cd1362c674d156e49f10755d25fa18be2194ab1a0dd65defab6bb0",
+    "app/src/main/java/org/openbw/androidtest/StoryLayout.java": "1659d4a272d63a2f87f9e8f961c46fe210bfef00c894ea32926effe80ed6d8c5",
+    "app/src/main/res/drawable/ic_launcher_foreground.xml": "8ed45a22d3379aab81c7559d990fd62bdcd5462643700366d18ca20abed50dd0",
+    "app/src/main/res/values/styles.xml": "1979ff7204d2c6ed06c1934e21422334f1018ac67dd48eb253105054a020f843",
+    "docs/FIXES-0.58.md": "b97447bbd193fe82a1ef974ddf08dc8bd630b6e596468a0deb24ac720d16c349",
+    "docs/FIXES-0.59.md": "e7b463abef9ad0f9fb7115b74c339201573143bc0cdea22dc638d2834e9bcdb8",
+    "docs/FIXES-0.60.md": "f91b1845be136392ee0158ab82a8166bfdb6b3daabc151ec47d1ef06a8edd115",
+    "docs/FIXES-0.61.md": "74508a4da354d7fec0755772e987ec3b8a790bb5b5e0905468b14272451d6f4d",
+    "docs/FIXES-1.0.md": "3fc7fc534dadadadbd4e0f74107b7fe9fc09dd00c7ea0b5680930622b76e884b",
+    "docs/PLAYER-GUIDE.md": "f60b3100080eeb31c1a97856a1af65ac140d3a7d04cb187dae1c0218592c6d80",
+    "docs/artwork/pylon-launcher.svg": "f9fd7915b0d5187682f96e5db996e908f33cd933df2bdf95981d35ef7654df79",
+    "docs/campaign-heroes.json": "ec87c687a14015694b710c0c6328913112a5098b87ff0ad068a5d68c00043b0b",
+    "native/audio.h": "6437ac032b9961e0c1cc91c84056be268682ada3754614c9385441930fabf46a",
+    "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2",
+    "native/generated/wasm_main.cpp": "6fe40ff3fe0aba8ccd7534bcf9778b5858162ef2d4f3e1a0dcff79353823cd95",
+    "native/hero_mode.h": "371cce07d5ff3fffbd9fd7244f47b21bff83306fabd210e75b869eae38ea80c7",
+    "native/multiplayer.h": "8977888202fd0df30ac19cc37decc6c96a7bc7423749c3b42bfdbf581b0eae6f",
+    "native/runtime.cpp": "386659ba536445e5ef89df66f674e6dd46ac18ec73059922f93e2b6e0a1f3c5c",
+    "native/save_state.h": "d6026805e57b02d24f370841ea79d8165162b1465659af63462a8cbf1dc1584d",
+    "patches/campaign.patch": "ca688d15ba6d24a64c3b9d260bd208ee3dbed3c927c36d936deaa92f70a9d609",
+    "patches/native-ai43.patch": "db4d250f42c33f7067e057be6e3c471c8777f0de66afd35422437b2ff5f44cd5",
+    "patches/native-ai45.patch": "c45e447ddc9d4b91c56423297cba8b6c985ccf4f6a724bcfdc8dafba89175fa6",
+    "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+    "patches/native-controls38.patch": "04f5614d3b4797215cc58442ed18e21bb39891cdfc01d79d7f557e373f4487d0",
+    "patches/native-finale37.patch": "f1050e7a66ee1a37f7159bfcf72f4a7fc94585da4e3ca4aeda21442782165f66",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/native-placement68.patch": "c3e8d9539a96cfa80b4fb81787012d56b7d690b111db45dd51ed0b8984f44490",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+    "patches/native-polish39.patch": "9a323dd664fa4685d0cee3ab531791c59ae970273eaa71ad4b65a78dc210a0a8",
+    "patches/native-polish40.patch": "2b588458a28921ad8ff8e5f88e3c573ec54e64490f29ae8d6b9d83deaeccfc49",
+    "patches/native-polish41.patch": "4776feefa2455e2114f97cc5ffb4b286cb072cfec1ff3bc2fe85f3f34cd75ea5",
+    "patches/native-polish42.patch": "92d7b77fc836e310d235f64b7c97029f82a422500501d2c2f94b32bcf045b667",
+    "patches/native-polish44.patch": "99840a772d41ff39162adb5908fbc68ab0a17aabb116b6ef0c0d39566eb3862c",
+    "patches/native-polish46.patch": "4c63797244f1c1905598e0972f48fc3605f49d3777696b7b572de78a3b1559de",
+    "patches/native-polish54.patch": "9e0ff4265c500933c1b3e3d27d361c136b58571d5b8ceeb19a3fa9304eb4d65f",
+    "patches/native-polish55.patch": "f9c05de5addfccbc2906dded592299c9f04177d515f9f15223ec040038a71b9e",
+    "patches/native-polish56.patch": "3108041b695e62d1a4acd2e7f5e93cd9570aeef41d9aa32d5aece94c9b25e822",
+    "patches/native-polish57.patch": "e45b0563c93ffffc86c2885203c934653046ba7ea5a1aa912e8fc4ac7bc57210",
+    "patches/native-polish58.patch": "613bf7009bc1bbd6229b1b95c602a0ac9f1c353d0007f09a3cd1891729c5ae33",
+    "patches/native-polish59.patch": "d8c014bcc48bcc725da55237ae2926ad993c700c522f6f6c1a9bb657b8fa66ca",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6",
+    "patches/native-scroll69.patch": "4d484a750edf2c82b7bf45a37fef12a278d8cf6a032f5efe5a1f91829337758a",
+    "patches/native-upgrades1.patch": "780b4beaa60d8897128202322f0852ba091b390b6eff5f9b53c2b9cfea007811",
+    "scripts/build.py": "8d8a8ef03dac225c76c96e45d3061e9123582c620339a7e93e71039d5735c22a",
+    "scripts/build_hero_report.py": "2108560f833ea0c61c77197f03b9aa44de245c41ef3ef60e23d39e2e650a39ba",
+    "scripts/build_native_engine.py": "c6bf87737c761bbf9d6f69d5eb49033662000c3901d6b5425d6f224b5de655ed",
+    "scripts/build_nearby.py": "0ff47e95e039c7b3fda30a449eea5e56ded4cb57853c71adb4dd5d3e0ec92d8a",
+    "scripts/prepare_classic.py": "7ddb4818ef898446b6c7d8efd6b26981e51bbea0bf583b34ed772fcae3f7e7af",
+    "scripts/prepare_menus.py": "741ee2fabe54e5c495a0e07bda56469947a3e69cc67e5ca82518bf0a13efed02",
+    "scripts/prepare_native.py": "422effbd9d613be6154cc87de7bd82ebf03990316737dd6fb3c9d9191e314426",
+    "scripts/prepare_web.py": "01f1fa85a723361129d9721feb75671884f48834d122d6409da516d9ba83a667",
+    "settings.gradle": "3445ce1d97bf70a20ffe1b43dbddb3eb3d5733c6b50d1b454e978df690bf38e3",
+    "tests/CameraPanTest.java": "c3db9edd95a08cdbab0ba4dd8a767b4af21053c6a89ed0e35ae64be35b398915",
+    "tests/ExitReportTest.java": "27c878c4b185c0329f75de0a901353c0b7d57a151b6587369960982d563c652a",
+    "tests/NativeControlsInstrumentation.java": "d67913c91c080bb6471a0fc94c05c0fb2acfa9f2c4f54ba11a6ac5fa80e7b5b6",
+    "tests/NativeCrashTraceTest.java": "be0a635e92a118f20275bc3b2ee9abdf1e9e151ca7013bf8d645d398a1b87b3c",
+    "tests/NativeMissionExportInstrumentation.java": "6d57a7004cee57f0d078e710c516973f100c95e1177d1cedd14d629456f9ef5f",
+    "tests/NativeRevisionInstrumentation.java": "0a0f4de067e50e9abd42bf445b8eb7acf99c1e019a224fadf30533d98ef45db8",
+    "tests/RoomMatchTest.java": "7d31057b1bba267a846271d4d6df95a934695f596806f6bf57dd7edfa8eb2a14",
+    "tests/build_native_host.py": "f4419428f997263adccd32f0043e44118c2da709d60f0e140029653fa8ab02ea",
+    "tests/check_nearby_package.py": "35503b79ab1648353c773ba29aef4e5068e2a9445cfcf006a41271ae76424c46",
+    "tests/check_placement_package.py": "c84f1d3da29b604021ef1c67588595bf1b82021842618f3d100c233d535f4e7d",
+    "tests/check_scroll70_package.py": "978a91ab428a6f9e0385fd05007cd12a66adf7049c7a34af3a5baf36428d2722",
+    "tests/extract_storm_reference57.cpp": "3de3416f5afd000553860e7f8e795414dc6e52ea93b570a25134a013f783d473",
+    "tests/fixtures/upgrades1-engine-baseline.json": "15a551c6e652c8bb1ba834b003a2e38085f8e6502fc1e9ef18174b14bb71d4f8",
+    "tests/native_placement.cpp": "74c5165fea951bff1c43c2e4f2c26695dd1e86fbdfbe6c9210198b594ca4c0ce",
+    "tests/native_revision56.cpp": "5545e7fa9eceefcd51c00c9da5b67f76b44d27eb980876123cc00641b3ee86d1",
+    "tests/native_revision57.cpp": "24e771cd88ae1ab7892cfe3489cee823332137683403a07ec9e3e46fd96a6b8b",
+    "tests/native_revision58.cpp": "23f1587bd16b279f0015148173c301fb9898f9f382580f39390209b3c4841d26",
+    "tests/native_revision59.cpp": "24d61ae5b768ed6dc2add39b0b7363e8ae85a5a0528c4e48f90ebf3071425491",
+    "tests/native_upgrades.cpp": "b90ab5534a9254757be049d5b7f7f13c3d6c18aab78fadcb693f7290e3412b50",
+    "tests/run_branding1.py": "b3526d84463042af223531b7edfd27798053174abdd95447e20f73b9306d6d6a",
+    "tests/run_diagnostics1.py": "e475fc0447ae0f68706c0e3150f47426efadada156f78a72d973cb9fc961290a",
+    "tests/run_hud59.py": "ef6ed3849de02ff5c164034e66f84bb5752f749322316c31eeef8ecde0f80a8d",
+    "tests/run_native55.py": "25fa44f64a9eac66a2c0ae55ad95ba9554b7531d1fbb0dd862f84e96c69d70d3",
+    "tests/run_native56.py": "f03a2768b7a8a8f696b2ca8ea77fc230313454b34064790545e796d1f66b024d",
+    "tests/run_native57.py": "86a38c8a472d229f1621d93b05be9653cb6b4ebfb6067236d6eac089f6e14ea0",
+    "tests/run_native58.py": "f0b0d8dcb7de6d331ee278cc6c4425cff4e0b0532a3b1c45f7d54e5db6f67c85",
+    "tests/run_native59.py": "29633b5d43a9691275df4aad1d589f5d33f906cd675198efbd4d2cc8238d36f4",
+    "tests/run_placement.py": "046a1a13db9743d850f95d12ff26518b5829c3bd766027780dbdecea52eb0242",
+    "tests/run_placement60.py": "815e67ad8901ca00b3e53911781a48153c1e96dca4bee4ea195296885ce0da42",
+    "tests/run_placement61.py": "e86fe6134786d50cef34c1f626c0b42200a83170c143a7a57fa335e1680cb871",
+    "tests/run_results56.py": "6b8f8c0f63ed5c7b2ab391bb959510a0b148ef629d337520e0f6db1121e93b96",
+    "tests/run_scroll69.py": "39979e9af497f802222bbd3340e1848d2a430fb82fdd0e8347d0f1f91518df56",
+    "tests/run_scroll70.py": "3db4096bedc98dc7aa7ea7ee9ac6e8e498dc0e8535e7c135545e10e28c28f223",
+    "tests/run_tooltip56.py": "9d5c21a77ea3a6f93a38ee7dcb1657eb62067f32308ee095976198c3c618715f",
+    "tests/run_ui56.py": "5c27ff41b7a135f94653048687d48f7e1d4da36b38dc4af3c39d1b31c08c825d",
+    "tests/run_ui58.py": "12fbaee602c17d2ce1c313276420e782b1b9c72eaf3eb27fd3b5fab1a5b8e859",
+    "tests/run_upgrade_ui.py": "77b5433a7223fbe56a8d64683b4d3c268850fb7bf661e83848f81c73462a7522",
+    "tests/run_upgrades.py": "4368f9ac126b514db920fa5cd949d7af4c84c2e82da3f88e48cdbfd3e4dae5a3",
+    "vendor/libsmacker/smacker.c": "d2a9adda0f8d36e952cdb44ec2fefbbe1f4146319272e779eed15f6c06a813a5",
+    "web/menus.html": "fb14da8d26977af15d7238ebe9c13f3164f0867bd53cd501df2fa69b25650488",
+    "web/menus.js": "7cf2c75ff2d36c08f44cfe65ab8717313cff1fcba1290a04597afd354e17628f",
+    "web/testing.js": "4d27d767251336acff60317a3cffbf5ea60c2e0f53fe57a0fb18a58337ba46e4",
+    "web/title.html": "ba0acbdb625ee7d7e40d2d99cef735917c5f668bb2daf5fcece8b9093b080553"
+  },
+  "nativeLibraries": {
+    "arm64-v8a/libopenbw.so": "2bf5e4b09e205b5b89ce11e96777a270305d9751122155ad40161186aaad9491",
+    "arm64-v8a/libsmacker.so": "44e52d6e7f4f56d7e8d6a4cedcea00553859b23af5b2d7111bfc551a236bcabf",
+    "x86_64/libopenbw.so": "783cb502b72e5622f80fb0858d0d8f64b9daf2558821ed74c9dd1272f78965ac",
+    "x86_64/libsmacker.so": "1977ed65b5f753b7ea68103dae1c7097c45b5a4478d68c65a2941d1befff75c4"
+  },
+  "limits": [
+    "The retained Samsung crash site is reproduced and fixed in the renderer; post-fix physical-device play and the separate Vivo closure remain unverified.",
+    "Physical Android installation, touchscreen/keyboard interaction and Bluetooth/Wi-Fi Direct radio confirmation remain pending.",
+    "Up to eight participants within the map slot limit; actual simultaneous radio links depend on hardware.",
+    "Host controls saves, loads and slot movement; there is no host migration or mid-match reconnection.",
+    "Native checks are bounded scenarios, not full campaign playthroughs. Original game archives remain external."
+  ],
+  "buildDate": "2026-10-25",
+  "heroComparison": {
+    "forms": 18,
+    "formsPerRace": 6,
+    "directlyPlayableCampaignForms": 14,
+    "proposedZergAdditions": [
+      "Torrasque",
+      "Devouring One",
+      "Kukulza (Mutalisk)"
+    ],
+    "campaignScenariosInspected": 64,
+    "pricesAreStartingBalanceValues": true,
+    "pricingRule": "Two thirds of stated unit equivalent, rounded to five resources",
+    "raynorMarineMinerals": 100,
+    "raynorMarineGas": 0,
+    "heroProductionAdded": true,
+    "replacesNoradIIWith": "Edmund Duke (Tank/Siege)",
+    "uniquePerPlayerAcrossQueues": true,
+    "tassadarZeratulMerge": true
+  },
+  "gameplayRuleChanges": [],
+  "previousGameplayRuleChanges": [
+    "Retail Brood War completed Protoss tech counting restored; unpowered producers remain disabled.",
+    "Optional Hero Mode adds six limited heroes per race at ground-upgrade buildings.",
+    "Teams share vision and victory but keep separate economies and unit control.",
+    "Skirmish depleted-base recovery, expansion budgets, production capacity and Hard attack pressure improved. Campaign macro unchanged.",
+    "Hero Mode AI on every difficulty pursues all six heroes early and reserves construction/hero resources; additional buildings allow concurrent upgrades.",
+    "Hero command slots are fixed across upgrade completion.",
+    "Status and Detector labels share a bounded row with full inspection text.",
+    "Hero build times exactly match base units; original Hive/Spire level-3 air upgrade rules retained.",
+    "Recycled visual effects clear stale frozen positions and recycled unit IDs release old loss guards for exact saved continuation. Campaign macro unchanged."
+  ],
+  "nativeEngineVersion": "1.0-build69",
+  "multiplayerProtocolBuild": 60,
+  "interfaceChanges": [
+    "Top/left/right edge scroll begins within 48 logical pixels; the bottom band remains 24 and timed smoothing/max speed are retained.",
+    "Camera settings adds Scroll while placing, default on, with persistence/migration and an immediate stop when disabled.",
+    "Existing selection/target scrolling, ordinary/two-finger pans, Build/Cancel capture and renderer bounds remain intact.",
+    "Version 1.0/code 70; Java-only update with all native libraries and assets identical to build 69. Device confirmation pending."
+  ],
+  "previousInterfaceChanges": [
+    "Placement drags scroll beneath the command bar/minimap while clamping the preview to the visible world and preserving captured touch ownership.",
+    "Elapsed-time edge movement with equal opposite directions, normalized diagonals and a short acceleration ramp; fractional ordinary/two-finger panning.",
+    "Release, cancel, menus, transitions and pinch stop edge movement. The Android host owns scrolling, preventing a second native step.",
+    "Keep the build 68 renderer bounds fix; memory regression includes 384 host-pan/map-edge frames. Version 1.0/code 69; physical-device confirmation pending.",
+    "Correct the bottom-row address in indexed and RGBA rectangle outlines, preventing out-of-bounds writes at the screen edge.",
+    "Original placement-preview and selection-outline faults reproduced with guarded images; corrected engine passes AddressSanitizer rendering regression.",
+    "Version 1.0/code 68, same signing identity, rebuilt ARM64 and x86-64 libraries. Physical-device confirmation pending; GitHub publication paused.",
+    "Read and locally retain Android 12+ native tombstone stacks in existing Credits / Copy diagnostics.",
+    "Bound trace size and omit memory dumps, other threads, log buffers and installation paths.",
+    "Version 1.0/code 67. Foreground single-player SIGSEGV confirmed but not yet located or fixed; publishing remains paused.",
+    "Android exit history and bounded persistent Java/renderer errors in existing diagnostics.",
+    "Version 1.0, code 66, same release signing identity.",
+    "Foreground close on Vivo X100 remains unconfirmed; GitHub publication paused."
+  ],
+  "projectName": "StarDroid",
+  "nativeSimulationVersion": "0.59",
+  "historicalValidationBuild65": {
+    "branding-v1.0.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "output": "PASS 314 checks: 64 campaign and 7 media names; migration, new-import precedence, fallback; real base/expansion mission export/reimport and exact payload preservation; Wi-Fi invitation names",
+      "version": "1.0",
+      "displayName": "StarDroid",
+      "applicationIdentityRetained": true,
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/ProjectFiles.java": "b762639c742f539346bcc2e92810dfb46089949590e84aa81f0b23de5a073622",
+        "app/src/main/java/org/openbw/androidtest/CampaignData.java": "0c428aa5ec5c490128569e99e9d494f4e4b84bb4c56eb669ad94e4ec8a503056",
+        "app/src/main/java/org/openbw/androidtest/CampaignCatalog.java": "5126fcd1d4b4f860b133ecd54da440cf2b5630e2b45641dcf753b0c0c7fdd321",
+        "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "923ae62bcd069266550aaebb7e35e8cfac50a476c13fa2bf02b0b1edea8206b9",
+        "app/src/main/java/org/openbw/androidtest/MusicData.java": "bd192578dccc51adfab7df8a1b6746ea1f8d1ce4f21af70011a96afdcfe1a421",
+        "app/src/main/java/org/openbw/androidtest/StoryData.java": "d9c3765a44cd1362c674d156e49f10755d25fa18be2194ab1a0dd65defab6bb0",
+        "app/src/main/java/org/openbw/androidtest/CinematicCatalog.java": "25ffead113330188b087c9cfb7da7cde75147e41d0fe901a8a44811bfa7fc594",
+        "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+        "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+        "app/src/main/java/org/openbw/androidtest/MissionExport.java": "5aeeafaf11f8e0b06cebc59a5b6dd777d8dbd4cf90b1980a3d2ef2dda4759e81",
+        "app/src/main/java/org/openbw/androidtest/MainActivity.java": "73fbbde6da18def9c3b89057b67da1aba82619e779d35e7bf0700def0c7910a2",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "66120f77ef4d2c1827d878f38eebe2179608b06f0af44dcf80a4f6d04c0f1347",
+        "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "e5d1bf46606950dbb96b48e62720829c67a390584afd97c5446dd802c8a40da3",
+        "app/src/main/java/org/openbw/androidtest/GameContent.java": "039073a80187c4a4fd2807221081f1f6c2ed58cdb6a3c21bfd7b6c60c446c47c",
+        "app/src/main/java/org/openbw/androidtest/NativeNearby.java": "2f41f7661d7b4eb20fe48a077f75fd54e2bb55209430103e82d8aa534d94a156",
+        "app/src/main/java/org/openbw/androidtest/LocalTransport.java": "30c94db549694a5b8f40aaf3161bffd560ab4253623635f92e88b3be883a584d",
+        "app/src/main/java/org/openbw/androidtest/NativeAudio.java": "c6b1628380a8e140b56e746cef1a2e951a1f529ac2155a8c12eb3529039ad123",
+        "app/src/main/java/org/openbw/androidtest/NativePortrait.java": "bc7ee2745746de7bfedab97eb5d7d41e80352135a381ec000af0bf35727db38e",
+        "settings.gradle": "3445ce1d97bf70a20ffe1b43dbddb3eb3d5733c6b50d1b454e978df690bf38e3",
+        "app/build.gradle": "d037397f74daff916a8274f922ebe062b367537efb962b456ae9bb583161b163",
+        "app/src/main/AndroidManifest.xml": "661553d6cf17441cd8bf4e0ca5ad12c90eb4bbe8ea7b05564c5cbb2fff58082f",
+        "app/src/main/res/values/styles.xml": "1979ff7204d2c6ed06c1934e21422334f1018ac67dd48eb253105054a020f843",
+        "scripts/build_nearby.py": "0ff47e95e039c7b3fda30a449eea5e56ded4cb57853c71adb4dd5d3e0ec92d8a",
+        "scripts/build_hero_report.py": "2108560f833ea0c61c77197f03b9aa44de245c41ef3ef60e23d39e2e650a39ba",
+        "tests/run_branding1.py": "b3526d84463042af223531b7edfd27798053174abdd95447e20f73b9306d6d6a"
+      }
+    },
+    "placement-v61.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
+      "output": "PASS 3857 checks, 1728 edge/zoom/control positions: always below visible preview, overlap allowed, real touch routing blocks underlying buttons/commands/minimap and the gap, drag capture, migration/persistence and three-race renders",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "d35c8c6c2b326f8da80ba3cc4a6cc16b79cee452618f01c568175799983efda2",
+        "app/src/main/java/org/openbw/androidtest/PlacementButtons.java": "230491ae1d965610c57f538d116294ccc1f6cf6d1e2b4675cd8becb70799871c",
+        "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+        "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "66120f77ef4d2c1827d878f38eebe2179608b06f0af44dcf80a4f6d04c0f1347",
+        "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+        "tests/run_placement61.py": "e86fe6134786d50cef34c1f626c0b42200a83170c143a7a57fa335e1680cb871"
+      }
+    },
+    "native-upgrades-v1.0.json": {
+      "passed": true,
+      "physicalDevices": false,
+      "cases": [
+        {
+          "case": "upgrades-0-0-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=0 heroes=0\n"
+        },
+        {
+          "case": "upgrades-0-0-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=0 heroes=1\n"
+        },
+        {
+          "case": "upgrades-0-1-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=1 heroes=0\n"
+        },
+        {
+          "case": "upgrades-0-1-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=1 heroes=1\n"
+        },
+        {
+          "case": "upgrades-0-2-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=2 heroes=0\n"
+        },
+        {
+          "case": "upgrades-0-2-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=2 heroes=1\n"
+        },
+        {
+          "case": "upgrades-0-3-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=3 heroes=0\n"
+        },
+        {
+          "case": "upgrades-0-3-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=3 heroes=1\n"
+        },
+        {
+          "case": "upgrades-0-4-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=4 heroes=0\n"
+        },
+        {
+          "case": "upgrades-0-4-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=0 mode=4 heroes=1\n"
+        },
+        {
+          "case": "upgrades-1-0-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=0 heroes=0\n"
+        },
+        {
+          "case": "upgrades-1-0-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=0 heroes=1\n"
+        },
+        {
+          "case": "upgrades-1-1-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=1 heroes=0\n"
+        },
+        {
+          "case": "upgrades-1-1-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=1 heroes=1\n"
+        },
+        {
+          "case": "upgrades-1-2-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=2 heroes=0\n"
+        },
+        {
+          "case": "upgrades-1-2-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=9, fog_player=0\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=2 heroes=1\n"
+        },
+        {
+          "case": "upgrades-1-3-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=3 heroes=0\n"
+        },
+        {
+          "case": "upgrades-1-3-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=3 heroes=1\n"
+        },
+        {
+          "case": "upgrades-1-4-0",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=4 heroes=0\n"
+        },
+        {
+          "case": "upgrades-1-4-1",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=9, fog_player=3\nPASS 1091 checks, 54 actual research completions; 16 lines plus both Spire types; expansion=1 mode=4 heroes=1\n"
+        },
+        {
+          "case": "power",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS power expansion=0 disabled building types=13 unit/building/upgrade dependencies=17 original red status and sound; retail completed-tech counting\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS power expansion=1 disabled building types=13 unit/building/upgrade dependencies=17 original red status and sound; retail completed-tech counting\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS actual Pylon construction/destruction and saved power state\n"
+        },
+        {
+          "case": "heroes",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 20 cost=100/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 19 cost=100/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 16 cost=50/150 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 28 cost=465/350 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 23 cost=225/150 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 99 cost=40/125 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 104 cost=40/125 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 51 cost=100/300 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 53 cost=100/35 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 48 cost=335/335 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 54 cost=50/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=9, fog_player=0\nPASS hero 55 cost=135/135 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 77 cost=165/0 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 78 cost=250/100 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 75 cost=290/235 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 79 cost=65/200 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 82 cost=465/335 six-button card, queue, save, train, death cap\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS hero 88 cost=415/190 six-button card, queue, save, train, death cap\n"
+        },
+        {
+          "case": "merge",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS Tassadar/Zeratul merge, complete hero Archon, save, paired cap/death release, Duke siege cap and supply\n"
+        },
+        {
+          "case": "teams",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 4, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 4, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 3 of 4, units=5, fog_player=3\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS four native perspectives: teams, vision, saved rules, shared victory and defeat, default-off isolation\n"
+        },
+        {
+          "case": "legacy",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nPASS previous schema 2 save compatibility\n"
+        },
+        {
+          "case": "victory",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 4, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 3, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 3, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 3, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 3, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 3, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 3, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 5, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 5, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 5, units=5, fog_player=2\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 5, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 1 of 5, units=5, fog_player=1\nopenbw_init: map 'Weave v1' 4096x4096, slot 2 of 5, units=5, fog_player=2\nPASS 48 victory cases: original/BW, 3 difficulties, 3 races, Melee/FFA, mixed/all-human network perspectives\n"
+        },
+        {
+          "case": "cargo",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS Bunker/Dropship/Shuttle/transport Overlord empty, full and unload command states\n"
+        },
+        {
+          "case": "detection",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 2, units=5, fog_player=0\nPASS reactive detection for three races, Comsat energy, campaign existing detectors only, scripted movement retained\n"
+        },
+        {
+          "case": "addons",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS all 6 addon types: actual lift, neutral tech/card, enemy landing capture, owner census, save round trip\n"
+        },
+        {
+          "case": "sound",
+          "passed": true,
+          "output": "openbw_init: map 'Weave v1' 4096x4096, slot 0 of 1, units=5, fog_player=0\nPASS original Ultralisk selection/annoyed/normal cycle; original score fill/end composed to 2200 ms; playback clock; independent complete lobby sounds\n"
+        }
+      ],
+      "changedPreparedEngineFiles": [
+        "web/sandbox.h"
+      ],
+      "simulationInputsUnchanged": true,
+      "simulationInputSha256": {
+        "bwgame.h": "421f07f5d7a2077db6c55462f190de9159d4d057e1586d7173e75da71bff43ee",
+        "actions.h": "9ddfaeb6c992a73fc22dc00a8b8a8ca876246128ec98688f11aadc4e2a888f36",
+        "game_types.h": "68d26020a148596d0de416c4dc759ab443eed6535ab97f77a70478edcccae61d",
+        "data_types.h": "9ce5aa1ed99ce4e75bc929ee30dfeabd6d83aa291173e95048f3a49642b2f1dd",
+        "web/campaign_ai.h": "7d0c89f77289a54279f484a29b469bbbbf561ce06fce8ea9fe3e8c1ec4dbc925"
+      },
+      "limitations": "Host engine and original data. Research is started via command-card packets with normal costs and duration; its timer is shortened before exercising normal completion. Covers 16 three-level upgrade lines and both Spire producers, original/BW, Melee/FFA/teams, multiplayer and Hero Mode on/off. Gameplay/AI implementation is unchanged. Physical Android input, sound, radio and performance remain untested.",
+      "sourceSha256": {
+        "tests/native_upgrades.cpp": "b90ab5534a9254757be049d5b7f7f13c3d6c18aab78fadcb693f7290e3412b50",
+        "tests/native_revision58.cpp": "23f1587bd16b279f0015148173c301fb9898f9f382580f39390209b3c4841d26",
+        "tests/native_revision57.cpp": "24e771cd88ae1ab7892cfe3489cee823332137683403a07ec9e3e46fd96a6b8b",
+        "tests/native_revision56.cpp": "5545e7fa9eceefcd51c00c9da5b67f76b44d27eb980876123cc00641b3ee86d1",
+        "tests/native_revision55.cpp": "81f0a4baaa91df81d60da81e68c3183601f03e39923735c036dbfb3ab4cb6645",
+        "tests/run_upgrades.py": "4368f9ac126b514db920fa5cd949d7af4c84c2e82da3f88e48cdbfd3e4dae5a3",
+        "tests/build_native_host.py": "bad48dc135623330cd8724d7c15112ba47e41b9abd2aadbaecc733e9670c1c52",
+        "tests/create_room_map55.py": "f03d3a977ef1e1c775d354926f10c008ff5f857658451f030e6abc5ddb17ebac",
+        "tests/fixtures/upgrades1-engine-baseline.json": "15a551c6e652c8bb1ba834b003a2e38085f8e6502fc1e9ef18174b14bb71d4f8",
+        "scripts/prepare_native.py": "52a541c9a4df8f0c3b1383a9e767122b34b7703cea031a9bb0517133f417d559",
+        "patches/native-upgrades1.patch": "780b4beaa60d8897128202322f0852ba091b390b6eff5f9b53c2b9cfea007811",
+        "native/runtime.cpp": "e270feff9df0491567e2d564ec95a64497dae6b31d67d0381d7896b626a4d531",
+        "native/hero_mode.h": "371cce07d5ff3fffbd9fd7244f47b21bff83306fabd210e75b869eae38ea80c7",
+        "native/audio.h": "6437ac032b9961e0c1cc91c84056be268682ada3754614c9385441930fabf46a",
+        "native/save_state.h": "d6026805e57b02d24f370841ea79d8165162b1465659af63462a8cbf1dc1584d",
+        "native/multiplayer.h": "8977888202fd0df30ac19cc37decc6c96a7bc7423749c3b42bfdbf581b0eae6f",
+        "patches/campaign.patch": "ca688d15ba6d24a64c3b9d260bd208ee3dbed3c927c36d936deaa92f70a9d609",
+        "patches/native-ai43.patch": "db4d250f42c33f7067e057be6e3c471c8777f0de66afd35422437b2ff5f44cd5",
+        "patches/native-ai45.patch": "c45e447ddc9d4b91c56423297cba8b6c985ccf4f6a724bcfdc8dafba89175fa6",
+        "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+        "patches/native-controls38.patch": "04f5614d3b4797215cc58442ed18e21bb39891cdfc01d79d7f557e373f4487d0",
+        "patches/native-finale37.patch": "f1050e7a66ee1a37f7159bfcf72f4a7fc94585da4e3ca4aeda21442782165f66",
+        "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+        "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+        "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+        "patches/native-polish39.patch": "9a323dd664fa4685d0cee3ab531791c59ae970273eaa71ad4b65a78dc210a0a8",
+        "patches/native-polish40.patch": "2b588458a28921ad8ff8e5f88e3c573ec54e64490f29ae8d6b9d83deaeccfc49",
+        "patches/native-polish41.patch": "4776feefa2455e2114f97cc5ffb4b286cb072cfec1ff3bc2fe85f3f34cd75ea5",
+        "patches/native-polish42.patch": "92d7b77fc836e310d235f64b7c97029f82a422500501d2c2f94b32bcf045b667",
+        "patches/native-polish44.patch": "99840a772d41ff39162adb5908fbc68ab0a17aabb116b6ef0c0d39566eb3862c",
+        "patches/native-polish46.patch": "4c63797244f1c1905598e0972f48fc3605f49d3777696b7b572de78a3b1559de",
+        "patches/native-polish54.patch": "9e0ff4265c500933c1b3e3d27d361c136b58571d5b8ceeb19a3fa9304eb4d65f",
+        "patches/native-polish55.patch": "f9c05de5addfccbc2906dded592299c9f04177d515f9f15223ec040038a71b9e",
+        "patches/native-polish56.patch": "3108041b695e62d1a4acd2e7f5e93cd9570aeef41d9aa32d5aece94c9b25e822",
+        "patches/native-polish57.patch": "e45b0563c93ffffc86c2885203c934653046ba7ea5a1aa912e8fc4ac7bc57210",
+        "patches/native-polish58.patch": "613bf7009bc1bbd6229b1b95c602a0ac9f1c353d0007f09a3cd1891729c5ae33",
+        "patches/native-polish59.patch": "d8c014bcc48bcc725da55237ae2926ad993c700c522f6f6c1a9bb657b8fa66ca",
+        "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+        "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6"
+      }
+    },
+    "upgrade-ui-v1.0.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "output": "PASS 704 checks: all 16 actual native upgrade cards, grey palette, stable slots, next-level/prerequisite text, two widths and button/text sizes",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+        "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
+        "patches/native-upgrades1.patch": "780b4beaa60d8897128202322f0852ba091b390b6eff5f9b53c2b9cfea007811",
+        "tests/native_upgrades.cpp": "b90ab5534a9254757be049d5b7f7f13c3d6c18aab78fadcb693f7290e3412b50",
+        "tests/run_hud59.py": "ef6ed3849de02ff5c164034e66f84bb5752f749322316c31eeef8ecde0f80a8d",
+        "tests/run_upgrade_ui.py": "77b5433a7223fbe56a8d64683b4d3c268850fb7bf661e83848f81c73462a7522"
+      }
+    },
+    "hud-v59.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "output": "PASS 4958 checks: fixed six-hero command positions across every upgrade combination, two widths/scales; bounded status/detector row, full inspection text, original red Unpowered\n",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
+        "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+        "app/src/main/assets/native/commands.json": "29fb6aea657c1fb557d20dbdf704dd5995026ad45f6dc5dce40d64da2e0e3509",
+        "tests/run_hud59.py": "ef6ed3849de02ff5c164034e66f84bb5752f749322316c31eeef8ecde0f80a8d"
+      }
+    },
+    "native-v55.json": {
+      "passed": true,
+      "physicalDevices": false,
+      "cases": [
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 0,
+          "trace": "8-0-0.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 1,
+          "trace": "8-0-1.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 2,
+          "trace": "8-0-2.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 3,
+          "trace": "8-0-3.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 4,
+          "trace": "8-0-4.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 5,
+          "trace": "8-0-5.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 6,
+          "trace": "8-0-6.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 8,
+          "ffa": 0,
+          "slot": 7,
+          "trace": "8-0-7.txt",
+          "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+        },
+        {
+          "humans": 6,
+          "ffa": 1,
+          "slot": 0,
+          "trace": "6-1-0.txt",
+          "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+        },
+        {
+          "humans": 6,
+          "ffa": 1,
+          "slot": 1,
+          "trace": "6-1-1.txt",
+          "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+        },
+        {
+          "humans": 6,
+          "ffa": 1,
+          "slot": 2,
+          "trace": "6-1-2.txt",
+          "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+        },
+        {
+          "humans": 6,
+          "ffa": 1,
+          "slot": 3,
+          "trace": "6-1-3.txt",
+          "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+        },
+        {
+          "humans": 6,
+          "ffa": 1,
+          "slot": 4,
+          "trace": "6-1-4.txt",
+          "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+        },
+        {
+          "humans": 6,
+          "ffa": 1,
+          "slot": 5,
+          "trace": "6-1-5.txt",
+          "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+        }
+      ],
+      "framesPerPerspective": 1440,
+      "checkpointsPerPerspective": 360,
+      "feedback": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=9, fog_player=0\nPASS Ultralisk original descending range plays normal ZUlWht WAV\nPASS mass larvae partial morph shortage=0\nPASS mass larvae partial morph shortage=1\nPASS mass larvae partial morph shortage=2\nPASS Guardian replacement morph at 200 supply\nopenbw_init: map 'First Strike' 3072x3072, slot 5 of 1, units=17, fog_player=5\nPASS original First Strike triggers: reveal while paused; base and Duran automatically join without approaching again\n",
+      "sourceSha256": {
+        "native/multiplayer.h": "8977888202fd0df30ac19cc37decc6c96a7bc7423749c3b42bfdbf581b0eae6f",
+        "native/runtime.cpp": "e270feff9df0491567e2d564ec95a64497dae6b31d67d0381d7896b626a4d531",
+        "patches/native-polish55.patch": "f9c05de5addfccbc2906dded592299c9f04177d515f9f15223ec040038a71b9e",
+        "patches/native-polish58.patch": "613bf7009bc1bbd6229b1b95c602a0ac9f1c353d0007f09a3cd1891729c5ae33",
+        "patches/native-polish59.patch": "d8c014bcc48bcc725da55237ae2926ad993c700c522f6f6c1a9bb657b8fa66ca",
+        "native/hero_mode.h": "371cce07d5ff3fffbd9fd7244f47b21bff83306fabd210e75b869eae38ea80c7",
+        "native/save_state.h": "d6026805e57b02d24f370841ea79d8165162b1465659af63462a8cbf1dc1584d",
+        "tests/native_revision55.cpp": "81f0a4baaa91df81d60da81e68c3183601f03e39923735c036dbfb3ab4cb6645",
+        "tests/create_room_map55.py": "f03d3a977ef1e1c775d354926f10c008ff5f857658451f030e6abc5ddb17ebac",
+        "tests/run_native55.py": "25fa44f64a9eac66a2c0ae55ad95ba9554b7531d1fbb0dd862f84e96c69d70d3"
+      }
+    },
+    "room-v55.json": {
+      "passed": true,
+      "physicalDevices": false,
+      "output": "PASS 2 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 3221 checks\nPASS 3 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 9133 checks\nPASS 4 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 18194 checks\nPASS 5 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 30110 checks\nPASS 6 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 45202 checks\nPASS 7 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 63551 checks\nPASS 8 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 84829 checks\nPASS 84832 multi-device checks\n",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/RoomProtocol.java": "9313a994833b1a5cc60d407b81273f9259f7cf9adc2c5f130aaf0e359c22cfc9",
+        "app/src/main/java/org/openbw/androidtest/RoomSnapshot.java": "343bb7fb799fb22882cff994338215d068327b00f896f9acd372a8e1ce3c6de1",
+        "app/src/main/java/org/openbw/androidtest/RoomMatch.java": "a2b0dc4ba7deb1980c0a0024c3e88d06812e224cb824875e746d4667e1200f02",
+        "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "2131d7d524735f4f32ce185101d5d2c9c9ef5d701863c134cdac11b028df2db7",
+        "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+        "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+        "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+        "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+        "tests/RoomMatchTest.java": "7d31057b1bba267a846271d4d6df95a934695f596806f6bf57dd7edfa8eb2a14",
+        "tests/run_room55.py": "74fe5c132bc7a024201ae1ce5e7dd39219e75bccb08df7d1a14d13a1456c8b5d"
+      }
+    },
+    "room-sockets-v55.json": {
+      "passed": true,
+      "realDesktopSockets": true,
+      "physicalDevices": false,
+      "output": [
+        "PASS 545 local transport checks: encrypted sockets, pairing, Wi-Fi authentication, handover, fallback, ordering, bounds and EOF\n",
+        "PASS 23543 real socket checks: eight devices, fourteen encrypted lanes, map/chat/countdown, seven handovers/fallbacks, paused save, guest departure, 740+ frames\n"
+      ],
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/RoomProtocol.java": "9313a994833b1a5cc60d407b81273f9259f7cf9adc2c5f130aaf0e359c22cfc9",
+        "app/src/main/java/org/openbw/androidtest/RoomSnapshot.java": "343bb7fb799fb22882cff994338215d068327b00f896f9acd372a8e1ce3c6de1",
+        "app/src/main/java/org/openbw/androidtest/RoomMatch.java": "a2b0dc4ba7deb1980c0a0024c3e88d06812e224cb824875e746d4667e1200f02",
+        "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "2131d7d524735f4f32ce185101d5d2c9c9ef5d701863c134cdac11b028df2db7",
+        "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+        "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+        "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+        "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+        "app/src/main/java/org/openbw/androidtest/LocalTransport.java": "30c94db549694a5b8f40aaf3161bffd560ab4253623635f92e88b3be883a584d",
+        "tests/RoomMatchTest.java": "7d31057b1bba267a846271d4d6df95a934695f596806f6bf57dd7edfa8eb2a14",
+        "tests/LocalTransportTest.java": "f2f12b494cd92d1c21a34e04f82a2fd1ad1cc382edbc2acf212b1bbc7f5ca1e3",
+        "tests/RoomSocketTest.java": "4bea9c0cf775317b6a7a5bbc8266ab2978d77e3f4e1b516e8a33f2233ae9b12b",
+        "tests/run_room_socket55.py": "54acb2c2e2a79e186c9513e7b88f515e928eb3b3300586f7d7fc3314d07c4616"
+      }
+    },
+    "ui-v58.json": {
+      "passed": true,
+      "physicalPhone": false,
+      "output": "PASS original connection/join/lobby/create artwork; thirteen renders including teams, hero mode and name dialogs; actual terrain preview; bounded nonoverlapping hit targets; entry gating",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/NativeResults.java": "3b054eb9e0275493bcc2976e5917ec2356ec5a8d7475a07151f166527128887c",
+        "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "fdc5f814efff146cd896c02defc3d201f0c11ee441a87dbfb12906a2e25b52d0",
+        "app/src/main/java/org/openbw/androidtest/NativeMapPreview.java": "7f77090c49c185b626ae52ecd564dc7feb487a898ad0de0d9dcb3e75c642dec1",
+        "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "2131d7d524735f4f32ce185101d5d2c9c9ef5d701863c134cdac11b028df2db7",
+        "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+        "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+        "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+        "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+        "app/src/main/java/org/openbw/androidtest/RoomProtocol.java": "9313a994833b1a5cc60d407b81273f9259f7cf9adc2c5f130aaf0e359c22cfc9",
+        "app/src/main/java/org/openbw/androidtest/RoomSnapshot.java": "343bb7fb799fb22882cff994338215d068327b00f896f9acd372a8e1ce3c6de1",
+        "app/src/main/java/org/openbw/androidtest/RoomMatch.java": "a2b0dc4ba7deb1980c0a0024c3e88d06812e224cb824875e746d4667e1200f02",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "66120f77ef4d2c1827d878f38eebe2179608b06f0af44dcf80a4f6d04c0f1347",
+        "tests/run_ui58.py": "12fbaee602c17d2ce1c313276420e782b1b9c72eaf3eb27fd3b5fab1a5b8e859"
+      }
+    },
+    "native-results-host-v56.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "canvas": "AWT compatibility shim; actual NativeArt/NativeGlue/NativeResults classes; alpha-composition rounding tolerance 1/255",
+      "fontFixture": "Supplied core FONT entries require fallback; synthetic glyph verifies original tint transparency",
+      "outcomeThemes": 6,
+      "tabRenders": 24,
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/NativeResults.java": "3b054eb9e0275493bcc2976e5917ec2356ec5a8d7475a07151f166527128887c",
+        "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "fdc5f814efff146cd896c02defc3d201f0c11ee441a87dbfb12906a2e25b52d0",
+        "tests/run_results56.py": "6b8f8c0f63ed5c7b2ab391bb959510a0b148ef629d337520e0f6db1121e93b96",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "66120f77ef4d2c1827d878f38eebe2179608b06f0af44dcf80a4f6d04c0f1347",
+        "tests/extract_interface46.cpp": "015e256acf7ec0eac94a2d165f8e4a537b00c0f058595df15ea70c41ab922660"
+      }
+    },
+    "tooltip-v56.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "descriptionFixtures": 115,
+      "output": "PASS 132110 checks; 2070 tooltip layouts across three widths and text sizes, two command sizes; Hive, long descriptions/requirements and responsive hover/hold/slide\n",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+        "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+        "tests/run_tooltip56.py": "9d5c21a77ea3a6f93a38ee7dcb1657eb62067f32308ee095976198c3c618715f"
+      }
+    },
+    "local-permissions-v55.json": {
+      "version": "0.55",
+      "passed": true,
+      "physicalAndroid": false,
+      "productionClasses": [
+        "NativeNearby",
+        "LocalPermissions",
+        "LocalTransport"
+      ],
+      "androidBoundary": "test doubles, no physical permission dialogs or radio",
+      "apiLevels": [
+        26,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "output": "PASS 685 local permission/lifecycle checks; API 26-36, Host/Join, grant/deny/cancel, optional Wi-Fi, duplicate and late callbacks, Bluetooth enable and visibility",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeNearby.java": "2f41f7661d7b4eb20fe48a077f75fd54e2bb55209430103e82d8aa534d94a156",
+        "app/src/main/java/org/openbw/androidtest/LocalPermissions.java": "e4d333cfd977a120671afc7467b8c1cfe47011df27185112fe91281c4cec97f6",
+        "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+        "app/src/main/java/org/openbw/androidtest/LocalTransport.java": "30c94db549694a5b8f40aaf3161bffd560ab4253623635f92e88b3be883a584d",
+        "tests/LocalPermissionsTest.java": "b5be16dd1b641153607232a46b3b1a5a7048e4b8954ebff8e4b10af975a05b82",
+        "app/src/main/AndroidManifest.xml": "661553d6cf17441cd8bf4e0ca5ad12c90eb4bbe8ea7b05564c5cbb2fff58082f",
+        "app/src/main/java/org/openbw/androidtest/MainActivity.java": "73fbbde6da18def9c3b89057b67da1aba82619e779d35e7bf0700def0c7910a2",
+        "tests/run_local_permissions.py": "2e1a40c0ce483be131aeb29fc3d374a0ae0c7bd669fe6e553686f85c73fba19b"
+      }
+    },
+    "native-package-v1.0.json": {
+      "version": "1.0",
+      "googlePlayServicesRequired": false,
+      "transport": "Android secure Bluetooth + authenticated Wi-Fi Direct; Bluetooth fallback",
+      "nativeEngineRebuilt": true,
+      "nativeEngineVersion": "1.0-build65",
+      "multiplayerProtocolBuild": 60,
+      "upgradeIdentityVerifiedFrom": "1.0",
+      "packageVerified": true,
+      "locationPermissionsCappedAtApi32": true,
+      "backgroundLocationRequested": false,
+      "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+      "sha256": "e5143049e1d703eed3c43a04f3a7ea609836aab01bb227b57e48c027f5bd9577",
+      "bytes": 2221130,
+      "abis": [
+        "arm64-v8a",
+        "x86_64"
+      ],
+      "jniMethodsVerified": 38,
+      "librarySha256": {
+        "arm64-v8a/libopenbw.so": "e35ef88c10519608c60bdb3f5293ff661f55d38840195bca0cb4a8d73bb193b1",
+        "arm64-v8a/libsmacker.so": "1a13bb6eaaf9e3adecafdcbc1f61b6a2736835a95f743f4ab47ef45d076b40cd",
+        "x86_64/libopenbw.so": "063e3e4e8116258248ae7c0f2d8e940907ab35480c9c34efbb5b7f8b055b43fc",
+        "x86_64/libsmacker.so": "2e745fbb2c95b2b7d20d9fd9cb1a4c774434f4de585d1ddf2bb221a7bbe368de"
+      },
+      "reports": [
+        "branding-v1.0.json",
+        "placement-v61.json",
+        "native-upgrades-v1.0.json",
+        "upgrade-ui-v1.0.json",
+        "hud-v59.json",
+        "native-v55.json",
+        "room-v55.json",
+        "room-sockets-v55.json",
+        "ui-v58.json",
+        "native-results-host-v56.json",
+        "tooltip-v56.json",
+        "local-permissions-v55.json"
+      ],
+      "lintErrors": 0,
+      "lintWarnings": 10,
+      "androidHardwareTested": false,
+      "nearbyRadioTested": false,
+      "releaseReady": false
+    }
+  },
+  "historicalValidationBuild66": {
+    "diagnostics-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 66,
+      "physicalDeviceTested": false,
+      "output": [
+        "PASS 22 exit classification, size, cause-chain, stack and OOM-report checks",
+        "PASS 12 write diagnostics checks",
+        "PASS 3 read diagnostics checks"
+      ],
+      "limitations": "Host Android API fakes exercise SDK guards, scoped history reads, unavailable/empty history, reason labels, original uncaught-handler delegation and persistence across separate JVMs. Actual Vivo/Android exit records and native signal traces require device testing.",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/AppDiagnostics.java": "832da40c66463c151d259100b269a687c62644c72ad361f1c3549d78faea58e2",
+        "app/src/main/java/org/openbw/androidtest/ExitReport.java": "bc302ece7eb0ee273f35a81aa0e63c9b256a55501f318b5fd14adc6b830ff93b",
+        "tests/ExitReportTest.java": "27c878c4b185c0329f75de0a901353c0b7d57a151b6587369960982d563c652a",
+        "tests/run_diagnostics1.py": "2986d43959b9abff179f8baa42a2bc086d9bc68d2e8f830ce9731e236d18d07e",
+        "app/src/main/java/org/openbw/androidtest/MainActivity.java": "2e4537fd48f4ad43788564f36dd7abb635751b81495bc32d7156f0be5e023a0c",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "207f096b6337f3e45113a0105e70aa659be70558f5c5aed3e99d97e647801434"
+      }
+    },
+    "diagnostics-package-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 66,
+      "signingCertificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+      "inPlaceUpdateFromBuild65Verified": true,
+      "apkSha256": "7fb0572fa0b36e6c696ef9dd18cdf4def000b329a19e2359a3bda912a7511156",
+      "apkBytes": 2224862,
+      "unchangedNativeLibrariesAndAssets": [
+        "lib/arm64-v8a/libopenbw.so",
+        "lib/arm64-v8a/libsmacker.so",
+        "lib/x86_64/libopenbw.so",
+        "lib/x86_64/libsmacker.so",
+        "assets/libsmacker-COPYING",
+        "assets/libsmacker-NOTICE.txt",
+        "assets/missions/ATTRIBUTION.txt",
+        "assets/missions/PyMS-LICENSE.txt",
+        "assets/missions/expbonus-files.txt",
+        "assets/missions/expprotoss01-files.txt",
+        "assets/missions/expprotoss02-files.txt",
+        "assets/missions/expprotoss03-files.txt",
+        "assets/missions/expprotoss04-files.txt",
+        "assets/missions/expprotoss05-files.txt",
+        "assets/missions/expprotoss06-files.txt",
+        "assets/missions/expprotoss07-files.txt",
+        "assets/missions/expprotoss08-files.txt",
+        "assets/missions/expterran01-files.txt",
+        "assets/missions/expterran02-files.txt",
+        "assets/missions/expterran03-files.txt",
+        "assets/missions/expterran04-files.txt",
+        "assets/missions/expterran05a-files.txt",
+        "assets/missions/expterran05b-files.txt",
+        "assets/missions/expterran06-files.txt",
+        "assets/missions/expterran07-files.txt",
+        "assets/missions/expterran08-files.txt",
+        "assets/missions/expzerg01-files.txt",
+        "assets/missions/expzerg02-files.txt",
+        "assets/missions/expzerg03-files.txt",
+        "assets/missions/expzerg04a-files.txt",
+        "assets/missions/expzerg04b-files.txt",
+        "assets/missions/expzerg04c-files.txt",
+        "assets/missions/expzerg04d-files.txt",
+        "assets/missions/expzerg04e-files.txt",
+        "assets/missions/expzerg04f-files.txt",
+        "assets/missions/expzerg05-files.txt",
+        "assets/missions/expzerg06-files.txt",
+        "assets/missions/expzerg07-files.txt",
+        "assets/missions/expzerg08-files.txt",
+        "assets/missions/expzerg09-files.txt",
+        "assets/missions/expzerg10-files.txt",
+        "assets/missions/protoss01-files.txt",
+        "assets/missions/protoss02-files.txt",
+        "assets/missions/protoss03-files.txt",
+        "assets/missions/protoss04-files.txt",
+        "assets/missions/protoss05-files.txt",
+        "assets/missions/protoss06-files.txt",
+        "assets/missions/protoss07-files.txt",
+        "assets/missions/protoss08-files.txt",
+        "assets/missions/protoss09-files.txt",
+        "assets/missions/protoss10-files.txt",
+        "assets/missions/story-files.txt",
+        "assets/missions/terran01-files.txt",
+        "assets/missions/terran02-files.txt",
+        "assets/missions/terran03-files.txt",
+        "assets/missions/terran04-files.txt",
+        "assets/missions/terran05-files.txt",
+        "assets/missions/terran06-files.txt",
+        "assets/missions/terran08-files.txt",
+        "assets/missions/terran09-files.txt",
+        "assets/missions/terran11-files.txt",
+        "assets/missions/terran12-files.txt",
+        "assets/missions/terrantutorial-files.txt",
+        "assets/missions/zerg01-files.txt",
+        "assets/missions/zerg02-files.txt",
+        "assets/missions/zerg03-files.txt",
+        "assets/missions/zerg04-files.txt",
+        "assets/missions/zerg05-files.txt",
+        "assets/missions/zerg06-files.txt",
+        "assets/missions/zerg07-files.txt",
+        "assets/missions/zerg08-files.txt",
+        "assets/missions/zerg09-files.txt",
+        "assets/missions/zerg10-files.txt",
+        "assets/native/commands.json",
+        "assets/native/missions.json",
+        "assets/native/weave.scx"
+      ],
+      "nativeEngineRebuilt": false,
+      "gameplayChanged": false,
+      "lintErrors": 0,
+      "lintWarnings": 10,
+      "deviceTested": false,
+      "crashCauseConfirmed": false
+    }
+  },
+  "historicalValidationBuild67": {
+    "native-crash-trace-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 67,
+      "physicalDeviceTested": false,
+      "output": [
+        "PASS 22 exit classification, size, cause-chain, stack and OOM-report checks",
+        "PASS 1023 native trace wire, metadata, privacy, bounds and malformed-input checks",
+        "PASS 17 write diagnostics checks",
+        "PASS 4 read diagnostics checks"
+      ],
+      "limitations": "Host Android API fakes and AOSP-wire fixtures exercise SDK guards, scoped/empty/unavailable history, native trace retrieval, reason labels, original uncaught-handler delegation, persistent native/Java reports across separate JVMs, selected-thread decoding, unknown fields, privacy and malformed/oversized input bounds. Actual Android device traces remain pending.",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/AppDiagnostics.java": "8250e05671828c00fec3cf0b0a46fdbfe46335690f626f0549065b71b86850c1",
+        "app/src/main/java/org/openbw/androidtest/ExitReport.java": "bc302ece7eb0ee273f35a81aa0e63c9b256a55501f318b5fd14adc6b830ff93b",
+        "app/src/main/java/org/openbw/androidtest/NativeCrashTrace.java": "3501b47a292e77348165ecd8ac26fd7b85ccdf15fc63166cf0529ebf16581fa6",
+        "tests/ExitReportTest.java": "27c878c4b185c0329f75de0a901353c0b7d57a151b6587369960982d563c652a",
+        "tests/NativeCrashTraceTest.java": "be0a635e92a118f20275bc3b2ee9abdf1e9e151ca7013bf8d645d398a1b87b3c",
+        "tests/run_diagnostics1.py": "e475fc0447ae0f68706c0e3150f47426efadada156f78a72d973cb9fc961290a",
+        "app/src/main/java/org/openbw/androidtest/MainActivity.java": "2e4537fd48f4ad43788564f36dd7abb635751b81495bc32d7156f0be5e023a0c",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "207f096b6337f3e45113a0105e70aa659be70558f5c5aed3e99d97e647801434"
+      }
+    },
+    "native-trace-package-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 67,
+      "apkSha256": "72cf2ed1e1cf8594e85133e46dbbcae6f762c1a16913c4e725bb9b0df1660214",
+      "apkBytes": 2228298,
+      "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+      "updateIdentityFromBuild66Verified": true,
+      "unchangedNativeAndAssetEntries": 76,
+      "nativeEngineRebuilt": false,
+      "gameplayChanged": false,
+      "lintErrors": 0,
+      "lintWarnings": 10,
+      "physicalDevicesTested": false,
+      "reportedCrashReproduced": false
+    },
+    "native-crash-investigation-v1.0.json": {
+      "completedCasesPassed": 5,
+      "incompleteCases": 1,
+      "reportedDeviceCrashReproduced": false,
+      "sanitizer": "GCC AddressSanitizer; -O1 -g1 -fno-omit-frame-pointer; leak detection disabled",
+      "cases": [
+        {
+          "case": "cargo",
+          "passed": true,
+          "addressSanitizerFinding": false,
+          "lastResult": "PASS Bunker/Dropship/Shuttle/transport Overlord empty, full and unload command states"
+        },
+        {
+          "case": "sound",
+          "passed": true,
+          "addressSanitizerFinding": false,
+          "lastResult": "PASS original Ultralisk selection/annoyed/normal cycle; original score fill/end composed to 2200 ms; playback clock; independent complete lobby sounds"
+        },
+        {
+          "case": "image-reuse",
+          "passed": true,
+          "addressSanitizerFinding": false,
+          "lastResult": "PASS recycled image clears frozen position for identical save continuation"
+        },
+        {
+          "case": "hero-weave-1",
+          "passed": true,
+          "addressSanitizerFinding": false,
+          "lastResult": "PASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation"
+        },
+        {
+          "case": "hero-weave-2",
+          "passed": true,
+          "addressSanitizerFinding": false,
+          "lastResult": "PASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation"
+        },
+        {
+          "case": "hero-weave-0",
+          "passed": false,
+          "completed": false,
+          "reason": "Exceeded 240-second host sanitizer time limit; no completed result."
+        }
+      ],
+      "limitations": "Host memory checks only. Terran and Protoss Hero Mode each ran 60000 frames and save/restore continuation. Zerg did not finish within the investigation limit. No on-device native stack is available yet. Initial economy runs used a slot-layout fixture without suitable resource placement and were discarded; corrected runs use the bundled Weave map."
+    }
+  },
+  "preparedSourceScope": {
+    "baselineBuild": 68,
+    "changedPreparedFiles": [
+      "web/sandbox.h"
+    ],
+    "beforeSha256": "0b4c24522a337754ced17f36e6f1caa2a2db40bc68e4aa5f8c9739b8bcfaeaf2",
+    "afterSha256": "daf189350fb5417d4c35e258e92b3cc90991cb0f208345bb14a584ff86e8e726",
+    "otherPreparedFilesUnchanged": 423,
+    "retainedRendererUiSha256": "f75e57fd173b6aacd95c102fb8f47e856fa0c0dc83839ef2e7cbd8e4d2f648ae"
+  },
+  "historicalValidationBuild68": {
+    "native-placement-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 68,
+      "baseline": [
+        {
+          "case": "ghost-repro",
+          "reproduced": true,
+          "fault": "SIGSEGV on write",
+          "function": "draw_placement_ghost",
+          "returnCode": -6
+        },
+        {
+          "case": "rgba-repro",
+          "reproduced": true,
+          "fault": "SIGSEGV on write",
+          "function": "line_rectangle_rgba",
+          "returnCode": -6
+        }
+      ],
+      "buildingTypes": 65,
+      "rectangleCases": 57794,
+      "ghostCases": 24960,
+      "renderedFrames": 300,
+      "sanitizer": "GCC AddressSanitizer, guard pages, row-padding and prefix canaries; leak detection disabled",
+      "coverage": [
+        "Indexed and RGBA outlines: exhaustive small rectangles, inverted/empty/one-pixel/extreme coordinates",
+        "All four edges, fully offscreen and full-image rectangles; tight and padded row strides",
+        "Real building sprites/footprints: blocked and valid locations, add-ons and morphs",
+        "640x480, 1280x720 and 457x343 displays at zoom 0.5, 1, 1.4 and 3",
+        "Full render path: ordinary/refinery/flying-building-plus-addon placement and edge-spanning selection"
+      ],
+      "physicalDeviceTested": false,
+      "limitations": "Host rendering and memory checks. Samsung crash-site behavior reproduced; post-fix Android device play and the separate Vivo closure remain unverified.",
+      "sourceSha256": {
+        "tests/native_placement.cpp": "b04bb62f6a069eae72e2a5057a1b3ce2db642eabc7c9970c6dff160cfd99786a",
+        "tests/run_placement.py": "443f6e96283c1dde47ca57c8b6eebc19706784c1ddd0b188b10afbd685ae4a11",
+        "tests/build_native_host.py": "f4419428f997263adccd32f0043e44118c2da709d60f0e140029653fa8ab02ea",
+        "scripts/prepare_native.py": "04c8a52a8d010bb563bf405cb33888c81466b939269ea8e83a51a69a9a02a492",
+        "patches/native-placement68.patch": "c3e8d9539a96cfa80b4fb81787012d56b7d690b111db45dd51ed0b8984f44490",
+        "native/runtime.cpp": "e270feff9df0491567e2d564ec95a64497dae6b31d67d0381d7896b626a4d531",
+        "native/generated/wasm_main.cpp": "6fe40ff3fe0aba8ccd7534bcf9778b5858162ef2d4f3e1a0dcff79353823cd95",
+        "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2"
+      },
+      "preparedUiSha256": "f75e57fd173b6aacd95c102fb8f47e856fa0c0dc83839ef2e7cbd8e4d2f648ae",
+      "testBinarySha256": "ae85d76a239fdcec3bceba48d952e4363ebc7528f59308822152da381aaa3720",
+      "baselineBinarySha256": "95835d1db43e9353b8d7cac22c60c0b89ce18dd34222f327d1e16d74e228dc85"
+    },
+    "placement-package-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 68,
+      "apkSha256": "65626d206eafb7139a8eef96cd98ce4411200d096099b8897ef325ac3f984e0f",
+      "apkBytes": 2228322,
+      "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+      "updateIdentityFromBuild67Verified": true,
+      "nativeEngineRebuilt": true,
+      "nativeEngineVersion": "1.0-build68",
+      "changedNativeAndAssetEntries": [
+        "lib/arm64-v8a/libopenbw.so",
+        "lib/arm64-v8a/libsmacker.so",
+        "lib/x86_64/libopenbw.so",
+        "lib/x86_64/libsmacker.so"
+      ],
+      "unchangedNativeAndAssetEntries": 72,
+      "gameAssetsUnchanged": true,
+      "permissionsUnchanged": true,
+      "multiplayerProtocolBuild": 60,
+      "decoderSourceUnchanged": true,
+      "decoderRebuildNote": "Same decoder source; embedded assertion path now uses the renamed stardroid project directory.",
+      "jniMethodsVerified": 38,
+      "loadAlignmentBytes": 16384,
+      "librarySha256": {
+        "arm64-v8a/libopenbw.so": "b328980a53baf4c0afe46a5f7c07ca248e3d28e09573dd8732ad9018af96e994",
+        "arm64-v8a/libsmacker.so": "44e52d6e7f4f56d7e8d6a4cedcea00553859b23af5b2d7111bfc551a236bcabf",
+        "x86_64/libopenbw.so": "38e7538c71ef2dd20f6a00160ec29d846ed966cf31e06f8457bc0e8f5c56f8fb",
+        "x86_64/libsmacker.so": "1977ed65b5f753b7ea68103dae1c7097c45b5a4478d68c65a2941d1befff75c4"
+      },
+      "lintErrors": 0,
+      "lintWarnings": 10,
+      "physicalDevicesTested": false,
+      "regressionReport": "native-placement-v1.0.json",
+      "sourceSha256": {
+        "tests/check_placement_package.py": "1c4c24621ecbbfd6d378028ca864a275776bf20d5a7d1e5f75648f297f5d017b"
+      }
+    }
+  },
+  "historicalValidationBuild69": {
+    "placement-scroll-v1.0.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
+      "version": "1.0",
+      "versionCode": 69,
+      "timing": "PASS 174467 camera checks: all directions, 30\u2013144 Hz, zoom/speed, subpixel pans, stop/reverse, stalls",
+      "output": "PASS 12971 checks, 1728 edge/zoom/control positions: always below visible preview, overlap allowed, real touch routing blocks underlying buttons/commands/minimap and the gap, drag capture, migration/persistence and three-race renders",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "d35c8c6c2b326f8da80ba3cc4a6cc16b79cee452618f01c568175799983efda2",
+        "app/src/main/java/org/openbw/androidtest/PlacementButtons.java": "230491ae1d965610c57f538d116294ccc1f6cf6d1e2b4675cd8becb70799871c",
+        "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+        "app/src/main/java/org/openbw/androidtest/CameraPan.java": "7f090d499faa180995b742cc5ffbd6f6637d834118f344737ce1c0792ff41eb2",
+        "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+        "tests/CameraPanTest.java": "1587196ff6b56701299370c501ad0409b11a96f515cd629cea96c7658791519f",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "cdf994f14653401b39b56027cc2f144b748a98fe00e6a7c46be8cff0ab9cfe89",
+        "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+        "tests/run_scroll69.py": "39979e9af497f802222bbd3340e1848d2a430fb82fdd0e8347d0f1f91518df56"
+      }
+    },
+    "native-placement-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 69,
+      "baseline": [],
+      "buildingTypes": 65,
+      "rectangleCases": 57794,
+      "ghostCases": 24960,
+      "renderedFrames": 684,
+      "scrollFrames": 384,
+      "sanitizer": "GCC AddressSanitizer, guard pages, row-padding and prefix canaries; leak detection disabled",
+      "coverage": [
+        "Indexed and RGBA outlines: exhaustive small rectangles, inverted/empty/one-pixel/extreme coordinates",
+        "All four edges, fully offscreen and full-image rectangles; tight and padded row strides",
+        "Real building sprites/footprints: blocked and valid locations, add-ons and morphs",
+        "640x480, 1280x720 and 457x343 displays at zoom 0.5, 1, 1.4 and 3",
+        "Full render path: ordinary/refinery/flying-building-plus-addon placement and edge-spanning selection",
+        "Host-owned scrolling in eight directions, four zoom levels, map limits and stationary release; no second native pan"
+      ],
+      "physicalDeviceTested": false,
+      "limitations": "Host rendering and memory checks. Samsung crash-site behavior reproduced; post-fix Android device play and the separate Vivo closure remain unverified.",
+      "sourceSha256": {
+        "tests/native_placement.cpp": "74c5165fea951bff1c43c2e4f2c26695dd1e86fbdfbe6c9210198b594ca4c0ce",
+        "tests/run_placement.py": "046a1a13db9743d850f95d12ff26518b5829c3bd766027780dbdecea52eb0242",
+        "tests/build_native_host.py": "f4419428f997263adccd32f0043e44118c2da709d60f0e140029653fa8ab02ea",
+        "scripts/prepare_native.py": "422effbd9d613be6154cc87de7bd82ebf03990316737dd6fb3c9d9191e314426",
+        "patches/native-placement68.patch": "c3e8d9539a96cfa80b4fb81787012d56b7d690b111db45dd51ed0b8984f44490",
+        "patches/native-scroll69.patch": "4d484a750edf2c82b7bf45a37fef12a278d8cf6a032f5efe5a1f91829337758a",
+        "native/runtime.cpp": "386659ba536445e5ef89df66f674e6dd46ac18ec73059922f93e2b6e0a1f3c5c",
+        "native/generated/wasm_main.cpp": "6fe40ff3fe0aba8ccd7534bcf9778b5858162ef2d4f3e1a0dcff79353823cd95",
+        "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2"
+      },
+      "preparedUiSha256": "f75e57fd173b6aacd95c102fb8f47e856fa0c0dc83839ef2e7cbd8e4d2f648ae",
+      "testBinarySha256": "6d4d5acab5c27248c7d5b3458f986b6af3e334d669fb43d42d7fc709a54b230b"
+    },
+    "placement-package-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 69,
+      "apkSha256": "5921763e34e195755b4ac417a6aea291aa7270b2c8a62d7f833e5f8a4cecd3a4",
+      "apkBytes": 2229582,
+      "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+      "updateIdentityFromBuild68Verified": true,
+      "nativeEngineRebuilt": true,
+      "nativeEngineVersion": "1.0-build69",
+      "changedNativeAndAssetEntries": [
+        "lib/arm64-v8a/libopenbw.so",
+        "lib/x86_64/libopenbw.so"
+      ],
+      "unchangedNativeAndAssetEntries": 74,
+      "gameAssetsUnchanged": true,
+      "permissionsUnchanged": true,
+      "multiplayerProtocolBuild": 60,
+      "decoderSourceUnchanged": true,
+      "decoderBinariesUnchanged": true,
+      "jniMethodsVerified": 38,
+      "loadAlignmentBytes": 16384,
+      "librarySha256": {
+        "arm64-v8a/libopenbw.so": "2bf5e4b09e205b5b89ce11e96777a270305d9751122155ad40161186aaad9491",
+        "arm64-v8a/libsmacker.so": "44e52d6e7f4f56d7e8d6a4cedcea00553859b23af5b2d7111bfc551a236bcabf",
+        "x86_64/libopenbw.so": "783cb502b72e5622f80fb0858d0d8f64b9daf2558821ed74c9dd1272f78965ac",
+        "x86_64/libsmacker.so": "1977ed65b5f753b7ea68103dae1c7097c45b5a4478d68c65a2941d1befff75c4"
+      },
+      "lintErrors": 0,
+      "lintWarnings": 10,
+      "physicalDevicesTested": false,
+      "regressionReports": [
+        "native-placement-v1.0.json",
+        "placement-scroll-v1.0.json"
+      ],
+      "sourceSha256": {
+        "tests/check_placement_package.py": "c84f1d3da29b604021ef1c67588595bf1b82021842618f3d100c233d535f4e7d"
+      }
+    }
+  },
+  "validation": {
+    "placement-scroll-v1.0.json": {
+      "passed": true,
+      "physicalAndroid": false,
+      "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
+      "version": "1.0",
+      "versionCode": 70,
+      "timing": "PASS 178077 camera checks: all directions, 30\u2013144 Hz, zoom/speed, subpixel pans, stop/reverse, stalls",
+      "output": "PASS 13116 checks, 1728 edge/zoom/control positions: always below visible preview, overlap allowed, real touch routing blocks underlying buttons/commands/minimap and the gap, drag capture, migration/persistence and three-race renders",
+      "sourceSha256": {
+        "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+        "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "5a63c15d7eb2545f4ca1902bac43a196557d7515ed742211a7cd75b8b252d3b7",
+        "app/src/main/java/org/openbw/androidtest/PlacementButtons.java": "230491ae1d965610c57f538d116294ccc1f6cf6d1e2b4675cd8becb70799871c",
+        "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+        "app/src/main/java/org/openbw/androidtest/CameraPan.java": "4ffff04674daa6935e9371e9040321b7823c3fb434dab84b2bd37d417d4a6871",
+        "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+        "tests/CameraPanTest.java": "c3db9edd95a08cdbab0ba4dd8a767b4af21053c6a89ed0e35ae64be35b398915",
+        "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "0f2907f6c8e645abbce433ddfdc1723112f594067d38033d9e4378ac150a6e97",
+        "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+        "tests/run_scroll70.py": "3db4096bedc98dc7aa7ea7ee9ac6e8e498dc0e8535e7c135545e10e28c28f223"
+      }
+    },
+    "placement-package-v1.0.json": {
+      "passed": true,
+      "version": "1.0",
+      "versionCode": 70,
+      "apkSha256": "592b57427b6f91cc4e80add4f08d92c34f1af90130564f0740401106f0218e58",
+      "apkBytes": 2229970,
+      "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+      "updateIdentityFromBuild69Verified": true,
+      "nativeEngineRebuilt": false,
+      "nativeEngineVersion": "1.0-build69",
+      "changedNativeAndAssetEntries": [],
+      "unchangedNativeAndAssetEntries": 76,
+      "gameAssetsUnchanged": true,
+      "permissionsUnchanged": true,
+      "multiplayerProtocolBuild": 60,
+      "decoderSourceUnchanged": true,
+      "decoderBinariesUnchanged": true,
+      "jniMethodsVerified": 38,
+      "loadAlignmentBytes": 16384,
+      "librarySha256": {
+        "arm64-v8a/libopenbw.so": "2bf5e4b09e205b5b89ce11e96777a270305d9751122155ad40161186aaad9491",
+        "arm64-v8a/libsmacker.so": "44e52d6e7f4f56d7e8d6a4cedcea00553859b23af5b2d7111bfc551a236bcabf",
+        "x86_64/libopenbw.so": "783cb502b72e5622f80fb0858d0d8f64b9daf2558821ed74c9dd1272f78965ac",
+        "x86_64/libsmacker.so": "1977ed65b5f753b7ea68103dae1c7097c45b5a4478d68c65a2941d1befff75c4"
+      },
+      "lintErrors": 0,
+      "lintWarnings": 10,
+      "physicalDevicesTested": false,
+      "regressionReports": [
+        "placement-scroll-v1.0.json"
+      ],
+      "retainedNativeMemoryReport": "native-placement-v1.0.json",
+      "retainedNativeMemoryReportBuild": 69,
+      "sourceSha256": {
+        "tests/check_scroll70_package.py": "978a91ab428a6f9e0385fd05007cd12a66adf7049c7a34af3a5baf36428d2722"
+      }
+    }
+  }
+}

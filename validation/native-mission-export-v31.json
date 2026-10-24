@@ -1,0 +1,23 @@
+{
+  "apkSha256": "b3fbb865781457836db94062a652257c9eda3393c3818db5d77d85d05ffa2816",
+  "testApkSha256": "357cb61842e589b4328b6aaa97ae2f44f0c7d513124081f81a2b598655e380ab",
+  "version": "0.31",
+  "android": "9",
+  "abi": "x86_64",
+  "originalGameAssets": false,
+  "emptyExportRejected": true,
+  "exportedMaps": 64,
+  "allMapsExportBytes": 584549,
+  "all64MapsRoundTripWithOriginalMetadata": true,
+  "voicesAndUnrelatedFilesExcluded": true,
+  "installedMissionsUnchanged": true,
+  "partialInstallExportsAvailableMaps": true,
+  "corruptMissionRejectedAndTemporaryFilesRemoved": true,
+  "savePickerLaunchAndCancellation": true,
+  "activityWritesSelectedDestinationAndReportsSuccess": true,
+  "passed": true,
+  "emulator": "37.2.12",
+  "acceleration": false,
+  "physicalDeviceTested": false,
+  "notes": "Synthetic MPQs for all 64 catalog missions. Save-dialog launch/cancel is intercepted by instrumentation; destination writing uses an app-owned file URI. Native libraries are retained byte-for-byte from 0.30."
+}

@@ -1,0 +1,7 @@
+Failed to load resource: the server responded with a status of 404 (Not Found)
+BEFORE {"tile":[7,4],"worker":{"id":3740,"name":"SCV","owner":1,"x":126,"y":150,"order":30},"status":"0\tSupply Depot","frame":811}
+AFTER CANCEL {
+  status: '0\tSupply Depot',
+  worker: { id: 3740, name: 'SCV', owner: 1, x: 126, y: 149, order: 30 }
+}
+PASS: canceled construction, simulation continued, SCV rebuilt depot successfully.

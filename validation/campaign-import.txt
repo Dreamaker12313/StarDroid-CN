@@ -1,0 +1,2 @@
+Mission import and every served entry match uploaded ZIP; unsafe path rejected.
+Rejected: This is not a Mission 1 export.

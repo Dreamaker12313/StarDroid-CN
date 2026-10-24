@@ -1,0 +1,15 @@
+{
+  "runtime": "native desktop C++ using the same simulation, mixer and decoder sources as Android",
+  "passed": true,
+  "checks": [
+    "Zerg 2 Lair command visibility and completed morph through native command stream",
+    "Mission-available Mutalisk disabled without a Spire",
+    "Drone Egg target identity and icon",
+    "Young Chrysalis without placeholder armor details",
+    "Extractor placement and completed HP/gas display",
+    "Victory WAV produces 95990 nonzero samples",
+    "Introduction decodes 320x308, 2082 frames; first five seconds produce 479581 nonzero samples"
+  ],
+  "limitations": "Controlled commands, resources and instant production; not a physical Android test.",
+  "log": "openbw_init: map 'Z2) Egression' 3072x3072, slot 3 of 1, units=17, fog_player=3\nNATIVE_CONTROLS_OK Lair, disabled technology, Egg target, Chrysalis, Extractor placement/HP/gas, audible victory (95990 nonzero samples)\nNATIVE_MEDIA_OK 320x308 / 2082 frames / 479581 audible samples\n"
+}

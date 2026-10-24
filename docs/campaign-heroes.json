@@ -1,0 +1,1174 @@
+{
+  "scope": "Hero Mode roster: six forms per race, with Edmund Duke in his Siege Tank replacing Norad II. Raynor and Fenix each occupy separate slots for their distinct forms.",
+  "stats": "Stock Brood War data before player upgrades. Intrinsic Fenix range and Devouring One attack-speed upgrade are included. Cooldown is nominal before the engine’s random variation and animation timing. Starting HP, campaign upgrades and map overrides can change in-mission values. Hero DAT costs are editor defaults, not actual build prices.",
+  "pricing": "Hero Mode cost = regular unit cost × estimated equivalent-unit count × 2/3, rounded to the nearest 5 resources. Raynor Marine: 50 × 3 × 2/3 = 100 minerals, 0 gas. Equivalents mostly follow weapon output; casters and Carrier hulls use the stated role estimates. Extra durability does not add another premium. These are deliberately discounted starting prices, not measured multiplayer balance. One living unit of each form per player; normal counterpart supply; rebuilding after death allowed. Enabled only in optional Hero Mode for custom and multiplayer games. Queued heroes reserve their limit across every producer. Trained at Engineering Bays, Evolution Chambers and Forges; upgrades share their production time. Infested Duran requires a Lair/Hive and Hydralisk Den; Infested Kerrigan requires a Hive and Queen’s Nest. Other heroes require the counterpart’s production/tech buildings. Tassadar and Zeratul merge into the original hero Archon, reserving both slots until it dies. The Archon uses four supply and has 100 HP, 800 shields, 3 armor and 60 ground/air damage before upgrades.",
+  "sourceSha256": {
+    "units.dat": "da2ee6f116b77329048ec6be9e02721a527fde23d4b05b1b1336e634490abcba",
+    "weapons.dat": "80de165015519f9bed46ea8858195c2d2d0120b65b9e55e1c0a50b19135f4b62"
+  },
+  "campaignScenariosInspected": 64,
+  "exclusions": "This chart defines optional Hero Mode, not the set of directly playable stock campaign units. Duke Tank, Torrasque, Devouring One and Kukulza are added editor/enemy forms. Campaign units and prices are unchanged.",
+  "rows": [
+    {
+      "name": "Jim Raynor — Marine",
+      "hero": {
+        "unitId": 20,
+        "name": "Jim Raynor",
+        "hp": 200,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 50,
+        "costGas": 0,
+        "ground": {
+          "damage": 18,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 5.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 18,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 5.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "base": {
+        "unitId": 0,
+        "name": "Terran Marine",
+        "hp": 40,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 1.0,
+        "costMinerals": 50,
+        "costGas": 0,
+        "ground": {
+          "damage": 6,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 4.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 6,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 4.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "proposedMinerals": 100,
+      "proposedGas": 0,
+      "proposedSupply": 1.0,
+      "notes": "Stim Packs; longer base range.",
+      "campaignExample": "The Jacobs Installation",
+      "campaignFile": "terran04",
+      "observedHumanOrRescueMissions": [
+        "terran04"
+      ],
+      "race": "Terran",
+      "equivalentUnits": 3,
+      "priceBasis": "Three Marine damage equivalents; your 100-mineral anchor. His 200 HP and 3 armor are extra hero value, not additional charges.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Jim Raynor — Vulture",
+      "hero": {
+        "unitId": 19,
+        "name": "Jim Raynor",
+        "hp": 300,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 8,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 150,
+        "costGas": 0,
+        "ground": {
+          "damage": 30,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 5.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 2
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 2,
+        "name": "Terran Vulture",
+        "hp": 80,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 8,
+        "energy": 0,
+        "supply": 2.0,
+        "costMinerals": 75,
+        "costGas": 0,
+        "ground": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 5.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 2
+        },
+        "air": null
+      },
+      "proposedMinerals": 100,
+      "proposedGas": 0,
+      "proposedSupply": 2.0,
+      "notes": "Spider Mines; faster attack cycle.",
+      "campaignExample": "Wasteland",
+      "campaignFile": "terran01",
+      "observedHumanOrRescueMissions": [
+        "terran01",
+        "terran02",
+        "terran05",
+        "terran06",
+        "terran12"
+      ],
+      "race": "Terran",
+      "equivalentUnits": 2,
+      "priceBasis": "About two Vultures in sustained weapon output, helped by the shorter cooldown.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Sarah Kerrigan — Ghost",
+      "hero": {
+        "unitId": 16,
+        "name": "Sarah Kerrigan",
+        "hp": 250,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 11,
+        "energy": 250,
+        "supply": 0.0,
+        "costMinerals": 50,
+        "costGas": 150,
+        "ground": {
+          "damage": 30,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 30,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "base": {
+        "unitId": 1,
+        "name": "Terran Ghost",
+        "hp": 45,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 9,
+        "energy": 200,
+        "supply": 1.0,
+        "costMinerals": 25,
+        "costGas": 75,
+        "ground": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "proposedMinerals": 50,
+      "proposedGas": 150,
+      "proposedSupply": 1.0,
+      "notes": "Cloaking and Lockdown; 250 energy.",
+      "campaignExample": "Revolution",
+      "campaignFile": "terran05",
+      "observedHumanOrRescueMissions": [
+        "terran05",
+        "terran08",
+        "terran11"
+      ],
+      "race": "Terran",
+      "equivalentUnits": 3,
+      "priceBasis": "Three Ghost weapon equivalents; hero energy and durability are included in the discount.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Hyperion",
+      "hero": {
+        "unitId": 28,
+        "name": "Hyperion",
+        "hp": 850,
+        "shields": 0,
+        "armor": 4,
+        "sightTiles": 11,
+        "energy": 250,
+        "supply": 0.0,
+        "costMinerals": 800,
+        "costGas": 600,
+        "ground": {
+          "damage": 30,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 3
+        },
+        "air": {
+          "damage": 30,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 3
+        }
+      },
+      "base": {
+        "unitId": 12,
+        "name": "Terran Battlecruiser",
+        "hp": 500,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 11,
+        "energy": 200,
+        "supply": 6.0,
+        "costMinerals": 400,
+        "costGas": 300,
+        "ground": {
+          "damage": 25,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 6.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 3
+        },
+        "air": {
+          "damage": 25,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 6.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 3
+        }
+      },
+      "proposedMinerals": 465,
+      "proposedGas": 350,
+      "proposedSupply": 6.0,
+      "notes": "Yamato Gun; faster attack cycle.",
+      "campaignExample": "The Trial of Tassadar",
+      "campaignFile": "protoss08",
+      "observedHumanOrRescueMissions": [
+        "protoss08"
+      ],
+      "race": "Terran",
+      "equivalentUnits": 1.75,
+      "priceBasis": "About 1.75 Battlecruisers, combining faster firing with higher durability.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Edmund Duke — Siege Tank",
+      "hero": {
+        "unitId": 23,
+        "name": "Edmund Duke",
+        "hp": 400,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 10,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 300,
+        "costGas": 200,
+        "ground": {
+          "damage": 70,
+          "hits": 1,
+          "cooldownFrames": 37,
+          "rangeTiles": 7.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 3
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 5,
+        "name": "Terran Siege Tank",
+        "hp": 150,
+        "shields": 0,
+        "armor": 1,
+        "sightTiles": 10,
+        "energy": 0,
+        "supply": 2.0,
+        "costMinerals": 150,
+        "costGas": 100,
+        "ground": {
+          "damage": 30,
+          "hits": 1,
+          "cooldownFrames": 37,
+          "rangeTiles": 7.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 3
+        },
+        "air": null
+      },
+      "proposedMinerals": 225,
+      "proposedGas": 150,
+      "proposedSupply": 2.0,
+      "notes": "Starts in Tank Mode and can siege. Tank Mode: 70 explosive damage, cooldown 37, range 7. Siege Mode: 150 explosive damage, cooldown 75, range 12 with minimum range and splash; normal Siege Tank: 70 damage. Both Duke modes share one hero limit and cost. 400 HP and 3 armor.",
+      "campaignExample": "Editor hero replacing Norad II in Hero Mode",
+      "campaignFile": "",
+      "observedHumanOrRescueMissions": [],
+      "race": "Terran",
+      "equivalentUnits": 2.25,
+      "priceBasis": "2.25 Siege Tank equivalents, between 70/30 tank-mode and 150/70 siege-mode damage ratios, discounted by one third.",
+      "suggestedAddition": true
+    },
+    {
+      "name": "Samir Duran",
+      "hero": {
+        "unitId": 99,
+        "name": "Samir Duran",
+        "hp": 200,
+        "shields": 0,
+        "armor": 2,
+        "sightTiles": 10,
+        "energy": 250,
+        "supply": 0.0,
+        "costMinerals": 200,
+        "costGas": 75,
+        "ground": {
+          "damage": 25,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 25,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "base": {
+        "unitId": 1,
+        "name": "Terran Ghost",
+        "hp": 45,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 9,
+        "energy": 200,
+        "supply": 1.0,
+        "costMinerals": 25,
+        "costGas": 75,
+        "ground": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "proposedMinerals": 40,
+      "proposedGas": 125,
+      "proposedSupply": 1.0,
+      "notes": "Cloaking and Lockdown; 250 energy.",
+      "campaignExample": "First Strike",
+      "campaignFile": "expterran01",
+      "observedHumanOrRescueMissions": [
+        "expterran01"
+      ],
+      "race": "Terran",
+      "equivalentUnits": 2.5,
+      "priceBasis": "2.5 Ghosts by weapon damage; same pricing rule as Infested Duran.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Infested Duran",
+      "hero": {
+        "unitId": 104,
+        "name": "Infested Duran",
+        "hp": 300,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 11,
+        "energy": 250,
+        "supply": 0.0,
+        "costMinerals": 200,
+        "costGas": 75,
+        "ground": {
+          "damage": 25,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 25,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "base": {
+        "unitId": 1,
+        "name": "Terran Ghost",
+        "hp": 45,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 9,
+        "energy": 200,
+        "supply": 1.0,
+        "costMinerals": 25,
+        "costGas": 75,
+        "ground": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "proposedMinerals": 40,
+      "proposedGas": 125,
+      "proposedSupply": 1.0,
+      "notes": "Ghost-derived infested hero, with Zerg regeneration and cloak.",
+      "campaignExample": "Drawing of the Web",
+      "campaignFile": "expzerg07",
+      "observedHumanOrRescueMissions": [
+        "expzerg07"
+      ],
+      "race": "Zerg",
+      "equivalentUnits": 2.5,
+      "priceBasis": "2.5 Ghosts by weapon damage; added HP receives no separate premium.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Infested Kerrigan",
+      "hero": {
+        "unitId": 51,
+        "name": "Infested Kerrigan",
+        "hp": 400,
+        "shields": 0,
+        "armor": 2,
+        "sightTiles": 9,
+        "energy": 250,
+        "supply": 0.0,
+        "costMinerals": 200,
+        "costGas": 300,
+        "ground": {
+          "damage": 50,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 0.46875,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 1,
+        "name": "Terran Ghost",
+        "hp": 45,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 9,
+        "energy": 200,
+        "supply": 1.0,
+        "costMinerals": 25,
+        "costGas": 75,
+        "ground": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 7.0,
+          "damageType": "Concussive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "proposedMinerals": 100,
+      "proposedGas": 300,
+      "proposedSupply": 1.0,
+      "notes": "Unique melee/caster hero; Ghost is an origin comparison, not an equivalent. Cloak, Psionic Storm, Ensnare and Consume.",
+      "campaignExample": "The Amerigo",
+      "campaignFile": "zerg05",
+      "observedHumanOrRescueMissions": [
+        "zerg05",
+        "zerg06",
+        "zerg08"
+      ],
+      "race": "Zerg",
+      "equivalentUnits": 6,
+      "priceBasis": "Six Ghost-cost equivalents as a spell-and-melee budget, not a DPS equality. Her unique kit has no faithful regular-unit equivalent; this is the most uncertain estimate.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Hunter Killer",
+      "hero": {
+        "unitId": 53,
+        "name": "Hunter Killer",
+        "hp": 160,
+        "shields": 0,
+        "armor": 2,
+        "sightTiles": 8,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 150,
+        "costGas": 50,
+        "ground": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 5.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 5.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "base": {
+        "unitId": 38,
+        "name": "Zerg Hydralisk",
+        "hp": 80,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 6,
+        "energy": 0,
+        "supply": 1.0,
+        "costMinerals": 75,
+        "costGas": 25,
+        "ground": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 4.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 4.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "proposedMinerals": 100,
+      "proposedGas": 35,
+      "proposedSupply": 1.0,
+      "notes": "Hydralisk hero strain; faster movement and longer base range. The campaign can provide several; proposed build rule permits only one.",
+      "campaignExample": "Egression",
+      "campaignFile": "zerg02",
+      "observedHumanOrRescueMissions": [
+        "expzerg01",
+        "zerg02",
+        "zerg05"
+      ],
+      "race": "Zerg",
+      "equivalentUnits": 2,
+      "priceBasis": "Two Hydralisks by damage and HP; intrinsic mobility is included.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Torrasque",
+      "hero": {
+        "unitId": 48,
+        "name": "Torrasque",
+        "hp": 800,
+        "shields": 0,
+        "armor": 4,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 400,
+        "costGas": 400,
+        "ground": {
+          "damage": 50,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 0.78125,
+          "damageType": "Normal"
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 39,
+        "name": "Zerg Ultralisk",
+        "hp": 400,
+        "shields": 0,
+        "armor": 1,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 4.0,
+        "costMinerals": 200,
+        "costGas": 200,
+        "ground": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 15,
+          "rangeTiles": 0.78125,
+          "damageType": "Normal"
+        },
+        "air": null
+      },
+      "proposedMinerals": 335,
+      "proposedGas": 335,
+      "proposedSupply": 4.0,
+      "notes": "Suggested heavy melee hero. 800 HP, 50 melee damage and 4 base armor. Chitinous Plating adds 2 if researched; campaign versions may start with upgrades. It is an enemy campaign hero, not normally directly playable.",
+      "campaignExample": "Suggested addition; not part of the directly playable campaign roster",
+      "campaignFile": "",
+      "observedHumanOrRescueMissions": [],
+      "suggestedAddition": true,
+      "race": "Zerg",
+      "equivalentUnits": 2.5,
+      "priceBasis": "2.5 Ultralisks by melee damage; extra armor and HP are included."
+    },
+    {
+      "name": "Devouring One",
+      "hero": {
+        "unitId": 54,
+        "name": "Devouring One",
+        "hp": 120,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 5,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 100,
+        "costGas": 0,
+        "ground": {
+          "damage": 10,
+          "hits": 1,
+          "cooldownFrames": 5,
+          "rangeTiles": 0.46875,
+          "damageType": "Normal"
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 37,
+        "name": "Zerg Zergling",
+        "hp": 35,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 5,
+        "energy": 0,
+        "supply": 0.5,
+        "costMinerals": 25,
+        "costGas": 0,
+        "ground": {
+          "damage": 5,
+          "hits": 1,
+          "cooldownFrames": 8,
+          "rangeTiles": 0.46875,
+          "damageType": "Normal"
+        },
+        "air": null
+      },
+      "proposedMinerals": 50,
+      "proposedGas": 0,
+      "proposedSupply": 0.5,
+      "notes": "Suggested fast melee hero. Intrinsic Adrenal attack speed gives a nominal 5-frame cooldown versus 8 for an unupgraded Zergling, before attack randomization/animation. A Zergling costs 25 minerals per individual: 50 buys an egg containing two. This proposal buys one Devouring One, not a pair. Editor hero, not a directly playable campaign hero.",
+      "campaignExample": "Suggested addition; not part of the directly playable campaign roster",
+      "campaignFile": "",
+      "observedHumanOrRescueMissions": [],
+      "suggestedAddition": true,
+      "race": "Zerg",
+      "equivalentUnits": 3,
+      "priceBasis": "About three unupgraded Zerglings in sustained melee output, including intrinsic attack speed."
+    },
+    {
+      "name": "Kukulza — Mutalisk",
+      "hero": {
+        "unitId": 55,
+        "name": "Kukulza",
+        "hp": 300,
+        "shields": 0,
+        "armor": 3,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 200,
+        "costGas": 200,
+        "ground": {
+          "damage": 18,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 3.0,
+          "damageType": "Normal"
+        },
+        "air": {
+          "damage": 18,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 3.0,
+          "damageType": "Normal"
+        }
+      },
+      "base": {
+        "unitId": 43,
+        "name": "Zerg Mutalisk",
+        "hp": 120,
+        "shields": 0,
+        "armor": 0,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 2.0,
+        "costMinerals": 100,
+        "costGas": 100,
+        "ground": {
+          "damage": 9,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 3.0,
+          "damageType": "Normal"
+        },
+        "air": {
+          "damage": 9,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 3.0,
+          "damageType": "Normal"
+        }
+      },
+      "proposedMinerals": 135,
+      "proposedGas": 135,
+      "proposedSupply": 2.0,
+      "notes": "Suggested flying hero. 18 primary-target damage, then 6 and 2 on the two bounces; a regular Mutalisk deals 9, 3 and 1. This is the Mutalisk form, not Kukulza’s Guardian form. Editor hero, not a directly playable campaign hero.",
+      "campaignExample": "Suggested addition; not part of the directly playable campaign roster",
+      "campaignFile": "",
+      "observedHumanOrRescueMissions": [],
+      "suggestedAddition": true,
+      "race": "Zerg",
+      "equivalentUnits": 2,
+      "priceBasis": "Two Mutalisks by damage on every bounce; extra HP and armor are included."
+    },
+    {
+      "name": "Fenix — Zealot",
+      "hero": {
+        "unitId": 77,
+        "name": "Fenix",
+        "hp": 240,
+        "shields": 240,
+        "armor": 2,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 200,
+        "costGas": 0,
+        "ground": {
+          "damage": 20,
+          "hits": 2,
+          "cooldownFrames": 22,
+          "rangeTiles": 0.46875,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 65,
+        "name": "Protoss Zealot",
+        "hp": 100,
+        "shields": 60,
+        "armor": 1,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 2.0,
+        "costMinerals": 100,
+        "costGas": 0,
+        "ground": {
+          "damage": 8,
+          "hits": 2,
+          "cooldownFrames": 22,
+          "rangeTiles": 0.46875,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": null
+      },
+      "proposedMinerals": 165,
+      "proposedGas": 0,
+      "proposedSupply": 2.0,
+      "notes": "Two hits per attack; enhanced movement.",
+      "campaignExample": "First Strike",
+      "campaignFile": "protoss01",
+      "observedHumanOrRescueMissions": [
+        "protoss01"
+      ],
+      "race": "Protoss",
+      "equivalentUnits": 2.5,
+      "priceBasis": "2.5 Zealots by melee damage, with no separate durability premium.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Fenix — Dragoon",
+      "hero": {
+        "unitId": 78,
+        "name": "Fenix",
+        "hp": 240,
+        "shields": 240,
+        "armor": 3,
+        "sightTiles": 8,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 300,
+        "costGas": 100,
+        "ground": {
+          "damage": 45,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 2
+        },
+        "air": {
+          "damage": 45,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 6.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 2
+        }
+      },
+      "base": {
+        "unitId": 66,
+        "name": "Protoss Dragoon",
+        "hp": 100,
+        "shields": 80,
+        "armor": 1,
+        "sightTiles": 8,
+        "energy": 0,
+        "supply": 2.0,
+        "costMinerals": 125,
+        "costGas": 50,
+        "ground": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 4.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 2
+        },
+        "air": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 4.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 2
+        }
+      },
+      "proposedMinerals": 250,
+      "proposedGas": 100,
+      "proposedSupply": 2.0,
+      "notes": "Faster attack cycle and intrinsic six-tile range.",
+      "campaignExample": "Homeland",
+      "campaignFile": "protoss07",
+      "observedHumanOrRescueMissions": [
+        "expzerg03",
+        "protoss07",
+        "protoss09"
+      ],
+      "race": "Protoss",
+      "equivalentUnits": 3,
+      "priceBasis": "About three Dragoons in sustained fire; longer intrinsic range and durability are included.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Zeratul",
+      "hero": {
+        "unitId": 75,
+        "name": "Zeratul",
+        "hp": 60,
+        "shields": 400,
+        "armor": 0,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 100,
+        "costGas": 300,
+        "ground": {
+          "damage": 100,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 0.46875,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 61,
+        "name": "Protoss Dark Templar",
+        "hp": 80,
+        "shields": 40,
+        "armor": 1,
+        "sightTiles": 7,
+        "energy": 0,
+        "supply": 2.0,
+        "costMinerals": 125,
+        "costGas": 100,
+        "ground": {
+          "damage": 40,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 0.46875,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 3
+        },
+        "air": null
+      },
+      "proposedMinerals": 290,
+      "proposedGas": 235,
+      "proposedSupply": 2.0,
+      "notes": "Permanent cloak; stronger and faster melee attack. Compares against the buildable Brood War Dark Templar.",
+      "campaignExample": "Into the Darkness",
+      "campaignFile": "protoss06",
+      "observedHumanOrRescueMissions": [
+        "expprotoss01",
+        "expprotoss08",
+        "protoss06",
+        "protoss07",
+        "protoss09",
+        "protoss10"
+      ],
+      "race": "Protoss",
+      "equivalentUnits": 3.5,
+      "priceBasis": "About 3.5 Dark Templars in sustained melee damage; concentrated shields are included.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Tassadar",
+      "hero": {
+        "unitId": 79,
+        "name": "Tassadar",
+        "hp": 80,
+        "shields": 300,
+        "armor": 2,
+        "sightTiles": 7,
+        "energy": 250,
+        "supply": 0.0,
+        "costMinerals": 100,
+        "costGas": 300,
+        "ground": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 22,
+          "rangeTiles": 3.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": null
+      },
+      "base": {
+        "unitId": 67,
+        "name": "Protoss High Templar",
+        "hp": 40,
+        "shields": 40,
+        "armor": 0,
+        "sightTiles": 7,
+        "energy": 200,
+        "supply": 2.0,
+        "costMinerals": 50,
+        "costGas": 150,
+        "ground": null,
+        "air": null
+      },
+      "proposedMinerals": 65,
+      "proposedGas": 200,
+      "proposedSupply": 2.0,
+      "notes": "Psionic Storm, Hallucination, 250 energy and a ground attack; ordinary High Templars have no weapon.",
+      "campaignExample": "The Hunt for Tassadar",
+      "campaignFile": "protoss04",
+      "observedHumanOrRescueMissions": [
+        "protoss04",
+        "protoss05",
+        "protoss06",
+        "protoss07"
+      ],
+      "race": "Protoss",
+      "equivalentUnits": 2,
+      "priceBasis": "Two High Templars as a caster budget. Energy, durability and his unique attack do not produce an exact caster equivalence.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Gantrithor",
+      "hero": {
+        "unitId": 82,
+        "name": "Gantrithor",
+        "hp": 800,
+        "shields": 500,
+        "armor": 4,
+        "sightTiles": 9,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 700,
+        "costGas": 600,
+        "ground": null,
+        "air": null
+      },
+      "base": {
+        "unitId": 72,
+        "name": "Protoss Carrier",
+        "hp": 300,
+        "shields": 150,
+        "armor": 4,
+        "sightTiles": 11,
+        "energy": 0,
+        "supply": 6.0,
+        "costMinerals": 350,
+        "costGas": 250,
+        "ground": null,
+        "air": null
+      },
+      "proposedMinerals": 465,
+      "proposedGas": 335,
+      "proposedSupply": 6.0,
+      "notes": "Eight Interceptors without a capacity upgrade; Interceptors cost 25 minerals each, in addition to the proposed hull cost.",
+      "campaignExample": "Eye of the Storm",
+      "campaignFile": "protoss10",
+      "observedHumanOrRescueMissions": [
+        "protoss10"
+      ],
+      "race": "Protoss",
+      "equivalentUnits": 2,
+      "priceBasis": "Two Carrier hull-cost equivalents for greater durability and built-in capacity. This is not a claim of twice an upgraded Carrier’s DPS. Interceptors remain 25 minerals each.",
+      "suggestedAddition": false
+    },
+    {
+      "name": "Artanis",
+      "hero": {
+        "unitId": 88,
+        "name": "Artanis",
+        "hp": 250,
+        "shields": 250,
+        "armor": 3,
+        "sightTiles": 10,
+        "energy": 0,
+        "supply": 0.0,
+        "costMinerals": 600,
+        "costGas": 300,
+        "ground": {
+          "damage": 20,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 4.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 28,
+          "hits": 2,
+          "cooldownFrames": 22,
+          "rangeTiles": 4.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "base": {
+        "unitId": 70,
+        "name": "Protoss Scout",
+        "hp": 150,
+        "shields": 100,
+        "armor": 0,
+        "sightTiles": 8,
+        "energy": 0,
+        "supply": 3.0,
+        "costMinerals": 275,
+        "costGas": 125,
+        "ground": {
+          "damage": 8,
+          "hits": 1,
+          "cooldownFrames": 30,
+          "rangeTiles": 4.0,
+          "damageType": "Normal",
+          "bonusPerUpgrade": 1
+        },
+        "air": {
+          "damage": 14,
+          "hits": 2,
+          "cooldownFrames": 22,
+          "rangeTiles": 4.0,
+          "damageType": "Explosive",
+          "bonusPerUpgrade": 1
+        }
+      },
+      "proposedMinerals": 415,
+      "proposedGas": 190,
+      "proposedSupply": 3.0,
+      "notes": "Enhanced Scout movement; two anti-air missiles per attack.",
+      "campaignExample": "The Battle of Braxis",
+      "campaignFile": "expprotoss05",
+      "observedHumanOrRescueMissions": [
+        "expprotoss05",
+        "expprotoss08"
+      ],
+      "race": "Protoss",
+      "equivalentUnits": 2.25,
+      "priceBasis": "2.25 Scouts between his 2× air and 2.5× ground damage ratios; faster movement and HP/shields are included.",
+      "suggestedAddition": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "package": "org.openbw.androidtest",
+  "versionName": "0.20",
+  "versionCode": 21,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "apkSha256": "33ac0e6fd7e4a73273ac8fbd3946d15041f126a1f160720bb0d498d9bc56d2c4",
+  "apkBytes": 3662502,
+  "zipCRC": true,
+  "packagedAssetsCompared": 59,
+  "assetByteMatch": true,
+  "hardwareTested": false
+}

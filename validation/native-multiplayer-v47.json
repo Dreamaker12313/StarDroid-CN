@@ -1,0 +1,85 @@
+{
+  "version": "0.47",
+  "nearbyRadioTested": false,
+  "physicalPhoneTested": false,
+  "cases": [
+    {
+      "races": [
+        0,
+        1
+      ],
+      "expansion": false,
+      "frames": 7200,
+      "checkpoints": 1801,
+      "sameState": true,
+      "traceSha256": "9390df1d5b527fc5de523d90d4d831b225186fa30ba69af9d8a92b851ae37078",
+      "transferredMapOnGuest": true
+    },
+    {
+      "races": [
+        0,
+        1
+      ],
+      "expansion": true,
+      "frames": 7200,
+      "checkpoints": 1801,
+      "sameState": true,
+      "traceSha256": "9390df1d5b527fc5de523d90d4d831b225186fa30ba69af9d8a92b851ae37078",
+      "transferredMapOnGuest": true
+    },
+    {
+      "races": [
+        1,
+        2
+      ],
+      "expansion": false,
+      "frames": 7200,
+      "checkpoints": 1801,
+      "sameState": true,
+      "traceSha256": "371655db73bbcff05afdc5c41a7106ec9c6a88164ce8c2d55af7f3bf065a2c73",
+      "transferredMapOnGuest": true
+    },
+    {
+      "races": [
+        1,
+        2
+      ],
+      "expansion": true,
+      "frames": 7200,
+      "checkpoints": 1801,
+      "sameState": true,
+      "traceSha256": "371655db73bbcff05afdc5c41a7106ec9c6a88164ce8c2d55af7f3bf065a2c73",
+      "transferredMapOnGuest": true
+    },
+    {
+      "races": [
+        2,
+        0
+      ],
+      "expansion": false,
+      "frames": 7200,
+      "checkpoints": 1801,
+      "sameState": true,
+      "traceSha256": "3499ef654a7957fc1918dd897731cbb335bb4d6aea03bf2f25be7e9dfe093821",
+      "transferredMapOnGuest": true
+    },
+    {
+      "races": [
+        2,
+        0
+      ],
+      "expansion": true,
+      "frames": 7200,
+      "checkpoints": 1801,
+      "sameState": true,
+      "traceSha256": "3499ef654a7957fc1918dd897731cbb335bb4d6aea03bf2f25be7e9dfe093821",
+      "transferredMapOnGuest": true
+    }
+  ],
+  "passed": true,
+  "sourceSha256": {
+    "native/runtime.cpp": "2dfbe175904c5c9e2c29e5ed7d2bcac30237f65c71f8f835120563f967731aa5",
+    "native/multiplayer.h": "d2afbc707c975ffe5d3bf02c78e43940777f3cef9e25c420e9344ba2aec8ef01",
+    "tests/native_multiplayer.cpp": "3c55a13bfd061d47dc87c746ed07d7830bc17ee2cbbc03af400a776ba87cb498"
+  }
+}

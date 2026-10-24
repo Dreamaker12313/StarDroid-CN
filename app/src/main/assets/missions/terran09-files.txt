@@ -1,0 +1,16 @@
+campaign\terran\terran09\staredit\scenario.chk
+campaign\terran\terran09\staredit\wav\combeep0.wav
+campaign\terran\terran09\staredit\wav\t9b00tad.wav
+campaign\terran\terran09\staredit\wav\t9b01ume.wav
+campaign\terran\terran09\staredit\wav\t9b02udu.wav
+campaign\terran\terran09\staredit\wav\t9b03ura.wav
+campaign\terran\terran09\staredit\wav\t9b04udu.wav
+campaign\terran\terran09\staredit\wav\t9b05ura.wav
+campaign\terran\terran09\staredit\wav\t9m00ura.wav
+campaign\terran\terran09\staredit\wav\t9m20udu.wav
+campaign\terran\terran09\staredit\wav\tam00udu.wav
+campaign\terran\terran09\staredit\wav\tam01uke.wav
+campaign\terran\terran09\staredit\wav\tam02ume.wav
+campaign\terran\terran09\staredit\wav\tam03uke.wav
+campaign\terran\terran09\staredit\wav\tam04ura.wav
+campaign\terran\terran09\staredit\wav\tam05ume.wav

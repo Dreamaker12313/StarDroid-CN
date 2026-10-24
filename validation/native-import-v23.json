@@ -1,0 +1,7 @@
+{
+  "runtime": "actual NativeData Java cache implementation on desktop JVM",
+  "passed": true,
+  "bundles": 70,
+  "cachedBundles": 70,
+  "log": "Reconstructed and cached 70 imported bundles\n"
+}

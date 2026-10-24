@@ -1,0 +1,17 @@
+campaign\protoss\protoss08\staredit\scenario.chk
+campaign\protoss\protoss08\staredit\wav\combeep0.wav
+campaign\protoss\protoss08\staredit\wav\combeep1.wav
+campaign\protoss\protoss08\staredit\wav\p8b00ufd.wav
+campaign\protoss\protoss08\staredit\wav\p8b01ufd.wav
+campaign\protoss\protoss08\staredit\wav\p8b02ura.wav
+campaign\protoss\protoss08\staredit\wav\p8b03ufd.wav
+campaign\protoss\protoss08\staredit\wav\p8m00ufd.wav
+campaign\protoss\protoss08\staredit\wav\p8m01pad.wav
+campaign\protoss\protoss08\staredit\wav\p8m02uze.wav
+campaign\protoss\protoss08\staredit\wav\p8m03pad.wav
+campaign\protoss\protoss08\staredit\wav\p8m04uze.wav
+campaign\protoss\protoss08\staredit\wav\p8m05pad.wav
+campaign\protoss\protoss08\staredit\wav\p8m06uze.wav
+campaign\protoss\protoss08\staredit\wav\p8m07uze.wav
+campaign\protoss\protoss08\staredit\wav\p8m08pad.wav
+campaign\protoss\protoss08\staredit\wav\pshbld03.wav

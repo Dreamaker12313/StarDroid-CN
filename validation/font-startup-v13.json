@@ -1,0 +1,578 @@
+{
+  "checks": [
+    "valid font import: title, custom game, portraits/menu, briefing and campaign start with unreadable StarDat font8; readable fonts retained independently",
+    "missing font import: title, custom game, portraits/menu, briefing and campaign start with unreadable StarDat font8; fallback remains playable",
+    "unreadable font import: title, custom game, portraits/menu, briefing and campaign start with unreadable StarDat font8; readable fonts retained independently",
+    "none font import: title, custom game, portraits/menu, briefing and campaign start with unreadable StarDat font8; fallback remains playable"
+  ],
+  "errors": [],
+  "scenarios": [
+    {
+      "fonts": "valid",
+      "title": {
+        "page": "splash",
+        "loaded": true,
+        "animations": [
+          "glue/mainmenu/single.smk",
+          "glue/mainmenu/singleon.smk",
+          "glue/mainmenu/multi.smk",
+          "glue/mainmenu/multion.smk",
+          "glue/mainmenu/editor.smk",
+          "glue/mainmenu/editoron.smk",
+          "glue/mainmenu/exit.smk",
+          "glue/mainmenu/exiton.smk",
+          "glue/campaign/disk.smk",
+          "glue/campaign/terr.smk",
+          "glue/campaign/terron.smk",
+          "glue/campaign/zerg.smk",
+          "glue/campaign/zergon.smk",
+          "glue/campaign/prot.smk",
+          "glue/campaign/proton.smk"
+        ],
+        "originalFont": true,
+        "campaignPalette": true,
+        "suspended": false,
+        "lastFrameTime": 833,
+        "transitioning": false,
+        "slideAmount": 0,
+        "profiles": 0,
+        "modal": false,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 0,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "custom": {
+        "game": {
+          "frame": 31,
+          "paused": false,
+          "audio": "not-started",
+          "soundBuffers": 0
+        },
+        "ui": {
+          "race": 1,
+          "originalConsole": true,
+          "originalFonts": [
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "32",
+            "50",
+            "16x"
+          ],
+          "speechFont": "font10",
+          "timerFont": "font16",
+          "resourceFrames": [
+            0,
+            2,
+            5
+          ],
+          "commandIcons": 0,
+          "minimap": {
+            "x": 4,
+            "y": 412,
+            "w": 64,
+            "h": 64
+          },
+          "minimapTerrain": true,
+          "dialogArt": "dlgs/terran.grp",
+          "selectedType": -1,
+          "details": [],
+          "submenu": false
+        }
+      },
+      "briefing": {
+        "originalRoom": true,
+        "layout": "rez/glurdyt.bin",
+        "fonts": {
+          "small": true,
+          "large": true,
+          "button": true
+        },
+        "dialogueFont": "font14",
+        "lineHeight": 19,
+        "contentHeight": 0,
+        "scrollDistance": 0,
+        "scrollOffset": 0,
+        "scrollDuration": 0,
+        "speechPosition": null,
+        "manualScroll": false,
+        "animations": [
+          "glue/readyt/proloop.smk",
+          "glue/readyt/proj.smk",
+          "glue/readyt/start.smk"
+        ],
+        "active": true,
+        "suspended": false,
+        "phase": "entering",
+        "elapsed": 4.60000000596051,
+        "slideAmount": 0.9817126225874127,
+        "projection": 0,
+        "glassIndex": 138,
+        "speakerFrames": 4,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 1,
+          "played": 1,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "campaign": {
+        "frame": 31,
+        "paused": false,
+        "audio": "running",
+        "soundBuffers": 1
+      }
+    },
+    {
+      "fonts": "missing",
+      "title": {
+        "page": "splash",
+        "loaded": true,
+        "animations": [
+          "glue/mainmenu/single.smk",
+          "glue/mainmenu/singleon.smk",
+          "glue/mainmenu/multi.smk",
+          "glue/mainmenu/multion.smk",
+          "glue/mainmenu/editor.smk",
+          "glue/mainmenu/editoron.smk",
+          "glue/mainmenu/exit.smk",
+          "glue/mainmenu/exiton.smk",
+          "glue/campaign/disk.smk",
+          "glue/campaign/terr.smk",
+          "glue/campaign/terron.smk",
+          "glue/campaign/zerg.smk",
+          "glue/campaign/zergon.smk",
+          "glue/campaign/prot.smk",
+          "glue/campaign/proton.smk"
+        ],
+        "originalFont": false,
+        "campaignPalette": false,
+        "suspended": false,
+        "lastFrameTime": 725.2,
+        "transitioning": false,
+        "slideAmount": 0,
+        "profiles": 0,
+        "modal": false,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 0,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "custom": {
+        "game": {
+          "frame": 31,
+          "paused": false,
+          "audio": "not-started",
+          "soundBuffers": 0
+        },
+        "ui": {
+          "race": 1,
+          "originalConsole": true,
+          "originalFonts": [],
+          "speechFont": "fallback",
+          "timerFont": "fallback",
+          "resourceFrames": [
+            0,
+            2,
+            5
+          ],
+          "commandIcons": 0,
+          "minimap": {
+            "x": 4,
+            "y": 412,
+            "w": 64,
+            "h": 64
+          },
+          "minimapTerrain": true,
+          "dialogArt": "dlgs/terran.grp",
+          "selectedType": -1,
+          "details": [],
+          "submenu": false
+        }
+      },
+      "briefing": {
+        "originalRoom": true,
+        "layout": "rez/glurdyt.bin",
+        "fonts": {
+          "small": false,
+          "large": false,
+          "button": false
+        },
+        "dialogueFont": "fallback",
+        "lineHeight": 19,
+        "contentHeight": 0,
+        "scrollDistance": 0,
+        "scrollOffset": 0,
+        "scrollDuration": 0,
+        "speechPosition": null,
+        "manualScroll": false,
+        "animations": [
+          "glue/readyt/proloop.smk",
+          "glue/readyt/proj.smk",
+          "glue/readyt/start.smk"
+        ],
+        "active": true,
+        "suspended": false,
+        "phase": "entering",
+        "elapsed": 0,
+        "slideAmount": 1,
+        "projection": 0,
+        "glassIndex": 138,
+        "speakerFrames": 4,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 1,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "campaign": {
+        "frame": 31,
+        "paused": false,
+        "audio": "running",
+        "soundBuffers": 1
+      }
+    },
+    {
+      "fonts": "unreadable",
+      "title": {
+        "page": "splash",
+        "loaded": true,
+        "animations": [
+          "glue/mainmenu/single.smk",
+          "glue/mainmenu/singleon.smk",
+          "glue/mainmenu/multi.smk",
+          "glue/mainmenu/multion.smk",
+          "glue/mainmenu/editor.smk",
+          "glue/mainmenu/editoron.smk",
+          "glue/mainmenu/exit.smk",
+          "glue/mainmenu/exiton.smk",
+          "glue/campaign/disk.smk",
+          "glue/campaign/terr.smk",
+          "glue/campaign/terron.smk",
+          "glue/campaign/zerg.smk",
+          "glue/campaign/zergon.smk",
+          "glue/campaign/prot.smk",
+          "glue/campaign/proton.smk"
+        ],
+        "originalFont": true,
+        "campaignPalette": true,
+        "suspended": false,
+        "lastFrameTime": 776.3,
+        "transitioning": false,
+        "slideAmount": 0,
+        "profiles": 0,
+        "modal": false,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 0,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "custom": {
+        "game": {
+          "frame": 31,
+          "paused": false,
+          "audio": "not-started",
+          "soundBuffers": 0
+        },
+        "ui": {
+          "race": 1,
+          "originalConsole": true,
+          "originalFonts": [
+            "10",
+            "12",
+            "14",
+            "16",
+            "32",
+            "50",
+            "16x"
+          ],
+          "speechFont": "font10",
+          "timerFont": "font16",
+          "resourceFrames": [
+            0,
+            2,
+            5
+          ],
+          "commandIcons": 0,
+          "minimap": {
+            "x": 4,
+            "y": 412,
+            "w": 64,
+            "h": 64
+          },
+          "minimapTerrain": true,
+          "dialogArt": "dlgs/terran.grp",
+          "selectedType": -1,
+          "details": [],
+          "submenu": false
+        }
+      },
+      "briefing": {
+        "originalRoom": true,
+        "layout": "rez/glurdyt.bin",
+        "fonts": {
+          "small": true,
+          "large": true,
+          "button": true
+        },
+        "dialogueFont": "font14",
+        "lineHeight": 19,
+        "contentHeight": 0,
+        "scrollDistance": 0,
+        "scrollOffset": 0,
+        "scrollDuration": 0,
+        "speechPosition": null,
+        "manualScroll": false,
+        "animations": [
+          "glue/readyt/proloop.smk",
+          "glue/readyt/proj.smk",
+          "glue/readyt/start.smk"
+        ],
+        "active": true,
+        "suspended": false,
+        "phase": "entering",
+        "elapsed": 13.000000005960374,
+        "slideAmount": 0.9488961256066074,
+        "projection": 0,
+        "glassIndex": 138,
+        "speakerFrames": 4,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 1,
+          "played": 1,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "campaign": {
+        "frame": 31,
+        "paused": false,
+        "audio": "running",
+        "soundBuffers": 1
+      }
+    },
+    {
+      "fonts": "none",
+      "title": {
+        "page": "splash",
+        "loaded": true,
+        "animations": [
+          "glue/mainmenu/single.smk",
+          "glue/mainmenu/singleon.smk",
+          "glue/mainmenu/multi.smk",
+          "glue/mainmenu/multion.smk",
+          "glue/mainmenu/editor.smk",
+          "glue/mainmenu/editoron.smk",
+          "glue/mainmenu/exit.smk",
+          "glue/mainmenu/exiton.smk",
+          "glue/campaign/disk.smk",
+          "glue/campaign/terr.smk",
+          "glue/campaign/terron.smk",
+          "glue/campaign/zerg.smk",
+          "glue/campaign/zergon.smk",
+          "glue/campaign/prot.smk",
+          "glue/campaign/proton.smk"
+        ],
+        "originalFont": false,
+        "campaignPalette": false,
+        "suspended": false,
+        "lastFrameTime": 683,
+        "transitioning": false,
+        "slideAmount": 0,
+        "profiles": 0,
+        "modal": false,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 0,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "custom": {
+        "game": {
+          "frame": 31,
+          "paused": false,
+          "audio": "not-started",
+          "soundBuffers": 0
+        },
+        "ui": {
+          "race": 1,
+          "originalConsole": true,
+          "originalFonts": [],
+          "speechFont": "fallback",
+          "timerFont": "fallback",
+          "resourceFrames": [
+            0,
+            2,
+            5
+          ],
+          "commandIcons": 0,
+          "minimap": {
+            "x": 4,
+            "y": 412,
+            "w": 64,
+            "h": 64
+          },
+          "minimapTerrain": true,
+          "dialogArt": "dlgs/terran.grp",
+          "selectedType": -1,
+          "details": [],
+          "submenu": false
+        }
+      },
+      "briefing": {
+        "originalRoom": true,
+        "layout": "rez/glurdyt.bin",
+        "fonts": {
+          "small": false,
+          "large": false,
+          "button": false
+        },
+        "dialogueFont": "fallback",
+        "lineHeight": 19,
+        "contentHeight": 0,
+        "scrollDistance": 0,
+        "scrollOffset": 0,
+        "scrollDuration": 0,
+        "speechPosition": null,
+        "manualScroll": false,
+        "animations": [
+          "glue/readyt/proloop.smk",
+          "glue/readyt/proj.smk",
+          "glue/readyt/start.smk"
+        ],
+        "active": true,
+        "suspended": false,
+        "phase": "entering",
+        "elapsed": 0,
+        "slideAmount": 1,
+        "projection": 0,
+        "glassIndex": 138,
+        "speakerFrames": 4,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 1,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "campaign": {
+        "frame": 31,
+        "paused": false,
+        "audio": "running",
+        "soundBuffers": 3
+      }
+    }
+  ],
+  "fallbackScroll": {
+    "stats": {
+      "originalRoom": true,
+      "layout": "rez/glurdyt.bin",
+      "fonts": {
+        "small": false,
+        "large": false,
+        "button": false
+      },
+      "dialogueFont": "fallback",
+      "lineHeight": 19,
+      "contentHeight": 152,
+      "scrollDistance": 95,
+      "scrollOffset": 20.117213242932312,
+      "scrollDuration": 16240.725623582764,
+      "speechPosition": 6019.773242630385,
+      "manualScroll": false,
+      "animations": [
+        "glue/readyt/proloop.smk",
+        "glue/readyt/proj.smk",
+        "glue/readyt/start.smk"
+      ],
+      "active": true,
+      "suspended": false,
+      "phase": "ready",
+      "elapsed": 12499.5,
+      "slideAmount": 0,
+      "projection": 0,
+      "glassIndex": 138,
+      "speakerFrames": 4,
+      "sounds": {
+        "available": [
+          "mousedown2",
+          "mouseover",
+          "swishin",
+          "swishlock",
+          "swishout"
+        ],
+        "decoded": 2,
+        "played": 2,
+        "paused": false,
+        "error": ""
+      }
+    },
+    "transform": "translateY(-20px)"
+  }
+}

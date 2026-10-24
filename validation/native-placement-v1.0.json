@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "version": "1.0",
+  "versionCode": 69,
+  "baseline": [],
+  "buildingTypes": 65,
+  "rectangleCases": 57794,
+  "ghostCases": 24960,
+  "renderedFrames": 684,
+  "scrollFrames": 384,
+  "sanitizer": "GCC AddressSanitizer, guard pages, row-padding and prefix canaries; leak detection disabled",
+  "coverage": [
+    "Indexed and RGBA outlines: exhaustive small rectangles, inverted/empty/one-pixel/extreme coordinates",
+    "All four edges, fully offscreen and full-image rectangles; tight and padded row strides",
+    "Real building sprites/footprints: blocked and valid locations, add-ons and morphs",
+    "640x480, 1280x720 and 457x343 displays at zoom 0.5, 1, 1.4 and 3",
+    "Full render path: ordinary/refinery/flying-building-plus-addon placement and edge-spanning selection",
+    "Host-owned scrolling in eight directions, four zoom levels, map limits and stationary release; no second native pan"
+  ],
+  "physicalDeviceTested": false,
+  "limitations": "Host rendering and memory checks. Samsung crash-site behavior reproduced; post-fix Android device play and the separate Vivo closure remain unverified.",
+  "sourceSha256": {
+    "tests/native_placement.cpp": "74c5165fea951bff1c43c2e4f2c26695dd1e86fbdfbe6c9210198b594ca4c0ce",
+    "tests/run_placement.py": "046a1a13db9743d850f95d12ff26518b5829c3bd766027780dbdecea52eb0242",
+    "tests/build_native_host.py": "f4419428f997263adccd32f0043e44118c2da709d60f0e140029653fa8ab02ea",
+    "scripts/prepare_native.py": "422effbd9d613be6154cc87de7bd82ebf03990316737dd6fb3c9d9191e314426",
+    "patches/native-placement68.patch": "c3e8d9539a96cfa80b4fb81787012d56b7d690b111db45dd51ed0b8984f44490",
+    "patches/native-scroll69.patch": "4d484a750edf2c82b7bf45a37fef12a278d8cf6a032f5efe5a1f91829337758a",
+    "native/runtime.cpp": "386659ba536445e5ef89df66f674e6dd46ac18ec73059922f93e2b6e0a1f3c5c",
+    "native/generated/wasm_main.cpp": "6fe40ff3fe0aba8ccd7534bcf9778b5858162ef2d4f3e1a0dcff79353823cd95",
+    "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2"
+  },
+  "preparedUiSha256": "f75e57fd173b6aacd95c102fb8f47e856fa0c0dc83839ef2e7cbd8e4d2f648ae",
+  "testBinarySha256": "6d4d5acab5c27248c7d5b3458f986b6af3e334d669fb43d42d7fc709a54b230b"
+}

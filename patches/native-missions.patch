@@ -1,0 +1,77 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -19169,6 +19169,19 @@
+ 		if (c == player_t::controller_unused_rescue_active) return true;
+ 		return false;
+ 	}
++
++    // UMS computer participants start allied even across different forces.
++    // A slot without a Start Location is excluded (installation trap owners).
++    // Run once during loading, before simulation; later trigger changes win.
++    void apply_computer_alliances(unsigned starting_players) {
++        for (int p=0;p<8;++p) {
++            if (!(starting_players & (1u<<p)) || st.players[p].controller != player_t::controller_computer_game) continue;
++            for (int q=0;q<8;++q) {
++                if (!(starting_players & (1u<<q)) || st.players[q].controller != player_t::controller_computer_game) continue;
++                if (!st.alliances[p][q]) st.alliances[p][q]=1;
++            }
++        }
++    }
+ 
+     void apply_force_settings() {
+         for (int p=0;p<8;++p) {
+@@ -21825,6 +21838,7 @@
+ 			tech_restrictions(r, true);
+ 		};
+ 
++		unsigned starting_players = 0;
+ 		tag_funcs["UNIT"] = [&](data_reader_le r) {
+             a_unordered_map<int, unit_t*> initial_units;
+             a_vector<std::pair<int, int>> initial_links;
+@@ -21861,6 +21875,7 @@
+ 
+ 				if (unit_type->id == UnitTypes::Special_Start_Location) {
+ 					game_st.start_locations[owner] = { x, y };
++					starting_players |= 1u << owner;
+ 					// todo: some callback to set initial screen position?
+ 					continue;
+ 				}
+@@ -22162,6 +22177,8 @@
+ 				tag_funcs["TRIG"](r);
+ 			}
+ 		}
++
++        if (use_map_settings) apply_computer_alliances(starting_players);
+ 
+ 		for (auto& v : st.players) v.initially_active = false;
+ 		for (int p : active_players()) {
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -300,6 +300,9 @@
+                 || us_hidden(u) || unit_is_disabled(u)) continue;
+             auto order=u->order_type->id;
+             if (order==Orders::Burrowing || order==Orders::Unburrowing || u_iscript_nobrk(u)) continue;
++            // A scripted Move must reach its location, including the True Colors
++            // ambush and exit. AttackMove and idle guards can still burrow.
++            if (order==Orders::Move) continue;
+             unit_t* target=nullptr;
+             for (auto* other:find_units(square_at(u->sprite->position,256))) {
+                 if (other==u || unit_dying(other) || u_flying(other) || u_invincible(other)
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -159,7 +159,14 @@
+                 else if(a.num_n==9)value=std::max(0,value-a.group2_n);
+             }return 0;
+         }
+-        if(a.type==57){for(int p:trigger_players(owner,a.group_n))st.alliances[owner][p]=std::max(0,std::min(2,a.extra_n));return 0;}
++        if(a.type==57){
++            auto alliances=st.alliances[owner];
++            for(int p:trigger_players(owner,a.group_n))alliances[p]=std::max(0,std::min(2,a.extra_n));
++            // Use the ordinary alliance action so existing enemy attack orders
++            // drop their target when the mission makes that player an ally.
++            action_functions(st,ai_actions).action_set_alliances(owner,alliances);
++            return 0;
++        }
+         if(a.type==48||a.type==49||a.type==50||a.type==51){
+             if(a.location<1||size_t(a.location)>st.locations.size())return 0;
+             a_vector<unit_t*> targets;

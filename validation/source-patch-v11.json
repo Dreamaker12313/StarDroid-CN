@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "Patch applies cleanly to pinned source archive",
+    "Every patched source is byte-identical to the actual compiled source"
+  ],
+  "files": [
+    "web/wasm_main.cpp",
+    "web/wasm_backend.cpp",
+    "web/sandbox.h",
+    "web/campaign.h",
+    "actions.h",
+    "bwgame.h",
+    "web/campaign_ai.h",
+    "web/bot/patch-vendor.py",
+    "web/bot/build-web.sh",
+    "ui/ui.h"
+  ],
+  "patchSha256": "dea469814d6591e1760cb4f0419a0d967fa7e87ead0fa675ac6559d54577d77e"
+}

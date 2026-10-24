@@ -1,0 +1,62 @@
+{
+  "version": "0.27",
+  "android": "9",
+  "abi": "x86_64",
+  "apkSha256": "f909c5f6f7166f171c146e8328b02cf8438ef355e881740a403b81eac89f518a",
+  "testApkSha256": "16cd8b075146fc638d33cb680b5bac4ea5a01448c944899fb2f33658731ac01f",
+  "title": {
+    "page": "main",
+    "modal": "",
+    "failure": ""
+  },
+  "mixedNonzeroSamples": 16382,
+  "independentSoundChannels": true,
+  "focusLossAndResume": true,
+  "muteImmediate": true,
+  "backgroundAudioStaysPaused": true,
+  "phaseAwareMusic": true,
+  "modalBlocksUnderlyingButtons": true,
+  "quickEaseOutMenuMotion": true,
+  "pixelScrollWithShortInertia": true,
+  "missions-scrolled": {
+    "page": "campaign",
+    "modal": "missions",
+    "failure": ""
+  },
+  "briefingMusicDucking": true,
+  "sound": {
+    "page": "game",
+    "modal": "sound",
+    "failure": ""
+  },
+  "soundSliderTouch": true,
+  "sound-adjusted": {
+    "page": "game",
+    "modal": "sound",
+    "failure": ""
+  },
+  "command-pressed": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "commandDragCancelsTap": true,
+  "victoryStopsBattleMusic": true,
+  "victory": {
+    "page": "game",
+    "modal": "outcome",
+    "failure": ""
+  },
+  "resultsMusic": true,
+  "appOptionsSuspendsGame": true,
+  "passed": true,
+  "environment": {
+    "emulator": "37.2.12",
+    "cpuAcceleration": false,
+    "graphics": "SwiftShader",
+    "resolution": "960x640",
+    "physicalDeviceTested": false,
+    "hostSpeakerOutput": false,
+    "focusTest": "Direct Android focus callback invocation"
+  }
+}

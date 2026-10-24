@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "physicalPhone": false,
+  "output": "PASS original connection/join/lobby/create artwork; seven renders; actual terrain preview; bounded nonoverlapping hit targets; entry gating",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "3b054eb9e0275493bcc2976e5917ec2356ec5a8d7475a07151f166527128887c",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "fdc5f814efff146cd896c02defc3d201f0c11ee441a87dbfb12906a2e25b52d0",
+    "app/src/main/java/org/openbw/androidtest/NativeMapPreview.java": "7f77090c49c185b626ae52ecd564dc7feb487a898ad0de0d9dcb3e75c642dec1",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "c800369ec6d54c30db55c5d243e97d965d641a0bbbf9c99a5e4e92b01df02f19",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "48df39c65a6975b50b00c77471700b82f1ade9b778482e474c3b1bf0768a3943",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "app/src/main/java/org/openbw/androidtest/RoomProtocol.java": "50fb26fba8306025603f2f0d03348577ae95079159b6c77c809ce4f93e3e7d48",
+    "app/src/main/java/org/openbw/androidtest/RoomSnapshot.java": "343bb7fb799fb22882cff994338215d068327b00f896f9acd372a8e1ce3c6de1",
+    "app/src/main/java/org/openbw/androidtest/RoomMatch.java": "8052395c053e5b2da0fb2a74d655008495fdb5ac22241602d65c9e26d4a81bb5",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "fbad3b71062f1a565138884a5711999a93345ef2f448a8cd5bd1cf85b783fef8",
+    "tests/run_ui56.py": "5c27ff41b7a135f94653048687d48f7e1d4da36b38dc4af3c39d1b31c08c825d"
+  }
+}

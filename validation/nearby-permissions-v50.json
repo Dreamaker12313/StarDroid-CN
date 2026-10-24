@@ -1,0 +1,33 @@
+{
+  "version": "0.50",
+  "passed": true,
+  "physicalAndroid": false,
+  "actualProductionClasses": [
+    "NativeNearby.java",
+    "NearbyProtocol.java"
+  ],
+  "androidAndGoogleServices": "test doubles; no real permission dialogs/radio",
+  "apiLevels": [
+    26,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "output": "PASS 608 Nearby permission checks; API 26\u201336, Host/Join, update from 0.49, grant/deny/cancel, approximate upgrade, late callbacks and service errors",
+  "manifestLocationNotCapped": true,
+  "backgroundLocationRequested": false,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeNearby.java": "ce84bf5d7c4b05c43f42a17f5e9c8519a9e2dfa134f2cce0d1a21220445eff01",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "2bde88ef993b226783fdd040737f93de622ec30b29e8fdbb4a37eab5893a27bd",
+    "tests/NearbyPermissionsTest.java": "55008bcf15c4d19a576f5be81a34fb50b1140357c7fb3bf4f6b7a951b34b3cd0",
+    "app/src/main/AndroidManifest.xml": "b43e24a9e64f84b21e56a1fe8150772a221c6f4c3587ed549d8af081e25209c0",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "b72ca57acf8ac89917e8f55cc28b45852cc7dbbca2cc4ac4ee3b536e843dcb1b",
+    "tests/run_nearby_permissions.py": "bfeffb90094925804dc392210f3f35e5a42618dcc016ffe54a323f2f8e368770"
+  }
+}

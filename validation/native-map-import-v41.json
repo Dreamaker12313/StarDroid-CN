@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "originalMapCount": 8,
+  "output": "PASS eight-map ZIP and individual imports, persistent collection, deduplication, path isolation, count bounds and failed-import cleanup\n",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeMaps.java": "7c4894217c67a29baca1493802e32d9e991fbe5c0d1580cbbf56649d9bdedd2b",
+    "tests/NativeMapsHarness.java": "ee9517ad0304e7e0de556827f31a987e960154a6a76bce2fa4c4145057cd4f6c"
+  }
+}

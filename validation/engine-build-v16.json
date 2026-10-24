@@ -1,0 +1,56 @@
+{
+  "campaignFreshRebuildMatchesRecordedHash": true,
+  "patchAppliesToPinnedSource": true,
+  "fullSourceRebuildCompleted": true,
+  "modules": [
+    {
+      "file": "openbw.wasm",
+      "previous": "16081f92daaeb0534c5d2c8dbdf4285546a393733085e313bb119d644e673acc",
+      "sha256": "fda973f82d42e12268930a126ce75f5031f6856d2ddcb87bb36f951191ed22a6",
+      "size": 2366989,
+      "changed": true
+    },
+    {
+      "file": "openbw-campaign.wasm",
+      "previous": "16081f92daaeb0534c5d2c8dbdf4285546a393733085e313bb119d644e673acc",
+      "sha256": "fda973f82d42e12268930a126ce75f5031f6856d2ddcb87bb36f951191ed22a6",
+      "size": 2366989,
+      "changed": true
+    },
+    {
+      "file": "openbw-bot.wasm",
+      "previous": "e5c41685521354a37f5f3895c9e4fdcb39894d7330089fd1c1f6343d31d5560c",
+      "sha256": "a9d18097e531f07204506b7ed056d0acd83accf30da940314f48552e854363ee",
+      "size": 6129053,
+      "changed": true
+    },
+    {
+      "file": "media-decoder.wasm",
+      "previous": "80ef1f504d6161a12f81b2b84462b1a8b4ef8a758f23e214a6aad240c4321b6c",
+      "sha256": "57cf86b9153081a1dc850b93c8e24250e35b144e6022cb5488bac10be23ac1be",
+      "size": 665157,
+      "changed": true
+    },
+    {
+      "file": "portrait-decoder.wasm",
+      "previous": "26b628f3f36d30ae998e850269adbc06a8fdf856fac6cf371635d47e83317cb0",
+      "sha256": "26b628f3f36d30ae998e850269adbc06a8fdf856fac6cf371635d47e83317cb0",
+      "size": 285594,
+      "changed": false
+    },
+    {
+      "file": "menu-decoder.wasm",
+      "previous": "9400381a97bfec5c04970be2234dd84ef2b9b890175e8a2c6890a26a6a51b9d2",
+      "sha256": "9400381a97bfec5c04970be2234dd84ef2b9b890175e8a2c6890a26a6a51b9d2",
+      "size": 285433,
+      "changed": false
+    },
+    {
+      "file": "cinematic-decoder.wasm",
+      "previous": "c167ce8fd74bb51267476a6b8abaf01e8c8a510b2421953aabcc7281c12d503f",
+      "sha256": "c167ce8fd74bb51267476a6b8abaf01e8c8a510b2421953aabcc7281c12d503f",
+      "size": 287265,
+      "changed": false
+    }
+  ]
+}

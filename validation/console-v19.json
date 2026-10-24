@@ -1,0 +1,220 @@
+{
+  "checks": [
+    "terran01: five-item queue in original rectangles; tap cancels queued/current production",
+    "protoss02: five-item queue in original rectangles; tap cancels queued/current production",
+    "Shield text uses original cyan font ramp; HP retains its own damage color",
+    "Actual Zealot HP checks original red <33%, yellow 33–66%, green >66% boundaries",
+    "Zerg 2 original four-Probe quota is maintained and workers gather resources",
+    "Selected Larvae become Egg wireframes without changing unit IDs; group production panel is hidden; hero/normal use original distinct frames",
+    "Single Egg shows Mutating progress without a five-slot building queue"
+  ],
+  "missions": {
+    "terran01": {
+      "producer": {
+        "unit": {
+          "id": 3710,
+          "name": "Command Center",
+          "owner": 1,
+          "x": 1056,
+          "y": 1744,
+          "order": 23
+        },
+        "queue": "7\tSCV\tSCV\tSCV\tSCV\tSCV",
+        "kind": 1
+      },
+      "geometry": [
+        {
+          "x": 104,
+          "y": 14,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 104,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 143,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 182,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 221,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        }
+      ],
+      "canceled": "3\tSCV\tSCV\tSCV",
+      "portraitLayers": {
+        "portrait": 1,
+        "console": 2
+      }
+    },
+    "protoss02": {
+      "producer": {
+        "unit": {
+          "id": 3716,
+          "name": "Nexus",
+          "owner": 7,
+          "x": 320,
+          "y": 720,
+          "order": 23
+        },
+        "queue": "7\tProbe\tProbe\tProbe\tProbe\tProbe",
+        "kind": 1
+      },
+      "geometry": [
+        {
+          "x": 104,
+          "y": 14,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 104,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 143,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 182,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        },
+        {
+          "x": 221,
+          "y": 53,
+          "w": 39,
+          "h": 36
+        }
+      ],
+      "canceled": "11\tProbe\tProbe\tProbe",
+      "shieldPixels": 72,
+      "shieldText": " 750/750  750/750",
+      "portraitLayers": {
+        "portrait": 1,
+        "console": 2
+      }
+    },
+    "zerg02": {
+      "ai": {
+        "probes": [
+          {
+            "id": 3604,
+            "name": "Probe",
+            "owner": 1,
+            "x": 548,
+            "y": 2676,
+            "order": 81
+          },
+          {
+            "id": 3620,
+            "name": "Probe",
+            "owner": 1,
+            "x": 484,
+            "y": 2531,
+            "order": 81
+          },
+          {
+            "id": 3631,
+            "name": "Probe",
+            "owner": 1,
+            "x": 485,
+            "y": 2676,
+            "order": 84
+          },
+          {
+            "id": 3632,
+            "name": "Probe",
+            "owner": 1,
+            "x": 948,
+            "y": 2548,
+            "order": 87
+          }
+        ],
+        "details": [
+          "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=2 [ttl=119 kind=1 pos=991,698] [ttl=122 kind=1 pos=1072,727]\nselection=1\ncamera=544,288\nselected_owner=1 selection_palette=16\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=0 first=none\nprimary=none\n",
+          "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=2 [ttl=119 kind=1 pos=991,698] [ttl=122 kind=1 pos=1072,727]\nselection=1\ncamera=544,288\nselected_owner=1 selection_palette=16\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=0 first=none\nprimary=none\n",
+          "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=2 [ttl=119 kind=1 pos=991,698] [ttl=122 kind=1 pos=1072,727]\nselection=1\ncamera=544,288\nselected_owner=1 selection_palette=16\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=0 first=none\nprimary=none\n",
+          "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=2 [ttl=119 kind=1 pos=991,698] [ttl=122 kind=1 pos=1072,727]\nselection=1\ncamera=544,288\nselected_owner=1 selection_palette=16\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=0 first=none\nprimary=none\n"
+        ],
+        "ai": "1\t35\t1\t1\t2\t5272\t5776\t5072\t5776\n",
+        "error": ""
+      },
+      "hero": [
+        {
+          "type": "53",
+          "frame": "19",
+          "background": "url(\"data:image/png;base64,iVB"
+        },
+        {
+          "type": "41",
+          "frame": "13",
+          "background": "url(\"data:image/png;base64,iVB"
+        }
+      ],
+      "morph": {
+        "larvae": [
+          {
+            "id": 3599,
+            "name": "Larva",
+            "owner": 3,
+            "x": 832,
+            "y": 569,
+            "order": 77
+          },
+          {
+            "id": 3600,
+            "name": "Larva",
+            "owner": 3,
+            "x": 851,
+            "y": 665,
+            "order": 77
+          },
+          {
+            "id": 3601,
+            "name": "Larva",
+            "owner": 3,
+            "x": 766,
+            "y": 569,
+            "order": 77
+          }
+        ],
+        "wire": "3599\tLarva\t25\t25\t0\t35\t13\n3600\tLarva\t25\t25\t0\t35\t13\n3601\tLarva\t25\t25\t0\t35\t13\n"
+      },
+      "larvaHashes": [
+        "733e7ec52043985fcce5ee64c159e2286dd8d79e0108db152dad3f3a02f0be34",
+        "733e7ec52043985fcce5ee64c159e2286dd8d79e0108db152dad3f3a02f0be34",
+        "733e7ec52043985fcce5ee64c159e2286dd8d79e0108db152dad3f3a02f0be34"
+      ],
+      "eggHashes": [
+        "ff18180487731fc62e1e44127393cbd11cc1413db21f8e104a8447a7833c3138",
+        "ff18180487731fc62e1e44127393cbd11cc1413db21f8e104a8447a7833c3138",
+        "ff18180487731fc62e1e44127393cbd11cc1413db21f8e104a8447a7833c3138"
+      ],
+      "singleEgg": "Mutating",
+      "portraitLayers": {
+        "portrait": 1,
+        "console": 2
+      }
+    }
+  },
+  "errors": []
+}

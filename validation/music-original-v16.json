@@ -1,0 +1,138 @@
+{
+  "tracks": [
+    {
+      "name": "music\\terran1.wav",
+      "bytes": 26226476,
+      "channels": 2,
+      "seconds": 297.3518367346939,
+      "sha256": "c4aee48492dff7da213ff0afae28ae225d6a470828f69187e41084981806b45e"
+    },
+    {
+      "name": "music\\terran2.wav",
+      "bytes": 21051436,
+      "channels": 2,
+      "seconds": 238.67791383219955,
+      "sha256": "ff373b1baf34fd63e34aeace57d89472824acf89e2a4c8e509edfbc45c52742c"
+    },
+    {
+      "name": "music\\terran3.wav",
+      "bytes": 23709480,
+      "channels": 2,
+      "seconds": 268.8144671201814,
+      "sha256": "9f1ad08618dddc6b6dd8dce6ba39eccae16eccc2e5a78ec53dd6af7b198ebf9f"
+    },
+    {
+      "name": "music\\protoss1.wav",
+      "bytes": 24674344,
+      "channels": 2,
+      "seconds": 279.75396825396825,
+      "sha256": "6a9173402b7b2f286b482dc94634ac6f6ce5c123509fa0e0cd71a6e91d64a514"
+    },
+    {
+      "name": "music\\protoss2.wav",
+      "bytes": 26042408,
+      "channels": 2,
+      "seconds": 295.26489795918366,
+      "sha256": "30730e8602f380f51c25cb85757e4dfecefacb2a0a033a4d7965558f6bb0e720"
+    },
+    {
+      "name": "music\\protoss3.wav",
+      "bytes": 27006572,
+      "channels": 2,
+      "seconds": 306.196462585034,
+      "sha256": "2ba1689b31e94f0b28578937a0fbc15a8ed608ed2ca31daeaba2b07ae99ea147"
+    },
+    {
+      "name": "music\\zerg1.wav",
+      "bytes": 24883244,
+      "channels": 2,
+      "seconds": 282.1224489795918,
+      "sha256": "7438e4e9ff1f5a838da8cb7399e6a7a0c183be2fc19110653b8bb54b6f4d628e"
+    },
+    {
+      "name": "music\\zerg2.wav",
+      "bytes": 26460204,
+      "channels": 2,
+      "seconds": 300.00181405895694,
+      "sha256": "fb7450d9803950bf9142027967c7367fc2bbe1e99494e30808f209e0c03be0a1"
+    },
+    {
+      "name": "music\\zerg3.wav",
+      "bytes": 27152424,
+      "channels": 2,
+      "seconds": 307.8501133786848,
+      "sha256": "278244158229ea536d3fce326b8ee55bc1e02286f7569437737dc99801a5b195"
+    },
+    {
+      "name": "music\\trdyroom.wav",
+      "bytes": 4513836,
+      "channels": 2,
+      "seconds": 51.17678004535147,
+      "sha256": "ec04aaf04c73b39c9c53e1943b09550852d2ce5b596e4f24ebbbb5323ccaef80"
+    },
+    {
+      "name": "music\\prdyroom.wav",
+      "bytes": 8527908,
+      "channels": 2,
+      "seconds": 96.68780045351474,
+      "sha256": "0be7876fa8ea3472e7f93a904a1fdebd37e3f75b53d40ee20bf2b38de9d5b9c3"
+    },
+    {
+      "name": "music\\zrdyroom.wav",
+      "bytes": 2433628,
+      "channels": 2,
+      "seconds": 27.591655328798186,
+      "sha256": "9b285840a4f41cc78520c26a37d9baff6cea1726c56bee1d9186b1863e62114d"
+    },
+    {
+      "name": "music\\tvict.wav",
+      "bytes": 4235532,
+      "channels": 2,
+      "seconds": 48.02140589569161,
+      "sha256": "8e24cd0bfbb8f5633ab71e325408f62f93477708479b440aabde6889f2267496"
+    },
+    {
+      "name": "music\\pvict.wav",
+      "bytes": 2756724,
+      "channels": 2,
+      "seconds": 31.254013605442175,
+      "sha256": "71fbf7632208e796b2943b8aa1027b785bbb35fa30ae62ea585b2e3cd9c12476"
+    },
+    {
+      "name": "music\\zvict.wav",
+      "bytes": 2753120,
+      "channels": 2,
+      "seconds": 31.214013605442176,
+      "sha256": "92d4fc803fdf04995c04ad1fa65efbaba938d4a21190e598501d4fc270691e0b"
+    },
+    {
+      "name": "music\\tdefeat.wav",
+      "bytes": 4579880,
+      "channels": 2,
+      "seconds": 51.92557823129252,
+      "sha256": "0c0109b48b13bfceb455acf30e0592fb8e41becbf8941a9b401c4190e6e11fb6"
+    },
+    {
+      "name": "music\\pdefeat.wav",
+      "bytes": 5618472,
+      "channels": 2,
+      "seconds": 63.7009977324263,
+      "sha256": "11b6571f746beb4700ddb1242ab986bd594fbb4d37933ac46a5123ba48fd55d7"
+    },
+    {
+      "name": "music\\zdefeat.wav",
+      "bytes": 1739352,
+      "channels": 2,
+      "seconds": 19.71854875283447,
+      "sha256": "2e2ca72f72bcf777003c0aec49f471f60652cc98204aba416a063a114b214745"
+    },
+    {
+      "name": "music\\title.wav",
+      "bytes": 12531964,
+      "channels": 2,
+      "seconds": 142.08526077097505,
+      "sha256": "289d139f6d920a334f0dd1127be2d0a2cc00902565b008bbc9b7972add0fe64c"
+    }
+  ],
+  "errors": []
+}

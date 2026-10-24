@@ -1,0 +1,48 @@
+{
+  "apkSha256": "fb3b3d862417fd5ba0b02d04d1f012931c544f51c07eb64f9461dc38e5b818ea",
+  "testApkSha256": "2afad6415fed704b0254813d7393c37d543d626564698eac03aa05662cfd3be9",
+  "version": "0.36",
+  "originalCoreAssets": true,
+  "fullPlaythrough": false,
+  "missions": [
+    {
+      "mission": "zerg04",
+      "snapshotBytes": 951211,
+      "saveBytes": 131061,
+      "exactContinuation": true
+    },
+    {
+      "mission": "expzerg05",
+      "snapshotBytes": 2063828,
+      "saveBytes": 322979,
+      "exactContinuation": true
+    }
+  ],
+  "passed": true,
+  "emulator": "37.2.12",
+  "display": "1280x720, 240 dpi",
+  "acceleration": false,
+  "physicalDeviceTested": false,
+  "survivesProcessRestart": true,
+  "restartVerification": {
+    "apkSha256": "fb3b3d862417fd5ba0b02d04d1f012931c544f51c07eb64f9461dc38e5b818ea",
+    "testApkSha256": "2afad6415fed704b0254813d7393c37d543d626564698eac03aa05662cfd3be9",
+    "version": "0.36",
+    "originalCoreAssets": true,
+    "fullPlaythrough": false,
+    "survivesProcessRestart": true,
+    "passed": true,
+    "emulator": "37.2.12",
+    "display": "1280x720, 240 dpi",
+    "acceleration": false,
+    "physicalDeviceTested": false
+  },
+  "scope": "Production JNI and save files: original zerg04 and expzerg05 run 4800 frames, save actual world state and sparse map, initialize a fresh mission, restore, and compare 240 frames of continuation byte for byte. True Colors is also restored and continued in a separate Android process.",
+  "sourceSha256": {
+    "tests/NativeCampaignInstrumentation.java": "da980391258c0516a53c8f3dd92f62de9011ebc72182e1d2596521f8354d2f28",
+    "native/runtime.cpp": "1773ebe54140c918758c68f5f9dd55faf5dfc9fbdabec6d83aba4d08b02ce14c",
+    "native/save_state.h": "0ce1d94898fe79bb1d2149b3ff75a9e80a1acc9b146bc150b96c10e4dfd07982",
+    "app/src/main/java/org/openbw/androidtest/NativeSaves.java": "c3f722f409593741672acf1490152d3b3ec722b6286c346173dbfd5f023c4702",
+    "app/src/main/java/org/openbw/androidtest/NativeMapArchive.java": "6dcbed76bca127d923e23f7d9ea3551d6cab42103d2f5b83c183d129b48b8569"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version": "0.19",
+  "versionCode": 20,
+  "package": "org.openbw.androidtest",
+  "bytes": 3658406,
+  "sha256": "096966d2feb0ee37d93b2bd5201768e8200f3822686ab7ac6561218916ab53ce",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "assetFilesCompared": 59,
+  "zipCRC": "pass",
+  "signing": "v2/v3 verified",
+  "alignment": "pass"
+}

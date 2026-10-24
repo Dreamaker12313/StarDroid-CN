@@ -1,0 +1,34 @@
+{
+  "version": "0.35",
+  "passed": true,
+  "freshProcessRead": true,
+  "originalCoreAssets": false,
+  "fullCampaignPlaythrough": false,
+  "checks": [
+    "persistent graph, pools, orders, cargo links, bullets, creep, fog, replay, AI and mission round trip",
+    "pending mission wait resumes",
+    "damaged/truncated files rejected before changing live world",
+    "mismatched map/data rejected"
+  ],
+  "stdout": "PASS persistent graph, pools, orders, cargo links, bullets, creep, fog, replay, AI and mission round trip\nPASS pending mission wait resumes\nPASS damaged/truncated files rejected before changing live world\nPASS mismatched map/data rejected\nPASS wrote persistent snapshot 282312 bytes\nPASS persistent graph, pools, orders, cargo links, bullets, creep, fog, replay, AI and mission round trip\nPASS pending mission wait resumes\nPASS damaged/truncated files rejected before changing live world\nPASS mismatched map/data rejected\n",
+  "binarySha256": "d860c2b9f91e8a7a26e5243a726981c94babe8b24cf06323704979a572a6d952",
+  "sourceSha256": {
+    "native/save_state.h": "0ce1d94898fe79bb1d2149b3ff75a9e80a1acc9b146bc150b96c10e4dfd07982",
+    "native/runtime.cpp": "1773ebe54140c918758c68f5f9dd55faf5dfc9fbdabec6d83aba4d08b02ce14c",
+    "native/audio.h": "b09844e77190a80efc9853321a82a75bde4cba0e23847492a83db1c82ba8d73a",
+    "tests/native_saves.cpp": "eeaa2cf3aba28bb4a1c0a2b9eb707707f4116cf7b2314558917e425a9acb0cc0",
+    "tests/native_fixture.h": "978bb1b25ba507aa450e256eda4446b35d665d098857f68388a9fc97ff259030",
+    "tests/build_native_host.py": "e6314047ed3f09e676aea6dad44d08abe464e9d64613384cd3425df9f61205fd",
+    "tests/run_save_checks.py": "bc6419b63cd701e848339dbc14b1409135ec07d9a516f2e3a8d38c3df62c62da",
+    "scripts/prepare_native.py": "6bbf7760c6d714fe819adf7114ce14696127faf98931efd08aa5d8005fa18180",
+    "scripts/prepare_feedback.py": "b15e627e5d16c7dcb881186746311ba64f599f216b81549b40f7db1f42b2a694",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "UPSTREAM.json": "33afc9db197e6c6d693c05dc792cb8cd10332ee76f1969aa392ee713049c71af",
+    "patches/campaign.patch": "3e5601478ad8302f66eea45052239e28238fdee3c79eb0c5d623042c35fcc43a",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+    "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6"
+  }
+}

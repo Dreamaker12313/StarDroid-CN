@@ -1,0 +1,39 @@
+{
+  "apkSha256": "f574df36800377548b0a74960b08bbd63c90854d85a154316a640057cdf810d3",
+  "testApkSha256": "2fd51104e80fec57a70a272aa4d1a0d3dcf19ce9cb1b6d15aa7d519553332186",
+  "version": "0.40",
+  "originalFontAvailable": false,
+  "fontSource": "Readable fallback; supplied core font payload is not a FONT file",
+  "menusPresetsCustomizationAndPersistence": true,
+  "actualPanAndSelectionGestureDispatch": true,
+  "oneShotCursorBothSidesAndGroundTapDefault": true,
+  "attackMoveToggleOriginalIconsBothSidesAndPreferences": true,
+  "largerResourceIconsAndTextSetting": true,
+  "optionalGroupButtonsHoldAssignTapRecallCancelAndPersistence": true,
+  "miscellaneousDefenderToggleAndCheats": true,
+  "customTooltipDelayAndDisable": true,
+  "unaffordableUnitTouchMessageAndAudio": true,
+  "largerGreenShadedMissionFont": true,
+  "originalLoadUnloadIcons": true,
+  "kerriganReferenceSlots": true,
+  "splashStressLayouts": 36,
+  "originalMissionOpeningTextsAvailable": false,
+  "splashFitsWithoutClipping": true,
+  "realWorldRenderedAtBottomWithLargerHud": true,
+  "passed": true,
+  "visualInspection": [
+    "map-bottom-center-edge.png"
+  ],
+  "visualFinding": "Revealed terrain ends at the center console, with no repeated terrain below it; group buttons, 150% resource counters and spaced original command/selection icons fit.",
+  "emulator": {
+    "api": 28,
+    "architecture": "x86_64",
+    "physicalDevice": false
+  },
+  "sourceSha256": {
+    "tests/NativeControlsInstrumentation.java": "8d1ee4874c9b23f27e8ebf20976a11b8b534efd7327154890a87501838a1ae27",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "32e13ae52c42a667b6f0db7985a2e06f4117a198dfc0cd87340be982a683cc32",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "205d95acecf14f9d0d8b26637923e75f8186e30a05e0fa8de00532c8551f6c74",
+    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "5b8e82ddfbfb04011d7ee49827642d8a89538a0f2672af31230a23f28e11d640"
+  }
+}

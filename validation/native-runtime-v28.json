@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "apkSha256": "8e57766e5a8878e4c89337e8c269bd290ff8753593fb6f8cd5da30ff3305e612",
+  "filter": [
+    "AndroidRuntime:E",
+    "OpenBW:E"
+  ],
+  "collectedRecentLines": 10000,
+  "errorEntries": []
+}

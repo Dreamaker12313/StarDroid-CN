@@ -1,0 +1,41 @@
+{
+  "version": "0.8",
+  "versionCode": 8,
+  "package": "org.openbw.androidtest",
+  "apk": "OpenBW-Android-0.8.apk",
+  "bytes": 3485048,
+  "sha256": "68cf0978461b2c370290ecf04def95fe3e78dbef6a78f41964d7c2f15c299e4e",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "buildChecks": [
+    "ZIP CRC",
+    "zipalign",
+    "APK signature",
+    "package/version metadata",
+    "packaged assets match prepared files"
+  ],
+  "testEnvironment": "Desktop Chromium touch emulation and JVM; no Android device/emulator",
+  "passed": [
+    "interface-v08.json",
+    "interface-import-v08.txt",
+    "campaign-v08.json",
+    "cancel-v08.json"
+  ],
+  "originalAssets": {
+    "titleSmks": 8,
+    "briefingSmks": 3,
+    "briefingPortraitWindows": 4,
+    "fontFilesImported": 8,
+    "referenceCanvas": [
+      640,
+      480
+    ]
+  },
+  "engineChanges": "Game, campaign, bot, audio and portrait WASM unchanged from 0.7; menu decoder height cap increased to 256 for original briefing animations.",
+  "limitations": [
+    "Not compared pixel-for-pixel against original game",
+    "Android device testing still needed",
+    "Some unit-status and production details, mission selector and settings remain custom",
+    "Briefing scrolling/fade timing approximate",
+    "Save/load, multiplayer, campaign editor and FMV playback unavailable"
+  ]
+}

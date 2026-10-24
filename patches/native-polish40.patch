@@ -1,0 +1,288 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -17436,6 +17436,23 @@
+ 
+     void apply_map_unit_flags(unit_t* u,int valid,int flags) {
+         if (valid&16) u_set_status_flag(u,unit_t::status_flag_invincible,flags&16);
++        // CHK UNIT and trigger UPRP both use bit 4 for an already airborne
++        // building. Apply before subsequent Move/Give actions, without waiting
++        // for a player-issued lift-off order or shifting the map position.
++        if ((valid&4) && (flags&4) && ut_flying_building(u) && u_grounded_building(u)) {
++            auto idle=u->order_type;
++            order_BuildingLiftoff(u);
++            sprite_run_anim(u->sprite,iscript_anims::LiftOff);
++            if (u->sprite->images.back().modifier==10) {
++                u->sprite->images.back().offset.y=42;
++                u->sprite->images.back().flags&=~image_t::flag_y_frozen;
++            }
++            u->flingy_top_speed=fp8::integer(1);
++            set_unit_move_target(u,u->position);
++            set_next_target_waypoint(u,u->position);
++            u_unset_status_flag(u,unit_t::status_flag_order_not_interruptible);
++            set_unit_order(u,idle);
++        }
+         if ((valid&1) && (flags&1)) {
+             cloak_unit(u);
+             set_secondary_order(u,get_order_type(Orders::Cloak));
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -922,6 +922,10 @@
+ 	// persistent things you've explored are frozen (unit_frozen_by_fog), not hidden;
+ 	// everything else in fog vanishes. Governs rendering, selection, and sound.
+ 	bool unit_hidden_by_fog(const unit_t* u) const {
++        // HiddenGun is a physically retracted trap, not an ordinary cloaked
++        // building. Detection/shared vision must not show its raised artwork.
++        // RevealTrap renders the actual opening animation when activated.
++        if (unit_is_trap(u) && u->order_type->id==Orders::HiddenGun) return true;
+ 		if (fog_player < 0) return false;
+ 		if (u->owner == fog_player) return false;
+         if (unit_is_trap(u) && unit_is_undetected(u, fog_player)) return true;
+@@ -1481,29 +1485,28 @@
+ 			current_selection_sprites.push_back(u->sprite);
+ 		}
+ 
+-		if (fog_player >= 0)
+-			for (size_t i = 0; i != 12; ++i)
+-				for (unit_t* u : ptr(st.player_units[i])) {
+-					if (unit_hidden_by_fog(u)) fog_hidden_sprite.at(u->sprite->index) = 1;
+-					else if (unit_frozen_by_fog(u)) fog_frozen_sprite.at(u->sprite->index) = 1;
+-					else if (u->owner != fog_player && unit_persists_in_fog(u)) snapshot_fog_sprite(u->sprite);
+-				}
++		for (size_t i = 0; i != 12; ++i)
++			for (unit_t* u : ptr(st.player_units[i])) {
++				if (unit_hidden_by_fog(u)) fog_hidden_sprite.at(u->sprite->index) = 1;
++				else if (unit_frozen_by_fog(u)) fog_frozen_sprite.at(u->sprite->index) = 1;
++				else if (fog_player >= 0 && u->owner != fog_player && unit_persists_in_fog(u)) snapshot_fog_sprite(u->sprite);
++			}
+ 
+ 		draw_psi_fields(data,data_pitch);
+ 		for (auto& v : sorted_sprites) {
++			if (fog_hidden_sprite[v.second->index]) continue;
+ 			if (fog_player >= 0) {
+-				if (!sprite_position_explored(v.second) || fog_hidden_sprite[v.second->index]) continue;
++				if (!sprite_position_explored(v.second)) continue;
+ 				if (fog_frozen_sprite[v.second->index]) { draw_fog_snapshot(v.second, data, data_pitch); continue; }
+ 			}
+ 			draw_sprite(v.second, data, data_pitch);
+ 		}
+ 
+-		if (fog_player >= 0)
+-			for (size_t i = 0; i != 12; ++i)
+-				for (unit_t* u : ptr(st.player_units[i])) {
+-					fog_hidden_sprite.at(u->sprite->index) = 0;
+-					fog_frozen_sprite.at(u->sprite->index) = 0;
+-				}
++		for (size_t i = 0; i != 12; ++i)
++			for (unit_t* u : ptr(st.player_units[i])) {
++				fog_hidden_sprite.at(u->sprite->index) = 0;
++				fog_frozen_sprite.at(u->sprite->index) = 0;
++			}
+ 
+ 		for (auto* s : current_selection_sprites) {
+ 			current_selection_sprites_set.at(s->index) = nullptr;
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -1,4 +1,4 @@
+-// Bounded interpreter for the original scripts/aiscript.bin (not a melee bot).
++// Bounded interpreter for original campaign scripts and the Terran Easy skirmish adapter.
+ // Opcode layout reference: PyMS AIBIN.py, bfc5d3aad0b5614a5aff72c223f8efa00afddfa4.
+ // Loads both original and expansion script indexes and campaign instructions.
+ // Town placement/defence/target selection are OpenBW implementations, not an
+@@ -27,6 +27,7 @@
+     };
+     struct defence_alert { unit_id source, victim; int wake=0, until=0; };
+     std::array<defence_alert,8> defence_alerts{};
++    bool melee_ai=false; // Derived from game setup; survives restore on this instance.
+     bool base_defence_enabled=true; // User difficulty preference; not an objective/trigger rule.
+     std::array<town,8> towns;
+     std::array<a_vector<uint8_t>,2> scripts;
+@@ -258,7 +259,11 @@
+         int gas_workers=0;
+         for(auto* u:ptr(st.player_units[owner]))if(ut_worker(u)&&gas&&(u->worker.gather_target==gas || (u->order_type->id>=Orders::MoveToGas && u->order_type->id<=Orders::ReturnGas)))++gas_workers;
+         for(auto* u:ptr(st.player_units[owner])) {
+-            if(unit_dying(u)||!ut_worker(u)||!u_completed(u)||!u->build_queue.empty()||u_order_not_interruptible(u)||u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
++            if(unit_dying(u)||!ut_worker(u)||!u_completed(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
++            // A rejected building placement can return to Guard with its
++            // reservation still queued. Release it so supply can be retried.
++            if(ai_idle(u)&&!u->build_queue.empty()&&ut_building(u->build_queue.front()))cancel_build_queue(u);
++            if(!u->build_queue.empty()||u->current_build_unit||u->order_type->id==Orders::ConstructingBuilding)continue;
+             bool idle=ai_idle(u), redirect=gas && gas_workers<2 && u->worker.gather_target && u->worker.gather_target!=gas && u->worker.resources_carried==0;
+             if(!idle&&!redirect)continue;
+             unit_t* target=nullptr;
+@@ -279,6 +284,12 @@
+                 bool morph=unit_is(u,UnitTypes::Zerg_Larva)||unit_is(u,UnitTypes::Zerg_Hydralisk)||unit_is(u,UnitTypes::Zerg_Mutalisk);
+                 if(morph?af.action_morph(owner,ut):af.action_train(owner,ut)){++a.trained;return true;}
+             } else if(!ut_worker(u)) {
++                if(ut_addon(ut) && u_grounded_building(u) && !u->building.addon
++                    && u->secondary_order_type->id!=Orders::BuildAddon) {
++                    xy pos=u->position-u->unit_type->placement_size/2+ut->addon_position;
++                    if(can_place_building(u,owner,ut,pos+ut->placement_size/2,false,false)
++                        && af.action_build(owner,get_order_type(Orders::PlaceAddon),ut,{size_t(pos.x/32),size_t(pos.y/32)})) {++a.built;return true;}
++                }
+                 if(unit_is_zerg_building(u)&&af.action_morph_building(owner,ut)){++a.built;return true;}
+             } else {
+                 if(u->current_build_unit || u->order_type->id==Orders::ConstructingBuilding)continue;
+@@ -289,16 +300,73 @@
+                     for(auto* g:ptr(st.player_units[11]))if(unit_is(g,UnitTypes::Resource_Vespene_Geyser)){int d=xy_length(g->sprite->position-start);if(d<distance){distance=d;geyser=g;}}
+                     if(!geyser||distance>800)return false;start=geyser->sprite->position-ut->placement_size/2;
+                     if(can_place_building(u,owner,ut,start+ut->placement_size/2,false,false)){af.action_build(owner,order,ut,{size_t(start.x/32),size_t(start.y/32)});++a.built;return true;}
+-                } else for(int r=2;r<=12;++r)for(int dy=-r;dy<=r;++dy)for(int dx=-r;dx<=r;++dx) {
++                } else for(int r=2;r<=(melee_ai?24:12);++r)for(int dy=-r;dy<=r;++dy)for(int dx=-r;dx<=r;++dx) {
+                     if(std::abs(dx)!=r && std::abs(dy)!=r)continue;
+                     int tx=start.x/32+dx,ty=start.y/32+dy;
+                     if(tx<0||ty<0||tx+ut->placement_size.x/32>int(game_st.map_tile_width)||ty+ut->placement_size.y/32>int(game_st.map_tile_height))continue;
+                     xy pos=xy(tx*32,ty*32)+ut->placement_size/2;
++                    if(melee_ai) {
++                        // Leave SCV/army corridors instead of walling the
++                        // depot in with the first barracks and supply depots.
++                        bool crowded=false;
++                        rect area{pos-ut->placement_size/2-xy(16,16),pos+ut->placement_size/2+xy(16,16)};
++                        for(auto* other:find_units(area))if(!unit_dying(other)&&ut_building(other))crowded=true;
++                        if(crowded)continue;
++                        int addon=type==106?107:type==113?120:type==114?115:type==116?117:-1;
++                        if(addon>=0) {
++                            const auto* at=get_unit_type(UnitTypes(addon));
++                            xy ap=pos-ut->placement_size/2+at->addon_position+at->placement_size/2;
++                            if(!can_place_building(u,owner,at,ap,false,false))continue;
++                        }
++                        // Keep future add-on pads clear when placing other structures.
++                        for(auto* other:ptr(st.player_units[owner]))if(!unit_dying(other)&&u_grounded_building(other)) {
++                            int id=int(other->unit_type->id);
++                            int ai=id==106?107:id==113?120:id==114?115:id==116?117:-1;
++                            if(ai<0)continue;
++                            const auto* at=get_unit_type(UnitTypes(ai));
++                            xy ap=other->position-other->unit_type->placement_size/2+at->addon_position;
++                            xy left=pos-ut->placement_size/2,right=pos+ut->placement_size/2;
++                            if(left.x<ap.x+at->placement_size.x&&right.x>ap.x&&left.y<ap.y+at->placement_size.y&&right.y>ap.y)crowded=true;
++                        }
++                        if(crowded)continue;
++                    }
+                     if(can_place_building(u,owner,ut,pos,false,false)){af.action_build(owner,order,ut,{size_t(tx),size_t(ty)});++a.built;return true;}
+                 }
+             }
+         }
+         return false;
++    }
++    void ai_melee_prerequisites(a_vector<request>& req) {
++        // Original campaign scripts expect the AI manager to provide missing
++        // tech buildings. Supply that manager work for a four-SCV melee start;
++        // the original TLOx bytes still own army composition and attack timing.
++        bool needs_gas=false;
++        for(size_t i=0;i<req.size();++i) {
++            auto r=req[i];const auto* ut=get_unit_type(UnitTypes(r.type));
++            needs_gas=needs_gas||ut->gas_cost>0;
++            auto need=[&](int type){ai_request(req,type,1,r.priority);};
++            switch(r.type) {
++            case 0: need(111);break;
++            case 32:case 34:need(111);need(112);break;
++            case 1:need(111);need(112);need(117);break;
++            case 2:need(113);break;
++            case 5:case 30:need(113);need(120);break;
++            case 3:need(113);need(123);break;
++            case 8:need(114);break;
++            case 9:need(114);need(115);need(116);break;
++            case 11:need(114);need(115);break;
++            case 12:need(114);need(115);need(118);break;
++            case 58:need(114);need(115);need(123);break;
++            case 112:case 113:need(111);break;
++            case 114:case 123:need(113);break;
++            case 116:need(114);break;
++            case 107:case 108:need(106);break;
++            case 115:need(114);break;
++            case 117:case 118:need(116);break;
++            case 120:need(113);break;
++            }
++        }
++        if(needs_gas)ai_request(req,110,1,90);
+     }
+     void ai_manage(int owner) {
+         auto& a=towns[owner];if(!a.active)return;
+@@ -308,6 +376,7 @@
+         for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u)&&!u_burrowed(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+         auto req=a.builds;
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
++        if(melee_ai && st.players[owner].race==race_t::terran)ai_melee_prerequisites(req);
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
+@@ -388,12 +457,32 @@
+             }
+         }
+     }
++    void ai_tanks(int owner) {
++        action_functions af(st,ai_actions);
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(!unit_is_tank(u)||ut_turret(u)||unit_dying(u)||!u_completed(u)
++                ||us_hidden(u)||unit_is_disabled(u)||u_iscript_nobrk(u))continue;
++            auto order=u->order_type->id;
++            if(order==Orders::Move||order==Orders::Sieging||order==Orders::Unsieging)continue;
++            unit_t* target=nullptr;
++            for(auto* other:find_units(square_at(u->position,416))) {
++                if(unit_dying(other)||u_flying(other)||u_invincible(other)||ut_turret(other)
++                    ||!unit_target_is_enemy(u,other)||!unit_can_see_target(u,other))continue;
++                if(!target||units_distance(u,other)<units_distance(u,target))target=other;
++            }
++            af.action_select(owner,u);
++            if(unit_is_unsieged_tank(u)&&target&&units_distance(u,target)>=64&&units_distance(u,target)<=384)
++                af.action_siege(owner,false);
++            else if(unit_is_sieged_tank(u)&&!target&&ai_attacking(towns[owner],u))
++                af.action_unsiege(owner,false);
++        }
++    }
+     void ai_tick() {
+         ++ai_clock;
+         for(auto& t:threads)if(!t.done&&t.wake<=ai_clock)ai_run(t);
+         if(!spawned.empty()){threads.insert(threads.end(),spawned.begin(),spawned.end());spawned.clear();}
+         if(ai_clock%12==0)for(int p=0;p<8;++p)
+-            if(p!=my_player && st.players[p].controller==player_t::controller_computer_game)ai_lurkers(p);
++            if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_lurkers(p);ai_tanks(p);}
+         if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_defend(p);ai_manage(p);}
+     }
+     a_string ai_status() {
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -92,14 +92,14 @@
+ 
+ // Build the game with `n` occupied slots. Every peer must pass an identical slot list (and
+ // the same map) or their initial states differ and lockstep is broken from frame 0.
+-static void init_game(int width, int height, int my_slot, const mp_slot* slots, size_t n, bool campaign = false) {
++static void init_game(int width, int height, int my_slot, const mp_slot* slots, size_t n, bool campaign = false, int original_ai_slot = -1) {
+ 	g_loader = new loader_t(data_loading::data_files_directory<loader_t>(""));
+ 
+ 	race_t my_race = race_t::terran;
+ 	for (size_t k = 0; k != n; ++k) if (slots[k].slot == my_slot) my_race = slots[k].race;
+ 
+ 	game_player player(*g_loader);
+-	if (campaign) {
++	if (campaign || original_ai_slot >= 0) {
+ 		g_campaign = new campaign_ui(std::move(player), my_slot, my_race);
+ 		g_ui = g_campaign;
+ 		g_campaign->sound_file = mission_sound;
+@@ -168,6 +168,13 @@
+ 		for(int i=0;i<2;++i) for(auto& archive:g_loader->mpqs) if(archive.mpq.file_exists(names[i])) { archive(g_campaign->scripts[i],names[i]); break; }
+ 	}
+ 
++    if(original_ai_slot>=0) {
++        g_campaign->melee_ai=true;
++        g_ui->st.players[original_ai_slot].controller=player_t::controller_computer_game;
++        g_campaign->ai_start(original_ai_slot,0x784f4c54u,0); // Original Brood War TLOx (Terran Easy).
++        if(!g_campaign->ai_error.empty())error("Terran AI: %s",g_campaign->ai_error.c_str());
++    }
++
+ 	g_ui->wnd.create("OpenBW Web", 0, 0, width, height);
+ 	g_ui->resize(width, height);
+ 	g_ui->set_image_data();
+@@ -532,6 +539,13 @@
+ 		g_ui->apply_commands(owner, g_inbuf.data(), (size_t)len);
+ }
+ 
++// Local skirmish using the same original-script runtime and portable snapshots.
++OPENBW_EXPORT(openbw_init_terran_ai) void openbw_init_terran_ai(int width,int height,int race,int opponent) {
++    if(opponent<1||opponent>=8)error("Invalid Terran AI slot");
++    mp_slot slots[]={{0,race_t(race)},{opponent,race_t::terran}};
++    init_game(width,height,0,slots,2,false,opponent);
++}
++
+ // Multiplayer init: the host writes the slot list into the openbw_in_ptr scratch buffer as
+ // int32 pairs [slot, race, slot, race, …] first, then calls this. Every peer must pass an
+ // identical list and load the same map, or the initial states differ and lockstep breaks

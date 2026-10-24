@@ -1,0 +1,3 @@
+#include "data_loading.h"
+#include <fstream>
+int main(int n,char**v){bwgame::data_loading::mpq_file<> a(v[1]);bwgame::a_vector<uint8_t>b;auto* h=a.mpq.find_hash_table_entry(v[2]);if(!h)return 1;auto x=a.mpq.block_table[h->block_index];if(!(x.flags&0x300)&&!(x.flags&0x10000)){std::ifstream f(v[1],std::ios::binary);f.seekg(x.data_offset);b.resize(x.size);f.read((char*)b.data(),b.size());}else a(b,v[2]);std::ofstream o(v[3],std::ios::binary);o.write((char*)b.data(),b.size());}

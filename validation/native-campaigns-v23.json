@@ -1,0 +1,585 @@
+{
+  "runtime": "native desktop C++ (same simulation sources as Android ARM64)",
+  "requestedFramesPerMission": 2400,
+  "notes": "Startup/AI smoke test, not full campaign playthroughs. Early triggered mission outcomes may stop the simulation.",
+  "passed": 64,
+  "total": 64,
+  "results": [
+    {
+      "mission": 50,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.306,
+      "audioSamples": 0,
+      "checksum": 481729402,
+      "passed": true
+    },
+    {
+      "mission": 1,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.201,
+      "audioSamples": 0,
+      "checksum": 1500571561,
+      "passed": true
+    },
+    {
+      "mission": 2,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.321,
+      "audioSamples": 0,
+      "checksum": 1503976697,
+      "passed": true
+    },
+    {
+      "mission": 3,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.041,
+      "audioSamples": 0,
+      "checksum": 1093065887,
+      "passed": true
+    },
+    {
+      "mission": 4,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.62,
+      "audioSamples": 0,
+      "checksum": 151691119,
+      "passed": true
+    },
+    {
+      "mission": 5,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 0.916,
+      "audioSamples": 0,
+      "checksum": 1095553056,
+      "passed": true
+    },
+    {
+      "mission": 6,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.463,
+      "audioSamples": 0,
+      "checksum": 331168725,
+      "passed": true
+    },
+    {
+      "mission": 8,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.448,
+      "audioSamples": 95980,
+      "checksum": 3457708590,
+      "passed": true
+    },
+    {
+      "mission": 9,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.622,
+      "audioSamples": 0,
+      "checksum": 3468844659,
+      "passed": true
+    },
+    {
+      "mission": 11,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.17,
+      "audioSamples": 0,
+      "checksum": 2222588294,
+      "passed": true
+    },
+    {
+      "mission": 12,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.772,
+      "audioSamples": 0,
+      "checksum": 1613074717,
+      "passed": true
+    },
+    {
+      "mission": 101,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.362,
+      "audioSamples": 0,
+      "checksum": 3451043490,
+      "passed": true
+    },
+    {
+      "mission": 102,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.125,
+      "audioSamples": 0,
+      "checksum": 984911661,
+      "passed": true
+    },
+    {
+      "mission": 103,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.318,
+      "audioSamples": 95962,
+      "checksum": 1138287327,
+      "passed": true
+    },
+    {
+      "mission": 104,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.265,
+      "audioSamples": 0,
+      "checksum": 405946366,
+      "passed": true
+    },
+    {
+      "mission": 105,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.293,
+      "audioSamples": 0,
+      "checksum": 222935884,
+      "passed": true
+    },
+    {
+      "mission": 106,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.599,
+      "audioSamples": 0,
+      "checksum": 1161118349,
+      "passed": true
+    },
+    {
+      "mission": 107,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.336,
+      "audioSamples": 0,
+      "checksum": 4089640392,
+      "passed": true
+    },
+    {
+      "mission": 108,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 0.935,
+      "audioSamples": 0,
+      "checksum": 777216680,
+      "passed": true
+    },
+    {
+      "mission": 109,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.223,
+      "audioSamples": 0,
+      "checksum": 3125186556,
+      "passed": true
+    },
+    {
+      "mission": 110,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.534,
+      "audioSamples": 95954,
+      "checksum": 3657739303,
+      "passed": true
+    },
+    {
+      "mission": 201,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.354,
+      "audioSamples": 95980,
+      "checksum": 2591990877,
+      "passed": true
+    },
+    {
+      "mission": 202,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.37,
+      "audioSamples": 0,
+      "checksum": 4228841366,
+      "passed": true
+    },
+    {
+      "mission": 203,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 0.996,
+      "audioSamples": 0,
+      "checksum": 2348888170,
+      "passed": true
+    },
+    {
+      "mission": 204,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 0.923,
+      "audioSamples": 0,
+      "checksum": 2391763559,
+      "passed": true
+    },
+    {
+      "mission": 205,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.132,
+      "audioSamples": 0,
+      "checksum": 2384099765,
+      "passed": true
+    },
+    {
+      "mission": 206,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.414,
+      "audioSamples": 0,
+      "checksum": 934542981,
+      "passed": true
+    },
+    {
+      "mission": 207,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.558,
+      "audioSamples": 95994,
+      "checksum": 1682467015,
+      "passed": true
+    },
+    {
+      "mission": 208,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.348,
+      "audioSamples": 95976,
+      "checksum": 225248066,
+      "passed": true
+    },
+    {
+      "mission": 209,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.002,
+      "audioSamples": 0,
+      "checksum": 2960993572,
+      "passed": true
+    },
+    {
+      "mission": 210,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.295,
+      "audioSamples": 95846,
+      "checksum": 3944314550,
+      "passed": true
+    },
+    {
+      "mission": 301,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.609,
+      "audioSamples": 95928,
+      "checksum": 4125352268,
+      "passed": true
+    },
+    {
+      "mission": 302,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.394,
+      "audioSamples": 0,
+      "checksum": 1642163665,
+      "passed": true
+    },
+    {
+      "mission": 303,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 0.995,
+      "audioSamples": 95990,
+      "checksum": 1698635395,
+      "passed": true
+    },
+    {
+      "mission": 304,
+      "frames": 2400,
+      "outcome": 2,
+      "seconds": 1.3,
+      "audioSamples": 95996,
+      "checksum": 2109791366,
+      "passed": true
+    },
+    {
+      "mission": 305,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.231,
+      "audioSamples": 95974,
+      "checksum": 1990348420,
+      "passed": true
+    },
+    {
+      "mission": 306,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.94,
+      "audioSamples": 95970,
+      "checksum": 3998683010,
+      "passed": true
+    },
+    {
+      "mission": 307,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.584,
+      "audioSamples": 95856,
+      "checksum": 3279508222,
+      "passed": true
+    },
+    {
+      "mission": 308,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.816,
+      "audioSamples": 0,
+      "checksum": 2054964831,
+      "passed": true
+    },
+    {
+      "mission": 401,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.109,
+      "audioSamples": 0,
+      "checksum": 3111809774,
+      "passed": true
+    },
+    {
+      "mission": 402,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.305,
+      "audioSamples": 95988,
+      "checksum": 3196742815,
+      "passed": true
+    },
+    {
+      "mission": 403,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.691,
+      "audioSamples": 0,
+      "checksum": 67854827,
+      "passed": true
+    },
+    {
+      "mission": 404,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.54,
+      "audioSamples": 0,
+      "checksum": 2105353756,
+      "passed": true
+    },
+    {
+      "mission": 405,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.336,
+      "audioSamples": 95984,
+      "checksum": 51055473,
+      "passed": true
+    },
+    {
+      "mission": 415,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.686,
+      "audioSamples": 95986,
+      "checksum": 1363920373,
+      "passed": true
+    },
+    {
+      "mission": 406,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 2.608,
+      "audioSamples": 95994,
+      "checksum": 1072058429,
+      "passed": true
+    },
+    {
+      "mission": 407,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.733,
+      "audioSamples": 95994,
+      "checksum": 3003874910,
+      "passed": true
+    },
+    {
+      "mission": 408,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.996,
+      "audioSamples": 95990,
+      "checksum": 744635341,
+      "passed": true
+    },
+    {
+      "mission": 501,
+      "frames": 2400,
+      "outcome": 2,
+      "seconds": 1.432,
+      "audioSamples": 0,
+      "checksum": 3005367936,
+      "passed": true
+    },
+    {
+      "mission": 502,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.832,
+      "audioSamples": 95986,
+      "checksum": 806518200,
+      "passed": true
+    },
+    {
+      "mission": 503,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.514,
+      "audioSamples": 0,
+      "checksum": 4195754453,
+      "passed": true
+    },
+    {
+      "mission": 504,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.731,
+      "audioSamples": 0,
+      "checksum": 1946347147,
+      "passed": true
+    },
+    {
+      "mission": 514,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.692,
+      "audioSamples": 0,
+      "checksum": 565440213,
+      "passed": true
+    },
+    {
+      "mission": 524,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.407,
+      "audioSamples": 0,
+      "checksum": 3963647705,
+      "passed": true
+    },
+    {
+      "mission": 534,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.26,
+      "audioSamples": 0,
+      "checksum": 3990269313,
+      "passed": true
+    },
+    {
+      "mission": 544,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 2.027,
+      "audioSamples": 0,
+      "checksum": 3395910877,
+      "passed": true
+    },
+    {
+      "mission": 554,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.998,
+      "audioSamples": 0,
+      "checksum": 1267132823,
+      "passed": true
+    },
+    {
+      "mission": 505,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.135,
+      "audioSamples": 96000,
+      "checksum": 4139952413,
+      "passed": true
+    },
+    {
+      "mission": 506,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.456,
+      "audioSamples": 92494,
+      "checksum": 2449244457,
+      "passed": true
+    },
+    {
+      "mission": 507,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.564,
+      "audioSamples": 0,
+      "checksum": 2559303842,
+      "passed": true
+    },
+    {
+      "mission": 508,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 2.097,
+      "audioSamples": 0,
+      "checksum": 632800989,
+      "passed": true
+    },
+    {
+      "mission": 509,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.645,
+      "audioSamples": 0,
+      "checksum": 2948934303,
+      "passed": true
+    },
+    {
+      "mission": 510,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 2.147,
+      "audioSamples": 0,
+      "checksum": 3501745204,
+      "passed": true
+    },
+    {
+      "mission": 599,
+      "frames": 2400,
+      "outcome": 0,
+      "seconds": 1.486,
+      "audioSamples": 95992,
+      "checksum": 2062190097,
+      "passed": true
+    }
+  ]
+}

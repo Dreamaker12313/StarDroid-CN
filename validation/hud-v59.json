@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "output": "PASS 4958 checks: fixed six-hero command positions across every upgrade combination, two widths/scales; bounded status/detector row, full inspection text, original red Unpowered\n",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "app/src/main/assets/native/commands.json": "29fb6aea657c1fb557d20dbdf704dd5995026ad45f6dc5dce40d64da2e0e3509",
+    "tests/run_hud59.py": "ef6ed3849de02ff5c164034e66f84bb5752f749322316c31eeef8ecde0f80a8d"
+  }
+}

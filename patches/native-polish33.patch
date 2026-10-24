@@ -1,0 +1,97 @@
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -174,7 +174,9 @@
+             int count=0,dest=a.group2_n==13?owner:a.group2_n,pct=std::max(0,std::min(100,a.group2_n));
+             for(auto* u:targets){
+                 if(a.num_n&&count++>=a.num_n)break;
+-                if(a.type==48){if(dest>=0&&dest<12&&u->owner!=dest){set_unit_owner(u,dest,false);set_unit_order(u,u->unit_type->return_to_idle);}}
++                // The regular Give Units path restores the new owner's idle order.
++                // Neutral Hatcheries need InitCreepGrowth to begin producing larvae.
++                if(a.type==48){if(dest>=0&&dest<12)trigger_give_unit_to(u,dest);}
+                 else if(a.type==49)set_unit_hp(u,std::max(1_fp8,u->unit_type->hitpoints*pct/100));
+                 else if(a.type==50)set_unit_energy(u,unit_max_energy(u)*pct/100);
+                 else if(u->unit_type->has_shield)set_unit_shield_points(u,fp8::integer(u->unit_type->shield_points*pct/100));
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -931,6 +931,55 @@
+ 		case U::Protoss_Scout: case U::Protoss_Corsair:
+ 		case U::Protoss_Arbiter: case U::Protoss_Carrier:      return U::Protoss_Stargate;
+ 		default: return U::None;
++		}
++	}
++
++	// Describe the actual command/type data, including scenario-customized units.
++	a_string command_description(const cmd_t& c) const {
++		if (c.ut != UnitTypes::None && (c.act == C_BUILD || c.act == C_TRAIN || c.act == C_MORPH || c.act == C_MORPHBLDG || c.act == C_FIGHTER)) {
++			auto* t = get_unit_type(c.ut);
++			a_string text = ut_building(t) ? "Structure." : ut_flyer(t) ? "Air unit." : "Ground unit.";
++			if (ut_worker(t)) text += " Harvests minerals and Vespene Gas and builds structures.";
++			else if (t->ground_weapon && t->air_weapon) text += " Attacks ground and air targets.";
++			else if (t->ground_weapon) text += " Attacks ground targets.";
++			else if (t->air_weapon) text += " Attacks air targets.";
++			if (ut_detector(t)) text += " Detects cloaked and burrowed enemies.";
++			if (ut_resource_depot(t)) text += " Receives gathered resources.";
++			if (c.ut == UnitTypes::Zerg_Hatchery || c.ut == UnitTypes::Zerg_Lair || c.ut == UnitTypes::Zerg_Hive)
++				text += " Spawns larvae and spreads creep.";
++			if (t->supply_provided.raw_value > 0) text += format(" Provides %d supply.", t->supply_provided.raw_value / 2);
++			if (ut_two_units_in_one_egg(t)) text += " Morphs two units per egg; cost and supply are for the pair.";
++			return text;
++		}
++		switch (c.act) {
++		case C_MOVE: return "Moves to the chosen location.";
++		case C_STOP: return "Stops the current order.";
++		case C_ATTACK: return "Attacks a target, or moves to a location while engaging enemies.";
++		case C_GATHER: return "Gathers minerals or Vespene Gas from the chosen resource.";
++		case C_HOLD: return "Holds position and attacks enemies in range.";
++		case C_PATROL: return "Patrols between the current position and the chosen location.";
++		case C_BUILDMENU: return "Opens the basic structure menu.";
++		case C_ADVMENU: return "Opens the advanced structure menu.";
++		case C_STIM: return "Spends health to temporarily increase movement and attack speed.";
++		case C_SIEGE: return "Deploys the tank for long-range ground attacks. Cannot move while deployed.";
++		case C_UNSIEGE: return "Returns to mobile tank mode.";
++		case C_REPAIR: return "Repairs a damaged mechanical unit or structure using resources.";
++		case C_SELECT: return "Selects the associated units.";
++		case C_RALLY: return "Sets the destination for newly produced units.";
++		case C_LIFT: return "Lifts this structure into the air.";
++		case C_LAND: return "Lands this structure at the chosen location.";
++		case C_NYDUS: return "Creates a connected Nydus Canal exit on creep.";
++		case C_UNLOAD: return "Unloads this passenger.";
++		case C_UNLOADALL: return "Unloads all passengers.";
++		case C_RETURN: return "Returns carried resources to a nearby resource depot.";
++		case C_BURROW: return "Hides underground. Detectors can reveal burrowed units.";
++		case C_UNBURROW: return "Returns to the surface.";
++		case C_CLOAK: return "Cloaks the unit while draining energy. Detectors can reveal it.";
++		case C_DECLOAK: return "Ends cloaking and its energy drain.";
++		case C_ARCHON: return "Merges two High Templars into an Archon.";
++		case C_DARCHON: return "Merges two Dark Templars into a Dark Archon.";
++		case C_CANCEL: return "Cancels the current action or closes this command menu.";
++		default: return "";
+ 		}
+ 	}
+ 
+@@ -1333,8 +1382,8 @@
+ 				minc = ut->mineral_cost; gasc = ut->gas_cost;
+ 			}
+ 			bool afford = (int)st.current_minerals[my_player] >= minc && (int)st.current_gas[my_player] >= gasc;
+-			const char* desc = c.act == C_UPGRADE ? bw_upgrade_desc(c.upg)
+-			                 : (c.act == C_RESEARCH || c.act == C_SPELL) ? bw_tech_desc(c.tech) : "";
++			a_string desc = c.act == C_UPGRADE ? bw_upgrade_desc(c.upg)
++			                 : (c.act == C_RESEARCH || c.act == C_SPELL) ? a_string(bw_tech_desc(c.tech)) : command_description(c);
+ 			// KEY \t Label \t enabled \t icon \t minerals \t gas \t affordable \t requires \t desc \t active
+ 			card_text += '\n'; card_text += c.key; card_text += '\t'; card_text += c.label;
+ 			card_text += '\t'; card_text += (c.enabled ? '1' : '0');
+@@ -1358,7 +1407,13 @@
+                 ? get_tech_type(c.tech)->energy_cost
+                 : c.act == C_CLOAK ? get_tech_type(unit_is_wraith(sel)
+                     ? TechTypes::Cloaking_Field : TechTypes::Personnel_Cloaking)->energy_cost : 0;
+-            card_text += format("\t%d", energy);
++            int supply = 0;
++            if (c.ut != UnitTypes::None && (c.act == C_TRAIN || c.act == C_MORPH || c.act == C_FIGHTER)) {
++                auto* t = get_unit_type(c.ut);
++                supply = t->supply_required.raw_value * (ut_two_units_in_one_egg(t) ? 2 : 1);
++            }
++            // Supply is in half-units, matching units.dat, and is the final unit's total.
++            card_text += format("\t%d\t%d", energy, supply);
+ 		}
+ 	}
+ 

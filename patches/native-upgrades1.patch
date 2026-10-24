@@ -1,0 +1,150 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -1156,6 +1156,121 @@
+ 		return UnitTypes::None;
+ 	}
+ 
++	// A command slot belongs to a producer even while its next upgrade is locked.
++	// Eligibility is still decided by unit_can_upgrade; this only controls visibility.
++	bool upgrade_belongs_to(const unit_t* u, UpgradeTypes id) const {
++		switch (id) {
++		case UpgradeTypes::Terran_Infantry_Armor:
++		case UpgradeTypes::Terran_Infantry_Weapons:
++			return unit_is(u, UnitTypes::Terran_Engineering_Bay);
++		case UpgradeTypes::Terran_Vehicle_Plating:
++		case UpgradeTypes::Terran_Ship_Plating:
++		case UpgradeTypes::Terran_Vehicle_Weapons:
++		case UpgradeTypes::Terran_Ship_Weapons:
++			return unit_is(u, UnitTypes::Terran_Armory);
++		case UpgradeTypes::Zerg_Carapace:
++		case UpgradeTypes::Zerg_Melee_Attacks:
++		case UpgradeTypes::Zerg_Missile_Attacks:
++			return unit_is(u, UnitTypes::Zerg_Evolution_Chamber);
++		case UpgradeTypes::Zerg_Flyer_Carapace:
++		case UpgradeTypes::Zerg_Flyer_Attacks:
++			return unit_is(u, UnitTypes::Zerg_Spire) || unit_is(u, UnitTypes::Zerg_Greater_Spire);
++		case UpgradeTypes::Protoss_Ground_Armor:
++		case UpgradeTypes::Protoss_Ground_Weapons:
++		case UpgradeTypes::Protoss_Plasma_Shields:
++			return unit_is(u, UnitTypes::Protoss_Forge);
++		case UpgradeTypes::Protoss_Air_Armor:
++		case UpgradeTypes::Protoss_Air_Weapons:
++		case UpgradeTypes::Singularity_Charge:
++			return unit_is(u, UnitTypes::Protoss_Cybernetics_Core);
++		case UpgradeTypes::U_238_Shells:
++		case UpgradeTypes::Caduceus_Reactor:
++			return unit_is(u, UnitTypes::Terran_Academy);
++		case UpgradeTypes::Ion_Thrusters:
++		case UpgradeTypes::Charon_Boosters:
++			return unit_is(u, UnitTypes::Terran_Machine_Shop);
++		case UpgradeTypes::Titan_Reactor:
++			return unit_is(u, UnitTypes::Terran_Science_Facility);
++		case UpgradeTypes::Ocular_Implants:
++		case UpgradeTypes::Moebius_Reactor:
++			return unit_is(u, UnitTypes::Terran_Covert_Ops);
++		case UpgradeTypes::Apollo_Reactor:
++			return unit_is(u, UnitTypes::Terran_Control_Tower);
++		case UpgradeTypes::Colossus_Reactor:
++			return unit_is(u, UnitTypes::Terran_Physics_Lab);
++		case UpgradeTypes::Ventral_Sacs:
++		case UpgradeTypes::Antennae:
++		case UpgradeTypes::Pneumatized_Carapace:
++			return unit_is(u, UnitTypes::Zerg_Lair) || unit_is(u, UnitTypes::Zerg_Hive);
++		case UpgradeTypes::Metabolic_Boost:
++		case UpgradeTypes::Adrenal_Glands:
++			return unit_is(u, UnitTypes::Zerg_Spawning_Pool);
++		case UpgradeTypes::Muscular_Augments:
++		case UpgradeTypes::Grooved_Spines:
++			return unit_is(u, UnitTypes::Zerg_Hydralisk_Den);
++		case UpgradeTypes::Gamete_Meiosis:
++			return unit_is(u, UnitTypes::Zerg_Queens_Nest);
++		case UpgradeTypes::Metasynaptic_Node:
++			return unit_is(u, UnitTypes::Zerg_Defiler_Mound);
++		case UpgradeTypes::Leg_Enhancements:
++			return unit_is(u, UnitTypes::Protoss_Citadel_of_Adun);
++		case UpgradeTypes::Scarab_Damage:
++		case UpgradeTypes::Reaver_Capacity:
++		case UpgradeTypes::Gravitic_Drive:
++			return unit_is(u, UnitTypes::Protoss_Robotics_Support_Bay);
++		case UpgradeTypes::Sensor_Array:
++		case UpgradeTypes::Gravitic_Boosters:
++			return unit_is(u, UnitTypes::Protoss_Observatory);
++		case UpgradeTypes::Khaydarin_Amulet:
++		case UpgradeTypes::Argus_Talisman:
++			return unit_is(u, UnitTypes::Protoss_Templar_Archives);
++		case UpgradeTypes::Apial_Sensors:
++		case UpgradeTypes::Gravitic_Thrusters:
++		case UpgradeTypes::Carrier_Capacity:
++		case UpgradeTypes::Argus_Jewel:
++			return unit_is(u, UnitTypes::Protoss_Fleet_Beacon);
++		case UpgradeTypes::Khaydarin_Core:
++			return unit_is(u, UnitTypes::Protoss_Arbiter_Tribunal);
++		case UpgradeTypes::Chitinous_Plating:
++		case UpgradeTypes::Anabolic_Synthesis:
++			return unit_is(u, UnitTypes::Zerg_Ultralisk_Cavern);
++		default: return false;
++		}
++	}
++
++	UnitTypes missing_upgrade_requirement(int owner, UpgradeTypes id) const {
++		using U = UnitTypes; using G = UpgradeTypes;
++		int level = player_upgrade_level(owner, id);
++		U req = U::None;
++		switch (id) {
++		case G::Terran_Infantry_Armor: case G::Terran_Vehicle_Plating: case G::Terran_Ship_Plating:
++		case G::Terran_Infantry_Weapons: case G::Terran_Vehicle_Weapons: case G::Terran_Ship_Weapons:
++			if (level > 0) req = U::Terran_Science_Facility;
++			break;
++		case G::Zerg_Carapace: case G::Zerg_Flyer_Carapace: case G::Zerg_Melee_Attacks:
++		case G::Zerg_Missile_Attacks: case G::Zerg_Flyer_Attacks:
++			if (level == 1) {
++				// A Hive morph retains the Lair prerequisite, as in the simulation.
++				if (player_has_completed_unit(owner, U::Zerg_Lair) || player_has_unit(owner, U::Zerg_Hive)) return U::None;
++				req = U::Zerg_Lair;
++			} else if (level == 2) req = U::Zerg_Hive;
++			break;
++		case G::Protoss_Ground_Armor: case G::Protoss_Ground_Weapons:
++			if (level > 0) req = U::Protoss_Templar_Archives;
++			break;
++		case G::Protoss_Air_Armor: case G::Protoss_Air_Weapons:
++			if (level > 0) req = U::Protoss_Fleet_Beacon;
++			break;
++		case G::Protoss_Plasma_Shields:
++			if (level > 0) req = U::Protoss_Cybernetics_Core;
++			break;
++		case G::Adrenal_Glands: req = U::Zerg_Hive; break;
++		case G::Charon_Boosters: req = U::Terran_Armory; break;
++		default: break;
++		}
++		return req != U::None && !player_has_completed_unit(owner, req) ? req : U::None;
++	}
++
+ 	// cat: 0 = no menu filter (a producer's own list); 1 = worker Basic build; 2 = Advanced.
+ 	void add_producible(unit_t* u, bool buildings_only, int cat = 0) {
+ 		bool worker = ut_worker(u), building = ut_building(u);
+@@ -1201,11 +1316,14 @@
+ 		if (buildings_only || (ut_flying_building(u) && !u_grounded_building(u))) return;
+ 		for (size_t i = 0; i != game_st.upgrade_types.vec.size(); ++i) {
+ 			const upgrade_type_t* up = get_upgrade_type((UpgradeTypes)i);
+-			if (!unit_can_upgrade(u, up)) continue;
++			if (!upgrade_belongs_to(u, up->id) || !u_completed(u) || u_hallucination(u)
++			    || player_upgrade_level(u->owner, up->id) >= player_max_upgrade_level(u->owner, up->id)) continue;
++			bool can = unit_can_upgrade(u, up);
++			UnitTypes req = can ? UnitTypes::None : missing_upgrade_requirement(u->owner, up->id);
+ 			const char* nm = upgrade_name(up);
+ 			char k = bw_upgrade_key(up->id);
+ 			if (k) for (auto& c : card) if (c.key == k) { k = 0; break; }
+-			card.push_back({k ? k : pick_key(nm), nm, C_UPGRADE, UnitTypes::None, true, TechTypes::None, up->id});
++			card.push_back({k ? k : pick_key(nm), nm, C_UPGRADE, UnitTypes::None, can, TechTypes::None, up->id, 0, req});
+ 		}
+ 		for (size_t i = 0; i != game_st.tech_types.vec.size(); ++i) {
+ 			const tech_type_t* te = get_tech_type((TechTypes)i);
+@@ -1496,6 +1614,8 @@
+ 			                 : (c.act == C_RESEARCH || c.act == C_SPELL) ? a_string(bw_tech_desc(c.tech)) : command_description(c);
+ 			// KEY \t Label \t enabled \t icon \t minerals \t gas \t affordable \t requires \t desc \t active
+ 			card_text += '\n'; card_text += c.key; card_text += '\t'; card_text += c.label;
++			if (c.act == C_UPGRADE && get_upgrade_type(c.upg)->max_level > 1)
++				card_text += format(" (Level %d)", player_upgrade_level(my_player, c.upg) + 1);
+ 			card_text += '\t'; card_text += (c.enabled ? '1' : '0');
+ 			card_text += '\t'; card_text += format("%d", icon).c_str();
+ 			card_text += '\t'; card_text += format("%d", minc).c_str();

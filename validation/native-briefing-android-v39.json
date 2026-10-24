@@ -1,0 +1,14 @@
+{
+  "apkSha256": "2ac5cc0f303a93418772166f51975fc9ed42c285582b8225d774c896133fc80c",
+  "testApkSha256": "a08b36299cc282af8ea756ba072cda9609f161cbfa99e858924306adef6ba3ed",
+  "version": "0.39",
+  "originalGameAssets": true,
+  "tReplaySupportStaysFixed": true,
+  "tStartUsesOriginalHoverPixels": true,
+  "terranProjectorBehindAnimatedPlanetDuringHoverAndExit": true,
+  "zReplaySupportStaysFixed": true,
+  "zStartUsesOriginalHoverPixels": true,
+  "pReplaySupportStaysFixed": true,
+  "pStartUsesOriginalHoverPixels": true,
+  "passed": true
+}

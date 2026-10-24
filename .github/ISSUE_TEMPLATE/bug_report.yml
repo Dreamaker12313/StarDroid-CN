@@ -1,0 +1,30 @@
+name: Bug report
+description: Report a reproducible StarDroid problem.
+title: "[Bug] "
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Device and build
+      description: Device model, Android version, APK release/build or checksum. For multiplayer, include each device and its host/join role.
+    validations:
+      required: true
+  - type: textarea
+    id: match
+    attributes:
+      label: Game setup
+      description: Mission/map, game type, races, difficulty, Hero Mode, and connection mode if applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: What did you do, what did you expect, and what happened?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or logs
+      description: Optional. Remove personal information. Do not attach game MPQs, installation archives, or signing keys.

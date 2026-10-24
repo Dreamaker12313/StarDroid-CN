@@ -1,0 +1,34 @@
+{
+  "version": "0.53",
+  "passed": true,
+  "physicalAndroid": false,
+  "productionClasses": [
+    "NativeNearby",
+    "LocalPermissions",
+    "LocalTransport"
+  ],
+  "androidBoundary": "test doubles, no physical permission dialogs or radio",
+  "apiLevels": [
+    26,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "output": "PASS 685 local permission/lifecycle checks; API 26-36, Host/Join, grant/deny/cancel, optional Wi-Fi, duplicate and late callbacks, Bluetooth enable and visibility",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeNearby.java": "1fba3381f77bf2e5575a69d33efa2340e9c548659a9fad67a3ab81f9ff68a1a8",
+    "app/src/main/java/org/openbw/androidtest/LocalPermissions.java": "e4d333cfd977a120671afc7467b8c1cfe47011df27185112fe91281c4cec97f6",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "3fefe5318dc3054938465707a47598d66964db69edce3a41972810e66b9fd77c",
+    "app/src/main/java/org/openbw/androidtest/LocalTransport.java": "c12218c31b5b57c9bb2874999e613731dfb22aa6afba23a1961a5bb8cb31bd5e",
+    "tests/LocalPermissionsTest.java": "fec53d0e180d09c194d9e0f585d3f83a95da4a9fb28bc9ceae6df4d5b72eb1e9",
+    "app/src/main/AndroidManifest.xml": "0c63ed59ef254708aad199498f37036e67ab6128ac1856bbbfea54703a1d67e3",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "96990359be6d0b3a9434a8c3e59ded814f378a591d9a9ef700127948f80c377c",
+    "tests/run_local_permissions.py": "acefe26be417bf94722351118535d4cbf0d38c54c3ae84918aaa77e84f54734a"
+  }
+}

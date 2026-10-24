@@ -1,0 +1,14 @@
+{
+  "original": {
+    "maps": 31,
+    "detectedExpansion": false,
+    "result": "StarCraft: 31 maps imported. Music and mission openings included.\nValidated 31 maps, each imported through the app validator."
+  },
+  "broodwar": {
+    "maps": 33,
+    "detectedExpansion": true,
+    "result": "Brood War: 33 maps imported. Music and mission openings included.\nValidated 33 maps, each imported through the app validator."
+  },
+  "validator": "Actual GameContent.install and each CampaignData/MusicData/StoryData/InterfaceData validator in desktop JVM",
+  "proprietaryContentIncluded": false
+}

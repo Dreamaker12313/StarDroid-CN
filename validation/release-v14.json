@@ -1,0 +1,32 @@
+{
+  "version": "0.14",
+  "versionCode": 15,
+  "package": "org.openbw.androidtest",
+  "apk": {
+    "file": "OpenBW-Android-0.14.apk",
+    "bytes": 3616556,
+    "sha256": "a6ab818a444cb5e43070ac09b39add46ad1f2c1d561798b2108670ba0317e5e4"
+  },
+  "checks": [
+    "APK asset bytes equal tested host and WASM files",
+    "APK ZIP CRC succeeds",
+    "Version 15 / 0.14 and original signing certificate retained",
+    "All six prior WASM modules unchanged",
+    "New cinematic module hash verified",
+    "Focused lifecycle/UI/movie and three-race integration checks pass"
+  ],
+  "unchangedWasm": [
+    "openbw.wasm",
+    "openbw-campaign.wasm",
+    "openbw-bot.wasm",
+    "media-decoder.wasm",
+    "portrait-decoder.wasm",
+    "menu-decoder.wasm"
+  ],
+  "cinematicDecoder": {
+    "file": "cinematic-decoder.wasm",
+    "size": 287265,
+    "sha256": "c167ce8fd74bb51267476a6b8abaf01e8c8a510b2421953aabcc7281c12d503f"
+  },
+  "physicalAndroidTest": false
+}

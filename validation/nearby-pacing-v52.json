@@ -1,0 +1,151 @@
+{
+  "checks": 302368,
+  "model": "Production 0.51 versus 0.52; deterministic engine, ordered delayed link, simulated startup and display cadence",
+  "passed": true,
+  "scenarios": [
+    {
+      "fixedHost": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 937,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "baselineHost": {
+        "maxStepsPerDraw": 4,
+        "multiStepDraws": 89,
+        "draws": 937,
+        "gameSpeedPercent": 99.68,
+        "longestStepGapMs": 208
+      },
+      "baselineGuest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 937,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "case": "Guest starts 600 ms late; 60 ms RTT with +/-20 ms one-way jitter",
+      "fixedGuest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 937,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      }
+    },
+    {
+      "host": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "guest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "case": "[0, 0, 16, 16]"
+    },
+    {
+      "host": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "guest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "case": "[0, 300, 16, 16]"
+    },
+    {
+      "host": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "guest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 303,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 66
+      },
+      "case": "[0, 1000, 16, 33]"
+    },
+    {
+      "host": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "guest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.54,
+        "longestStepGapMs": 48
+      },
+      "case": "[600, 0, 16, 16]"
+    },
+    {
+      "host": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 303,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 66
+      },
+      "guest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "case": "[0, 600, 33, 16]"
+    },
+    {
+      "host": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 1250,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "guest": {
+        "maxStepsPerDraw": 1,
+        "multiStepDraws": 0,
+        "draws": 625,
+        "gameSpeedPercent": 99.96,
+        "longestStepGapMs": 48
+      },
+      "case": "[0, 600, 8, 16]"
+    }
+  ],
+  "version": "0.52",
+  "physicalPhones": false,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "47185ffd0988ad0918510df2e2d92862e377c2300d9ec5111d8f80699f3d5457",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "52d1386975dc722fc87a2d5ee21c35e5776bfab66f8b477fb23fe49a17b63a58",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "597336118cd66cc3c2b7087fd7cef50989aa26f8000d230e578539bd9e379e58",
+    "tests/NearbyPacingTest.java": "24b37971cbd214c8f7e513178d3395884cf20d3b1c8180ac63bdd49a561b6cc9",
+    "tests/fixtures/nearby51/NearbyMatch51.java": "541944d08be2117a2b5be20494811a649536da939017b10e2e694f25f1791a8d",
+    "tests/fixtures/nearby51/NearbyProtocol51.java": "1805d5012138e457cc35f1c49dd583cf1e745f01092639cfb0f85f21b6251f7a",
+    "tests/run_nearby_pacing.py": "2ea386bb260f1c0bf4e3cfd475788de9c9e822e4c9e62bf7fcc404fc39509b3f"
+  }
+}

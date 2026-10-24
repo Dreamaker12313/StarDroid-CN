@@ -1,0 +1,26 @@
+.tools
+.gradle/
+app/build/
+build-native/*
+!build-native/json-20240303.jar
+!build-native/nearby-weave.chk
+native-engine/
+dist/
+local.properties
+*.log
+__pycache__/
+
+# Local signing material and credentials must never enter the public repository.
+signing/
+*.p12
+*.jks
+*.keystore
+*.pem
+.env
+.env.*
+
+# Game data belongs to the player, not the source distribution.
+*.mpq
+*.MPQ
+Install.exe
+install.exe

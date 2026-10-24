@@ -1,0 +1,227 @@
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -1,4 +1,4 @@
+-// Bounded interpreter for original campaign scripts and the Terran Easy skirmish adapter.
++// Bounded interpreter for original campaign scripts and Terran/Protoss skirmish managers.
+ // Opcode layout reference: PyMS AIBIN.py, bfc5d3aad0b5614a5aff72c223f8efa00afddfa4.
+ // Loads both original and expansion script indexes and campaign instructions.
+ // Town placement/defence/target selection are OpenBW implementations, not an
+@@ -137,9 +137,10 @@
+         int sent=0;
+         for(auto* u:ptr(st.player_units[owner])) {
+             int type=int(u->unit_type->id);
+-            if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||type>=228||ai_attacking(a,u))continue;
+-            if (!u->unit_type->ground_weapon && !u->unit_type->air_weapon) continue;
++            if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||u_loaded(u)||us_hidden(u)||unit_is_fighter(u)||type>=228||ai_attacking(a,u))continue;
++            if (!u->unit_type->ground_weapon && !u->unit_type->air_weapon && !unit_is_carrier(u) && !unit_is_reaver(u)) continue;
+             if(!all && need[type]<=0)continue;
++            if(all&&melee_ai&&ai_count(owner,type,true,true)<=a.defence[type])continue;
+             if(u_order_not_interruptible(u) || u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
+             issue_order(u,false,get_order_type(Orders::AttackMove),{target,nullptr});
+             a.attackers.push_back(get_unit_id(u)); --need[type]; ++sent;
+@@ -303,14 +304,15 @@
+     }
+     bool ai_expand(int owner) {
+         if(ai_clock%240)return false;
+-        auto depots=ai_depots(owner);if(depots.empty()||ai_count(owner,106)>int(depots.size()))return false;
++        const auto race=st.players[owner].race;const int depot=race==race_t::protoss?154:106;
++        auto depots=ai_depots(owner);if(depots.empty()||ai_count(owner,depot)>int(depots.size()))return false;
+         int remaining=0;
+         for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r))
+             for(auto* base:depots)if(xy_length(base->position-r->position)<384){remaining+=r->building.resource.resource_count;break;}
+         int desired=1+(ai_clock>10000+(2-melee_ai_level)*4000)+(ai_clock>26000+(2-melee_ai_level)*6000);
+         if(int(depots.size())>=desired&&remaining>4000)return false;
+         if(depots.size()>=4||st.current_minerals[owner]<400)return false;
+-        const auto* cc=get_unit_type(UnitTypes::Terran_Command_Center);
++        const auto* cc=get_unit_type(UnitTypes(depot));
+         a_vector<unit_t*> workers;
+         for(auto* u:ptr(st.player_units[owner]))if(!ai_busy_worker(u)&&!u->worker.resources_carried)workers.push_back(u);
+         if(workers.empty())return false;
+@@ -342,7 +344,7 @@
+             action_functions af(st,ai_actions);af.action_select(owner,worker);
+             if(can_place_building(worker,owner,cc,pos,false,false)){
+                 xy tile=(pos-cc->placement_size/2)/32;
+-                if(af.action_build(owner,get_order_type(kit_for(race_t::terran).build_order),cc,{size_t(tile.x),size_t(tile.y)})){++towns[owner].built;return true;}
++                if(af.action_build(owner,get_order_type(kit_for(race).build_order),cc,{size_t(tile.x),size_t(tile.y)})){++towns[owner].built;return true;}
+             }else if(worker->order_type->id!=Orders::Move||worker->order_target.pos!=pos)
+                 af.action_order(owner,get_order_type(Orders::Move),pos,nullptr,nullptr,false);
+             return false;
+@@ -386,7 +388,7 @@
+         }
+     }
+     void ai_mine(int owner) {
+-        if(melee_ai&&st.players[owner].race==race_t::terran){ai_mine_melee(owner);return;}
++        if(melee_ai){ai_mine_melee(owner);return;}
+         auto& a=towns[owner]; action_functions af(st,ai_actions);
+         unit_t* gas=nullptr; a_vector<unit_t*> minerals;
+         for(auto* u:ptr(st.player_units[owner])) if(!unit_dying(u)&&u_completed(u)&&(unit_is(u,UnitTypes::Zerg_Extractor)||unit_is(u,UnitTypes::Terran_Refinery)||unit_is(u,UnitTypes::Protoss_Assimilator))) {gas=u;break;}
+@@ -409,6 +411,14 @@
+     }
+     bool ai_produce(int owner,int type) {
+         auto& a=towns[owner]; const auto* ut=get_unit_type(UnitTypes(type)); action_functions af(st,ai_actions);
++        if(melee_ai&&(type==68||type==63)) {
++            unit_t* first=nullptr;
++            for(auto* u:ptr(st.player_units[owner]))if(unit_is(u,UnitTypes(type==68?67:61))&&!unit_dying(u)&&u_completed(u)&&!u_order_not_interruptible(u)&&!u_iscript_nobrk(u)&&!ai_attacking(a,u)) {
++                if(!first){first=u;continue;}unit_t* pair[]={first,u};af.action_select(owner,pair);
++                return type==68?af.action_morph_archon(owner):af.action_morph_dark_archon(owner);
++            }
++            return false;
++        }
+         if(!has_available_resources_for(owner,ut))return false;
+         for(auto* u:ptr(st.player_units[owner])) {
+             if(unit_dying(u)||!u_completed(u)||!u->build_queue.empty()||!unit_can_build(u,ut))continue;
+@@ -442,6 +452,7 @@
+                 } else {
+                   a_vector<xy> centers{a.center};
+                   if(melee_ai){centers.clear();for(auto* base:ai_depots(owner))centers.push_back(base->position);
++                    if(type==156)for(auto* b:ptr(st.player_units[owner]))if(!unit_dying(b)&&u_completed(b)&&ut_requires_psionic_matrix(b)&&!is_in_psionic_matrix(owner,b->position))centers.insert(centers.begin(),b->position);
+                     std::stable_sort(centers.begin(),centers.end(),[&](xy l,xy r){return xy_length(u->position-l)<xy_length(u->position-r);});}
+                   for(auto center:centers)for(int r=2;r<=(melee_ai?14:12);++r)for(int dy=-r;dy<=r;++dy)for(int dx=-r;dx<=r;++dx) {
+                     start=center;
+@@ -450,6 +461,10 @@
+                     if(tx<0||ty<0||tx+ut->placement_size.x/32>int(game_st.map_tile_width)||ty+ut->placement_size.y/32>int(game_st.map_tile_height))continue;
+                     xy pos=xy(tx*32,ty*32)+ut->placement_size/2;
+                     if(melee_ai&&!can_place_building(u,owner,ut,pos,false,false))continue;
++                    if(melee_ai&&type==156) {
++                        bool covered=false;for(auto* p:ptr(st.player_units[owner]))if(unit_is(p,UnitTypes::Protoss_Pylon)&&!unit_dying(p)&&xy_length(p->position-pos)<160)covered=true;
++                        if(covered)continue;
++                    }
+                     if(melee_ai) {
+                         // Reserve both the footprint and add-on pad, including
+                         // SCV orders whose buildings have not appeared yet.
+@@ -536,6 +551,47 @@
+         }
+         if(needs_gas)ai_request(req,110,1,90);
+     }
++    void ai_protoss_prerequisites(a_vector<request>& req) {
++        bool gas=false;
++        for(size_t i=0;i<req.size();++i) {
++            auto r=req[i];auto id=UnitTypes(r.type);auto* ut=get_unit_type(id);gas=gas||ut->gas_cost>0;
++            auto need=[&](UnitTypes id,int n=1){if(id!=UnitTypes::None)ai_request(req,int(id),n,r.priority);};
++            if(id==UnitTypes::Protoss_Archon)need(UnitTypes::Protoss_High_Templar,2);
++            else if(id==UnitTypes::Protoss_Dark_Archon)need(UnitTypes::Protoss_Dark_Templar,2);
++            else if(!ut_building(ut))need(bw_what_builds(id));
++            UnitTypes required[2];bw_requires(id,required);for(auto dep:required)need(dep);
++            if(ut_requires_psionic_matrix(ut))need(UnitTypes::Protoss_Pylon);
++        }
++        if(gas)ai_request(req,157,1,94);
++    }
++    void ai_protoss_support(int owner) {
++        action_functions af(st,ai_actions);
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
++            // Carrier and Reaver ammunition is purchased through normal actions.
++            if(unit_is_carrier(u)||unit_is_reaver(u)) {af.action_select(owner,u);af.action_train_fighter(owner);continue;}
++            if(!unit_is(u,UnitTypes::Protoss_Observer)&&!unit_is(u,UnitTypes::Protoss_High_Templar)&&!unit_is(u,UnitTypes::Protoss_Dark_Archon))continue;
++            if(unit_is(u,UnitTypes::Protoss_High_Templar)&&u->energy>=75_fp8&&player_has_researched(owner,TechTypes::Psionic_Storm)) {
++                unit_t* target=nullptr;int score=0;
++                for(auto* other:find_units(square_at(u->position,288))) {
++                    if(unit_dying(other)||ut_building(other)||ut_turret(other)||u_invincible(other)||!unit_target_is_enemy(u,other)||!unit_can_see_target(u,other)||other->storm_timer)continue;
++                    int count=0;for(auto* near:find_units(square_at(other->position,48)))if(!unit_dying(near)&&!ut_building(near)&&!ut_turret(near))count+=unit_target_is_enemy(u,near)?1:-2;
++                    if(count>score){score=count;target=other;}
++                }
++                if(target&&score>=2){af.action_select(owner,u);if(af.action_order(owner,get_order_type(Orders::CastPsionicStorm),target->position,nullptr,nullptr,false))continue;}
++            }
++            if(!ai_idle(u))continue;
++            unit_t* escort=nullptr;int distance=0x7fffffff;
++            for(auto id:towns[owner].attackers)if(auto* other=get_unit(id))if(!unit_dying(other)&&!ut_worker(other)) {
++                int d=xy_length(other->position-u->position);if(d<distance){distance=d;escort=other;}
++            }
++            if(escort){af.action_select(owner,u);af.action_order(owner,get_order_type(Orders::Follow),escort->position,escort,nullptr,false);}
++        }
++        // Retry a Probe placement that has never started; completed warp-ins
++        // need no worker and must never be treated as Terran construction.
++        if(ai_clock%2400==0)for(auto* u:ptr(st.player_units[owner]))
++            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::PlaceProtossBuilding&&!u->current_build_unit&&!u->build_queue.empty()&&u->build_queue.front()->id!=UnitTypes::Protoss_Nexus&&xy_length(u->position-u->order_target.pos)>160){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
++    }
+     void ai_manage(int owner) {
+         auto& a=towns[owner];if(!a.active)return;
+         a.attackers.erase(std::remove_if(a.attackers.begin(),a.attackers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),a.attackers.end());
+@@ -559,11 +615,33 @@
+             if(bases>1)ai_request(req,110,bases,94);
+             ai_expand(owner);ai_support(owner);ai_resume_construction(owner);
+         }
++        if(melee_ai && st.players[owner].race==race_t::protoss) {
++            int bases=int(ai_depots(owner).size());
++            ai_request(req,64,std::min(48,20*bases),80);
++            int techTime=6500+(2-melee_ai_level)*3500;
++            if(ai_clock>3000){ai_request(req,66,4,55);ai_request(req,65,6,50);}
++            if(ai_clock>techTime){ai_request(req,84,2,88);ai_request(req,61,2,86);ai_request(req,67,2,85);}
++            if(ai_clock>techTime+4500){ai_request(req,83,1,87);ai_request(req,60,2,84);ai_request(req,70,2,83);ai_request(req,72,melee_ai_level==2?2:1,89);}
++            if(ai_clock>techTime+9000){ai_request(req,71,1,86);ai_request(req,68,2,85);}
++            ai_protoss_prerequisites(req);
++            if(bases>1)ai_request(req,157,bases,94);
++            int psi=0;bool unpowered=false;
++            for(auto* b:ptr(st.player_units[owner]))if(!unit_dying(b)&&ut_requires_psionic_matrix(b)) {++psi;if(u_completed(b)&&!is_in_psionic_matrix(owner,b->position))unpowered=true;}
++            int pylons=ai_count(owner,156),desired=std::max(bases*2,(psi+2)/3+1);
++            if(unpowered&&pylons==ai_count(owner,156,true))desired=std::max(desired,pylons+1);
++            ai_request(req,156,desired,100);
++            if(ai_clock>6000)ai_request(req,160,2,70);
++            ai_expand(owner);ai_protoss_support(owner);
++            // Script waves remain authoritative; supplement late game units
++            // that do not occur in the selected campaign army definition.
++            if(ai_clock%2400==0&&ai_clock>techTime+4500)ai_attack(owner,true);
++        }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
+         int accepted=0;
+-        for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type))))<r.amount) {
++        for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type)))
++            &&!(melee_ai&&st.players[owner].race==race_t::protoss&&r.priority>=80))<r.amount) {
+             const auto* target=get_unit_type(UnitTypes(r.type));
+             bool reserve=false;
+             if(melee_ai&&r.priority>=86&&!ut_building(target)&&!ut_worker(target))
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -173,9 +173,11 @@
+         g_campaign->melee_ai=true;
+         g_campaign->melee_ai_level=std::max(0,std::min(2,g_terran_ai_level));
+         g_ui->st.players[original_ai_slot].controller=player_t::controller_computer_game;
+-        const uint32_t scripts[]={0x784f4c54u,0x78454d54u,0x78494854u}; // TLOx / TMEx / THIx, original Brood War scripts.
++        const uint32_t terran[]={0x784f4c54u,0x78454d54u,0x78494854u}; // TLOx / TMEx / THIx
++        const uint32_t protoss[]={0x784f4c50u,0x78454d50u,0x78494850u}; // PLOx / PMEx / PHIx
++        const auto* scripts=g_ui->st.players[original_ai_slot].race==race_t::protoss?protoss:terran;
+         g_campaign->ai_start(original_ai_slot,scripts[std::max(0,std::min(2,g_terran_ai_level))],0);
+-        if(!g_campaign->ai_error.empty())error("Terran AI: %s",g_campaign->ai_error.c_str());
++        if(!g_campaign->ai_error.empty())error("Skirmish AI: %s",g_campaign->ai_error.c_str());
+     }
+ 
+ 	g_ui->wnd.create("OpenBW Web", 0, 0, width, height);
+@@ -544,11 +546,15 @@
+ 		g_ui->apply_commands(owner, g_inbuf.data(), (size_t)len);
+ }
+ 
+-// Local skirmish using the same original-script runtime and portable snapshots.
++// Local skirmish using original-script runtime and portable snapshots.
++OPENBW_EXPORT(openbw_init_race_ai) void openbw_init_race_ai(int width,int height,int race,int opponent,int ai_race) {
++    if(opponent<1||opponent>=8||(ai_race!=1&&ai_race!=2))error("Invalid computer opponent");
++    mp_slot slots[]={{0,race_t(race)},{opponent,race_t(ai_race)}};
++    init_game(width,height,0,slots,2,false,opponent);
++}
++// Preserve this entry point for existing Terran regression harnesses.
+ OPENBW_EXPORT(openbw_init_terran_ai) void openbw_init_terran_ai(int width,int height,int race,int opponent) {
+-    if(opponent<1||opponent>=8)error("Invalid Terran AI slot");
+-    mp_slot slots[]={{0,race_t(race)},{opponent,race_t::terran}};
+-    init_game(width,height,0,slots,2,false,opponent);
++    openbw_init_race_ai(width,height,race,opponent,1);
+ }
+ 
+ // Multiplayer init: the host writes the slot list into the openbw_in_ptr scratch buffer as
+@@ -563,16 +569,6 @@
+ 	init_game(width, height, my_slot, slots.data(), slots.size());
+ }
+ 
+-#ifdef OPENBW_WITH_BOT
+-// Computer opponent (web/bot/bot_view.cpp): attach a BWAPI read-view over THIS
+-// sandbox's live state so a bot can drive player `slot`. Compiled ONLY into the
+-// vs-computer module (openbw-bot.wasm, built with -DOPENBW_WITH_BOT); the clean
+-// openbw.wasm never sees this and is byte-identical. Call after openbw_init_mp.
+-extern "C" void bot_view_attach(void* state_ptr, int slot);
+-OPENBW_EXPORT(openbw_bot_attach) void openbw_bot_attach(int slot) {
+-	if (g_ui) bot_view_attach(&g_ui->player.st(), slot);
+-}
+-#endif
+ 
+ // 0 undecided, 1 victory, 2 defeat. Both peers derive this from the shared deterministic
+ // sim, so they agree without exchanging anything.

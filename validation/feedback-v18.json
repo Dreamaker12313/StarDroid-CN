@@ -1,0 +1,68 @@
+{
+  "checks": [
+    "Actual SCV SMK repeats normal idle using original 87/5/5/3 weights; menu pause holds/resumes animation",
+    "terran01: real rescue flashes original yellow palette, blinks back to green and expires; multi-unit base transfer is covered",
+    "terran01: Menu → Options → Test Victory opens original message and race result screen; cheat replay remains disabled",
+    "protoss01: real rescue flashes original yellow palette, blinks back to green and expires; multi-unit base transfer is covered",
+    "protoss01: Menu → Options → Test Victory opens original message and race result screen; cheat replay remains disabled"
+  ],
+  "missions": {
+    "terran01": {
+      "idle": {
+        "unit": 7,
+        "talking": false,
+        "file": "portrait/tSCV\\TSCFid00.smk",
+        "frame": 0,
+        "frames": 10,
+        "variant": 0,
+        "loops": [
+          3,
+          0,
+          0,
+          0
+        ],
+        "weights": [
+          87,
+          5,
+          5,
+          3
+        ],
+        "visible": true,
+        "scanlines": false,
+        "width": 60,
+        "height": 56
+      },
+      "rescue": {
+        "target": {
+          "id": 3722,
+          "name": "Jim Raynor",
+          "owner": 2,
+          "x": 1014,
+          "y": 1031
+        },
+        "on": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=694,791\nselected_owner=1 selection_palette=8\nrescues=1 sound=33:Misc\\TRescue.wav\nrescue_flashes=1\nsim_selection=0 first=none\nunit=Jim Raynor owner=1\ncompleted=1 remaining_build_time=0 research_time=-1\norder=2 order2=23\nattack_move=2 attack_unit=10\nground_weapon=5\npos=1014,1031 hp=300\nmove_target=1014,1031 order_target=0,0\n",
+        "off": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=694,791\nselected_owner=1 selection_palette=0\nrescues=1 sound=33:Misc\\TRescue.wav\nrescue_flashes=1\nsim_selection=0 first=none\nunit=Jim Raynor owner=1\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=5\npos=1014,1031 hp=300\nmove_target=1014,1031 order_target=0,0\n",
+        "ended": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=704,768\nselected_owner=1 selection_palette=0\nrescues=1 sound=33:Misc\\TRescue.wav\nrescue_flashes=0\nsim_selection=0 first=none\nunit=Jim Raynor owner=1\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=5\npos=1014,1031 hp=300\nmove_target=1014,1031 order_target=0,0\n",
+        "yellowChanges": 94,
+        "units": 13
+      }
+    },
+    "protoss01": {
+      "rescue": {
+        "target": {
+          "id": 3648,
+          "name": "Nexus",
+          "owner": 1,
+          "x": 480,
+          "y": 2224
+        },
+        "on": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=160,1984\nselected_owner=7 selection_palette=8\nrescues=1 sound=34:Misc\\PRescue.wav\nrescue_flashes=9\nsim_selection=0 first=none\nunit=Nexus owner=7\ncompleted=1 remaining_build_time=0 research_time=0\norder=23 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=480,2224 hp=652\nmove_target=480,2224 order_target=0,0\n",
+        "off": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=160,1984\nselected_owner=7 selection_palette=0\nrescues=2 sound=34:Misc\\PRescue.wav\nrescue_flashes=10\nsim_selection=0 first=none\nunit=Nexus owner=7\ncompleted=1 remaining_build_time=0 research_time=0\norder=23 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=480,2224 hp=652\nmove_target=480,2224 order_target=0,0\n",
+        "ended": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=976,1584\nselected_owner=7 selection_palette=0\nrescues=2 sound=34:Misc\\PRescue.wav\nrescue_flashes=0\nsim_selection=0 first=none\nunit=Nexus owner=7\ncompleted=1 remaining_build_time=0 research_time=0\norder=23 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=480,2224 hp=652\nmove_target=480,2224 order_target=0,0\n",
+        "yellowChanges": 398,
+        "units": 18
+      }
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,28 @@
+{
+  "version": "0.9",
+  "versionCode": 10,
+  "package": "org.openbw.androidtest",
+  "apk": "OpenBW-Android-0.9.apk",
+  "bytes": 3489144,
+  "sha256": "066df178f7483ae6f574307a9636e185605c183da8ad222c62d65c3b2a544bcb",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "buildChecks": [
+    "ZIP CRC",
+    "zipalign",
+    "APK signature",
+    "package/version metadata",
+    "packaged asset bytes"
+  ],
+  "testEnvironment": "Desktop Chromium touch emulation; no Android device/emulator",
+  "passed": [
+    "interface-v09.json",
+    "menu-navigation-v09.json",
+    "font-startup-v09.json"
+  ],
+  "engineChanges": "None; all six WASM files are byte-identical to 0.8.1. Interface changes are JavaScript/CSS; native code changes only version labels.",
+  "limitations": [
+    "Android device check still needed",
+    "Reconstructed transition curves, glass blend and fades",
+    "Mission picker and Android options remain custom"
+  ]
+}

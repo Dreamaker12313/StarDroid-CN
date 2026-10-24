@@ -1,0 +1,77 @@
+{
+  "checks": [
+    "Mobile lobby, offline map and sandbox default",
+    "Imported MPQs loaded; WASM sandbox rendered and simulation advanced",
+    "Worker selection and long-press move command changed unit position",
+    "Background/menu pause stops frames; resume works and preserves manual pause",
+    "Two-finger touch pinch changes game zoom",
+    "Cancel appears while targeting and clears the pending command",
+    "Sound data loaded; Web Audio context running (not a listening test)",
+    "Bot completes Spawning Pool and trains Zerglings; player instant cheat leaves enemy construction timing unchanged",
+    "ZZZKBot module loaded and simulated more than 2,000 frames",
+    "No remote network requests or browser errors"
+  ],
+  "errors": [],
+  "blockedRequests": [],
+  "sandbox": {
+    "frame": 16,
+    "paused": false,
+    "audio": "not-started",
+    "soundBuffers": 0
+  },
+  "workerBefore": "fog_player=0 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\nsim_selection=0 first=none\nunit=SCV owner=0\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=13\npos=1080,264 hp=60\nmove_target=1080,264 order_target=0,0\n",
+  "workerAfter": "fog_player=0 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\nsim_selection=1 first=SCV\nunit=SCV owner=0\ncompleted=1 remaining_build_time=0 research_time=-1\norder=6 order2=23\nattack_move=2 attack_unit=10\nground_weapon=13\npos=1085,264 hp=60\nmove_target=1176,302 order_target=1176,302\n",
+  "audio": {
+    "frame": 49,
+    "paused": false,
+    "audio": "running",
+    "soundBuffers": 3
+  },
+  "bot": {
+    "frame": 2026,
+    "paused": false,
+    "audio": "not-started",
+    "soundBuffers": 0
+  },
+  "botUnits": [
+    "Larva",
+    "Drone",
+    "Spawning Pool",
+    "Drone",
+    "Drone",
+    "Drone",
+    "Overlord",
+    "Larva",
+    "Larva",
+    "Hatchery"
+  ],
+  "botProduction": {
+    "before": "Spawning Pool\tHP 722/750\t\t",
+    "after": "Spawning Pool\tHP 734/750\t\t",
+    "army": [
+      "Larva",
+      "Zergling",
+      "Larva",
+      "Drone",
+      "Zergling",
+      "Zergling",
+      "Larva",
+      "Zergling",
+      "Zergling",
+      "Zergling",
+      "Zergling",
+      "Zergling",
+      "Zergling",
+      "Zergling",
+      "Drone",
+      "Spawning Pool",
+      "Drone",
+      "Drone",
+      "Overlord",
+      "Zergling",
+      "Zergling",
+      "Hatchery"
+    ],
+    "frame": 5046
+  }
+}

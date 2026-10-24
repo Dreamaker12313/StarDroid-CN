@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "baseMaps": 31,
+  "expansionMaps": 33,
+  "movies": {
+    "OpenBW-Cinematics.zip": {
+      "entryCount": 13,
+      "packedBytes": 337845712,
+      "names": [
+        "smk\\starintr.smk",
+        "smk\\terran1.smk",
+        "smk\\terran2.smk",
+        "smk\\terran3.smk",
+        "smk\\terran4.smk",
+        "smk\\zerg1.smk",
+        "smk\\zerg2.smk",
+        "smk\\zerg3.smk",
+        "smk\\zerg4.smk",
+        "smk\\protoss1.smk",
+        "smk\\protoss2.smk",
+        "smk\\protoss3.smk",
+        "smk\\protoss4.smk"
+      ]
+    },
+    "OpenBW-Cinematics-BroodWar.zip": {
+      "entryCount": 4,
+      "packedBytes": 264380136,
+      "names": [
+        "smk\\starxintr.smk",
+        "smk\\xprotoss.smk",
+        "smk\\xterran.smk",
+        "smk\\xzerg.smk"
+      ]
+    }
+  },
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/GameContent.java": "a56947e4ad9fef1474dfa2b32f80bdff1e5929e04a0b3512456b8d5233ab43e6",
+    "app/src/main/java/org/openbw/androidtest/StoryData.java": "694005a1e4c9137ed0ce31236fbd3cf025108ef8a69d510e5cc30eaea9d26f92",
+    "app/src/main/java/org/openbw/androidtest/CinematicCatalog.java": "25ffead113330188b087c9cfb7da7cde75147e41d0fe901a8a44811bfa7fc594",
+    "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "425d3160bf9194d055b20129e24a074bafdc39948382dafa2eaf6f072b81cf54"
+  }
+}

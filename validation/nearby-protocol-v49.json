@@ -1,0 +1,33 @@
+{
+  "version": "0.49",
+  "passed": true,
+  "physicalRadioTested": false,
+  "actualProductionClasses": [
+    "NearbyProtocol.java",
+    "NearbyMatch.java",
+    "NativeData.java"
+  ],
+  "cases": [
+    "bounded wire format",
+    "chunked map and SHA-256 verification",
+    "version mismatch",
+    "core data mismatch",
+    "initial state mismatch",
+    "delayed two-peer simulation",
+    "shared pause and resume",
+    "stale pause message",
+    "missing inputs freeze simulation",
+    "desync abort",
+    "explicit surrender",
+    "connection loss",
+    "results exit is not surrender",
+    "scenario MPQ construction"
+  ],
+  "output": "PASS 1430 nearby protocol assertions; version, map, ordering, delays, pauses, desync, leave and disconnect",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "de07d9e39eb5d3d0a63674569cfec825fcb290145c20790e0a9eac347b18d728",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "0fceb1ec552269867b43efe8d6f9c91e80002b08bf26a15dcd7ae8c7bcb3c119",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "tests/NearbyProtocolTest.java": "67e84fb52389733c201e27db792803d0bdb4bcd2bf1e136f98887cebd335952b"
+  }
+}

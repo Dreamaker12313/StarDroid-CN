@@ -1,0 +1,313 @@
+{
+  "checks": [
+    "valid font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8",
+    "missing font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8",
+    "unreadable font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8"
+  ],
+  "errors": [],
+  "scenarios": [
+    {
+      "fonts": "valid",
+      "title": {
+        "page": "splash",
+        "loaded": true,
+        "animations": [
+          "glue/mainmenu/single.smk",
+          "glue/mainmenu/singleon.smk",
+          "glue/mainmenu/multi.smk",
+          "glue/mainmenu/multion.smk",
+          "glue/mainmenu/editor.smk",
+          "glue/mainmenu/editoron.smk",
+          "glue/mainmenu/exit.smk",
+          "glue/mainmenu/exiton.smk"
+        ],
+        "originalFont": true,
+        "suspended": false,
+        "lastFrameTime": 659.7,
+        "transitioning": false,
+        "slideAmount": 0,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 0,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "custom": {
+        "game": {
+          "frame": 31,
+          "paused": false,
+          "audio": "not-started",
+          "soundBuffers": 0
+        },
+        "ui": {
+          "race": 1,
+          "originalConsole": true,
+          "originalFonts": [
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "32",
+            "50",
+            "16x"
+          ],
+          "commandIcons": 0,
+          "minimap": {
+            "x": 4,
+            "y": 412,
+            "w": 64,
+            "h": 64
+          },
+          "selectedType": -1,
+          "submenu": false
+        }
+      },
+      "briefing": {
+        "originalRoom": true,
+        "layout": "rez/glurdyt.bin",
+        "fonts": {
+          "small": true,
+          "large": true,
+          "button": true
+        },
+        "animations": [
+          "glue/readyt/proloop.smk",
+          "glue/readyt/proj.smk",
+          "glue/readyt/start.smk"
+        ],
+        "active": true,
+        "suspended": false,
+        "phase": "entering",
+        "elapsed": 0,
+        "slideAmount": 1,
+        "projection": 0,
+        "glassIndex": 138,
+        "speakerFrames": 4,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 1,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "campaign": {
+        "frame": 31,
+        "paused": false,
+        "audio": "running",
+        "soundBuffers": 1
+      }
+    },
+    {
+      "fonts": "missing",
+      "title": {
+        "page": "splash",
+        "loaded": true,
+        "animations": [
+          "glue/mainmenu/single.smk",
+          "glue/mainmenu/singleon.smk",
+          "glue/mainmenu/multi.smk",
+          "glue/mainmenu/multion.smk",
+          "glue/mainmenu/editor.smk",
+          "glue/mainmenu/editoron.smk",
+          "glue/mainmenu/exit.smk",
+          "glue/mainmenu/exiton.smk"
+        ],
+        "originalFont": false,
+        "suspended": false,
+        "lastFrameTime": 492.6,
+        "transitioning": false,
+        "slideAmount": 0,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 0,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "custom": {
+        "game": {
+          "frame": 31,
+          "paused": false,
+          "audio": "not-started",
+          "soundBuffers": 0
+        },
+        "ui": {
+          "race": 1,
+          "originalConsole": true,
+          "originalFonts": [],
+          "commandIcons": 0,
+          "minimap": {
+            "x": 4,
+            "y": 412,
+            "w": 64,
+            "h": 64
+          },
+          "selectedType": -1,
+          "submenu": false
+        }
+      },
+      "briefing": {
+        "originalRoom": true,
+        "layout": "rez/glurdyt.bin",
+        "fonts": {
+          "small": false,
+          "large": false,
+          "button": false
+        },
+        "animations": [
+          "glue/readyt/proloop.smk",
+          "glue/readyt/proj.smk",
+          "glue/readyt/start.smk"
+        ],
+        "active": true,
+        "suspended": false,
+        "phase": "entering",
+        "elapsed": 0,
+        "slideAmount": 1,
+        "projection": 0,
+        "glassIndex": 138,
+        "speakerFrames": 4,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 1,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "campaign": {
+        "frame": 31,
+        "paused": false,
+        "audio": "running",
+        "soundBuffers": 1
+      }
+    },
+    {
+      "fonts": "unreadable",
+      "title": {
+        "page": "splash",
+        "loaded": true,
+        "animations": [
+          "glue/mainmenu/single.smk",
+          "glue/mainmenu/singleon.smk",
+          "glue/mainmenu/multi.smk",
+          "glue/mainmenu/multion.smk",
+          "glue/mainmenu/editor.smk",
+          "glue/mainmenu/editoron.smk",
+          "glue/mainmenu/exit.smk",
+          "glue/mainmenu/exiton.smk"
+        ],
+        "originalFont": false,
+        "suspended": false,
+        "lastFrameTime": 509.6,
+        "transitioning": false,
+        "slideAmount": 0,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 0,
+          "played": 0,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "custom": {
+        "game": {
+          "frame": 31,
+          "paused": false,
+          "audio": "not-started",
+          "soundBuffers": 0
+        },
+        "ui": {
+          "race": 1,
+          "originalConsole": true,
+          "originalFonts": [],
+          "commandIcons": 0,
+          "minimap": {
+            "x": 4,
+            "y": 412,
+            "w": 64,
+            "h": 64
+          },
+          "selectedType": -1,
+          "submenu": false
+        }
+      },
+      "briefing": {
+        "originalRoom": true,
+        "layout": "rez/glurdyt.bin",
+        "fonts": {
+          "small": false,
+          "large": false,
+          "button": false
+        },
+        "animations": [
+          "glue/readyt/proloop.smk",
+          "glue/readyt/proj.smk",
+          "glue/readyt/start.smk"
+        ],
+        "active": true,
+        "suspended": false,
+        "phase": "entering",
+        "elapsed": 1.4999999992548965,
+        "slideAmount": 0.9940119920029684,
+        "projection": 0,
+        "glassIndex": 138,
+        "speakerFrames": 4,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout"
+          ],
+          "decoded": 1,
+          "played": 1,
+          "paused": false,
+          "error": ""
+        }
+      },
+      "campaign": {
+        "frame": 31,
+        "paused": false,
+        "audio": "running",
+        "soundBuffers": 1
+      }
+    }
+  ]
+}

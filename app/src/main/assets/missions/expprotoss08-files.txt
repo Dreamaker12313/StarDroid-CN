@@ -1,0 +1,16 @@
+campaign\expprotoss\protoss08\staredit\scenario.chk
+campaign\expprotoss\protoss08\staredit\wav\combeep0.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b00art.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b01zer.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b02ras.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b03zer.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b04ras.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b05zer.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b06art.wav
+campaign\expprotoss\protoss08\staredit\wav\p8b07ras.wav
+campaign\expprotoss\protoss08\staredit\wav\p8m00ras.wav
+campaign\expprotoss\protoss08\staredit\wav\p8m10art.wav
+campaign\expprotoss\protoss08\staredit\wav\p8m20zer.wav
+campaign\expprotoss\protoss08\staredit\wav\p8m30art.wav
+campaign\expprotoss\protoss08\staredit\wav\p8m40zer.wav
+campaign\expprotoss\protoss08\staredit\wav\utmwht00.wav

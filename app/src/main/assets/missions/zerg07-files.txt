@@ -1,0 +1,7 @@
+campaign\zerg\zerg07\staredit\scenario.chk
+campaign\zerg\zerg07\staredit\wav\z7b00uki.wav
+campaign\zerg\zerg07\staredit\wav\z7b01uda.wav
+campaign\zerg\zerg07\staredit\wav\z7b02uki.wav
+campaign\zerg\zerg07\staredit\wav\z7b03uda.wav
+campaign\zerg\zerg07\staredit\wav\z7b04uki.wav
+campaign\zerg\zerg07\staredit\wav\z7b05uda.wav

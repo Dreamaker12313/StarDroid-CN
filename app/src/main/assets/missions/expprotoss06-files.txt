@@ -1,0 +1,14 @@
+campaign\expprotoss\protoss06\staredit\scenario.chk
+campaign\expprotoss\protoss06\staredit\wav\p6b00art.wav
+campaign\expprotoss\protoss06\staredit\wav\p6b01zer.wav
+campaign\expprotoss\protoss06\staredit\wav\p6b02zke.wav
+campaign\expprotoss\protoss06\staredit\wav\p6b03art.wav
+campaign\expprotoss\protoss06\staredit\wav\p6b04zer.wav
+campaign\expprotoss\protoss06\staredit\wav\p6b05art.wav
+campaign\expprotoss\protoss06\staredit\wav\p6b06zke.wav
+campaign\expprotoss\protoss06\staredit\wav\p6b07art.wav
+campaign\expprotoss\protoss06\staredit\wav\p6m00art.wav
+campaign\expprotoss\protoss06\staredit\wav\p6m10art.wav
+campaign\expprotoss\protoss06\staredit\wav\p6m20art.wav
+campaign\expprotoss\protoss06\staredit\wav\prescue.wav
+campaign\expprotoss\protoss06\staredit\wav\pshtra00.wav

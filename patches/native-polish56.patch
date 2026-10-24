@@ -1,0 +1,350 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -16505,6 +16505,11 @@
+ 		u->user_action_flags = 0;
+ 		u->pathing_flags = 0;
+ 		u->previous_hp = 1;
++        // A free pool slot can still contain the previous unit's strengths.
++        // New unfinished units must start identically before/after a save;
++        // complete_unit computes their actual strengths when production ends.
++        u->air_strength = 0;
++        u->ground_strength = 0;
+ 
+ 		u->building.rally = {};
+ 
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -553,12 +553,14 @@
+ 		if (current_selection.size() == 1 && get_unit_id(u) == ack_unit) ++ack_count;
+ 		else { ack_unit = get_unit_id(u); ack_count = 0; }
+ 		const unit_type_t* ut = u->unit_type;
+-		int what_n = ut->first_what_sound > 0 && ut->last_what_sound > 0
+-			? std::abs(ut->last_what_sound - ut->first_what_sound) + 1 : 0;
+-		if (ack_count >= what_n && ut->first_pissed_sound > 0 && ut->last_pissed_sound >= ut->first_pissed_sound)
+-			play_unit_ack(u, ut->first_pissed_sound, ut->last_pissed_sound);
+-		else
+-			play_unit_ack(u, ut->first_what_sound, ut->last_what_sound);
++        // Four ordinary acknowledgements, the original ordered annoyed lines,
++        // then return to normal. Never leave a unit stuck in its annoyed set.
++        int annoyed=ut->first_pissed_sound>0?std::abs(ut->last_pissed_sound-ut->first_pissed_sound)+1:0;
++        if(ut_building(u) || ack_count>=4+annoyed)ack_count=0;
++        if(ack_count>=4 && annoyed) {
++            int sound=std::min(ut->first_pissed_sound,ut->last_pissed_sound)+ack_count-4;
++            play_unit_ack(u,sound,sound);
++        } else play_unit_ack(u,ut->first_what_sound,ut->last_what_sound);
+ 		refresh_card();
+ 	}
+ 
+@@ -580,6 +582,18 @@
+ 		// Direct defeat signal, in case the triggers haven't resolved yet: nothing left.
+ 		if (events_seeded && st.players[my_player].initially_active &&
+ 		    count_units(st, my_player) == 0) outcome = 2;
++        if(outcome || !events_seeded)return;
++        // Custom games do not run the mission victory overrides. A computer
++        // slot may retain its controller after elimination; count living units
++        // rather than treating every original slot as a remaining opponent.
++        bool had_enemy=false, enemy_alive=false, own_alive=false;
++        for(auto* u:ptr(st.player_units[my_player]))if(!unit_dying(u))own_alive=true;
++        for(int p=0;p<8;p++)if(p!=my_player && st.players[p].initially_active && !st.alliances[my_player][p]){
++            had_enemy=true;
++            if(player_defeated(p))continue;
++            for(auto* u:ptr(st.player_units[p]))if(!unit_dying(u)){enemy_alive=true;break;}
++        }
++        if(own_alive && had_enemy && !enemy_alive)outcome=1;
+ 	}
+ 
+ 	int nearest_palette_color(int r, int g, int b) {
+@@ -1317,11 +1331,11 @@
+         // onto a second command-card page when the transport fills up.
+         if (u_completed(u) && (unit_provides_space(u) || id == U::Zerg_Overlord)) {
+             bool available=unit_provides_space(u);
+-            if (available && !unit_is_disabled(u) && unit_space_left(u)>0) card.push_back({'l', "Load", C_LOAD, U::None});
+-            if (available && !unit_is_disabled(u) && !loaded_units(u).empty()) card.push_back({'u', "Unload", C_UNLOADALL, U::None});
++            if (available && !unit_is_disabled(u) && unit_space_left(u)>0) card.push_back({'l', "Load", C_LOAD, U::None, true});
++            if (available && !unit_is_disabled(u) && !loaded_units(u).empty()) card.push_back({'u', "Unload", C_UNLOADALL, U::None, true});
+         }
+         if (id==U::Zerg_Nydus_Canal && u_completed(u) && u->building.nydus.exit) {
+-            if (u_completed(u->building.nydus.exit) && !unit_is_disabled(u)) card.push_back({'l', "Load", C_LOAD, U::None});
++            if (u_completed(u->building.nydus.exit) && !unit_is_disabled(u)) card.push_back({'l', "Load", C_LOAD, U::None, true});
+             card.push_back({'u', "View Exit", C_NYDUS_VIEW, U::None, true});
+         }
+ 		return unit_name(id);
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -6,9 +6,10 @@
+ namespace bwgame {
+ struct campaign_ui : campaign_ai {
+ 	using campaign_ai::campaign_ai;
+-	void poll_eliminations() override {} // Original mission triggers announce results.
+-	void check_last_standing() override {} // Intro triggers may create the player's first units later.
++	void poll_eliminations() override {if(melee_ai)play_ui::poll_eliminations();} // Original mission triggers announce results.
++	void check_last_standing() override {if(melee_ai)play_ui::check_last_standing();} // Intro triggers may create the player's first units later.
+ 	void on_victory_state(int owner, int state) override {
++		if(melee_ai){play_ui::on_victory_state(owner,state);return;}
+ 		if (owner == my_player && state && !outcome) outcome = state >= 3 ? 1 : 2;
+ 	}
+ 	bool units_paused = false;
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -302,19 +302,50 @@
+             }
+         }
+     }
++    void ai_clear_expansion_path(int owner) {
++        if(!melee_ai||ai_clock%240)return;
++        // Destructible neutral structures can seal an otherwise connected
++        // terrain route. Send nearby combat units to clear the visible blocker
++        // instead of leaving a scout/builder walking into it indefinitely.
++        for(auto* worker:ptr(st.player_units[owner])) {
++            if(!ut_worker(worker)||unit_dying(worker)||worker->current_build_unit)continue;
++            auto order=worker->order_type->id;
++            if(order!=Orders::Move&&order!=Orders::PlaceBuilding&&order!=Orders::PlaceProtossBuilding&&order!=Orders::DroneStartBuild)continue;
++            xy target=worker->order_target.pos;
++            if(xy_length(worker->position-target)<256)continue;
++            unit_t* blocker=nullptr;int distance=161;
++            for(auto* u:ptr(st.player_units[11])) {
++                if(!u_grounded_building(u)||unit_dying(u)||u_invincible(u)||unit_is_mineral_field(u)||unit_is_refinery(u)
++                    ||unit_is(u,UnitTypes::Resource_Vespene_Geyser)||!unit_can_see_target(worker,u))continue;
++                if(xy_length(u->position-target)>=xy_length(worker->position-target))continue;
++                int d=units_distance(worker,u);if(d<distance){distance=d;blocker=u;}
++            }
++            if(!blocker)continue;
++            action_functions af(st,ai_actions);int sent=0;
++            for(auto* u:ptr(st.player_units[owner])) {
++                if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||u_loaded(u)||us_hidden(u)
++                    ||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)
++                    ||(!u->unit_type->ground_weapon&&!unit_is_carrier(u)&&!unit_is_reaver(u))||units_distance(u,blocker)>960)continue;
++                auto* fighting=u->order_target.unit;
++                if(fighting&&fighting!=blocker&&fighting->owner!=11&&unit_target_is_enemy(u,fighting)&&unit_can_see_target(u,fighting))continue;
++                if(fighting!=blocker){af.action_select(owner,u);if(!af.action_order(owner,get_order_type(Orders::AttackUnit),blocker->position,blocker,nullptr,false))continue;}
++                if(++sent==4)break;
++            }
++            if(sent)return;
++        }
++    }
+     bool ai_expand(int owner) {
+-        if(ai_clock%240)return false;
+         const auto race=st.players[owner].race;const int depot=race==race_t::zerg?131:race==race_t::protoss?154:106;
+         auto depots=ai_depots(owner);if(depots.empty()||ai_count(owner,depot)>int(depots.size()))return false;
+         int remaining=0;
+         for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r))
+             for(auto* base:depots)if(xy_length(base->position-r->position)<384){remaining+=r->building.resource.resource_count;break;}
+-        int desired=1+(ai_clock>10000+(2-melee_ai_level)*4000)+(ai_clock>26000+(2-melee_ai_level)*6000);
++        int desired=1+(ai_clock>6000+(2-melee_ai_level)*4000)+(ai_clock>18000+(2-melee_ai_level)*6000);
+         int bases=int(depots.size());
+         if(race==race_t::zerg)bases=ai_zerg_bases(owner);
+         if(bases>=desired&&remaining>4000)return false;
+         const auto* cc=get_unit_type(UnitTypes(depot));
+-        if(bases>=4||!has_available_resources_for(owner,cc))return false;
++        if(bases>=4)return false;
+         a_vector<unit_t*> workers;
+         for(auto* u:ptr(st.player_units[owner]))if(!ai_busy_worker(u)&&!u->worker.resources_carried)workers.push_back(u);
+         if(workers.empty())return false;
+@@ -343,6 +374,9 @@
+                 if(d<distance&&can_place_building(u,owner,cc,pos,false,true,true)){distance=d;worker=u;}
+             }
+             if(!worker)continue;
++            // Reserve the depot cost once a legal expansion site exists.
++            // Army replacement must not spend it again every manager tick.
++            if(!has_available_resources_for(owner,cc))return true;
+             action_functions af(st,ai_actions);af.action_select(owner,worker);
+             if(can_place_building(worker,owner,cc,pos,false,false)){
+                 xy tile=(pos-cc->placement_size/2)/32;
+@@ -370,12 +404,11 @@
+         action_functions af(st,ai_actions);
+         // A queued placement has not spent resources and must not block all
+         // future supply if its SCV cannot reach the site. Retry local work;
+-        // long-distance Command Center construction keeps its own scout route.
+-        if(ai_clock%2400==0)for(auto* u:ptr(st.player_units[owner]))
++        // Depot placements get a longer retry window for their scout route.
++        if(ai_clock%600==0)for(auto* u:ptr(st.player_units[owner]))
+             if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::PlaceBuilding
+                 &&!u->current_build_unit&&!u->build_queue.empty()
+-                &&u->build_queue.front()->id!=UnitTypes::Terran_Command_Center
+-                &&xy_length(u->position-u->order_target.pos)>160) {
++                &&(u->build_queue.front()->id!=UnitTypes::Terran_Command_Center||ai_clock%2400==0)) {
+                 cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});
+             }
+         for(auto* b:ptr(st.player_units[owner]))if(ut_building(b)&&!ut_addon(b)&&!unit_dying(b)&&!u_completed(b)) {
+@@ -492,6 +525,14 @@
+                             if(ut_worker(other)&&!other->current_build_unit&&!other->build_queue.empty()&&ut_building(other->build_queue.front())
+                                 && overlaps(reserved(other->build_queue.front(),other->order_target.pos)))crowded=true;
+                         }
++                        // A legal footprint can still seal a base against a
++                        // cliff. Preserve a walkable tile around new buildings,
++                        // including the reserved addon footprint.
++                        if(!crowded) {
++                            if(area.from.x<0||area.from.y<0||area.to.x>int(game_st.map_tile_width*32)||area.to.y>int(game_st.map_tile_height*32))crowded=true;
++                            else for(int yy=area.from.y;yy<area.to.y&&!crowded;yy+=8)for(int xx=area.from.x;xx<area.to.x;xx+=8)
++                                if((xx<area.from.x+32||xx>=area.to.x-32||yy<area.from.y+32||yy>=area.to.y-32)&&!is_walkable({xx+4,yy+4})){crowded=true;break;}
++                        }
+                         // Keep mineral/gas approaches open. A narrow legal
+                         // footprint gap is not necessarily passable by an SCV.
+                         if(!crowded)for(auto* base:ai_depots(owner))for(int p:{owner,11})for(auto* resource:ptr(st.player_units[p])) {
+@@ -540,7 +581,8 @@
+             case 112:case 113:need(111);break;
+             case 114:case 123:need(113);break;
+             case 116:need(114);break;
+-            case 107:case 108:need(106);break;
++            case 107:need(106);need(112);break;
++            case 108:need(106);break;
+             case 115:need(114);break;
+             case 117:case 118:need(116);break;
+             case 120:need(113);break;
+@@ -593,8 +635,8 @@
+         }
+         // Retry a Probe placement that has never started; completed warp-ins
+         // need no worker and must never be treated as Terran construction.
+-        if(ai_clock%2400==0)for(auto* u:ptr(st.player_units[owner]))
+-            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::PlaceProtossBuilding&&!u->current_build_unit&&!u->build_queue.empty()&&u->build_queue.front()->id!=UnitTypes::Protoss_Nexus&&xy_length(u->position-u->order_target.pos)>160){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
++        if(ai_clock%600==0)for(auto* u:ptr(st.player_units[owner]))
++            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::PlaceProtossBuilding&&!u->current_build_unit&&!u->build_queue.empty()&&(u->build_queue.front()->id!=UnitTypes::Protoss_Nexus||ai_clock%2400==0)){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
+     }
+     // Macro Hatcheries supply larvae/creep; only separate resource locations
+     // count as expansions. A Hive still satisfies Hatchery/Lair requests.
+@@ -678,16 +720,17 @@
+         }
+         // A Drone that never reached its placement must not reserve a building
+         // forever. Once morphing starts the Drone is already the structure.
+-        if(ai_clock%2400==0)for(auto* u:ptr(st.player_units[owner]))
+-            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::DroneStartBuild&&!u->current_build_unit&&!u->build_queue.empty()&&u->build_queue.front()->id!=UnitTypes::Zerg_Hatchery&&xy_length(u->position-u->order_target.pos)>160){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
++        if(ai_clock%600==0)for(auto* u:ptr(st.player_units[owner]))
++            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::DroneStartBuild&&!u->current_build_unit&&!u->build_queue.empty()&&(u->build_queue.front()->id!=UnitTypes::Zerg_Hatchery||ai_clock%2400==0)){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
+     }
+     void ai_manage(int owner) {
+         auto& a=towns[owner];if(!a.active)return;
+         a.attackers.erase(std::remove_if(a.attackers.begin(),a.attackers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),a.attackers.end());
++        ai_clear_expansion_path(owner);
+         ai_mine(owner);
+         // Reissue only idle attackers, allowing normal targeting/pathfinding to run.
+         for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u)&&!u_burrowed(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+-        auto req=a.builds;
++        auto req=a.builds;bool reserveExpansion=false;
+         auto allowed_requests=[&](){req.erase(std::remove_if(req.begin(),req.end(),[&](const request& r){return !game_st.unit_type_allowed[owner][UnitTypes(r.type)];}),req.end());};
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+         if(melee_ai && st.players[owner].race==race_t::terran) {
+@@ -698,17 +741,18 @@
+             // The imported campaign scripts assume a prebuilt base and omit
+             // some Brood War support. Grow a melee roster at real tech/cost gates.
+             if(ai_clock>2400)ai_request(req,34,2,86);
+-            int techTime=6500+(2-melee_ai_level)*3500;
++            if(ai_clock>3000)ai_request(req,107,1,96);
++            int techTime=5500+(2-melee_ai_level)*3500;
+             if(ai_clock>techTime){ai_request(req,9,1,88);ai_request(req,1,2,87);}
+             if(ai_clock>techTime+4500)ai_request(req,12,melee_ai_level==2?2:1,89);
+             allowed_requests(); ai_melee_prerequisites(req);
+             if(bases>1)ai_request(req,110,bases,94);
+-            ai_expand(owner);ai_support(owner);ai_resume_construction(owner);
++            reserveExpansion=ai_expand(owner);ai_support(owner);ai_resume_construction(owner);
+         }
+         if(melee_ai && st.players[owner].race==race_t::protoss) {
+             int bases=int(ai_depots(owner).size());
+             ai_request(req,64,std::min(48,20*bases),80);
+-            int techTime=6500+(2-melee_ai_level)*3500;
++            int techTime=5500+(2-melee_ai_level)*3500;
+             if(ai_clock>3000){ai_request(req,66,4,55);ai_request(req,65,6,50);}
+             if(ai_clock>techTime){ai_request(req,84,2,88);ai_request(req,61,2,86);ai_request(req,67,2,85);}
+             if(ai_clock>techTime+4500){ai_request(req,83,1,87);ai_request(req,60,2,84);ai_request(req,70,2,83);ai_request(req,72,melee_ai_level==2?2:1,89);}
+@@ -721,7 +765,7 @@
+             if(unpowered&&pylons==ai_count(owner,156,true))desired=std::max(desired,pylons+1);
+             ai_request(req,156,desired,100);
+             if(ai_clock>6000)ai_request(req,160,2,70);
+-            ai_expand(owner);ai_protoss_support(owner);
++            reserveExpansion=ai_expand(owner);ai_protoss_support(owner);
+             // Script waves remain authoritative; supplement late game units
+             // that do not occur in the selected campaign army definition.
+             if(ai_clock%2400==0&&ai_clock>techTime+4500)ai_attack(owner,true);
+@@ -731,7 +775,7 @@
+             // Drones are consumed by construction; replace them normally from
+             // larvae and leave enough larva income for army and Overlords.
+             ai_request(req,41,std::min(54,18*bases),80);
+-            int techTime=6500+(2-melee_ai_level)*3500;
++            int techTime=5500+(2-melee_ai_level)*3500;
+             if(ai_clock>2400){ai_request(req,37,8,50);ai_request(req,38,4,55);}
+             if(ai_clock>techTime){ai_request(req,43,4,84);ai_request(req,103,2,87);ai_request(req,45,1,83);ai_request(a.techs,int(TechTypes::Lurker_Aspect),1,90);ai_request(a.techs,int(TechTypes::Ensnare),1,80);}
+             if(ai_clock>techTime+4500){ai_request(req,39,melee_ai_level==2?3:1,88);ai_request(req,46,1,86);ai_request(req,44,2,89);ai_request(req,62,1,85);ai_request(req,47,4,82);}
+@@ -740,28 +784,82 @@
+             // Local Hatcheries provide larvae even where expansion starts are
+             // cramped; the expansion manager separately finds fresh resources.
+             if(ai_clock>6000)ai_request(req,131,std::min(5,bases+1),75);
+-            ai_expand(owner);ai_zerg_support(owner);
++            reserveExpansion=ai_expand(owner);ai_zerg_support(owner);
+             if(ai_clock%2400==0&&ai_clock>techTime+4500)ai_attack(owner,true);
++        }
++        if(melee_ai && ai_clock>3600+(2-melee_ai_level)*1800) {
++            int level=std::min(melee_ai_level+1,1+(ai_clock>14000)+(ai_clock>24000));
++            auto upgrade=[&](int type,int amount=1){if(game_st.max_upgrade_levels[owner][UpgradeTypes(type)]>0)ai_request(a.upgrades,type,std::min(amount,game_st.max_upgrade_levels[owner][UpgradeTypes(type)]),85);};
++            if(st.players[owner].race==race_t::zerg) {
++                ai_request(req,139,1,92);for(int id:{3,4,10,11,12})upgrade(id,level);
++                for(int id:{26,27,28,29,30,52,53})upgrade(id);
++            } else if(st.players[owner].race==race_t::terran) {
++                ai_request(req,122,1,92);if(ai_clock>6500)ai_request(req,123,1,91);
++                for(int id:{0,1,2,7,8,9})upgrade(id,level);for(int id:{16,17,54})upgrade(id);
++            } else {
++                ai_request(req,166,1,92);for(int id:{5,6,13,14,15})upgrade(id,level);
++                for(int id:{33,34,38,39,43})upgrade(id);
++            }
+         }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         allowed_requests();
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
++        action_functions af(st,ai_actions);
++        bool reserveUpgrade=false;
++        if(melee_ai && !reserveExpansion && ai_clock%960<360)for(auto r:a.upgrades) {
++            auto type=UpgradeTypes(r.type);if(player_upgrade_level(owner,type)>=r.amount)continue;
++            for(auto* u:ptr(st.player_units[owner])) {
++                if(unit_dying(u)||!unit_can_upgrade(u,get_upgrade_type(type),owner))continue;
++                af.action_select(owner,u);af.action_upgrade(owner,get_upgrade_type(type));
++                reserveUpgrade=true;break;
++            }
++            if(reserveUpgrade)break;
++        }
+         int accepted=0;
+         for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type)))
+             &&!(melee_ai&&st.players[owner].race!=race_t::terran&&r.priority>=80))<r.amount) {
+             const auto* target=get_unit_type(UnitTypes(r.type));
++            if((reserveExpansion||reserveUpgrade)&&r.priority<100)continue;
+             bool reserve=false;
+             if(melee_ai&&r.priority>=86&&!ut_building(target)&&!ut_worker(target))
+                 for(auto* producer:ptr(st.player_units[owner]))if(!unit_dying(producer)&&producer->build_queue.empty()&&unit_can_build(producer,target))reserve=true;
+             if(ai_produce(owner,r.type)){if(++accepted>=2)break;}
+             else if(reserve&&!has_available_resources_for(owner,target))break;
+         }
+-        action_functions af(st,ai_actions);
++        if(reserveExpansion)return;
+         for(auto r:a.techs)if(game_st.tech_available[owner][TechTypes(r.type)]&&!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
+         for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
+     }
++    void ai_detect(unit_t* victim,unit_t* source) {
++        int owner=victim->owner;
++        if(owner>=8||owner==my_player||!towns[owner].active||!source||unit_dying(source)
++            ||st.players[owner].controller!=player_t::controller_computer_game
++            ||!unit_target_is_enemy(victim,source)||!unit_is_undetected(source,owner))return;
++        action_functions af(st,ai_actions);
++        // Respond to an actual unseen attack, not hidden enemies elsewhere.
++        // Campaigns use only detectors/Comsats already supplied by their scripts.
++        for(auto* u:ptr(st.player_units[owner]))if(unit_is(u,UnitTypes::Spell_Scanner_Sweep)
++            &&!unit_dying(u)&&units_distance(u,source)<288)return;
++        for(auto* u:ptr(st.player_units[owner]))if(unit_is(u,UnitTypes::Terran_Comsat_Station)
++            &&u_completed(u)&&!unit_dying(u)&&!unit_is_disabled(u)&&ai_idle(u)
++            &&u->energy>=fp8::integer(50)&&game_st.tech_available[owner][TechTypes::Scanner_Sweep]) {
++            af.action_select(owner,u);
++            if(af.action_order(owner,get_order_type(Orders::CastScannerSweep),source->position,nullptr,nullptr,false))return;
++        }
++        unit_t* detector=nullptr;int distance=1281;
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(!(unit_is(u,UnitTypes::Terran_Science_Vessel)||unit_is(u,UnitTypes::Protoss_Observer)||unit_is(u,UnitTypes::Zerg_Overlord))
++                ||unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_loaded(u)||us_hidden(u)
++                ||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
++            bool escort=u->order_type->id==Orders::Follow;
++            if(!ai_idle(u)&&!escort)continue;
++            int d=units_distance(u,victim);if(d<distance){distance=d;detector=u;}
++        }
++        if(detector){af.action_select(owner,detector);af.action_order(owner,get_order_type(Orders::Move),source->position,nullptr,nullptr,false);}
++    }
+     void on_scenario_attack(unit_t* victim, unit_t* source) override {
++        ai_detect(victim,source);
+         int owner=victim->owner;
+         if(!base_defence_enabled)return;
+         if(owner>=8 || owner==my_player || !towns[owner].active || !source

@@ -1,0 +1,98 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -490,7 +490,8 @@
+ 	// original game client did on select/order — the sim never plays these.
+ 	void play_unit_ack(unit_t* u, int first, int last) {
+ 		if (spectator || campaign_speech_muted) return;
+-		if (!u || first <= 0 || last < first) return;
++		if (!u || first <= 0 || last <= 0) return;
++        if(last<first)std::swap(first,last);
+ 		int id = first + (sound_rotation++ % (last - first + 1));
+ 		play_sound(id, xy(), u, false); // Selected-unit speech is global, including off-screen commands.
+ 	}
+@@ -552,8 +553,8 @@
+ 		if (current_selection.size() == 1 && get_unit_id(u) == ack_unit) ++ack_count;
+ 		else { ack_unit = get_unit_id(u); ack_count = 0; }
+ 		const unit_type_t* ut = u->unit_type;
+-		int what_n = ut->first_what_sound > 0 && ut->last_what_sound >= ut->first_what_sound
+-			? ut->last_what_sound - ut->first_what_sound + 1 : 0;
++		int what_n = ut->first_what_sound > 0 && ut->last_what_sound > 0
++			? std::abs(ut->last_what_sound - ut->first_what_sound) + 1 : 0;
+ 		if (ack_count >= what_n && ut->first_pissed_sound > 0 && ut->last_pissed_sound >= ut->first_pissed_sound)
+ 			play_unit_ack(u, ut->first_pissed_sound, ut->last_pissed_sound);
+ 		else
+@@ -1723,6 +1724,15 @@
+ 		    !has_available_supply_for(my_player, ut, false)) { error_supply_race=int(unit_race(ut)); return E_SUPPLY; }
+ 		return E_NONE;
+ 	}
++
++    void on_morph_shortage(int owner, const unit_type_t* type, bool supply_shortage) override {
++        if(owner!=my_player||spectator)return;
++        // Report the actual remainder after affordable larvae were queued.
++        // This also covers resources spent during multiplayer's input delay.
++        if(st.current_minerals[owner]<type->mineral_cost)raise_error(E_MINERALS);
++        else if(st.current_gas[owner]<type->gas_cost)raise_error(E_GAS);
++        else if(supply_shortage||!has_available_supply_for(owner,type,false)){error_supply_race=int(unit_race(type));raise_error(E_SUPPLY);}
++    }
+ 
+ 	// Resign. In a 1v1 this leaves through the command stream (opcode 87) so both peers
+ 	// apply it deterministically — we're marked defeated and, with only the opponent left,
+--- a/actions.h
++++ b/actions.h
+@@ -878,8 +878,14 @@
+ 		return retval;
+ 	}
+ 
++	virtual void on_morph_shortage(int owner, const unit_type_t* unit_type, bool supply_shortage) {}
+ 	bool action_morph(int owner, const unit_type_t* unit_type) {
+-		bool retval = false;
++		bool retval = false,shortage=false,supply_shortage=false;
++        fp1 reserved_supply=fp1::zero();auto required=unit_type->supply_required;
++        if(ut_two_units_in_one_egg(unit_type))required*=2;
++        if(unit_is(unit_type,UnitTypes::Zerg_Lurker))required-=get_unit_type(UnitTypes::Zerg_Hydralisk)->supply_required;
++        if(ut_flag(unit_type,(unit_type_t::flags_t)0x1000000))required=fp1::zero();
++        auto race=unit_race(unit_type);
+ 		for (unit_t* u : selected_units(owner)) {
+ 			if (u->owner != owner) continue;
+ 			if (unit_is(u, UnitTypes::Zerg_Hydralisk) && unit_is(unit_type, UnitTypes::Zerg_Lurker)) {
+@@ -888,10 +894,13 @@
+ 				if (!unit_can_build(u, unit_type)) continue;
+ 			} else continue;
+ 			if (u->order_type->id == Orders::ZergUnitMorph) continue;
+-			if (!build_queue_push(u, unit_type)) continue;
++			if(race!=race_t::none&&required>fp1::zero()&&st.supply_used[owner][(size_t)race]+reserved_supply+required>std::min(st.supply_available[owner][(size_t)race],fp1::integer(200))){shortage=supply_shortage=true;continue;}
++            if (!build_queue_push(u, unit_type)) {shortage=true;continue;}
++            reserved_supply+=required;
+ 			set_unit_order(u, get_order_type(Orders::ZergUnitMorph));
+ 			retval = true;
+ 		}
++		if(shortage)on_morph_shortage(owner,unit_type,supply_shortage);
+ 		return retval;
+ 	}
+ 
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -3487,7 +3487,7 @@
+ 		xy p = u->sprite->position;
+ 		for (unit_t* visitor : find_units(rect{p - xy(64, 64), p + xy(65, 65)})) {
+ 			if (st.players[visitor->owner].controller != player_t::controller_occupied) continue;
+-			if (!u_completed(visitor) || unit_dying(visitor) || ut_building(visitor)) continue;
++			if (!u_completed(visitor) || unit_dying(visitor) || us_hidden(visitor)) continue;
+ 			int rescued_owner = u->owner, new_owner = visitor->owner;
+ 			bool rescue_all = ut_resource_depot(u);
+ 			if (!trigger_give_unit_to(u, new_owner)) continue;
+@@ -13278,7 +13278,13 @@
+ 	}
+ 
+ 	void process_frame() {
+-		if (scenario_units_paused()) return;
++        if (scenario_units_paused()) {
++            // Trigger-created revealers must work during dialogue. Simulation,
++            // orders and animations stay frozen; only visibility is refreshed.
++            for(auto* u:ptr(st.map_revealer_units))refresh_unit_vision(u);
++            for(auto* u:ptr(st.visible_units))update_unit_sprite(u);
++            return;
++        }
+ 		recede_creep();
+ 
+ 		if (st.update_tiles_countdown == 0) st.update_tiles_countdown = 100;

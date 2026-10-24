@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "version": "1.0",
+  "versionCode": 67,
+  "physicalDeviceTested": false,
+  "output": [
+    "PASS 22 exit classification, size, cause-chain, stack and OOM-report checks",
+    "PASS 1023 native trace wire, metadata, privacy, bounds and malformed-input checks",
+    "PASS 17 write diagnostics checks",
+    "PASS 4 read diagnostics checks"
+  ],
+  "limitations": "Host Android API fakes and AOSP-wire fixtures exercise SDK guards, scoped/empty/unavailable history, native trace retrieval, reason labels, original uncaught-handler delegation, persistent native/Java reports across separate JVMs, selected-thread decoding, unknown fields, privacy and malformed/oversized input bounds. Actual Android device traces remain pending.",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/AppDiagnostics.java": "8250e05671828c00fec3cf0b0a46fdbfe46335690f626f0549065b71b86850c1",
+    "app/src/main/java/org/openbw/androidtest/ExitReport.java": "bc302ece7eb0ee273f35a81aa0e63c9b256a55501f318b5fd14adc6b830ff93b",
+    "app/src/main/java/org/openbw/androidtest/NativeCrashTrace.java": "3501b47a292e77348165ecd8ac26fd7b85ccdf15fc63166cf0529ebf16581fa6",
+    "tests/ExitReportTest.java": "27c878c4b185c0329f75de0a901353c0b7d57a151b6587369960982d563c652a",
+    "tests/NativeCrashTraceTest.java": "be0a635e92a118f20275bc3b2ee9abdf1e9e151ca7013bf8d645d398a1b87b3c",
+    "tests/run_diagnostics1.py": "e475fc0447ae0f68706c0e3150f47426efadada156f78a72d973cb9fc961290a",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "2e4537fd48f4ad43788564f36dd7abb635751b81495bc32d7156f0be5e023a0c",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "207f096b6337f3e45113a0105e70aa659be70558f5c5aed3e99d97e647801434"
+  }
+}

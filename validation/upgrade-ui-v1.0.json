@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "output": "PASS 704 checks: all 16 actual native upgrade cards, grey palette, stable slots, next-level/prerequisite text, two widths and button/text sizes",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+    "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
+    "patches/native-upgrades1.patch": "780b4beaa60d8897128202322f0852ba091b390b6eff5f9b53c2b9cfea007811",
+    "tests/native_upgrades.cpp": "b90ab5534a9254757be049d5b7f7f13c3d6c18aab78fadcb693f7290e3412b50",
+    "tests/run_hud59.py": "ef6ed3849de02ff5c164034e66f84bb5752f749322316c31eeef8ecde0f80a8d",
+    "tests/run_upgrade_ui.py": "77b5433a7223fbe56a8d64683b4d3c268850fb7bf661e83848f81c73462a7522"
+  }
+}

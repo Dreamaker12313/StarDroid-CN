@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/heiner/openbw",
+  "commit": "469d2037e2fd03085dac4729912f4188bc2a778b",
+  "retrieved": "2026-10-13",
+  "binaries": [
+    {
+      "file": "openbw.wasm",
+      "url": "https://openbw.heiner.ai/openbw.wasm?v=469d2037e2fd",
+      "size": 2289890,
+      "sha256": "bc7016bc95a1daf796942e08e69994ee4da025692288a8facffef7fe4ebd21f5"
+    }
+  ],
+  "source_archive": {
+    "file": "vendor/openbw-469d2037e2fd-no-external-bot.tar.gz",
+    "sha256": "af94d408ee88104fc1036d0cea04bc3328917efecaa926c5615e54273d1ce5af",
+    "originalFile": "openbw-469d2037e2fd.tar.gz",
+    "originalSha256": "ac36cfd95e60ee57f3d8e395845a145aa77dabc14407d89538efc0cd01abe344",
+    "localChanges": "0.43: removed web/bot (external BWAPI bot adapters/build scripts); disabled external bot catalog in historical web/openbw.js. Engine files unchanged."
+  }
+}

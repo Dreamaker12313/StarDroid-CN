@@ -1,0 +1,398 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -1442,7 +1442,12 @@
+ 	}
+ 
+ 	bool unit_is_trap(unit_type_autocast ut) const {
+-		return ut->id >= UnitTypes::Special_Floor_Missile_Trap && ut->id <= UnitTypes::Special_Right_Wall_Flame_Trap;
++		return ut->id == UnitTypes::Special_Floor_Missile_Trap
++            || ut->id == UnitTypes::Special_Floor_Gun_Trap
++            || ut->id == UnitTypes::Special_Wall_Missile_Trap
++            || ut->id == UnitTypes::Special_Wall_Flame_Trap
++            || ut->id == UnitTypes::Special_Right_Wall_Missile_Trap
++            || ut->id == UnitTypes::Special_Right_Wall_Flame_Trap;
+ 	}
+ 
+ 	bool unit_is_zerg_building(unit_type_autocast ut) const {
+@@ -5376,6 +5381,7 @@
+ 		}
+ 	}
+ 
++    virtual void on_technology_complete(unit_t*, bool) {}
+ 	void order_ResearchTech(unit_t* u) {
+ 		auto* tech = u->building.researching_type;
+ 		auto done = [&]() {
+@@ -5389,7 +5395,7 @@
+ 			return;
+ 		}
+ 		if (u->building.upgrade_research_time-- == 0 || player_has_researched(u->owner, tech->id) || st.cheat_operation_cwal) {
+-			// todo: callback for sound
++            if (!player_has_researched(u->owner,tech->id)) on_technology_complete(u,false);
+ 			st.tech_researched[u->owner][tech->id] = true;
+ 			done();
+ 		}
+@@ -5410,8 +5416,8 @@
+ 		}
+ 		bool already_upgraded = player_upgrade_level(u->owner, upgrade->id) >= u->building.upgrading_level;
+ 		if (u->building.upgrade_research_time-- == 0 || already_upgraded || st.cheat_operation_cwal) {
+-			// todo: callback for sound
+ 			if (!already_upgraded && player_max_upgrade_level(u->owner, upgrade->id) >= u->building.upgrading_level) {
++				on_technology_complete(u,true);
+ 				st.upgrade_levels[u->owner][upgrade->id] = u->building.upgrading_level;
+ 				apply_upgrades_to_player_units(u->owner);
+ 			}
+@@ -5934,9 +5940,26 @@
+ 	bool unit_is_door(const unit_t* u) const {
+ 		return unit_is(u,UnitTypes::Special_Upper_Level_Door)||unit_is(u,UnitTypes::Special_Right_Upper_Level_Door)||unit_is(u,UnitTypes::Special_Pit_Door)||unit_is(u,UnitTypes::Special_Right_Pit_Door);
+ 	}
++    void run_doodad_animation(unit_t* u, int animation) {
++        auto unit_context=make_thingy_setter(iscript_unit,u);
++        auto flingy_context=make_thingy_setter(iscript_flingy,u);
++        for (auto it=u->sprite->images.begin();it!=u->sprite->images.end();) {
++            auto* image=&*it++;
++            auto* script=image->iscript_state.current_script;
++            if (!script || size_t(animation)>=script->animation_pc.size()
++                || !script->animation_pc[animation]) continue;
++            // The original doodad call forces Enable/Disable even on stationary
++            // images whose ordinary animation flag is clear.
++            image->flags|=image_t::flag_has_iscript_animations;
++            iscript_run_anim(image,animation);
++        }
++    }
+ 	void set_doodad_state(unit_t* u,bool enabled,bool immediate=false) {
+ 		if(!u->sprite)return;
+ 		if(unit_is_door(u)) {
++            auto order=enabled?Orders::CloseDoor:Orders::OpenDoor;
++            if (!immediate && (u->order_type->id==order
++                || (u->order_type->id==Orders::Nothing && u_disabled(u)==!enabled))) return;
+ 			u_unset_status_flag(u,unit_t::status_flag_disabled);
+ 			u->order_signal &= ~1;
+             set_unit_order(u,get_order_type(enabled?Orders::CloseDoor:Orders::OpenDoor));
+@@ -5944,14 +5967,14 @@
+                 u_unset_status_flag(u,unit_t::status_flag_no_collide);
+                 u->sprite->elevation_level=u->unit_type->elevation_level;
+             }
+-            auto unit_context = make_thingy_setter(iscript_unit, u);
+-            auto flingy_context = make_thingy_setter(iscript_flingy, u);
+-            sprite_run_anim(u->sprite,enabled?iscript_anims::Enable:iscript_anims::Disable);
++            run_doodad_animation(u,enabled?iscript_anims::Enable:iscript_anims::Disable);
++            if (!immediate) play_sound(enabled?u->unit_type->last_what_sound:u->unit_type->first_what_sound,u);
+             (void)immediate; // Initial doors also wait for their visible open frame.
+ 		} else {
+-			u_set_status_flag(u,unit_t::status_flag_disabled,!enabled);
+-			sprite_run_anim(u->sprite,enabled?iscript_anims::Enable:iscript_anims::Disable);
+-			set_unit_order(u,u->unit_type->return_to_idle);
++            if (!immediate && u_disabled(u)==!enabled) return;
++            u_set_status_flag(u,unit_t::status_flag_disabled,!enabled);
++            set_unit_order(u,u->unit_type->return_to_idle);
++            run_doodad_animation(u,enabled?iscript_anims::Enable:iscript_anims::Disable);
+ 		}
+ 	}
+ 	void order_HiddenGun(unit_t* u) {
+@@ -5973,11 +5996,15 @@
+ 		set_unit_order(u,get_order_type(Orders::RevealTrap),target);
+ 	}
+ 	void order_TrapAnimation(unit_t* u,bool reveal) {
+-		if(!u->order_state){u->order_signal&=~1;sprite_run_anim(u->sprite,reveal?iscript_anims::SpecialState1:iscript_anims::SpecialState2);u->order_state=1;}
++		if(!u->order_state){u->order_signal&=~1;run_doodad_animation(u,reveal?iscript_anims::SpecialState1:iscript_anims::SpecialState2);u->order_state=1;}
+ 		else if(u->order_signal&1){
+ 			u->order_signal&=~1;
+-			if(reveal){auto* target=u->order_target.unit;set_unit_order(u,get_order_type(Orders::TowerAttack),target);}
+-			else set_unit_order(u,get_order_type(Orders::HiddenGun));
++            u_unset_status_flag(u,unit_t::status_flag_order_not_interruptible);
++            if(reveal){
++                auto* target=u->order_target.unit;
++                set_unit_order(u,get_order_type(Orders::TowerAttack),target);
++                u_set_status_flag(u,unit_t::status_flag_ready_to_attack);
++            } else set_unit_order(u,get_order_type(Orders::HiddenGun));
+ 		}
+ 	}
+ 	void order_TowerGuard(unit_t* u) {
+@@ -7774,7 +7801,8 @@
+ 			break;
+ 		}
+ 
+-		if (unit_is_disabled(u) || (!u_can_move(u) && u_cannot_attack(u))) {
++		if (unit_is_disabled(u) || (!u_can_move(u) && u_cannot_attack(u)
++            && u->order_type->id!=Orders::HiddenGun)) {
+ 			if (u->main_order_timer == 0) u->main_order_timer = 15;
+ 			if (unit_is_disabled(u)) return;
+ 		}
+@@ -17365,6 +17393,16 @@
+ 		u->ground_strength = get_unit_strength(u, true);
+ 	}
+ 
++    void apply_map_unit_flags(unit_t* u,int valid,int flags) {
++        if (valid&16) u_set_status_flag(u,unit_t::status_flag_invincible,flags&16);
++        if ((valid&1) && (flags&1)) {
++            cloak_unit(u);
++            set_secondary_order(u,get_order_type(Orders::Cloak));
++        }
++        if ((valid&2) && (flags&2) && ut_can_burrow(u))
++            set_unit_order(u,get_order_type(Orders::Burrowing));
++    }
++
+ 	unit_t* create_initial_unit(const unit_type_t* unit_type, xy pos, int owner) {
+ 		unit_t* u = create_unit(unit_type, pos, owner);
+ 		if (!u) {
+@@ -19132,6 +19170,18 @@
+ 		return false;
+ 	}
+ 
++    void apply_force_settings() {
++        for (int p=0;p<8;++p) {
++            int force=st.players[p].force;
++            if (force<1 || force>4) continue;
++            int flags=game_st.forces[force-1].flags;
++            for (int q=0;q<8;++q) if (st.players[q].force==force) {
++                if (flags&2) st.alliances[p][q]=(flags&4)?2:1;
++                if (flags&8) st.shared_vision[p]|=1<<q;
++            }
++        }
++    }
++
+ 	bool trigger_players_pred(int owner, int player, int n) const {
+ 		// Neutral map objects (including installation doors) participate in
+ 		// explicit-player and All Players trigger queries, not victory slots.
+@@ -19142,7 +19192,7 @@
+ 		case 12: return false; // no players
+ 		case 13: return n == owner; // current player
+ 		case 14: return owner != n && st.alliances[owner][n] == 0; // enemy
+-		case 15: return owner != n && st.alliances[owner][n] == 2; // ally
++		case 15: return owner != n && st.alliances[owner][n] != 0; // ally, with or without shared victory
+ 		case 16: return owner != n && st.alliances[owner][n] == 1; // neutral
+ 		case 17: return true; // all players
+ 		case 18: return n < 8 && st.players[n].force == 1;
+@@ -21859,7 +21909,7 @@
+ 				if (valid_properties & 0x4) set_unit_shield_points(u, fp8::integer(u->unit_type->shield_points * shield_percent / 100));
+ 				if (valid_properties & 0x8) set_unit_energy(u, unit_max_energy(u) * energy_percent / 100);
+ 				if (valid_properties & 0x10) set_unit_resources(u, resources);
+-				// todo: more stuff...
++                apply_map_unit_flags(u,valid_flags,flags);
+ 
+ 				if (valid_flags & 8 && flags & 8) {
+ 					make_unit_hallucination(u);
+@@ -22043,6 +22093,7 @@
+ 		}
+ 
+ 		use_map_settings = setup_info.victory_condition == 0 && setup_info.tournament_mode == 0 && setup_info.starting_units == 0;
++        if (use_map_settings) apply_force_settings();
+ 
+ 		if (version == 59 || version == 63) {
+ 			if (use_map_settings) {
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -81,7 +81,7 @@
+             if(data&4)set_unit_shield_points(u,fp8::integer(u->unit_type->shield_points*std::min<int>(100,b[6])/100));
+             if(data&8)set_unit_energy(u,unit_max_energy(u)*std::min<int>(100,b[7])/100);
+             if(data&16)set_unit_resources(u,u32(b+8));
+-            if(valid&16)u_set_status_flag(u,unit_t::status_flag_invincible,flags&16);
++            apply_map_unit_flags(u,valid,flags);
+             if(valid&8 && flags&8)make_unit_hallucination(u);
+         }
+     }
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -280,7 +280,7 @@
+         a.attackers.erase(std::remove_if(a.attackers.begin(),a.attackers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),a.attackers.end());
+         ai_mine(owner);
+         // Reissue only idle attackers, allowing normal targeting/pathfinding to run.
+-        for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
++        for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u)&&!u_burrowed(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+         auto req=a.builds;
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+@@ -294,10 +294,31 @@
+         for(auto r:a.techs)if(!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
+         for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
+     }
++    void ai_lurkers(int owner) {
++        for (auto* u:ptr(st.player_units[owner])) {
++            if (!unit_is(u,UnitTypes::Zerg_Lurker) || unit_dying(u) || !u_completed(u)
++                || us_hidden(u) || unit_is_disabled(u)) continue;
++            auto order=u->order_type->id;
++            if (order==Orders::Burrowing || order==Orders::Unburrowing || u_iscript_nobrk(u)) continue;
++            unit_t* target=nullptr;
++            for (auto* other:find_units(square_at(u->sprite->position,256))) {
++                if (other==u || unit_dying(other) || u_flying(other) || u_invincible(other)
++                    || !unit_target_is_enemy(u,other) || !unit_can_see_target(u,other)) continue;
++                if (!target || units_distance(u,other)<units_distance(u,target)) target=other;
++            }
++            if (!u_burrowed(u) && target && units_distance(u,target)<=192) {
++                issue_order(u,false,get_order_type(Orders::Burrowing),{});
++            } else if (u_burrowed(u) && !target && ai_attacking(towns[owner],u)) {
++                issue_order(u,false,get_order_type(Orders::Unburrowing),{});
++            }
++        }
++    }
+     void ai_tick() {
+         ++ai_clock;
+         for(auto& t:threads)if(!t.done&&t.wake<=ai_clock)ai_run(t);
+         if(!spawned.empty()){threads.insert(threads.end(),spawned.begin(),spawned.end());spawned.clear();}
++        if(ai_clock%12==0)for(int p=0;p<8;++p)
++            if(p!=my_player && st.players[p].controller==player_t::controller_computer_game)ai_lurkers(p);
+         if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game)ai_manage(p);
+     }
+     a_string ai_status() {
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -471,7 +471,7 @@
+ 		if (spectator || campaign_speech_muted) return;
+ 		if (!u || first <= 0 || last < first) return;
+ 		int id = first + (sound_rotation++ % (last - first + 1));
+-		play_sound(id, u->sprite->position, u, false);   // 4-arg form (override hides the others)
++		play_sound(id, xy(), u, false); // Selected-unit speech is global, including off-screen commands.
+ 	}
+ 
+ 	// Selection ack: the unit's "what" line, escalating to its "pissed"
+@@ -515,7 +515,11 @@
+ 		}
+ 		menu = 0;
+ 		last_recalled_group = -1;   // a fresh selection resets group double-tap tracking
+-		unit_t* u = primary_selected();
++        unit_t* u = primary_selected();
++        if (!u && current_selection.size()==1) {
++            auto* selected=get_unit(current_selection.front());
++            if (selected && unit_is_critter(selected)) u=selected;
++        }
+ 		if (!u) { ack_count = 0; refresh_card(); return; }
+ 		// Like the original: selecting a building with a rally waypoint pops the ground
+ 		// marker there, so you can see where its units will gather. (Same real-rally test
+@@ -934,9 +938,9 @@
+ 	static const char* bw_upgrade_desc(UpgradeTypes id) {
+ 		using U = UpgradeTypes;
+ 		switch (id) {
+-		case U::Terran_Infantry_Weapons: return "+1 infantry damage";
+-		case U::Terran_Vehicle_Weapons:  return "+1 vehicle damage";
+-		case U::Terran_Ship_Weapons:     return "+1 ship damage";
++		case U::Terran_Infantry_Weapons: return "Increases damage dealt by Terran infantry.";
++		case U::Terran_Vehicle_Weapons:  return "Increases damage dealt by Terran ground vehicles.";
++		case U::Terran_Ship_Weapons:     return "Increases damage dealt by Terran air units.";
+ 		case U::Terran_Infantry_Armor:   return "+1 infantry armor";
+ 		case U::Terran_Vehicle_Plating:  return "+1 vehicle armor";
+ 		case U::Terran_Ship_Plating:     return "+1 ship armor";
+@@ -949,9 +953,9 @@
+ 		case U::Moebius_Reactor:         return "+50 Ghost energy";
+ 		case U::Apollo_Reactor:          return "+50 Wraith energy";
+ 		case U::Colossus_Reactor:        return "+50 Battlecruiser energy";
+-		case U::Zerg_Melee_Attacks:      return "+1 melee damage";
+-		case U::Zerg_Missile_Attacks:    return "+1 ranged damage";
+-		case U::Zerg_Flyer_Attacks:      return "+1 air damage";
++		case U::Zerg_Melee_Attacks:      return "Increases damage dealt by Zerg melee units.";
++		case U::Zerg_Missile_Attacks:    return "Increases damage dealt by Hydralisks and Lurkers.";
++		case U::Zerg_Flyer_Attacks:      return "Increases damage dealt by air units.";
+ 		case U::Zerg_Carapace:           return "+1 ground armor";
+ 		case U::Zerg_Flyer_Carapace:     return "+1 air armor";
+ 		case U::Ventral_Sacs:            return "Overlords carry units";
+@@ -965,14 +969,14 @@
+ 		case U::Metasynaptic_Node:       return "+50 Defiler energy";
+ 		case U::Chitinous_Plating:       return "+2 Ultralisk armor";
+ 		case U::Anabolic_Synthesis:      return "Faster Ultralisks";
+-		case U::Protoss_Ground_Weapons:  return "+1 ground damage";
+-		case U::Protoss_Air_Weapons:     return "+1 air damage";
++		case U::Protoss_Ground_Weapons:  return "Increases damage dealt by Protoss ground units.";
++		case U::Protoss_Air_Weapons:     return "Increases damage dealt by air units.";
+ 		case U::Protoss_Ground_Armor:    return "+1 ground armor";
+ 		case U::Protoss_Air_Armor:       return "+1 air armor";
+-		case U::Protoss_Plasma_Shields:  return "+1 shields";
++		case U::Protoss_Plasma_Shields:  return "Increases shield armor for all Protoss units and buildings.";
+ 		case U::Singularity_Charge:      return "+2 Dragoon range";
+ 		case U::Leg_Enhancements:        return "Faster Zealots";
+-		case U::Scarab_Damage:           return "+ Scarab damage";
++		case U::Scarab_Damage:           return "Increases Scarab damage by 25.";
+ 		case U::Reaver_Capacity:         return "Reaver holds 10 Scarabs";
+ 		case U::Gravitic_Drive:          return "Faster Shuttles";
+ 		case U::Sensor_Array:            return "+2 Observer sight";
+@@ -1181,7 +1185,7 @@
+ 			bool have_energy;
+ 			if (sp[i].tech == TechTypes::None) {
+ 				// Nuclear Strike isn't a real tech: any Ghost can call in a built missile.
+-				if (!player_has_completed_unit(my_player, U::Terran_Nuclear_Missile)) continue;
++				if (ut_hero(u) || !player_has_completed_unit(my_player, U::Terran_Nuclear_Missile)) continue;
+ 				have_energy = true;
+ 			} else {
+ 				const tech_type_t* te = get_tech_type(sp[i].tech);
+@@ -1365,8 +1369,10 @@
+ 		details_text.clear();
+ 		if (current_selection.size() != 1) return "";
+ 		unit_t* u = get_unit(current_selection.front());
+-		if (!u || ut_resource(u) || ut_powerup(u) || unit_is_special_beacon(u)) return "";
++		if (!u || ut_resource(u) || ut_powerup(u) || unit_is_special_beacon(u) || unit_is_critter(u)) return "";
+ 		int ri = (int)unit_race(u), supplied = u_completed(u) ? u->unit_type->supply_provided.raw_value / 2 : 0;
++        // Neutral doodads have no race supply array.
++        if (ri < 0 || ri >= 3) ri = 0;
+ 		bool cargo = false;
+ 		if (unit_provides_space(u)) for (auto* passenger : loaded_units(u)) { (void)passenger; cargo = true; break; }
+ 		details_text = format("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",u->kill_count,
+@@ -1388,7 +1394,8 @@
+ 		const auto* type = u->subunit ? u->subunit->unit_type : u->unit_type;
+ 		weapon(ground,type->max_ground_hits);
+ 		if (air != ground) weapon(air,type->max_air_hits);
+-        if (!unit_is_trap(u)) {
++        if (!unit_is_trap(u) && !unit_is_door(u) && !unit_is_critter(u)
++            && u->unit_type->armor_upgrade!=UpgradeTypes::None) {
+             const auto* armor = get_upgrade_type(u->unit_type->armor_upgrade);
+             int level = player_upgrade_level(u->owner,armor->id);
+             details_text += format("\narmor\t%d\t%d\t%d\t%d\t1\t%d",armor->icon,level,
+@@ -1615,6 +1622,27 @@
+ 		}
+ 		return -1;
+ 	}
++    a_vector<int> advisor_queue;
++    int advisor_last=-1;
++    int technology_notifications=0;
++    void on_technology_complete(unit_t* u,bool upgrade) override {
++        if (u->owner!=my_player || spectator) return;
++        int r=int(my_race);
++        const char* name=upgrade
++            ? (r==1?"TAdUpd06":r==2?"PAdUpd06":"ZAdUpd02")
++            : (r==1?"TAdUpd02":r==2?"PAdUpd02":"ZAdUpd02");
++        int sound=find_sound(name);
++        ++technology_notifications;
++        if (sound>=0 && advisor_queue.size()<32) advisor_queue.push_back(sound);
++    }
++    void poll_advisor() {
++        if (advisor_queue.empty() || campaign_speech_muted) return;
++        if (advisor_last>=0) for (auto& channel:sound_channels)
++            if (channel.playing && channel.sound_type==get_sound_type((Sounds)advisor_last)
++                && native_sound::is_playing(&channel-sound_channels.data())) return;
++        advisor_last=advisor_queue.front();advisor_queue.erase(advisor_queue.begin());
++        play_sound(advisor_last,xy(),nullptr,false);
++    }
+ 	// The race's advisor "your forces are under attack" line (*AdUpd00), by filename so
+ 	// it survives sfx-table index shifts.
+ 	void resolve_alert_sound() {
+@@ -1884,10 +1912,33 @@
+ 			if (it != last_life.end() && life < it->second && !seeding && !(stim_now && !stim_prev)) add_alert(u);
+ 			last_life[id] = life;
+ 		}
++		poll_advisor();
+ 		events_seeded = true;
+ 		check_last_standing();
+ 		poll_eliminations();
+ 	}
++
++    unit_t* touch_selection_near(int x,int y,int radius,bool force_select) {
++        if (paused || campaign_control_lock || pending_build || targeting) return nullptr;
++        xy pos=screen_to_map(x,y);
++        auto* exact=select_get_unit_at(pos);
++        if (exact && !unit_hidden_by_fog(exact)) return nullptr;
++        bool owns=primary_selected()!=nullptr;
++        unit_t* best=nullptr; int score=radius*radius+1;
++        for(auto* u:find_units(square_at(pos,radius))) {
++            if (!u->sprite || unit_dying(u) || !unit_can_be_selected(u) || unit_hidden_by_fog(u)) continue;
++            if (!force_select && owns && u->owner!=my_player) continue;
++            if (!force_select && owns && unit_is_refinery(u)) continue;
++            auto bounds=sprite_clickable_bounds(u->sprite);
++            int dx=std::max({bounds.from.x-pos.x,0,pos.x-bounds.to.x});
++            int dy=std::max({bounds.from.y-pos.y,0,pos.y-bounds.to.y});
++            int distance=dx*dx+dy*dy;
++            if(distance<score || (distance==score && best && get_unit_id(u).raw_value<get_unit_id(best).raw_value)) {
++                best=u;score=distance;
++            }
++        }
++        return best;
++    }
+ 
+ 	// Is there a unit under the current cursor position?
+ 	bool hovering_unit() {

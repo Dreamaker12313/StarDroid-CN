@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StarDroid · 1.0</title>
+
+<style>
+  html, body { margin: 0; height: 100%; background: #000; color: #cbd5e1;
+    font: 14px/1.5 system-ui, sans-serif; overflow: hidden; }
+  #wrap { position: fixed; inset: 0; }
+  /* touch-action:none — we handle touch gestures ourselves; stop the browser from
+     scrolling/zooming/double-tap-zooming on the game surface. */
+  /* 100dvh/dvw (with vh/vw fallback) = the *visible* viewport. Plain 100vh is the large
+     viewport that extends under the mobile browser's toolbar / home indicator, which pushed
+     the framebuffer's bottom edge — where the minimap sits — off-screen. */
+  #screen { image-rendering: pixelated; display: block; touch-action: none;
+    width: 100vw; height: 100vh; width: 100dvw; height: 100dvh;
+    background: #111; cursor: default; }
+  /* Anchored to the top, not vertically centred: the panel gains rows as you host or
+     join, and centring made every existing row jump upward each time. Growing downwards
+     keeps the title and buttons put. Scrolls if it outgrows the viewport. */
+  #overlay { position: fixed; inset: 0; display: grid; place-items: start center;
+    background: rgba(0,0,0,.85); text-align: center; z-index: 10;
+    padding: 7vh 16px 32px; box-sizing: border-box; overflow-y: auto; }
+  #overlay .card { max-width: 560px; padding: 0 28px; }
+  h1 { font-size: 20px; margin: 0 0 8px; color: #e2e8f0; }
+  h1 a { color: inherit; text-decoration: none; }
+  h1 a:hover { text-decoration: underline; }
+  #bar { height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden; margin: 14px 0 6px; }
+  #bar > i { display: block; height: 100%; width: 0; background: #38bdf8; transition: width .2s; }
+  #msg { font-size: 13px; color: #94a3b8; min-height: 1.5em; }
+  .hint { margin-top: 16px; font-size: 12px; color: #64748b; }
+  #mobilewarn { display: none; margin: 12px 0; padding: 10px 14px; border-radius: 8px;
+    background: rgba(180,83,9,.25); border: 1px solid rgba(245,158,11,.5);
+    color: #fcd34d; font-size: 13px; line-height: 1.5; }
+  kbd { background:#1e293b; border-radius:3px; padding:1px 5px; color:#cbd5e1; }
+  button { font: inherit; color:#0b1220; background:#38bdf8; border:0; border-radius:6px;
+    padding:8px 16px; cursor:pointer; margin-top:8px; }
+  a { color:#38bdf8; }
+  /* Status bar and command card stack in one bottom-right column, so a card that wraps
+     to two lines grows upward and pushes the status bar up instead of hiding under it. */
+  #hud { position: fixed; right: 8px; bottom: 8px; z-index: 4; display: flex; flex-direction: column;
+    align-items: flex-end; gap: 8px; max-width: 72vw; pointer-events: none; }
+  #card { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end;
+    min-height: 26px; padding: 6px 10px; border-radius: 8px;
+    background: rgba(0,0,0,.5); font: 13px system-ui, sans-serif; color: #cbd5e1; pointer-events: none; }
+  #card:empty { display: none; }
+  /* Selection wireframes above the command card: group tiles, or the single big frame.
+     Same translucent treatment as the resource HUD (no box, just a dark wash). */
+  #wires { display: flex; gap: 3px; justify-content: flex-end; flex-wrap: wrap;
+    min-height: 76px; align-items: flex-end; }
+  #wires:empty { display: none; }
+  #wires canvas { width: 38px; height: 38px; image-rendering: pixelated; cursor: pointer;
+    background: rgba(0,0,0,.5); border-radius: 6px; }
+  #wires canvas.big { padding: 6px; border-radius: 10px; }
+  #wires canvas:hover { outline: 1px solid #38bdf8; }
+  #card .title { font-weight: 700; color: #e2e8f0; margin-right: 4px; }
+  #card .fx { color: #e879f9; font-weight: 600; }   /* status effects: blind, parasite, ensnare, … */
+  #card .cmd { position: relative; display: inline-flex; align-items: center; gap: 4px; background: rgba(30,41,59,.9);
+    border-radius: 5px; padding: 2px 8px; white-space: nowrap;
+    pointer-events: auto; cursor: pointer; user-select: none; }
+  #card .cost { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 8px;
+    display: none; white-space: nowrap; padding: 3px 9px; border-radius: 6px; background: rgba(15,23,42,.98);
+    font: 600 13px system-ui, sans-serif; box-shadow: 0 6px 18px rgba(0,0,0,.55); pointer-events: none; z-index: 3; }
+  #card .cost .d { color: #cbd5e1; font-weight: 500; margin-bottom: 4px; }
+  #card .cost .m, #card .cost .g { display: inline-flex; align-items: center; gap: 4px; }
+  #card .cost .g { margin-left: 10px; }
+  #card .cost .cico { height: 14px; width: auto; image-rendering: pixelated; }
+  #card .cost .m { color: #6cb8ff; }
+  #card .cost .g { color: #4ade80; }
+  #card .cost::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 5px solid transparent; border-top-color: rgba(15,23,42,.98); }
+  #card .cmd:hover .cost { display: block; }
+  #card .req { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 8px;
+    display: none; white-space: nowrap; padding: 3px 9px; border-radius: 6px; background: rgba(15,23,42,.98);
+    color: #fca5a5; font: 600 13px system-ui, sans-serif; box-shadow: 0 6px 18px rgba(0,0,0,.55);
+    pointer-events: none; z-index: 3; }
+  #card .cmd:hover .req { display: block; }
+  #card .cmd:not(.off):hover { background: rgba(51,65,85,.95); }
+  #card .cmd.off { cursor: default; }
+  #card .cmd.poor .lbl { color: #f87171; }   /* can't afford */
+  #card .cmd.active { background: rgba(56,189,248,.32); box-shadow: inset 0 0 0 1.5px #38bdf8; }  /* current order */
+  #card .stat { color: #94a3b8; margin-right: 2px; }   /* HP / shields / resources text */
+  #card .cmd .ico { width: 22px; height: 22px; object-fit: contain; image-rendering: pixelated; }
+  #card .cmd.off .ico { filter: grayscale(1) brightness(.6); }
+  #card .cmd b { color: #38bdf8; }
+  #card .cmd.off { opacity: .38; }
+  #card .cmd.off b { color: #64748b; }
+  #status { display: flex; gap: 6px; align-items: center; min-height: 23px;
+    justify-content: flex-end; padding: 5px 10px; border-radius: 8px; background: rgba(0,0,0,.5);
+    color: #cbd5e1; font: 13px system-ui, sans-serif; pointer-events: none; }
+  /* Empty status still reserves its row (invisible), so the HUD stack height — and the
+     wireframe above it — stays put when selections change between producers and others. */
+  #status:empty { background: none; }
+  #status .bar { display: block; width: 68px; height: 6px; image-rendering: pixelated;
+    border: 1px solid #2f6d86; border-radius: 3px; }
+  #status .q { background: rgba(30,41,59,.9); border-radius: 5px; padding: 2px 8px; white-space: nowrap;
+    pointer-events: auto; cursor: pointer; }
+  #status .q:hover { background: rgba(120,30,30,.92); color: #fee2e2; }   /* click to cancel */
+  #status .q.cur { color: #e2e8f0; font-weight: 600; }
+  #resources { position: fixed; top: 8px; right: 12px; display: flex; gap: 16px; align-items: center;
+    padding: 5px 12px; border-radius: 8px; background: rgba(0,0,0,.5);
+    font: 600 14px system-ui, sans-serif; color: #e2e8f0; pointer-events: none; }
+  #resources:empty { display: none; }
+  #resources .r { display: flex; gap: 5px; align-items: center; }
+  #resources .rico { height: 22px; width: auto; max-width: 26px; image-rendering: pixelated; }
+  /* the carried mineral/gas sprites are small and fill their box, so scale them down
+     to visually match the (more sparsely-filled) supply-provider sprite */
+  #resources .min .rico, #resources .gas .rico { height: 16px; }
+  #resources .dot { width: 9px; height: 9px; border-radius: 50%; }
+  #resources .min .dot { background: #6cb8ff; }
+  #resources .gas .dot { background: #4ade80; }
+  #resources .sup .dot { background: #cbd5e1; }
+  #resources .cap { color: #f87171; }
+  /* One flex row, so hiding a button (pause is hidden in multiplayer) reflows the
+     rest instead of leaving a gap. */
+  #topbar { position: fixed; top: 8px; left: 12px; z-index: 5; display: none; gap: 6px; }
+  #topbar button { height: 30px; padding: 0; margin: 0; border: 0; border-radius: 8px;
+    background: rgba(0,0,0,.5); color: #e2e8f0; font-size: 16px; line-height: 30px;
+    cursor: pointer; }
+  #topbar button:hover { background: rgba(0,0,0,.72); }
+  #pausebtn, #mute { width: 34px; }
+  /* Pause/play as CSS shapes, not emoji — mobile renders ⏸/▶ as colour emoji even with
+     the text-variation selector. currentColor keeps them the button's grey. */
+  #pausebtn::before { content: ''; display: inline-block; vertical-align: middle; box-sizing: content-box; }
+  #pausebtn:not(.is-paused)::before { width: 4px; height: 13px;
+    border-left: 4px solid currentColor; border-right: 4px solid currentColor; }
+  #pausebtn.is-paused::before { width: 0; height: 0; margin-left: 3px;
+    border-top: 7px solid transparent; border-bottom: 7px solid transparent; border-left: 12px solid currentColor; }
+  #settingsbtn, #helpbtn { width: 30px; }
+  #helpbtn { font: 700 16px system-ui, sans-serif; }
+  #settings { position: fixed; top: 46px; left: 12px; z-index: 6; display: none; max-width: 320px;
+    padding: 12px 16px; border-radius: 10px; background: rgba(15,23,42,.96); color: #cbd5e1;
+    font: 13px/1.5 system-ui, sans-serif; box-shadow: 0 10px 34px rgba(0,0,0,.55); }
+  #settings h3 { margin: 0 0 8px; font-size: 13px; color: #e2e8f0; }
+  #settings label { display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 6px 0; }
+  #settings input { accent-color: #38bdf8; }
+  #settings .keybtn { margin-left: auto; background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+    border-radius: 6px; padding: 3px 10px; font: inherit; cursor: pointer; }
+  #settings .keybtn:hover { background: #334155; }
+  #settings select { margin-left: auto; background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+    border-radius: 6px; padding: 2px 6px; font: inherit; cursor: pointer; }
+  #settings .danger { width: 100%; margin-top: 12px; background: #7a1a1a; color: #fee2e2; }
+  #settings .danger:hover { background: #991b1b; }
+  #settings .backmenu { width: 100%; margin-top: 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
+  #settings .backmenu:hover { background: #334155; }
+  #help { position: fixed; top: 46px; left: 12px; z-index: 6; display: none; max-width: 400px;
+    padding: 12px 16px; border-radius: 10px; background: rgba(15,23,42,.96); color: #cbd5e1;
+    font: 13px/1.5 system-ui, sans-serif; box-shadow: 0 10px 34px rgba(0,0,0,.55); }
+  #help h3 { margin: 0 0 8px; font-size: 13px; color: #e2e8f0; }
+  #help .row { margin: 4px 0; }
+  #help kbd { background:#1e293b; border-radius:3px; padding:1px 5px; color:#cbd5e1; }
+  #paused { position: fixed; inset: 0; z-index: 7; display: none; align-items: center;
+    justify-content: center; pointer-events: none; }
+  #paused span { font: 800 clamp(32px, 7vw, 68px) system-ui, sans-serif; letter-spacing: 3px;
+    color: #e2e8f0; text-shadow: 0 2px 18px rgba(0,0,0,.9), 0 0 3px rgba(0,0,0,.95); }
+  #controls .row { display: flex; gap: 8px; align-items: center; justify-content: center;
+    margin: 8px 0; }
+  #controls select { background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+    border-radius: 6px; padding: 4px 8px; font: inherit; cursor: pointer; }
+  #map-info { color: #94a3b8; font-size: 13px; margin: 2px 0 10px; }
+  /* Map row shares the slots' 2-column grid so the dropdown lines up with You/Slot; the
+     "load map file" link hangs out to the right without shifting that alignment. */
+  #map-row { display: inline-grid; grid-template-columns: 52px 150px; gap: 6px 10px;
+    align-items: center; text-align: left; margin: 8px 0; position: relative; }
+  #map-row .lbl { color: #cbd5e1; font-size: 13px; }
+  #load-wrap { position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+    margin-left: 12px; white-space: nowrap; color: #64748b; font-size: 13px; }
+  #load-map { color: #38bdf8; cursor: pointer; }
+  #load-map:hover { text-decoration: underline; }
+  #slots { display: inline-grid; grid-template-columns: 52px 150px; gap: 6px 10px;
+    align-items: center; text-align: left; margin: 0 auto 4px; }
+  #slots .lbl { color: #cbd5e1; font-size: 13px; }
+  #slots .you { color: #38bdf8; font-weight: 600; }
+  #slots select { min-width: 150px; }
+  #controls .hint { color: #64748b; font-size: 12px; margin: 2px 0 8px; }
+  #mp { margin-top: 18px; padding-top: 14px; border-top: 1px solid #1e293b; text-align: left; }
+  #mp h2 { font-size: 13px; margin: 0 0 8px; color: #94a3b8; font-weight: 600; text-align: center; }
+  #mp-relay { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #1e293b; }
+  #mp-relay .hint { margin-top: 6px; font-size: 11px; color: #64748b; text-align: center; }
+  #mp-relay code { background: #1e293b; border-radius: 3px; padding: 1px 4px; }
+  #mp .row { display: flex; gap: 8px; align-items: center; justify-content: center; margin: 8px 0; }
+  #mp select { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px;
+    padding: 4px 8px; font: inherit; cursor: pointer; }
+  /* The code is never read by a human — a single line with Copy beside it is plenty. */
+  #mp .codeline { display: flex; gap: 6px; align-items: center; margin: 6px 0; }
+  #mp .codeline input { flex: 1 1 auto; min-width: 0; background: #0b1220; color: #cbd5e1;
+    border: 1px solid #334155; border-radius: 6px; padding: 6px 8px;
+    font: 12px ui-monospace, Menlo, monospace; }
+  #mp .codeline button { margin: 0; flex: 0 0 auto; }
+  #mp button { margin-top: 0; }
+  /* Lobby laid out like the original: player slots on the left, game info on the right. */
+  #mp .lobby { display: grid; grid-template-columns: 1fr 148px; gap: 12px; margin: 10px 0; }
+  #mp .slots { display: flex; flex-direction: column; gap: 6px; }
+  #mp .slot { display: flex; gap: 8px; align-items: center; padding: 5px 8px;
+    background: rgba(30,41,59,.6); border: 1px solid #334155; border-radius: 6px; }
+  #mp .slot .nm { flex: 1 1 auto; color: #e2e8f0; font-weight: 600; font-size: 13px; }
+  #mp .slot.you .nm { color: #38bdf8; }
+  #mp .slot.open .nm { color: #64748b; font-weight: 400; font-style: italic; }
+  #mp .ginfo { background: rgba(30,41,59,.4); border: 1px solid #334155; border-radius: 6px;
+    padding: 8px 10px; }
+  #mp .ginfo > div { display: flex; justify-content: space-between; gap: 8px; margin: 3px 0;
+    font-size: 12px; }
+  #mp .ginfo label { color: #64748b; }
+  #mp .ginfo span { color: #cbd5e1; }
+  #mp .hint { margin: 4px 0; font-size: 12px; color: #64748b; text-align: left; }
+  #mp .step.done { opacity: .5; }
+  #mp .step.done .hint::before { content: '\2713 '; color: #4ade80; font-weight: 700; }
+  #mp-status { margin-top: 8px; font-size: 12px; color: #94a3b8; min-height: 1.4em; }
+  #mp-status.err { color: #f87171; }
+  #mp-status.ok { color: #4ade80; }
+  #dropbtn { position: fixed; top: 58%; left: 50%; transform: translateX(-50%); z-index: 8;
+    display: none; background: #7a1a1a; color: #fee2e2; }
+  #dropbtn:hover { background: #991b1b; }
+  #toast { position: fixed; bottom: 92px; left: 50%; transform: translate(-50%, 8px); z-index: 8;
+    padding: 8px 16px; border-radius: 8px; background: rgba(122,26,26,.94); color: #fee2e2;
+    font: 600 14px system-ui, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  /* Chat / system message log, as in the original: plain outlined text over the
+     game, left side around mid-screen — no background. */
+  #messages { position: fixed; top: 36vh; left: 12px; z-index: 6; display: flex;
+    flex-direction: column; gap: 3px; pointer-events: none;
+    font: 600 14px system-ui, sans-serif; color: #b4ffb4;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 2px 4px #000; }
+  #messages .msg { animation: msgin .2s ease-out; align-self: flex-start; }
+  @keyframes msgin { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; } }
+  /* Chat / cheat input (Enter to open): a bare typing line, bottom middle above the HUD. */
+  #chatinput { position: fixed; bottom: 200px; left: 50%; transform: translateX(-50%);
+    z-index: 9; width: 44vw;
+    padding: 0; border: none; border-radius: 0; background: transparent;
+    color: #f1f5f9; font: 600 14px system-ui, sans-serif; outline: none; caret-color: #f1f5f9;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 2px 4px #000; }
+  /* End-of-game score screen. */
+  #gameover { position: fixed; inset: 0; z-index: 12; display: none; place-items: center;
+    background: rgba(3,6,12,.82); backdrop-filter: blur(2px); }
+  #gameover.show { display: grid; }
+  #gameover .go-card { min-width: 420px; max-width: 92vw; padding: 22px 26px; border-radius: 14px;
+    background: #0b1220; border: 1px solid #1e293b; box-shadow: 0 24px 64px rgba(0,0,0,.6);
+    text-align: center; }
+  #go-title { margin: 0 0 14px; font-size: 30px; letter-spacing: .5px; }
+  #go-title.win { color: #4ade80; } #go-title.lose { color: #f87171; }
+  #go-stats { width: 100%; border-collapse: collapse; font: 14px system-ui, sans-serif; }
+  #go-stats th { color: #94a3b8; font-weight: 600; text-align: right; padding: 6px 10px;
+    border-bottom: 1px solid #1e293b; }
+  #go-stats th:first-child { text-align: left; }
+  #go-stats td { text-align: right; padding: 7px 10px; color: #e2e8f0; }
+  #go-stats td:first-child { text-align: left; font-weight: 600; }
+  #go-stats tr.me td:first-child::after { content: ' (you)'; color: #64748b; font-weight: 400; }
+  #go-stats .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px;
+    margin-right: 7px; vertical-align: middle; }
+  .go-actions { margin-top: 20px; display: flex; gap: 10px; justify-content: center; }
+  .go-actions button { font: inherit; padding: 9px 18px; }
+  .go-actions .go-ghost { background: #1e293b; color: #e2e8f0; }
+  .go-actions .go-ghost:hover { background: #334155; }
+  #opt-debug button { width: 100%; margin-top: 6px; background: #334155; color: #e2e8f0; }
+  /* Finger-sized hit targets on touch devices. Scoped to a coarse pointer so mouse/
+     trackpad layouts are untouched. */
+  @media (pointer: coarse) {
+    #card .cmd { padding: 8px 10px; }
+    #card .cmd .ico { width: 28px; height: 28px; }
+    #status .q { padding: 8px 10px; }
+    #topbar button { height: 42px; }
+    #topbar #pausebtn, #topbar #mute { width: 46px; }
+    #topbar #settingsbtn, #topbar #helpbtn { width: 42px; }
+    #settings, #help { font-size: 15px; }
+  }
+
+  /* Features not wired to Android in this milestone are not offered. */
+  #mp, #spectate-row, #go-replay, #opt-fullscreen { display: none !important; }
+  #overlay { padding-top: 16px; }
+  #overlay .card { max-width: 620px; padding: 0 10px; }
+  #mobilewarn { margin: 6px 0; padding: 6px 10px; }
+  #topbar #android-cancel { width: auto; min-width: 62px; padding: 0 8px; }
+  select { min-height: 34px; }
+</style>
+<link rel="stylesheet" href="campaign.css">
+<script src="missions.js"></script><script src="campaign.js"></script>
+<link rel="stylesheet" href="classic.css">
+<script src="mpq-decoder.js"></script><script src="portraits.js"></script><script src="testing.js"></script><script src="classic.js"></script><script src="music.js"></script>
+<link rel="stylesheet" href="menus.css"><link rel="stylesheet" href="original.css"><link rel="stylesheet" href="results.css"><link rel="stylesheet" href="custom.css"><script src="ui-assets.js"></script><script src="ui-original.js"></script><script src="production.js"></script><script src="story.js"></script><script src="briefing.js"></script><script src="menus.js"></script><script src="results.js"></script><script src="custom.js"></script></head>
+<body>
+<div id="wrap"><canvas id="screen" width="1280" height="800"></canvas></div>
+<div id="campaign-panel" hidden>
+  <div id="campaign-progress"></div>
+  <div id="campaign-ai-warning" hidden></div>
+  <div id="campaign-cinematic" hidden>Transmission…</div>
+  <div id="campaign-subtitle" hidden></div>
+</div>
+<div id="campaign-objectives" hidden>
+  <button id="campaign-objectives-close">Close</button>
+  <h3>Mission objectives</h3><div id="campaign-objectives-text"></div>
+  <p id="campaign-ai-status"></p>
+  <p>Touch: hold then drag to select a group. Tap the minimap to travel across the map.</p>
+</div>
+<div id="campaign-briefing" hidden>
+  <div id="brief-room" aria-label="Terran mission briefing">
+    <img id="brief-background" alt="">
+    <canvas id="brief-portrait" class="brief-original-portrait" width="60" height="56" hidden></canvas>
+    <canvas id="brief-portrait-1" class="brief-original-portrait" width="60" height="56" hidden></canvas>
+    <canvas id="brief-portrait-2" class="brief-original-portrait" width="60" height="56" hidden></canvas>
+    <canvas id="brief-portrait-3" class="brief-original-portrait" width="60" height="56" hidden></canvas>
+    <div id="brief-text" aria-live="polite"></div>
+    <div id="brief-objectives-heading"></div><div id="brief-goals"></div>
+    <button id="brief-start" class="brief-original-button" aria-label="Start"></button>
+    <button id="brief-cancel" class="brief-original-button" aria-label="Cancel"></button>
+    <button id="brief-replay" class="brief-original-button" aria-label="Replay"></button>
+  </div>
+</div>
+
+<div id="resources"></div>
+<div id="topbar">
+<button id="campaign-objectives-button" hidden>Objectives</button>
+  <button id="pausebtn" title="Pause"></button>
+  <button id="mute" title="Mute sound">🔊</button>
+  <button id="settingsbtn" title="Game Menu" aria-label="Game Menu">MENU</button>
+  <button id="helpbtn" title="Controls">?</button>
+  <button id="android-cancel" title="Cancel targeting or building placement">Cancel</button>
+</div>
+<div id="settings">
+  <h3>Settings</h3>
+  <label><input type="checkbox" id="opt-lines"> Show order &amp; rally lines</label>
+  <label>Game speed
+    <select id="opt-speed">
+      <option value="167">Slowest</option>
+      <option value="111">Slower</option>
+      <option value="83">Slow</option>
+      <option value="67">Normal</option>
+      <option value="56">Fast</option>
+      <option value="48">Faster</option>
+      <option value="42">Fastest (1×)</option><option value="21">2× Fastest</option><option value="10.5">4× Fastest</option><option value="5.25">8× Fastest</option><option value="2.625">16× Fastest</option>
+    </select>
+  </label>
+  <label title="A second key that acts like Esc (cancel). Click, then press the key you want; press Esc to clear.">Alt. Esc key
+    <button id="opt-altesc" class="keybtn">none</button>
+  </label>
+  <label title="Capture the mouse inside the window (click the game to engage; Esc releases it). Edge-scrolling always works while locked."><input type="checkbox" id="opt-mouselock"> Lock mouse to window</label>
+  <button id="opt-fullscreen" class="backmenu">Fullscreen</button>
+  <div id="opt-debug" style="display:none">
+    <button id="dbg-victory">Debug: force Victory</button>
+    <button id="dbg-defeat">Debug: force Defeat</button>
+    <button id="dbg-resources">Debug: 2000 / 1000 resources</button>
+    <button id="dbg-reveal">Debug: reveal map</button>
+  </div>
+  <div id="testing-settings" hidden><h3>Cheats</h3>
+<p>For this game. Only your player gets resources and instant production. Placement, tech and supply requirements still apply.</p>
+<button id="test-money">+10,000 minerals and gas</button>
+<label><input type="checkbox" id="test-instant"> Instant construction, training &amp; research</label>
+<button id="test-reveal">Reveal map</button><button id="test-reset">Normal production / reset speed</button>
+<button id="test-victory">Force victory (end match)</button>
+<div id="testing-status" role="status">Choose up to 16× Fastest in Game Speed & Display. Actual speed depends on your phone.</div></div>
+<div id="music-settings"><h3>Music</h3>
+  <label><input type="checkbox" id="opt-music"> Play original music</label>
+  <div id="music-status" role="status">Checking imported music…</div>
+  <label>Volume <input id="music-volume" type="range" min="0" max="100" value="30" aria-label="Music volume"></label>
+  <label>Track <select id="music-track"><option value="auto">Automatic (your race)</option></select></label>
+  <button id="music-next">Next track</button>
+  </div>
+  <button id="opt-resign" class="danger">Resign game</button>
+</div>
+<div id="help">
+  <h3>Touch controls</h3><div class="row">Tap your unit: select · Drag: pan · Hold briefly, then drag: select a group</div><div class="row">Tap ground/target: attack with non-workers, contextual orders with workers · Pinch: zoom</div><div class="row">Preview a building, then tap Build to confirm. Android Back opens the Game Menu.</div><h3>Mouse / keyboard</h3>
+  <div class="row"><kbd>Click</kbd> / drag to select · double-click picks all of a type · <kbd>Shift</kbd>-click adds</div>
+  <div class="row"><kbd>Right-click</kbd> to move / attack / gather</div>
+  <div class="row">Command-card letters (or clicking them) build &amp; train · <kbd>Shift</kbd> queues</div>
+  <div class="row"><kbd>Ctrl</kbd>+<kbd>#</kbd> sets a control group · <kbd>#</kbd> recalls (again centers)</div>
+  <div class="row">Pan with the screen edge, arrow keys, scroll, or the minimap</div>
+  <div class="row"><kbd>Esc</kbd> cancels targeting / building placement</div>
+</div>
+<div id="classic-console" hidden aria-label="Game console">
+  <div class="console-fill"></div>
+  <img id="console-left" alt=""><img id="console-center" alt=""><img id="console-right" alt="">
+  <button id="minimap-terrain" type="button" aria-label="Minimap terrain" aria-pressed="true" title="Hide minimap terrain (Tab)"></button>
+  <div id="minimap-slot"><canvas id="classic-minimap" width="128" height="128" aria-label="Minimap: tap or drag to move camera; hold to command"></canvas></div>
+  <div id="unit-preview" title="Unit portrait"><canvas id="unit-portrait" hidden width="60" height="56"></canvas><img id="unit-preview-image" alt=""></div>
+</div>
+<div id="unit-info"><strong id="unit-name"></strong><span id="unit-life"></span><span id="unit-extra"></span><span id="unit-effects"></span><span id="unit-detector"></span><div id="unit-supply"></div><span id="unit-kills"></span><div id="unit-details"></div><div id="unit-health"><i></i></div></div>
+
+<div id="command-hint" hidden></div>
+<div id="hud"><div id="status"></div><div id="wires"></div><div id="card"></div></div>
+<div id="toast"></div>
+<div id="messages"></div>
+<input id="chatinput" type="text" maxlength="80" autocomplete="off" spellcheck="false" style="display:none">
+<div id="paused"><span>Paused</span></div>
+<button id="dropbtn">Drop opponent</button>
+<div id="game-menu" hidden role="dialog" aria-modal="true" aria-labelledby="game-menu-heading">
+  <section class="sc-dialog">
+    <h2 id="game-menu-heading">Game Menu</h2>
+    <div id="menu-main" class="menu-page">
+      <button id="menu-save" class="sc-button" disabled title="Saving is not implemented yet">Save Game</button>
+      <button id="menu-load" class="sc-button" disabled title="Loading is not implemented yet">Load Game</button>
+      <button id="menu-help" class="sc-button">Help</button>
+      <button id="menu-options" class="sc-button">Options</button>
+      <button id="menu-objectives" class="sc-button" hidden>Mission Objectives</button>
+      <button id="menu-end" class="sc-button">End Mission</button>
+      <button id="menu-resume" class="sc-button menu-primary">Return to Game</button>
+    </div>
+    <div id="menu-end-page" class="menu-page" hidden>
+      <button id="menu-restart" class="sc-button">Restart Mission</button><button id="menu-quit" class="sc-button">Quit Mission</button><button id="menu-exit" class="sc-button">Exit Program</button><button class="sc-button menu-back">Previous</button>
+    </div>
+    <div id="menu-options-page" class="menu-page" hidden>
+      <button id="menu-game-options" class="sc-button">Speed</button>
+      <button id="menu-sound" class="sc-button">Sound</button>
+      <button id="menu-video" class="sc-button">Video</button><button id="menu-network" class="sc-button" disabled>Network</button>
+      <button id="menu-testing" class="sc-button">Cheats</button>
+      <button id="menu-test-victory" class="sc-button">Force victory (end match)</button>
+      <button class="sc-button menu-back">Previous</button>
+    </div>
+    <div id="menu-content" class="menu-page" hidden><div id="menu-content-body"></div><button class="sc-button menu-back">Previous</button></div>
+    <div id="menu-confirm" class="menu-page" hidden>
+      <p id="menu-confirm-text"></p><button id="menu-confirm-yes" class="sc-button">Confirm</button><button class="sc-button menu-back">Cancel</button>
+    </div>
+  </section>
+</div>
+
+<div id="gameover">
+  <div class="go-card">
+    <h1 id="go-title">Game over</h1>
+    <table id="go-stats"></table>
+    <div class="go-actions">
+      <button id="go-replay">Save replay (.rep)</button>
+      <button id="go-close" class="go-ghost">Look at map</button>
+      <button id="go-new" class="go-ghost">New game</button>
+    </div>
+  </div>
+</div>
+
+<div id="overlay"><div class="card">
+  <h1><a id="home" href="./title.html?menu" title="Main menu">Play Custom</a></h1>
+  <div id="bar"><i></i></div>
+  <div id="msg">Preparing…</div>
+  <div id="mobilewarn">
+    📱 Touch controls: <b>tap</b> to select, <b>drag</b> to pan, <b>long-press</b> to
+    command (move/attack), <b>long-press&nbsp;+&nbsp;drag</b> to box-select. Best in
+    landscape. Pinch to zoom. Android Back opens the Game Menu. Game files are read locally.
+  </div>
+  <div id="controls" style="display:none">
+    <div id="map-row">
+      <span class="lbl">Map</span>
+      <select id="map-select"></select>
+      <span id="load-wrap">or <label id="load-map" for="map-file">load map file</label></span>
+      <input type="file" id="map-file" accept=".scx,.scm" hidden>
+    </div>
+    <div id="map-info"></div>
+    <div id="slots"></div>
+    <label id="spectate-row" style="display:flex;align-items:center;gap:8px;justify-content:center;margin:10px 0;cursor:pointer">
+      <input type="checkbox" id="spectate"> Bot vs Bot (spectate)
+    </label>
+    <div id="lobby-hint" class="hint"></div>
+    <p><button id="start-game" class="sc-button">Start Game</button></p><p><a class="setup-back" href="./title.html?menu">Previous</a></p>
+    <div id="mp">
+      <h2>or play a friend (1v1)</h2>
+      <div class="row" id="mp-setup">
+        <button id="mp-host">Host a game</button>
+        <button id="mp-join">Join with a code</button>
+      </div>
+
+      <!-- Relay (openbw_bridge): the host runs the relay and shares its address; no paste.
+           Falls back to copy-paste above when you don't want to run anything. -->
+      <div id="mp-relay">
+        <div class="codeline">
+          <input id="mp-relay-url" type="text" spellcheck="false" autocomplete="off"
+                 placeholder="ws://host-ip:8100">
+        </div>
+        <div class="row">
+          <button id="mp-relay-host">Host on relay</button>
+          <button id="mp-relay-join">Join on relay</button>
+        </div>
+        <div class="hint">Run <code>openbw_bridge</code> on the host, share its
+          <code>ws://&lt;LAN-IP&gt;:8100</code>. No copy-paste.</div>
+      </div>
+
+      <!-- Joiner without a link: the only place anything is pasted in by a joiner. -->
+      <div id="mp-step-invite" class="step" style="display:none">
+        <div class="hint" id="mp-invite-hint">1. Paste the invite code your friend sent:</div>
+        <div class="codeline">
+          <input id="mp-in-invite" type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Paste invite code">
+          <button id="mp-accept">Continue</button>
+        </div>
+      </div>
+
+      <!-- Host shares the invite; joiner shares the response. Copy-out only. -->
+      <div id="mp-step-share" class="step" style="display:none">
+        <div class="hint" id="mp-share-hint"></div>
+        <div class="codeline">
+          <input id="mp-out" type="text" spellcheck="false" autocomplete="off" readonly>
+          <button id="mp-copy">Copy</button>
+        </div>
+      </div>
+
+      <!-- Host only: paste back what the joiner sends. -->
+      <div id="mp-step-answer" class="step" style="display:none">
+        <div class="hint">2. Then paste your friend&rsquo;s response here:</div>
+        <div class="codeline">
+          <input id="mp-in-answer" type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Paste response">
+          <button id="mp-connect">Connect</button>
+        </div>
+      </div>
+
+      <!-- Lobby: player slots + game info, host starts a 5s countdown. -->
+      <div id="mp-lobby" style="display:none">
+        <div class="lobby">
+          <div class="slots">
+            <div class="slot" id="mp-s0"><span class="nm" id="mp-n0">Player 1</span>
+              <select id="mp-r0"></select></div>
+            <div class="slot" id="mp-s1"><span class="nm" id="mp-n1">Open</span>
+              <select id="mp-r1"></select></div>
+          </div>
+          <div class="ginfo">
+            <div><label>Type</label><span>Melee</span></div>
+            <div><label>Map</label><span id="mp-gi-map">&mdash;</span></div>
+            <div><label>Speed</label><span id="mp-gi-speed">Fastest</span></div>
+          </div>
+        </div>
+        <div class="row"><button id="mp-start">Start game</button></div>
+      </div>
+
+      <div id="mp-status"></div>
+    </div>
+    
+  </div>
+</div></div>
+
+<!-- In prod, android-0.22-469d2037e2fd is the commit SHA (cache-busts per deploy). In dev it stays the
+     literal "android-0.22-469d2037e2fd", so the browser would serve a stale openbw.js forever — load it
+     with a fresh timestamp instead so local edits always take. -->
+<script src="original-stage.js"></script><script type="module">
+  const dev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  import('./openbw.js?v=' + (dev ? Date.now() : 'android-0.22-469d2037e2fd'));
+</script>
+</body>
+</html>

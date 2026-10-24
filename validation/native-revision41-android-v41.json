@@ -1,0 +1,15 @@
+{
+  "passed": false,
+  "executed": false,
+  "blockedByEnvironment": true,
+  "reason": "Android emulator did not complete first boot; repeated attempts encountered userdata creation/encryption delays and disk-space failures before installation or instrumentation. Java instrumentation compiled successfully. No visual pass is claimed.",
+  "apkSha256": "1b4bb3e0b4fa60854faabfb30486de5b9b122da52ce21acd8b2420199c105694",
+  "testApkSha256": "57747e28f72a297455010c79bd47dc23d756b08a2b7d99c8bece195d56ce7b1e",
+  "plannedChecks": [
+    "research and low-energy command tint",
+    "six unboxed warnings at two widths",
+    "both Archon progress panels",
+    "original cargo frames and passenger unloading",
+    "eight-map ZIP import and deduplication"
+  ]
+}

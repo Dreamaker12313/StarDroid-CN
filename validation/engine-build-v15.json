@@ -1,0 +1,51 @@
+{
+  "version": "0.15",
+  "campaignRebuildMatchesReviewedBinary": true,
+  "patchAppliesToPinnedSource": true,
+  "binaries": [
+    {
+      "file": "openbw.wasm",
+      "bytes": 2364694,
+      "sha256": "16081f92daaeb0534c5d2c8dbdf4285546a393733085e313bb119d644e673acc",
+      "changed": true
+    },
+    {
+      "file": "openbw-campaign.wasm",
+      "bytes": 2364694,
+      "sha256": "16081f92daaeb0534c5d2c8dbdf4285546a393733085e313bb119d644e673acc",
+      "changed": true
+    },
+    {
+      "file": "openbw-bot.wasm",
+      "bytes": 6126751,
+      "sha256": "e5c41685521354a37f5f3895c9e4fdcb39894d7330089fd1c1f6343d31d5560c",
+      "changed": true
+    },
+    {
+      "file": "media-decoder.wasm",
+      "bytes": 665540,
+      "sha256": "80ef1f504d6161a12f81b2b84462b1a8b4ef8a758f23e214a6aad240c4321b6c",
+      "changed": false
+    },
+    {
+      "file": "portrait-decoder.wasm",
+      "bytes": 285594,
+      "sha256": "26b628f3f36d30ae998e850269adbc06a8fdf856fac6cf371635d47e83317cb0",
+      "changed": false
+    },
+    {
+      "file": "menu-decoder.wasm",
+      "bytes": 285433,
+      "sha256": "9400381a97bfec5c04970be2234dd84ef2b9b890175e8a2c6890a26a6a51b9d2",
+      "changed": false
+    },
+    {
+      "file": "cinematic-decoder.wasm",
+      "bytes": 287265,
+      "sha256": "c167ce8fd74bb51267476a6b8abaf01e8c8a510b2421953aabcc7281c12d503f",
+      "changed": false
+    }
+  ],
+  "sdk": "wasi-sdk-33.0-x86_64-linux",
+  "cmake": "4.4.0"
+}

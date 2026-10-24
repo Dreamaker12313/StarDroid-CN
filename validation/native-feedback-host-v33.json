@@ -1,0 +1,42 @@
+{
+  "version": "0.33",
+  "passed": true,
+  "scope": "Synthetic native engine state",
+  "originalMissionMaps": false,
+  "originalCoreAssets": false,
+  "originalCampaignPlaythrough": false,
+  "stdout": "PASS six trap types: hidden, detected, revealed, fog and no armor\nPASS hero command cards, mission restrictions and energy gating\nPASS Drone/SCV/Probe refinery taps and gas orders\nPASS four door types: iscript signal context and collision transitions\nPASS force allies, shared victory/vision and map invincibility/burrow flags\nPASS six traps acquire enemies, animate reveal and begin firing\nPASS Lurker combat burrow respects alliances\nPASS offscreen acknowledgments, neutral critter and race-specific completion speech\nPASS nearby selection radius, fog and explicit order protection\nPASS synthetic countdown and delayed trigger resume\nPASS command metadata: scenario costs, pair supply and unit descriptions\nFEEDBACK_RESULT PASS\n",
+  "stderr": "",
+  "binarySha256": "96333f27f1972b21c20b81cdad1110ee5bf4f19e182c2efec9bb9cee16ed7c88",
+  "checks": [
+    "six trap types: hidden, detected, revealed, fog and no armor",
+    "hero command cards, mission restrictions and energy gating",
+    "Drone/SCV/Probe refinery taps and gas orders",
+    "four door types: iscript signal context and collision transitions",
+    "force allies, shared victory/vision and map invincibility/burrow flags",
+    "six traps acquire enemies, animate reveal and begin firing",
+    "Lurker combat burrow respects alliances",
+    "offscreen acknowledgments, neutral critter and race-specific completion speech",
+    "nearby selection radius, fog and explicit order protection",
+    "synthetic countdown and delayed trigger resume",
+    "command metadata: scenario costs, pair supply and unit descriptions"
+  ],
+  "sourceSha256": {
+    "UPSTREAM.json": "33afc9db197e6c6d693c05dc792cb8cd10332ee76f1969aa392ee713049c71af",
+    "native/runtime.cpp": "9f779547d4d80bd9afa54f9bbfbaea48e9a39482cc0a775a2c3bdd7bddff5186",
+    "native/audio.h": "b09844e77190a80efc9853321a82a75bde4cba0e23847492a83db1c82ba8d73a",
+    "patches/campaign.patch": "3e5601478ad8302f66eea45052239e28238fdee3c79eb0c5d623042c35fcc43a",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+    "scripts/prepare_native.py": "d80333b5698917fc1f837fb46bfd78747d79a9be9d30d169617c26dd062f2144",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "scripts/prepare_feedback.py": "b15e627e5d16c7dcb881186746311ba64f599f216b81549b40f7db1f42b2a694",
+    "tests/build_native_host.py": "6e51bfa90ca2069237f6a3a991bce1fdb7034118379827827093039b89f479ec",
+    "tests/native_fixture.h": "978bb1b25ba507aa450e256eda4446b35d665d098857f68388a9fc97ff259030",
+    "tests/run_mission_checks.py": "93e0cd7ee6a685f8f204888bc66b968b5715c4fe31530b61b180ced648b4c9d0",
+    "tests/native_feedback.cpp": "3e82c7afcb051ccaa3e702d32a828bac7e49897e2e15d83a61ceda9f7c065b23"
+  },
+  "checkGroups": 11
+}

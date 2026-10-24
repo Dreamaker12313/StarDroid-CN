@@ -1,0 +1,91 @@
+{
+  "package": "org.openbw.androidtest",
+  "versionName": "0.24",
+  "versionCode": 25,
+  "apkSha256": "f70e57db555580d8aea846295a441eb38d3d6982104f6d492dd1f8155f76c127",
+  "apkBytes": 8771998,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "updateCertificateMatches": true,
+  "v2Signature": true,
+  "v3Signature": true,
+  "zipCRC": true,
+  "zipAligned16KiB": true,
+  "assetByteMatches": 72,
+  "webViewClassReferenced": false,
+  "webRuntimeAssetsPackaged": false,
+  "jniMethodsPerArchitecture": 21,
+  "libraries": [
+    {
+      "abi": "arm64-v8a",
+      "file": "libopenbw.so",
+      "sha256": "a5d6a8df2105c516500210fab6c309d623c42943cec9073ab261e5d8300eaa2a",
+      "bytes": 4139480,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libsmacker.so",
+        "libjnigraphics.so",
+        "libdl.so",
+        "libm.so",
+        "libc.so"
+      ]
+    },
+    {
+      "abi": "arm64-v8a",
+      "file": "libsmacker.so",
+      "sha256": "469a713c1552081eec0e2e8ebb21056763288397fa1cd8ff3d69237f68ebbce8",
+      "bytes": 32560,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libdl.so",
+        "libc.so"
+      ]
+    },
+    {
+      "abi": "x86_64",
+      "file": "libopenbw.so",
+      "sha256": "c680a1021eea397384b99a039aa78dd07f0287664f816575063d86e399eb4a47",
+      "bytes": 4362864,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libsmacker.so",
+        "libjnigraphics.so",
+        "libdl.so",
+        "libm.so",
+        "libc.so"
+      ]
+    },
+    {
+      "abi": "x86_64",
+      "file": "libsmacker.so",
+      "sha256": "7646650a1134158011af945e62d72ab82987898ff5c3ccae2d280b85e26c7513",
+      "bytes": 34792,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "dependencies": [
+        "libdl.so",
+        "libc.so"
+      ]
+    }
+  ],
+  "androidUiVerified": true,
+  "hardwareTested": false
+}

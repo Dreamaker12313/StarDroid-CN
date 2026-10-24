@@ -1,0 +1,6 @@
+Reading the music index…
+Importing music: 1 / 3
+Importing music: 2 / 3
+Importing music: 3 / 3
+Missing-music archive rejected: No music tracks found. Select the large StarCraft.mpq or BroodWar.mpq, not StarDat.mpq.
+PASS: music export, validated install, local serving, safe replacement, missing-track handling.

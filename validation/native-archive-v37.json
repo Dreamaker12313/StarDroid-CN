@@ -1,0 +1,26 @@
+{
+  "version": "0.37",
+  "passed": true,
+  "scope": "Hash-table probing, ordinary/CRC sector offsets, exclusion of checksum payload, malformed-offset rejection and byte-exact extraction of three supplied raw font payloads. Payload readability is separately checked by Android.",
+  "originalCoreAssets": true,
+  "stdout": "PASS empty, deleted, colliding and fully deleted MPQ hash tables\nPASS ordinary/CRC sector tables, checksum-block exclusion and invalid offsets\nPASS original checksum-enabled payload font/font8.fnt 6472 bytes (font readability checked by Android)\nPASS original checksum-enabled payload font/font10.fnt 7752 bytes (font readability checked by Android)\nPASS original checksum-enabled payload font/font16.fnt 13384 bytes (font readability checked by Android)\n",
+  "stderr": "",
+  "binarySha256": "aaeea3cbbc5adbde98bcdb2b967cd2b0075c24ecd94696dd57f3912de196ab52",
+  "sourceSha256": {
+    "tests/native_archive.cpp": "c059def3dbd9139183530c9432d240bc47f7cc5be7661a36c99d14ea85d03402",
+    "tests/run_archive_checks.py": "2b3581a065ebf8b9b801bd57f4baf42e8fe7f313394f47bc3086af1a32974910",
+    "scripts/prepare_native.py": "a5d3f34ba9942bf42031d03532a835e1a4d60fc8564d2c746f2d997d0126eba7",
+    "scripts/prepare_feedback.py": "b15e627e5d16c7dcb881186746311ba64f599f216b81549b40f7db1f42b2a694",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "UPSTREAM.json": "33afc9db197e6c6d693c05dc792cb8cd10332ee76f1969aa392ee713049c71af",
+    "patches/campaign.patch": "3e5601478ad8302f66eea45052239e28238fdee3c79eb0c5d623042c35fcc43a",
+    "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+    "patches/native-finale37.patch": "f1050e7a66ee1a37f7159bfcf72f4a7fc94585da4e3ca4aeda21442782165f66",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6"
+  },
+  "stardatSha256": "dede48dd9b313817b118a4c117101c9a70cf19264756e9db4e9be1af7f852e9a"
+}

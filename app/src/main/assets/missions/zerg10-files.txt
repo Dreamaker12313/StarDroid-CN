@@ -1,0 +1,7 @@
+campaign\zerg\zerg10\staredit\scenario.chk
+campaign\zerg\zerg10\staredit\wav\combeep0.wav
+campaign\zerg\zerg10\staredit\wav\zab00zad.wav
+campaign\zerg\zerg10\staredit\wav\zab01zad.wav
+campaign\zerg\zerg10\staredit\wav\zab02zad.wav
+campaign\zerg\zerg10\staredit\wav\zam00uda.wav
+campaign\zerg\zerg10\staredit\wav\zam20zad.wav

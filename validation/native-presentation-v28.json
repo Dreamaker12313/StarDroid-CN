@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "T3 original camera, speaker sequence, both bunker pings",
+    "bottom edge and camera bounds at four viewport/zoom sizes",
+    "BW Z2 connected Machine Shops: 2",
+    "rally only for producers, including mission-restricted Hatcheries",
+    "unarmed commands and Escape without scan code",
+    "preserved title music and >64 MB Brood War native cinematic"
+  ],
+  "sourceSha256": {
+    "native/runtime.cpp": "98049665c64d1133e9f5e1af59e759322e7971aa8c0d15f5caa0eeb32fbdd476",
+    "native/audio.h": "b09844e77190a80efc9853321a82a75bde4cba0e23847492a83db1c82ba8d73a",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "scripts/prepare_native.py": "6df6b8c88490e5e321252f1487cffb700c5506c80c85c683c83577a65c08ba3e",
+    "tests/native_presentation.cpp": "910515fdeb3fd841c734cec862e9ad3e355ee066f207d8c7a74554162a599806"
+  }
+}

@@ -1,0 +1,723 @@
+{
+  "checks": [
+    "Real registry entry takes ~900ms with stepped travel; registry exit + campaign entry ~1600ms; text and button art share the animated widget"
+  ],
+  "missions": {},
+  "errors": [],
+  "registry": [
+    {
+      "now": 8340,
+      "page": "registry",
+      "amount": 1
+    },
+    {
+      "now": 8390.1,
+      "page": "registry",
+      "amount": 0.9444444444444444
+    },
+    {
+      "now": 8423.4,
+      "page": "registry",
+      "amount": 0.8888888888888888
+    },
+    {
+      "now": 8440.1,
+      "page": "registry",
+      "amount": 0.8888888888888888
+    },
+    {
+      "now": 8473.4,
+      "page": "registry",
+      "amount": 0.8333333333333334
+    },
+    {
+      "now": 8490.1,
+      "page": "registry",
+      "amount": 0.8333333333333334
+    },
+    {
+      "now": 8506.7,
+      "page": "registry",
+      "amount": 0.8333333333333334
+    },
+    {
+      "now": 8523.4,
+      "page": "registry",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 8540,
+      "page": "registry",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 8556.7,
+      "page": "registry",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 8573.4,
+      "page": "registry",
+      "amount": 0.7222222222222222
+    },
+    {
+      "now": 8590.1,
+      "page": "registry",
+      "amount": 0.7222222222222222
+    },
+    {
+      "now": 8606.7,
+      "page": "registry",
+      "amount": 0.7222222222222222
+    },
+    {
+      "now": 8623.4,
+      "page": "registry",
+      "amount": 0.6666666666666667
+    },
+    {
+      "now": 8640.1,
+      "page": "registry",
+      "amount": 0.6666666666666667
+    },
+    {
+      "now": 8656.7,
+      "page": "registry",
+      "amount": 0.6666666666666667
+    },
+    {
+      "now": 8673.4,
+      "page": "registry",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 8690.1,
+      "page": "registry",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 8706.7,
+      "page": "registry",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 8723.4,
+      "page": "registry",
+      "amount": 0.5555555555555556
+    },
+    {
+      "now": 8740,
+      "page": "registry",
+      "amount": 0.5555555555555556
+    },
+    {
+      "now": 8756.7,
+      "page": "registry",
+      "amount": 0.5555555555555556
+    },
+    {
+      "now": 8773.4,
+      "page": "registry",
+      "amount": 0.5
+    },
+    {
+      "now": 8790,
+      "page": "registry",
+      "amount": 0.5
+    },
+    {
+      "now": 8806.7,
+      "page": "registry",
+      "amount": 0.5
+    },
+    {
+      "now": 8823.4,
+      "page": "registry",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 8840,
+      "page": "registry",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 8856.7,
+      "page": "registry",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 8873.3,
+      "page": "registry",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 8890.1,
+      "page": "registry",
+      "amount": 0.38888888888888884
+    },
+    {
+      "now": 8906.7,
+      "page": "registry",
+      "amount": 0.38888888888888884
+    },
+    {
+      "now": 8923.4,
+      "page": "registry",
+      "amount": 0.33333333333333337
+    },
+    {
+      "now": 8940.1,
+      "page": "registry",
+      "amount": 0.33333333333333337
+    },
+    {
+      "now": 8956.7,
+      "page": "registry",
+      "amount": 0.33333333333333337
+    },
+    {
+      "now": 8973.4,
+      "page": "registry",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 8990,
+      "page": "registry",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 9006.7,
+      "page": "registry",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 9023.4,
+      "page": "registry",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 9040.1,
+      "page": "registry",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 9056.7,
+      "page": "registry",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 9073.4,
+      "page": "registry",
+      "amount": 0.16666666666666663
+    },
+    {
+      "now": 9090.1,
+      "page": "registry",
+      "amount": 0.16666666666666663
+    },
+    {
+      "now": 9106.7,
+      "page": "registry",
+      "amount": 0.16666666666666663
+    },
+    {
+      "now": 9123.3,
+      "page": "registry",
+      "amount": 0.16666666666666663
+    },
+    {
+      "now": 9140,
+      "page": "registry",
+      "amount": 0.11111111111111116
+    },
+    {
+      "now": 9156.7,
+      "page": "registry",
+      "amount": 0.11111111111111116
+    },
+    {
+      "now": 9173.3,
+      "page": "registry",
+      "amount": 0.11111111111111116
+    },
+    {
+      "now": 9190,
+      "page": "registry",
+      "amount": 0.05555555555555558
+    },
+    {
+      "now": 9206.7,
+      "page": "registry",
+      "amount": 0.05555555555555558
+    },
+    {
+      "now": 9223.3,
+      "page": "registry",
+      "amount": 0.05555555555555558
+    }
+  ],
+  "campaign": [
+    {
+      "now": 9323.3,
+      "page": "registry",
+      "amount": 0
+    },
+    {
+      "now": 9340.1,
+      "page": "registry",
+      "amount": 0
+    },
+    {
+      "now": 9356.7,
+      "page": "registry",
+      "amount": 0.05555555555555555
+    },
+    {
+      "now": 9373.4,
+      "page": "registry",
+      "amount": 0.05555555555555555
+    },
+    {
+      "now": 9390,
+      "page": "registry",
+      "amount": 0.1111111111111111
+    },
+    {
+      "now": 9406.6,
+      "page": "registry",
+      "amount": 0.1111111111111111
+    },
+    {
+      "now": 9423.4,
+      "page": "registry",
+      "amount": 0.16666666666666666
+    },
+    {
+      "now": 9440.1,
+      "page": "registry",
+      "amount": 0.16666666666666666
+    },
+    {
+      "now": 9456.7,
+      "page": "registry",
+      "amount": 0.16666666666666666
+    },
+    {
+      "now": 9473.3,
+      "page": "registry",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 9490,
+      "page": "registry",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 9506.7,
+      "page": "registry",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 9523.3,
+      "page": "registry",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 9540,
+      "page": "registry",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 9556.7,
+      "page": "registry",
+      "amount": 0.3333333333333333
+    },
+    {
+      "now": 9573.4,
+      "page": "registry",
+      "amount": 0.3333333333333333
+    },
+    {
+      "now": 9590,
+      "page": "registry",
+      "amount": 0.3888888888888889
+    },
+    {
+      "now": 9606.6,
+      "page": "registry",
+      "amount": 0.3888888888888889
+    },
+    {
+      "now": 9623.3,
+      "page": "registry",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 9640,
+      "page": "registry",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 9656.7,
+      "page": "registry",
+      "amount": 0.5
+    },
+    {
+      "now": 9673.4,
+      "page": "registry",
+      "amount": 0.5
+    },
+    {
+      "now": 9690,
+      "page": "registry",
+      "amount": 0.5
+    },
+    {
+      "now": 9706.6,
+      "page": "registry",
+      "amount": 0.5555555555555556
+    },
+    {
+      "now": 9723.4,
+      "page": "registry",
+      "amount": 0.5555555555555556
+    },
+    {
+      "now": 9740,
+      "page": "registry",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 9756.7,
+      "page": "registry",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 9773.4,
+      "page": "registry",
+      "amount": 0.6666666666666666
+    },
+    {
+      "now": 9790,
+      "page": "registry",
+      "amount": 0.6666666666666666
+    },
+    {
+      "now": 9806.7,
+      "page": "registry",
+      "amount": 0.6666666666666666
+    },
+    {
+      "now": 9823.4,
+      "page": "registry",
+      "amount": 0.7222222222222222
+    },
+    {
+      "now": 9840,
+      "page": "registry",
+      "amount": 0.7222222222222222
+    },
+    {
+      "now": 9856.6,
+      "page": "registry",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 9873.3,
+      "page": "registry",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 9890,
+      "page": "registry",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 9906.7,
+      "page": "registry",
+      "amount": 0.8333333333333334
+    },
+    {
+      "now": 9923.3,
+      "page": "registry",
+      "amount": 0.8333333333333334
+    },
+    {
+      "now": 9940,
+      "page": "registry",
+      "amount": 0.8888888888888888
+    },
+    {
+      "now": 9956.6,
+      "page": "registry",
+      "amount": 0.8888888888888888
+    },
+    {
+      "now": 9973.3,
+      "page": "registry",
+      "amount": 0.9444444444444444
+    },
+    {
+      "now": 9990,
+      "page": "registry",
+      "amount": 0.9444444444444444
+    },
+    {
+      "now": 10006.7,
+      "page": "campaign",
+      "amount": 1
+    },
+    {
+      "now": 10023.3,
+      "page": "campaign",
+      "amount": 1
+    },
+    {
+      "now": 10056.7,
+      "page": "campaign",
+      "amount": 0.9444444444444444
+    },
+    {
+      "now": 10123.4,
+      "page": "campaign",
+      "amount": 0.8888888888888888
+    },
+    {
+      "now": 10140,
+      "page": "campaign",
+      "amount": 0.8888888888888888
+    },
+    {
+      "now": 10190,
+      "page": "campaign",
+      "amount": 0.8333333333333334
+    },
+    {
+      "now": 10206.7,
+      "page": "campaign",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 10223.3,
+      "page": "campaign",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 10240,
+      "page": "campaign",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 10256.6,
+      "page": "campaign",
+      "amount": 0.7777777777777778
+    },
+    {
+      "now": 10273.3,
+      "page": "campaign",
+      "amount": 0.7222222222222222
+    },
+    {
+      "now": 10289.9,
+      "page": "campaign",
+      "amount": 0.7222222222222222
+    },
+    {
+      "now": 10306.7,
+      "page": "campaign",
+      "amount": 0.6666666666666667
+    },
+    {
+      "now": 10323.3,
+      "page": "campaign",
+      "amount": 0.6666666666666667
+    },
+    {
+      "now": 10339.9,
+      "page": "campaign",
+      "amount": 0.6666666666666667
+    },
+    {
+      "now": 10373.4,
+      "page": "campaign",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 10390,
+      "page": "campaign",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 10406.6,
+      "page": "campaign",
+      "amount": 0.6111111111111112
+    },
+    {
+      "now": 10423.3,
+      "page": "campaign",
+      "amount": 0.5555555555555556
+    },
+    {
+      "now": 10439.9,
+      "page": "campaign",
+      "amount": 0.5555555555555556
+    },
+    {
+      "now": 10456.7,
+      "page": "campaign",
+      "amount": 0.5
+    },
+    {
+      "now": 10473.3,
+      "page": "campaign",
+      "amount": 0.5
+    },
+    {
+      "now": 10490,
+      "page": "campaign",
+      "amount": 0.5
+    },
+    {
+      "now": 10506.7,
+      "page": "campaign",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 10523.3,
+      "page": "campaign",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 10540,
+      "page": "campaign",
+      "amount": 0.4444444444444444
+    },
+    {
+      "now": 10556.7,
+      "page": "campaign",
+      "amount": 0.38888888888888884
+    },
+    {
+      "now": 10573.3,
+      "page": "campaign",
+      "amount": 0.38888888888888884
+    },
+    {
+      "now": 10589.9,
+      "page": "campaign",
+      "amount": 0.38888888888888884
+    },
+    {
+      "now": 10606.7,
+      "page": "campaign",
+      "amount": 0.33333333333333337
+    },
+    {
+      "now": 10623.3,
+      "page": "campaign",
+      "amount": 0.33333333333333337
+    },
+    {
+      "now": 10639.9,
+      "page": "campaign",
+      "amount": 0.33333333333333337
+    },
+    {
+      "now": 10656.7,
+      "page": "campaign",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 10673.3,
+      "page": "campaign",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 10690,
+      "page": "campaign",
+      "amount": 0.2777777777777778
+    },
+    {
+      "now": 10706.7,
+      "page": "campaign",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 10723.3,
+      "page": "campaign",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 10740,
+      "page": "campaign",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 10756.6,
+      "page": "campaign",
+      "amount": 0.2222222222222222
+    },
+    {
+      "now": 10773.3,
+      "page": "campaign",
+      "amount": 0.16666666666666663
+    },
+    {
+      "now": 10790,
+      "page": "campaign",
+      "amount": 0.16666666666666663
+    },
+    {
+      "now": 10806.7,
+      "page": "campaign",
+      "amount": 0.11111111111111116
+    },
+    {
+      "now": 10823.3,
+      "page": "campaign",
+      "amount": 0.11111111111111116
+    },
+    {
+      "now": 10840,
+      "page": "campaign",
+      "amount": 0.11111111111111116
+    },
+    {
+      "now": 10856.6,
+      "page": "campaign",
+      "amount": 0.11111111111111116
+    },
+    {
+      "now": 10873.3,
+      "page": "campaign",
+      "amount": 0.05555555555555558
+    },
+    {
+      "now": 10889.9,
+      "page": "campaign",
+      "amount": 0.05555555555555558
+    },
+    {
+      "now": 10906.6,
+      "page": "campaign",
+      "amount": 0.05555555555555558
+    }
+  ],
+  "labels": [
+    {
+      "id": "campaign-load",
+      "transform": "translateX(0px)",
+      "labelInWidget": true
+    },
+    {
+      "id": "campaign-replay",
+      "transform": "translateX(0px)",
+      "labelInWidget": true
+    },
+    {
+      "id": "campaign-cancel",
+      "transform": "translateX(0px)",
+      "labelInWidget": true
+    }
+  ]
+}

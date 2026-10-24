@@ -1,0 +1,212 @@
+{
+  "checks": [
+    "Real HTMLAudio resumes in both visibility/native event orders, retries rejected playback, recovers an external pause without UI input, and keeps its position",
+    "Load Saved/Replay follow the left panel, Custom/Cancel follow the right panel, and music resumes while mission selection is open",
+    "Original opening suspends/skips; Start uses separate normal/selected original SMKs on touch, plus the original projector sequence on hover",
+    "Native status positions; full-size command canvases; no green order box or Android tap tint",
+    "Game menu freezes simulation while music advances; original click sounds play; native background/resume preserves menu pause and resumes music; Stim bottom-left; status borders removed; turret keeps weapon and omits armor"
+  ],
+  "errors": [],
+  "slide": {
+    "left": -436,
+    "right": 423,
+    "load": -436,
+    "replay": -436,
+    "custom": 423,
+    "cancel": 423
+  },
+  "details": [
+    {
+      "kind": "armor",
+      "bounds": {
+        "x": 242,
+        "y": 439,
+        "width": 36,
+        "height": 36,
+        "top": 439,
+        "right": 278,
+        "bottom": 475,
+        "left": 242
+      },
+      "size": [
+        36,
+        36
+      ]
+    },
+    {
+      "kind": "weapon",
+      "bounds": {
+        "x": 281,
+        "y": 439,
+        "width": 36,
+        "height": 36,
+        "top": 439,
+        "right": 317,
+        "bottom": 475,
+        "left": 281
+      },
+      "size": [
+        36,
+        36
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "b": {
+        "x": 505,
+        "y": 358,
+        "width": 36,
+        "height": 34,
+        "top": 358,
+        "right": 541,
+        "bottom": 392,
+        "left": 505
+      },
+      "i": {
+        "x": 505,
+        "y": 358,
+        "width": 36,
+        "height": 34,
+        "top": 358,
+        "right": 541,
+        "bottom": 392,
+        "left": 505
+      },
+      "outline": "none",
+      "shadow": "none",
+      "tap": "rgba(0, 0, 0, 0)",
+      "active": false
+    },
+    {
+      "b": {
+        "x": 551,
+        "y": 358,
+        "width": 36,
+        "height": 34,
+        "top": 358,
+        "right": 587,
+        "bottom": 392,
+        "left": 551
+      },
+      "i": {
+        "x": 551,
+        "y": 358,
+        "width": 36,
+        "height": 34,
+        "top": 358,
+        "right": 587,
+        "bottom": 392,
+        "left": 551
+      },
+      "outline": "none",
+      "shadow": "none",
+      "tap": "rgba(0, 0, 0, 0)",
+      "active": true
+    },
+    {
+      "b": {
+        "x": 597,
+        "y": 358,
+        "width": 36,
+        "height": 34,
+        "top": 358,
+        "right": 633,
+        "bottom": 392,
+        "left": 597
+      },
+      "i": {
+        "x": 597,
+        "y": 358,
+        "width": 36,
+        "height": 34,
+        "top": 358,
+        "right": 633,
+        "bottom": 392,
+        "left": 597
+      },
+      "outline": "none",
+      "shadow": "none",
+      "tap": "rgba(0, 0, 0, 0)",
+      "active": false
+    },
+    {
+      "b": {
+        "x": 551,
+        "y": 398,
+        "width": 36,
+        "height": 34,
+        "top": 398,
+        "right": 587,
+        "bottom": 432,
+        "left": 551
+      },
+      "i": {
+        "x": 551,
+        "y": 398,
+        "width": 36,
+        "height": 34,
+        "top": 398,
+        "right": 587,
+        "bottom": 432,
+        "left": 551
+      },
+      "outline": "none",
+      "shadow": "none",
+      "tap": "rgba(0, 0, 0, 0)",
+      "active": false
+    },
+    {
+      "b": {
+        "x": 505,
+        "y": 398,
+        "width": 36,
+        "height": 34,
+        "top": 398,
+        "right": 541,
+        "bottom": 432,
+        "left": 505
+      },
+      "i": {
+        "x": 505,
+        "y": 398,
+        "width": 36,
+        "height": 34,
+        "top": 398,
+        "right": 541,
+        "bottom": 432,
+        "left": 505
+      },
+      "outline": "none",
+      "shadow": "none",
+      "tap": "rgba(0, 0, 0, 0)",
+      "active": false
+    },
+    {
+      "b": {
+        "x": 505,
+        "y": 438,
+        "width": 36,
+        "height": 34,
+        "top": 438,
+        "right": 541,
+        "bottom": 472,
+        "left": 505
+      },
+      "i": {
+        "x": 505,
+        "y": 438,
+        "width": 36,
+        "height": 34,
+        "top": 438,
+        "right": 541,
+        "bottom": 472,
+        "left": 505
+      },
+      "outline": "none",
+      "shadow": "none",
+      "tap": "rgba(0, 0, 0, 0)",
+      "active": false
+    }
+  ]
+}

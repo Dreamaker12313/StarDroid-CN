@@ -1,0 +1,192 @@
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -756,6 +756,77 @@
+                 af.action_select(owner,u);af.action_cancel_build_queue(owner,0);
+             }
+     }
++    void ai_hero_requests(int owner,a_vector<request>& req) {
++        if(!melee_ai||!game_st.hero_mode||ai_clock<600)return;
++        int race=int(st.players[owner].race),worker=race==0?41:race==1?7:64;
++        int workers=ai_count(owner,worker,true);if(workers<6)return;
++        ai_request(req,worker,12,105);
++        int opening=race==0?54:race==1?20:77;
++        bool first=hero_reserved(owner,UnitTypes(opening));
++        ai_request(req,int(hero_producer(race)),1,first?98:300);
++        const auto* firstHero=hero_definition(UnitTypes(opening));
++        for(int tech:{firstHero->tech1,firstHero->tech2})if(tech>=0)ai_request(req,tech,1,first?95:300);
++        // Give the opening hero precedence over the expensive later tech tree.
++        // All six remain goals on every difficulty, including replacements.
++        if(first) {
++            int bases=race==0?ai_zerg_bases(owner):int(ai_depots(owner).size());
++            int producers=1+(workers>=10&&ai_clock>=2400)+(bases>=2&&ai_clock>=6000);
++            ai_request(req,int(hero_producer(race)),producers,98);
++            for(const auto& h:hero_roster())if(h.race==race&&!hero_reserved(owner,UnitTypes(h.id)))
++                for(int tech:{h.tech1,h.tech2})if(tech>=0)ai_request(req,tech,1,95);
++        }
++    }
++    std::pair<int,int> ai_hero_construction_budget(int owner) {
++        if(!melee_ai||!game_st.hero_mode)return {};
++        std::pair<int,int> cost{};
++        // Construction is paid when the worker reaches its site. Keep those
++        // funds available while it walks, or ordinary training cancels it.
++        for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&ut_worker(u)&&!u->current_build_unit&&!u->build_queue.empty()) {
++            const auto* type=u->build_queue.front();
++            if(ut_building(type)&&!ut_resource_depot(type)){cost.first+=type->mineral_cost;cost.second+=type->gas_cost;}
++        }
++        return cost;
++    }
++    std::pair<int,int> ai_train_heroes(int owner,int reservedMinerals,int reservedGas,a_vector<request>& req) {
++        if(!melee_ai||!game_st.hero_mode||ai_clock<600)return {};
++        int race=int(st.players[owner].race),producers=0,training=0;
++        for(auto* u:ptr(st.player_units[owner]))if(unit_is(u,hero_producer(race))&&!unit_dying(u)&&u_completed(u)
++            &&u_grounded_building(u)&&!unit_is_disabled(u)) {
++            ++producers;if(!u->build_queue.empty()&&hero_definition(u->build_queue.front()->id))++training;
++        }
++        // With multiple buildings, leave capacity for ordinary upgrades.
++        int limit=std::max(1,producers-1);
++        a_vector<const hero_entry*> wanted;
++        for(const auto& h:hero_roster())if(h.race==race&&!hero_reserved(owner,UnitTypes(h.id))
++            &&hero_missing_requirement(owner,h)==UnitTypes::None)wanted.push_back(&h);
++        std::stable_sort(wanted.begin(),wanted.end(),[](const hero_entry* a,const hero_entry* b){return a->minerals+a->gas<b->minerals+b->gas;});
++        const hero_entry* budget=nullptr;
++        for(const auto* h:wanted) {
++            if(training>=limit)break;
++            auto* type=get_unit_type(UnitTypes(h->id));bool ready=false;
++            for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&u->build_queue.empty()&&unit_can_build(u,type)){ready=true;break;}
++            if(!ready)continue;
++            if(!has_available_supply_for(owner,type,false)) {
++                int supply=int(kit_for(st.players[owner].race).supply);
++                if(ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
++                continue;
++            }
++            if(st.current_minerals[owner]>=reservedMinerals+h->minerals&&st.current_gas[owner]>=reservedGas+h->gas&&ai_produce(owner,h->id))++training;
++            else if(!budget)budget=h;
++        }
++        return budget?std::make_pair(budget->minerals,budget->gas):std::pair<int,int>{};
++    }
++    unit_t* ai_reserved_hero_producer(int owner) {
++        if(!melee_ai||!game_st.hero_mode)return nullptr;
++        int race=int(st.players[owner].race);bool pending=false;
++        for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&unit_is(u,hero_producer(race))
++            &&!u->build_queue.empty()&&hero_definition(u->build_queue.front()->id))return nullptr;
++        for(const auto& h:hero_roster())if(h.race==race&&!hero_reserved(owner,UnitTypes(h.id)))pending=true;
++        if(!pending)return nullptr;
++        for(auto* u:ptr(st.player_units[owner]))if(unit_is(u,hero_producer(race))&&!unit_dying(u)&&u_completed(u)
++            &&u_grounded_building(u)&&!unit_is_disabled(u)&&!unit_is_constructing(u)&&!unit_is_upgrading(u)&&!unit_is_researching(u))return u;
++        return nullptr;
++    }
+     void ai_manage(int owner) {
+         auto& a=towns[owner];if(!a.active)return;
+         a.attackers.erase(std::remove_if(a.attackers.begin(),a.attackers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),a.attackers.end());
+@@ -764,6 +835,7 @@
+         // Reissue only idle attackers, allowing normal targeting/pathfinding to run.
+         for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u)&&!u_burrowed(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+         auto req=a.builds;bool reserveExpansion=false;
++        ai_hero_requests(owner,req);
+         auto allowed_requests=[&](){req.erase(std::remove_if(req.begin(),req.end(),[&](const request& r){return !game_st.unit_type_allowed[owner][UnitTypes(r.type)];}),req.end());};
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+         if(melee_ai && st.players[owner].race==race_t::terran) {
+@@ -842,27 +914,24 @@
+             }
+             if(ai_clock>6000&&ai_clock%1800==0)ai_attack(owner,true);
+         }
+-        if(melee_ai&&game_st.hero_mode&&melee_ai_level==2&&ai_clock>12000) {
+-            // The computer buys the same limited heroes at the same costs.
+-            for(const auto& h:hero_roster())if(h.race==int(st.players[owner].race)&&!hero_reserved(owner,UnitTypes(h.id))) {
+-                ai_request(req,int(hero_producer(h.race)),1,90);
+-                if(hero_missing_requirement(owner,h)==UnitTypes::None)ai_request(req,h.id,1,82);
+-            }
+-        }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
++        int expansionBudget=reserveExpansion?get_unit_type(UnitTypes(race==0?131:race==1?106:154))->mineral_cost:0;
++        auto constructionBudget=ai_hero_construction_budget(owner);
++        auto heroBudget=ai_train_heroes(owner,expansionBudget+constructionBudget.first,constructionBudget.second,req);
+         allowed_requests();
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
+         action_functions af(st,ai_actions);
+         // Reserve the base price, not the entire economy. A slow scout must
+         // not freeze army/tech spending when there is money above that reserve.
+-        int expansionBudget=reserveExpansion?get_unit_type(UnitTypes(race==0?131:race==1?106:154))->mineral_cost:0;
+-        auto spendable=[&](int cost){return st.current_minerals[owner]-cost>=expansionBudget;};
++        auto spendable=[&](int minerals,int gas=0){return st.current_minerals[owner]-minerals>=expansionBudget+constructionBudget.first+heroBudget.first
++            &&(gas==0||st.current_gas[owner]-gas>=constructionBudget.second+heroBudget.second);};
++        unit_t* heroProducer=ai_reserved_hero_producer(owner);
+         bool reserveUpgrade=false;
+         if(melee_ai && ai_clock%960<360)for(auto r:a.upgrades) {
+-            auto type=UpgradeTypes(r.type);if(player_upgrade_level(owner,type)>=r.amount||!spendable(upgrade_mineral_cost(owner,get_upgrade_type(type))))continue;
++            auto type=UpgradeTypes(r.type);if(player_upgrade_level(owner,type)>=r.amount||!spendable(upgrade_mineral_cost(owner,get_upgrade_type(type)),upgrade_gas_cost(owner,get_upgrade_type(type))))continue;
+             for(auto* u:ptr(st.player_units[owner])) {
+-                if(unit_dying(u)||!unit_can_upgrade(u,get_upgrade_type(type),owner))continue;
++                if(unit_dying(u)||u==heroProducer||!unit_can_upgrade(u,get_upgrade_type(type),owner))continue;
+                 af.action_select(owner,u);af.action_upgrade(owner,get_upgrade_type(type));
+                 reserveUpgrade=true;break;
+             }
+@@ -872,16 +941,21 @@
+         for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type)))
+             &&!(melee_ai&&st.players[owner].race!=race_t::terran&&r.priority>=80))<r.amount) {
+             const auto* target=get_unit_type(UnitTypes(r.type));
+-            if(reserveUpgrade&&r.priority<100)continue;
+-            if(reserveExpansion&&r.priority<100&&!spendable(target->mineral_cost))continue;
++            if(reserveUpgrade&&r.priority<100&&!(game_st.hero_mode&&hero_definition(target->id)))continue;
++            if(((reserveExpansion&&r.priority<100)||constructionBudget.first||constructionBudget.second||heroBudget.first||heroBudget.second)
++                &&!spendable(target->mineral_cost,target->gas_cost))continue;
+             bool reserve=false;
+             if(melee_ai&&r.priority>=86&&!ut_building(target)&&!ut_worker(target))
+                 for(auto* producer:ptr(st.player_units[owner]))if(!unit_dying(producer)&&producer->build_queue.empty()&&unit_can_build(producer,target))reserve=true;
+-            if(ai_produce(owner,r.type)){if(++accepted>=2)break;}
++            // Save for the opening hero's buildings instead of repeatedly
++            // spending their price on workers and delaying the first hero.
++            if(melee_ai&&game_st.hero_mode&&r.priority>=300&&ut_building(target))
++                for(auto* producer:ptr(st.player_units[owner]))if(!unit_dying(producer)&&producer->build_queue.empty()&&unit_can_build(producer,target))reserve=true;
++            if(ai_produce(owner,r.type)){constructionBudget=ai_hero_construction_budget(owner);if(++accepted>=2)break;}
+             else if(reserve&&!has_available_resources_for(owner,target))break;
+         }
+-        for(auto r:a.techs)if(game_st.tech_available[owner][TechTypes(r.type)]&&!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u)||!spendable(get_tech_type(TechTypes(r.type))->mineral_cost))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
+-        for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u)||!spendable(upgrade_mineral_cost(owner,get_upgrade_type(UpgradeTypes(r.type)))))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
++        for(auto r:a.techs)if(game_st.tech_available[owner][TechTypes(r.type)]&&!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u)||!spendable(get_tech_type(TechTypes(r.type))->mineral_cost,get_tech_type(TechTypes(r.type))->gas_cost))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
++        for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u)||u==heroProducer||!spendable(upgrade_mineral_cost(owner,get_upgrade_type(UpgradeTypes(r.type))),upgrade_gas_cost(owner,get_upgrade_type(UpgradeTypes(r.type)))))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
+     }
+     void ai_detect(unit_t* victim,unit_t* source) {
+         int owner=victim->owner;
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -359,6 +359,7 @@
+ 	virtual void on_unit_deselect(unit_t* u) {}
+ 
+ 	virtual void on_unit_destroy(unit_t* u) {}
++	virtual void on_unit_recycled(unit_t* u) {}
+ 	virtual void on_kill_unit(unit_t* u) {}
+ 
+ 	virtual void on_player_eliminated(int owner) {}
+@@ -13034,6 +13035,7 @@
+ 				remove_queued_order(u, &u->order_queue.front());
+ 			}
+ 			st.dead_units.remove(*u);
++			on_unit_recycled(u);
+ 			st.units_container.push(u);
+ 		}
+ 	}
+@@ -15473,6 +15475,8 @@
+ 		if (image_type->has_directional_frames) flags |= image_t::flag_has_directional_frames;
+ 		if (image_type->is_clickable) flags |= image_t::flag_clickable;
+ 		image->flags = flags;
++		// Reused construction overlays must not retain a prior frozen position.
++		image->frozen_y_value = 0;
+ 		image->frame_index_base = 0;
+ 		image->frame_index_offset = 0;
+ 		image->frame_index = 0;
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -1692,6 +1692,11 @@
+ 	a_string stats_out;
+ 	std::array<int,12> score_killed{}, score_razed{}, score_lost{}, score_buildings_lost{}, score_kills{}, score_razings{};
+ 	a_unordered_set<unsigned> scored_losses;
++	void on_unit_recycled(unit_t* u) override {
++		// Unit IDs wrap when pool slots are reused. Only the current lifetime
++		// needs a duplicate-death guard, matching the state rebuilt on load.
++		scored_losses.erase(get_unit_id(u).raw_value);
++	}
+ 	void on_kill_unit(unit_t* u) override {
+ 		if (u->owner >= 12 || ut_turret(u) || ut_resource(u) || u_hallucination(u) || unit_is_special_beacon(u)) return;
+ 		// Cancellation is not a loss; combat damage sets HP to zero before this callback.

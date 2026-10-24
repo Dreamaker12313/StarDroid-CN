@@ -1,0 +1,528 @@
+{
+  "checks": [
+    "All six retail mission-three transmissions play in sequence without missing speech; scroll follows AudioContext time, pauses/resumes, permits manual reading and resets on replay; native 9-line wrapping and continued end scroll; doubled portraits have scanlines; hotkey initials use original bright-green glyph ramps",
+    "Original dlgs/terran.grp Menu/terrain/dialog frames; 96×96 mission minimap centered without stretching; touch and keyboard terrain toggles agree and preserve green local unit markers on a black background; five framed units arranged 3+2; bitmap timer; menu pauses gameplay"
+  ],
+  "errors": [],
+  "layouts": [],
+  "first": {
+    "brief": {
+      "originalRoom": true,
+      "layout": "rez/glurdyt.bin",
+      "fonts": {
+        "small": true,
+        "large": true,
+        "button": true
+      },
+      "dialogueFont": "font14",
+      "lineHeight": 19,
+      "contentHeight": 38,
+      "scrollDistance": 0,
+      "scrollOffset": 0,
+      "scrollDuration": 4166.938775510203,
+      "speechPosition": 72.56235827664399,
+      "manualScroll": false,
+      "animations": [
+        "glue/readyt/proloop.smk",
+        "glue/readyt/proj.smk",
+        "glue/readyt/start.smk"
+      ],
+      "active": true,
+      "suspended": false,
+      "phase": "ready",
+      "elapsed": 1849.9000000000005,
+      "slideAmount": 0,
+      "projection": 0,
+      "glassIndex": 138,
+      "speakerFrames": 4,
+      "sounds": {
+        "available": [
+          "mousedown2",
+          "mouseover",
+          "swishin",
+          "swishlock",
+          "swishout"
+        ],
+        "decoded": 2,
+        "played": 2,
+        "paused": false,
+        "error": ""
+      }
+    },
+    "campaign": {
+      "history": [],
+      "missing": [],
+      "briefIndex": 0,
+      "briefPhase": "ready",
+      "playing": true,
+      "actionIndex": 4,
+      "transmission": {
+        "position": 72.56235827664399,
+        "remaining": 4094.3764172335596,
+        "fallback": false
+      },
+      "voice": {
+        "ready": true,
+        "failed": false,
+        "duration": 4166.938775510203,
+        "position": 81.26984126984127
+      },
+      "slots": [
+        -1,
+        -1,
+        -1,
+        106
+      ],
+      "messages": [],
+      "status": "0\t16\t1\t0\t0\t0",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 1,
+      "allocatedMissionBytes": 2158478
+    },
+    "portraits": {
+      "draws": 11,
+      "paused": false,
+      "cacheBytes": 268800,
+      "pending": 0,
+      "error": "",
+      "surfaces": [
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": false,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": 106,
+          "talking": true,
+          "file": "portrait/TAdvisor\\TAdTlk00.smk",
+          "frame": 0,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        }
+      ]
+    }
+  },
+  "scanlineRatio": 0.44180141625415315,
+  "hotkeys": [
+    {
+      "id": "brief-start",
+      "width": 60,
+      "height": 19,
+      "brightFirst": 34,
+      "brightRest": 0
+    },
+    {
+      "id": "brief-replay",
+      "width": 67,
+      "height": 19,
+      "brightFirst": 39,
+      "brightRest": 0
+    },
+    {
+      "id": "brief-cancel",
+      "width": 67,
+      "height": 19,
+      "brightFirst": 30,
+      "brightRest": 0
+    }
+  ],
+  "timed": {
+    "brief": {
+      "originalRoom": true,
+      "layout": "rez/glurdyt.bin",
+      "fonts": {
+        "small": true,
+        "large": true,
+        "button": true
+      },
+      "dialogueFont": "font14",
+      "lineHeight": 19,
+      "contentHeight": 247,
+      "scrollDistance": 190,
+      "scrollOffset": 43.07362777118907,
+      "scrollDuration": 30423.900226757367,
+      "speechPosition": 10010.702947845804,
+      "manualScroll": false,
+      "animations": [
+        "glue/readyt/proloop.smk",
+        "glue/readyt/proj.smk",
+        "glue/readyt/start.smk"
+      ],
+      "active": true,
+      "suspended": false,
+      "phase": "ready",
+      "elapsed": 32886.39999999702,
+      "slideAmount": 0,
+      "projection": 0,
+      "glassIndex": 138,
+      "speakerFrames": 4,
+      "sounds": {
+        "available": [
+          "mousedown2",
+          "mouseover",
+          "swishin",
+          "swishlock",
+          "swishout"
+        ],
+        "decoded": 2,
+        "played": 2,
+        "paused": false,
+        "error": ""
+      }
+    },
+    "campaign": {
+      "history": [],
+      "missing": [],
+      "briefIndex": 2,
+      "briefPhase": "ready",
+      "playing": true,
+      "actionIndex": 9,
+      "transmission": {
+        "position": 10010.702947845804,
+        "remaining": 20413.19727891156,
+        "fallback": false
+      },
+      "voice": {
+        "ready": true,
+        "failed": false,
+        "duration": 30423.900226757367,
+        "position": 10019.410430839001
+      },
+      "slots": [
+        -1,
+        -1,
+        -1,
+        106
+      ],
+      "messages": [],
+      "status": "0\t16\t1\t0\t0\t0",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 3,
+      "allocatedMissionBytes": 2158478
+    },
+    "portraits": {
+      "draws": 484,
+      "paused": false,
+      "cacheBytes": 1344000,
+      "pending": 0,
+      "error": "",
+      "surfaces": [
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": false,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "portrait/UDuke\\UDuFid00.smk",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        },
+        {
+          "unit": 106,
+          "talking": true,
+          "file": "portrait/TAdvisor\\TAdTlk00.smk",
+          "frame": 8,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        }
+      ]
+    }
+  },
+  "lastMengsk": {
+    "brief": {
+      "originalRoom": true,
+      "layout": "rez/glurdyt.bin",
+      "fonts": {
+        "small": true,
+        "large": true,
+        "button": true
+      },
+      "dialogueFont": "font14",
+      "lineHeight": 19,
+      "contentHeight": 171,
+      "scrollDistance": 114,
+      "scrollOffset": 99.09492966857846,
+      "scrollDuration": 21245.850340136054,
+      "speechPosition": 19011.337868480725,
+      "manualScroll": false,
+      "animations": [
+        "glue/readyt/proloop.smk",
+        "glue/readyt/proj.smk",
+        "glue/readyt/start.smk"
+      ],
+      "active": true,
+      "suspended": false,
+      "phase": "ready",
+      "elapsed": 103633.59999999702,
+      "slideAmount": 0,
+      "projection": 0,
+      "glassIndex": 138,
+      "speakerFrames": 4,
+      "sounds": {
+        "available": [
+          "mousedown2",
+          "mouseover",
+          "swishin",
+          "swishlock",
+          "swishout"
+        ],
+        "decoded": 2,
+        "played": 2,
+        "paused": false,
+        "error": ""
+      }
+    },
+    "campaign": {
+      "history": [],
+      "missing": [],
+      "briefIndex": 4,
+      "briefPhase": "ready",
+      "playing": true,
+      "actionIndex": 13,
+      "transmission": {
+        "position": 19011.337868480725,
+        "remaining": 2234.512471655329,
+        "fallback": false
+      },
+      "voice": {
+        "ready": true,
+        "failed": false,
+        "duration": 21245.850340136054,
+        "position": 19020.045351473924
+      },
+      "slots": [
+        -1,
+        -1,
+        27,
+        106
+      ],
+      "messages": [],
+      "status": "0\t16\t1\t0\t0\t0",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 5,
+      "allocatedMissionBytes": 2158478
+    },
+    "portraits": {
+      "draws": 1675,
+      "paused": false,
+      "cacheBytes": 1881600,
+      "pending": 0,
+      "error": "",
+      "surfaces": [
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": false,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": 27,
+          "talking": true,
+          "file": "portrait/Umengsk\\UMeTlk00.smk",
+          "frame": 8,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        },
+        {
+          "unit": 106,
+          "talking": false,
+          "file": "portrait/TAdvisor\\TAdFid01.smk",
+          "frame": 3,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        }
+      ]
+    }
+  },
+  "minimap": {
+    "bounds": {
+      "x": 22,
+      "y": 363,
+      "width": 96,
+      "height": 96
+    },
+    "unitPixels": 149,
+    "art": "dlgs/terran.grp"
+  },
+  "hud": {
+    "timer": {
+      "width": 128,
+      "height": 19,
+      "box": {
+        "x": 176,
+        "y": 0,
+        "width": 160,
+        "height": 23.75,
+        "top": 0,
+        "right": 336,
+        "bottom": 23.75,
+        "left": 176
+      }
+    },
+    "resourceIcons": [
+      {
+        "w": 14,
+        "h": 14,
+        "width": 14
+      },
+      {
+        "w": 14,
+        "h": 14,
+        "width": 14
+      },
+      {
+        "w": 14,
+        "h": 14,
+        "width": 14
+      }
+    ],
+    "details": [
+      {
+        "w": 36,
+        "h": 34,
+        "box": {
+          "x": 242,
+          "y": 439,
+          "width": 36,
+          "height": 34,
+          "top": 439,
+          "right": 278,
+          "bottom": 473,
+          "left": 242
+        }
+      },
+      {
+        "w": 36,
+        "h": 34,
+        "box": {
+          "x": 281,
+          "y": 439,
+          "width": 36,
+          "height": 34,
+          "top": 439,
+          "right": 317,
+          "bottom": 473,
+          "left": 281
+        }
+      }
+    ]
+  }
+}

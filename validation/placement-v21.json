@@ -1,0 +1,115 @@
+{
+  "checks": [
+    "terran01: widescreen extends viewport with unchanged HUD sizes; 50% zoom doubles world view; disabling restores 100%/4:3",
+    "Wide/zoom options survive reload while briefing stays classic; building preview/cancel/confirm places exactly one depot at 67% zoom in widescreen"
+  ],
+  "missions": {
+    "terran01": {
+      "classic": {
+        "screen": {
+          "x": 296,
+          "y": 0,
+          "w": 944,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 304.8500061035156,
+          "y": 511.82501220703125,
+          "w": 188.80001831054688,
+          "h": 188.79998779296875
+        },
+        "card": {
+          "x": 1040.875,
+          "y": 528.0499877929688,
+          "w": 188.800048828125,
+          "h": 168.1500244140625
+        },
+        "unit-preview": {
+          "x": 905.1749877929688,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 499.54998779296875,
+          "y": 572.2999877929688,
+          "w": 398.25,
+          "h": 135.70001220703125
+        }
+      },
+      "wide": {
+        "screen": {
+          "x": 0.26251220703125,
+          "y": 0,
+          "w": 1535.47509765625,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 9.112512588500977,
+          "y": 511.82501220703125,
+          "w": 188.8000030517578,
+          "h": 188.79998779296875
+        },
+        "card": {
+          "x": 1336.612548828125,
+          "y": 528.0499877929688,
+          "w": 188.800048828125,
+          "h": 168.1500244140625
+        },
+        "unit-preview": {
+          "x": 1200.91259765625,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 203.81251525878906,
+          "y": 572.2999877929688,
+          "w": 989.72509765625,
+          "h": 135.70001220703125
+        }
+      },
+      "zoomOut": {
+        "display": {
+          "active": true,
+          "width": 1041,
+          "height": 480,
+          "widescreen": true,
+          "allowZoomOut": true,
+          "zoom": 0.5
+        },
+        "mini": {
+          "x": 4,
+          "y": 828,
+          "w": 128,
+          "h": 128
+        },
+        "canvas": [
+          2082,
+          960
+        ]
+      },
+      "persisted": {
+        "active": true,
+        "width": 1041,
+        "height": 480,
+        "widescreen": true,
+        "allowZoomOut": true,
+        "zoom": 0.67
+      },
+      "placement": {
+        "site": [
+          7,
+          3
+        ],
+        "before": 1,
+        "point": {
+          "x": 245.4639444148548,
+          "y": 174.56983240223462
+        },
+        "after": 2
+      }
+    }
+  },
+  "errors": []
+}

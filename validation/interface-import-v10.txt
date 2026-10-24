@@ -1,0 +1,16 @@
+Reading original interface…
+Importing original interface: 1 / 13
+Importing original interface: 2 / 13
+Importing original interface: 3 / 13
+Importing original interface: 4 / 13
+Importing original interface: 5 / 13
+Importing original interface: 6 / 13
+Importing original interface: 7 / 13
+Importing original interface: 8 / 13
+Importing original interface: 9 / 13
+Importing original interface: 10 / 13
+Importing original interface: 11 / 13
+Importing original interface: 12 / 13
+Importing original interface: 13 / 13
+Missing-fonts archive rejected: No original interface files found. Select the large StarCraft.mpq or the original Install.exe.
+PASS: fonts export, validated install, local serving, safe replacement, missing-font handling.

@@ -1,0 +1,8 @@
+{
+  "upstreamCommit": "469d2037e2fd03085dac4729912f4188bc2a778b",
+  "sdk": "wasi-sdk-33.0-x86_64-linux",
+  "sdkArchiveSha256": "0ba8b5bfaeb2adf3f29bab5841d76cf5318ab8e1642ea195f88baba1abd47bce",
+  "patchSha256": "ca688d15ba6d24a64c3b9d260bd208ee3dbed3c927c36d936deaa92f70a9d609",
+  "wasmSha256": "36d69a7ad98a32c2c8577f42bf4444a0ecd862ef69059a2cd963562f4022dbc8",
+  "version": "0.22"
+}

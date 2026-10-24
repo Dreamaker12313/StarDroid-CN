@@ -1,0 +1,193 @@
+{
+  "version": "0.54",
+  "passed": true,
+  "originalGameData": true,
+  "physicalAndroid": false,
+  "binarySha256": "be39f429759b2377af08450c92f6b37e8969dca696fffacc397fa7a16585aa37",
+  "cases": [
+    {
+      "ffa": false,
+      "computerRaces": [
+        0,
+        1
+      ],
+      "expansion": false,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "f9e98a849546598f50776e64db0109264683800a9631a5ee6398497e0cf47e26"
+    },
+    {
+      "ffa": false,
+      "computerRaces": [
+        0,
+        1
+      ],
+      "expansion": true,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "1bbb627f4e13bb634e517fdecf5befc7d46eb4e6d887077f223ad31ab3c40e15"
+    },
+    {
+      "ffa": false,
+      "computerRaces": [
+        1,
+        2
+      ],
+      "expansion": false,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "f9e5abd12e2f8a9e43228823893daedab2ecec1df2184a10172609285529c701"
+    },
+    {
+      "ffa": false,
+      "computerRaces": [
+        1,
+        2
+      ],
+      "expansion": true,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "36a5ce88ea58849befa6aa6f20ff65e677d1d0f02b410064cbc723525e8d7e7d"
+    },
+    {
+      "ffa": false,
+      "computerRaces": [
+        2,
+        0
+      ],
+      "expansion": false,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "8bcfdff82233f80f66dbebbe580e00e90e59dca81903e0a89f19d8e3e2975144"
+    },
+    {
+      "ffa": false,
+      "computerRaces": [
+        2,
+        0
+      ],
+      "expansion": true,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "4d5d65a2f74ebfd599c94464e7158bcd3122c8b1436d11242740d35d3e6893fc"
+    },
+    {
+      "ffa": true,
+      "computerRaces": [
+        0,
+        1
+      ],
+      "expansion": false,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "ce38af0ffcd469d921677b1faf13d78b3ccaf4d0aecbfaff7122031f3413fd16"
+    },
+    {
+      "ffa": true,
+      "computerRaces": [
+        0,
+        1
+      ],
+      "expansion": true,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "a719a65c4494f6512d517d273e86e26b389d39cba51ed3505bc6cc28547cc4d1"
+    },
+    {
+      "ffa": true,
+      "computerRaces": [
+        1,
+        2
+      ],
+      "expansion": false,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "9eaf910edd91069c22e1a58f3a285a3cd285b33ec78ce431cf592ed290e81baf"
+    },
+    {
+      "ffa": true,
+      "computerRaces": [
+        1,
+        2
+      ],
+      "expansion": true,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "d12bedcc3bdd012c83d4ea8ff6828e5fc079ebb30f18dda4e877adad207e8164"
+    },
+    {
+      "ffa": true,
+      "computerRaces": [
+        2,
+        0
+      ],
+      "expansion": false,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "6dd810c704b37f7475d07cec3cee0b4550152da71afcd52cecdb2ec9ee3ec54a"
+    },
+    {
+      "ffa": true,
+      "computerRaces": [
+        2,
+        0
+      ],
+      "expansion": true,
+      "matchingCheckpoints": 601,
+      "framesBeforeSave": 2400,
+      "continuedFramesAfterSave": 240,
+      "crossRoleRestore": true,
+      "threeComputerSoloSaveContinuation": true,
+      "sha256": "ba6a6b875962f033a3890d46f590c2f47c72b00ffc1f90f03531f831298fe9d3"
+    }
+  ],
+  "controls": [
+    "transport and bunker deselection",
+    "six airborne command cards",
+    "Land replaces pending addon",
+    "human departure does not defeat remaining computers"
+  ],
+  "sourceSha256": {
+    "native/runtime.cpp": "0255ff2a4a8bfe48a55839f410d69fc21763d686f487b27a2cc8b3b18cc98806",
+    "native/multiplayer.h": "1669a8617a531657061571cfeaf534c896f6888de5522d4a54b212866d939a87",
+    "native/save_state.h": "67ff50c019b3666e9d90a53dc2ff9cd2234b0473f22964ccdb6a066cd7532520",
+    "native/generated/wasm_main.cpp": "6fe40ff3fe0aba8ccd7534bcf9778b5858162ef2d4f3e1a0dcff79353823cd95",
+    "patches/native-polish54.patch": "9e0ff4265c500933c1b3e3d27d361c136b58571d5b8ceeb19a3fa9304eb4d65f",
+    "tests/native_revision54.cpp": "df9a5a5740baf45335fb47b85eb39f3ff1ccb3d62d3cd2c869b9e0286f43508b",
+    "tests/native_multiplayer.cpp": "3c55a13bfd061d47dc87c746ed07d7830bc17ee2cbbc03af400a776ba87cb498",
+    "tests/run_revision54.py": "908442700ed41f5a5c1641d86f849e6aae901ea5ab0acb2588e0eb3709ff9d80"
+  }
+}

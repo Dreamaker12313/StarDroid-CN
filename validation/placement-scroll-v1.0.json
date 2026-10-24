@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
+  "version": "1.0",
+  "versionCode": 70,
+  "timing": "PASS 178077 camera checks: all directions, 30\u2013144 Hz, zoom/speed, subpixel pans, stop/reverse, stalls",
+  "output": "PASS 13116 checks, 1728 edge/zoom/control positions: always below visible preview, overlap allowed, real touch routing blocks underlying buttons/commands/minimap and the gap, drag capture, migration/persistence and three-race renders",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "5a63c15d7eb2545f4ca1902bac43a196557d7515ed742211a7cd75b8b252d3b7",
+    "app/src/main/java/org/openbw/androidtest/PlacementButtons.java": "230491ae1d965610c57f538d116294ccc1f6cf6d1e2b4675cd8becb70799871c",
+    "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+    "app/src/main/java/org/openbw/androidtest/CameraPan.java": "4ffff04674daa6935e9371e9040321b7823c3fb434dab84b2bd37d417d4a6871",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+    "tests/CameraPanTest.java": "c3db9edd95a08cdbab0ba4dd8a767b4af21053c6a89ed0e35ae64be35b398915",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "0f2907f6c8e645abbce433ddfdc1723112f594067d38033d9e4378ac150a6e97",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "tests/run_scroll70.py": "3db4096bedc98dc7aa7ea7ee9ac6e8e498dc0e8535e7c135545e10e28c28f223"
+  }
+}

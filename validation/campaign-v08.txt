@@ -1,0 +1,9 @@
+Failed to load resource: the server responded with a status of 404 (Not Found)
+Initial state 21	5	0	0	1	0
+Rescue state 9	5	0	1	1	0
+Base state 9	5	0	1	1	0
+Mining 360	0	10	18
+Build accepted at [[30,48]]
+Barracks state 9	5	1	1	1	0
+Victory state 9	10	1	1	1	0 1
+Defeat outcome 2

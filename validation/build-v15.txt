@@ -1,0 +1,56 @@
+Prepared local Android web assets from 469d2037e2fd.
+Prepared six-mission campaign host.
+Prepared classic console, animated portraits, music and testing controls.
+Prepared original-asset title screen and paused game menus.
+----------
+1. WARNING in /workspace/scratch/ada05cf5593b/openbw-android/app/src/main/java/org/openbw/androidtest/MainActivity.java (at line 617)
+	if (web == null) { if (!importing) { if(ready())startTitle();else super.onBackPressed(); } return; }
+	                                                                        ^^^^^^^^^^^^^^^
+The method onBackPressed() from the type Activity is deprecated
+----------
+2. WARNING in /workspace/scratch/ada05cf5593b/openbw-android/app/src/main/java/org/openbw/androidtest/MainActivity.java (at line 649)
+	getWindow().setDecorFitsSystemWindows(false);
+	            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The method setDecorFitsSystemWindows(boolean) from the type Window is deprecated
+----------
+3. WARNING in /workspace/scratch/ada05cf5593b/openbw-android/app/src/main/java/org/openbw/androidtest/MainActivity.java (at line 652)
+	} else getWindow().getDecorView().setSystemUiVisibility(5894);
+	                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The method setSystemUiVisibility(int) from the type View is deprecated
+----------
+3 problems (3 warnings)
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=OpenBW Android Test, O=Personal Development, C=US
+Signer #1 certificate SHA-256 digest: 40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e
+Signer #1 certificate SHA-1 digest: e60e5587c29ae8c18f5613b8afde75929d95159f
+Signer #1 certificate MD5 digest: fa7437bcd9e291431923f18a33306455
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 5250d0dbf3a200890f53a5b77d9439834e625f37d2f9e6cd475c0c9b8f2e1a96
+Signer #1 public key SHA-1 digest: 3349f987150661b845e317cae82b341f23a91433
+Signer #1 public key MD5 digest: b307df11320c29219ae2438be49ec2fa
+package: name='org.openbw.androidtest' versionCode='16' versionName='0.15' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+sdkVersion:'26'
+targetSdkVersion:'35'
+application-label:'OpenBW Test'
+application-icon-160:'res/drawable/ic_launcher.xml'
+application: label='OpenBW Test' icon='res/drawable/ic_launcher.xml'
+launchable-activity: name='org.openbw.androidtest.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature-not-required: name='android.hardware.touchscreen'
+  uses-feature: name='android.hardware.screen.landscape'
+  uses-implied-feature: name='android.hardware.screen.landscape' reason='one or more activities have specified a landscape orientation'
+main
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'
+Built: /workspace/scratch/ada05cf5593b/openbw-android/dist/OpenBW-Android-0.15.apk 
+SHA-256: 955a38aa034a3693b0dc5505e9fe9fb9d5fd6e177286c98cae25701da67eac33

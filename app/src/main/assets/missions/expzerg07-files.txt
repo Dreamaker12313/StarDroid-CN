@@ -1,0 +1,16 @@
+campaign\expzerg\zerg07\staredit\scenario.chk
+campaign\expzerg\zerg07\staredit\wav\combeep0.wav
+campaign\expzerg\zerg07\staredit\wav\ptesum00.wav
+campaign\expzerg\zerg07\staredit\wav\z7b00zke.wav
+campaign\expzerg\zerg07\staredit\wav\z7b01zdu.wav
+campaign\expzerg\zerg07\staredit\wav\z7b02zke.wav
+campaign\expzerg\zerg07\staredit\wav\z7b03zdu.wav
+campaign\expzerg\zerg07\staredit\wav\z7b04zke.wav
+campaign\expzerg\zerg07\staredit\wav\z7b05zdu.wav
+campaign\expzerg\zerg07\staredit\wav\z7b06zke.wav
+campaign\expzerg\zerg07\staredit\wav\z7m00zdu.wav
+campaign\expzerg\zerg07\staredit\wav\z7m01zdu.wav
+campaign\expzerg\zerg07\staredit\wav\z7m02zdu.wav
+campaign\expzerg\zerg07\staredit\wav\z7m10zdu.wav
+campaign\expzerg\zerg07\staredit\wav\z7m11zke.wav
+campaign\expzerg\zerg07\staredit\wav\z7m12zdu.wav

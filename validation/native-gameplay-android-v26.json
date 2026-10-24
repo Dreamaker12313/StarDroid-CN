@@ -1,0 +1,88 @@
+{
+  "version": "0.26",
+  "android": "9",
+  "abi": "x86_64",
+  "nydusExitTouch": true,
+  "nydus-exit-preview": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "nydus-linked": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "busy-barracks": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "blocked-landing": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "blocked-addon": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "completed-addon": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "terranPlacementAndBusyControls": true,
+  "passed": true,
+  "apkSha256": "61f322f3aaad9543b254a2680160c4eb781f482dd95d0b26a51b130b0358ff01",
+  "emulator": "37.2.12",
+  "image": "system-images;android-28;default;x86_64",
+  "display": "960x640 @160dpi",
+  "acceleration": "Software CPU emulation / SwiftShader, no KVM",
+  "physicalDeviceTested": false,
+  "fullCampaignPlaythroughs": false,
+  "audibleSpeakerOutputVerified": false,
+  "finalProcessPids": [
+    3289,
+    3381
+  ],
+  "appErrorLogForFinalProcessesEmpty": true,
+  "sectionResults": {
+    "terran": {
+      "passed": true,
+      "process": 3289
+    },
+    "nydus": {
+      "passed": true,
+      "process": 3381
+    }
+  },
+  "testFixtureControls": [
+    "diagnostic selection",
+    "resources",
+    "map reveal",
+    "instant production",
+    "worker repositioning"
+  ],
+  "fixtureCorrection": "The full run passed all Terran checks, then stopped because the Zerg setup assumed a Spawning Pool. The Nydus section was rerun successfully after building the Pool, Lair, Queen's Nest and Hive through ordinary commands. This report combines the passed sections on the same unchanged APK.",
+  "sourceSha256": {
+    "tests/NativeGameplayInstrumentation.java": "f5b752eabb72ab6be768559674e56d7c60e157c0d813eb2c358d41f1e31ba648"
+  },
+  "capturedScenes": [
+    "blocked-addon",
+    "blocked-landing",
+    "busy-barracks",
+    "completed-addon",
+    "nydus-exit-preview",
+    "nydus-linked"
+  ],
+  "screenshotsInspected": [
+    "busy-barracks",
+    "blocked-landing",
+    "blocked-addon",
+    "completed-addon",
+    "nydus-exit-preview",
+    "nydus-linked"
+  ]
+}

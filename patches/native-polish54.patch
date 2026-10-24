@@ -1,0 +1,126 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -371,7 +371,7 @@
+ 	void prune_selection() {
+ 		current_selection.erase(std::remove_if(current_selection.begin(), current_selection.end(), [&](unit_id id) {
+ 			auto* u = get_unit(id);
+-			return !u || unit_dying(u);
++			return !u || unit_dying(u) || u_loaded(u);
+ 		}), current_selection.end());
+ 	}
+ 
+@@ -418,7 +418,7 @@
+ 		current_selection_clear();
+ 		for (auto uid : groups[n]) {
+ 			unit_t* u = get_unit(uid);   // skips units that have since died
+-			if (u && !unit_dying(u) && u->owner == my_player) current_selection_add(u);
++			if (u && !unit_dying(u) && !u_loaded(u) && u->owner == my_player) current_selection_add(u);
+ 		}
+ 		if (current_selection.empty()) { last_recalled_group = -1; on_selection(false); return; }
+ 		if (refocus) center_on_selection();   // don't re-ack on a recenter
+@@ -1120,6 +1120,7 @@
+ 			const unit_type_t* t = get_unit_type(id);
+ 			if (!game_st.unit_type_allowed[u->owner][id]) continue;
+ 			bool tb = ut_building(t), addon = ut_addon(t), morph = bw_is_building_morph(id);
++            if (ut_flying_building(u) && !u_grounded_building(u) && !addon) continue;
+ 			if (addon && building && u->building.addon) continue;
+ 			// Producer cards list units plus their addons (addons are buildings, but the
+ 			// producer builds them, not a worker); the worker submenu lists real buildings.
+@@ -1147,7 +1148,7 @@
+ 			card.push_back({(k && !used) ? k : pick_key(nm), nm, act, id, can,
+ 			                TechTypes::None, UpgradeTypes::None, 0, req});
+ 		}
+-		if (buildings_only) return;
++		if (buildings_only || (ut_flying_building(u) && !u_grounded_building(u))) return;
+ 		for (size_t i = 0; i != game_st.upgrade_types.vec.size(); ++i) {
+ 			const upgrade_type_t* up = get_upgrade_type((UpgradeTypes)i);
+ 			if (!unit_can_upgrade(u, up)) continue;
+@@ -2156,7 +2157,7 @@
+ 			                      // Addons ask for a placement (like a building): drop it in place
+ 			                      // for no lift, or elsewhere to lift off and move there.
+ 			                      if (unit_t* b = primary_selected()) {
+-			                          pending_build = b->unit_type; pending_addon = at;
++			                          clear_pending(); targeting = false; pending_build = b->unit_type; pending_addon = at;
+ 			                          menu = 0; refresh_card();
+ 			                      }
+ 			                  } else { sync_selection(); cmd_type(31, c.ut); }
+@@ -2171,7 +2172,7 @@
+ 			case C_SIEGE:     sync_selection(); cmd_queued(38, key_shift()); break;
+ 			case C_UNSIEGE:   sync_selection(); cmd_queued(37, key_shift()); break;
+ 			case C_LIFT:      sync_selection(); cmd_liftoff(u_pos_of_selected()); break;
+-			case C_LAND:      pending_build = get_unit_type(c.ut != UnitTypes::None ? c.ut : landing_type());
++			case C_LAND:      clear_pending(); targeting = false; pending_build = get_unit_type(c.ut != UnitTypes::None ? c.ut : landing_type());
+ 			                  pending_land = true; menu = 0; refresh_card(); break;
+ 			case C_NYDUS:     pending_build = get_unit_type(UnitTypes::Zerg_Nydus_Canal);
+ 			                  pending_nydus = true; menu = 0; refresh_card(); break;
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -94,14 +94,15 @@
+ 
+ // Build the game with `n` occupied slots. Every peer must pass an identical slot list (and
+ // the same map) or their initial states differ and lockstep is broken from frame 0.
+-static void init_game(int width, int height, int my_slot, const mp_slot* slots, size_t n, bool campaign = false, int original_ai_slot = -1) {
++static void init_game(int width, int height, int my_slot, const mp_slot* slots, size_t n, bool campaign = false, int original_ai_slot = -1, unsigned ai_mask = 0, bool free_for_all = false) {
++    if(original_ai_slot>=0)ai_mask|=1u<<original_ai_slot;
+ 	g_loader = new loader_t(data_loading::data_files_directory<loader_t>(""));
+ 
+ 	race_t my_race = race_t::terran;
+ 	for (size_t k = 0; k != n; ++k) if (slots[k].slot == my_slot) my_race = slots[k].race;
+ 
+ 	game_player player(*g_loader);
+-	if (campaign || original_ai_slot >= 0) {
++	if (campaign || ai_mask) {
+ 		g_campaign = new campaign_ui(std::move(player), my_slot, my_race);
+ 		g_ui = g_campaign;
+ 		g_campaign->sound_file = mission_sound;
+@@ -177,7 +178,7 @@
+ 		for(int i=0;i<2;++i) for(auto& archive:g_loader->mpqs) if(archive.mpq.file_exists(names[i])) { archive(g_campaign->scripts[i],names[i]); break; }
+ 	}
+ 
+-    if(original_ai_slot>=0) {
++    for(int original_ai_slot=0;original_ai_slot<8;++original_ai_slot) if(ai_mask & (1u<<original_ai_slot)) {
+         g_campaign->melee_ai=true;
+         g_campaign->melee_ai_level=std::max(0,std::min(2,g_terran_ai_level));
+         g_ui->st.players[original_ai_slot].controller=player_t::controller_computer_game;
+@@ -193,6 +194,12 @@
+         if(!g_campaign->ai_error.empty())error("Skirmish AI: %s",g_campaign->ai_error.c_str());
+     }
+ 
++    if(!campaign) {
++        // Melee computers form a team; FFA gives every occupied slot its own side.
++        for(int i=0;i<8;++i) for(int j=0;j<8;++j)
++            g_ui->st.alliances[i][j] = i==j || (!free_for_all && (ai_mask&(1u<<i)) && (ai_mask&(1u<<j))) ? 1 : 0;
++    }
++
+ 	g_ui->wnd.create("OpenBW Web", 0, 0, width, height);
+ 	g_ui->resize(width, height);
+ 	g_ui->set_image_data();
+@@ -213,7 +220,7 @@
+ 		r.active_player_count = (int)n;
+ 		r.slot_count = (int)n;
+ 		r.game_speed = 6;                 // "fastest", matching our default step rate
+-		r.game_type = 2;                  // melee
++		r.game_type = free_for_all ? 3 : 2;                  // melee
+ 		r.random_seed = rep_seed0;
+ 		r.game_name = "OpenBW Web";
+ 		r.map_name = g_ui->game_st.scenario_name;
+@@ -226,7 +233,7 @@
+ 		r.setup_info.starting_minerals = 50;
+ 		for (size_t i = 0; i != 12; ++i) {
+ 			r.players[i] = st.players[i];
+-			r.setup_info.create_melee_units_for_player[i] = st.players[i].controller == player_t::controller_occupied;
++			r.setup_info.create_melee_units_for_player[i] = st.players[i].controller == player_t::controller_occupied || st.players[i].controller == player_t::controller_computer_game;
+ 		}
+ 		for (size_t k = 0; k != n; ++k)
+ 			r.player_names[slots[k].slot] = (int)k == my_slot ? "You" : "Opponent";
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -210,7 +210,7 @@
+             // capt_expand chooses an expansion as attack target in the original
+             // manager; this first implementation chooses the nearest enemy base.
+             case 16: break;
+-            case 32: case 33: st.alliances[t.owner][my_player]=op==32?0:1;break;
++            case 32: case 33: if(!melee_ai)st.alliances[t.owner][my_player]=op==32?0:1;break; // Melee alliances come from the shared game setup.
+             case 38: case 90: case 101:
+                 for(auto* u:ptr(st.player_units[t.owner]))if(!unit_dying(u)&&!ut_building(u)&&!ut_worker(u)&&!ut_turret(u)&&xy_length(u->sprite->position-t.pos)<640)
+                     issue_order(u,false,get_order_type(op==101?Orders::JunkYardDog:Orders::AttackMove),{ai_target(t.owner,t.pos),nullptr});

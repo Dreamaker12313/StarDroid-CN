@@ -1,0 +1,409 @@
+{
+  "checks": [
+    "No Hive: Adrenal Glands rejected, Metabolic Boost accepted; unaffordable icon keeps original palette",
+    "Drone walking to build has normal stats and no production queue",
+    "Larva keeps its ID through Hydralisk morph; original ready WAV decoded and started",
+    "zerg02: widescreen extends viewport with unchanged HUD sizes; 50% zoom doubles world view; disabling restores 100%/4:3",
+    "protoss02: widescreen extends viewport with unchanged HUD sizes; 50% zoom doubles world view; disabling restores 100%/4:3",
+    "Actual two-finger pinch respects disabled zoom-out floor and reaches 50% when enabled; minimap input remains usable",
+    "Touch: quick drag pans only; hold-drag selects two units; military tap attack-moves; own-unit tap selects worker; pause cancels held gesture",
+    "terran01: widescreen extends viewport with unchanged HUD sizes; 50% zoom doubles world view; disabling restores 100%/4:3",
+    "Wide/zoom options survive reload while briefing stays classic; building preview/cancel/confirm places exactly one depot at 67% zoom in widescreen"
+  ],
+  "missions": {
+    "zerg02": {
+      "upgrades": {
+        "pool": {
+          "id": 3610,
+          "name": "Spawning Pool",
+          "owner": 3,
+          "x": 1072,
+          "y": 416,
+          "order": 23
+        },
+        "hives": 0,
+        "card": "Spawning Pool\tHP 750/750\t\t\nm\tMetabolic Boost\t1\t-1\t100\t100\t0\t\tFaster Zerglings\t0\t263",
+        "iconPoor": {
+          "filter": "none",
+          "opacity": "1"
+        },
+        "colors": {
+          "gold": 83,
+          "shade": 73
+        },
+        "rules": {
+          "adrenal": "",
+          "metabolic": "0\tMetabolic Boost"
+        }
+      },
+      "builder": {
+        "site": [
+          12,
+          9
+        ],
+        "status": "",
+        "kind": 0,
+        "dump": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=544,288\nselected_owner=3 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=1 first=Drone\nunit=Drone owner=3\ncarrying=0 powerup=0\ncompleted=1 remaining_build_time=0 research_time=-1\norder=26 order2=23\nattack_move=2 attack_unit=10\nground_weapon=43\npos=944,544 hp=40\nmove_target=944,544 order_target=944,544\n"
+      },
+      "den": {
+        "id": 3727,
+        "name": "Hydralisk Den",
+        "owner": 3,
+        "x": 1008,
+        "y": 608,
+        "order": 45
+      },
+      "hydra": {
+        "id": 3599,
+        "unit": {
+          "id": 3599,
+          "name": "Hydralisk",
+          "owner": 3,
+          "x": 753,
+          "y": 571,
+          "order": 3
+        },
+        "debug": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=2 [ttl=8 kind=1 pos=991,698] [ttl=126 kind=0 pos=753,571]\nselection=1\ncamera=544,288\nselected_owner=3 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=1 ready_type=38 ready_sound=866:Zerg\\Hydra\\ZHyRdy00.WAV\nsim_selection=1 first=Hydralisk\nunit=Hydralisk owner=3\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=38\npos=753,571 hp=80\nmove_target=753,571 order_target=0,0\n",
+        "audio": {
+          "played": true,
+          "duration": 1.6602267573696146,
+          "rate": 44100
+        }
+      },
+      "classic": {
+        "screen": {
+          "x": 296,
+          "y": 0,
+          "w": 944,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 304.8500061035156,
+          "y": 511.82501220703125,
+          "w": 188.80001831054688,
+          "h": 188.79998779296875
+        },
+        "card": {
+          "x": 1033.5,
+          "y": 532.4750366210938,
+          "w": 188.800048828125,
+          "h": 168.14996337890625
+        },
+        "unit-preview": {
+          "x": 905.1749877929688,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 499.54998779296875,
+          "y": 572.2999877929688,
+          "w": 398.25,
+          "h": 135.70001220703125
+        }
+      },
+      "wide": {
+        "screen": {
+          "x": 0.26251220703125,
+          "y": 0,
+          "w": 1535.47509765625,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 9.112512588500977,
+          "y": 511.82501220703125,
+          "w": 188.8000030517578,
+          "h": 188.79998779296875
+        },
+        "card": {
+          "x": 1329.237548828125,
+          "y": 532.4750366210938,
+          "w": 188.800048828125,
+          "h": 168.14996337890625
+        },
+        "unit-preview": {
+          "x": 1200.91259765625,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 795.2875366210938,
+          "y": 572.2999877929688,
+          "w": 398.25006103515625,
+          "h": 135.70001220703125
+        }
+      },
+      "zoomOut": {
+        "display": {
+          "active": true,
+          "width": 1041,
+          "height": 480,
+          "widescreen": true,
+          "allowZoomOut": true,
+          "zoom": 0.5
+        },
+        "mini": {
+          "x": 4,
+          "y": 764,
+          "w": 192,
+          "h": 192
+        },
+        "canvas": [
+          2082,
+          960
+        ]
+      }
+    },
+    "protoss02": {
+      "classic": {
+        "screen": {
+          "x": 296,
+          "y": 0,
+          "w": 944,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 304.8500061035156,
+          "y": 543.2839965820312,
+          "w": 188.80001831054688,
+          "h": 125.8590087890625
+        },
+        "card": {
+          "x": 1040.875,
+          "y": 528.0499877929688,
+          "w": 188.800048828125,
+          "h": 168.1500244140625
+        },
+        "unit-preview": {
+          "x": 905.1749877929688,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 499.54998779296875,
+          "y": 572.2999877929688,
+          "w": 398.25,
+          "h": 135.70001220703125
+        }
+      },
+      "wide": {
+        "screen": {
+          "x": 0.26251220703125,
+          "y": 0,
+          "w": 1535.47509765625,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 9.112512588500977,
+          "y": 543.2839965820312,
+          "w": 188.8000030517578,
+          "h": 125.8590087890625
+        },
+        "card": {
+          "x": 1336.612548828125,
+          "y": 528.0499877929688,
+          "w": 188.800048828125,
+          "h": 168.1500244140625
+        },
+        "unit-preview": {
+          "x": 1200.91259765625,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 795.2875366210938,
+          "y": 572.2999877929688,
+          "w": 398.25006103515625,
+          "h": 135.70001220703125
+        }
+      },
+      "zoomOut": {
+        "display": {
+          "active": true,
+          "width": 1041,
+          "height": 480,
+          "widescreen": true,
+          "allowZoomOut": true,
+          "zoom": 0.5
+        },
+        "mini": {
+          "x": 4,
+          "y": 828,
+          "w": 192,
+          "h": 128
+        },
+        "canvas": [
+          2082,
+          960
+        ]
+      },
+      "controlUnits": {
+        "zealots": [
+          {
+            "id": 3711,
+            "name": "Zealot",
+            "owner": 7,
+            "x": 643,
+            "y": 729,
+            "order": 3
+          },
+          {
+            "id": 3712,
+            "name": "Zealot",
+            "owner": 7,
+            "x": 614,
+            "y": 727,
+            "order": 3
+          }
+        ],
+        "probe": {
+          "id": 3722,
+          "name": "Probe",
+          "owner": 7,
+          "x": 462,
+          "y": 622,
+          "order": 3
+        },
+        "before": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=600,600\nselected_owner=7 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=1 first=Zealot\nunit=Zealot owner=7\ncompleted=1 remaining_build_time=0 research_time=-1\norder=2 order2=23\nattack_move=2 attack_unit=10\nground_weapon=64\npos=800,760 hp=100\nmove_target=800,760 order_target=0,0\n"
+      },
+      "pan": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=560,590\nselected_owner=7 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=1 first=Zealot\nunit=Zealot owner=7\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=64\npos=800,760 hp=100\nmove_target=800,760 order_target=0,0\n",
+      "group": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=2\ncamera=600,600\nselected_owner=7 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=1 first=Zealot\nunit=Zealot owner=7\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=64\npos=800,760 hp=100\nmove_target=800,760 order_target=0,0\n",
+      "attack": {
+        "dump": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=2\ncamera=600,600\nselected_owner=7 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=2 first=Zealot\nunit=Zealot owner=7\ncompleted=1 remaining_build_time=0 research_time=-1\norder=14 order2=23\nattack_move=2 attack_unit=10\nground_weapon=64\npos=800,760 hp=100\nmove_target=900,840 order_target=900,840\n",
+        "units": [
+          {
+            "id": 3711,
+            "name": "Zealot",
+            "owner": 7,
+            "x": 800,
+            "y": 760,
+            "order": 14
+          },
+          {
+            "id": 3712,
+            "name": "Zealot",
+            "owner": 7,
+            "x": 863,
+            "y": 760,
+            "order": 14
+          }
+        ]
+      },
+      "worker": {
+        "dump": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=600,600\nselected_owner=7 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=2 first=Zealot\nunit=Probe owner=7\ncarrying=0 powerup=0\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=62\npos=710,760 hp=20\nmove_target=710,760 order_target=0,0\n",
+        "action": 1
+      },
+      "minimapZoomed": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=896,512\nselected_owner=7 selection_palette=0\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=2 first=Zealot\nunit=Probe owner=7\ncarrying=0 powerup=0\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=62\npos=710,760 hp=20\nmove_target=710,760 order_target=0,0\n"
+    },
+    "terran01": {
+      "classic": {
+        "screen": {
+          "x": 296,
+          "y": 0,
+          "w": 944,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 304.8500061035156,
+          "y": 511.82501220703125,
+          "w": 188.80001831054688,
+          "h": 188.79998779296875
+        },
+        "card": {
+          "x": 1040.875,
+          "y": 528.0499877929688,
+          "w": 188.800048828125,
+          "h": 168.1500244140625
+        },
+        "unit-preview": {
+          "x": 905.1749877929688,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 499.54998779296875,
+          "y": 572.2999877929688,
+          "w": 398.25,
+          "h": 135.70001220703125
+        }
+      },
+      "wide": {
+        "screen": {
+          "x": 0.26251220703125,
+          "y": 0,
+          "w": 1535.47509765625,
+          "h": 708
+        },
+        "classic-minimap": {
+          "x": 9.112512588500977,
+          "y": 511.82501220703125,
+          "w": 188.8000030517578,
+          "h": 188.79998779296875
+        },
+        "card": {
+          "x": 1336.612548828125,
+          "y": 528.0499877929688,
+          "w": 188.800048828125,
+          "h": 168.1500244140625
+        },
+        "unit-preview": {
+          "x": 1200.91259765625,
+          "y": 604.75,
+          "w": 88.5,
+          "h": 82.60003662109375
+        },
+        "unit-info": {
+          "x": 795.2875366210938,
+          "y": 572.2999877929688,
+          "w": 398.25006103515625,
+          "h": 135.70001220703125
+        }
+      },
+      "zoomOut": {
+        "display": {
+          "active": true,
+          "width": 1041,
+          "height": 480,
+          "widescreen": true,
+          "allowZoomOut": true,
+          "zoom": 0.5
+        },
+        "mini": {
+          "x": 4,
+          "y": 828,
+          "w": 128,
+          "h": 128
+        },
+        "canvas": [
+          2082,
+          960
+        ]
+      },
+      "persisted": {
+        "active": true,
+        "width": 1041,
+        "height": 480,
+        "widescreen": true,
+        "allowZoomOut": true,
+        "zoom": 0.67
+      },
+      "placement": {
+        "site": [
+          7,
+          3
+        ],
+        "before": 1,
+        "point": {
+          "x": 245.4639444148548,
+          "y": 174.56983240223462
+        },
+        "after": 2
+      }
+    }
+  },
+  "errors": []
+}

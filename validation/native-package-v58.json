@@ -1,0 +1,39 @@
+{
+  "version": "0.58",
+  "googlePlayServicesRequired": false,
+  "transport": "Android secure Bluetooth + authenticated Wi-Fi Direct; Bluetooth fallback",
+  "nativeEngineRebuilt": true,
+  "upgradeIdentityVerifiedFrom": "0.57",
+  "packageVerified": true,
+  "locationPermissionsCappedAtApi32": true,
+  "backgroundLocationRequested": false,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "sha256": "b6d64b41584f06b4d2dc913205eab4c0c1330b8802933ca34988297a1a860aca",
+  "bytes": 2207542,
+  "abis": [
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "jniMethodsVerified": 38,
+  "librarySha256": {
+    "arm64-v8a/libopenbw.so": "a484844acac337023ad7e2a8a4e1d29b274fdea473650780992e0a450f636bdf",
+    "arm64-v8a/libsmacker.so": "1a13bb6eaaf9e3adecafdcbc1f61b6a2736835a95f743f4ab47ef45d076b40cd",
+    "x86_64/libopenbw.so": "1051f0dcbc2f6d02a1d4b593201279da1df270eb3252b33f9849def35e003fc1",
+    "x86_64/libsmacker.so": "2e745fbb2c95b2b7d20d9fd9cb1a4c774434f4de585d1ddf2bb221a7bbe368de"
+  },
+  "reports": [
+    "native-v58.json",
+    "native-v55.json",
+    "room-v55.json",
+    "room-sockets-v55.json",
+    "ui-v58.json",
+    "native-results-host-v56.json",
+    "tooltip-v56.json",
+    "local-permissions-v55.json"
+  ],
+  "lintErrors": 0,
+  "lintWarnings": 10,
+  "androidHardwareTested": false,
+  "nearbyRadioTested": false,
+  "releaseReady": false
+}

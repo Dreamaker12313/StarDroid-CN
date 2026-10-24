@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "states": 6,
+  "renderer": "Production drawNearby method, actual NativeArt/NativeGlue, desktop Canvas shim",
+  "fontFixture": "Provided font payloads use the existing fallback in this host harness",
+  "output": "PASS six lobby renders, bounded/non-overlapping buttons and animation input gating; desktop Canvas shim",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "62e380bece5072219a58b62350a0f71a32c4ca596e55223bc3afc236bd16cd44",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "f0774753a18d90b9c75f34efd3a23fe01f25a962b29bf4aad466e7a1ac494554",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "5b760dc10d2ce909b0e887b4ab5f0f64b9a44555eeb006a3104cfab83b8ae4c0",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "0fceb1ec552269867b43efe8d6f9c91e80002b08bf26a15dcd7ae8c7bcb3c119",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "aec0f12c04b99e184d48f46dad016ace2975271234195d323ed34e6d87280e9e",
+    "tests/run_nearby_ui.py": "b53aeda52eda5827d0f2acba4a4b577e1cb4ceab3f1eae77505c06aafe08bbf1"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "85% base idle; three rare variants each 5%; fid03 is reachable",
+    "Per-portrait DAT weights respected; zero-weight fid02 never selected",
+    "Pause holds the current frame and resumes without restarting/cycling clips",
+    "Speech uses its separate variants without immediate repeats",
+    "No selection stays black and does not continue decoding/painting"
+  ],
+  "errors": []
+}

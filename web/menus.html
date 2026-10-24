@@ -1,0 +1,29 @@
+<div id="game-menu" hidden role="dialog" aria-modal="true" aria-labelledby="game-menu-heading">
+  <section class="sc-dialog">
+    <h2 id="game-menu-heading">Game Menu</h2>
+    <div id="menu-main" class="menu-page">
+      <button id="menu-save" class="sc-button" disabled title="Saving is not implemented yet">Save Game</button>
+      <button id="menu-load" class="sc-button" disabled title="Loading is not implemented yet">Load Game</button>
+      <button id="menu-help" class="sc-button">Help</button>
+      <button id="menu-options" class="sc-button">Options</button>
+      <button id="menu-objectives" class="sc-button" hidden>Mission Objectives</button>
+      <button id="menu-end" class="sc-button">End Mission</button>
+      <button id="menu-resume" class="sc-button menu-primary">Return to Game</button>
+    </div>
+    <div id="menu-end-page" class="menu-page" hidden>
+      <button id="menu-restart" class="sc-button">Restart Mission</button><button id="menu-quit" class="sc-button">Quit Mission</button><button id="menu-exit" class="sc-button">Exit Program</button><button class="sc-button menu-back">Previous</button>
+    </div>
+    <div id="menu-options-page" class="menu-page" hidden>
+      <button id="menu-game-options" class="sc-button">Speed</button>
+      <button id="menu-sound" class="sc-button">Sound</button>
+      <button id="menu-video" class="sc-button">Video</button><button id="menu-network" class="sc-button" disabled>Network</button>
+      <button id="menu-testing" class="sc-button">Cheats</button>
+      <button id="menu-test-victory" class="sc-button">Force victory (end match)</button>
+      <button class="sc-button menu-back">Previous</button>
+    </div>
+    <div id="menu-content" class="menu-page" hidden><div id="menu-content-body"></div><button class="sc-button menu-back">Previous</button></div>
+    <div id="menu-confirm" class="menu-page" hidden>
+      <p id="menu-confirm-text"></p><button id="menu-confirm-yes" class="sc-button">Confirm</button><button class="sc-button menu-back">Cancel</button>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,431 @@
+{
+  "apkSha256": "08a8110979489b3e29c567eb1a4bf4bed4ecbb1579800ecabc25ce9ad7bec28b",
+  "testApkSha256": "2c3e2474ef5153a32b4a6e4e1100b9d9db601367bbf1f57ec469409c8a29f8df",
+  "version": "0.35",
+  "android": "9",
+  "originalGameAssets": false,
+  "diskSnapshotMapAndMetadataRoundTrip": true,
+  "failedAndInterruptedOverwriteRetainsPreviousSave": true,
+  "tamperedSaveRejected": true,
+  "originalMissionArchives": [
+    {
+      "id": "terrantutorial",
+      "mapBytes": 94454,
+      "archiveBytes": 606586670,
+      "saveBytes": 90778
+    },
+    {
+      "id": "terran01",
+      "mapBytes": 88628,
+      "archiveBytes": 606586670,
+      "saveBytes": 92581
+    },
+    {
+      "id": "terran02",
+      "mapBytes": 105877,
+      "archiveBytes": 606586670,
+      "saveBytes": 92870
+    },
+    {
+      "id": "terran03",
+      "mapBytes": 143911,
+      "archiveBytes": 606586670,
+      "saveBytes": 110343
+    },
+    {
+      "id": "terran04",
+      "mapBytes": 267687,
+      "archiveBytes": 606586670,
+      "saveBytes": 107104
+    },
+    {
+      "id": "terran05",
+      "mapBytes": 159465,
+      "archiveBytes": 606586670,
+      "saveBytes": 108919
+    },
+    {
+      "id": "terran06",
+      "mapBytes": 170133,
+      "archiveBytes": 606586670,
+      "saveBytes": 106303
+    },
+    {
+      "id": "terran08",
+      "mapBytes": 171895,
+      "archiveBytes": 606586670,
+      "saveBytes": 121422
+    },
+    {
+      "id": "terran09",
+      "mapBytes": 216795,
+      "archiveBytes": 606586670,
+      "saveBytes": 125525
+    },
+    {
+      "id": "terran11",
+      "mapBytes": 176258,
+      "archiveBytes": 606586670,
+      "saveBytes": 110840
+    },
+    {
+      "id": "terran12",
+      "mapBytes": 205202,
+      "archiveBytes": 606586670,
+      "saveBytes": 126583
+    },
+    {
+      "id": "zerg01",
+      "mapBytes": 100739,
+      "archiveBytes": 606586670,
+      "saveBytes": 92194
+    },
+    {
+      "id": "zerg02",
+      "mapBytes": 137159,
+      "archiveBytes": 606586670,
+      "saveBytes": 108866
+    },
+    {
+      "id": "zerg03",
+      "mapBytes": 101332,
+      "archiveBytes": 606586670,
+      "saveBytes": 95524
+    },
+    {
+      "id": "zerg04",
+      "mapBytes": 135836,
+      "archiveBytes": 606586670,
+      "saveBytes": 102994
+    },
+    {
+      "id": "zerg05",
+      "mapBytes": 270128,
+      "archiveBytes": 606586670,
+      "saveBytes": 120644
+    },
+    {
+      "id": "zerg06",
+      "mapBytes": 205451,
+      "archiveBytes": 606586670,
+      "saveBytes": 133786
+    },
+    {
+      "id": "zerg07",
+      "mapBytes": 201837,
+      "archiveBytes": 606586670,
+      "saveBytes": 131784
+    },
+    {
+      "id": "zerg08",
+      "mapBytes": 277038,
+      "archiveBytes": 606586670,
+      "saveBytes": 132299
+    },
+    {
+      "id": "zerg09",
+      "mapBytes": 225638,
+      "archiveBytes": 606586670,
+      "saveBytes": 130690
+    },
+    {
+      "id": "zerg10",
+      "mapBytes": 369174,
+      "archiveBytes": 606586670,
+      "saveBytes": 172636
+    },
+    {
+      "id": "protoss01",
+      "mapBytes": 146838,
+      "archiveBytes": 606586670,
+      "saveBytes": 110367
+    },
+    {
+      "id": "protoss02",
+      "mapBytes": 107879,
+      "archiveBytes": 606586670,
+      "saveBytes": 102312
+    },
+    {
+      "id": "protoss03",
+      "mapBytes": 159805,
+      "archiveBytes": 606586670,
+      "saveBytes": 116218
+    },
+    {
+      "id": "protoss04",
+      "mapBytes": 216981,
+      "archiveBytes": 606586670,
+      "saveBytes": 120569
+    },
+    {
+      "id": "protoss05",
+      "mapBytes": 212807,
+      "archiveBytes": 606586670,
+      "saveBytes": 120355
+    },
+    {
+      "id": "protoss06",
+      "mapBytes": 241002,
+      "archiveBytes": 606586670,
+      "saveBytes": 110241
+    },
+    {
+      "id": "protoss07",
+      "mapBytes": 217586,
+      "archiveBytes": 606586670,
+      "saveBytes": 132753
+    },
+    {
+      "id": "protoss08",
+      "mapBytes": 207669,
+      "archiveBytes": 606586670,
+      "saveBytes": 136252
+    },
+    {
+      "id": "protoss09",
+      "mapBytes": 217158,
+      "archiveBytes": 606586670,
+      "saveBytes": 129884
+    },
+    {
+      "id": "protoss10",
+      "mapBytes": 398088,
+      "archiveBytes": 606586670,
+      "saveBytes": 200018
+    },
+    {
+      "id": "expprotoss01",
+      "mapBytes": 445531,
+      "archiveBytes": 571552776,
+      "saveBytes": 162375
+    },
+    {
+      "id": "expprotoss02",
+      "mapBytes": 199435,
+      "archiveBytes": 571552776,
+      "saveBytes": 143610
+    },
+    {
+      "id": "expprotoss03",
+      "mapBytes": 226849,
+      "archiveBytes": 571552776,
+      "saveBytes": 136411
+    },
+    {
+      "id": "expprotoss04",
+      "mapBytes": 227214,
+      "archiveBytes": 571552776,
+      "saveBytes": 148922
+    },
+    {
+      "id": "expprotoss05",
+      "mapBytes": 447657,
+      "archiveBytes": 571552776,
+      "saveBytes": 160338
+    },
+    {
+      "id": "expprotoss06",
+      "mapBytes": 264144,
+      "archiveBytes": 571552776,
+      "saveBytes": 154745
+    },
+    {
+      "id": "expprotoss07",
+      "mapBytes": 270198,
+      "archiveBytes": 571552776,
+      "saveBytes": 174593
+    },
+    {
+      "id": "expprotoss08",
+      "mapBytes": 444747,
+      "archiveBytes": 571552776,
+      "saveBytes": 243099
+    },
+    {
+      "id": "expterran01",
+      "mapBytes": 159714,
+      "archiveBytes": 571552776,
+      "saveBytes": 134579
+    },
+    {
+      "id": "expterran02",
+      "mapBytes": 487937,
+      "archiveBytes": 571552776,
+      "saveBytes": 179553
+    },
+    {
+      "id": "expterran03",
+      "mapBytes": 251991,
+      "archiveBytes": 571552776,
+      "saveBytes": 147953
+    },
+    {
+      "id": "expterran04",
+      "mapBytes": 275044,
+      "archiveBytes": 571552776,
+      "saveBytes": 163723
+    },
+    {
+      "id": "expterran05a",
+      "mapBytes": 413768,
+      "archiveBytes": 571552776,
+      "saveBytes": 206063
+    },
+    {
+      "id": "expterran05b",
+      "mapBytes": 347260,
+      "archiveBytes": 571552776,
+      "saveBytes": 201774
+    },
+    {
+      "id": "expterran06",
+      "mapBytes": 384221,
+      "archiveBytes": 571552776,
+      "saveBytes": 168955
+    },
+    {
+      "id": "expterran07",
+      "mapBytes": 787276,
+      "archiveBytes": 571552776,
+      "saveBytes": 184889
+    },
+    {
+      "id": "expterran08",
+      "mapBytes": 545572,
+      "archiveBytes": 571552776,
+      "saveBytes": 220201
+    },
+    {
+      "id": "expzerg01",
+      "mapBytes": 337633,
+      "archiveBytes": 571552776,
+      "saveBytes": 156167
+    },
+    {
+      "id": "expzerg02",
+      "mapBytes": 387704,
+      "archiveBytes": 571552776,
+      "saveBytes": 172308
+    },
+    {
+      "id": "expzerg03",
+      "mapBytes": 262262,
+      "archiveBytes": 571552776,
+      "saveBytes": 165107
+    },
+    {
+      "id": "expzerg04a",
+      "mapBytes": 186895,
+      "archiveBytes": 571552776,
+      "saveBytes": 152469
+    },
+    {
+      "id": "expzerg04b",
+      "mapBytes": 186967,
+      "archiveBytes": 571552776,
+      "saveBytes": 152469
+    },
+    {
+      "id": "expzerg04c",
+      "mapBytes": 187039,
+      "archiveBytes": 571552776,
+      "saveBytes": 152530
+    },
+    {
+      "id": "expzerg04d",
+      "mapBytes": 187111,
+      "archiveBytes": 571552776,
+      "saveBytes": 152610
+    },
+    {
+      "id": "expzerg04e",
+      "mapBytes": 187183,
+      "archiveBytes": 571552776,
+      "saveBytes": 152697
+    },
+    {
+      "id": "expzerg04f",
+      "mapBytes": 187255,
+      "archiveBytes": 571552776,
+      "saveBytes": 152700
+    },
+    {
+      "id": "expzerg05",
+      "mapBytes": 346740,
+      "archiveBytes": 571552776,
+      "saveBytes": 199875
+    },
+    {
+      "id": "expzerg06",
+      "mapBytes": 452114,
+      "archiveBytes": 571552776,
+      "saveBytes": 196314
+    },
+    {
+      "id": "expzerg07",
+      "mapBytes": 229668,
+      "archiveBytes": 571552776,
+      "saveBytes": 167280
+    },
+    {
+      "id": "expzerg08",
+      "mapBytes": 303375,
+      "archiveBytes": 571552776,
+      "saveBytes": 174032
+    },
+    {
+      "id": "expzerg09",
+      "mapBytes": 234281,
+      "archiveBytes": 571552776,
+      "saveBytes": 146729
+    },
+    {
+      "id": "expzerg10",
+      "mapBytes": 440582,
+      "archiveBytes": 571552776,
+      "saveBytes": 229658
+    },
+    {
+      "id": "expbonus",
+      "mapBytes": 217150,
+      "archiveBytes": 571552776,
+      "saveBytes": 144998
+    }
+  ],
+  "all64ImportedMissionSaveLoadAndNativeMapRead": true,
+  "loadedTrueColorsCanBeSavedAgainWithoutOriginalBundle": true,
+  "legacySaveCompatibilityAndInvalidMetadataAtomicity": true,
+  "bothDuranAbilitySlots": true,
+  "newSaveJniEntryPointsLoad": true,
+  "sixSlotsAndCancelAndOverwriteLoadConfirmations": true,
+  "passed": true,
+  "emulator": "37.2.12",
+  "display": "1280x720, 240 dpi",
+  "acceleration": false,
+  "physicalDeviceTested": false,
+  "originalCoreAssets": false,
+  "survivesProcessRestart": true,
+  "restartVerification": {
+    "apkSha256": "08a8110979489b3e29c567eb1a4bf4bed4ecbb1579800ecabc25ce9ad7bec28b",
+    "testApkSha256": "2c3e2474ef5153a32b4a6e4e1100b9d9db601367bbf1f57ec469409c8a29f8df",
+    "version": "0.35",
+    "android": "9",
+    "originalGameAssets": false,
+    "diskSnapshotMapAndMetadataRoundTrip": true,
+    "failedAndInterruptedOverwriteRetainsPreviousSave": true,
+    "tamperedSaveRejected": true,
+    "legacySaveCompatibilityAndInvalidMetadataAtomicity": true,
+    "bothDuranAbilitySlots": true,
+    "survivesProcessRestart": true,
+    "newSaveJniEntryPointsLoad": true,
+    "sixSlotsAndCancelAndOverwriteLoadConfirmations": true,
+    "passed": true,
+    "emulator": "37.2.12",
+    "display": "1280x720, 240 dpi",
+    "acceleration": false,
+    "physicalDeviceTested": false,
+    "originalCoreAssets": false
+  },
+  "notes": "64 real mission imports are saved, loaded and read through the native MPQ decoder. File-I/O snapshot payloads are synthetic. Full world snapshots use separate native host tests. No full original-data campaign playthrough is claimed."
+}

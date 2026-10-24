@@ -1,0 +1,313 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -19335,6 +19335,9 @@
+ 			ra.flags |= 1;
+ 			return false;
+ 		case 7: // transmission: present once and resume this action after its wait
++            // Zero-wait transmissions highlight units, often with a rescue sound.
++            // Set To 0 must not join an unrelated dialogue wait (Tarsonis handover).
++            if (!a.group2_n && (a.num_n == 7 || !a.sound_index)) { on_scenario_action(owner, a); return true; }
+ 			if (st.trigger_waiting[owner]) return false;
+ 			if (ra.flags & 1) { ra.flags &= ~1; return true; }
+ 			st.trigger_wait_timers[owner] = on_scenario_action(owner, a);
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -273,7 +273,7 @@
+ 	int icon_w = 0, icon_h = 0;              // size of the last render_icon() result
+ 	a_vector<uint8_t> icon_index, icon_rgba; // scratch: 8-bit frame, then RGBA
+ 
+-	enum targ_t { T_ATTACK, T_MOVE, T_PATROL, T_GATHER, T_REPAIR, T_RALLY, T_SPELL };
++	enum targ_t { T_ATTACK, T_MOVE, T_PATROL, T_GATHER, T_REPAIR, T_RALLY, T_SPELL, T_LOAD, T_UNLOAD };
+ 	targ_t pending_targ = T_ATTACK;
+ 	Orders pending_spell_order{};   // the spell to cast once its target is clicked
+ 	bool pending_spell_unit = false;   // does that spell target a unit (vs the ground)?
+@@ -290,7 +290,7 @@
+ 	               C_FIGHTER,                 // Carrier interceptor / Reaver scarab
+ 	               C_ARCHON, C_DARCHON,       // High / Dark Templar merges
+ 	               C_SPELL,                   // a targeted spellcaster ability
+-	               C_CANCEL };                // cancel a morph / addon / nuke (opcode in cmd.unit)
++	               C_CANCEL, C_LOAD, C_NYDUS_VIEW };                // cancel a morph / addon / nuke (opcode in cmd.unit)
+ 	struct cmd_t { char key; const char* label; cmd_act act; UnitTypes ut; bool enabled = false;
+ 	               TechTypes tech = TechTypes::None; UpgradeTypes upg = UpgradeTypes::None;
+ 	               uint16_t unit = 0;          // target unit id (C_UNLOAD)
+@@ -298,6 +298,7 @@
+ 	a_vector<cmd_t> card;
+ 	a_string card_text;                           // "title\nKEY\tLabel\tEN\n…" for the JS overlay
+ 	a_string status_text;                         // producer queue + progress, rebuilt per frame
++	a_string cargo_text;
+ 	a_string resources_text;                      // minerals/gas/supply HUD, rebuilt per frame
+ 	a_string error_text, error_status_text;       // last blocked-command reason, for the JS toast
+ 	int error_seq = 0;                            // bumped whenever error_text is (re)set
+@@ -970,7 +971,9 @@
+ 		case C_LAND: return "Lands this structure at the chosen location.";
+ 		case C_NYDUS: return "Creates a connected Nydus Canal exit on creep.";
+ 		case C_UNLOAD: return "Unloads this passenger.";
+-		case C_UNLOADALL: return "Unloads all passengers.";
++		case C_UNLOADALL: return "Unloads all passengers. Flying transports first ask for a landing location.";
++        case C_LOAD: return "Select a friendly ground unit to load. Nydus Canals transfer eligible Zerg units directly to their linked exit.";
++        case C_NYDUS_VIEW: return "Centers the camera on the connected Nydus exit. Units leave it automatically.";
+ 		case C_RETURN: return "Returns carried resources to a nearby resource depot.";
+ 		case C_BURROW: return "Hides underground. Detectors can reveal burrowed units.";
+ 		case C_UNBURROW: return "Returns to the surface.";
+@@ -1264,18 +1267,17 @@
+ 			// click on the button (the host sends it as the sym).
+ 			card.push_back({'\x1b', "Cancel", C_CANCEL, U::None, true,
+ 			                TechTypes::None, UpgradeTypes::None, (uint16_t)cancel_op});
+-		// Cargo: a bunker/transport shows each carried unit (click its icon to eject just
+-		// that one) plus an Unload button that ejects everything.
+-		if (unit_provides_space(u)) {
+-			bool any = false;
+-			for (unit_t* c : loaded_units(u)) {
+-				card.push_back({pick_key(unit_name(c->unit_type->id)), unit_name(c->unit_type->id),
+-				                C_UNLOAD, c->unit_type->id, true, TechTypes::None, UpgradeTypes::None,
+-				                get_unit_id(c).raw_value});
+-				any = true;
+-			}
+-			if (any) card.push_back({pick_key("Unload"), "Unload", C_UNLOADALL, U::None});
+-		}
++        // Keep passenger icons in the cargo panel so Load/Unload never move
++        // onto a second command-card page when the transport fills up.
++        if (u_completed(u) && (unit_provides_space(u) || id == U::Zerg_Overlord)) {
++            bool available=unit_provides_space(u);
++            card.push_back({'l', "Load", C_LOAD, U::None, available && unit_space_left(u)>0});
++            card.push_back({'u', "Unload", C_UNLOADALL, U::None, available && !loaded_units(u).empty()});
++        }
++        if (id==U::Zerg_Nydus_Canal && u_completed(u) && u->building.nydus.exit) {
++            card.push_back({'l', "Load", C_LOAD, U::None, u_completed(u->building.nydus.exit)});
++            card.push_back({'u', "View Exit", C_NYDUS_VIEW, U::None, true});
++        }
+ 		return unit_name(id);
+ 	}
+ 
+@@ -1323,7 +1325,7 @@
+ 			case C_STIM:  c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Stim_Packs), my_player); break;
+ 			case C_SIEGE: c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Tank_Siege_Mode), my_player); break;
+ 			case C_BUILD: case C_TRAIN: case C_MORPH: case C_MORPHBLDG:
+-			case C_UPGRADE: case C_RESEARCH: case C_SPELL: case C_CLOAK: case C_LIFT: break;   // enabled already set
++			case C_UPGRADE: case C_RESEARCH: case C_SPELL: case C_CLOAK: case C_LIFT: case C_LOAD: case C_UNLOADALL: break;   // enabled already set
+ 			default:      c.enabled = true;
+ 			}
+ 		}
+@@ -1535,17 +1537,28 @@
+ 		return status_text.c_str();
+ 	}
+ 
+-	// "minerals\tgas\tsupply_used\tsupply_max" for the resource HUD.
+-	const char* resources() {
+-		int p = my_player, ri = (int)my_race;   // race index into the supply arrays
+-		// Spectating: show the economy of whichever player's unit is selected.
+-		if (spectator) if (unit_t* u = primary_selected(); u && u->owner < 8) { p = u->owner; ri = (int)unit_race(u); }
+-		int used = st.supply_used[p][ri].raw_value / 2;
+-		int max = st.supply_available[p][ri].raw_value / 2;
+-		if (max > 200) max = 200;
+-		resources_text = format("%d\t%d\t%d\t%d", (int)st.current_minerals[p], (int)st.current_gas[p], used, max);
+-		return resources_text.c_str();
+-	}
++    // Keep the four legacy fields, then append each race's independent supply.
++    const char* resources() {
++        int p=my_player,ri=int(my_race);
++        if (spectator) if (auto* u=primary_selected();u&&u->owner<8) {p=u->owner;ri=int(unit_race(u));}
++        if(ri<0||ri>2)ri=int(my_race);
++        resources_text=format("%d\t%d\t%d\t%d",int(st.current_minerals[p]),int(st.current_gas[p]),
++            st.supply_used[p][ri].raw_value/2,std::min<int>(200,st.supply_available[p][ri].raw_value/2));
++        int active=1<<ri;
++        for(auto* u:ptr(st.player_units[p]))if(!unit_dying(u)&&!ut_turret(u)) {
++            int race=int(unit_race(u));if(race>=0&&race<3)active|=1<<race;
++        }
++        resources_text+=format("\t%d",active);
++        for(int race=0;race<3;++race)resources_text+=format("\t%d\t%d",st.supply_used[p][race].raw_value/2,
++            std::min<int>(200,st.supply_available[p][race].raw_value/2));
++        return resources_text.c_str();
++    }
++    const char* cargo_status() {
++        cargo_text.clear();auto* u=primary_selected();if(!u||!unit_provides_space(u))return cargo_text.c_str();
++        for(auto* passenger:loaded_units(u))cargo_text+=format("%u\t%d\t%d\t%d\n",get_unit_id(passenger).raw_value,
++            int(passenger->unit_type->id),passenger->hp.ceil().integer_part(),passenger->unit_type->hitpoints.ceil().integer_part());
++        return cargo_text.c_str();
++    }
+ 
+ 	// End-game score for the game-over screen. First line "outcome\tframe"; then one line
+ 	// per player that started the game: "isMe\trace\tcolor\tunits\tbuildings\tminerals\tgas
+@@ -1990,7 +2003,7 @@
+         for(auto* u:find_units(square_at(pos,radius))) {
+             if (!u->sprite || unit_dying(u) || !unit_can_be_selected(u) || unit_hidden_by_fog(u)) continue;
+             if (!force_select && owns && u->owner!=my_player) continue;
+-            if (!force_select && owns && unit_is_refinery(u)) continue;
++            if (!force_select && owns && (unit_is_refinery(u) || unit_provides_space(u) || unit_is_nydus(u))) continue;
+             auto bounds=sprite_clickable_bounds(u->sprite);
+             int dx=std::max({bounds.from.x-pos.x,0,pos.x-bounds.to.x});
+             int dy=std::max({bounds.from.y-pos.y,0,pos.y-bounds.to.y});
+@@ -2076,7 +2089,15 @@
+ 			case C_NYDUS:     pending_build = get_unit_type(UnitTypes::Zerg_Nydus_Canal);
+ 			                  pending_nydus = true; menu = 0; refresh_card(); break;
+ 			case C_UNLOAD:    sync_selection(); cmds.unload(c.unit); break;
+-			case C_UNLOADALL: sync_selection(); cmds.unload_all(key_shift()); break;
++			case C_UNLOADALL:
++                if (auto* transport=primary_selected(); transport && ut_building(transport)) {sync_selection();cmds.unload_all(key_shift());}
++                else start_target(T_UNLOAD);
++                break;
++            case C_LOAD: start_target(T_LOAD); break;
++            case C_NYDUS_VIEW:
++                if (auto* canal=primary_selected(); canal && unit_is_nydus(canal) && canal->building.nydus.exit) {
++                    screen_pos=canal->building.nydus.exit->sprite->position-xy(view_width/2,view_height/2);clamp_viewport();
++                }break;
+ 			case C_RETURN:    sync_selection(); cmds.return_cargo(key_shift()); break;
+ 			case C_BURROW:    sync_selection(); cmds.burrow(key_shift()); break;
+ 			case C_UNBURROW:  sync_selection(); cmds.unburrow(); break;
+@@ -2117,6 +2138,21 @@
+ 
+ 	void issue_target(xy pos) {
+ 		unit_t* target = select_get_unit_at(pos);
++        if(pending_targ==T_LOAD)if(auto* transport=primary_selected()) {
++            // Aircraft can visually cover the passenger being picked. A Load
++            // cursor targets eligible ground units underneath that aircraft.
++            auto eligible=[&](unit_t* u){return u!=transport&&u->owner==my_player&&!ut_building(u)&&!u_flying(u)
++                &&!u_loaded(u)&&u_completed(u)&&!unit_dying(u)&&!unit_hidden_by_fog(u)
++                &&(unit_is_nydus(transport)?unit_can_enter_nydus(u,transport):unit_provides_space(transport)
++                    &&u->unit_type->space_required>0&&unit_can_load_target(transport,u));};
++            if(!target||!eligible(target)) {
++                target=nullptr;
++                for(auto* u:find_units(square_at(pos,8)))if(eligible(u)) {
++                    auto box=sprite_clickable_bounds(u->sprite);
++                    if(pos.x>=box.from.x&&pos.y>=box.from.y&&pos.x<box.to.x&&pos.y<box.to.y){target=u;break;}
++                }
++            }
++        }
+ 		if (target && unit_hidden_by_fog(target)) target = nullptr;   // can't target through fog
+ 		// A unit target gets only the target flash; the ground circle is for ground orders
+ 		// (matches the right-click path — both at once looked wrong on attack clicks).
+@@ -2137,6 +2173,16 @@
+ 		case T_REPAIR: cmd_order(Orders::Repair, pos, target, q); break;
+ 		case T_RALLY:  cmd_order(target ? Orders::RallyPointUnit : Orders::RallyPointTile, pos, target, false); break;
+ 		case T_SPELL:  cmd_order(pending_spell_order, pos, pending_spell_unit ? target : nullptr, false); break;
++        case T_UNLOAD: cmd_order(Orders::MoveUnload,pos,nullptr,q); break;
++        case T_LOAD:
++            if (auto* transport=primary_selected(); transport && target && target!=transport
++                && !ut_building(target) && !u_flying(target) && !u_loaded(target) && u_completed(target)) {
++                if (unit_is_nydus(transport) && unit_can_enter_nydus(target,transport)) {
++                    uint16_t id=get_unit_id(target).raw_value;cmds.select(&id,1);
++                    cmd_default_order(transport->sprite->position,transport,q);sync_selection();
++                } else if (unit_provides_space(transport) && target->unit_type->space_required>0 && unit_can_load_target(transport,target))
++                    cmd_order(unit_is(transport,UnitTypes::Terran_Bunker)?Orders::PickupBunker:Orders::PickupTransport,pos,target,q);
++            }break;
+ 		}
+ 		if (unit_t* u = primary_selected())
+ 			play_unit_ack(u, u->unit_type->first_yes_sound, u->unit_type->last_yes_sound);
+@@ -2196,7 +2242,7 @@
+ 			if ((int)st.current_gas[my_player] < pending_build->gas_cost) { raise_error(E_GAS); return; }
+ 		}
+ 		sync_primary();   // build is a single-unit action (see sync_primary)
+-		cmd_build(pending_land ? Orders::BuildingLand : pending_nydus ? Orders::BuildNydusExit : kit.build_order, pending_build, tx, ty);
++		cmd_build(pending_land ? Orders::BuildingLand : pending_nydus ? Orders::BuildNydusExit : kit_for(unit_race(pending_build)).build_order, pending_build, tx, ty);
+ 		if (!pending_land) play_sound(4 + int(unit_race(pending_build)),xy(),nullptr,false);
+         // Placement has its own acknowledgement. Do not also play worker speech.
+         if (pending_land) if (auto* u = primary_selected())
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -400,6 +400,11 @@
+     auto* target = g_ui->select_get_unit_at(g_ui->screen_to_map(x,y));
+     if (target && g_ui->unit_hidden_by_fog(target)) target = nullptr;
+     if (target && target->owner == g_ui->my_player) {
++        for(auto id:g_ui->current_selection)if(auto* passenger=g_ui->get_unit(id))
++            if(passenger!=target && passenger->owner==g_ui->my_player && !g_ui->ut_building(passenger)
++                && !g_ui->u_flying(passenger) && !g_ui->u_loaded(passenger) && g_ui->u_completed(passenger)
++                && ((g_ui->unit_provides_space(target) && passenger->unit_type->space_required>0
++                     && g_ui->unit_can_load_target(target,passenger)) || g_ui->unit_can_enter_nydus(passenger,target)))return 1;
+         if (g_ui->unit_is_refinery(target) && g_ui->u_completed(target))
+             for (auto id : g_ui->current_selection) if (auto* worker = g_ui->get_unit(id))
+                 if (worker->owner == g_ui->my_player && g_ui->ut_worker(worker)
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -27,6 +27,7 @@
+     };
+     struct defence_alert { unit_id source, victim; int wake=0, until=0; };
+     std::array<defence_alert,8> defence_alerts{};
++    bool base_defence_enabled=true; // User difficulty preference; not an objective/trigger rule.
+     std::array<town,8> towns;
+     std::array<a_vector<uint8_t>,2> scripts;
+     a_vector<thread> threads, spawned;
+@@ -320,6 +321,7 @@
+     }
+     void on_scenario_attack(unit_t* victim, unit_t* source) override {
+         int owner=victim->owner;
++        if(!base_defence_enabled)return;
+         if(owner>=8 || owner==my_player || !towns[owner].active || !source
+             || st.players[owner].controller!=player_t::controller_computer_game
+             || !unit_target_is_enemy(victim,source) || unit_dying(source))return;
+@@ -338,6 +340,7 @@
+     }
+     void ai_defend(int owner) {
+         auto& alert=defence_alerts[owner];
++        if(!base_defence_enabled){alert={};return;}
+         if(alert.until<=ai_clock||alert.wake>ai_clock)return;
+         auto* source=get_unit(alert.source);auto* victim=get_unit(alert.victim);
+         if(!source||!victim||unit_dying(source)||unit_dying(victim)||victim->owner!=owner
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -37,12 +37,24 @@
+         if(u->unit_type->group_flags&GroupFlags::Factory)++kills[owner][232];
+     }
+     void on_kill_unit(unit_t* u) override {
++
+         play_ui::on_kill_unit(u);
+         if(u->owner>=12||ut_turret(u)||u_hallucination(u)||us_hidden(u)||(!u_completed(u)&&u->hp!=0_fp8))return;
+         if(!counted_deaths.insert(get_unit_id(u).raw_value).second)return;
+         ++deaths[u->owner][int(u->unit_type->id)];++deaths[u->owner][229];
+         ++deaths[u->owner][ut_building(u)?231:230];
+         if(u->unit_type->group_flags&GroupFlags::Factory)++deaths[u->owner][232];
++    }
++    // Scenario counters can belong to unused player slots. Campaign maps use
++    // those slots as variables (Dylarian's fourth platform is Player 4).
++    a_vector<int> scenario_counter_players(int owner,int group) const {
++        a_vector<int> result;
++        if(group>=0&&group<12)result.push_back(group);
++        else if(group==13)result.push_back(owner);
++        else if(group==17)for(int p=0;p<12;++p)result.push_back(p);
++        else if(group>=18&&group<=21) {for(int p=0;p<8;++p)if(st.players[p].force==group-17)result.push_back(p);}
++        else for(int p:trigger_players(owner,group))result.push_back(p);
++        return result;
+     }
+     int scenario_score(int p,int type) const {
+         int v=0;
+@@ -55,9 +67,9 @@
+     int on_scenario_condition(int owner,const trigger::condition& c) const override {
+         if(c.type==1)return trigger_count_comparison(c,countdown_ms/1000);
+         if(c.type==11 && c.extra_n>=0 && c.extra_n<256)return switches[c.extra_n]==(c.num_n==2);
+-        if(c.type==5){int total=0;if(c.unit_id<0||c.unit_id>=233)return 0;for(int p:trigger_players(owner,c.group))if(p<8)total+=kills[p][c.unit_id];return trigger_count_comparison(c,total);}
+-        if(c.type==15){int total=0;if(c.unit_id<0||c.unit_id>=233)return 0;for(int p:trigger_players(owner,c.group))total+=deaths[p][c.unit_id];return trigger_count_comparison(c,total);}
+-        if(c.type==21){int total=0;for(int p:trigger_players(owner,c.group))total+=scenario_score(p,c.extra_n);return trigger_count_comparison(c,total);}
++        if(c.type==5){int total=0;if(c.unit_id<0||c.unit_id>=233)return 0;for(int p:scenario_counter_players(owner,c.group))if(p<8)total+=kills[p][c.unit_id];return trigger_count_comparison(c,total);}
++        if(c.type==15){int total=0;if(c.unit_id<0||c.unit_id>=233)return 0;for(int p:scenario_counter_players(owner,c.group))total+=deaths[p][c.unit_id];return trigger_count_comparison(c,total);}
++        if(c.type==21){int total=0;for(int p:scenario_counter_players(owner,c.group))total+=scenario_score(p,c.extra_n);return trigger_count_comparison(c,total);}
+         if(c.type==7||c.type==17){
+             if(c.location<1||size_t(c.location)>st.locations.size())return 0;
+             auto counts=trigger_bring_count(st.locations[c.location-1]);
+@@ -151,7 +163,7 @@
+         }
+         if(a.type==54||a.type==55){timer_paused=a.type==54;return 0;}
+         if(a.type==45||a.type==27){
+-            for(int p:trigger_players(owner,a.group_n)){
++            for(int p:scenario_counter_players(owner,a.group_n)){
+                 if(a.extra_n<0 || a.extra_n>=(a.type==45?233:8))continue;
+                 int& value=a.type==45?deaths[p][a.extra_n]:scores[p][a.extra_n];
+                 if(a.num_n==7)value=a.group2_n;
+@@ -192,15 +204,15 @@
+ 			int voice = sound_duration(a.sound_index);
+ 			// Map-only exports omit recordings. Keep their editor-recorded duration
+ 			// so dialogue and scripted entrances still run in the original order.
+-			if (!voice) voice = std::max(0, a.time_n);
++			if (!voice && a.sound_index) voice = std::max(0, a.time_n);
+ 			// time_n stores the editor WAV length; group2_n is the timing adjustment.
+ 			// Adding the WAV length twice made exchanges pause for an extra line.
+ 			duration = a.group2_n;
+ 			if (a.num_n == 8) duration += voice;
+ 			else if (a.num_n == 9) duration = std::max(0, voice - duration);
+-			// The transmission must not cut off its own recording. No arbitrary
+-			// three-second minimum for short replies.
+-			duration = std::max(voice, duration);
++            // Set To, Add and Subtract control the trigger's wait independently
++            // of the recording. A rescue highlight deliberately uses Set To 0.
++
+ 		}
+ 		if (a.type == 5) units_paused = true;
+ 		if (a.type == 6) units_paused = false;

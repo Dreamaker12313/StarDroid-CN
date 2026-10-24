@@ -1,0 +1,41 @@
+{
+  "version": "0.54",
+  "passed": true,
+  "physicalRadioTested": false,
+  "actualProductionClasses": [
+    "NearbyProtocol.java",
+    "NearbyMatch.java",
+    "MatchSetup.java",
+    "MatchSnapshot.java",
+    "NearbyMapCodec.java",
+    "NearbyMapCache.java",
+    "NativeData.java"
+  ],
+  "cases": [
+    "bounded wire format",
+    "chunked map and SHA-256 verification",
+    "version mismatch",
+    "core data mismatch",
+    "initial state mismatch",
+    "delayed two-peer simulation",
+    "shared pause and resume",
+    "stale pause message",
+    "missing inputs freeze simulation",
+    "desync abort",
+    "explicit surrender",
+    "connection loss",
+    "results exit is not surrender",
+    "scenario MPQ construction"
+  ],
+  "output": "PASS 1430 nearby protocol assertions; version, map, ordering, delays, pauses, desync, leave and disconnect",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "ebf90d315c72d2bc23c4ca65c0df19dfa27aa3bc9fd2e0d9cfffd1dadf79deb0",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "4452c454fbc43d250c0e3a7ba7616e6fd5d5636220eafcb4570074725d7892cb",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "ec2f9de5db257efb6498db06e80ce7723908f8d67c1aef966375ca16f971d24e",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCache.java": "2f49e859ea90f02d7547b9c6329ca10b1c59f586b3614f1ee1999890dbc250f2",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "tests/NearbyProtocolTest.java": "e94526f60257f8bd78a2cf4df24d9fefe914045c0c3f63f83c41c9f22fd78306"
+  }
+}

@@ -1,0 +1,10 @@
+libsmacker 1.2.0, Copyright (C) 2012-2021 Greg Kennedy and contributors.
+LGPL version 2.1 or later. See COPYING for the full license.
+Pinned source: https://github.com/JonnyH/libsmacker
+Commit: ae8d4c9ec07b24d43ccff184d6e512bae793dfd1
+
+smacker.c, smacker.h, and smk_malloc.h are included unmodified.
+The OpenBW Android adapter is web/portrait_decoder.c. It is linked into its
+own portrait-decoder.wasm, separate from the game engine. Source and build
+instructions are included so this component can be modified, rebuilt and
+replaced. No original StarCraft portrait movies are included.

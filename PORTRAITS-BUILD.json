@@ -1,0 +1,27 @@
+{
+  "repository": "https://github.com/JonnyH/libsmacker",
+  "commit": "ae8d4c9ec07b24d43ccff184d6e512bae793dfd1",
+  "license": "LGPL-2.1-or-later",
+  "files": [
+    {
+      "file": "vendor/libsmacker/COPYING",
+      "sha256": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551"
+    },
+    {
+      "file": "vendor/libsmacker/README",
+      "sha256": "57669b49ffba7ccd20af27812033ca3d398738dc110a52d9d3feed6b180929a8"
+    },
+    {
+      "file": "vendor/libsmacker/smacker.c",
+      "sha256": "d2a9adda0f8d36e952cdb44ec2fefbbe1f4146319272e779eed15f6c06a813a5"
+    },
+    {
+      "file": "vendor/libsmacker/smacker.h",
+      "sha256": "4bcf855b32bc6a69ca2d6df65bcbf628d939ad89866313553eb5f2de598e29c8"
+    },
+    {
+      "file": "vendor/libsmacker/smk_malloc.h",
+      "sha256": "ccb52a95f587a9b7968433280c198ddadc726288d454102729d638f9d5d82353"
+    }
+  ]
+}

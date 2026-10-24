@@ -1,0 +1,66 @@
+{
+  "compressedMapBytes": 4596,
+  "checks": 737042,
+  "model": "Production 0.50 vs 0.51 match classes; ordered synthetic link; lightweight deterministic test engine; no radio/render workload",
+  "passed": true,
+  "benchmarks": [
+    {
+      "baselineFrames": 1249,
+      "candidateMapMs": 1,
+      "baselineMapMs": 1,
+      "roundTripMs": 0,
+      "candidateFrames": 1428,
+      "candidateSpeedPercent": 99.96,
+      "baselineSpeedPercent": 87.43
+    },
+    {
+      "baselineFrames": 1249,
+      "candidateMapMs": 191,
+      "baselineMapMs": 1311,
+      "roundTripMs": 20,
+      "candidateFrames": 1428,
+      "candidateSpeedPercent": 99.96,
+      "baselineSpeedPercent": 87.43
+    },
+    {
+      "baselineFrames": 1152,
+      "candidateMapMs": 476,
+      "baselineMapMs": 3276,
+      "roundTripMs": 50,
+      "candidateFrames": 1427,
+      "candidateSpeedPercent": 99.89,
+      "baselineSpeedPercent": 80.64
+    },
+    {
+      "baselineFrames": 998,
+      "candidateMapMs": 951,
+      "baselineMapMs": 6551,
+      "roundTripMs": 100,
+      "candidateFrames": 1427,
+      "candidateSpeedPercent": 99.89,
+      "baselineSpeedPercent": 69.86
+    },
+    {
+      "baselineFrames": 831,
+      "candidateMapMs": 1901,
+      "baselineMapMs": 13101,
+      "roundTripMs": 200,
+      "candidateFrames": 1425,
+      "candidateSpeedPercent": 99.75,
+      "baselineSpeedPercent": 58.17
+    }
+  ],
+  "version": "0.51",
+  "physicalPhones": false,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "30dacd58f8e1ae04bbf8a7e68f1bef75e937bf4938934d7b19f3c8644ef37158",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "d2fd67d711f2c2bbec0d9e0882e73c669329a2c85110dde7083e70d2ba6ef7a3",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "597336118cd66cc3c2b7087fd7cef50989aa26f8000d230e578539bd9e379e58",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCache.java": "2f49e859ea90f02d7547b9c6329ca10b1c59f586b3614f1ee1999890dbc250f2",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "tests/NearbyEfficiencyTest.java": "3bf3d6d13de523ec54c6fbb2d250393d02e5b787c9b30ce3fe4c86717e3e4a34",
+    "tests/fixtures/nearby50/NearbyMatch50.java": "fdc3018613813caf1707283d246003aff4299d7545da25d58d83177edecab5fc",
+    "tests/fixtures/nearby50/NearbyProtocol50.java": "bd69a9dd9e6c43122cd125bb20b977241e649dfee11b26e1109f6536ab0e323a",
+    "tests/run_nearby_efficiency.py": "37722c304a70b80f2056b58f591c6abab53a2ba9b03a476f43c7662a01870695"
+  }
+}

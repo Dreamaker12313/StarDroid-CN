@@ -1,0 +1,4 @@
+Mission filenames: PyMS/Data/Listfile.txt, poiuyqwert/PyMS
+https://github.com/poiuyqwert/PyMS
+Commit bfc5d3aad0b5614a5aff72c223f8efa00afddfa4
+MIT; see PyMS-LICENSE.txt. No campaign payload data bundled.

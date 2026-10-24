@@ -1,0 +1,17 @@
+{
+  "verified": true,
+  "files": [
+    "web/wasm_main.cpp",
+    "web/wasm_backend.cpp",
+    "web/sandbox.h",
+    "web/campaign.h",
+    "actions.h",
+    "bwgame.h",
+    "web/campaign_ai.h",
+    "web/bot/patch-vendor.py",
+    "web/bot/build-web.sh",
+    "ui/ui.h"
+  ],
+  "patchSha256": "80745314b4b1afe8b6942a7f3fd071ede0828a5d8e61b0a77a083a9f678c5a98",
+  "engineSha256": "11444d8706315c93cfbd1928960620a64bdd7d24ecb14080ababdc0ff440e80a"
+}

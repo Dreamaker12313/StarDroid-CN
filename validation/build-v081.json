@@ -1,0 +1,27 @@
+{
+  "version": "0.8.1",
+  "versionCode": 9,
+  "package": "org.openbw.androidtest",
+  "apk": "OpenBW-Android-0.8.1.apk",
+  "bytes": 3485048,
+  "sha256": "70bd58e3e38913ba0496e72736db04b91f9b0052581b22bd907c0bb8e685e3fe",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "buildChecks": [
+    "ZIP CRC",
+    "zipalign",
+    "APK signature",
+    "package/version metadata",
+    "packaged asset bytes"
+  ],
+  "testEnvironment": "Desktop Chromium touch emulation; no Android device/emulator",
+  "passed": [
+    "font-startup-v08-repro.json (old version reproduces reported failure)",
+    "font-startup-v081.json (valid/missing/unreadable imports)",
+    "interface-v081.json (full original UI integration)"
+  ],
+  "engineChanges": "None; all six WASM hashes unchanged from 0.8. Fonts load only from the optional interface bundle in a private decoder.",
+  "limitations": [
+    "Android device check still needed",
+    "Original UI parity limits from 0.8 remain"
+  ]
+}

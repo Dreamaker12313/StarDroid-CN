@@ -1,0 +1,448 @@
+{
+  "checks": [
+    "All six retail mission-three transmissions play in sequence without missing speech; scroll follows AudioContext time, pauses/resumes, permits manual reading and resets on replay; native 9-line wrapping and continued end scroll; doubled portraits have scanlines; hotkey initials use original bright-green glyph ramps"
+  ],
+  "errors": [],
+  "layouts": [],
+  "first": {
+    "brief": {
+      "originalRoom": true,
+      "layout": "rez/glurdyt.bin",
+      "fonts": {
+        "small": true,
+        "large": true,
+        "button": true
+      },
+      "dialogueFont": "font14",
+      "lineHeight": 19,
+      "scrollOffset": 0,
+      "scrollDuration": 4166.938775510203,
+      "speechPosition": 11.60997732426304,
+      "manualScroll": false,
+      "animations": [
+        "glue/readyt/proloop.smk",
+        "glue/readyt/proj.smk",
+        "glue/readyt/start.smk"
+      ],
+      "active": true,
+      "suspended": false,
+      "phase": "ready",
+      "elapsed": 1783.3000000000002,
+      "slideAmount": 0,
+      "projection": 0,
+      "glassIndex": 138,
+      "speakerFrames": 4,
+      "sounds": {
+        "available": [
+          "mousedown2",
+          "mouseover",
+          "swishin",
+          "swishlock",
+          "swishout"
+        ],
+        "decoded": 2,
+        "played": 2,
+        "paused": false,
+        "error": ""
+      }
+    },
+    "campaign": {
+      "history": [],
+      "missing": [],
+      "briefIndex": 0,
+      "briefPhase": "ready",
+      "playing": true,
+      "actionIndex": 4,
+      "transmission": {
+        "position": 11.60997732426304,
+        "remaining": 4155.32879818594,
+        "fallback": false
+      },
+      "voice": {
+        "ready": true,
+        "failed": false,
+        "duration": 4166.938775510203,
+        "position": 11.60997732426304
+      },
+      "slots": [
+        -1,
+        -1,
+        -1,
+        106
+      ],
+      "messages": [],
+      "status": "0\t16\t1\t0\t0\t0",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 1,
+      "allocatedMissionBytes": 2158478
+    },
+    "portraits": {
+      "draws": 11,
+      "paused": false,
+      "cacheBytes": 268800,
+      "pending": 0,
+      "error": "",
+      "surfaces": [
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": false,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": 106,
+          "talking": true,
+          "file": "portrait/TAdvisor\\TAdTlk00.smk",
+          "frame": 0,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        }
+      ]
+    }
+  },
+  "scanlineRatio": 0.441826900898249,
+  "hotkeys": [
+    {
+      "id": "brief-start",
+      "width": 60,
+      "height": 19,
+      "brightFirst": 34,
+      "brightRest": 0
+    },
+    {
+      "id": "brief-replay",
+      "width": 67,
+      "height": 19,
+      "brightFirst": 39,
+      "brightRest": 0
+    },
+    {
+      "id": "brief-cancel",
+      "width": 67,
+      "height": 19,
+      "brightFirst": 30,
+      "brightRest": 0
+    }
+  ],
+  "timed": {
+    "brief": {
+      "originalRoom": true,
+      "layout": "rez/glurdyt.bin",
+      "fonts": {
+        "small": true,
+        "large": true,
+        "button": true
+      },
+      "dialogueFont": "font14",
+      "lineHeight": 19,
+      "scrollOffset": 43.13623858013515,
+      "scrollDuration": 30423.900226757367,
+      "speechPosition": 10019.410430839001,
+      "manualScroll": false,
+      "animations": [
+        "glue/readyt/proloop.smk",
+        "glue/readyt/proj.smk",
+        "glue/readyt/start.smk"
+      ],
+      "active": true,
+      "suspended": false,
+      "phase": "ready",
+      "elapsed": 32788.60000000298,
+      "slideAmount": 0,
+      "projection": 0,
+      "glassIndex": 138,
+      "speakerFrames": 4,
+      "sounds": {
+        "available": [
+          "mousedown2",
+          "mouseover",
+          "swishin",
+          "swishlock",
+          "swishout"
+        ],
+        "decoded": 2,
+        "played": 2,
+        "paused": false,
+        "error": ""
+      }
+    },
+    "campaign": {
+      "history": [],
+      "missing": [],
+      "briefIndex": 2,
+      "briefPhase": "ready",
+      "playing": true,
+      "actionIndex": 9,
+      "transmission": {
+        "position": 10019.410430839001,
+        "remaining": 20404.489795918365,
+        "fallback": false
+      },
+      "voice": {
+        "ready": true,
+        "failed": false,
+        "duration": 30423.900226757367,
+        "position": 10019.410430839001
+      },
+      "slots": [
+        -1,
+        -1,
+        -1,
+        106
+      ],
+      "messages": [],
+      "status": "0\t16\t1\t0\t0\t0",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 3,
+      "allocatedMissionBytes": 2158478
+    },
+    "portraits": {
+      "draws": 483,
+      "paused": false,
+      "cacheBytes": 1344000,
+      "pending": 0,
+      "error": "",
+      "surfaces": [
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": false,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "portrait/UDuke\\UDuFid00.smk",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        },
+        {
+          "unit": 106,
+          "talking": true,
+          "file": "portrait/TAdvisor\\TAdTlk00.smk",
+          "frame": 8,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        }
+      ]
+    }
+  },
+  "lastMengsk": {
+    "brief": {
+      "originalRoom": true,
+      "layout": "rez/glurdyt.bin",
+      "fonts": {
+        "small": true,
+        "large": true,
+        "button": true
+      },
+      "dialogueFont": "font14",
+      "lineHeight": 19,
+      "scrollOffset": 99.15248861995781,
+      "scrollDuration": 21245.850340136054,
+      "speechPosition": 19020.045351473924,
+      "manualScroll": false,
+      "animations": [
+        "glue/readyt/proloop.smk",
+        "glue/readyt/proj.smk",
+        "glue/readyt/start.smk"
+      ],
+      "active": true,
+      "suspended": false,
+      "phase": "ready",
+      "elapsed": 103085.80000000297,
+      "slideAmount": 0,
+      "projection": 0,
+      "glassIndex": 138,
+      "speakerFrames": 4,
+      "sounds": {
+        "available": [
+          "mousedown2",
+          "mouseover",
+          "swishin",
+          "swishlock",
+          "swishout"
+        ],
+        "decoded": 2,
+        "played": 2,
+        "paused": false,
+        "error": ""
+      }
+    },
+    "campaign": {
+      "history": [],
+      "missing": [],
+      "briefIndex": 4,
+      "briefPhase": "ready",
+      "playing": true,
+      "actionIndex": 13,
+      "transmission": {
+        "position": 19020.045351473924,
+        "remaining": 2225.80498866213,
+        "fallback": false
+      },
+      "voice": {
+        "ready": true,
+        "failed": false,
+        "duration": 21245.850340136054,
+        "position": 19020.045351473924
+      },
+      "slots": [
+        -1,
+        -1,
+        27,
+        106
+      ],
+      "messages": [],
+      "status": "0\t16\t1\t0\t0\t0",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 5,
+      "allocatedMissionBytes": 2158478
+    },
+    "portraits": {
+      "draws": 1668,
+      "paused": false,
+      "cacheBytes": 1881600,
+      "pending": 0,
+      "error": "",
+      "surfaces": [
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": false,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": -1,
+          "talking": false,
+          "file": "",
+          "frame": -1,
+          "frames": 0,
+          "visible": false,
+          "scanlines": true,
+          "width": 60,
+          "height": 56
+        },
+        {
+          "unit": 27,
+          "talking": true,
+          "file": "portrait/Umengsk\\UMeTlk00.smk",
+          "frame": 7,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        },
+        {
+          "unit": 106,
+          "talking": false,
+          "file": "portrait/TAdvisor\\TAdFid01.smk",
+          "frame": 0,
+          "frames": 10,
+          "visible": true,
+          "scanlines": true,
+          "width": 128,
+          "height": 118
+        }
+      ]
+    }
+  }
+}

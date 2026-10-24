@@ -1,0 +1,532 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -15559,6 +15559,12 @@
+ 
+ 		f->position = pos;
+ 		f->exact_position = to_xy_fp8(pos);
++		// The setter returns early for an unchanged target. Clear recycled
++		// targets first so repeated shots at one position initialize exactly
++		// like fresh slots recreated by a saved-game load.
++		f->move_target = {};
++		f->next_movement_waypoint = {};
++		f->next_target_waypoint = {};
+ 
+ 		set_flingy_move_target(f, pos);
+ 		set_next_target_waypoint(f, pos);
+@@ -18567,9 +18573,9 @@
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			return true;
+ 		case TechTypes::Feedback:
+-			if (!unit_is(u, UnitTypes::Protoss_Templar_Archives)) return false;
+-			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+-			return true;
++			// Feedback is innate. Its unused DAT research cost must not expose
++			// a research button at the Templar Archives.
++			return false;
+ 		case TechTypes::Maelstrom:
+ 			if (!unit_is(u, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -468,7 +468,7 @@
+ 		return r;
+ 	}
+ 
+-	bool unit_can_be_selected(const unit_t* u) const {
++	virtual bool unit_can_be_selected(const unit_t* u) const {
+ 		if (unit_is(u, UnitTypes::Terran_Nuclear_Missile)) return false;
+ 		if (unit_is(u, UnitTypes::Protoss_Scarab)) return false;
+ 		if (unit_is(u, UnitTypes::Spell_Disruption_Web)) return false;
+@@ -921,6 +921,10 @@
+ 	// BW hides units the moment they leave your vision. Your own units are always shown;
+ 	// persistent things you've explored are frozen (unit_frozen_by_fog), not hidden;
+ 	// everything else in fog vanishes. Governs rendering, selection, and sound.
++	bool unit_can_be_selected(const unit_t* u) const override {
++		return u->sprite && !unit_hidden_by_fog(u) && ui_util_functions::unit_can_be_selected(u);
++	}
++
+ 	bool unit_hidden_by_fog(const unit_t* u) const {
+         // HiddenGun is a physically retracted trap, not an ordinary cloaked
+         // building. Detection/shared vision must not show its raised artwork.
+@@ -928,7 +932,7 @@
+         if (unit_is_trap(u) && u->order_type->id==Orders::HiddenGun) return true;
+ 		if (fog_player < 0) return false;
+ 		if (u->owner == fog_player) return false;
+-        if (unit_is_trap(u) && unit_is_undetected(u, fog_player)) return true;
++        if (unit_is_undetected(u, fog_player)) return true;
+ 		if (u->sprite->visibility_flags & (1 << fog_player)) return false;
+ 		if (unit_persists_in_fog(u)) return !sprite_position_explored(u->sprite);
+ 		return true;
+@@ -938,6 +942,7 @@
+ 	// frame it had when last seen (BW's fog-sprite snapshot).
+ 	bool unit_frozen_by_fog(const unit_t* u) const {
+ 		if (fog_player < 0 || u->owner == fog_player) return false;
++		if (unit_is_undetected(u, fog_player)) return false;
+ 		if (u->sprite->visibility_flags & (1 << fog_player)) return false;
+ 		return unit_persists_in_fog(u) && sprite_position_explored(u->sprite);
+ 	}
+@@ -1439,6 +1444,16 @@
+ 		}
+ 	}
+ 
++    // CHK MASK contains terrain the player already knows at mission start.
++    // Seed only its existing structures/resources. Later construction in fog
++    // must still wait to be seen, and mobile units need current vision.
++    void seed_explored_structures() {
++        if(fog_player<0)return;
++        for(int p=0;p<12;++p)for(auto* u:ptr(st.player_units[p]))
++            if(u->sprite && unit_persists_in_fog(u) && !unit_is_undetected(u,fog_player)
++                && sprite_position_explored(u->sprite))snapshot_fog_sprite(u->sprite);
++    }
++
+ 	// Draw the frozen snapshot of a fogged structure/resource. Something at an explored
+ 	// spot we never actually saw (built in fog) has no snapshot and stays hidden. The
+ 	// structure doesn't move, so the live sprite's position still places the copy.
+@@ -1487,7 +1502,10 @@
+ 
+ 		for (size_t i = 0; i != 12; ++i)
+ 			for (unit_t* u : ptr(st.player_units[i])) {
+-				if (unit_hidden_by_fog(u)) fog_hidden_sprite.at(u->sprite->index) = 1;
++				if (unit_hidden_by_fog(u)) {
++					fog_hidden_sprite.at(u->sprite->index) = 1;
++					if(u->subunit)fog_hidden_sprite.at(u->subunit->sprite->index)=1;
++				}
+ 				else if (unit_frozen_by_fog(u)) fog_frozen_sprite.at(u->sprite->index) = 1;
+ 				else if (fog_player >= 0 && u->owner != fog_player && unit_persists_in_fog(u)) snapshot_fog_sprite(u->sprite);
+ 			}
+@@ -1505,6 +1523,7 @@
+ 		for (size_t i = 0; i != 12; ++i)
+ 			for (unit_t* u : ptr(st.player_units[i])) {
+ 				fog_hidden_sprite.at(u->sprite->index) = 0;
++				if(u->subunit)fog_hidden_sprite.at(u->subunit->sprite->index)=0;
+ 				fog_frozen_sprite.at(u->sprite->index) = 0;
+ 			}
+ 
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -290,7 +290,7 @@
+ 	               C_FIGHTER,                 // Carrier interceptor / Reaver scarab
+ 	               C_ARCHON, C_DARCHON,       // High / Dark Templar merges
+ 	               C_SPELL,                   // a targeted spellcaster ability
+-	               C_CANCEL, C_LOAD, C_NYDUS_VIEW };                // cancel a morph / addon / nuke (opcode in cmd.unit)
++	               C_CANCEL, C_LOAD, C_NYDUS_VIEW, C_RECHARGE };     // append: saved command IDs stay stable
+ 	struct cmd_t { char key; const char* label; cmd_act act; UnitTypes ut; bool enabled = false;
+ 	               TechTypes tech = TechTypes::None; UpgradeTypes upg = UpgradeTypes::None;
+ 	               uint16_t unit = 0;          // target unit id (C_UNLOAD)
+@@ -992,6 +992,7 @@
+ 		case C_NYDUS: return "Creates a connected Nydus Canal exit on creep.";
+ 		case C_UNLOAD: return "Unloads this passenger.";
+ 		case C_UNLOADALL: return "Unloads all passengers. Flying transports first ask for a landing location.";
++        case C_RECHARGE: return "Select a friendly unit to recharge its shields using this battery's energy.";
+         case C_LOAD: return "Select a friendly ground unit to load. Nydus Canals transfer eligible Zerg units directly to their linked exit.";
+         case C_NYDUS_VIEW: return "Centers the camera on the connected Nydus exit. Units leave it automatically.";
+ 		case C_RETURN: return "Returns carried resources to a nearby resource depot.";
+@@ -1165,6 +1166,20 @@
+ 	}
+ 
+ 	// The unit-specific part of the card (not the build submenu); returns the title.
++	bool selected_fighter_capacity(bool carrier) {
++		for (auto id : current_selection) if (auto* u = get_unit(id)) {
++			if (u->owner != my_player || !u_completed(u) || unit_is_disabled(u) || u_hallucination(u)) continue;
++			if (carrier ? unit_is_carrier(u) && unit_interceptor_count(u) + unit_queued_fighter_units(u) < unit_max_interceptor_count(u)
++			            : unit_is_reaver(u) && unit_scarab_count(u) + unit_queued_fighter_units(u) < unit_max_scarab_count(u)) return true;
++		}
++		return false;
++	}
++	bool selected_merge_pair(UnitTypes type, TechTypes tech) {
++		int count = 0;
++		for (auto id : current_selection) if (auto* u = get_unit(id))
++			if (unit_is(u, type) && unit_can_use_tech(u, get_tech_type(tech), my_player) && !unit_dying(u) && ++count >= 2) return true;
++		return false;
++	}
+ 	const char* card_for_unit(unit_t* u, UnitTypes id) {
+ 		using U = UnitTypes;
+         if (archon_merging(u)) return unit_name(id);
+@@ -1241,13 +1256,15 @@
+                 unit_can_use_tech(u, cloak, my_player), cloak->id});
+         }
+         // Count finished, deployed and queued ammunition against the DAT capacity.
+-        if (unit_is_carrier(u) && unit_interceptor_count(u) + unit_queued_fighter_units(u) < unit_max_interceptor_count(u))
++        if (unit_is_carrier(u) && selected_fighter_capacity(true))
+             card.push_back({pick_key("Interceptor"), "Build Interceptor", C_FIGHTER, U::Protoss_Interceptor});
+-        else if (unit_is_reaver(u) && unit_scarab_count(u) + unit_queued_fighter_units(u) < unit_max_scarab_count(u))
++        else if (unit_is_reaver(u) && selected_fighter_capacity(false))
+             card.push_back({'r', "Build Scarab", C_FIGHTER, U::Protoss_Scarab});
+ 		// Two templar merge into an archon. Both merges are 'r' in BW (on separate unit cards).
+ 		if (id == U::Protoss_High_Templar) card.push_back({'r', "Merge Archon", C_ARCHON, U::Protoss_Archon});
+ 		else if (id == U::Protoss_Dark_Templar) card.push_back({'r', "Dark Archon", C_DARCHON, U::Protoss_Dark_Archon});
++		if (id == U::Protoss_Shield_Battery && u_completed(u))
++			card.push_back({'b', "Recharge Shields", C_RECHARGE, U::None, !unit_is_disabled(u)});
+ 		// Targeted spellcaster abilities: visible when the scenario permits the tech,
+ 		// grayed until researched; low energy leaves the icon active. The canonical key falls back to auto-assign on a collision.
+ 		size_t nsp; const spell_t* sp = spells(nsp);
+@@ -1290,11 +1307,11 @@
+         // onto a second command-card page when the transport fills up.
+         if (u_completed(u) && (unit_provides_space(u) || id == U::Zerg_Overlord)) {
+             bool available=unit_provides_space(u);
+-            card.push_back({'l', "Load", C_LOAD, U::None, available && unit_space_left(u)>0});
+-            card.push_back({'u', "Unload", C_UNLOADALL, U::None, available && !loaded_units(u).empty()});
++            if (available && !unit_is_disabled(u) && unit_space_left(u)>0) card.push_back({'l', "Load", C_LOAD, U::None});
++            if (available && !unit_is_disabled(u) && !loaded_units(u).empty()) card.push_back({'u', "Unload", C_UNLOADALL, U::None});
+         }
+         if (id==U::Zerg_Nydus_Canal && u_completed(u) && u->building.nydus.exit) {
+-            card.push_back({'l', "Load", C_LOAD, U::None, u_completed(u->building.nydus.exit)});
++            if (u_completed(u->building.nydus.exit) && !unit_is_disabled(u)) card.push_back({'l', "Load", C_LOAD, U::None});
+             card.push_back({'u', "View Exit", C_NYDUS_VIEW, U::None, true});
+         }
+ 		return unit_name(id);
+@@ -1343,6 +1360,9 @@
+ 			switch (c.act) {
+ 			case C_STIM:  c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Stim_Packs), my_player); break;
+ 			case C_SIEGE: c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Tank_Siege_Mode), my_player); break;
++			case C_ARCHON: c.enabled = selected_merge_pair(UnitTypes::Protoss_High_Templar, TechTypes::Archon_Warp); break;
++			case C_DARCHON: c.enabled = selected_merge_pair(UnitTypes::Protoss_Dark_Templar, TechTypes::Dark_Archon_Meld); break;
++			case C_RECHARGE: break;
+ 			case C_BUILD: case C_TRAIN: case C_MORPH: case C_MORPHBLDG:
+ 			case C_UPGRADE: case C_RESEARCH: case C_SPELL: case C_CLOAK: case C_BURROW: case C_LIFT: case C_LOAD: case C_UNLOADALL: break;   // enabled already set
+ 			default:      c.enabled = true;
+@@ -1421,6 +1441,7 @@
+ 			else if (c.tech != TechTypes::None) command_icon = get_tech_type(c.tech)->icon;
+ 			else if (c.act == C_CLOAK) command_icon = get_tech_type(unit_is_wraith(sel) ? TechTypes::Cloaking_Field : TechTypes::Personnel_Cloaking)->icon;
+ 			else if (c.act == C_DECLOAK) command_icon = get_tech_type(unit_is_wraith(sel) ? TechTypes::Cloaking_Field : TechTypes::Personnel_Cloaking)->icon + 1;
++			else if (c.act == C_RECHARGE) command_icon = 308; // cmdicons.grp: Recharge Shields (0x134).
+ 			card_text += '\t'; card_text += format("%d",command_icon).c_str();
+ 			// Stable data IDs let the host retain empty command slots after research.
+ 			card_text += format("\t%d\t%d", c.act == C_UPGRADE ? int(c.upg) : -1,
+@@ -2075,6 +2096,9 @@
+ 		for (auto& c : card) {
+ 			if (c.key != key) continue;
+ 			if (!c.enabled) return true;
++            if (c.act == C_RECHARGE && primary_selected() && primary_selected()->energy < 1_fp8) {
++                raise_error(E_ENERGY); return true;
++            }
+             if ((c.act == C_SPELL || c.act == C_CLOAK) && c.tech != TechTypes::None) {
+                 auto* caster=primary_selected();
+                 if (caster && caster->energy < fp8::integer(get_tech_type(c.tech)->energy_cost)) {
+@@ -2129,6 +2153,9 @@
+                 else start_target(T_UNLOAD);
+                 break;
+             case C_LOAD: start_target(T_LOAD); break;
++            case C_RECHARGE:
++                pending_spell_order = Orders::RechargeShieldsBattery; pending_spell_unit = true;
++                start_target(T_SPELL); break;
+             case C_NYDUS_VIEW:
+                 if (auto* canal=primary_selected(); canal && unit_is_nydus(canal) && canal->building.nydus.exit) {
+                     screen_pos=canal->building.nydus.exit->sprite->position-xy(view_width/2,view_height/2);clamp_viewport();
+@@ -2255,7 +2282,7 @@
+ 	}
+ 
+ 	void place_pending(int mx, int my) {
+-		if (!placement_valid(mx,my)) return;
++		if (!placement_valid(mx,my)) { if (pending_build) raise_placement_error(placement_error(mx,my)); return; }
+ 		int tx, ty;
+ 		placement_tile(screen_to_map(mx, my), tx, ty);   // tile of pending_build (the parent, for an addon)
+ 		if (pending_addon) {
+@@ -2284,6 +2311,35 @@
+             play_unit_ack(u,u->unit_type->first_yes_sound,u->unit_type->last_yes_sound);
+ 		clear_pending();   // one-shot; re-open the menu to place another
+ 	}
++
++    int placement_error(int mx, int my) {
++        if (!pending_build) return 855;
++        auto* builder = primary_selected(); int tx, ty;
++        placement_tile(screen_to_map(mx,my),tx,ty);
++        int w=pending_build->placement_size.x/32,h=pending_build->placement_size.y/32;
++        if(tx<0||ty<0||tx+w>int(game_st.map_tile_width)||ty+h>int(game_st.map_tile_height))return 853;
++        xy center(tx*32+pending_build->placement_size.x/2,ty*32+pending_build->placement_size.y/2);
++        for(int y=ty;y<ty+h;++y)for(int x=tx;x<tx+w;++x)
++            if(st.tiles[y*game_st.map_tile_width+x].explored&(1<<my_player))return 856;
++        if(ut_requires_psionic_matrix(pending_build)&&!is_in_psionic_matrix(my_player,center))return 860;
++        if(ut_requires_creep(pending_build)||pending_nydus)
++            for(int y=ty;y<ty+h;++y)for(int x=tx;x<tx+w;++x)
++                if(!(st.tiles[y*game_st.map_tile_width+x].flags&tile_t::flag_has_creep))return 859;
++        if(unit_is_refinery(pending_build)&&!get_building_at_center_position(center,get_unit_type(UnitTypes::Resource_Vespene_Geyser)))return 858;
++        if(builder&&!u_flying(builder)&&!u_grounded_building(builder)&&!is_reachable(builder,xy(tx*32,ty*32)))return 861;
++        if(ut_resource_depot(pending_build))
++            for(auto* n:find_units_noexpand({xy((tx-3)*32,(ty-3)*32),xy((tx+w+3)*32,(ty+h+3)*32)}))
++                if(ut_resource(n))return 851;
++        return pending_land?862:855;
++    }
++    void raise_placement_error(int index) {
++        error_text=stat_name(index);++error_seq;
++        // Original worker placement sounds: Drone, SCV, Probe; the psi
++        // warning has the Probe's separate error sound.
++        int race=int(primary_selected()?unit_race(primary_selected()):my_race);
++        int sound=index==860?164:index==859?137:race==0?137:race==1?159:161;
++        play_sound(sound,xy(),nullptr,false);
++    }
+ 
+ 	// Precompute the two tint tables (built once): each maps a source palette
+ 	// index to a dimmed, colour-washed nearest palette index — green for a
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -171,6 +171,7 @@
+ 
+     if(original_ai_slot>=0) {
+         g_campaign->melee_ai=true;
++        g_campaign->melee_ai_level=std::max(0,std::min(2,g_terran_ai_level));
+         g_ui->st.players[original_ai_slot].controller=player_t::controller_computer_game;
+         const uint32_t scripts[]={0x784f4c54u,0x78454d54u,0x78494854u}; // TLOx / TMEx / THIx, original Brood War scripts.
+         g_campaign->ai_start(original_ai_slot,scripts[std::max(0,std::min(2,g_terran_ai_level))],0);
+@@ -180,6 +181,7 @@
+ 	g_ui->wnd.create("OpenBW Web", 0, 0, width, height);
+ 	g_ui->resize(width, height);
+ 	g_ui->set_image_data();
++	if (campaign) g_ui->seed_explored_structures();
+ 	xy start = g_ui->game_st.start_locations[my_slot];
+ 	g_ui->screen_pos = start - xy(width / 2, height / 2);
+ 
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -27,6 +27,7 @@
+     };
+     struct defence_alert { unit_id source, victim; int wake=0, until=0; };
+     std::array<defence_alert,8> defence_alerts{};
++    int melee_ai_level=2; // Game setup preference, like melee_ai; no additional save state.
+     bool melee_ai=false; // Derived from game setup; survives restore on this instance.
+     bool base_defence_enabled=true; // User difficulty preference; not an objective/trigger rule.
+     std::array<town,8> towns;
+@@ -100,7 +101,7 @@
+     bool ai_type(unit_t* u,int type) {
+         int actual=int(u->unit_type->id);
+         // A morphed Zerg depot/spire also satisfies its prerequisite building.
+-        return actual==type || (type==131 && (actual==132 || actual==133)) || (type==132 && actual==133) || (type==141 && actual==137);
++        return actual==type || (type==5 && actual==30) || (type==131 && (actual==132 || actual==133)) || (type==132 && actual==133) || (type==141 && actual==137);
+     }
+     int ai_count(int owner,int type,bool complete=false,bool home=false) {
+         if (type<0 || type>=228) return 0;
+@@ -251,7 +252,141 @@
+         auto o=u->order_type->id;
+         return o==Orders::PlayerGuard || o==Orders::Guard || o==Orders::ComputerAI || o==Orders::Stop || o==Orders::Nothing;
+     }
++    a_vector<unit_t*> ai_depots(int owner) {
++        a_vector<unit_t*> out;
++        for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&u_completed(u)&&u_grounded_building(u)&&ut_resource_depot(u))out.push_back(u);
++        return out;
++    }
++    bool ai_busy_worker(unit_t* u) {
++        return unit_dying(u)||!ut_worker(u)||!u_completed(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)
++            ||!u->build_queue.empty()||u->current_build_unit||u->order_type->id==Orders::ConstructingBuilding;
++    }
++    void ai_mine_melee(int owner) {
++        auto depots=ai_depots(owner);if(depots.empty())return;
++        a_vector<unit_t*> resources; a_unordered_map<unit_t*,int> assigned;
++        for(int p:{owner,11})for(auto* r:ptr(st.player_units[p])) {
++            bool mineral=unit_is_mineral_field(r),gas=unit_is_refinery(r)&&r->owner==owner;
++            if(!mineral&&!gas)continue;
++            if(unit_dying(r)||!u_completed(r)||r->building.resource.resource_count<=0)continue;
++            for(auto* base:depots)if(xy_length(base->position-r->position)<384){resources.push_back(r);break;}
++        }
++        for(auto* u:ptr(st.player_units[owner]))if(ut_worker(u)&&!unit_dying(u)&&u->worker.gather_target)++assigned[u->worker.gather_target];
++        action_functions af(st,ai_actions);
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(ut_worker(u)&&ai_idle(u)&&!u->build_queue.empty())cancel_build_queue(u);
++            if(ai_busy_worker(u))continue;
++            if(u->worker.resources_carried) {
++                if(ai_idle(u)){af.action_select(owner,u);af.action_return_cargo(owner,false);}
++                continue;
++            }
++            auto* current=u->worker.gather_target;
++            bool valid=current&&std::find(resources.begin(),resources.end(),current)!=resources.end();
++            unit_t* best=nullptr;int score=0x7fffffff;
++            for(auto* r:resources) {
++                int count=assigned[r]-(r==current?1:0);
++                if(unit_is_refinery(r)&&count>=3)continue;
++                if(!is_reachable(u,r->position))continue;
++                int value=xy_length(u->position-r->position)+count*160;
++                if(unit_is_refinery(r))value-=1200; // Three workers per active refinery.
++                if(value<score){score=value;best=r;}
++            }
++            // Leave scouts, builders and player-independent scripted movement alone.
++            bool harvest=u->order_type->id>=Orders::MoveToGas&&u->order_type->id<=Orders::ReturnMinerals;
++            bool redistribute=harvest&&valid&&best&&best!=current&&ai_clock%240==0
++                &&(unit_is_refinery(best)||assigned[current]>3||xy_length(u->position-current->position)>900);
++            if(!ai_idle(u)&&!(harvest&&!valid)&&!redistribute)continue;
++            if(best && (best!=current || ai_idle(u))) {
++                if(current)--assigned[current];++assigned[best];
++                af.action_select(owner,u);af.action_default_order(owner,best->position,best,nullptr,false);++towns[owner].orders;
++            }
++        }
++    }
++    bool ai_expand(int owner) {
++        if(ai_clock%240)return false;
++        auto depots=ai_depots(owner);if(depots.empty()||ai_count(owner,106)>int(depots.size()))return false;
++        int remaining=0;
++        for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r))
++            for(auto* base:depots)if(xy_length(base->position-r->position)<384){remaining+=r->building.resource.resource_count;break;}
++        int desired=1+(ai_clock>10000+(2-melee_ai_level)*4000)+(ai_clock>26000+(2-melee_ai_level)*6000);
++        if(int(depots.size())>=desired&&remaining>4000)return false;
++        if(depots.size()>=4||st.current_minerals[owner]<400)return false;
++        const auto* cc=get_unit_type(UnitTypes::Terran_Command_Center);
++        a_vector<unit_t*> workers;
++        for(auto* u:ptr(st.player_units[owner]))if(!ai_busy_worker(u)&&!u->worker.resources_carried)workers.push_back(u);
++        if(workers.empty())return false;
++        a_vector<xy> clusters;
++        for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r)&&r->building.resource.resource_count>0){
++            bool near=false;for(auto p:clusters)if(xy_length(p-r->position)<400)near=true;
++            for(auto* base:depots)if(xy_length(base->position-r->position)<750)near=true;
++            for(int p=0;p<8;++p)if(p!=owner&&!st.alliances[owner][p])
++                for(auto* enemy:ptr(st.player_units[p]))if(ut_resource_depot(enemy)&&!unit_dying(enemy)&&xy_length(enemy->position-r->position)<800)near=true;
++            if(!near)clusters.push_back(r->position);
++        }
++        std::stable_sort(clusters.begin(),clusters.end(),[&](xy a,xy b){return xy_length(a-towns[owner].center)<xy_length(b-towns[owner].center);});
++        // Retry another resource group after a bounded scouting interval.
++        // Terrain connectivity alone does not guarantee a usable route through
++        // occupied choke points, so one failed approach must not stall the AI.
++        if(!clusters.empty())std::rotate(clusters.begin(),clusters.begin()+(ai_clock/6000)%clusters.size(),clusters.end());
++        for(auto p:clusters)for(int radius=4;radius<=11;++radius)for(int dy=-radius;dy<=radius;++dy)for(int dx=-radius;dx<=radius;++dx){
++            if(std::abs(dx)!=radius&&std::abs(dy)!=radius)continue;
++            xy pos=xy((p.x/32+dx)*32,(p.y/32+dy)*32)+cc->placement_size/2;
++            unit_t* worker=nullptr;int distance=0x7fffffff;
++            for(auto* u:workers) {
++                int d=xy_length(u->position-pos);
++                // Continue the existing scout rather than allocating a new SCV
++                // on each manager tick or restarting its path around terrain.
++                if(u->order_type->id==Orders::Move)d-=100000;
++                if(d<distance&&can_place_building(u,owner,cc,pos,false,true,true)){distance=d;worker=u;}
++            }
++            if(!worker)continue;
++            action_functions af(st,ai_actions);af.action_select(owner,worker);
++            if(can_place_building(worker,owner,cc,pos,false,false)){
++                xy tile=(pos-cc->placement_size/2)/32;
++                if(af.action_build(owner,get_order_type(kit_for(race_t::terran).build_order),cc,{size_t(tile.x),size_t(tile.y)})){++towns[owner].built;return true;}
++            }else if(worker->order_type->id!=Orders::Move||worker->order_target.pos!=pos)
++                af.action_order(owner,get_order_type(Orders::Move),pos,nullptr,nullptr,false);
++            return false;
++        }
++        return false;
++    }
++    void ai_support(int owner) {
++        action_functions af(st,ai_actions);
++        for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&u_completed(u)&&(unit_is(u,UnitTypes::Terran_Medic)||unit_is(u,UnitTypes::Terran_Science_Vessel))){
++            if(!ai_idle(u))continue;
++            unit_t* escort=nullptr;int distance=0x7fffffff;
++            for(auto id:towns[owner].attackers)if(auto* other=get_unit(id)){
++                if(unit_dying(other)||!other->unit_type->ground_weapon)continue;
++                int d=xy_length(u->position-other->position);if(d<distance){distance=d;escort=other;}
++            }
++            if(escort){af.action_select(owner,u);af.action_order(owner,get_order_type(unit_is(u,UnitTypes::Terran_Medic)?Orders::HealMove:Orders::Follow),escort->position,escort,nullptr,false);}
++        }
++    }
++    void ai_resume_construction(int owner) {
++        if(ai_clock%240)return;
++        action_functions af(st,ai_actions);
++        // A queued placement has not spent resources and must not block all
++        // future supply if its SCV cannot reach the site. Retry local work;
++        // long-distance Command Center construction keeps its own scout route.
++        if(ai_clock%2400==0)for(auto* u:ptr(st.player_units[owner]))
++            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::PlaceBuilding
++                &&!u->current_build_unit&&!u->build_queue.empty()
++                &&u->build_queue.front()->id!=UnitTypes::Terran_Command_Center
++                &&xy_length(u->position-u->order_target.pos)>160) {
++                cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});
++            }
++        for(auto* b:ptr(st.player_units[owner]))if(ut_building(b)&&!ut_addon(b)&&!unit_dying(b)&&!u_completed(b)) {
++            bool staffed=false;
++            for(auto* u:ptr(st.player_units[owner]))if(ut_worker(u)&&!unit_dying(u)&&u->current_build_unit==b)staffed=true;
++            if(staffed)continue;
++            unit_t* worker=nullptr;int distance=0x7fffffff;
++            for(auto* u:ptr(st.player_units[owner]))if(!ai_busy_worker(u)&&is_reachable(u,b->position)) {
++                int d=xy_length(u->position-b->position);if(d<distance){distance=d;worker=u;}
++            }
++            if(worker){af.action_select(owner,worker);af.action_default_order(owner,b->position,b,nullptr,false);return;}
++        }
++    }
+     void ai_mine(int owner) {
++        if(melee_ai&&st.players[owner].race==race_t::terran){ai_mine_melee(owner);return;}
+         auto& a=towns[owner]; action_functions af(st,ai_actions);
+         unit_t* gas=nullptr; a_vector<unit_t*> minerals;
+         for(auto* u:ptr(st.player_units[owner])) if(!unit_dying(u)&&u_completed(u)&&(unit_is(u,UnitTypes::Zerg_Extractor)||unit_is(u,UnitTypes::Terran_Refinery)||unit_is(u,UnitTypes::Protoss_Assimilator))) {gas=u;break;}
+@@ -296,18 +431,25 @@
+                 if(unit_is_zerg_building(u)&&af.action_morph_building(owner,ut)){++a.built;return true;}
+             } else {
+                 if(u->current_build_unit || u->order_type->id==Orders::ConstructingBuilding)continue;
++                if(melee_ai&&u->order_type->id==Orders::Move)continue; // Expansion scout owns this order.
+                 auto* order=get_order_type(kit_for(st.players[owner].race).build_order);
+                 xy start=a.center;
+                 if(type==149||type==110||type==157) {
+                     unit_t* geyser=nullptr;int distance=0x7fffffff;
+-                    for(auto* g:ptr(st.player_units[11]))if(unit_is(g,UnitTypes::Resource_Vespene_Geyser)){int d=xy_length(g->sprite->position-start);if(d<distance){distance=d;geyser=g;}}
++                    for(auto* g:ptr(st.player_units[11]))if(unit_is(g,UnitTypes::Resource_Vespene_Geyser)){int d=xy_length(g->sprite->position-start);if(melee_ai){d=0x7fffffff;for(auto* base:ai_depots(owner))d=std::min(d,xy_length(g->position-base->position));}if(d<distance){distance=d;geyser=g;}}
+                     if(!geyser||distance>800)return false;start=geyser->sprite->position-ut->placement_size/2;
+                     if(can_place_building(u,owner,ut,start+ut->placement_size/2,false,false)){af.action_build(owner,order,ut,{size_t(start.x/32),size_t(start.y/32)});++a.built;return true;}
+-                } else for(int r=2;r<=(melee_ai?24:12);++r)for(int dy=-r;dy<=r;++dy)for(int dx=-r;dx<=r;++dx) {
++                } else {
++                  a_vector<xy> centers{a.center};
++                  if(melee_ai){centers.clear();for(auto* base:ai_depots(owner))centers.push_back(base->position);
++                    std::stable_sort(centers.begin(),centers.end(),[&](xy l,xy r){return xy_length(u->position-l)<xy_length(u->position-r);});}
++                  for(auto center:centers)for(int r=2;r<=(melee_ai?14:12);++r)for(int dy=-r;dy<=r;++dy)for(int dx=-r;dx<=r;++dx) {
++                    start=center;
+                     if(std::abs(dx)!=r && std::abs(dy)!=r)continue;
+                     int tx=start.x/32+dx,ty=start.y/32+dy;
+                     if(tx<0||ty<0||tx+ut->placement_size.x/32>int(game_st.map_tile_width)||ty+ut->placement_size.y/32>int(game_st.map_tile_height))continue;
+                     xy pos=xy(tx*32,ty*32)+ut->placement_size/2;
++                    if(melee_ai&&!can_place_building(u,owner,ut,pos,false,false))continue;
+                     if(melee_ai) {
+                         // Reserve both the footprint and add-on pad, including
+                         // SCV orders whose buildings have not appeared yet.
+@@ -322,7 +464,7 @@
+                             }
+                             return area;
+                         };
+-                        rect area=reserved(ut,pos);area.from-=xy(16,16);area.to+=xy(16,16);
++                        rect area=reserved(ut,pos);area.from-=xy(32,32);area.to+=xy(32,32);
+                         bool crowded=false;
+                         auto overlaps=[&](rect other){return area.from.x<other.to.x&&area.to.x>other.from.x&&area.from.y<other.to.y&&area.to.y>other.from.y;};
+                         for(auto* other:find_units(area))if(!unit_dying(other)&&ut_building(other)&&overlaps(reserved(other->unit_type,other->position)))crowded=true;
+@@ -330,6 +472,15 @@
+                             if(u_grounded_building(other)&&overlaps(reserved(other->unit_type,other->position)))crowded=true;
+                             if(ut_worker(other)&&!other->current_build_unit&&!other->build_queue.empty()&&ut_building(other->build_queue.front())
+                                 && overlaps(reserved(other->build_queue.front(),other->order_target.pos)))crowded=true;
++                        }
++                        // Keep mineral/gas approaches open. A narrow legal
++                        // footprint gap is not necessarily passable by an SCV.
++                        if(!crowded)for(auto* base:ai_depots(owner))for(int p:{owner,11})for(auto* resource:ptr(st.player_units[p])) {
++                            if(!(unit_is_mineral_field(resource)||unit_is_refinery(resource)||unit_is(resource,UnitTypes::Resource_Vespene_Geyser)))continue;
++                            if(xy_length(base->position-resource->position)>384)continue;
++                            xy delta=resource->position-base->position;int steps=std::max(1,xy_length(delta)/16);
++                            for(int k=1;k<=steps;++k){xy point=base->position+xy(delta.x*k/steps,delta.y*k/steps);
++                                if(point.x>area.from.x&&point.x<area.to.x&&point.y>area.from.y&&point.y<area.to.y){crowded=true;break;}}
+                         }
+                         if(crowded)continue;
+                         int addon=type==106?107:type==113?120:type==114?115:type==116?117:-1;
+@@ -340,6 +491,7 @@
+                         }
+                     }
+                     if(can_place_building(u,owner,ut,pos,false,false)){af.action_build(owner,order,ut,{size_t(tx),size_t(ty)});++a.built;return true;}
++                  }
+                 }
+             }
+         }
+@@ -395,15 +547,29 @@
+         if(melee_ai && st.players[owner].race==race_t::terran) {
+             // Campaign scripts start with an established economy. A melee start
+             // has four SCVs, so maintain a working mineral/gas line as it grows.
+-            ai_request(req,7,16,80);
++            int bases=int(ai_depots(owner).size());
++            ai_request(req,7,std::min(48,20*bases),80);
++            // The imported campaign scripts assume a prebuilt base and omit
++            // some Brood War support. Grow a melee roster at real tech/cost gates.
++            if(ai_clock>2400)ai_request(req,34,2,86);
++            int techTime=6500+(2-melee_ai_level)*3500;
++            if(ai_clock>techTime){ai_request(req,9,1,88);ai_request(req,1,2,87);}
++            if(ai_clock>techTime+4500)ai_request(req,12,melee_ai_level==2?2:1,89);
+             ai_melee_prerequisites(req);
++            if(bases>1)ai_request(req,110,bases,94);
++            ai_expand(owner);ai_support(owner);ai_resume_construction(owner);
+         }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
+         int accepted=0;
+         for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type))))<r.amount) {
+-            if(ai_produce(owner,r.type) && ++accepted>=2)break;
++            const auto* target=get_unit_type(UnitTypes(r.type));
++            bool reserve=false;
++            if(melee_ai&&r.priority>=86&&!ut_building(target)&&!ut_worker(target))
++                for(auto* producer:ptr(st.player_units[owner]))if(!unit_dying(producer)&&producer->build_queue.empty()&&unit_can_build(producer,target))reserve=true;
++            if(ai_produce(owner,r.type)){if(++accepted>=2)break;}
++            else if(reserve&&!has_available_resources_for(owner,target))break;
+         }
+         action_functions af(st,ai_actions);
+         for(auto r:a.techs)if(!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}

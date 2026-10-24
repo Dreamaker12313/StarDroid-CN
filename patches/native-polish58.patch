@@ -1,0 +1,586 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -129,6 +129,28 @@
+ 	std::array<a_vector<uint8_t>, 8> tileset_cv5;
+ };
+ 
++// Optional skirmish rules. Campaign DAT values are left untouched.
++struct hero_entry { int id, base, race, minerals, gas, supply2, tech1, tech2; };
++inline const std::array<hero_entry,18>& hero_roster() {
++    static const std::array<hero_entry,18> rows{{
++        {20,0,1,100,0,2,111,-1},{19,2,1,100,0,4,113,-1},
++        {16,1,1,50,150,2,112,117},{28,12,1,465,350,12,115,118},
++        {23,5,1,225,150,4,113,120},{99,1,1,40,125,2,112,117},
++        {104,1,0,40,125,2,132,135},{51,1,0,100,300,2,133,138},
++        {53,38,0,100,35,2,135,-1},{48,39,0,335,335,8,140,-1},
++        {54,37,0,50,0,1,142,-1},{55,43,0,135,135,4,141,-1},
++        {77,65,2,165,0,4,160,-1},{78,66,2,250,100,4,160,164},
++        {75,61,2,290,235,4,160,165},{79,67,2,65,200,4,160,165},
++        {82,72,2,465,335,12,167,169},{88,70,2,415,190,6,167,-1}
++    }};return rows;
++}
++inline const hero_entry* hero_definition(UnitTypes type) {
++    int id=int(type);if(id==25)id=23;
++    for(const auto& h:hero_roster())if(h.id==id)return &h;
++    return nullptr;
++}
++inline UnitTypes hero_producer(int race) { return UnitTypes(race==0?139:race==1?122:166); }
++
+ struct game_state {
+ 
+ 	game_state() = default;
+@@ -167,6 +189,8 @@
+ 	a_vector<vf4_entry> vf4;
+ 	a_vector<uint16_t> mega_tile_flags;
+ 
++	bool hero_mode = false;
++    bool team_game = false;
+ 	unit_types_t unit_types;
+ 	weapon_types_t weapon_types;
+ 	upgrade_types_t upgrade_types;
+@@ -7258,7 +7282,9 @@
+ 		int d = xy_length(u->sprite->position - target->sprite->position);
+ 		if (d <= (is_dark_archon ? 20 : 2)) {
+ 			merge_status_effects(u, target);
+-			morph_unit(u, get_unit_type(is_dark_archon ? UnitTypes::Protoss_Dark_Archon : UnitTypes::Protoss_Archon));
++            bool heroic=!is_dark_archon&&hero_merge_pair(u,target);
++			morph_unit(u, get_unit_type(heroic ? UnitTypes::Hero_Tassadar_Zeratul_Archon : is_dark_archon ? UnitTypes::Protoss_Dark_Archon : UnitTypes::Protoss_Archon));
++            if(heroic)decloak_unit(u);
+ 			if (is_dark_archon) decloak_unit(u);
+ 			u->sprite->flags &= ~sprite_t::flag_iscript_nobrk;
+ 			sprite_run_anim(u->sprite, iscript_anims::SpecialState1);
+@@ -8372,7 +8398,7 @@
+ 
+ 	void secondary_order_Train(unit_t* u) {
+ 		if (unit_is_disabled(u)) return;
+-		if (unit_race(u) == race_t::zerg && !unit_is(u, UnitTypes::Zerg_Infested_Command_Center)) return;
++		if (unit_race(u) == race_t::zerg && !unit_is(u, UnitTypes::Zerg_Infested_Command_Center) && !(game_st.hero_mode && unit_is(u,UnitTypes::Zerg_Evolution_Chamber))) return;
+ 		if (u->secondary_order_state == 0 || u->secondary_order_state == 1) {
+ 			if (u->build_queue.empty()) {
+ 				set_secondary_order(u, get_order_type(Orders::Nothing));
+@@ -17614,6 +17640,36 @@
+ 		return false;
+ 	}
+ 
++    bool hero_reserved(int owner, UnitTypes type) const {
++        const auto* h=hero_definition(type);if(!h)return false;
++        for(auto* other:ptr(st.player_units[owner])) {
++            if(unit_dying(other)||u_hallucination(other)||ut_turret(other))continue;
++            const auto* existing=hero_definition(other->unit_type->id);
++            if(existing&&existing->id==h->id)return true;
++            if((h->id==75||h->id==79)&&unit_is(other,UnitTypes::Hero_Tassadar_Zeratul_Archon))return true;
++            for(auto* queued:other->build_queue)if(queued->id==UnitTypes(h->id))return true;
++        }
++        return false;
++    }
++    UnitTypes hero_missing_requirement(int owner,const hero_entry& h) const {
++        for(int id:{h.tech1,h.tech2})if(id>=0) {
++            auto type=UnitTypes(id);bool present=player_has_completed_unit(owner,type);
++            if(id==132)present=present||player_has_completed_unit(owner,UnitTypes::Zerg_Hive);
++            if(id==141)present=present||player_has_completed_unit(owner,UnitTypes::Zerg_Greater_Spire);
++            if(ut_addon(get_unit_type(type)))present=player_has_active_tech(owner,type);
++            if(!present)return type;
++        }
++        return UnitTypes::None;
++    }
++    bool hero_merge_ready(const unit_t* u) const {
++        return game_st.hero_mode && u && u->owner<8 && u_completed(u) && !unit_dying(u)
++            && !unit_is_disabled(u) && !u_hallucination(u) && !u_loaded(u) && !us_hidden(u)
++            && (unit_is(u,UnitTypes::Hero_Tassadar)||unit_is(u,UnitTypes::Hero_Zeratul));
++    }
++    bool hero_merge_pair(const unit_t* a,const unit_t* b) const {
++        return hero_merge_ready(a)&&hero_merge_ready(b)&&a->owner==b->owner&&a->unit_type!=b->unit_type;
++    }
++
+ 	bool unit_can_build(const unit_t* u, const unit_type_t* unit_type) const {
+         if (ut_addon(u) && !addon_is_attached(u)) return false;
+ 		if (!u_completed(u)) return false;
+@@ -17625,6 +17681,11 @@
+ 			if (u->build_queue.back()->id <= UnitTypes::Spell_Disruption_Web) return false;
+ 		}
+ 
++        if(game_st.hero_mode)if(const auto* h=hero_definition(unit_type->id)) {
++            if(int(unit_type->id)!=h->id || !unit_is(u,hero_producer(h->race)) || !u_grounded_building(u)
++                || unit_is_researching(u) || unit_is_upgrading(u) || hero_reserved(owner,unit_type->id))return false;
++            return hero_missing_requirement(owner,*h)==UnitTypes::None;
++        }
+ 		switch (unit_type->id) {
+ 		case UnitTypes::Terran_Marine:
+ 			if (!unit_is(u, UnitTypes::Terran_Barracks)) return false;
+@@ -17768,11 +17829,11 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Dragoon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Gateway)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_High_Templar:
+ 			if (!unit_is(u, UnitTypes::Protoss_Gateway)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Shuttle:
+ 			if (!unit_is(u, UnitTypes::Protoss_Robotics_Facility)) return false;
+@@ -17782,11 +17843,11 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Arbiter:
+ 			if (!unit_is(u, UnitTypes::Protoss_Stargate)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Arbiter_Tribunal)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Arbiter_Tribunal)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Carrier:
+ 			if (!unit_is(u, UnitTypes::Protoss_Stargate)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Interceptor:
+ 			if (!unit_is_carrier(u)) return false;
+@@ -17794,7 +17855,7 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Reaver:
+ 			if (!unit_is(u, UnitTypes::Protoss_Robotics_Facility)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Robotics_Support_Bay)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Robotics_Support_Bay)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Scarab:
+ 			if (!unit_is_reaver(u)) return false;
+@@ -17802,14 +17863,14 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Observer:
+ 			if (!unit_is(u, UnitTypes::Protoss_Robotics_Facility)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Observatory)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Observatory)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Corsair:
+ 			if (!unit_is(u, UnitTypes::Protoss_Stargate)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Dark_Templar:
+ 			if (!unit_is(u, UnitTypes::Protoss_Gateway)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			return true;
+ 		case UnitTypes::Terran_Command_Center:
+ 			if (!unit_is(u, UnitTypes::Terran_SCV)) return false;
+@@ -17979,7 +18040,7 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Robotics_Facility:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Pylon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+@@ -17989,52 +18050,52 @@
+ 			return true;
+ 		case UnitTypes::Protoss_Observatory:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Gateway:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Nexus)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Nexus)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Photon_Cannon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Forge)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Forge)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Citadel_of_Adun:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Cybernetics_Core:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Gateway)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Gateway)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Templar_Archives:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Citadel_of_Adun)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Citadel_of_Adun)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Forge:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Nexus)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Nexus)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Stargate:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Fleet_Beacon:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Stargate)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Stargate)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Arbiter_Tribunal:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Stargate)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Stargate)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Robotics_Support_Bay:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Robotics_Facility)) return false;
+ 			return true;
+ 		case UnitTypes::Protoss_Shield_Battery:
+ 			if (!unit_is(u, UnitTypes::Protoss_Probe)) return false;
+-			if (!player_has_active_tech(owner, UnitTypes::Protoss_Gateway)) return false;
++			if (!player_has_completed_unit(owner, UnitTypes::Protoss_Gateway)) return false;
+ 			return true;
+ 		default:
+ 			return false;
+@@ -18691,14 +18752,14 @@
+ 			if (!unit_is(u, UnitTypes::Protoss_Forge)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Ground_Armor) != 0) {
+-				if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Protoss_Air_Armor:
+ 			if (!unit_is(u, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Air_Armor) != 0) {
+-				if (!player_has_active_tech(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
++				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Terran_Infantry_Weapons:
+@@ -18765,21 +18826,21 @@
+ 			if (!unit_is(u, UnitTypes::Protoss_Forge)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Ground_Weapons) != 0) {
+-				if (!player_has_active_tech(owner, UnitTypes::Protoss_Templar_Archives)) return false;
++				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Templar_Archives)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Protoss_Air_Weapons:
+ 			if (!unit_is(u, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Air_Weapons) != 0) {
+-				if (!player_has_active_tech(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
++				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Fleet_Beacon)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::Protoss_Plasma_Shields:
+ 			if (!unit_is(u, UnitTypes::Protoss_Forge)) return false;
+ 			if (unit_is_constructing(u) || unit_is_researching(u) || unit_is_upgrading(u)) return false;
+ 			if (player_upgrade_level(owner, UpgradeTypes::Protoss_Plasma_Shields) != 0) {
+-				if (!player_has_active_tech(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
++				if (!player_has_completed_unit(owner, UnitTypes::Protoss_Cybernetics_Core)) return false;
+ 			}
+ 			return true;
+ 		case UpgradeTypes::U_238_Shells:
+@@ -19042,6 +19103,7 @@
+ 			if (!unit_is(u, UnitTypes::Protoss_High_Templar) && !unit_is(u, UnitTypes::Hero_Tassadar)) return false;
+ 			return true;
+ 		case TechTypes::Archon_Warp:
++            if(hero_merge_ready(u))return true;
+ 			if (!unit_is(u, UnitTypes::Protoss_High_Templar)) return false;
+ 			return true;
+ 		case TechTypes::Recall:
+--- a/actions.h
++++ b/actions.h
+@@ -229,7 +229,18 @@
+ 	}
+ 	
+ 	bool morph_archon_impl(int owner, bool is_dark_archon) {
+-		auto sel = selected_units(owner);
++        auto sel = selected_units(owner);
++        if(!is_dark_archon&&game_st.hero_mode) {
++            unit_t* first=nullptr;unit_t* second=nullptr;
++            for(auto* u:sel)if(hero_merge_ready(u)&&u->owner==owner) {
++                if(!first)first=u;else if(hero_merge_pair(first,u)){second=u;break;}
++            }
++            if(second) {
++                set_unit_order(first,get_order_type(Orders::ArchonWarp),second);
++                set_unit_order(second,get_order_type(Orders::ArchonWarp),first);
++                return true;
++            }
++        }
+ 		auto i = sel.begin();
+ 		if (i == sel.end()) return false;
+ 		if (!unit_can_use_tech(*i, get_tech_type(is_dark_archon ? TechTypes::Dark_Archon_Meld : TechTypes::Archon_Warp), owner)) return false;
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -585,12 +585,26 @@
+ 	// deterministic sim, so a 1v1 reaches the same verdict on the same frame for free.
+ 	void on_victory_state(int owner, int state) override {
+ 		// Single-player is a sandbox — a lone melee player "wins" instantly, so ignore it.
+-		if (!competitive || outcome || state == 0) return;
++		if (!competitive || outcome || state == 0 || game_st.team_game) return;
+ 		if (owner == my_player) outcome = state >= 3 ? 1 : 2;
+ 		else if (state >= 3) outcome = 2;          // someone else won, so we lost
+ 	}
+ 	virtual void check_last_standing() {
+-		if (!competitive || outcome) return;
++        if (!competitive || outcome) return;
++        if(game_st.team_game) {
++            if(!events_seeded)return;
++            bool friends=false,enemies=false,had_enemy=false;
++            for(int p=0;p<8;p++)if(st.players[p].initially_active) {
++                bool allied=st.alliances[my_player][p]&&st.alliances[p][my_player];
++                if(!allied)had_enemy=true;
++                if(player_defeated(p))continue;
++                for(auto* u:ptr(st.player_units[p]))if(!unit_dying(u)) {
++                    if(allied)friends=true;else enemies=true;break;
++                }
++            }
++            if(!friends)outcome=2;else if(had_enemy&&!enemies)outcome=1;
++            return;
++        }
+ 		if (st.players[my_player].victory_state >= 3) { outcome = 1; return; }
+ 		for (int i = 0; i != 8; ++i)
+ 			if (i != my_player && st.players[i].victory_state >= 3) { outcome = 2; return; }
+@@ -1000,6 +1014,7 @@
+ 				text += " Spawns larvae and spreads creep.";
+ 			if (t->supply_provided.raw_value > 0) text += format(" Provides %d supply.", t->supply_provided.raw_value / 2);
+ 			if (ut_two_units_in_one_egg(t)) text += " Morphs two units per egg; cost and supply are for the pair.";
++            if(game_st.hero_mode&&hero_definition(c.ut))text+=" One per player, including queued units. Rebuild after death.";
+ 			return text;
+ 		}
+ 		switch (c.act) {
+@@ -1030,7 +1045,9 @@
+ 		case C_UNBURROW: return "Returns to the surface.";
+ 		case C_CLOAK: return "Cloaks the unit while draining energy. Detectors can reveal it.";
+ 		case C_DECLOAK: return "Ends cloaking and its energy drain.";
+-		case C_ARCHON: return "Merges two High Templars into an Archon.";
++        case C_ARCHON: return c.ut==UnitTypes::Hero_Tassadar_Zeratul_Archon
++            ? "Merges Tassadar and Zeratul. Both remain unavailable until their Archon dies."
++            : "Merges two High Templars into an Archon.";
+ 		case C_DARCHON: return "Merges two Dark Templars into a Dark Archon.";
+ 		case C_CANCEL: return "Cancels the current action or closes this command menu.";
+ 		default: return "";
+@@ -1158,7 +1175,10 @@
+ 			if (cat && tb && bw_build_advanced(id) != (cat == 2)) continue;
+ 			bool can = unit_can_build(u, t);
+ 			UnitTypes req = UnitTypes::None;
+-			if (!can) {
++            const auto* hero=game_st.hero_mode?hero_definition(id):nullptr;
++            if(hero && (int(id)!=hero->id || u->unit_type->id!=hero_producer(hero->race)))continue;
++            if(hero && !can)req=hero_missing_requirement(u->owner,*hero);
++			if (!can && !hero) {
+ 				// Not buildable yet: keep it, grayed with its missing prereq, for the lists BW
+ 				// always shows — the worker's building menu, a producer's addons, and a producer's
+ 				// own unit roster (Barracks shows Firebat/Medic grayed without an Academy, etc.).
+@@ -1301,6 +1321,7 @@
+         else if (unit_is_reaver(u) && selected_fighter_capacity(false))
+             card.push_back({'r', "Build Scarab", C_FIGHTER, U::Protoss_Scarab});
+ 		// Two templar merge into an archon. Both merges are 'r' in BW (on separate unit cards).
++        if(hero_merge_ready(u))card.push_back({'r', "Merge Heroes", C_ARCHON, U::Hero_Tassadar_Zeratul_Archon});
+ 		if (id == U::Protoss_High_Templar) card.push_back({'r', "Merge Archon", C_ARCHON, U::Protoss_Archon});
+ 		else if (id == U::Protoss_Dark_Templar) card.push_back({'r', "Dark Archon", C_DARCHON, U::Protoss_Dark_Archon});
+ 		if (id == U::Protoss_Shield_Battery && u_completed(u))
+@@ -1333,7 +1354,7 @@
+ 		else if (u_grounded_building(u) && u->secondary_order_type->id == Orders::BuildAddon &&
+ 		         u->current_build_unit && !u_completed(u->current_build_unit))
+ 			cancel_op = 52;
+-		else if (unit_race(u) == race_t::zerg && !u->build_queue.empty())
++		else if (unit_race(u) == race_t::zerg && !u->build_queue.empty() && !(game_st.hero_mode && unit_is(u,U::Zerg_Evolution_Chamber)))
+ 			cancel_op = 25;
+ 		else if (u_grounded_building(u) && !u_completed(u))
+ 			cancel_op = 24;   // a building still going up (Terran/Protoss); refunds and frees the worker
+@@ -1400,7 +1421,14 @@
+ 			switch (c.act) {
+ 			case C_STIM:  c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Stim_Packs), my_player); break;
+ 			case C_SIEGE: c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Tank_Siege_Mode), my_player); break;
+-			case C_ARCHON: c.enabled = selected_merge_pair(UnitTypes::Protoss_High_Templar, TechTypes::Archon_Warp); break;
++            case C_ARCHON:
++                if(c.ut==UnitTypes::Hero_Tassadar_Zeratul_Archon) {
++                    c.enabled=false;unit_t* first=nullptr;
++                    for(auto id:current_selection)if(auto* u=get_unit(id))if(u->owner==my_player&&hero_merge_ready(u)) {
++                        if(first&&hero_merge_pair(first,u)){c.enabled=true;break;}first=u;
++                    }
++                }else c.enabled = selected_merge_pair(UnitTypes::Protoss_High_Templar, TechTypes::Archon_Warp);
++                break;
+ 			case C_DARCHON: c.enabled = selected_merge_pair(UnitTypes::Protoss_Dark_Templar, TechTypes::Dark_Archon_Meld); break;
+ 			case C_RECHARGE: break;
+ 			case C_BUILD: case C_TRAIN: case C_MORPH: case C_MORPHBLDG:
+@@ -1583,7 +1611,7 @@
+ 	// is what's in progress), or empty if idle. Covers unit training and — since those
+ 	// live on a different field — tech research and upgrades.
+ 	bool archon_merging(const unit_t* u) const {
+-        if (!unit_is(u, UnitTypes::Protoss_Archon) && !unit_is(u, UnitTypes::Protoss_Dark_Archon)) return false;
++        if (!unit_is(u, UnitTypes::Protoss_Archon) && !unit_is(u, UnitTypes::Protoss_Dark_Archon) && !unit_is(u,UnitTypes::Hero_Tassadar_Zeratul_Archon)) return false;
+         if (u->order_type->id == Orders::CompletingArchonSummon) return true;
+         for (const auto& order : u->order_queue) if (order.order_type->id == Orders::CompletingArchonSummon) return true;
+         return false;
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -264,13 +264,25 @@
+     }
+     void ai_mine_melee(int owner) {
+         auto depots=ai_depots(owner);if(depots.empty())return;
+-        a_vector<unit_t*> resources; a_unordered_map<unit_t*,int> assigned;
++        a_vector<unit_t*> resources,distant; a_unordered_map<unit_t*,int> assigned;
++        bool local_minerals=false;
+         for(int p:{owner,11})for(auto* r:ptr(st.player_units[p])) {
+             bool mineral=unit_is_mineral_field(r),gas=unit_is_refinery(r)&&r->owner==owner;
+             if(!mineral&&!gas)continue;
+-            if(unit_dying(r)||!u_completed(r)||r->building.resource.resource_count<=0)continue;
+-            for(auto* base:depots)if(xy_length(base->position-r->position)<384){resources.push_back(r);break;}
+-        }
++            if(unit_dying(r)||!u_completed(r)||(mineral&&r->building.resource.resource_count<=0))continue;
++            bool local=false;
++            for(auto* base:depots)if(xy_length(base->position-r->position)<512){local=true;break;}
++            if(local){resources.push_back(r);if(mineral)local_minerals=true;}
++            else if(mineral) {
++                bool dangerous=false;
++                for(int enemy=0;enemy<8;enemy++)if(enemy!=owner&&!st.alliances[owner][enemy])
++                    for(auto* b:ptr(st.player_units[enemy]))if(!unit_dying(b)&&ut_resource_depot(b)&&xy_length(b->position-r->position)<640)dangerous=true;
++                if(!dangerous)distant.push_back(r);
++            }
++        }
++        // A spent base must still earn the cost of its replacement. Workers
++        // long-distance mine reachable fresh fields until a new depot finishes.
++        if(!local_minerals)resources.insert(resources.end(),distant.begin(),distant.end());
+         for(auto* u:ptr(st.player_units[owner]))if(ut_worker(u)&&!unit_dying(u)&&u->worker.gather_target)++assigned[u->worker.gather_target];
+         action_functions af(st,ai_actions);
+         for(auto* u:ptr(st.player_units[owner])) {
+@@ -288,7 +300,12 @@
+                 if(unit_is_refinery(r)&&count>=3)continue;
+                 if(!is_reachable(u,r->position))continue;
+                 int value=xy_length(u->position-r->position)+count*160;
+-                if(unit_is_refinery(r))value-=1200; // Three workers per active refinery.
++                if(unit_is_refinery(r)) {
++                    value-=1200;
++                    // Empty geysers still yield two gas, but fresh gas wins.
++                    if(r->building.resource.resource_count<=0)value+=800;
++                    if(!local_minerals&&count>=1)continue;
++                }
+                 if(value<score){score=value;best=r;}
+             }
+             // Leave scouts, builders and player-independent scripted movement alone.
+@@ -310,7 +327,7 @@
+         for(auto* worker:ptr(st.player_units[owner])) {
+             if(!ut_worker(worker)||unit_dying(worker)||worker->current_build_unit)continue;
+             auto order=worker->order_type->id;
+-            if(order!=Orders::Move&&order!=Orders::PlaceBuilding&&order!=Orders::PlaceProtossBuilding&&order!=Orders::DroneStartBuild)continue;
++            if(order!=Orders::Move&&order!=Orders::PlaceBuilding&&order!=Orders::PlaceProtossBuilding&&order!=Orders::DroneStartBuild&&order!=Orders::DroneLand)continue;
+             xy target=worker->order_target.pos;
+             if(xy_length(worker->position-target)<256)continue;
+             unit_t* blocker=nullptr;int distance=161;
+@@ -336,19 +353,32 @@
+     }
+     bool ai_expand(int owner) {
+         const auto race=st.players[owner].race;const int depot=race==race_t::zerg?131:race==race_t::protoss?154:106;
++        // A worker only spends the depot price when construction starts.
++        // Keep that money reserved during the entire approach, including ticks
++        // where its queued placement makes it ineligible as a fresh builder.
++        for(auto* u:ptr(st.player_units[owner]))if(ut_worker(u)&&!unit_dying(u)&&!u->build_queue.empty()
++            &&int(u->build_queue.front()->id)==depot&&!u->current_build_unit)return true;
+         auto depots=ai_depots(owner);if(depots.empty()||ai_count(owner,depot)>int(depots.size()))return false;
+         int remaining=0;
+         for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r))
+             for(auto* base:depots)if(xy_length(base->position-r->position)<384){remaining+=r->building.resource.resource_count;break;}
+-        int desired=1+(ai_clock>6000+(2-melee_ai_level)*4000)+(ai_clock>18000+(2-melee_ai_level)*6000);
+-        int bases=int(depots.size());
+-        if(race==race_t::zerg)bases=ai_zerg_bases(owner);
+-        if(bases>=desired&&remaining>4000)return false;
++        int desired=1+(ai_clock>4500+(2-melee_ai_level)*5000)+(ai_clock>15000+(2-melee_ai_level)*7500);
++        int productive=0;
++        for(auto* base:depots) {
++            int minerals=0;
++            for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r)&&xy_length(base->position-r->position)<512)minerals+=r->building.resource.resource_count;
++            if(minerals>1500)++productive;
++        }
++        // Empty old bases do not count against the next expansion. There is
++        // no four-base ceiling preventing late-game resource replacement.
++        if(productive>=desired&&remaining>4000)return false;
+         const auto* cc=get_unit_type(UnitTypes(depot));
+-        if(bases>=4)return false;
+         a_vector<unit_t*> workers;
+         for(auto* u:ptr(st.player_units[owner]))if(!ai_busy_worker(u)&&!u->worker.resources_carried)workers.push_back(u);
+-        if(workers.empty())return false;
++        if(workers.empty()) {
++            for(auto* u:ptr(st.player_units[owner]))if(ut_worker(u)&&!unit_dying(u))return true;
++            return false; // Rebuild a lost worker before reserving a depot.
++        }
+         a_vector<xy> clusters;
+         for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r)&&r->building.resource.resource_count>0){
+             bool near=false;for(auto p:clusters)if(xy_length(p-r->position)<400)near=true;
+@@ -383,7 +413,7 @@
+                 if(af.action_build(owner,get_order_type(kit_for(race).build_order),cc,{size_t(tile.x),size_t(tile.y)})){++towns[owner].built;return true;}
+             }else if(worker->order_type->id!=Orders::Move||worker->order_target.pos!=pos)
+                 af.action_order(owner,get_order_type(Orders::Move),pos,nullptr,nullptr,false);
+-            return false;
++            return true; // Retain the expansion budget while its scout travels.
+         }
+         return false;
+     }
+@@ -721,7 +751,10 @@
+         // A Drone that never reached its placement must not reserve a building
+         // forever. Once morphing starts the Drone is already the structure.
+         if(ai_clock%600==0)for(auto* u:ptr(st.player_units[owner]))
+-            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::DroneStartBuild&&!u->current_build_unit&&!u->build_queue.empty()&&(u->build_queue.front()->id!=UnitTypes::Zerg_Hatchery||ai_clock%2400==0)){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
++            if(ut_worker(u)&&!unit_dying(u)&&(u->order_type->id==Orders::DroneStartBuild||u->order_type->id==Orders::DroneLand)
++                &&!u->current_build_unit&&!u->build_queue.empty()&&(u->build_queue.front()->id!=UnitTypes::Zerg_Hatchery||ai_clock%2400==0)){
++                af.action_select(owner,u);af.action_cancel_build_queue(owner,0);
++            }
+     }
+     void ai_manage(int owner) {
+         auto& a=towns[owner];if(!a.active)return;
+@@ -801,14 +834,33 @@
+                 for(int id:{33,34,38,39,43})upgrade(id);
+             }
+         }
++        if(melee_ai&&melee_ai_level==2) {
++            int bases=st.players[owner].race==race_t::zerg?ai_zerg_bases(owner):int(ai_depots(owner).size());
++            if(bases>1&&ai_clock>9000) {
++                if(st.players[owner].race==race_t::terran){ai_request(req,111,std::min(4,bases+1),81);ai_request(req,113,std::min(3,bases),81);ai_request(req,114,2,80);}
++                if(st.players[owner].race==race_t::protoss){ai_request(req,160,std::min(5,bases+2),81);ai_request(req,155,2,80);ai_request(req,167,2,80);}
++            }
++            if(ai_clock>6000&&ai_clock%1800==0)ai_attack(owner,true);
++        }
++        if(melee_ai&&game_st.hero_mode&&melee_ai_level==2&&ai_clock>12000) {
++            // The computer buys the same limited heroes at the same costs.
++            for(const auto& h:hero_roster())if(h.race==int(st.players[owner].race)&&!hero_reserved(owner,UnitTypes(h.id))) {
++                ai_request(req,int(hero_producer(h.race)),1,90);
++                if(hero_missing_requirement(owner,h)==UnitTypes::None)ai_request(req,h.id,1,82);
++            }
++        }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         allowed_requests();
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
+         action_functions af(st,ai_actions);
++        // Reserve the base price, not the entire economy. A slow scout must
++        // not freeze army/tech spending when there is money above that reserve.
++        int expansionBudget=reserveExpansion?get_unit_type(UnitTypes(race==0?131:race==1?106:154))->mineral_cost:0;
++        auto spendable=[&](int cost){return st.current_minerals[owner]-cost>=expansionBudget;};
+         bool reserveUpgrade=false;
+-        if(melee_ai && !reserveExpansion && ai_clock%960<360)for(auto r:a.upgrades) {
+-            auto type=UpgradeTypes(r.type);if(player_upgrade_level(owner,type)>=r.amount)continue;
++        if(melee_ai && ai_clock%960<360)for(auto r:a.upgrades) {
++            auto type=UpgradeTypes(r.type);if(player_upgrade_level(owner,type)>=r.amount||!spendable(upgrade_mineral_cost(owner,get_upgrade_type(type))))continue;
+             for(auto* u:ptr(st.player_units[owner])) {
+                 if(unit_dying(u)||!unit_can_upgrade(u,get_upgrade_type(type),owner))continue;
+                 af.action_select(owner,u);af.action_upgrade(owner,get_upgrade_type(type));
+@@ -820,16 +872,16 @@
+         for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type)))
+             &&!(melee_ai&&st.players[owner].race!=race_t::terran&&r.priority>=80))<r.amount) {
+             const auto* target=get_unit_type(UnitTypes(r.type));
+-            if((reserveExpansion||reserveUpgrade)&&r.priority<100)continue;
++            if(reserveUpgrade&&r.priority<100)continue;
++            if(reserveExpansion&&r.priority<100&&!spendable(target->mineral_cost))continue;
+             bool reserve=false;
+             if(melee_ai&&r.priority>=86&&!ut_building(target)&&!ut_worker(target))
+                 for(auto* producer:ptr(st.player_units[owner]))if(!unit_dying(producer)&&producer->build_queue.empty()&&unit_can_build(producer,target))reserve=true;
+             if(ai_produce(owner,r.type)){if(++accepted>=2)break;}
+             else if(reserve&&!has_available_resources_for(owner,target))break;
+         }
+-        if(reserveExpansion)return;
+-        for(auto r:a.techs)if(game_st.tech_available[owner][TechTypes(r.type)]&&!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
+-        for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
++        for(auto r:a.techs)if(game_st.tech_available[owner][TechTypes(r.type)]&&!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u)||!spendable(get_tech_type(TechTypes(r.type))->mineral_cost))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
++        for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u)||!spendable(upgrade_mineral_cost(owner,get_upgrade_type(UpgradeTypes(r.type)))))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
+     }
+     void ai_detect(unit_t* victim,unit_t* source) {
+         int owner=victim->owner;

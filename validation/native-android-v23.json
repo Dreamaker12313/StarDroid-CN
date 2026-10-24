@@ -1,0 +1,9 @@
+{
+  "status": "blocked before app installation",
+  "environment": "Android 11 AOSP x86_64 emulator 37.2.12, software CPU emulation without KVM",
+  "observed": "system_server restarted; package service unavailable; APK installation could not complete",
+  "systemServerFailure": "java.lang.IllegalStateException: Lost network stack",
+  "androidUiVerified": false,
+  "physicalDeviceVerified": false,
+  "instrumentationSource": "tests/NativeInstrumentation.java"
+}

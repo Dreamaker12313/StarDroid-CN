@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "output": "PASS Science Facility addon slots, Ghost slots and cost text\n",
+  "androidRenderingExecuted": false,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "e09c8c421ecfe95d4eb341a80018b4afacb98c5fb9d91671eb39ab83c05f9f5b",
+    "tests/CommandFeedback44Harness.java": "d02551763533eda6e53ba780c56747bacb099843e313d6d54130097e655764eb"
+  }
+}

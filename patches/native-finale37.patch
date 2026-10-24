@@ -1,0 +1,264 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -2566,7 +2566,7 @@
+ 		return false;
+ 	}
+ 
+-	bool can_place_building(const unit_t* u, int owner, const unit_type_t* unit_type, xy pos, bool check_undetected_units, bool check_invisible_tiles) const {
++	bool can_place_building(const unit_t* u, int owner, const unit_type_t* unit_type, xy pos, bool check_undetected_units, bool check_invisible_tiles, bool scenario_creation = false) const {
+ 		xy_t<size_t> tile_pos;
+ 		tile_pos.x = (pos.x - unit_type->placement_size.x / 2) / 32u;
+ 		tile_pos.y = (pos.y - unit_type->placement_size.y / 2) / 32u;
+@@ -2579,7 +2579,9 @@
+ 		if (tile_pos.y + tile_size.y > game_st.map_tile_height) return false;
+ 		if (u && !u_flying(u) && !u_grounded_building(u) && !is_reachable(u, xy(int(tile_pos.x * 32), int(tile_pos.y * 32)))) return false;
+ 
+-		int visibility_mask = 1 << owner;
++		// Trigger creation runs before the first visibility update. Test the real
++		// terrain and collisions, independently of what the owner has explored.
++		int visibility_mask = scenario_creation ? 0 : 1 << owner;
+ 
+ 		if (unit_is_refinery(unit_type)) {
+ 			xy gas_placement_size = get_unit_type(UnitTypes::Resource_Vespene_Geyser)->placement_size;
+@@ -7773,11 +7775,17 @@
+ 		unit_t* target = u->auto_target_unit;
+ 		if (target) {
+ 			u->auto_target_unit = nullptr;
+-			if (!us_hidden(target) && !unit_target_is_undetected(u, target) && target->owner != u->owner) {
++			if (u->owner < 8 && !unit_dying(target) && !us_hidden(target) && !unit_target_is_undetected(u, target) && target->owner != u->owner) {
+ 				st.players[u->owner].controller = player_t::controller_computer_game;
+ 				st.alliances[u->owner][target->owner] = 0;
+ 				st.alliances[target->owner][u->owner] = 0;
+-				error("a neutral unit attacked something. this triggers computer player behavior which is not supported yet :(");
++				// A campaign neutral can be provoked before its scripted handover.
++				// Enter ordinary guard behavior instead of aborting the mission.
++				for (unit_t* n : ptr(st.player_units[u->owner])) {
++					if (!unit_dying(n) && n->order_type->id == Orders::Neutral)
++						set_unit_order(n, n->unit_type->return_to_idle);
++				}
++				if (unit_can_attack_target(u, target)) auto_attack_target(u, target);
+ 			}
+ 		}
+ 	}
+@@ -12822,6 +12830,13 @@
+ 	}
+ 
+ 	void update_hidden_unit(unit_t* u) {
++		// A hidden tank/Goliath owns its turret just like a visible one.
++		// Process the parent's death first: updating the turret first can run
++		// Die on its back-reference and destroy the parent twice.
++		if (unit_dying(u)) {
++			if (!unit_dead(u)) order_Die(u);
++			return;
++		}
+ 		if (u->subunit && !ut_turret(u)) {
+ 			auto ius = make_thingy_setter(iscript_unit, u->subunit);
+ 			update_hidden_unit(u->subunit);
+@@ -13107,8 +13122,13 @@
+ 			update_unit(u);
+ 		}
+ 
+-		for (auto i = st.hidden_units.begin(); i != st.hidden_units.end();) {
+-			unit_t* u = &*i++;
++		// Cleanup can move other hidden units between lists. Their intrusive
++		// links are reused, so retain generation-checked IDs across updates.
++		a_vector<unit_id> hidden_updates;
++		for (unit_t* u : ptr(st.hidden_units)) hidden_updates.push_back(get_unit_id(u));
++		for (auto id : hidden_updates) {
++			unit_t* u = get_unit(id);
++			if (!u || !us_hidden(u)) continue;
+ 			if (u_cloaked(u) || u_requires_detector(u)) u->cloak_counter = 0;
+ 			iscript_flingy = u;
+ 			iscript_unit = u;
+@@ -13771,6 +13791,8 @@
+ 		}
+ 	}
+ 
++	virtual void on_scenario_attack(unit_t*, unit_t*) {}
++
+ 	void on_unit_damage(unit_t* u, unit_t* source_unit, bool reveal_source) {
+ 		if (!source_unit || source_unit->owner == u->owner) return;
+ 		u->last_attacking_player = source_unit->owner;
+@@ -13789,6 +13811,7 @@
+ 				on_hit_aoe_change_target(n, source_unit);
+ 			}
+ 		}
++		on_scenario_attack(u, source_unit);
+ 	}
+ 
+ 	void unit_deal_damage(unit_t* u, fp8 damage, unit_t* source_unit, int source_owner, bool reveal_source = true) {
+@@ -16238,18 +16261,18 @@
+ 					unit_t* parent = u->fighter.parent;
+ 					if (u->fighter.parent) {
+ 						if (u->fighter.is_outside) {
+-							if (unit_is(parent, UnitTypes::Protoss_Carrier)) {
++							if (unit_is_carrier(parent)) {
+ 								parent->carrier.outside_units.remove(*u);
+ 								--parent->carrier.outside_count;
+-							} else if (unit_is(parent, UnitTypes::Protoss_Reaver)) {
++							} else if (unit_is_reaver(parent)) {
+ 								parent->reaver.outside_units.remove(*u);
+ 								--parent->reaver.outside_count;
+ 							}
+ 						} else {
+-							if (unit_is(parent, UnitTypes::Protoss_Carrier)) {
++							if (unit_is_carrier(parent)) {
+ 								parent->carrier.inside_units.remove(*u);
+ 								--parent->carrier.inside_count;
+-							} else if (unit_is(parent, UnitTypes::Protoss_Reaver)) {
++							} else if (unit_is_reaver(parent)) {
+ 								parent->reaver.inside_units.remove(*u);
+ 								--parent->reaver.inside_count;
+ 							}
+@@ -16402,12 +16425,21 @@
+ 	}
+ 
+ 	void destroy_unit(unit_t* u) {
++		const bool was_refinery = unit_is_refinery(u);
+ 		unit_t* turret = unit_turret(u);
+ 		if (turret) {
+ 			destroy_unit(turret);
+ 			u->subunit = nullptr;
+ 		}
+ 		destroy_unit_impl(u);
++		// Refinery destruction restores a live neutral geyser. A trigger's
++		// Remove action hides it first; keep the restored sprite and put the
++		// geyser back in the visible list instead of leaving a dead null sprite
++		// in the hidden/player lists.
++		if (was_refinery) {
++			if (us_hidden(u)) show_unit(u);
++			return;
++		}
+ 		u->order_type = get_order_type(Orders::Die);
+ 		u->order_state = 1;
+ 		destroy_sprite(u->sprite);
+@@ -19118,7 +19150,7 @@
+ 		if (ut_building(unit_type)) {
+ 			xy top_left = restrict_pos_to_map_bounds(pos - unit_type->placement_size / 2);
+ 			pos = top_left / 32 * 32 + unit_type->placement_size / 2;
+-			if (!can_place_building(nullptr, owner, unit_type, pos, true, false)) {
++			if (!can_place_building(nullptr, owner, unit_type, pos, true, false, true)) {
+ 				// todo: show error?
+ 				return nullptr;
+ 			}
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -25,6 +25,8 @@
+         xy pos;
+         bool done = false;
+     };
++    struct defence_alert { unit_id source, victim; int wake=0, until=0; };
++    std::array<defence_alert,8> defence_alerts{};
+     std::array<town,8> towns;
+     std::array<a_vector<uint8_t>,2> scripts;
+     a_vector<thread> threads, spawned;
+@@ -316,6 +318,51 @@
+         for(auto r:a.techs)if(!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
+         for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
+     }
++    void on_scenario_attack(unit_t* victim, unit_t* source) override {
++        int owner=victim->owner;
++        if(owner>=8 || owner==my_player || !towns[owner].active || !source
++            || st.players[owner].controller!=player_t::controller_computer_game
++            || !unit_target_is_enemy(victim,source) || unit_dying(source))return;
++        // Protect a base and its harvesters. Do not recall distant scripted armies
++        // for every skirmish, or break installation/hero movement triggers.
++        bool base=ut_building(victim);
++        if(!base && ut_worker(victim))for(auto* u:ptr(st.player_units[owner]))
++            if(ut_building(u)&&!unit_dying(u)&&units_distance(u,victim)<320){base=true;break;}
++        if(!base)return;
++        auto& alert=defence_alerts[owner];
++        if(alert.until<=ai_clock || !get_unit(alert.source)) {
++            alert.source=get_unit_id(source);alert.victim=get_unit_id(victim);
++            alert.wake=ai_clock+48; // Campaign response, not an instant global army pull.
++        }
++        alert.until=ai_clock+192;
++    }
++    void ai_defend(int owner) {
++        auto& alert=defence_alerts[owner];
++        if(alert.until<=ai_clock||alert.wake>ai_clock)return;
++        auto* source=get_unit(alert.source);auto* victim=get_unit(alert.victim);
++        if(!source||!victim||unit_dying(source)||unit_dying(victim)||victim->owner!=owner
++            || !unit_target_is_enemy(victim,source)||units_distance(victim,source)>640) {
++            alert={};return;
++        }
++        alert.wake=ai_clock+48;
++        a_vector<unit_t*> defenders;
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)
++                ||ut_hero(u)||u_loaded(u)||us_hidden(u)||unit_is_fighter(u)||unit_is_disabled(u)
++                ||!ai_idle(u)||ai_attacking(towns[owner],u)||!u->order_queue.empty()
++                ||u_order_not_interruptible(u)||u_iscript_nobrk(u)||u_burrowed(u)
++                ||!unit_can_attack_target(u,source)||!unit_can_see_target(u,source)
++                ||units_distance(u,victim)>1024)continue;
++            defenders.push_back(u);
++        }
++        std::stable_sort(defenders.begin(),defenders.end(),[&](unit_t* a,unit_t* b){return units_distance(a,victim)<units_distance(b,victim);});
++        int sent=0;
++        for(auto* u:defenders) {
++            issue_order(u,false,get_order_type(Orders::AttackMove),{source->sprite->position,nullptr});
++            ++towns[owner].orders;if(++sent==12)break;
++        }
++        if(sent)ai_trace=format("P%d base defence: %d units at frame %d",owner+1,sent,st.current_frame);
++    }
+     void ai_lurkers(int owner) {
+         for (auto* u:ptr(st.player_units[owner])) {
+             if (!unit_is(u,UnitTypes::Zerg_Lurker) || unit_dying(u) || !u_completed(u)
+@@ -344,7 +391,7 @@
+         if(!spawned.empty()){threads.insert(threads.end(),spawned.begin(),spawned.end());spawned.clear();}
+         if(ai_clock%12==0)for(int p=0;p<8;++p)
+             if(p!=my_player && st.players[p].controller==player_t::controller_computer_game)ai_lurkers(p);
+-        if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game)ai_manage(p);
++        if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_defend(p);ai_manage(p);}
+     }
+     a_string ai_status() {
+         a_string s="";
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -2033,11 +2033,10 @@
+ 				if (c.act == C_SPELL || c.act == C_CLOAK) raise_error(E_ENERGY);
+ 				return true;
+ 			}
+-			// Only the commands that actually spend are gated here. Build is excluded
+-			// because its cost is taken on the placement click, and Land carries a unit
+-			// type (the building's own) but costs nothing.
++			// Check construction when its button is pressed and again at placement.
++			// Landing an existing building costs nothing.
+ 			switch (c.act) {
+-			case C_TRAIN: case C_MORPH: case C_MORPHBLDG: case C_RESEARCH: case C_UPGRADE: case C_FIGHTER:
++			case C_BUILD: case C_TRAIN: case C_MORPH: case C_MORPHBLDG: case C_RESEARCH: case C_UPGRADE: case C_FIGHTER:
+ 				if (err_kind r = block_reason(c)) { raise_error(r); return true; }
+ 				break;
+ 			default: break;
+--- a/data_loading.h
++++ b/data_loading.h
+@@ -1059,17 +1059,25 @@
+ 		sector_data.resize(sector_size);
+ 		r.seek(be.data_offset);
+ 
++		const size_t sectors = (be.size + sector_size - 1) / sector_size;
++		const bool has_sector_checksums = (be.flags & 0x04000000) != 0;
++		const size_t table_bytes = 4 * (sectors + 1 + has_sector_checksums);
++		if (table_bytes > be.compressed_size) error("mpq: %s: truncated sector table", filename);
+ 		auto read_sectors = [&](auto&& sectors_r) {
+-			while (true) {
++			// CRC-enabled files append a checksum block and one extra offset.
++			// The last data sector ends before that block, not at file end.
++			for (size_t i = 0; i != sectors + 1; ++i) {
+ 				size_t offset = sectors_r.template get<uint32_t>();
++				if (offset < table_bytes || offset > be.compressed_size ||
++					(i && offset <= compressed_sectors.back())) error("mpq: %s: invalid sector offset", filename);
+ 				compressed_sectors.push_back(offset);
+-				if (offset == be.compressed_size) break;
+-				if (compressed_sectors.size() > (be.size + sector_size - 1) / sector_size) error("mpq: %s: too many compressed sectors in file", filename);
+ 			}
++			size_t end = has_sector_checksums ? sectors_r.template get<uint32_t>() : compressed_sectors.back();
++			if (end != be.compressed_size || end < compressed_sectors.back()) error("mpq: %s: invalid sector table end", filename);
+ 		};
+ 
+ 		if (be.flags & 0x10000) {
+-			read_sectors(make_encrypted_reader(r, 4 * ((be.size + sector_size - 1) / sector_size + 1), key - 1, crypt_table));
++			read_sectors(make_encrypted_reader(r, table_bytes, key - 1, crypt_table));
+ 		} else {
+ 			read_sectors(r);
+ 		}

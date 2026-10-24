@@ -1,0 +1,13 @@
+{
+  "apkSha256": "9ce3e6fb39eee8d6af9f9787ab66053be13fbe1c3fee5a7fcb89f40503b1ed63",
+  "testApkSha256": "2c3e2474ef5153a32b4a6e4e1100b9d9db601367bbf1f57ec469409c8a29f8df",
+  "version": "0.35",
+  "android": "9",
+  "originalGameAssets": false,
+  "diskSnapshotMapAndMetadataRoundTrip": true,
+  "failedAndInterruptedOverwriteRetainsPreviousSave": true,
+  "tamperedSaveRejected": true,
+  "passed": false,
+  "error": "java.io.IOException: Mission map is unavailable or too large",
+  "note": "New regression suite executed against installed 0.34 after emulator update timeout. Expected old behavior reproduced; this is not 0.35 validation."
+}

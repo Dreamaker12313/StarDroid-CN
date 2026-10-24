@@ -1,0 +1,17 @@
+{
+  "missions": {
+    "expterran07": {
+      "state": {
+        "frame": 2404,
+        "ai": "6\t3\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 320,
+        "voices": 5,
+        "next": "expterran08"
+      }
+    }
+  },
+  "checks": [],
+  "errors": []
+}

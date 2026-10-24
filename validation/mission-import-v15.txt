@@ -1,0 +1,13 @@
+terran01: Exported 9 entries, 1145976 payload bytes, missing=3
+terran01: Mission import and every served entry match uploaded ZIP; unsafe path rejected.
+terran02: Exported 22 entries, 1928875 payload bytes, missing=2
+terran02: Mission import and every served entry match uploaded ZIP; unsafe path rejected.
+terran03: Exported 17 entries, 2129550 payload bytes, missing=0
+terran03: Mission import and every served entry match uploaded ZIP; unsafe path rejected.
+terran04: Exported 18 entries, 1558207 payload bytes, missing=6
+terran04: Mission import and every served entry match uploaded ZIP; unsafe path rejected.
+zerg01: Exported 18 entries, 2131811 payload bytes, missing=1
+zerg01: Mission import and every served entry match uploaded ZIP; unsafe path rejected.
+protoss01: Exported 10 entries, 1372604 payload bytes, missing=6
+protoss01: Mission import and every served entry match uploaded ZIP; unsafe path rejected.
+Rejected: Wrong mission for this destination.

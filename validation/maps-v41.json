@@ -1,0 +1,45 @@
+{
+  "source": "http://ftp.blizzard.com/pub/starcraft/Maps/starcraftmaps.zip",
+  "maps": [
+    {
+      "name": "(2)Eldritch Lake.scm",
+      "bytes": 87390,
+      "sha256": "26d24e60a110e851bc28303f364646535c5f84f4b3409ae15a7cfc6f694685cc"
+    },
+    {
+      "name": "(2)Gemini Station.scm",
+      "bytes": 52795,
+      "sha256": "33f6698aac41144394118d757293e7acea3669aa515553b07d91c625f7a9408c"
+    },
+    {
+      "name": "(2)Giant Steps.scm",
+      "bytes": 46091,
+      "sha256": "9bc042e70c49e02d55cef487a63466875307f613ffe41bc0698f70416bfb1639"
+    },
+    {
+      "name": "(4)Crossfire.scx",
+      "bytes": 89465,
+      "sha256": "4a644689aefe106d10adf563980b3f559a3f4822445da583337c5d6eef5dd978"
+    },
+    {
+      "name": "(4)High Noon.scm",
+      "bytes": 117328,
+      "sha256": "10ffa58cb1cc428906c68f95fa24cc7ff25643c7bf7b644704ef5b91b29bd73d"
+    },
+    {
+      "name": "(4)Perdition's Flame.scm",
+      "bytes": 102180,
+      "sha256": "3dd5d5060494e874ff3520d7435402598ac48cf6113c2d102e059efdaa06218c"
+    },
+    {
+      "name": "(4)Sarengo Canyon.scm",
+      "bytes": 112577,
+      "sha256": "b69aee877e44e3473b29c04cebba037a7739b86353c5bbd5038a4d9547f2e007"
+    },
+    {
+      "name": "(4)Watering Hole.scm",
+      "bytes": 165434,
+      "sha256": "3a0db32f12067f5e638817776cba0c00c60e0241274c3440379a21c1b49f79ac"
+    }
+  ]
+}

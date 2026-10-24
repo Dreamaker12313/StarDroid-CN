@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "physicalDevices": false,
+  "output": "PASS 2 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 3221 checks\nPASS 3 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 9133 checks\nPASS 4 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 18194 checks\nPASS 5 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 30110 checks\nPASS 6 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 45202 checks\nPASS 7 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 63551 checks\nPASS 8 devices: slots/races/chat/countdown/paused save/live reload/fresh restore/disconnect, 84829 checks\nPASS 84832 multi-device checks\n",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/RoomProtocol.java": "9313a994833b1a5cc60d407b81273f9259f7cf9adc2c5f130aaf0e359c22cfc9",
+    "app/src/main/java/org/openbw/androidtest/RoomSnapshot.java": "343bb7fb799fb22882cff994338215d068327b00f896f9acd372a8e1ce3c6de1",
+    "app/src/main/java/org/openbw/androidtest/RoomMatch.java": "a2b0dc4ba7deb1980c0a0024c3e88d06812e224cb824875e746d4667e1200f02",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "2131d7d524735f4f32ce185101d5d2c9c9ef5d701863c134cdac11b028df2db7",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "tests/RoomMatchTest.java": "7d31057b1bba267a846271d4d6df95a934695f596806f6bf57dd7edfa8eb2a14",
+    "tests/run_room55.py": "74fe5c132bc7a024201ae1ce5e7dd39219e75bccb08df7d1a14d13a1456c8b5d"
+  }
+}

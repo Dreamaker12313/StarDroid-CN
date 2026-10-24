@@ -1,0 +1,39 @@
+{
+  "checks": [
+    "Every intro and first Terran movie frame decodes; stereo PCM duration stays within one second of video; no RGBA whole-movie cache"
+  ],
+  "movies": [
+    {
+      "name": "starintr",
+      "frames": 2082,
+      "interval": 66.66,
+      "width": 320,
+      "height": 308,
+      "channels": 2,
+      "bits": 16,
+      "rate": 22050,
+      "audioBytes": 12240928,
+      "videoSeconds": 138.78611999999998,
+      "audioSeconds": 138.78603174603174,
+      "memory": 77725696,
+      "decodeMs": 2789.061963,
+      "pixelsSha256": "e29cb4e65e771dee3f32f21b6324773993a3440bf3d83a07ec6a9c0be6348481"
+    },
+    {
+      "name": "terran1",
+      "frames": 1180,
+      "interval": 66.66,
+      "width": 320,
+      "height": 308,
+      "channels": 2,
+      "bits": 16,
+      "rate": 22050,
+      "audioBytes": 6937636,
+      "videoSeconds": 78.6588,
+      "audioSeconds": 78.6580045351474,
+      "memory": 43581440,
+      "decodeMs": 1508.1493539999997,
+      "pixelsSha256": "3aa1e8ac9a438a599cbf61b69ee5c5f6928f80e5d90ad7b3bacfdbc6bfea9354"
+    }
+  ]
+}

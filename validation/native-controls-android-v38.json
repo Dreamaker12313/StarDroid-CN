@@ -1,0 +1,20 @@
+{
+  "apkSha256": "c768ce5150e078a4ad3f867ba584623d0aeeae022f6ad522eb0b13f335bec7a0",
+  "testApkSha256": "e5db1f4a654de9098bf12647078cbeeeb2bf09049d6144f03f2fad16d9a9399e",
+  "version": "0.38",
+  "originalFontAvailable": false,
+  "fontSource": "Readable fallback; supplied core font payload is not a FONT file",
+  "menusPresetsCustomizationAndPersistence": true,
+  "actualPanAndSelectionGestureDispatch": true,
+  "oneShotCursorBothSidesAndGroundTapDefault": true,
+  "miscellaneousDefenderToggleAndCheats": true,
+  "customTooltipDelayAndDisable": true,
+  "unaffordableUnitTouchMessageAndAudio": true,
+  "largerGreenShadedMissionFont": true,
+  "passed": true,
+  "emulator": "37.2.12",
+  "display": "1280x720, 240 dpi",
+  "acceleration": false,
+  "physicalDeviceTested": false,
+  "originalCoreAssets": true
+}

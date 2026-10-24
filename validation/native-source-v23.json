@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "method": "Fresh extraction of final source archive, then scripts/prepare_native.py; compare generated engine and bot tree byte for byte with compiled source tree",
+  "sourceFilesCompared": 1178
+}

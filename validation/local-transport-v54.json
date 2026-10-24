@@ -1,0 +1,41 @@
+{
+  "version": "0.54",
+  "passed": true,
+  "actualProductionClasses": [
+    "LocalTransport",
+    "NearbyProtocol"
+  ],
+  "realDesktopSockets": true,
+  "physicalAndroidRadioTested": false,
+  "cases": [
+    "encrypted stream round trip",
+    "pairing code and capability negotiation",
+    "Wi-Fi session authentication",
+    "wrong key and tamper rejection",
+    "replay rejection",
+    "Bluetooth to Wi-Fi handover with in-flight packets",
+    "duplicate suppression and ordering",
+    "Wi-Fi stall and Bluetooth fallback",
+    "bounded queues",
+    "invalid acknowledgement rejection",
+    "all links lost",
+    "real TCP encrypted pipes",
+    "valid final messages precede EOF"
+  ],
+  "output": "PASS 545 local transport checks: encrypted sockets, pairing, Wi-Fi authentication, handover, fallback, ordering, bounds and EOF",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "ebf90d315c72d2bc23c4ca65c0df19dfa27aa3bc9fd2e0d9cfffd1dadf79deb0",
+    "app/src/main/java/org/openbw/androidtest/LocalTransport.java": "c12218c31b5b57c9bb2874999e613731dfb22aa6afba23a1961a5bb8cb31bd5e",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "4452c454fbc43d250c0e3a7ba7616e6fd5d5636220eafcb4570074725d7892cb",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "ec2f9de5db257efb6498db06e80ce7723908f8d67c1aef966375ca16f971d24e",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCache.java": "2f49e859ea90f02d7547b9c6329ca10b1c59f586b3614f1ee1999890dbc250f2",
+    "tests/LocalTransportTest.java": "f2f12b494cd92d1c21a34e04f82a2fd1ad1cc382edbc2acf212b1bbc7f5ca1e3",
+    "tests/LocalMatchTest.java": "8271f8a51009814e2b5ca9aa014cf18e1a731c6b98eb20dc11769ca9bde9a008",
+    "tests/NearbyProtocolTest.java": "e94526f60257f8bd78a2cf4df24d9fefe914045c0c3f63f83c41c9f22fd78306",
+    "tests/run_local_transport.py": "44ba97e172164bad21dcb8aa3423a8e00ae0154947d106a45ae0072d133e4d22"
+  },
+  "integratedMatchOutput": "PASS 1422 integrated match checks; exact map, encrypted stream handover, Bluetooth fallback, shared pause and 900+ simulation frames"
+}

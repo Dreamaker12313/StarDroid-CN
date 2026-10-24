@@ -1,0 +1,2349 @@
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -8,6 +8,7 @@
+ // web/wasm_backend.cpp, which JS blits to a <canvas>.
+ 
+ #include "sandbox.h"
++#include "campaign.h"
+ 
+ #include <cstdio>
+ #include <cstdlib>
+@@ -69,22 +70,42 @@
+ using loader_t = data_loading::data_files_loader<data_loading::mpq_file<data_loading::js_file_reader<>>>;
+ loader_t* g_loader = nullptr;
+ play_ui* g_ui = nullptr;
++campaign_ui* g_campaign = nullptr;
++data_loading::mpq_file<data_loading::js_file_reader<>>* g_mission = nullptr;
++#include "campaign_catalog.h"
++bool g_campaign_expansion = false;
++a_unordered_map<int, a_vector<uint8_t>> g_mission_sounds;
++a_vector<uint8_t> g_empty_sound;
++a_string g_campaign_prefix = "campaign/terran/terran01/";
++const a_vector<uint8_t>& mission_sound(int index) {
++	if (!g_campaign || !g_mission || index < 1 || size_t(index) > g_ui->game_st.map_strings.size()) return g_empty_sound;
++	auto found = g_mission_sounds.find(index);
++	if (found != g_mission_sounds.end()) return found->second;
++	a_string filename = g_campaign_prefix + g_ui->game_st.map_strings[index - 1];
++	a_vector<uint8_t>& out = g_mission_sounds[index];
++	if (g_mission->mpq.file_exists(filename)) (*g_mission)(out, filename);
++	return out;
++}
+ }
+ 
+ #define OPENBW_EXPORT(name) __attribute__((export_name(#name))) extern "C"
+ 
+ // Build the game with `n` occupied slots. Every peer must pass an identical slot list (and
+ // the same map) or their initial states differ and lockstep is broken from frame 0.
+-static void init_game(int width, int height, int my_slot, const mp_slot* slots, size_t n) {
++static void init_game(int width, int height, int my_slot, const mp_slot* slots, size_t n, bool campaign = false) {
+ 	g_loader = new loader_t(data_loading::data_files_directory<loader_t>(""));
+ 
+ 	race_t my_race = race_t::terran;
+ 	for (size_t k = 0; k != n; ++k) if (slots[k].slot == my_slot) my_race = slots[k].race;
+ 
+ 	game_player player(*g_loader);
+-	g_ui = new play_ui(std::move(player), my_slot, my_race);
++	if (campaign) {
++		g_campaign = new campaign_ui(std::move(player), my_slot, my_race);
++		g_ui = g_campaign;
++		g_campaign->sound_file = mission_sound;
++	} else g_ui = new play_ui(std::move(player), my_slot, my_race);
+ 	g_ui->exit_on_close = false;
+-	g_ui->competitive = n > 1;   // victory/defeat only matters with an opponent
++	g_ui->competitive = campaign || n > 1;   // victory/defeat only matters with an opponent
+ 	g_ui->load_data_file = [](a_vector<uint8_t>& data, a_string filename) {
+ 		(*g_loader)(data, std::move(filename));
+ 	};
+@@ -94,12 +115,58 @@
+ 	data_loading::mpq_file<data_loading::js_file_reader<>> map_loader("openbw.map");
+ 	// Tee the map's CHK out of the loader: a .rep embeds it verbatim, and it's the only
+ 	// part of the replay we can't reconstruct from the sim afterwards.
++	if (campaign) {
++		g_mission = new data_loading::mpq_file<data_loading::js_file_reader<>>("openbw.map");
++		(*g_mission)(g_ui->rep_map, g_campaign_prefix + "staredit/scenario.chk");
++		game_load_functions load(g_ui->player.st());
++		// Preserve every original owner and race, before the melee loader's
++		// default random-race setup. Mission 1's human is player 2 (slot 1).
++		std::array<int, 12> owners{}, races{};
++		auto& data = g_ui->rep_map;
++		for (size_t p = 0; p + 8 <= data.size();) {
++			unsigned len = campaign_ui::u32(&data[p + 4]);
++			if (len > data.size() - p - 8) error("Invalid campaign CHK");
++			if (!memcmp(&data[p], "UPRP", 4)) g_campaign->properties.assign(data.begin()+p+8,data.begin()+p+8+len);
++			if (len >= 12) for (size_t i = 0; i < 12; ++i) {
++				if (!memcmp(&data[p], "OWNR", 4)) owners[i] = data[p + 8 + i];
++				if (!memcmp(&data[p], "SIDE", 4)) races[i] = data[p + 8 + i];
++			}
++			p += 8 + len;
++		}
++		load.load_map_data(data.data(), data.size(), [&]() {
++			load.setup_info.victory_condition = 0;
++			load.setup_info.resource_type = 0;
++			for (size_t i = 0; i < 12; ++i) {
++				auto& p = g_ui->st.players[i];
++				p.controller = (decltype(p.controller))owners[i];
++				p.race = (race_t)races[i];
++				if (p.controller == player_t::controller_open) p.controller = player_t::controller_occupied;
++				if (p.controller == player_t::controller_computer) p.controller = player_t::controller_computer_game;
++			}
++		});
++		// The imported classic campaign missions are original StarCraft. Old CHKs do
++		// not disable types added later by Brood War; enforce that game mode in
++		// the simulation as well as in the command card.
++		if (!g_campaign_expansion) for (int p = 0; p < 12; ++p) {
++			for (const auto& type : g_ui->game_st.unit_types.vec)
++				if (type.is_broodwar) load.game_st.unit_type_allowed[p][type.id] = false;
++			for (const auto& type : g_ui->game_st.upgrade_types.vec)
++				if (type.is_broodwar) load.game_st.max_upgrade_levels[p][type.id] = 0;
++			for (int i = 24; i < 44; ++i) load.game_st.tech_available[p][(TechTypes)i] = false;
++		}
++	} else {
+ 	setup_melee_slots(g_ui->player.st(), [&](a_vector<uint8_t>& out, a_string fn) {
+ 		map_loader(out, fn);
+ 		a_string low;
+ 		for (char c : fn) low += (char)std::tolower((unsigned char)c);
+ 		if (low.find("scenario.chk") != a_string::npos) g_ui->rep_map = out;
+ 	}, slots, n, &rep_seed0);
++	}
++
++	if (g_campaign) {
++		const char* names[]={"scripts/aiscript.bin","scripts/bwscript.bin"};
++		for(int i=0;i<2;++i) for(auto& archive:g_loader->mpqs) if(archive.mpq.file_exists(names[i])) { archive(g_campaign->scripts[i],names[i]); break; }
++	}
+ 
+ 	g_ui->wnd.create("OpenBW Web", 0, 0, width, height);
+ 	g_ui->resize(width, height);
+@@ -137,7 +204,7 @@
+ 		}
+ 		for (size_t k = 0; k != n; ++k)
+ 			r.player_names[slots[k].slot] = (int)k == my_slot ? "You" : "Opponent";
+-		g_ui->rep_on = g_ui->rep_map.size() != 0;
++		g_ui->rep_on = !campaign && g_ui->rep_map.size() != 0;
+ 	}
+ 
+ 	ui::log("openbw_init: map '%s' %dx%d, slot %d of %d, units=%d, fog_player=%d\n",
+@@ -152,26 +219,70 @@
+ 	init_game(width, height, slot, &s, 1);
+ }
+ 
++// Catalog IDs keep existing Terran routes stable while retaining each CHK's
++// original human player slot and race.
++OPENBW_EXPORT(openbw_init_campaign) void openbw_init_campaign(int width, int height, int mission) {
++    for (const auto& entry : web_campaigns) if (entry.code == mission) {
++        g_campaign_prefix = entry.prefix;
++        g_campaign_expansion = entry.expansion;
++        mp_slot slot{entry.player,race_t(entry.race)};
++        init_game(width,height,entry.player,&slot,1,true);
++        return;
++    }
++    error("Unknown campaign mission");
++}
++OPENBW_EXPORT(openbw_campaign_chk) const uint8_t* openbw_campaign_chk() { return g_campaign ? g_ui->rep_map.data() : nullptr; }
++OPENBW_EXPORT(openbw_campaign_chk_len) int openbw_campaign_chk_len() { return g_campaign ? (int)g_ui->rep_map.size() : 0; }
++OPENBW_EXPORT(openbw_campaign_sound) const uint8_t* openbw_campaign_sound(int index) { return mission_sound(index).data(); }
++OPENBW_EXPORT(openbw_campaign_sound_len) int openbw_campaign_sound_len(int index) { return (int)mission_sound(index).size(); }
++OPENBW_EXPORT(openbw_campaign_events) const char* openbw_campaign_events() {
++	static a_string out;
++	out.clear(); if (g_campaign) out.swap(g_campaign->events);
++	return out.c_str();
++}
++OPENBW_EXPORT(openbw_campaign_status) const char* openbw_campaign_status() {
++	static a_string out;
++	if (!g_campaign) return "";
++	char buf[160];
++	int alive = count_units_of_type(g_ui->st, 1, UnitTypes::Hero_Jim_Raynor_Vulture) + count_units_of_type(g_ui->st, 2, UnitTypes::Hero_Jim_Raynor_Vulture);
++	snprintf(buf, sizeof(buf), "%d\t%d\t%d\t%d\t%d\t%d", g_campaign->objectives,
++		g_ui->st.completed_unit_counts[1][UnitTypes::Terran_Marine],
++		g_ui->st.completed_unit_counts[1][UnitTypes::Terran_Barracks],
++		count_units_of_type(g_ui->st, 1, UnitTypes::Hero_Jim_Raynor_Vulture), alive,
++		g_campaign->campaign_control_lock || g_campaign->units_paused);
++	out = buf; return out.c_str();
++}
++
++OPENBW_EXPORT(openbw_campaign_timer) const char* openbw_campaign_timer() { static char out[24];int sec=g_campaign?(g_campaign->countdown_ms+999)/1000:0;snprintf(out,sizeof(out),"%d:%02d",sec/60,sec%60);return out; }
++OPENBW_EXPORT(openbw_campaign_ai) const char* openbw_campaign_ai() { static a_string out; out=g_campaign?g_campaign->ai_status():"";return out.c_str(); }
++OPENBW_EXPORT(openbw_campaign_ai_error) const char* openbw_campaign_ai_error() { return g_campaign?g_campaign->ai_error.c_str():""; }
++OPENBW_EXPORT(openbw_campaign_ai_trace) const char* openbw_campaign_ai_trace() { return g_campaign?g_campaign->ai_trace.c_str():""; }
++
+ // Resize the render target (e.g. when the browser window changes). Recreates
+ // the framebuffer at the new size; ui.resize() rebuilds the surfaces.
+ OPENBW_EXPORT(openbw_resize) void openbw_resize(int width, int height) {
+ 	if (!g_ui) return;
+ 	g_ui->wnd.destroy();
++	if (g_campaign) {
++		const char* names[]={"scripts/aiscript.bin","scripts/bwscript.bin"};
++		for(int i=0;i<2;++i) for(auto& archive:g_loader->mpqs) if(archive.mpq.file_exists(names[i])) { archive(g_campaign->scripts[i],names[i]); break; }
++	}
++
+ 	g_ui->wnd.create("OpenBW Web", 0, 0, width, height);
+ 	g_ui->resize(width, height);
+ }
+ 
+ // Nudge the camera by (dx, dy) map pixels (e.g. from a trackpad/wheel scroll).
+-// ui.update() clamps screen_pos to the map each frame.
++// Clamp immediately with signed coordinates, including gestures past an edge.
+ OPENBW_EXPORT(openbw_pan) void openbw_pan(int dx, int dy) {
+-	if (g_ui) g_ui->screen_pos += xy(dx, dy);
++	if (g_ui) { g_ui->screen_pos += xy(dx, dy); g_ui->clamp_viewport(); }
+ }
+ 
+ // One simulation frame. JS drives this from a fixed-interval timer, so it keeps
+ // ticking (throttled) while the tab is backgrounded and never fast-forwards a
+ // backlog on return — unlike advancing by elapsed wall-clock time.
+ OPENBW_EXPORT(openbw_step) void openbw_step() {
+-	if (g_ui) g_ui->state_functions::next_frame();
++	if (g_ui) { g_ui->apply_testing_cheats(); if(g_campaign) g_campaign->campaign_tick(); g_ui->state_functions::next_frame(); }
+ }
+ 
+ // Render the current state into the framebuffer and process input. JS drives
+@@ -191,6 +302,32 @@
+ OPENBW_EXPORT(openbw_status) const char* openbw_status() {
+ 	return g_ui ? g_ui->build_status() : "";
+ }
++OPENBW_EXPORT(openbw_production_icon) int openbw_production_icon() {
++    auto* u = g_ui ? g_ui->primary_selected() : nullptr;
++    if (!u) return -1;
++    if (!u->build_queue.empty()) return (int)u->build_queue.front()->id;
++    if (g_ui->unit_is_researching(u)) return u->building.researching_type->icon;
++    if (g_ui->unit_is_upgrading(u)) return u->building.upgrading_type->icon;
++    return -1;
++}
++OPENBW_EXPORT(openbw_production_kind) int openbw_production_kind() {
++    auto* u = g_ui ? g_ui->primary_selected() : nullptr;
++    if (!u || g_ui->current_selection.size() != 1) return 0;
++    if (g_ui->ut_worker(u)) return 0;
++    if (!g_ui->u_completed(u)) return 4;
++    if (!u->build_queue.empty()) return 1;
++    if (g_ui->unit_is_researching(u)) return 2;
++    if (g_ui->unit_is_upgrading(u)) return 3;
++    return 0;
++}
++OPENBW_EXPORT(openbw_production_queue_type) int openbw_production_queue_type(int slot) {
++    auto* u = g_ui ? g_ui->primary_selected() : nullptr;
++    return u && slot >= 0 && size_t(slot) < u->build_queue.size() ? int(u->build_queue[slot]->id) : -1;
++}
++OPENBW_EXPORT(openbw_selected_race) int openbw_selected_race() {
++    auto* u = g_ui ? g_ui->primary_selected() : nullptr;
++    return u ? int(g_ui->unit_race(u)) : -1;
++}
+ 
+ // "minerals\tgas\tsupply_used\tsupply_max" for the resource HUD.
+ OPENBW_EXPORT(openbw_resources) const char* openbw_resources() {
+@@ -243,6 +380,70 @@
+ OPENBW_EXPORT(openbw_wires) const char* openbw_wires() { return g_ui ? g_ui->wires() : ""; }
+ OPENBW_EXPORT(openbw_wire_rgba) const uint8_t* openbw_wire_rgba(int i) { return g_ui ? g_ui->render_wireframe((size_t)i) : nullptr; }
+ OPENBW_EXPORT(openbw_wire_box) int openbw_wire_box() { return g_ui ? g_ui->wire_box() : 32; }
++OPENBW_EXPORT(openbw_selected_type) int openbw_selected_type() {
++    auto* u = g_ui ? g_ui->primary_selected() : nullptr;
++    if (!u && g_ui && !g_ui->current_selection.empty()) u = g_ui->get_unit(g_ui->current_selection.front());
++    return u ? (int)u->unit_type->id : -1;
++}
++OPENBW_EXPORT(openbw_placement_valid) int openbw_placement_valid(int x, int y) {
++    return g_ui && g_ui->placement_valid(x,y);
++}
++OPENBW_EXPORT(openbw_unit_details) const char* openbw_unit_details() {
++    return g_ui ? g_ui->unit_details() : "";
++}
++// A read-only, fog-aware hit test for the touch UI. No commands on touch-down.
++// 0 = select/inspect; 1 = contextual worker/rally order; 2 = explicit target;
++// 3 = attack/attack-move for owned mobile non-workers.
++OPENBW_EXPORT(openbw_touch_action) int openbw_touch_action(int x, int y) {
++    if (!g_ui || g_ui->paused || g_ui->campaign_control_lock) return 0;
++    if (g_ui->pending_build || g_ui->targeting) return 2;
++    auto* target = g_ui->select_get_unit_at(g_ui->screen_to_map(x,y));
++    if (target && !g_ui->unit_hidden_by_fog(target) && target->owner == g_ui->my_player) return 0;
++    bool owned = false;
++    for (auto id : g_ui->current_selection) if (auto* u = g_ui->get_unit(id)) {
++        if (u->owner != g_ui->my_player) continue;
++        owned = true;
++        if (g_ui->u_completed(u) && !g_ui->ut_building(u) && !g_ui->ut_worker(u) &&
++            !g_ui->unit_is(u, UnitTypes::Zerg_Larva) && !g_ui->unit_is_egg(u)) return 3;
++    }
++    return owned ? 1 : 0;
++}
++OPENBW_EXPORT(openbw_touch_attack) void openbw_touch_attack() {
++    if (g_ui && !g_ui->paused && !g_ui->campaign_control_lock) g_ui->start_target(g_ui->T_ATTACK);
++}
++OPENBW_EXPORT(openbw_touch_cancel) void openbw_touch_cancel() {
++    if (!g_ui) return;
++    // Cancel the local selection gesture without committing it or an order.
++    extern void openbw_discard_pointer_events();
++    openbw_discard_pointer_events();
++    g_ui->is_drag_selecting = false;
++    g_ui->is_dragging_screen = false;
++    g_ui->is_moving_minimap = false;
++}
++OPENBW_EXPORT(openbw_portrait_for_type) int openbw_portrait_for_type(int type) {
++    return g_ui && type >= 0 && type < 228 ? g_ui->get_unit_type((UnitTypes)type)->portrait : -1;
++}
++OPENBW_EXPORT(openbw_portrait_talking) int openbw_portrait_talking() {
++    if (!g_ui) return 0;
++    auto* u = g_ui->primary_selected();
++    if (!u) return 0;
++    for (size_t i = 0; i < g_ui->sound_channels.size(); ++i) {
++        auto& c = g_ui->sound_channels[i];
++        if (c.playing && (c.flags & 2) && c.unit_type == u->unit_type && native_sound::is_playing(i)) return 1;
++    }
++    return 0;
++}
++// Local test controls. Never grant resources or production bonuses to enemy players.
++OPENBW_EXPORT(openbw_test_instant) void openbw_test_instant(int enabled) {
++    if (g_ui) { g_ui->test_instant = enabled != 0; if (enabled) g_ui->rep_on = false; }
++}
++OPENBW_EXPORT(openbw_test_money) void openbw_test_money() {
++    if (!g_ui) return;
++    int p = g_ui->my_player;
++    g_ui->st.current_minerals[p] = std::min(999999, g_ui->st.current_minerals[p] + 10000);
++    g_ui->st.current_gas[p] = std::min(999999, g_ui->st.current_gas[p] + 10000);
++    g_ui->rep_on = false;
++}
+ 
+ // External cursor + view zoom support: the host renders the frame at window/zoom
+ // and upscales; the cursor is drawn in a native-resolution host overlay and the
+@@ -250,13 +451,30 @@
+ OPENBW_EXPORT(openbw_cursor_rgba) const uint8_t* openbw_cursor_rgba() { return g_ui ? g_ui->cursor_rgba() : nullptr; }
+ OPENBW_EXPORT(openbw_cursor_box) int openbw_cursor_box() { return g_ui ? (int)g_ui->cursor_box() : 128; }
+ OPENBW_EXPORT(openbw_set_external_cursor) void openbw_set_external_cursor(int on) { if (g_ui) g_ui->external_cursor = on != 0; }
+-OPENBW_EXPORT(openbw_set_view_scale) void openbw_set_view_scale(double s) { if (g_ui) g_ui->minimap_scale = s >= 1 ? s : 1; }
++OPENBW_EXPORT(openbw_set_view_scale) void openbw_set_view_scale(double s) { if (g_ui) g_ui->minimap_scale = s >= .5 ? s : .5; }
+ 
+ // Debug JS API for console/automation testing: list units, select by id (see sandbox.h).
+ OPENBW_EXPORT(openbw_debug_units) const char* openbw_debug_units() { return g_ui ? g_ui->debug_units() : ""; }
+ OPENBW_EXPORT(openbw_debug_select) void openbw_debug_select(int id, int add) { if (g_ui) g_ui->debug_select(id, add); }
++// Diagnostic fault injection: exercise campaign replacement requests without
++// modifying the mission or its original AI bytecode. Never called by game UI.
++OPENBW_EXPORT(openbw_debug_kill) void openbw_debug_kill(int raw_id) { if(g_ui) { auto* u=g_ui->get_unit(unit_id(uint16_t(raw_id))); if(u&&!g_ui->unit_dying(u))g_ui->kill_unit(u); } }
+ OPENBW_EXPORT(openbw_debug_set_life) void openbw_debug_set_life(int id, int hp, int shields) { if (g_ui) g_ui->debug_set_life(id, hp, shields); }
+ 
++// Deterministic scenario diagnostics, not exposed as player controls.
++OPENBW_EXPORT(openbw_debug_warp) void openbw_debug_warp(int raw_id,int x,int y) {
++    if(!g_ui)return;auto* u=g_ui->get_unit(unit_id(uint16_t(raw_id)));if(!u||g_ui->unit_dying(u))return;
++    auto pos=g_ui->find_unit_placement(u,{x,y},true,false);if(!pos.first)return;
++    g_ui->reset_movement_state(u);g_ui->move_unit(u,pos.second);g_ui->refresh_unit_vision(u);if(u->subunit)g_ui->move_unit(u->subunit,pos.second);
++    g_ui->set_unit_order(u,u->unit_type->return_to_idle);
++}
++OPENBW_EXPORT(openbw_debug_doodads) const char* openbw_debug_doodads() {
++    static a_string out;out.clear();if(!g_ui)return out.c_str();
++    for(int p=0;p<12;++p)for(auto* u:ptr(g_ui->st.player_units[p]))if(g_ui->unit_is_door(u)||g_ui->unit_is_trap(u))
++        out+=format("%d\t%d\t%d\t%d\t%d\t%d\t%d\n",int(g_ui->get_unit_id(u).raw_value),int(u->unit_type->id),u->sprite->position.x,u->sprite->position.y,int(g_ui->u_disabled(u)),int(g_ui->u_no_collide(u)),int(u->order_type->id));
++    return out.c_str();
++}
++
+ // Cancel the build-queue slot a status chip was clicked on (0 = the one in progress).
+ OPENBW_EXPORT(openbw_cancel) void openbw_cancel(int slot) { if (g_ui) g_ui->cancel_queue_slot(slot); }
+ 
+@@ -344,6 +562,8 @@
+ // Installation, 3 Ashworld, 4 Jungle, 5 Desert, 6 Ice, 7 Twilight.
+ OPENBW_EXPORT(openbw_map_w) int openbw_map_w() { return g_ui ? (int)g_ui->game_st.map_tile_width : 0; }
+ OPENBW_EXPORT(openbw_map_h) int openbw_map_h() { return g_ui ? (int)g_ui->game_st.map_tile_height : 0; }
++OPENBW_EXPORT(openbw_minimap_terrain) int openbw_minimap_terrain() { return g_ui && g_ui->minimap_terrain; }
++OPENBW_EXPORT(openbw_set_minimap_terrain) void openbw_set_minimap_terrain(int on) { if (g_ui) g_ui->minimap_terrain = on != 0; }
+ OPENBW_EXPORT(openbw_map_tileset) int openbw_map_tileset() { return g_ui ? (int)g_ui->game_st.tileset_index : 0; }
+ 
+ // Serialise the recorded game as a BW .rep and hand back the bytes. Returns 0 if nothing
+--- a/web/wasm_backend.cpp
++++ b/web/wasm_backend.cpp
+@@ -318,3 +318,16 @@
+ }
+ 
+ }  // namespace native_sound
++
++// Used only when a touchscreen gesture is cancelled or becomes a pan/pinch.
++// Drop queued pointer events so a down/up in the same frame cannot commit it.
++extern "C" void openbw_discard_pointer_events() {
++    using namespace native_window;
++    if (!g_window) return;
++    auto& q = g_window->events;
++    for (auto i=q.begin();i!=q.end();) {
++        if (i->type == event_t::type_mouse_motion || i->type == event_t::type_mouse_button_down || i->type == event_t::type_mouse_button_up) i=q.erase(i);
++        else ++i;
++    }
++    g_window->button_state = 0;
++}
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -257,6 +257,8 @@
+ 	bool pending_land = false;                    // that placement is a flying building landing
+ 	const unit_type_t* pending_addon = nullptr;   // placing an addon: pending_build is the parent
+ 	bool targeting = false;                       // an order awaiting a target click
++	bool campaign_control_lock = false;
++	bool campaign_speech_muted = false;
+ 	bool paused = false;                          // frozen: ignore game input (camera still ok)
+ 	int mouse_x = -1, mouse_y = -1;   // off-screen until the first move, so edge-scroll stays idle at startup
+ 	int sound_rotation = 0;                       // rotates through a unit's ack sound range
+@@ -315,7 +317,10 @@
+ 	xy last_event_pos; bool have_last_event = false;   // Space recenters here
+ 	a_unordered_map<uint16_t, int> last_life;     // per own unit: last hp+shields, to spot damage
+ 	a_unordered_map<uint16_t, uint8_t> last_stim; // per own unit: stim active last frame (its self-damage is no attack)
+-	a_unordered_set<uint16_t> announced;          // own units whose ready sound has fired
++	// Morphs retain their unit ID: a Larva and its completed Hydralisk must not
++	// share a ready notification. Remember the completed type as well as the ID.
++	a_unordered_map<uint16_t, int> announced;
++	int ready_notifications = 0, last_ready_sound = -1, last_ready_type = -1;
+ 	bool events_seeded = false;                   // first poll seeds silently (no startup spam)
+ 	// System message log (eliminations, later chat), shown as fading lines top-left.
+ 	struct log_msg { a_string text; int age; };
+@@ -462,7 +467,7 @@
+ 	// Play one of a unit's voice-ack sounds (first..last inclusive), the way the
+ 	// original game client did on select/order — the sim never plays these.
+ 	void play_unit_ack(unit_t* u, int first, int last) {
+-		if (spectator) return;   // a spectator is nobody's player — no unit voices, for anyone
++		if (spectator || campaign_speech_muted) return;
+ 		if (!u || first <= 0 || last < first) return;
+ 		int id = first + (sound_rotation++ % (last - first + 1));
+ 		play_sound(id, u->sprite->position, u, false);   // 4-arg form (override hides the others)
+@@ -540,7 +545,7 @@
+ 		if (owner == my_player) outcome = state >= 3 ? 1 : 2;
+ 		else if (state >= 3) outcome = 2;          // someone else won, so we lost
+ 	}
+-	void check_last_standing() {
++	virtual void check_last_standing() {
+ 		if (!competitive || outcome) return;
+ 		if (st.players[my_player].victory_state >= 3) { outcome = 1; return; }
+ 		for (int i = 0; i != 8; ++i)
+@@ -889,6 +894,15 @@
+ 	static UnitTypes bw_what_builds(UnitTypes id) {
+ 		using U = UnitTypes;
+ 		switch (id) {
++		case U::Zerg_Drone: case U::Zerg_Overlord: case U::Zerg_Zergling:
++		case U::Zerg_Hydralisk: case U::Zerg_Mutalisk: case U::Zerg_Scourge:
++		case U::Zerg_Queen: case U::Zerg_Defiler: case U::Zerg_Ultralisk: return U::Zerg_Larva;
++		case U::Zerg_Lurker: return U::Zerg_Hydralisk;
++		case U::Zerg_Guardian: case U::Zerg_Devourer: return U::Zerg_Mutalisk;
++		case U::Zerg_Lair: return U::Zerg_Hatchery;
++		case U::Zerg_Hive: return U::Zerg_Lair;
++		case U::Zerg_Greater_Spire: return U::Zerg_Spire;
++		case U::Zerg_Sunken_Colony: case U::Zerg_Spore_Colony: return U::Zerg_Creep_Colony;
+ 		case U::Terran_SCV:                  return U::Terran_Command_Center;
+ 		case U::Terran_Marine: case U::Terran_Firebat:
+ 		case U::Terran_Medic:  case U::Terran_Ghost:            return U::Terran_Barracks;
+@@ -1015,11 +1029,14 @@
+ 		race_t race = unit_race(u);
+ 		for (size_t i = 0; i != game_st.unit_types.vec.size(); ++i) {
+ 			UnitTypes id = (UnitTypes)i;
++			// Fighter production has its own opcode/button, never a Larva morph.
++			if (id == UnitTypes::Protoss_Scarab || id == UnitTypes::Protoss_Interceptor) continue;
+ 			const unit_type_t* t = get_unit_type(id);
+-			bool tb = ut_building(t), addon = ut_addon(t);
++			if (!game_st.unit_type_allowed[u->owner][id]) continue;
++			bool tb = ut_building(t), addon = ut_addon(t), morph = bw_is_building_morph(id);
+ 			// Producer cards list units plus their addons (addons are buildings, but the
+ 			// producer builds them, not a worker); the worker submenu lists real buildings.
+-			if (buildings_only ? (!tb || addon) : (tb && !addon)) continue;
++			if (buildings_only ? (!tb || addon || morph) : (tb && !addon && !morph)) continue;
+ 			if (cat && tb && bw_build_advanced(id) != (cat == 2)) continue;
+ 			bool can = unit_can_build(u, t);
+ 			UnitTypes req = UnitTypes::None;
+@@ -1030,7 +1047,7 @@
+ 				// bw_build_key is non-zero only for real build-menu buildings.
+ 				bool always = (buildings_only && bw_build_key(id) && unit_race(t) == race && !bw_is_building_morph(id))
+ 				           || (!buildings_only && addon && bw_addon_parent(id) == u->unit_type->id)
+-				           || (!buildings_only && !tb && bw_what_builds(id) == u->unit_type->id);
++				           || (!buildings_only && bw_what_builds(id) == u->unit_type->id);
+ 				if (!always) continue;
+ 				req = first_missing_req(id, u->owner);
+ 			}
+@@ -1083,7 +1100,13 @@
+ 			else card.push_back({'g', "Gather", C_GATHER, U::None});
+ 			if (id == U::Terran_SCV) card.push_back({'r', "Repair", C_REPAIR, U::None});
+ 			card.push_back({'b', "Build", C_BUILDMENU, U::None});
+-			card.push_back({'v', "Advanced", C_ADVMENU, U::None});
++			bool advanced = false;
++			for (size_t n = 0; n != game_st.unit_types.vec.size(); ++n) {
++				auto candidate = (UnitTypes)n;
++				if (game_st.unit_type_allowed[u->owner][candidate] && bw_build_key(candidate) &&
++				    bw_build_advanced(candidate) && unit_race(get_unit_type(candidate)) == unit_race(u)) { advanced = true; break; }
++			}
++			if (advanced) card.push_back({'v', "Advanced", C_ADVMENU, U::None});
+ 		} else {
+ 			add_producible(u, false);   // train/morph units, upgrades, research
+ 		}
+@@ -1252,7 +1275,7 @@
+ 		}
+ 		card_text += title;
+ 		card_text += '\t';
+-		if (!ut_resource(sel)) card_text += format("HP %d/%d", hp, maxhp).c_str();
++		if ((!ut_resource(sel) || unit_is_refinery(sel)) && !unit_is_special_beacon(sel) && !u_invincible(sel)) card_text += format("HP %d/%d", hp, maxhp).c_str();
+ 		card_text += '\t'; card_text += stat2.c_str();
+ 		// Status effects (field 4). Blind and parasite have no in-world overlay sprite, so
+ 		// this panel line is the only place they're visible; the rest also draw on the unit
+@@ -1286,7 +1309,7 @@
+ 				const tech_type_t* te = get_tech_type(c.tech);
+ 				minc = te->mineral_cost; gasc = te->gas_cost;
+ 			} else if (c.ut != UnitTypes::None &&
+-			           (c.act == C_BUILD || c.act == C_TRAIN || c.act == C_MORPH || c.act == C_MORPHBLDG)) {
++			           (c.act == C_BUILD || c.act == C_TRAIN || c.act == C_MORPH || c.act == C_MORPHBLDG || c.act == C_FIGHTER)) {
+ 				const unit_type_t* ut = get_unit_type(c.ut);
+ 				minc = ut->mineral_cost; gasc = ut->gas_cost;
+ 			}
+@@ -1303,7 +1326,66 @@
+ 			card_text += '\t'; card_text += (c.req != UnitTypes::None) ? unit_name(c.req) : "";
+ 			card_text += '\t'; card_text += desc;
+ 			card_text += '\t'; card_text += (active_act >= 0 && (int)c.act == active_act) ? '1' : '0';
++			int command_icon = icon;
++			if (c.upg != UpgradeTypes::None) command_icon = get_upgrade_type(c.upg)->icon;
++			else if (c.tech != TechTypes::None) command_icon = get_tech_type(c.tech)->icon;
++			else if (c.act == C_CLOAK) command_icon = get_tech_type(unit_is(sel,UnitTypes::Terran_Ghost) ? TechTypes::Personnel_Cloaking : TechTypes::Cloaking_Field)->icon;
++			else if (c.act == C_DECLOAK) command_icon = get_tech_type(unit_is(sel,UnitTypes::Terran_Ghost) ? TechTypes::Personnel_Cloaking : TechTypes::Cloaking_Field)->icon + 1;
++			card_text += '\t'; card_text += format("%d",command_icon).c_str();
++			// Stable data IDs let the host retain empty command slots after research.
++			card_text += format("\t%d\t%d", c.act == C_UPGRADE ? int(c.upg) : -1,
++			    c.act == C_RESEARCH ? int(c.tech) : -1);
++		}
++	}
++
++	// The selected unit's real combat statistics. Field IDs point into stat_txt;
++	// the host draws the original command icons and bitmap font, not canned values.
++	a_string details_text;
++	const char* unit_details() {
++		details_text.clear();
++		if (current_selection.size() != 1) return "";
++		unit_t* u = get_unit(current_selection.front());
++		if (!u || ut_resource(u) || ut_powerup(u) || unit_is_special_beacon(u)) return "";
++		int ri = (int)unit_race(u), supplied = u_completed(u) ? u->unit_type->supply_provided.raw_value / 2 : 0;
++		bool cargo = false;
++		if (unit_provides_space(u)) for (auto* passenger : loaded_units(u)) { (void)passenger; cargo = true; break; }
++		details_text = format("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",u->kill_count,
++			u->unit_type->has_shield ? u->shield_points.integer_part() : -1,
++			u->unit_type->shield_points,
++			ut_has_energy(u) && !u_hallucination(u) ? u->energy.integer_part() : -1,
++			unit_max_energy(u).integer_part(),ut_building(u) ? 1 : 0,
++			ut_detector(u) && !u_hallucination(u) ? 1 : 0, supplied,
++			st.supply_used[u->owner][ri].raw_value / 2,
++			std::min(200,st.supply_available[u->owner][ri].raw_value / 2),ri,cargo ? 1 : 0);
++		auto weapon = [&](const weapon_type_t* w, int hits) {
++			if (!w) return;
++			int level = player_upgrade_level(u->owner,w->damage_upgrade);
++			details_text += format("\nweapon\t%d\t%d\t%d\t%d\t%d\t%d",w->icon,level,
++				w->damage_amount,level*w->damage_bonus,std::max(1,hits),w->label);
++		};
++		auto* ground = unit_or_subunit_ground_weapon(u);
++		auto* air = unit_or_subunit_air_weapon(u);
++		const auto* type = u->subunit ? u->subunit->unit_type : u->unit_type;
++		weapon(ground,type->max_ground_hits);
++		if (air != ground) weapon(air,type->max_air_hits);
++		const auto* armor = get_upgrade_type(u->unit_type->armor_upgrade);
++		int level = player_upgrade_level(u->owner,armor->id);
++		details_text += format("\narmor\t%d\t%d\t%d\t%d\t1\t%d",armor->icon,level,
++			u->unit_type->armor,unit_armor(u).integer_part()-u->unit_type->armor,armor->label);
++		if (u->unit_type->has_shield) {
++			const auto* shield = get_upgrade_type(UpgradeTypes::Protoss_Plasma_Shields);
++			int level = player_upgrade_level(u->owner,shield->id);
++			details_text += format("\nshield\t%d\t%d\t0\t%d\t1\t%d",shield->icon,level,level,shield->label);
++		}
++		if (unit_is_reaver(u) || unit_is_carrier(u)) {
++			bool reaver = unit_is_reaver(u);
++			const auto* fighter = get_unit_type(reaver ? UnitTypes::Protoss_Scarab : UnitTypes::Protoss_Interceptor);
++			const weapon_type_t* w = fighter->ground_weapon;
++			int level = w ? player_upgrade_level(u->owner,w->damage_upgrade) : 0;
++			details_text += format("\nammo\t%d\t%d\t%d\t%d\t1\t0",int(fighter->id),
++			    int(reaver ? unit_scarab_count(u) : unit_interceptor_count(u)),w ? w->damage_amount : 0,w ? level*w->damage_bonus : 0);
+ 		}
++		return details_text.c_str();
+ 	}
+ 
+ 	static const char* unit_short_name(UnitTypes id) {
+@@ -1333,7 +1415,10 @@
+ 	const char* build_status() {
+ 		status_text.clear();
+ 		unit_t* u = primary_selected();
+-		if (!u) return status_text.c_str();
++		if (!u || current_selection.size() != 1 || (!spectator && u->owner != my_player)) return status_text.c_str();
++		// Workers use build_queue internally for a destination building, not a
++		// production queue. A Drone walking to morph still shows its normal stats.
++		if (ut_worker(u)) return status_text.c_str();
+ 		auto pct = [](int done, int total) { return total > 0 ? 100 * done / total : 0; };
+ 		if (!u->build_queue.empty()) {
+ 			int prog = 0;
+@@ -1350,6 +1435,9 @@
+ 			}
+ 			status_text += format("%d", prog);
+ 			for (auto* ut : u->build_queue) { status_text += '\t'; status_text += unit_name(ut->id); }
++		} else if (!u_completed(u)) {
++			int bt = u->unit_type->build_time;
++			status_text = format("%d\t%s", pct(bt - u->remaining_build_time, bt), unit_name(u->unit_type->id));
+ 		} else if (unit_is_researching(u)) {
+ 			const tech_type_t* te = u->building.researching_type;
+ 			status_text += format("%d", pct(te->research_time - u->building.upgrade_research_time, te->research_time));
+@@ -1379,6 +1467,20 @@
+ 	// per player that started the game: "isMe\trace\tcolor\tunits\tbuildings\tminerals\tgas
+ 	// \tscore". Stats come straight from the sim's cumulative counters.
+ 	a_string stats_out;
++	std::array<int,12> score_killed{}, score_razed{}, score_lost{}, score_buildings_lost{}, score_kills{}, score_razings{};
++	a_unordered_set<unsigned> scored_losses;
++	void on_kill_unit(unit_t* u) override {
++		if (u->owner >= 12 || ut_turret(u) || ut_resource(u) || u_hallucination(u) || unit_is_special_beacon(u)) return;
++		// Cancellation is not a loss; combat damage sets HP to zero before this callback.
++		if (!u_completed(u) && u->hp != 0_fp8) return;
++		if (scored_losses.insert(get_unit_id(u).raw_value).second)
++			++(ut_building(u) ? score_buildings_lost : score_lost)[u->owner];
++	}
++	void on_scenario_kill(int owner, const unit_t* u) override {
++		if (owner < 0 || owner >= 12 || owner == u->owner || ut_turret(u) || ut_resource(u) || u_hallucination(u)) return;
++		++(ut_building(u) ? score_razed : score_killed)[owner];
++		(ut_building(u) ? score_razings : score_kills)[owner] += u->unit_type->destroy_score;
++	}
+ 	const char* stats_text() {
+ 		stats_out = format("%d\t%d", outcome, (int)st.current_frame);
+ 		for (int i = 0; i != 8; ++i) {
+@@ -1388,6 +1490,12 @@
+ 				st.total_non_buildings_ever_completed[i], st.total_buildings_ever_completed[i],
+ 				st.total_minerals_gathered[i], st.total_gas_gathered[i],
+ 				st.unit_score[i] + st.building_score[i]);
++			stats_out += format("\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
++				score_killed[i],score_lost[i],score_razed[i],score_buildings_lost[i],
++				st.unit_score[i]+score_kills[i],st.building_score[i]+score_razings[i],
++				std::max(0,st.total_minerals_gathered[i]-(int)st.current_minerals[i]),
++				std::max(0,st.total_gas_gathered[i]-(int)st.current_gas[i]),
++				i,(int)st.players[i].victory_state,(int)st.players[i].controller);
+ 		}
+ 		return stats_out.c_str();
+ 	}
+@@ -1541,6 +1649,24 @@
+ 		return msg_out.c_str();
+ 	}
+ 
++    bool test_instant = false;
++    void apply_testing_cheats() {
++        if (!test_instant || campaign_control_lock || scenario_units_paused()) return;
++        for (unit_t* u : ptr(st.player_units[my_player])) {
++            if (unit_dying(u)) continue;
++            // Leave placement, resource/supply checks, morph animations and completion
++            // callbacks in the ordinary engine. Only remove the production wait.
++            if (!u_completed(u) && u->remaining_build_time > 0) {
++                u->remaining_build_time = 0;
++                set_unit_hp(u, u->unit_type->hitpoints);
++                set_unit_shield_points(u, fp8::integer(u->unit_type->shield_points));
++            }
++            if (ut_building(u) && (u->order_type->id == Orders::ResearchTech ||
++                                  u->order_type->id == Orders::Upgrade))
++                u->building.upgrade_research_time = 0;
++        }
++    }
++
+ 	// Debug JS API (window.__bw.x.openbw_debug_*): the browser-console/automation story for
+ 	// driving the game without pixel-hunting the canvas — clicking units that move between a
+ 	// screenshot and the click is hopelessly flaky. List the units, then select by id.
+@@ -1548,7 +1674,7 @@
+ 	// debug_units(): one unit per line, "id \t type \t owner \t x \t y \t order".
+ 	const char* debug_units() {
+ 		debug_text.clear();
+-		for (size_t i = 0; i != 8; ++i)
++		for (size_t i = 0; i != 12; ++i)
+ 			for (unit_t* u : ptr(st.player_units[i]))
+ 				debug_text += format("%u\t%s\t%d\t%d\t%d\t%d\n", (unsigned)get_unit_id(u).raw_value,
+ 					unit_name(u->unit_type->id), u->owner,
+@@ -1616,6 +1742,14 @@
+ 		for (auto& a : alerts) debug_text += format(" [ttl=%d kind=%d pos=%d,%d]", a.ttl, a.kind, a.pos.x, a.pos.y);
+ 		debug_text += "\n";
+ 		debug_text += format("selection=%d\n", (int)current_selection.size());
++		debug_text += format("camera=%d,%d\n", screen_pos.x, screen_pos.y);
++		if (!current_selection.empty()) if (auto* selected = get_unit(current_selection.front()))
++			debug_text += format("selected_owner=%d selection_palette=%d\n", selected->owner, selection_color_offset(selected));
++		debug_text += format("rescues=%d sound=%d:%s\n", rescue_notifications, last_rescue_sound,
++			last_rescue_sound >= 0 ? sound_filenames[last_rescue_sound].c_str() : "none");
++		debug_text += format("rescue_flashes=%d\n", int(rescue_flashes.size()));
++		debug_text += format("ready_notifications=%d ready_type=%d ready_sound=%d:%s\n", ready_notifications,
++			last_ready_type, last_ready_sound, last_ready_sound >= 0 ? sound_filenames[last_ready_sound].c_str() : "none");
+ 		{   // the sim-side selection (what single-unit actions like build key off)
+ 			int n = 0; const char* first = "none";
+ 			for (unit_t* su : selected_units(my_player)) { if (!n) first = unit_name(su->unit_type->id); ++n; }
+@@ -1624,6 +1758,9 @@
+ 		unit_t* u = primary_selected();
+ 		if (!u) { debug_text += "primary=none\n"; return debug_text.c_str(); }
+ 		debug_text += format("unit=%s owner=%d\n", unit_name(u->unit_type->id), u->owner);
++		if(ut_worker(u))debug_text+=format("carrying=%d powerup=%d\n",u->carrying_flags,u->worker.powerup?get_unit_id(u->worker.powerup).raw_value:0);
++        debug_text += format("completed=%d remaining_build_time=%d research_time=%d\n", u_completed(u), u->remaining_build_time,
++            ut_building(u) ? u->building.upgrade_research_time : -1);
+ 		debug_text += format("order=%d order2=%d\n", (int)u->order_type->id, (int)u->secondary_order_type->id);
+ 		debug_text += format("attack_move=%d attack_unit=%d\n",
+ 			(int)u->unit_type->attack_move->id, (int)u->unit_type->attack_unit->id);
+@@ -1634,10 +1771,48 @@
+ 		return debug_text.c_str();
+ 	}
+ 
+-	// Announce a participant the moment it loses its last unit/building.
+-	void poll_eliminations() {
++	int selection_viewer() const override { return spectator ? fog_player : my_player; }
++	struct rescue_flash { unit_id id; int start; };
++	a_unordered_map<size_t,rescue_flash> rescue_flashes;
++	static constexpr int RESCUE_FLASH_FRAMES = 60, RESCUE_BLINK_FRAMES = 6;
++	void on_unit_given(unit_t* u, int old_owner, int new_owner) override {
++		if (old_owner == new_owner || new_owner != my_player || spectator || !u->sprite || ut_turret(u)) return;
++		rescue_flashes[u->sprite->index] = {get_unit_id(u),st.current_frame};
++		// Ownership changes are not production completions.
++		announced[get_unit_id(u).raw_value] = int(u->unit_type->id);
++		last_life[get_unit_id(u).raw_value] = u->hp.ceil().integer_part() + u->shield_points.integer_part();
++	}
++	const unit_t* selection_flash_unit(const sprite_t* sprite) const override {
++		auto it=rescue_flashes.find(sprite->index);
++		if(it==rescue_flashes.end())return nullptr;
++		int elapsed=st.current_frame-it->second.start;
++		if(elapsed<0 || elapsed>=RESCUE_FLASH_FRAMES || (elapsed/RESCUE_BLINK_FRAMES)%2)return nullptr;
++		const auto* u=get_unit(it->second.id);
++		return u && u->sprite==sprite && u->owner==my_player && !unit_dying(u) ? u : nullptr;
++	}
++	int selection_color_offset(const unit_t* u) const override {
++		return u->sprite && selection_flash_unit(u->sprite)==u ? 8 : ui_functions::selection_color_offset(u);
++	}
++	int rescue_notifications = 0, last_rescue_sound = -1;
++	void on_units_rescued(int old_owner, int new_owner, race_t race) override {
++		if (new_owner != my_player || spectator) return;
++		// Rescued units are not newly produced units: don't play their ready lines.
++		for (auto* u : ptr(st.player_units[new_owner])) if (u_completed(u)) {
++			auto id = get_unit_id(u).raw_value;
++			announced[id] = int(u->unit_type->id);
++			last_life[id] = u->hp.ceil().integer_part() + u->shield_points.integer_part();
++		}
++		last_rescue_sound = 32 + int(race);
++		++rescue_notifications;
++		play_sound(last_rescue_sound, xy(), nullptr, false);
++	}
++
++	// Campaigns use their original trigger text instead of melee elimination notices.
++	virtual void poll_eliminations() {
+ 		for (int i = 0; i != 8; ++i) {
+ 			if (!st.players[i].initially_active) continue;
++			if (st.players[i].controller == player_t::controller_rescue_passive ||
++			    st.players[i].controller == player_t::controller_neutral) continue;
+ 			bool alive = false;
+ 			for (unit_t* u : ptr(st.player_units[i])) { (void)u; alive = true; break; }
+ 			if (alive) player_had_units[i] = 1;
+@@ -1651,6 +1826,9 @@
+ 	// Once per frame: fire unit-ready voices on completion and raise under-attack alerts
+ 	// when an own unit loses life. The first pass seeds silently so startup units are quiet.
+ 	void poll_events() {
++		for(auto it=rescue_flashes.begin();it!=rescue_flashes.end();) {
++			if(st.current_frame-it->second.start>=RESCUE_FLASH_FRAMES || !get_unit(it->second.id))it=rescue_flashes.erase(it);else ++it;
++		}
+ 		++event_tick;
+ 		if (alert_cooldown > 0) --alert_cooldown;
+ 		for (size_t i = 0; i != alerts.size();) {
+@@ -1663,9 +1841,17 @@
+ 		bool seeding = !events_seeded;
+ 		for (unit_t* u : ptr(st.player_units[my_player])) {
+ 			uint16_t id = get_unit_id(u).raw_value;
+-			if (u_completed(u) && announced.insert(id).second && !seeding && announces_ready(u)) {
+-				play_sound(u->unit_type->ready_sound, u->sprite->position, u, false);
+-				ping_minimap(u, 0);
++			if (u_completed(u)) {
++				auto previous = announced.find(id);
++				bool fresh = previous == announced.end() || previous->second != int(u->unit_type->id);
++				announced[id] = int(u->unit_type->id);
++				if (fresh && !seeding && announces_ready(u)) {
++					last_ready_type = int(u->unit_type->id); last_ready_sound = u->unit_type->ready_sound;
++					++ready_notifications;
++					// Production completion is a global acknowledgement, including offscreen units.
++					play_sound(last_ready_sound, xy(), u, false);
++					ping_minimap(u, 0);
++				}
+ 			}
+ 			int life = u->hp.ceil().integer_part() + u->shield_points.integer_part();
+ 			auto it = last_life.find(id);
+@@ -1716,7 +1902,7 @@
+ 			// because its cost is taken on the placement click, and Land carries a unit
+ 			// type (the building's own) but costs nothing.
+ 			switch (c.act) {
+-			case C_TRAIN: case C_MORPH: case C_MORPHBLDG: case C_RESEARCH: case C_UPGRADE:
++			case C_TRAIN: case C_MORPH: case C_MORPHBLDG: case C_RESEARCH: case C_UPGRADE: case C_FIGHTER:
+ 				if (err_kind r = block_reason(c)) { raise_error(r); return true; }
+ 				break;
+ 			default: break;
+@@ -1837,7 +2023,18 @@
+ 		if (ty < 0) ty = 0;
+ 	}
+ 
++	bool placement_valid(int mx, int my) {
++		if (!pending_build || mx < 0 || my < 0 || mx >= screen_width || my >= screen_height) return false;
++		// Addon/landing checks retain their dedicated action semantics.
++		if (pending_addon || pending_land) return true;
++		auto* builder = primary_selected();int tx,ty;
++		placement_tile(screen_to_map(mx,my),tx,ty);
++		xy center(tx*32+pending_build->placement_size.x/2,ty*32+pending_build->placement_size.y/2);
++		return builder && can_place_building(builder,my_player,pending_build,center,false,false);
++	}
++
+ 	void place_pending(int mx, int my) {
++		if (!placement_valid(mx,my)) return;
+ 		int tx, ty;
+ 		placement_tile(screen_to_map(mx, my), tx, ty);   // tile of pending_build (the parent, for an addon)
+ 		if (pending_addon) {
+@@ -1848,6 +2045,7 @@
+ 			// from it and lifts off only when that differs from where the parent stands.
+ 			cmd_build(Orders::PlaceAddon, pending_addon,
+ 			          tx + pending_addon->addon_position.x / 32, ty + pending_addon->addon_position.y / 32);
++			if (auto* u = primary_selected()) play_unit_ack(u,u->unit_type->first_yes_sound,u->unit_type->last_yes_sound);
+ 			clear_pending();
+ 			return;
+ 		}
+@@ -1859,6 +2057,8 @@
+ 		}
+ 		sync_primary();   // build is a single-unit action (see sync_primary)
+ 		cmd_build(pending_land ? Orders::BuildingLand : kit.build_order, pending_build, tx, ty);
++		if (!pending_land) play_sound(4 + int(unit_race(pending_build)),xy(),nullptr,false);
++		if (auto* u = primary_selected()) play_unit_ack(u,u->unit_type->first_yes_sound,u->unit_type->last_yes_sound);
+ 		clear_pending();   // one-shot; re-open the menu to place another
+ 	}
+ 
+@@ -1976,9 +2176,11 @@
+ 			if (n++ == 12) break;
+ 			int steps; bool shield;
+ 			wire_state(u, steps, shield);
+-			wires_text += format("%u\t%s\t%d\t%d\t%d\n", (unsigned)get_unit_id(u).raw_value,
++			// Morphing preserves the unit ID and often HP; include the type in redraws.
++			int frame = u_hallucination(u) ? 31 : ut_hero(u) ? 19 : u->parasite_flags ? 25 : 13;
++			wires_text += format("%u\t%s\t%d\t%d\t%d\t%d\t%d\n", (unsigned)get_unit_id(u).raw_value,
+ 				unit_name(u->unit_type->id), u->hp.ceil().integer_part(),
+-				u->unit_type->hitpoints.ceil().integer_part(), (steps << 1) | (int)shield);
++				u->unit_type->hitpoints.ceil().integer_part(), (steps << 1) | (int)shield, (int)u->unit_type->id, frame);
+ 		}
+ 		return wires_text.c_str();
+ 	}
+@@ -2482,6 +2684,19 @@
+ 		draw_frame(frame, false, dst, pitch, ox, oy, w, h, [](uint8_t v, uint8_t) { return v; });
+ 	}
+ 
++	// Local UI only: draw the original four-piece Psi sprite below units, without
++	// changing simulation visibility or leaking an enemy Pylon through fog.
++	void draw_psi_fields(uint8_t* data, size_t pitch) override {
++		for (const auto* pylon : ptr(st.psionic_matrix_units)) {
++			if (pylon->owner != my_player || !u_completed(pylon) || unit_hidden_by_fog(pylon)) continue;
++			bool selected = false;
++			for (auto id : current_selection) if (get_unit(id) == pylon) { selected = true; break; }
++			bool placing = pending_build && unit_race(pending_build) == race_t::protoss;
++			if ((selected || placing) && pylon->building.pylon.psi_field_sprite)
++				ui_functions::draw_sprite(pylon->building.pylon.psi_field_sprite,data,pitch);
++		}
++	}
++
+ 	// Placement preview: a faded, tinted silhouette of the actual building, plus a
+ 	// footprint outline so the exact tiles it will occupy are unambiguous.
+ 	void draw_callback(uint8_t* data, size_t data_pitch) override {
+@@ -2490,7 +2705,7 @@
+ 		draw_cursor_marker(data, data_pitch);   // the ring is drawn in draw_sprite (occluded by the unit)
+ 		draw_bw_cursor(data, data_pitch);
+ 
+-		if (!pending_build) return;
++		if (!pending_build || mouse_x < 0 || mouse_y < 0 || mouse_x >= screen_width || mouse_y >= screen_height) return;
+ 		if (place_ok_color < 0) {
+ 			place_ok_color = nearest_palette_color(40, 240, 40);
+ 			place_bad_color = nearest_palette_color(240, 40, 40);
+@@ -2574,9 +2789,18 @@
+ 		edge_dir = dir[dy > 0 ? 2 : dy < 0 ? 0 : 1][dx > 0 ? 2 : dx < 0 ? 0 : 1];
+ 	}
+ 
++	void clamp_viewport() {
++		// The base renderer compares against unsigned view dimensions. Clamp in
++		// signed arithmetic first, so crossing zero cannot wrap to the far edge.
++		screen_pos.x = std::max(0, std::min(screen_pos.x, (int)game_st.map_width - (int)view_width));
++		screen_pos.y = std::max(0, std::min(screen_pos.y, (int)game_st.map_height - (int)view_height));
++	}
++
+ 	void update() {
++		clamp_viewport();
+ 		ui_functions::update();   // processes input first, so edge_scroll sees the fresh cursor
+ 		edge_scroll();
++		clamp_viewport();
+ 		poll_events();
+ 		refresh_card();
+ 	}
+@@ -2585,7 +2809,7 @@
+ 		using ev = native_window::event_t;
+ 		if (e.type == ev::type_mouse_motion) { mouse_x = e.mouse_x; mouse_y = e.mouse_y; return false; }
+ 
+-		if (paused) {
++		if (paused || campaign_control_lock) {
+ 			// No selection, orders, or hotkeys (nor their sounds/markers) while paused;
+ 			// let the base still pan (minimap click, arrow keys, edge scroll).
+ 			if (e.type == ev::type_mouse_button_down && e.button == 1) {
+--- /dev/null
++++ b/web/campaign.h
+@@ -0,0 +1,210 @@
++// Campaign presentation and audio for the browser host. Original CHK triggers
++// drive the objectives; this class only presents their actions.
++#ifndef OPENBW_WEB_CAMPAIGN_H
++#define OPENBW_WEB_CAMPAIGN_H
++#include "campaign_ai.h"
++namespace bwgame {
++struct campaign_ui : campaign_ai {
++	using campaign_ai::campaign_ai;
++	void poll_eliminations() override {} // Original mission triggers announce results.
++	void check_last_standing() override {} // Intro triggers may create the player's first units later.
++	void on_victory_state(int owner, int state) override {
++		if (owner == my_player && state && !outcome) outcome = state >= 3 ? 1 : 2;
++	}
++	bool units_paused = false;
++	int objectives = 0;
++	int countdown_ms = 0;
++	bool timer_paused = false;
++	std::array<std::array<int,233>,12> deaths{};
++	std::array<std::array<int,8>,12> scores{};
++	a_unordered_set<unsigned> counted_deaths;
++	std::array<bool,256> switches{};
++	std::array<std::array<int,233>,8> kills{};
++	a_vector<uint8_t> properties;
++	a_string events;
++	std::function<const a_vector<uint8_t>&(int)> sound_file;
++	bool scenario_units_paused() const override { return units_paused; }
++	static unsigned u32(const uint8_t* p) { return p[0] | unsigned(p[1]) << 8 | unsigned(p[2]) << 16 | unsigned(p[3]) << 24; }
++	void campaign_tick() {
++        if(!timer_paused&&countdown_ms>0) countdown_ms=std::max(0,countdown_ms-42);
++        if(!units_paused)ai_tick();
++    }
++    void on_scenario_kill(int owner,const unit_t* u) override {
++        play_ui::on_scenario_kill(owner,u);
++        if(owner<0||owner>=8||owner==u->owner||ut_turret(u)||u_hallucination(u))return;
++        ++kills[owner][int(u->unit_type->id)];++kills[owner][229];
++        ++kills[owner][ut_building(u)?231:230];
++        if(u->unit_type->group_flags&GroupFlags::Factory)++kills[owner][232];
++    }
++    void on_kill_unit(unit_t* u) override {
++        play_ui::on_kill_unit(u);
++        if(u->owner>=12||ut_turret(u)||u_hallucination(u)||us_hidden(u)||(!u_completed(u)&&u->hp!=0_fp8))return;
++        if(!counted_deaths.insert(get_unit_id(u).raw_value).second)return;
++        ++deaths[u->owner][int(u->unit_type->id)];++deaths[u->owner][229];
++        ++deaths[u->owner][ut_building(u)?231:230];
++        if(u->unit_type->group_flags&GroupFlags::Factory)++deaths[u->owner][232];
++    }
++    int scenario_score(int p,int type) const {
++        int v=0;
++        if(type==0||type==1||type==3)v+=st.unit_score[p];
++        if(type==0||type==2||type==3)v+=st.building_score[p];
++        if(type==0||type==4||type==6)v+=score_kills[p];
++        if(type==0||type==5||type==6)v+=score_razings[p];
++        return v+scores[p][std::max(0,std::min(7,type))];
++    }
++    int on_scenario_condition(int owner,const trigger::condition& c) const override {
++        if(c.type==1)return trigger_count_comparison(c,countdown_ms/1000);
++        if(c.type==11 && c.extra_n>=0 && c.extra_n<256)return switches[c.extra_n]==(c.num_n==2);
++        if(c.type==5){int total=0;if(c.unit_id<0||c.unit_id>=233)return 0;for(int p:trigger_players(owner,c.group))if(p<8)total+=kills[p][c.unit_id];return trigger_count_comparison(c,total);}
++        if(c.type==15){int total=0;if(c.unit_id<0||c.unit_id>=233)return 0;for(int p:trigger_players(owner,c.group))total+=deaths[p][c.unit_id];return trigger_count_comparison(c,total);}
++        if(c.type==21){int total=0;for(int p:trigger_players(owner,c.group))total+=scenario_score(p,c.extra_n);return trigger_count_comparison(c,total);}
++        if(c.type==7||c.type==17){
++            if(c.location<1||size_t(c.location)>st.locations.size())return 0;
++            auto counts=trigger_bring_count(st.locations[c.location-1]);
++            int own=trigger_command_count(counts,owner,owner,c.unit_id,false);
++            for(int p=0;p<8;++p)if(player_slot_active(p)){
++                int other=trigger_command_count(counts,owner,p,c.unit_id,false);
++                if(c.type==7?other>own:other<own)return 0;
++            }return 1;
++        }
++        return -1;
++    }
++    void campaign_create(int owner,const trigger::action& a) {
++        if(a.location<1||size_t(a.location)>st.locations.size()||a.extra_n<0||a.extra_n>=228)return;
++        const auto& loc=st.locations[a.location-1];xy pos=(loc.area.from+loc.area.to)/2;
++        for(int p:trigger_players(owner,a.group_n)) for(int i=0;i<std::max(1,a.num_n);++i) {
++            auto* u=trigger_create_unit(get_unit_type(UnitTypes(a.extra_n)),pos,p);if(!u)continue;
++            // Legacy campaign actions use count 0 for one unit and no UPRP flag.
++            if(!(a.flags&8)||a.group2_n<1||a.group2_n>64||properties.size()<size_t(a.group2_n)*20)continue;
++            auto* b=&properties[(a.group2_n-1)*20];int valid=b[0]|b[1]<<8,data=b[2]|b[3]<<8,flags=b[14]|b[15]<<8;
++            if(data&2)set_unit_hp(u,std::max(1_fp8,u->unit_type->hitpoints*std::min<int>(100,b[5])/100));
++            if(data&4)set_unit_shield_points(u,fp8::integer(u->unit_type->shield_points*std::min<int>(100,b[6])/100));
++            if(data&8)set_unit_energy(u,unit_max_energy(u)*std::min<int>(100,b[7])/100);
++            if(data&16)set_unit_resources(u,u32(b+8));
++            if(valid&16)u_set_status_flag(u,unit_t::status_flag_invincible,flags&16);
++            if(valid&8 && flags&8)make_unit_hallucination(u);
++        }
++    }
++	int sound_duration(int index) {
++		if (!sound_file || !index) return 0;
++		const auto& b = sound_file(index);
++		unsigned rate = 0, bytes = 0;
++		for (size_t p = 12; p + 8 <= b.size();) {
++			unsigned n = u32(&b[p + 4]);
++			if (n > b.size() - p - 8) break;
++			if (!memcmp(&b[p], "fmt ", 4) && n >= 16) rate = u32(&b[p + 16]);
++			if (!memcmp(&b[p], "data", 4)) bytes = n;
++			p += 8 + n + (n & 1);
++		}
++		return rate ? int(uint64_t(bytes) * 1000 / rate) : 0;
++	}
++	int on_scenario_action(int owner, const trigger::action& a) override {
++		if (a.type == 15 || a.type == 16) { ai_start(owner, a.group2_n, a.type == 16 ? a.location : 0); return 0; }
++		if(a.type==13 && a.group2_n>=0 && a.group2_n<256) {
++            auto& value=switches[a.group2_n];
++            if(a.num_n==4)value=true;else if(a.num_n==5)value=false;else if(a.num_n==6)value=!value;
++            else if(a.num_n==11){ai_random=ai_random*1664525u+1013904223u;value=bool(ai_random>>31);}return 0;
++        }
++        if(a.type==14){int time=int(std::min<int64_t>(int64_t(std::max(0,a.time_n))*1000,2147483000));
++            if(a.num_n==7)countdown_ms=time;else if(a.num_n==8)countdown_ms=int(std::min<int64_t>(int64_t(countdown_ms)+time,2147483000));else if(a.num_n==9)countdown_ms=std::max(0,countdown_ms-time);return 0;}
++        if(a.type==11){campaign_create(owner,a);return 0;}
++        if(a.type==23||a.type==43){
++            if(a.location<1||size_t(a.location)>st.locations.size())return 0;
++            a_vector<unit_t*> targets;
++            for(auto* u:find_units(st.locations[a.location-1].area))if(!unit_dying(u)&&trigger_unit_pred(owner,u,a.group_n,a.extra_n)&&unit_is_at_elevation_flags(u,st.locations[a.location-1].elevation_flags))targets.push_back(u);
++            int n=0;for(auto* u:targets){if(a.type==23){if(a.num_n && n++>=a.num_n)break;kill_unit(u);}else{bool value=a.num_n==4||(a.num_n==6&&!u_invincible(u));u_set_status_flag(u,unit_t::status_flag_invincible,value);}}return 0;
++        }
++        if(a.type==39||a.type==42){
++            if(a.location<1||size_t(a.location)>st.locations.size())return 0;
++            a_vector<unit_t*> targets;
++            for(auto* u:find_units(st.locations[a.location-1].area))if(!unit_dying(u)&&!ut_turret(u)&&trigger_unit_pred(owner,u,a.group_n,a.extra_n)&&unit_is_at_elevation_flags(u,st.locations[a.location-1].elevation_flags))targets.push_back(u);
++            if(a.type==42){for(auto* u:targets)set_doodad_state(u,a.num_n==4||(a.num_n==6&&u_disabled(u)));return 0;}
++            if(a.group2_n<1||size_t(a.group2_n)>st.locations.size())return 0;
++            auto& loc=st.locations[a.group2_n-1];xy dest=(loc.area.from+loc.area.to)/2;int moved=0;
++            for(auto* u:targets){if(a.num_n&&moved>=a.num_n)break;if(us_hidden(u))continue;
++                // Grounded structures use the trigger's center directly. T4
++                // intentionally packs its silos with overlapping collision boxes.
++                auto place=u_grounded_building(u)
++                    ? std::make_pair(true,restrict_move_target_to_valid_bounds(u,dest))
++                    : find_unit_placement(u,dest,true,false);
++                if(!place.first)continue;
++                // Campaigns also move structures (including T4's six silos).
++                // Keep their orders/production and refresh both old and new footprints.
++                const xy old_pos=u->sprite->position;
++                const bool grounded=u_grounded_building(u);
++                unit_finder_remove(u);
++                if(grounded)set_unit_tiles_unoccupied(u,old_pos);
++                if(u_flying(u))decrement_repulse_field(u);
++                reset_movement_state(u);move_unit(u,place.second);refresh_unit_position(u);
++                if(grounded&&unit_race(u)==race_t::zerg){
++                    remove_creep_provider(u,old_pos,u_completed(u));
++                    set_creep_building_tiles(u,u->sprite->position);add_creep_provider(u);
++                }
++                if(grounded&&unit_race(u)==race_t::protoss){
++                    st.update_psionic_matrix=true;
++                    if(unit_is(u,UnitTypes::Protoss_Pylon)&&u->building.pylon.psi_field_sprite)
++                        move_sprite(u->building.pylon.psi_field_sprite,u->sprite->position);
++                }
++                if(!ut_building(u)&&!unit_is_egg(u))set_unit_order(u,u->unit_type->return_to_idle);
++                ++moved;
++            }return 0;
++        }
++        if(a.type==54||a.type==55){timer_paused=a.type==54;return 0;}
++        if(a.type==45||a.type==27){
++            for(int p:trigger_players(owner,a.group_n)){
++                if(a.extra_n<0 || a.extra_n>=(a.type==45?233:8))continue;
++                int& value=a.type==45?deaths[p][a.extra_n]:scores[p][a.extra_n];
++                if(a.num_n==7)value=a.group2_n;
++                else if(a.num_n==8)value=int(std::min<int64_t>(2147483647,int64_t(value)+a.group2_n));
++                else if(a.num_n==9)value=std::max(0,value-a.group2_n);
++            }return 0;
++        }
++        if(a.type==57){for(int p:trigger_players(owner,a.group_n))st.alliances[owner][p]=std::max(0,std::min(2,a.extra_n));return 0;}
++        if(a.type==48||a.type==49||a.type==50||a.type==51){
++            if(a.location<1||size_t(a.location)>st.locations.size())return 0;
++            a_vector<unit_t*> targets;
++            for(auto* u:find_units(st.locations[a.location-1].area))if(!unit_dying(u)&&!ut_turret(u)&&trigger_unit_pred(owner,u,a.group_n,a.extra_n)&&unit_is_at_elevation_flags(u,st.locations[a.location-1].elevation_flags))targets.push_back(u);
++            int count=0,dest=a.group2_n==13?owner:a.group2_n,pct=std::max(0,std::min(100,a.group2_n));
++            for(auto* u:targets){
++                if(a.num_n&&count++>=a.num_n)break;
++                if(a.type==48){if(dest>=0&&dest<12&&u->owner!=dest){set_unit_owner(u,dest,false);set_unit_order(u,u->unit_type->return_to_idle);}}
++                else if(a.type==49)set_unit_hp(u,std::max(1_fp8,u->unit_type->hitpoints*pct/100));
++                else if(a.type==50)set_unit_energy(u,unit_max_energy(u)*pct/100);
++                else if(u->unit_type->has_shield)set_unit_shield_points(u,fp8::integer(u->unit_type->shield_points*pct/100));
++            }return 0;
++        }
++        if (owner != my_player) return 0;
++		if(a.type==28 && a.location>0 && size_t(a.location)<=st.locations.size()) {
++			const auto& loc=st.locations[a.location-1];xy pos=(loc.area.from+loc.area.to)/2;
++			alerts.push_back({unit_id(),pos,ALERT_TTL,0});last_event_pos=pos;have_last_event=true;
++		}
++		int duration = a.time_n;
++		if (a.type == 7) {
++			int voice = sound_duration(a.sound_index);
++			// time_n stores the editor WAV length; group2_n is the timing adjustment.
++			// Adding the WAV length twice made exchanges pause for an extra line.
++			duration = a.group2_n;
++			if (a.num_n == 8) duration += voice;
++			else if (a.num_n == 9) duration = std::max(0, voice - duration);
++			// The transmission must not cut off its own recording. No arbitrary
++			// three-second minimum for short replies.
++			duration = std::max(voice, duration);
++		}
++		if (a.type == 5) units_paused = true;
++		if (a.type == 6) units_paused = false;
++		if (a.type == 30) campaign_speech_muted = true;
++		if (a.type == 31) campaign_speech_muted = false;
++		campaign_control_lock = units_paused;
++		if (a.type == 12) objectives = a.string_index;
++		if (a.type == 10 && a.location && a.location <= st.locations.size()) {
++			const auto& loc = st.locations[a.location - 1];
++			screen_pos = (loc.area.from + loc.area.to) / 2 - xy(screen_width / 2, screen_height / 2);
++		}
++		char buf[160];
++		snprintf(buf, sizeof(buf), "%u\t%u\t%u\t%d\t%u\n", a.type, a.string_index, a.sound_index, duration, a.extra_n);
++		events += buf;
++		return duration;
++	}
++};
++}
++#endif
+--- a/actions.h
++++ b/actions.h
+@@ -574,6 +574,16 @@
+ 		if (u->build_queue.empty()) return false;
+ 		if (slot == 254) slot = u->build_queue.size() - 1;
+ 		if (slot >= u->build_queue.size()) return false;
++		// A worker's queue is its pending building, not a training queue. Removing
++		// it must also interrupt the walk to the site. Otherwise PlaceBuilding
++		// eventually dereferences an empty queue and terminates the simulation.
++		if (ut_worker(u) && !ut_building(u)) {
++			if (u_order_not_interruptible(u) || u_iscript_nobrk(u)) return false;
++			cancel_build_queue(u);
++			while (!u->order_queue.empty()) remove_queued_order(u, &u->order_queue.front());
++			issue_order(u, false, get_order_type(Orders::Stop), {});
++			return true;
++		}
+ 		cancel_build_queue(u, slot);
+ 		return true;
+ 	}
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -339,6 +339,13 @@
+ 
+ 	virtual void on_player_eliminated(int owner) {}
+ 	virtual void on_victory_state(int owner, int state) {}
++	// Presentation supplied by the campaign host; ordinary games keep their path.
++	virtual int on_scenario_action(int owner, const trigger::action& a) { return a.time_n; }
++	virtual bool scenario_units_paused() const { return false; }
++	virtual int on_scenario_condition(int owner, const trigger::condition& c) const { return -1; }
++	virtual void on_scenario_kill(int owner, const unit_t* u) {}
++	virtual void on_units_rescued(int old_owner, int new_owner, race_t race) {}
++	virtual void on_unit_given(unit_t* u, int old_owner, int new_owner) {}
+ 
+ 	virtual ~state_functions() {}
+ 
+@@ -1566,6 +1573,9 @@
+ 
+ 	bool unit_can_collide_with(const unit_t* u, const unit_t* target) const {
+ 		if (target == u) return false;
++		// Mission pads are floor markers, including when an objective item
++		// sits on top. Their footprint must not divert an approaching worker.
++		if (unit_is_special_beacon(target)) return false;
+ 		if (~target->pathing_flags & 1) return false;
+ 		if (u_no_collide(target)) return false;
+ 		if (u_status_flag(target, unit_t::status_flag_400000)) {
+@@ -2210,8 +2220,54 @@
+ 	}
+ 
+ 	void drop_carried_items(unit_t* u) {
++		if (ut_powerup(u) && u->order_type->id==Orders::PowerupIdle) {
++			auto* carrier=u->order_target.unit;
++			if(carrier && ut_worker(carrier) && carrier->worker.powerup==u) {
++				carrier->worker.powerup=nullptr;carrier->carrying_flags&=3;destroy_carrying_images(carrier);
++			}
++			return;
++		}
+ 		if ((u->carrying_flags & ~3) == 0) return;
+-		error("drop_carried_items: fixme");
++		if(!ut_worker(u))return;
++		auto* item=u->worker.powerup;u->worker.powerup=nullptr;u->carrying_flags&=3;destroy_carrying_images(u);
++		if(item && !unit_dying(item))release_powerup(item,u->sprite->position);
++	}
++	void release_powerup(unit_t* item, xy pos) {
++		auto placement=find_unit_placement(item,pos,true,false);
++		move_unit(item,placement.first?placement.second:item->building.powerup.origin);
++		set_unit_order(item,get_order_type(Orders::PowerupIdle));
++		item->main_order_timer=24;
++		if(us_hidden(item))show_unit(item);
++	}
++	bool campaign_carryable_powerup(const unit_t* u) const {
++		switch(u->unit_type->id) {
++		case UnitTypes::Powerup_Young_Chrysalis:case UnitTypes::Powerup_Psi_Emitter:
++		case UnitTypes::Powerup_Data_Disk:case UnitTypes::Powerup_Khaydarin_Crystal:
++		case UnitTypes::Powerup_Uraj_Crystal:case UnitTypes::Powerup_Khalis_Crystal:return true;
++		default:return false;
++		}
++	}
++	void order_campaign_powerup(unit_t* item) {
++		if(!campaign_carryable_powerup(item)||item->main_order_timer)return;
++		item->main_order_timer=8;
++		xy p=item->sprite->position;unit_t* carrier=nullptr;int distance=0x7fffffff;
++		for(auto* u:find_units(rect{p-xy(32,32),p+xy(33,33)})) {
++			if(!ut_worker(u)||u->owner>=8||!u_completed(u)||unit_dying(u)||us_hidden(u)||u_burrowed(u)||u_hallucination(u)||unit_is_disabled(u)||u->carrying_flags||u->worker.powerup)continue;
++			int d=units_distance(item,u);if(d>16||d>=distance)continue;carrier=u;distance=d;
++		}
++		if(!carrier)return;
++		const image_type_t* art=item->sprite->main_image->image_type;
++		hide_unit(item);set_unit_order(item,get_order_type(Orders::PowerupIdle),carrier);
++		carrier->worker.powerup=item;carrier->carrying_flags=4;
++		image_t* image=create_image(art,carrier->sprite,{},image_order_above);
++		if(image){i_set_flag(image,image_t::flag_uses_special_offset);update_image_special_offset(image);}
++	}
++	void order_carried_powerup(unit_t* item) {
++		auto* carrier=item->order_target.unit;
++		if(!carrier || unit_dying(carrier) || !ut_worker(carrier) || carrier->worker.powerup!=item) {
++			release_powerup(item,item->sprite->position);return;
++		}
++		move_unit(item,carrier->sprite->position);
+ 	}
+ 
+ 	bool has_available_supply_for(int owner, const unit_type_t* unit_type, bool show_error = false) const {
+@@ -3226,6 +3282,7 @@
+ 	}
+ 
+ 	void give_unit_to(unit_t* u, int new_owner) {
++		int old_owner = u->owner;
+ 		bool any_upgrades_granted = false;
+ 		auto grant_tech = [&](TechTypes id) {
+ 			if (!player_has_researched(new_owner, id)) st.tech_researched[new_owner][id] = true;
+@@ -3412,6 +3469,28 @@
+ 			}
+ 		}
+ 
++		on_unit_given(u, old_owner, new_owner);
++	}
++
++	void order_RescuePassive(unit_t* u) {
++		if (u->main_order_timer) return;
++		u->main_order_timer = 8;
++		xy p = u->sprite->position;
++		for (unit_t* visitor : find_units(rect{p - xy(64, 64), p + xy(65, 65)})) {
++			if (st.players[visitor->owner].controller != player_t::controller_occupied) continue;
++			if (!u_completed(visitor) || unit_dying(visitor) || ut_building(visitor)) continue;
++			int rescued_owner = u->owner, new_owner = visitor->owner;
++			bool rescue_all = ut_resource_depot(u);
++			if (!trigger_give_unit_to(u, new_owner)) continue;
++			if (rescue_all) {
++				a_vector<unit_t*> units;
++				for (unit_t* other : ptr(st.player_units[rescued_owner])) units.push_back(other);
++				for (unit_t* other : units) trigger_give_unit_to(other, new_owner);
++			}
++			if (!unit_is_special_beacon(u) && !ut_powerup(u))
++				on_units_rescued(rescued_owner, new_owner, unit_race(u));
++			return;
++		}
+ 	}
+ 
+ 	void make_unit_neutral(unit_t* u) {
+@@ -4567,6 +4646,11 @@
+ 	}
+ 
+ 	void order_PlaceBuilding(unit_t* u) {
++		// A canceled/stale placement is recoverable; never abort the whole game.
++		if (u->build_queue.empty()) {
++			set_unit_order(u, get_order_type(Orders::Stop), {});
++			return;
++		}
+ 		if (u->order_state == 0) {
+ 			if (u->order_target.unit) {
+ 				u->order_target.pos = u->order_target.unit->sprite->position;
+@@ -4576,7 +4660,6 @@
+ 			u->order_state = 1;
+ 		} else if (u->order_state == 1) {
+ 			if (unit_is_at_move_target(u)) {
+-				if (u->build_queue.empty()) error("order_PlaceBuilding: empty build queue");
+ 				const unit_type_t* unit_type = u->build_queue.front();
+ 				auto can_build = [&]() {
+ 					if (u_immovable(u)) return false;
+@@ -5846,6 +5929,51 @@
+ 		}
+ 	}
+ 
++	// Original installation doors and traps (iscript Enable/Disable and
++	// SpecialState1/2 complete via signal bit 1).
++	bool unit_is_door(const unit_t* u) const {
++		return unit_is(u,UnitTypes::Special_Upper_Level_Door)||unit_is(u,UnitTypes::Special_Right_Upper_Level_Door)||unit_is(u,UnitTypes::Special_Pit_Door)||unit_is(u,UnitTypes::Special_Right_Pit_Door);
++	}
++	void set_doodad_state(unit_t* u,bool enabled,bool immediate=false) {
++		if(!u->sprite)return;
++		if(unit_is_door(u)) {
++			u_unset_status_flag(u,unit_t::status_flag_disabled);
++			u->order_signal &= ~1;
++			sprite_run_anim(u->sprite,enabled?iscript_anims::Enable:iscript_anims::Disable);
++			set_unit_order(u,get_order_type(enabled?Orders::CloseDoor:Orders::OpenDoor));
++			if(immediate){u_set_status_flag(u,unit_t::status_flag_no_collide,!enabled);u->sprite->elevation_level=enabled?u->unit_type->elevation_level:1;}
++		} else {
++			u_set_status_flag(u,unit_t::status_flag_disabled,!enabled);
++			sprite_run_anim(u->sprite,enabled?iscript_anims::Enable:iscript_anims::Disable);
++			set_unit_order(u,u->unit_type->return_to_idle);
++		}
++	}
++	void order_HiddenGun(unit_t* u) {
++		if(!u->order_state){
++			u_set_status_flag(u,unit_t::status_flag_no_collide);
++			u_set_status_flag(u,unit_t::status_flag_cloaked);
++			u_set_status_flag(u,unit_t::status_flag_requires_detector);
++			u->detected_flags=0x80000000;u->secondary_order_timer=0;u->order_state=1;
++			if(unit_is(u,UnitTypes::Special_Floor_Gun_Trap)||unit_is(u,UnitTypes::Special_Floor_Missile_Trap))u->sprite->elevation_level=0;
++		}
++		if(unit_is_disabled(u)||u->main_order_timer)return;
++		u->main_order_timer=15;
++		auto* target=find_acquire_random_target(u);
++		if(!target)return;
++		u_unset_status_flag(u,unit_t::status_flag_no_collide);
++		u_unset_status_flag(u,unit_t::status_flag_cloaked);
++		u_unset_status_flag(u,unit_t::status_flag_requires_detector);
++		u->sprite->elevation_level=u->unit_type->elevation_level;
++		set_unit_order(u,get_order_type(Orders::RevealTrap),target);
++	}
++	void order_TrapAnimation(unit_t* u,bool reveal) {
++		if(!u->order_state){u->order_signal&=~1;sprite_run_anim(u->sprite,reveal?iscript_anims::SpecialState1:iscript_anims::SpecialState2);u->order_state=1;}
++		else if(u->order_signal&1){
++			u->order_signal&=~1;
++			if(reveal){auto* target=u->order_target.unit;set_unit_order(u,get_order_type(Orders::TowerAttack),target);}
++			else set_unit_order(u,get_order_type(Orders::HiddenGun));
++		}
++	}
+ 	void order_TowerGuard(unit_t* u) {
+ 		if (unit_is_disabled(u)) return;
+ 		if (u->main_order_timer == 0) {
+@@ -5862,7 +5990,7 @@
+ 
+ 	void order_TowerAttack(unit_t* u) {
+ 		if (unit_is_disabled(u) || !try_attack_something(u)) {
+-			order_done(u);
++			if(unit_is_trap(u))set_unit_order(u,get_order_type(Orders::HideTrap));else order_done(u);
+ 		} else {
+ 			set_unit_move_target(u, u->sprite->position);
+ 			set_next_target_waypoint(u, u->order_target.pos);
+@@ -7631,6 +7759,8 @@
+ 		case Orders::NukeTrack:
+ 			order_NukeTrack(u);
+ 			return;
++		case Orders::DisableDoodad:
++			set_doodad_state(u,false);break;
+ 		case Orders::WarpIn:
+ 			error("WarpIn");
+ 			return;
+@@ -7801,7 +7931,8 @@
+ 			error("UnusedNothing");
+ 			break;
+ 		case Orders::UnusedPowerup:
+-			error("UnusedPowerup");
++		case Orders::PowerupIdle:
++			order_campaign_powerup(u);
+ 			break;
+ 		case Orders::TowerGuard:
+ 			order_TowerGuard(u);
+@@ -8077,7 +8208,7 @@
+ 			error("CTFCOP2");
+ 			break;
+ 		case Orders::ComputerAI:
+-			error("ComputerAI");
++			set_unit_order(u, get_order_type(Orders::PlayerGuard));
+ 			break;
+ 		case Orders::AtkMoveEP:
+ 			error("AtkMoveEP");
+@@ -8086,13 +8217,15 @@
+ 			error("HarassMove");
+ 			break;
+ 		case Orders::AIPatrol:
+-			error("AIPatrol");
++			// The campaign town manager owns patrol/attack assignment.
++			// Unassigned flyers (notably Overlords) wait using normal guard logic.
++			set_unit_order(u, get_order_type(Orders::PlayerGuard));
+ 			break;
+ 		case Orders::GuardPost:
+ 			error("GuardPost");
+ 			break;
+ 		case Orders::RescuePassive:
+-			error("RescuePassive");
++			order_RescuePassive(u);
+ 			break;
+ 		case Orders::Neutral:
+ 			order_Neutral(u);
+@@ -8104,22 +8237,22 @@
+ 			order_InitializePsiProvider(u);
+ 			break;
+ 		case Orders::HiddenGun:
+-			error("HiddenGun");
++			order_HiddenGun(u);
+ 			break;
+ 		case Orders::OpenDoor:
+-			error("OpenDoor");
++			if(u->order_signal&1){u->order_signal&=~1;u_set_status_flag(u,unit_t::status_flag_no_collide);u->sprite->elevation_level=1;set_unit_order(u,get_order_type(Orders::Nothing));u_set_status_flag(u,unit_t::status_flag_disabled);}
+ 			break;
+ 		case Orders::CloseDoor:
+-			error("CloseDoor");
++			if(u->order_signal&1){u->order_signal&=~1;u_unset_status_flag(u,unit_t::status_flag_no_collide);u->sprite->elevation_level=u->unit_type->elevation_level;set_unit_order(u,get_order_type(Orders::Nothing));}
+ 			break;
+ 		case Orders::HideTrap:
+-			error("HideTrap");
++			order_TrapAnimation(u,false);
+ 			break;
+ 		case Orders::RevealTrap:
+-			error("RevealTrap");
++			order_TrapAnimation(u,true);
+ 			break;
+ 		case Orders::EnableDoodad:
+-			error("EnableDoodad");
++			set_doodad_state(u,true);
+ 			break;
+ 		case Orders::WarpIn:
+ 			error("WarpIn");
+@@ -12594,7 +12727,7 @@
+ 			order_HarvestGas(u);
+ 			return;
+ 		case Orders::PowerupIdle:
+-			error("hidden PowerupIdle");
++			order_carried_powerup(u);
+ 			return;
+ 		case Orders::NukeLaunch:
+ 			order_NukeLaunch(u);
+@@ -13086,6 +13219,7 @@
+ 	}
+ 
+ 	void process_frame() {
++		if (scenario_units_paused()) return;
+ 		recede_creep();
+ 
+ 		if (st.update_tiles_countdown == 0) st.update_tiles_countdown = 100;
+@@ -13128,7 +13262,10 @@
+ 		execute_trigger_struct ets;
+ 
+ 		bool any_triggers_executed = false;
+-		for (int i : active_players()) {
++		for (int i = 0; i < 8; ++i) {
++			// Campaign neutral/rescuable players also own triggers (e.g. the
++			// Antigan rebellion). They are not participants in victory voting.
++			if (!player_slot_active(i)) continue;
+ 			for (auto& rt : st.running_triggers[i]) {
+ 				if (rt.flags & 8) continue;
+ 				auto& t = *rt.t;
+@@ -13143,7 +13280,7 @@
+ 					}
+ 				}
+ 				if (execute_now) {
+-					rt.current_action_index = 0;
++					if (~rt.flags & 1) rt.current_action_index = 0;
+ 					execute_trigger(ets, i, rt, t);
+ 					any_triggers_executed = true;
+ 				}
+@@ -13639,6 +13776,7 @@
+ 					// todo: units lost scores
+ 				}
+ 			}
++			on_scenario_kill(source_owner, u);
+ 			u->hp = 0_fp8;
+ 			kill_unit(u);
+ 			// todo: units lost scores
+@@ -15025,6 +15163,10 @@
+ 				show_image(image);
+ 				break;
+ 
++			case opc_setspawnframe:
++                a = *p++;
++                if (!noop && iscript_unit) set_next_target_waypoint(iscript_unit,iscript_unit->sprite->position+to_xy(direction_xy(8_dir*a,20)));
++                break;
+ 			case opc_setfldirect:
+ 				a = *p++;
+ 				if (noop) break;
+@@ -16498,13 +16640,15 @@
+ 
+ 	}
+ 
+-	std::pair<bool, xy> find_unit_placement(const unit_t* u, xy pos, rect bounds, bool terrain_displaces_unit) const {
++	std::pair<bool, xy> find_unit_placement(const unit_t* u, xy pos, rect bounds, bool terrain_displaces_unit, bool require_reachable = true) const {
+ 		if (bounds.from.x < 0) bounds.from.x = 0;
+ 		if (bounds.from.y < 0) bounds.from.y = 0;
+ 		if (bounds.to.x >= (int)game_st.map_width) bounds.to.x = (int)game_st.map_width - 1;
+ 		if (bounds.to.y >= (int)game_st.map_height - 32) bounds.to.y = (int)game_st.map_height - 32 - 1;
+ 		auto blocking_unit_pred = [&](const unit_t* target) {
+ 			if (unit_dead(target)) return false;
++			// Beacon footprints do not obstruct units standing on mission pads.
++			if (target == u || unit_is_special_beacon(target)) return false;
+ 			if (u_no_collide(u) || u_no_collide(target)) return false;
+ 			if (ut_powerup(u)) {
+ 				return u_grounded_building(target) || ut_powerup(target);
+@@ -16568,7 +16712,7 @@
+ 						continue;
+ 					} else {
+ 						xy pos{x, bb.to.y};
+-						if (is_reachable(u, pos)) {
++						if (!require_reachable || is_reachable(u, pos)) {
+ 							if (u_flying(u) || unit_type_can_fit_at(u->unit_type, pos)) {
+ 								find_result = pos;
+ 								return true;
+@@ -16595,7 +16739,7 @@
+ 						continue;
+ 					} else {
+ 						xy pos{bb.to.x, y};
+-						if (is_reachable(u, pos)) {
++						if (!require_reachable || is_reachable(u, pos)) {
+ 							if (u_flying(u) || unit_type_can_fit_at(u->unit_type, pos)) {
+ 								find_result = pos;
+ 								return true;
+@@ -16626,7 +16770,7 @@
+ 						continue;
+ 					} else {
+ 						xy pos{x, bb.from.y};
+-						if (is_reachable(u, pos)) {
++						if (!require_reachable || is_reachable(u, pos)) {
+ 							if (u_flying(u) || unit_type_can_fit_at(u->unit_type, pos)) {
+ 								find_result = pos;
+ 								return true;
+@@ -16653,7 +16797,7 @@
+ 						continue;
+ 					} else {
+ 						xy pos{bb.from.x, y};
+-						if (is_reachable(u, pos)) {
++						if (!require_reachable || is_reachable(u, pos)) {
+ 							if (u_flying(u) || unit_type_can_fit_at(u->unit_type, pos)) {
+ 								find_result = pos;
+ 								return true;
+@@ -16689,8 +16833,8 @@
+ 		return {false, {}};
+ 	}
+ 
+-	std::pair<bool, xy> find_unit_placement(const unit_t* u, xy pos, bool terrain_displaces_unit) const {
+-		return find_unit_placement(u, pos, {pos - xy(128, 128), pos + xy(127, 127)}, terrain_displaces_unit);
++	std::pair<bool, xy> find_unit_placement(const unit_t* u, xy pos, bool terrain_displaces_unit, bool require_reachable = true) const {
++		return find_unit_placement(u, pos, {pos - xy(128, 128), pos + xy(127, 127)}, terrain_displaces_unit, require_reachable);
+ 	}
+ 
+ 	void move_unit(unit_t* u, xy pos) {
+@@ -17199,15 +17343,17 @@
+ 			u->secondary_order_timer = 0;
+ 		}
+ 		if (st.players[u->owner].controller == player_t::controller_rescue_passive) {
+-			error("fixme rescue passive");
++			set_unit_order(u, get_order_type(Orders::RescuePassive));
+ 		} else {
+ 			if (st.players[u->owner].controller == player_t::controller_neutral) set_unit_order(u, get_order_type(Orders::Neutral));
+ 			else if (st.players[u->owner].controller == player_t::controller_computer_game) set_unit_order(u, u->unit_type->computer_ai_idle);
+ 			else set_unit_order(u, u->unit_type->human_ai_idle);
+ 		}
+-		if (ut_flag(u, (unit_type_t::flags_t)0x800)) {
+-			error("fixme unknown flag");
+-		}
++		if (ut_powerup(u)) {
++            // The Chrysalis and data discs are map objects, not production.
++            // Retain their original position for later transport/return logic.
++            u->building.powerup.origin=u->sprite->position;
++        }
+ 		u->air_strength = get_unit_strength(u, false);
+ 		u->ground_strength = get_unit_strength(u, true);
+ 	}
+@@ -18803,7 +18949,7 @@
+ 				else if (unit_id == 230) r += count_obj.non_building_counts[p];
+ 				else if (unit_id == 231) r += count_obj.building_counts[p];
+ 				else if (unit_id == 232) r += count_obj.factory_counts[p];
+-				else r += count_obj.unit_counts[owner].at((UnitTypes)unit_id);
++				else r += count_obj.unit_counts[p].at((UnitTypes)unit_id);
+ 			}
+ 		}
+ 		return r;
+@@ -18812,7 +18958,7 @@
+ 	bool trigger_count_comparison(const trigger::condition& c, int count) const {
+ 		if (c.num_n == 0) return count >= c.count_n;
+ 		else if (c.num_n == 1) return count <= c.count_n;
+-		else if (c.num_n == 2) return count == c.count_n;
++		else if (c.num_n == 10) return count == c.count_n;
+ 		else return false;
+ 	}
+ 
+@@ -18885,15 +19031,27 @@
+ 	}
+ 
+ 	bool test_trigger_condition(const trigger::condition& c, int owner) const {
++		if (c.flags & 2) return true;
++		int custom = on_scenario_condition(owner, c);
++		if (custom >= 0) return custom != 0;
+ 		switch (c.type) {
+ 		case 2: // command
+ 			return trigger_count_comparison(c, trigger_command_count(st, owner, c.group, c.unit_id, c.num_n != 1));
+ 		case 3: // bring
+ 			return trigger_count_comparison(c, trigger_command_count(trigger_bring_count(st.locations.at(c.location - 1)), owner, c.group, c.unit_id, c.num_n != 1));
++		case 4: { // accumulate: minerals, gas, or both
++			int count = 0;
++			for (int p : trigger_players(owner, c.group)) {
++				if (c.extra_n == 0 || c.extra_n == 2) count += st.current_minerals[p];
++				if (c.extra_n == 1 || c.extra_n == 2) count += st.current_gas[p];
++			}
++			return trigger_count_comparison(c, count);
++		}
+ 		case 12: // elapsed time
+-			return trigger_count_comparison(c, st.current_frame);
++			return trigger_count_comparison(c, st.current_frame / 24);
+ 		case 14: // opponents
+ 			return trigger_count_comparison(c, trigger_opponent_count(owner, c.group));
++		case 23: return false; // never
+ 		case 22: // always
+ 			return true;
+ 		default:
+@@ -18968,6 +19126,9 @@
+ 	}
+ 
+ 	bool trigger_players_pred(int owner, int player, int n) const {
++		// Neutral map objects (including installation doors) participate in
++		// explicit-player and All Players trigger queries, not victory slots.
++		if (n >= 8 && n < 12) return player == n || player == 17;
+ 		if (!player_slot_active(n)) return false;
+ 		if (player < 12) return n == player; // player index
+ 		switch (player) {
+@@ -18989,13 +19150,13 @@
+ 	bool unit_is_at_elevation_flags(const unit_t* u, int elevation_flags) const {
+ 		int ground_height = get_ground_height_at(u->sprite->position);
+ 		if (u_flying(u)) {
+-			if (ground_height == 0) return (elevation_flags & 1) == 0;
+-			if (ground_height == 1) return (elevation_flags & 2) == 0;
+-			if (ground_height == 2) return (elevation_flags & 4) == 0;
+-		} else {
+ 			if (ground_height == 0) return (elevation_flags & 8) == 0;
+ 			if (ground_height == 1) return (elevation_flags & 0x10) == 0;
+ 			if (ground_height == 2) return (elevation_flags & 0x20) == 0;
++		} else {
++			if (ground_height == 0) return (elevation_flags & 1) == 0;
++			if (ground_height == 1) return (elevation_flags & 2) == 0;
++			if (ground_height == 2) return (elevation_flags & 4) == 0;
+ 		}
+ 		return true;
+ 	}
+@@ -19011,7 +19172,7 @@
+ 		}
+ 
+ 		if (unit_dying(u)) return false;
+-		if (ut_powerup(u)) error("trigger_unit_pred: powerup");
++
+ 		if (!trigger_players_pred(owner, player, u->owner)) return false;
+ 		if (uid == 229) return true;
+ 		else if (uid == 230) {
+@@ -19064,7 +19225,22 @@
+ 			st.trigger_wait_timers[owner] = a.time_n;
+ 			ra.flags |= 1;
+ 			return false;
+-		case 15: // ai script
++		case 7: // transmission: present once and resume this action after its wait
++			if (st.trigger_waiting[owner]) return false;
++			if (ra.flags & 1) { ra.flags &= ~1; return true; }
++			st.trigger_wait_timers[owner] = on_scenario_action(owner, a);
++			st.trigger_waiting[owner] = st.trigger_wait_timers[owner] > 0;
++			if (!st.trigger_waiting[owner]) return true;
++			ra.flags |= 1;
++			return false;
++		case 5: case 6: case 8: case 9: case 10: case 12: case 17:
++		case 11: case 13: case 14: case 23: case 28: case 43:
++		case 30: case 31: case 32: case 39: case 42:
++		case 27: case 41: case 45: case 48: case 49: case 50: case 51:
++		case 54: case 55: case 57:
++			on_scenario_action(owner, a);
++			return true;
++		case 15: case 16: // AI script, optionally at a location
+ 			switch (a.group2_n) {
+ 			case 0x3069562b:
+ 				st.shared_vision[0] |= 1 << owner;
+@@ -19091,7 +19267,8 @@
+ 				st.shared_vision[7] |= 1 << owner;
+ 				break;
+ 			default:
+-				break;   // unknown/newer AI script id — ignore (irrelevant to melee)
++				on_scenario_action(owner, a);
++				break;
+ 			}
+ 			return true;
+ 		case 22: // kill unit
+@@ -19101,7 +19278,7 @@
+ 					unit_t* u = &*i++;
+ 					if (ut_turret(u)) continue;
+ 					if (unit_dying(u)) continue;
+-					if (ut_powerup(u)) error("trigger kill unit fixme: powerup");
++
+ 					if (u->owner != p) continue;
+ 					if (uid == 229) kill_unit(u);
+ 					else if (uid == 230) {
+@@ -19123,7 +19300,7 @@
+ 					unit_t* u = &*i++;
+ 					if (ut_turret(u)) continue;
+ 					if (unit_dying(u)) continue;
+-					if (ut_powerup(u)) error("trigger kill unit fixme: powerup");
++
+ 					if (u->owner != p) continue;
+ 					bool ok = false;
+ 					if (uid == 229) ok = true;
+@@ -19160,7 +19337,7 @@
+ 
+ 					if (ut_turret(u)) return;
+ 					if (unit_dying(u)) return;
+-					if (ut_powerup(u)) error("trigger remove unit fixme: powerup");
++
+ 					if (!trigger_players_pred(owner, a.group_n, u->owner)) return;
+ 					bool ok = false;
+ 					if (uid == 229) ok = true;
+@@ -19178,9 +19355,10 @@
+ 					kill_unit(u);
+ 
+ 				};
+-				for (unit_t* u : find_units(st.locations.at(a.location - 1).area)) {
+-					proc(u);
+-				}
++				// End the spatial query before hide/remove mutates its index.
++				a_vector<unit_t*> targets;
++				for (unit_t* u : find_units(st.locations.at(a.location - 1).area)) targets.push_back(u);
++				for (unit_t* u : targets) proc(u);
+ 			}
+ 			return true;
+ 		case 26: // set resources
+@@ -19204,7 +19382,7 @@
+ 						st.current_gas[p] += a.group2_n;
+ 						st.total_gas_gathered[p] += a.group2_n;
+ 					}
+-				} else if (a.num_n == 8) {
++				} else if (a.num_n == 9) {
+ 					if (a.extra_n == 0 || a.extra_n == 2) {
+ 						if (st.current_minerals[p] < a.group2_n) st.current_minerals[p] = 0;
+ 						else st.current_minerals[p] -= a.group2_n;
+@@ -19223,7 +19401,7 @@
+ 				unit_t* u = trigger_find_unit(owner, loc, a.group_n, a.extra_n);
+ 				if (u) pos = u->sprite->position;
+ 				auto& target_loc = st.locations.at(a.group2_n - 1);
+-				xy diff = pos - (loc.area.from + loc.area.to) / 2;
++				xy diff = pos - (target_loc.area.from + target_loc.area.to) / 2;
+ 				xy from = target_loc.area.from + diff;
+ 				xy to = target_loc.area.to + diff;
+ 				if (from.x < 0) {
+@@ -19252,7 +19430,9 @@
+ 				if (unit_is_mineral_field(ut) || unit_is(ut, UnitTypes::Resource_Vespene_Geyser)) p = 11;
+ 				auto& loc = st.locations.at(a.location - 1);
+ 				xy pos = (loc.area.from + loc.area.to) / 2;
+-				for (int i = 0; i != a.num_n; ++i) {
++				// Retail campaign records also encode a single creation as zero
++				// (for example Duran's entrance in Brood War Terran 7).
++				for (int i = 0; i != std::max(1, a.num_n); ++i) {
+ 					trigger_create_unit(ut, pos, p);
+ 				}
+ 			}
+@@ -21346,7 +21526,8 @@
+ 			}
+ 			if (r.left()) {
+ 				for (size_t i = 0; i != 8; ++i) {
+-					st.players[i].force = r.get<uint8_t>();
++					// CHK stores Force 1..4 as 0..3; runtime trigger groups are 1..4.
++					st.players[i].force = int(r.get<uint8_t>()) + 1;
+ 				}
+ 				for (size_t i = 0; i != 4; ++i) {
+ 					game_st.forces[i].name = get_map_string(r.get<uint16_t>());
+@@ -21419,8 +21600,8 @@
+ 					if (unit_type == UnitTypes::Special_Pit_Door) owner = 11;
+ 					if (unit_type == UnitTypes::Special_Right_Pit_Door) owner = 11;
+ 					if (use_map_settings || owner == 11) {
+-						create_initial_unit(get_unit_type(unit_type), xy(x, y), owner);
+-						if (flags & 0x80) error("disable thingy unit");
++						auto* u=create_initial_unit(get_unit_type(unit_type), xy(x, y), owner);
++						if (u && (flags & 0x80)) set_doodad_state(u,false,true);
+ 					}
+ 				}
+ 			}
+@@ -21768,7 +21949,7 @@
+ 			}
+ 			for (auto& t : game_st.triggers) {
+ 				for (int i = 0; i != 8; ++i) {
+-					if (st.players[i].controller != player_t::controller_occupied) continue;
++					if (!player_slot_active(i)) continue;
+ 					if (!t.enabled[i] && !t.enabled.at(17 + st.players[i].force) && !t.enabled[17]) continue;
+ 					st.running_triggers[i].emplace_back();
+ 					auto& rt = st.running_triggers[i].back();
+@@ -21995,12 +22176,17 @@
+ struct string_table_data {
+ 	a_vector<uint8_t> data;
+ 	a_string operator[](size_t index) const {
++		// TBL references are one-based; zero means no string, including
++		// unused sound entries reached by some expansion iscripts.
++		if (data.size() < 2 || index == 0) return "";
+ 		data_loading::data_reader_le r(data.data(), data.data() + data.size());
++		if (index > r.get<uint16_t>() || 2 + index * 2 > data.size()) return "";
+ 		r.seek(2 + (index - 1) * 2);
+ 		size_t offset = r.get<uint16_t>();
++		if (offset >= data.size()) return "";
+ 		r.seek(offset);
+ 		a_string str;
+-		while (char c = r.get<char>()) str += c;
++		while (r.left()) { char c = r.get<char>(); if (!c) break; str += c; }
+ 		return str;
+ 	}
+ 	a_string at(size_t index) const {
+@@ -22033,8 +22219,9 @@
+ 		ins_data[opc_wait] = "1";
+ 		ins_data[opc_waitrand] = "11";
+ 		ins_data[opc_goto] = "j";
+-		ins_data[opc_imgol] = "211";
+-		ins_data[opc_imgul] = "211";
++		// Overlay coordinates are signed bytes (e.g. Psi field left quadrants).
++		ins_data[opc_imgol] = "2s1s1";
++		ins_data[opc_imgul] = "2s1s1";
+ 		ins_data[opc_imgolorig] = "2";
+ 		ins_data[opc_switchul] = "2";
+ 		ins_data[opc___0c] = "";
+--- /dev/null
++++ b/web/campaign_ai.h
+@@ -0,0 +1,311 @@
++// Bounded interpreter for the original scripts/aiscript.bin (not a melee bot).
++// Opcode layout reference: PyMS AIBIN.py, bfc5d3aad0b5614a5aff72c223f8efa00afddfa4.
++// Loads both original and expansion script indexes and campaign instructions.
++// Town placement/defence/target selection are OpenBW implementations, not an
++// assertion of frame-perfect parity with Blizzard's closed-source AI manager.
++#ifndef OPENBW_WEB_CAMPAIGN_AI_H
++#define OPENBW_WEB_CAMPAIGN_AI_H
++namespace bwgame {
++struct campaign_ai : play_ui {
++    using play_ui::play_ui;
++    struct request { int type, amount, priority; };
++    struct town {
++        bool active = false, campaign = false, supply = true;
++        xy center;
++        a_vector<request> builds, techs, upgrades;
++        std::array<int,228> defence{}, wave{}, limits{};
++        int nuke_rate=0;
++        a_vector<unit_id> attackers;
++        int built = 0, trained = 0, attacks = 0, orders = 0, opcodes = 0;
++    };
++    struct thread {
++        int owner = 0, pc = 0, wake = 0, file = 0;
++        a_vector<int> calls;
++        uint32_t id = 0;
++        xy pos;
++        bool done = false;
++    };
++    std::array<town,8> towns;
++    std::array<a_vector<uint8_t>,2> scripts;
++    a_vector<thread> threads, spawned;
++    action_state ai_actions;
++    a_string ai_error, ai_trace;
++    int ai_clock = 0;
++    unsigned ai_random = 1;
++    static uint32_t read32(const uint8_t* b) { return b[0] | uint32_t(b[1])<<8 | uint32_t(b[2])<<16 | uint32_t(b[3])<<24; }
++    void ai_fail(thread& t, const char* why, int op = -1) {
++        t.done = true;
++        if (ai_error.empty()) ai_error = format("AI %.4s P%d at %d opcode %d: %s", (const char*)&t.id, t.owner+1, t.pc, op, why);
++    }
++    int ai_read(thread& t, int n) {
++        auto& b = scripts[t.file];
++        if (t.pc < 4 || size_t(t.pc+n) > b.size() || size_t(t.pc+n) > read32(b.data())) { ai_fail(t,"invalid script read"); return 0; }
++        int v=0; for (int i=0;i<n;++i) v |= int(b[t.pc++])<<(8*i); return v;
++    }
++    void ai_start(int owner, uint32_t id, int location) {
++        if (owner < 0 || owner >= 8) return;
++        thread t; t.owner=owner; t.id=id;
++        t.pos=game_st.start_locations[owner];
++        if (location>0 && size_t(location)<=st.locations.size()) { auto a=st.locations[location-1].area; t.pos=(a.from+a.to)/2; }
++        for (int file=0;file<2;++file) {
++            auto& b=scripts[file]; if (b.size()<4) continue;
++            size_t p=read32(b.data());
++            size_t stride=file==1?8:16;
++            for (int count=0;p+stride<=b.size() && count<4096;p+=stride,++count) {
++                unsigned name=read32(&b[p]); if (!name) break;
++                if (name!=id) continue;
++                unsigned pc=read32(&b[p+4]); if (!pc) break; // expansion script table
++                if (pc<4 || pc>=read32(b.data())) { ai_fail(t,"invalid entry point"); return; }
++                // Reclaim stopped threads; a preserved trigger cannot grow memory forever.
++                threads.erase(std::remove_if(threads.begin(),threads.end(),[](const thread& x){return x.done;}),threads.end());
++                if (threads.size()>=128) { ai_fail(t,"thread limit"); return; }
++                t.pc=pc; t.file=file; threads.push_back(t); return;
++            }
++        }
++        ai_fail(t,"script not found in local game data");
++    }
++    static void ai_request(a_vector<request>& req, int type, int n, int priority) {
++        for (auto& r:req) if(r.type==type) { r.amount=std::max(r.amount,n); r.priority=std::max(r.priority,priority); return; }
++        req.push_back({type,n,priority});
++    }
++    bool ai_attacking(const town& a, unit_t* u) {
++        auto id=get_unit_id(u); return std::find(a.attackers.begin(),a.attackers.end(),id)!=a.attackers.end();
++    }
++    bool ai_type(unit_t* u,int type) {
++        int actual=int(u->unit_type->id);
++        // A morphed Zerg depot/spire also satisfies its prerequisite building.
++        return actual==type || (type==131 && (actual==132 || actual==133)) || (type==132 && actual==133) || (type==141 && actual==137);
++    }
++    int ai_count(int owner,int type,bool complete=false,bool home=false) {
++        if (type<0 || type>=228) return 0;
++        int n=0;
++        for (auto* u:ptr(st.player_units[owner])) {
++            if (unit_dying(u) || ut_turret(u)) continue;
++            if (home && ai_attacking(towns[owner],u)) continue;
++            if (ai_type(u,type) && (!complete || u_completed(u))) ++n;
++            if (!complete) {
++                size_t start=u->current_build_unit ? 1:0;
++                for (size_t i=start;i<u->build_queue.size();++i) if (int(u->build_queue[i]->id)==type) {
++                    // Zerglings/scourge are produced in pairs; a morphing building
++                    // already carries its new type and must not be counted twice.
++                    if (!ai_type(u,type)) n+=(type==37 || type==47)?2:1;
++                }
++            }
++        }
++        return n;
++    }
++    xy ai_target(int owner,xy from,bool buildings=true) {
++        unit_t* best=nullptr; int distance=0x7fffffff;
++        for (int p=0;p<8;++p) if(p!=owner && st.alliances[owner][p]==0)
++            for (auto* u:ptr(st.player_units[p])) {
++                if (unit_dying(u) || !u->sprite || ut_turret(u) || (buildings && !ut_building(u))) continue;
++                int d=xy_length(u->sprite->position-from);
++                if(d<distance){distance=d;best=u;}
++            }
++        if(best)return best->sprite->position;
++        return buildings ? ai_target(owner,from,false):from;
++    }
++    void ai_attack(int owner,bool all=false) {
++        auto& a=towns[owner]; auto need=a.wave; xy target=ai_target(owner,a.center);
++        int sent=0;
++        for(auto* u:ptr(st.player_units[owner])) {
++            int type=int(u->unit_type->id);
++            if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||type>=228||ai_attacking(a,u))continue;
++            if (!u->unit_type->ground_weapon && !u->unit_type->air_weapon) continue;
++            if(!all && need[type]<=0)continue;
++            if(u_order_not_interruptible(u) || u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
++            issue_order(u,false,get_order_type(Orders::AttackMove),{target,nullptr});
++            a.attackers.push_back(get_unit_id(u)); --need[type]; ++sent;
++        }
++        if(sent){++a.attacks;ai_trace=format("P%d wave %d: %d units at frame %d",owner+1,a.attacks,sent,st.current_frame);}
++    }
++    void ai_run(thread& t) {
++        auto& a=towns[t.owner];
++        for(int budget=0;budget<64 && !t.done && t.wake<=ai_clock;++budget) {
++            int at=t.pc,op=ai_read(t,1); if(t.done)return; ++a.opcodes;
++            switch(op) {
++            case 0: t.pc=ai_read(t,2); break;
++            case 1: {int type=ai_read(t,2),dest=ai_read(t,2);if(!ai_count(t.owner,type))t.pc=dest;break;}
++            case 2: t.wake=ai_clock+std::max(1,ai_read(t,2));return;
++            case 3: case 4:
++                a.active=true; a.center=t.pos;
++                // Prefer an existing depot within this location to its geometric center.
++                {unit_t* depot=nullptr;int dist=0x7fffffff;for(auto* u:ptr(st.player_units[t.owner]))if(ut_resource_depot(u)&&!unit_dying(u)){int d=xy_length(u->sprite->position-t.pos);if(d<dist){dist=d;depot=u;}}if(depot)a.center=depot->sprite->position;}
++                break;
++            case 6: {int n=ai_read(t,1),type=ai_read(t,2),priority=ai_read(t,1);if(type>=228){ai_fail(t,"invalid unit",op);break;}ai_request(a.builds,type,n,priority);break;}
++            case 7: {int n=ai_read(t,1),type=ai_read(t,2),priority=ai_read(t,1);if(type>=61){ai_fail(t,"invalid upgrade",op);break;}ai_request(a.upgrades,type,n,priority);break;}
++            case 8: {int type=ai_read(t,2),priority=ai_read(t,1);if(type>=44){ai_fail(t,"invalid technology",op);break;}ai_request(a.techs,type,1,priority);break;}
++            case 9: case 10: case 62: case 78: {int n=ai_read(t,1),type=ai_read(t,2);if(ai_count(t.owner,type,op!=10)<n){t.pc=at;t.wake=ai_clock+8;return;}break;}
++            case 11: a.wave.fill(0); break;
++            case 12: {int n=ai_read(t,1),type=ai_read(t,2);if(type>=228){ai_fail(t,"invalid attack unit",op);break;}a.wave[type]=std::min(200,a.wave[type]+n);break;}
++            case 13: // Production is maintained while this instruction waits for the party.
++                {bool ready=true;for(int i=0;i<228;++i)if(a.wave[i] && ai_count(t.owner,i,true,true)<a.wave[i]+a.defence[i])ready=false;
++                if(!ready){t.pc=at;t.wake=ai_clock+8;return;}}break;
++            case 14: ai_attack(t.owner);break;
++            case 19: case 20: case 21: case 22: case 23: case 24: case 25: case 26:
++                {int n=ai_read(t,1),type=ai_read(t,2);if(type>=228){ai_fail(t,"invalid defence unit",op);break;}a.defence[type]=std::max(a.defence[type],n);}break;
++            case 31: ai_read(t,1);a.center=t.pos;ai_attack(t.owner,true);break;
++            case 34: ai_read(t,1);break; // default_min is superseded by explicit build requests
++            case 35: break; // No implicit opening build order in this implementation.
++            case 36: t.done=true;break;
++            case 37:
++                st.players[t.owner].controller=player_t::controller_rescue_passive;
++                a.active=false;
++                for(auto* u:ptr(st.player_units[t.owner]))if(u_completed(u)&&!unit_dying(u)&&!ut_turret(u)&&!u_loaded(u))
++                    set_unit_order(u,get_order_type(Orders::RescuePassive));
++                t.done=true;break;
++            case 41: { // enter_bunker: load nearby infantry into the local garrison.
++                a_unordered_map<unsigned,int> reserved;
++                for(auto* u:ptr(st.player_units[t.owner])) {
++                    if(unit_dying(u)||!u_completed(u)||u_loaded(u)||us_hidden(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||u_flying(u))continue;
++                    if(xy_length(u->sprite->position-t.pos)>320)continue;
++                    unit_t* best=nullptr;int distance=0x7fffffff;
++                    for(auto* bunker:ptr(st.player_units[t.owner]))if(unit_is(bunker,UnitTypes::Terran_Bunker)&&!unit_dying(bunker)&&unit_can_load_target(bunker,u)) {
++                        if(reserved[get_unit_id(bunker).raw_value]+int(u->unit_type->space_required)>int(unit_space_left(bunker)))continue;
++                        int d=xy_length(bunker->sprite->position-u->sprite->position);
++                        if(d<distance && d<=320){best=bunker;distance=d;}
++                    }
++                    if(best){issue_order(u,false,get_order_type(Orders::EnterTransport),{best->sprite->position,best});reserved[get_unit_id(best).raw_value]+=u->unit_type->space_required;}
++                }break;
++            }
++            case 47: // Clear this town's attack bookkeeping after its base falls.
++                a.attackers.clear();a.wave.fill(0);break;
++            case 46: ai_read(t,2);break; // max_force: script armies are already bounded to 200 per type
++            case 48: {int chance=ai_read(t,1),dest=ai_read(t,2);ai_random=ai_random*1664525u+1013904223u;if((ai_random>>24)<unsigned(chance))t.pc=dest;break;}
++            case 49: {int seconds=ai_read(t,1),dest=ai_read(t,2);if(ai_clock>=seconds*24)t.pc=dest;break;}
++            case 50: case 51: a.supply=true;break;
++            case 56: a.campaign=true;break;
++            case 64: {int dest=ai_read(t,2);if(t.calls.size()>=16){ai_fail(t,"call depth limit");break;}t.calls.push_back(t.pc);t.pc=dest;break;}
++            case 65: if(t.calls.empty())ai_fail(t,"return without call",op);else{t.pc=t.calls.back();t.calls.pop_back();}break;
++            case 69: case 70: case 76: {int n=ai_read(t,1),type=ai_read(t,2);if(type>=228){ai_fail(t,"invalid training unit",op);break;}ai_request(a.builds,type,n,50);break;}
++            case 87: case 88: {int p=ai_read(t,1);if(p>=8){ai_fail(t,"invalid vision player",op);break;}if(op==87)st.shared_vision[p]|=1<<t.owner;else st.shared_vision[p]&=~(1<<t.owner);break;}
++            // capt_expand chooses an expansion as attack target in the original
++            // manager; this first implementation chooses the nearest enemy base.
++            case 16: break;
++            case 32: case 33: st.alliances[t.owner][my_player]=op==32?0:1;break;
++            case 38: case 90: case 101:
++                for(auto* u:ptr(st.player_units[t.owner]))if(!unit_dying(u)&&!ut_building(u)&&!ut_worker(u)&&!ut_turret(u)&&xy_length(u->sprite->position-t.pos)<640)
++                    issue_order(u,false,get_order_type(op==101?Orders::JunkYardDog:Orders::AttackMove),{ai_target(t.owner,t.pos),nullptr});
++                break;
++            case 42: case 77: a.center=t.pos;break;
++            case 45: a.nuke_rate=ai_read(t,1);break;
++            case 61: {int type=ai_read(t,2);ai_read(t,1);if(type<228){a.defence[type]=std::min(200,a.defence[type]+1);ai_request(a.builds,type,a.defence[type],60);}break;}
++            case 72: {int dest=ai_read(t,2);if(threads.size()+spawned.size()<128){thread child=t;child.pc=dest;child.calls.clear();spawned.push_back(child);}else ai_fail(t,"thread limit");break;}
++            case 75: {int n=ai_read(t,1),type=ai_read(t,2);if(type<228)a.limits[type]=n;break;}
++            case 92: case 110:
++                for(auto* u:ptr(st.player_units[t.owner]))if(!unit_dying(u)&&u_completed(u)&&!ut_building(u)&&!ut_worker(u)&&!ut_turret(u)&&ai_idle(u))set_unit_order(u,u->unit_type->return_to_idle);
++                break;
++            case 93: {int type=ai_read(t,2),dest=ai_read(t,2);for(int p=0;p<8;++p)if(st.alliances[t.owner][p]==0&&ai_count(p,type)){t.pc=dest;break;}break;}
++            case 94: {int minerals=ai_read(t,2),gas=ai_read(t,2),dest=ai_read(t,2);for(int p=0;p<8;++p)if(st.alliances[t.owner][p]==0&&st.current_minerals[p]>=minerals&&st.current_gas[p]>=gas){t.pc=dest;break;}break;}
++            case 97: t.done=true;break;
++            case 98: break; // Thread already terminates when the scenario ends.
++            case 105: ai_random=unsigned(ai_read(t,4));break;
++            case 108: {int type=ai_read(t,2),px=ai_read(t,2),py=ai_read(t,2);if(type<228)trigger_create_unit(get_unit_type(UnitTypes(type)),{px,py},t.owner);break;}
++            case 107:
++                for(auto* u:ptr(st.player_units[t.owner]))if(unit_is(u,UnitTypes::Terran_Nuclear_Silo)&&!unit_dying(u)&&!u->building.silo.nuke){
++                    auto* n=trigger_create_unit(get_unit_type(UnitTypes::Terran_Nuclear_Missile),u->sprite->position,t.owner);
++                    if(n){hide_unit(n);n->connected_unit=u;u->building.silo.nuke=n;u->building.silo.ready=true;}break;
++                }break;
++            case 89: case 102: case 103: case 104: case 109: {
++                xy target=t.pos;if(op==109){target.x=ai_read(t,2);target.y=ai_read(t,2);}
++                Orders order=op==103?Orders::CastDisruptionWeb:op==104?Orders::CastRecall:Orders::NukePaint;
++                action_functions af(st,ai_actions);
++                for(auto* u:ptr(st.player_units[t.owner]))if(!unit_dying(u)&&u_completed(u)&&!ut_turret(u)){
++                    if((op==103&&!unit_is(u,UnitTypes::Protoss_Corsair))||(op==104&&!unit_is(u,UnitTypes::Protoss_Arbiter))||((op==89||op==102||op==109)&&!unit_is_ghost(u)))continue;
++                    af.action_select(t.owner,u);if(af.action_order(t.owner,get_order_type(order),target,nullptr,nullptr,false))break;
++                }break;
++            }
++            case 111: {int p=ai_read(t,1),dest=ai_read(t,2);if(p<8&&st.alliances[t.owner][p])t.pc=dest;break;}
++            case 112: {int index=ai_read(t,1),dest=ai_read(t,2);if(index<8&&towns[index].active){t.pos=towns[index].center;t.pc=dest;}break;}
++            default: ai_fail(t,"unsupported command (thread stopped)",op);break;
++            }
++        }
++    }
++    bool ai_idle(unit_t* u) {
++        auto o=u->order_type->id;
++        return o==Orders::PlayerGuard || o==Orders::Guard || o==Orders::ComputerAI || o==Orders::Stop || o==Orders::Nothing;
++    }
++    void ai_mine(int owner) {
++        auto& a=towns[owner]; action_functions af(st,ai_actions);
++        unit_t* gas=nullptr; a_vector<unit_t*> minerals;
++        for(auto* u:ptr(st.player_units[owner])) if(!unit_dying(u)&&u_completed(u)&&(unit_is(u,UnitTypes::Zerg_Extractor)||unit_is(u,UnitTypes::Terran_Refinery)||unit_is(u,UnitTypes::Protoss_Assimilator))) {gas=u;break;}
++        for(auto* u:ptr(st.player_units[11])) if(int(u->unit_type->id)>=176 && int(u->unit_type->id)<=178 && u->building.resource.resource_count>0 && xy_length(u->sprite->position-a.center)<640)minerals.push_back(u);
++        int gas_workers=0;
++        for(auto* u:ptr(st.player_units[owner]))if(ut_worker(u)&&gas&&(u->worker.gather_target==gas || (u->order_type->id>=Orders::MoveToGas && u->order_type->id<=Orders::ReturnGas)))++gas_workers;
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(unit_dying(u)||!ut_worker(u)||!u_completed(u)||!u->build_queue.empty()||u_order_not_interruptible(u)||u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
++            bool idle=ai_idle(u), redirect=gas && gas_workers<2 && u->worker.gather_target && u->worker.gather_target!=gas && u->worker.resources_carried==0;
++            if(!idle&&!redirect)continue;
++            unit_t* target=nullptr;
++            if(gas&&gas_workers<2){target=gas;++gas_workers;}
++            else if(!minerals.empty())target=minerals[u->index%minerals.size()];
++            if(target){af.action_select(owner,u);af.action_default_order(owner,target->sprite->position,target,nullptr,false);++a.orders;}
++        }
++    }
++    bool ai_produce(int owner,int type) {
++        auto& a=towns[owner]; const auto* ut=get_unit_type(UnitTypes(type)); action_functions af(st,ai_actions);
++        if(!has_available_resources_for(owner,ut))return false;
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(unit_dying(u)||!u_completed(u)||!u->build_queue.empty()||!unit_can_build(u,ut))continue;
++            if(u_order_not_interruptible(u)||u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
++            af.action_select(owner,u);
++            if(!ut_building(ut)) {
++                if(!has_available_supply_for(owner,ut,false))return false;
++                bool morph=unit_is(u,UnitTypes::Zerg_Larva)||unit_is(u,UnitTypes::Zerg_Hydralisk)||unit_is(u,UnitTypes::Zerg_Mutalisk);
++                if(morph?af.action_morph(owner,ut):af.action_train(owner,ut)){++a.trained;return true;}
++            } else if(!ut_worker(u)) {
++                if(unit_is_zerg_building(u)&&af.action_morph_building(owner,ut)){++a.built;return true;}
++            } else {
++                if(u->current_build_unit || u->order_type->id==Orders::ConstructingBuilding)continue;
++                auto* order=get_order_type(kit_for(st.players[owner].race).build_order);
++                xy start=a.center;
++                if(type==149||type==110||type==157) {
++                    unit_t* geyser=nullptr;int distance=0x7fffffff;
++                    for(auto* g:ptr(st.player_units[11]))if(unit_is(g,UnitTypes::Resource_Vespene_Geyser)){int d=xy_length(g->sprite->position-start);if(d<distance){distance=d;geyser=g;}}
++                    if(!geyser||distance>800)return false;start=geyser->sprite->position-ut->placement_size/2;
++                    if(can_place_building(u,owner,ut,start+ut->placement_size/2,false,false)){af.action_build(owner,order,ut,{size_t(start.x/32),size_t(start.y/32)});++a.built;return true;}
++                } else for(int r=2;r<=12;++r)for(int dy=-r;dy<=r;++dy)for(int dx=-r;dx<=r;++dx) {
++                    if(std::abs(dx)!=r && std::abs(dy)!=r)continue;
++                    int tx=start.x/32+dx,ty=start.y/32+dy;
++                    if(tx<0||ty<0||tx+ut->placement_size.x/32>int(game_st.map_tile_width)||ty+ut->placement_size.y/32>int(game_st.map_tile_height))continue;
++                    xy pos=xy(tx*32,ty*32)+ut->placement_size/2;
++                    if(can_place_building(u,owner,ut,pos,false,false)){af.action_build(owner,order,ut,{size_t(tx),size_t(ty)});++a.built;return true;}
++                }
++            }
++        }
++        return false;
++    }
++    void ai_manage(int owner) {
++        auto& a=towns[owner];if(!a.active)return;
++        a.attackers.erase(std::remove_if(a.attackers.begin(),a.attackers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),a.attackers.end());
++        ai_mine(owner);
++        // Reissue only idle attackers, allowing normal targeting/pathfinding to run.
++        for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
++        auto req=a.builds;
++        for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
++        int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
++        if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
++        std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
++        int accepted=0;
++        for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type))))<r.amount) {
++            if(ai_produce(owner,r.type) && ++accepted>=2)break;
++        }
++        action_functions af(st,ai_actions);
++        for(auto r:a.techs)if(!player_has_researched(owner,TechTypes(r.type)))for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_research(owner,get_tech_type(TechTypes(r.type))))break;}
++        for(auto r:a.upgrades)if(player_upgrade_level(owner,UpgradeTypes(r.type))<r.amount)for(auto* u:ptr(st.player_units[owner])){if(unit_dying(u))continue;af.action_select(owner,u);if(af.action_upgrade(owner,get_upgrade_type(UpgradeTypes(r.type))))break;}
++    }
++    void ai_tick() {
++        ++ai_clock;
++        for(auto& t:threads)if(!t.done&&t.wake<=ai_clock)ai_run(t);
++        if(!spawned.empty()){threads.insert(threads.end(),spawned.begin(),spawned.end());spawned.clear();}
++        if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game)ai_manage(p);
++    }
++    a_string ai_status() {
++        a_string s="";
++        for(int p=0;p<8;++p){auto& a=towns[p];if(!a.active&&a.opcodes==0)continue;
++            s+=format("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",p,a.opcodes,a.built,a.trained,a.attacks,st.total_minerals_gathered[p],st.total_gas_gathered[p],st.current_minerals[p],st.current_gas[p]);}
++        return s;
++    }
++};
++}
++#endif
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -33,6 +33,7 @@
+ 	int resource_minimap_color;
+ 	int minimap_border_color;
+ 	int minimap_flat_color;
++	int own_minimap_color;
+ 	std::array<uint8_t, 256> cloak_fade_selector;
+ };
+ 
+@@ -272,7 +273,8 @@
+ 	};
+ 	img.resource_minimap_color = get_nearest_color(0, 255, 255);
+ 	img.minimap_border_color = get_nearest_color(110, 110, 110);   // subdued gray frame around the minimap
+-	img.minimap_flat_color = get_nearest_color(68, 68, 68);        // terrain-off backdrop (Tab toggle)
++	img.minimap_flat_color = get_nearest_color(0, 0, 0);         // terrain-off backdrop (Tab toggle)
++	img.own_minimap_color = get_nearest_color(24, 252, 24);      // local units use green, regardless of army color
+ 
+ 	for (size_t i = 0; i != 256; ++i) {
+ 		int r = img.wpe[4 * i + 0];
+@@ -666,6 +668,7 @@
+ 		if (!sound_audible(source_unit, position)) return;   // nothing heard through the fog
+ 		if (add_race_index) id += 1;
+ 		if ((size_t)id >= has_loaded_sound.size()) return;
++		if (sound_filenames[id].empty()) return;
+ 		if (!has_loaded_sound[id]) {
+ 			has_loaded_sound[id] = true;
+ 			a_vector<uint8_t> data;
+@@ -1162,6 +1165,18 @@
+ 	};
+ 	a_vector<fog_snapshot_t> fog_snapshots = a_vector<fog_snapshot_t>(2500);
+ 
++	virtual int selection_viewer() const { return fog_player; }
++	virtual const unit_t* selection_flash_unit(const sprite_t* sprite) const { return nullptr; }
++	virtual int selection_color_offset(const unit_t* u) const {
++		int viewer = selection_viewer();
++		if (viewer < 0) return -1; // Observer mode retains player colors.
++		if (u->owner == viewer) return 0;
++		if (u->owner >= 8 || ut_resource(u) || st.alliances[viewer][u->owner] ||
++		    st.players[u->owner].controller == player_t::controller_rescue_passive ||
++		    st.players[u->owner].controller == player_t::controller_neutral) return 8;
++		return 16;
++	}
++
+ 	void draw_selection_circle(const sprite_t* sprite, const unit_t* u, uint8_t* data, size_t data_pitch) {
+ 		auto* image_type = get_image_type((ImageTypes)((int)ImageTypes::IMAGEID_Selection_Circle_22pixels + sprite->sprite_type->selection_circle));
+ 
+@@ -1197,15 +1212,15 @@
+ 		width = std::min(width, screen_width - screen_x);
+ 		height = std::min(height, screen_height - screen_y);
+ 
+-		// Colour the ring by the unit's owner, not the sprite's: an abandoned addon keeps its
+-		// old body colour (sprite owner) but belongs to neutral, whose ring is yellow.
++		// Original tselect ramps: friendly green, neutral/allied yellow, hostile red.
++		int offset = selection_color_offset(u);
+ 		size_t color_index = st.players[u->owner].color;
+ 		uint8_t color = img.player_unit_colors.at(color_index)[0];
+ 		if (unit_is_mineral_field(u) || unit_is(u, UnitTypes::Resource_Vespene_Geyser)) {
+ 			color = tileset_img.resource_minimap_color;
+ 		}
+-		auto player_color = [color](uint8_t new_value, uint8_t) {
+-			if (new_value >= 0 && new_value < 8) return color;
++		auto player_color = [this, color, offset](uint8_t new_value, uint8_t) {
++			if (new_value < 8) return offset < 0 ? color : img.selection_colors[offset + new_value];
+ 			return new_value;
+ 		};
+ 		draw_frame(frame, false, dst, data_pitch, offset_x, offset_y, width, height, player_color);
+@@ -1389,6 +1404,7 @@
+ 	virtual void draw_sprite(const sprite_t* sprite, uint8_t* data, size_t data_pitch) {
+ 		const unit_t* draw_selection_u = current_selection_sprites_set.at(sprite->index);
+ 		const unit_t* draw_health_bars_u = draw_selection_u;
++		if (const auto* flashing = selection_flash_unit(sprite)) draw_selection_u = flashing;
+ 		for (auto* image : ptr(reverse(sprite->images))) {
+ 			if (i_flag(image, image_t::flag_hidden)) continue;
+ 			if (draw_selection_u && image->modifier != 10) {
+@@ -1397,7 +1413,7 @@
+ 			}
+ 			draw_image(image, data, data_pitch, st.players[sprite->owner].color);
+ 		}
+-		if (draw_health_bars_u && !u_invincible(draw_health_bars_u)) {
++		if (draw_health_bars_u && !u_invincible(draw_health_bars_u) && !unit_is_special_beacon(draw_health_bars_u)) {
+ 			draw_health_bars(sprite, draw_health_bars_u, data, data_pitch);
+ 		}
+ 	}
+@@ -1430,6 +1446,8 @@
+ 
+ 	a_vector<std::pair<uint32_t, const sprite_t*>> sorted_sprites;
+ 
++	virtual void draw_psi_fields(uint8_t*, size_t) {}
++
+ 	void draw_sprites(uint8_t* data, size_t data_pitch) {
+ 
+ 		image_draw_queue.clear();
+@@ -1468,6 +1486,7 @@
+ 					else if (u->owner != fog_player && unit_persists_in_fog(u)) snapshot_fog_sprite(u->sprite);
+ 				}
+ 
++		draw_psi_fields(data,data_pitch);
+ 		for (auto& v : sorted_sprites) {
+ 			if (fog_player >= 0) {
+ 				if (!sprite_position_explored(v.second) || fog_hidden_sprite[v.second->index]) continue;
+@@ -1559,7 +1578,7 @@
+ 		} else if (game_st.map_height < game_st.map_width) {
+ 			minimap_height = minimap_height * minimap_height * game_st.map_tile_height / (minimap_width* game_st.map_tile_width);
+ 		}
+-		if (minimap_scale > 1) {
++		if (minimap_scale > 0 && minimap_scale != 1) {
+ 			minimap_width = (size_t)(minimap_width / minimap_scale + 0.5);
+ 			minimap_height = (size_t)(minimap_height / minimap_scale + 0.5);
+ 		}
+@@ -1622,6 +1641,7 @@
+ 				if (!unit_visble_on_minimap(u)) continue;
+ 				if (unit_hidden_by_fog(u)) continue;
+ 				int color = img.player_minimap_colors.at(st.players[u->owner].color);
++				if (u->owner == fog_player) color = tileset_img.own_minimap_color;
+ 				size_t w = u->unit_type->placement_size.x / 32u;
+ 				size_t h = u->unit_type->placement_size.y / 32u;
+ 				if (unit_is_mineral_field(u) || unit_is(u, UnitTypes::Resource_Vespene_Geyser)) {
+@@ -2197,9 +2217,9 @@
+ 			}
+ 		}
+ 
+-		if (screen_pos.y + view_height > game_st.map_height) screen_pos.y = game_st.map_height - view_height;
++		if (screen_pos.y + (int)view_height > (int)game_st.map_height) screen_pos.y = (int)game_st.map_height - (int)view_height;
+ 		if (screen_pos.y < 0) screen_pos.y = 0;
+-		if (screen_pos.x + view_width > game_st.map_width) screen_pos.x = game_st.map_width - view_width;
++		if (screen_pos.x + (int)view_width > (int)game_st.map_width) screen_pos.x = (int)game_st.map_width - (int)view_width;
+ 		if (screen_pos.x < 0) screen_pos.x = 0;
+ 
+ 		uint8_t* data = (uint8_t*)indexed_surface->lock();
+--- a/data_loading.h
++++ b/data_loading.h
+@@ -951,6 +951,7 @@
+ 
+ template<bool little_endian = true>
+ size_t decompress_adpcm(uint8_t* input, size_t input_size, uint8_t* output, size_t output_size, size_t channels) {
++	if (channels < 1 || channels > 2 || input_size < 2 + channels * 2) error("decompress_adpcm: invalid header");
+ 	data_reader<little_endian> r(input, input + input_size);
+ 	
+ 	size_t out_pos = 0;
+@@ -960,17 +961,19 @@
+ 	
+ 	r.template get<uint8_t>();
+ 	auto shift = r.template get<uint8_t>();
++	if (shift > 31) error("decompress_adpcm: invalid shift");
+ 	
+ 	for (size_t i = 0; i != channels; ++i) {
+ 		auto sample = r.template get<int16_t>();
+ 		previous_sample[i] = sample;
+-		if (out_pos - output_size < 2) error("decompress_adpcm: attempt to write past end");
++		if (output_size - out_pos < 2) error("decompress_adpcm: attempt to write past end");
+ 		set_value_at<little_endian, int16_t>(output + out_pos, sample);
+ 		out_pos += 2;
+ 	}
+ 	
+ 	while (r.left()) {
+ 		for (size_t channel = 0; channel != channels; ++channel) {
++			if (!r.left()) return out_pos;
+ 			auto in_value = r.template get<uint8_t>();
+ 			if (~in_value & 0x80) {
+ 				int index = step_index[channel];
+@@ -991,8 +994,8 @@
+ 				}
+ 				
+ 				previous_sample[channel] = sample;
+-				if (out_pos - output_size < 2) error("decompress_adpcm: attempt to write past end");
+-				set_value_at<true, int16_t>(output + out_pos, sample);
++				if (output_size - out_pos < 2) error("decompress_adpcm: attempt to write past end");
++				set_value_at<little_endian, int16_t>(output + out_pos, sample);
+ 				out_pos += 2;
+ 				
+ 				index += adpcm_index_add_table[in_value & 0x1f];
+@@ -1003,7 +1006,7 @@
+ 				int n = in_value & 0x7f;
+ 				if (n == 0) {
+ 					if (step_index[channel] != 0) --step_index[channel];
+-					if (out_pos - output_size < 2) error("decompress_adpcm: attempt to write past end");
++					if (output_size - out_pos < 2) error("decompress_adpcm: attempt to write past end");
+ 					set_value_at<little_endian, int16_t>(output + out_pos, previous_sample[channel]);
+ 					out_pos += 2;
+ 				} else if (n == 1) {
+@@ -1092,8 +1095,7 @@
+ 			}
+ 		};
+ 
+-		size_t current_sector_size = sector_data.size();
+-		if (current_sector == compressed_sectors.size() - 2) current_sector_size = be.size % sector_size;
++		size_t current_sector_size = std::min(sector_size, size_t(be.size) - current_sector * sector_size);
+ 
+ 		if (sector_data_size == current_sector_size && sector_data_size <= sector_size) {
+ 			if (be.flags & 0x10000) make_encrypted_reader(r, sector_data_size, key + (uint32_t)current_sector, crypt_table).get_bytes(sector_data.data(), sector_data_size);
+@@ -1101,9 +1103,13 @@
+ 		} else {
+ 			if (be.flags & 0x10000) get_data(make_encrypted_reader(r, sector_data_size, key + (uint32_t)current_sector, crypt_table));
+ 			else get_data(r);
+-			if (compression_flags == 8) decompress(compressed_data.data(), sector_data_size, sector_data.data(), current_sector_size);
++			// The multi-compression mask is metadata, not a codec input byte.
++			// Including it in the length made direct ADPCM consume a stale byte
++			// after the final sample (many original Zerg/Protoss music sectors).
++			size_t payload_size = sector_data_size - ((be.flags & 0x200) ? 1 : 0);
++			if (compression_flags == 8) decompress(compressed_data.data(), payload_size, sector_data.data(), current_sector_size);
+ 			else {
+-				size_t input_size = sector_data_size;
++				size_t input_size = payload_size;
+ 				auto swap_buffers = [&](size_t new_input_size) {
+ 					input_size = new_input_size;
+ 					std::swap(compressed_data, sector_data);
+--- /dev/null
++++ b/web/campaign_catalog.h
+@@ -0,0 +1,68 @@
++// Generated from missions.json.
++struct web_campaign_entry { int code, player, race; bool expansion; const char* prefix; };
++static const web_campaign_entry web_campaigns[] = {
++    {50,1,1,false,"campaign/terran/tutorial/"},
++    {1,1,1,false,"campaign/terran/terran01/"},
++    {2,1,1,false,"campaign/terran/terran02/"},
++    {3,1,1,false,"campaign/terran/terran03/"},
++    {4,0,1,false,"campaign/terran/terran04/"},
++    {5,0,1,false,"campaign/terran/terran05/"},
++    {6,0,1,false,"campaign/terran/terran06/"},
++    {8,0,1,false,"campaign/terran/terran08/"},
++    {9,0,1,false,"campaign/terran/terran09/"},
++    {11,0,1,false,"campaign/terran/terran11/"},
++    {12,1,1,false,"campaign/terran/terran12/"},
++    {101,3,0,false,"campaign/zerg/zerg01/"},
++    {102,3,0,false,"campaign/zerg/zerg02/"},
++    {103,3,0,false,"campaign/zerg/zerg03/"},
++    {104,3,0,false,"campaign/zerg/zerg04/"},
++    {105,3,0,false,"campaign/zerg/zerg05/"},
++    {106,3,0,false,"campaign/zerg/zerg06/"},
++    {107,3,0,false,"campaign/zerg/zerg07/"},
++    {108,3,0,false,"campaign/zerg/zerg08/"},
++    {109,3,0,false,"campaign/zerg/zerg09/"},
++    {110,3,0,false,"campaign/zerg/zerg10/"},
++    {201,7,2,false,"campaign/protoss/protoss01/"},
++    {202,7,2,false,"campaign/protoss/protoss02/"},
++    {203,7,2,false,"campaign/protoss/protoss03/"},
++    {204,7,2,false,"campaign/protoss/protoss04/"},
++    {205,7,2,false,"campaign/protoss/protoss05/"},
++    {206,7,2,false,"campaign/protoss/protoss06/"},
++    {207,7,2,false,"campaign/protoss/protoss07/"},
++    {208,7,2,false,"campaign/protoss/protoss08/"},
++    {209,7,2,false,"campaign/protoss/protoss09/"},
++    {210,1,2,false,"campaign/protoss/protoss10/"},
++    {301,2,2,true,"campaign/expprotoss/protoss01/"},
++    {302,5,2,true,"campaign/expprotoss/protoss02/"},
++    {303,1,2,true,"campaign/expprotoss/protoss03/"},
++    {304,1,2,true,"campaign/expprotoss/protoss04/"},
++    {305,1,2,true,"campaign/expprotoss/protoss05/"},
++    {306,1,2,true,"campaign/expprotoss/protoss06/"},
++    {307,1,2,true,"campaign/expprotoss/protoss07/"},
++    {308,1,2,true,"campaign/expprotoss/protoss08/"},
++    {401,5,1,true,"campaign/expterran/terran01/"},
++    {402,6,1,true,"campaign/expterran/terran02/"},
++    {403,6,1,true,"campaign/expterran/terran03/"},
++    {404,6,1,true,"campaign/expterran/terran04/"},
++    {405,6,1,true,"campaign/expterran/terran05a/"},
++    {415,6,1,true,"campaign/expterran/terran05b/"},
++    {406,6,1,true,"campaign/expterran/terran06/"},
++    {407,2,1,true,"campaign/expterran/terran07/"},
++    {408,6,1,true,"campaign/expterran/terran08/"},
++    {501,3,0,true,"campaign/expzerg/zerg01/"},
++    {502,3,0,true,"campaign/expzerg/zerg02/"},
++    {503,3,0,true,"campaign/expzerg/zerg03/"},
++    {504,3,0,true,"campaign/expzerg/zerg04a/"},
++    {514,3,0,true,"campaign/expzerg/zerg04b/"},
++    {524,3,0,true,"campaign/expzerg/zerg04c/"},
++    {534,3,0,true,"campaign/expzerg/zerg04d/"},
++    {544,3,0,true,"campaign/expzerg/zerg04e/"},
++    {554,3,0,true,"campaign/expzerg/zerg04f/"},
++    {505,3,0,true,"campaign/expzerg/zerg05/"},
++    {506,3,0,true,"campaign/expzerg/zerg06/"},
++    {507,3,0,true,"campaign/expzerg/zerg07/"},
++    {508,3,0,true,"campaign/expzerg/zerg08/"},
++    {509,3,0,true,"campaign/expzerg/zerg09/"},
++    {510,3,0,true,"campaign/expzerg/zerg10/"},
++    {599,1,2,true,"campaign/expzerg/bonus/"}
++};

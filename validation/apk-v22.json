@@ -1,0 +1,15 @@
+{
+  "package": "org.openbw.androidtest",
+  "versionName": "0.22",
+  "versionCode": 23,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "apkSha256": "9a974862b99eb079ad384e04e514e7e7cb0a10bfd364cf9e484ca009fc7a2e21",
+  "apkBytes": 3712115,
+  "v2Signature": true,
+  "v3Signature": true,
+  "zipAligned": true,
+  "zipCRC": true,
+  "packagedAssetsCompared": 115,
+  "assetByteMatch": true,
+  "hardwareTested": false
+}

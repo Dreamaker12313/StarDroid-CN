@@ -1,0 +1,10 @@
+{
+  "version": "0.27",
+  "apkSha256": "f909c5f6f7166f171c146e8328b02cf8438ef355e881740a403b81eac89f518a",
+  "filters": [
+    "AndroidRuntime:E",
+    "OpenBW:E"
+  ],
+  "errors": [],
+  "passed": true
+}

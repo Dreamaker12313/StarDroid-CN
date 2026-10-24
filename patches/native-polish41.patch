@@ -1,0 +1,558 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -18892,6 +18892,10 @@
+ 	}
+ 
+ 	bool unit_can_use_tech(const unit_t* u, const tech_type_t* tech) const {
++		return unit_tech_available(u, tech, false);
++	}
++
++	bool unit_tech_available(const unit_t* u, const tech_type_t* tech, bool ignore_research) const {
+ 		if (!u_completed(u)) return false;
+ 		if (u_hallucination(u)) return false;
+ 		if (unit_is_disabled(u)) return false;
+@@ -18899,15 +18903,15 @@
+ 		if (!player_tech_available(owner, tech->id)) return false;
+ 		switch (tech->id) {
+ 		case TechTypes::Stim_Packs:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Stim_Packs)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Stim_Packs)) return false;
+ 			if (!unit_is_marine(u) && !unit_is_firebat(u)) return false;
+ 			return true;
+ 		case TechTypes::Lockdown:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Lockdown)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Lockdown)) return false;
+ 			if (!unit_is_ghost(u)) return false;
+ 			return true;
+ 		case TechTypes::Spider_Mines:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Spider_Mines)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Spider_Mines)) return false;
+ 			if (unit_spider_mine_count(u) == 0) return false;
+ 			if (!unit_is_vulture(u)) return false;
+ 			return true;
+@@ -18915,48 +18919,48 @@
+ 			if (!unit_is(u, UnitTypes::Terran_Comsat_Station)) return false;
+ 			return true;
+ 		case TechTypes::Tank_Siege_Mode:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Tank_Siege_Mode)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Tank_Siege_Mode)) return false;
+ 			if (!unit_is_tank(u)) return false;
+ 			return true;
+ 		case TechTypes::EMP_Shockwave:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::EMP_Shockwave)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::EMP_Shockwave)) return false;
+ 			if (!unit_is(u, UnitTypes::Terran_Science_Vessel) && !unit_is(u, UnitTypes::Hero_Magellan)) return false;
+ 			return true;
+ 		case TechTypes::Defensive_Matrix:
+ 			if (!unit_is(u, UnitTypes::Terran_Science_Vessel) && !unit_is(u, UnitTypes::Hero_Magellan)) return false;
+ 			return true;
+ 		case TechTypes::Irradiate:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Irradiate)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Irradiate)) return false;
+ 			if (!unit_is(u, UnitTypes::Terran_Science_Vessel) && !unit_is(u, UnitTypes::Hero_Magellan)) return false;
+ 			return true;
+ 		case TechTypes::Yamato_Gun:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Yamato_Gun)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Yamato_Gun)) return false;
+ 			if (!unit_is(u, UnitTypes::Terran_Battlecruiser) && !unit_is(u, UnitTypes::Hero_Hyperion) && !unit_is(u, UnitTypes::Hero_Norad_II) && !unit_is(u, UnitTypes::Hero_Gerard_DuGalle)) return false;
+ 			return true;
+ 		case TechTypes::Cloaking_Field:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Cloaking_Field)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Cloaking_Field)) return false;
+ 			if (!unit_is_wraith(u)) return false;
+ 			return true;
+ 		case TechTypes::Personnel_Cloaking:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Personnel_Cloaking)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Personnel_Cloaking)) return false;
+             if (!unit_is_ghost(u) && !unit_is(u, UnitTypes::Hero_Infested_Kerrigan)) return false;
+ 			return true;
+ 		case TechTypes::Restoration:
+-			if (!player_has_researched(owner, TechTypes::Restoration)) return false;
++			if (!ignore_research && !player_has_researched(owner, TechTypes::Restoration)) return false;
+ 			if (!unit_is(u, UnitTypes::Terran_Medic)) return false;
+ 			return true;
+ 		case TechTypes::Healing:
+ 			if (!unit_is(u, UnitTypes::Terran_Medic)) return false;
+ 			return true;
+ 		case TechTypes::Burrowing:
+-			if (!ut_hero(u) && !unit_is(u, UnitTypes::Zerg_Lurker) && !player_has_researched(owner, TechTypes::Burrowing)) return false;
++			if (!ut_hero(u) && !unit_is(u, UnitTypes::Zerg_Lurker) && !ignore_research && !player_has_researched(owner, TechTypes::Burrowing)) return false;
+ 			if (!unit_is(u, UnitTypes::Zerg_Lurker) && !unit_is(u, UnitTypes::Zerg_Drone) && !unit_is(u, UnitTypes::Zerg_Infested_Terran) && !unit_is(u, UnitTypes::Zerg_Defiler) && !unit_is(u, UnitTypes::Zerg_Zergling) && !unit_is(u, UnitTypes::Zerg_Hydralisk) && !unit_is(u, UnitTypes::Hero_Unclean_One) && !unit_is(u, UnitTypes::Hero_Devouring_One) && !unit_is(u, UnitTypes::Hero_Hunter_Killer)) return false;
+ 			return true;
+ 		case TechTypes::Infestation:
+ 			if (!unit_is_queen(u)) return false;
+ 			return true;
+ 		case TechTypes::Spawn_Broodlings:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Spawn_Broodlings)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Spawn_Broodlings)) return false;
+ 			if (!unit_is_queen(u)) return false;
+ 			return true;
+ 		case TechTypes::Parasite:
+@@ -18967,48 +18971,48 @@
+ 			if (u_burrowed(u)) return false;
+ 			return true;
+ 		case TechTypes::Plague:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Plague)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Plague)) return false;
+ 			if (!unit_is_defiler(u)) return false;
+ 			if (u_burrowed(u)) return false;
+ 			return true;
+ 		case TechTypes::Consume:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Consume)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Consume)) return false;
+ 			if (!unit_is_defiler(u) && !unit_is(u, UnitTypes::Hero_Infested_Duran) && !unit_is(u, UnitTypes::Hero_Infested_Kerrigan)) return false;
+ 			if (u_burrowed(u)) return false;
+ 			return true;
+ 		case TechTypes::Ensnare:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Ensnare)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Ensnare)) return false;
+ 			if (!unit_is_queen(u) && !unit_is(u, UnitTypes::Hero_Infested_Kerrigan)) return false;
+ 			if (u_burrowed(u)) return false;
+ 			return true;
+ 		case TechTypes::Psionic_Storm:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Psionic_Storm)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Psionic_Storm)) return false;
+ 			if (!unit_is(u, UnitTypes::Protoss_High_Templar) && !unit_is(u, UnitTypes::Hero_Tassadar) && !unit_is(u, UnitTypes::Hero_Infested_Kerrigan)) return false;
+ 			return true;
+ 		case TechTypes::Hallucination:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Hallucination)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Hallucination)) return false;
+ 			if (!unit_is(u, UnitTypes::Protoss_High_Templar) && !unit_is(u, UnitTypes::Hero_Tassadar)) return false;
+ 			return true;
+ 		case TechTypes::Archon_Warp:
+ 			if (!unit_is(u, UnitTypes::Protoss_High_Templar)) return false;
+ 			return true;
+ 		case TechTypes::Recall:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Recall)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Recall)) return false;
+ 			if (!unit_is_arbiter(u)) return false;
+ 			return true;
+ 		case TechTypes::Stasis_Field:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Stasis_Field)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Stasis_Field)) return false;
+ 			if (!unit_is_arbiter(u)) return false;
+ 			return true;
+ 		case TechTypes::Disruption_Web:
+-			if (!ut_hero(u) && !player_has_researched(owner, TechTypes::Disruption_Web)) return false;
++			if (!ut_hero(u) && !ignore_research && !player_has_researched(owner, TechTypes::Disruption_Web)) return false;
+ 			if (!unit_is(u, UnitTypes::Protoss_Corsair) && !unit_is(u, UnitTypes::Hero_Raszagal)) return false;
+ 			return true;
+ 		case TechTypes::Dark_Archon_Meld:
+ 			if (!unit_is(u, UnitTypes::Protoss_Dark_Templar)) return false;
+ 			return true;
+ 		case TechTypes::Mind_Control:
+-			if (!player_has_researched(owner, TechTypes::Mind_Control)) return false;
++			if (!ignore_research && !player_has_researched(owner, TechTypes::Mind_Control)) return false;
+ 			if (!unit_is(u, UnitTypes::Protoss_Dark_Archon)) return false;
+ 			return true;
+ 		case TechTypes::Feedback:
+@@ -19016,14 +19020,14 @@
+ 			return true;
+ 		case TechTypes::Optical_Flare:
+ 			if (!unit_is(u, UnitTypes::Terran_Medic)) return false;
+-			if (!player_has_researched(owner, TechTypes::Optical_Flare)) return false;
++			if (!ignore_research && !player_has_researched(owner, TechTypes::Optical_Flare)) return false;
+ 			return true;
+ 		case TechTypes::Maelstrom:
+-			if (!player_has_researched(owner, TechTypes::Maelstrom)) return false;
++			if (!ignore_research && !player_has_researched(owner, TechTypes::Maelstrom)) return false;
+ 			if (!unit_is(u, UnitTypes::Protoss_Dark_Archon)) return false;
+ 			return true;
+ 		case TechTypes::Lurker_Aspect:
+-			if (!player_has_researched(owner, TechTypes::Lurker_Aspect)) return false;
++			if (!ignore_research && !player_has_researched(owner, TechTypes::Lurker_Aspect)) return false;
+ 			if (!unit_is(u, UnitTypes::Zerg_Hydralisk)) return false;
+ 			return true;
+ 		default:
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -696,7 +696,7 @@
+ 
+ 	// Targeted spellcaster abilities. Each is action_order (opcode 21) with the spell's
+ 	// Cast* order, gated by unit_can_use_tech (tech researched + right unit) and grayed when
+-	// energy is short. targ_unit picks a unit target; otherwise it targets the ground.
++	// research is missing. targ_unit picks a unit target; otherwise it targets the ground.
+ 	struct spell_t { UnitTypes caster; TechTypes tech; Orders order; bool targ_unit; const char* label; char key; };
+ 	static const spell_t* spells(size_t& n) {
+ 		using U = UnitTypes; using T = TechTypes; using O = Orders;
+@@ -1167,6 +1167,7 @@
+ 	// The unit-specific part of the card (not the build submenu); returns the title.
+ 	const char* card_for_unit(unit_t* u, UnitTypes id) {
+ 		using U = UnitTypes;
++        if (archon_merging(u)) return unit_name(id);
+ 		// A Terran SCV mid-construction shows only Cancel (Esc), like the original — all the
+ 		// normal worker actions are hidden. Cancel halts the build via Stop: the worker walks
+ 		// free and the building is left as an unfinished shell (resume by right-clicking it
+@@ -1227,47 +1228,45 @@
+ 		else if (unit_is_sieged_tank(u))
+ 			card.push_back({'o', "Tank Mode", C_UNSIEGE, U::None});
+ 		// Burrow: Zerg ground units once Burrowing is researched (Lurkers innately).
+-		if (ut_can_burrow(u) && unit_can_use_tech(u, get_tech_type(TechTypes::Burrowing), my_player)) {
++		if (ut_can_burrow(u) && unit_tech_available(u, get_tech_type(TechTypes::Burrowing), true)) {
+ 			if (u_burrowed(u)) card.push_back({'u', "Unburrow", C_UNBURROW, U::None});
+-			else card.push_back({'u', "Burrow", C_BURROW, U::None});
+-		}
+-		// Cloak: Wraith / Ghost with the matching tech researched.
+-		bool cloakable = unit_can_use_tech(u, get_tech_type(TechTypes::Cloaking_Field), my_player)
+-            || unit_can_use_tech(u, get_tech_type(TechTypes::Personnel_Cloaking), my_player);
+-		if (cloakable) {
+-			if (u_cloaked(u)) card.push_back({'c', "Decloak", C_DECLOAK, U::None});
+-			else {
+-                const auto* cloak = get_tech_type(unit_is_wraith(u)
+-                    ? TechTypes::Cloaking_Field : TechTypes::Personnel_Cloaking);
+-                card.push_back({'c', "Cloak", C_CLOAK, U::None,
+-                    u->energy >= fp8::integer(cloak->energy_cost)});
+-            }
+-		}
+-		// Carrier interceptors / Reaver scarabs are built by the unit itself.
+-		if (unit_is_carrier(u)) card.push_back({pick_key("Interceptor"), "Build Interceptor", C_FIGHTER, U::Protoss_Interceptor});
+-		else if (unit_is_reaver(u)) card.push_back({'r', "Build Scarab", C_FIGHTER, U::Protoss_Scarab});
++			else card.push_back({'u', "Burrow", C_BURROW, U::None, unit_can_use_tech(u, get_tech_type(TechTypes::Burrowing), my_player), TechTypes::Burrowing});
++		}
++        // Research controls the button tint; energy is checked when issuing it.
++        const auto* cloak = get_tech_type(unit_is_wraith(u)
++            ? TechTypes::Cloaking_Field : TechTypes::Personnel_Cloaking);
++        if (unit_tech_available(u, cloak, true)) {
++            if (u_cloaked(u)) card.push_back({'c', "Decloak", C_DECLOAK, U::None});
++            else card.push_back({'c', "Cloak", C_CLOAK, U::None,
++                unit_can_use_tech(u, cloak, my_player), cloak->id});
++        }
++        // Count finished, deployed and queued ammunition against the DAT capacity.
++        if (unit_is_carrier(u) && unit_interceptor_count(u) + unit_queued_fighter_units(u) < unit_max_interceptor_count(u))
++            card.push_back({pick_key("Interceptor"), "Build Interceptor", C_FIGHTER, U::Protoss_Interceptor});
++        else if (unit_is_reaver(u) && unit_scarab_count(u) + unit_queued_fighter_units(u) < unit_max_scarab_count(u))
++            card.push_back({'r', "Build Scarab", C_FIGHTER, U::Protoss_Scarab});
+ 		// Two templar merge into an archon. Both merges are 'r' in BW (on separate unit cards).
+ 		if (id == U::Protoss_High_Templar) card.push_back({'r', "Merge Archon", C_ARCHON, U::Protoss_Archon});
+ 		else if (id == U::Protoss_Dark_Templar) card.push_back({'r', "Dark Archon", C_DARCHON, U::Protoss_Dark_Archon});
+-		// Targeted spellcaster abilities: shown once the tech is available, grayed when
+-		// energy is short. The canonical key falls back to auto-assign on a collision.
++		// Targeted spellcaster abilities: visible when the scenario permits the tech,
++		// grayed until researched; low energy leaves the icon active. The canonical key falls back to auto-assign on a collision.
+ 		size_t nsp; const spell_t* sp = spells(nsp);
+ 		for (size_t i = 0; i != nsp; ++i) {
+             if (sp[i].tech == TechTypes::None && !unit_is_ghost(u)) continue;
+-			bool have_energy;
++			bool researched;
+ 			if (sp[i].tech == TechTypes::None) {
+ 				// Nuclear Strike isn't a real tech: any Ghost can call in a built missile.
+ 				if (ut_hero(u) || !player_has_completed_unit(my_player, U::Terran_Nuclear_Missile)) continue;
+-				have_energy = true;
++				researched = true;
+ 			} else {
+ 				const tech_type_t* te = get_tech_type(sp[i].tech);
+-				if (!unit_can_use_tech(u, te, my_player)) continue;
+-				have_energy = u->energy.integer_part() >= te->energy_cost;
++				if (!unit_tech_available(u, te, true)) continue;
++				researched = unit_can_use_tech(u, te, my_player);
+ 			}
+ 			char k = sp[i].key;
+ 			for (auto& c : card) if (c.key == k) { k = 0; break; }
+ 			card.push_back({k ? k : pick_key(sp[i].label), sp[i].label, C_SPELL,
+-			                U::None, have_energy, sp[i].tech});
++			                U::None, researched, sp[i].tech});
+ 		}
+ 		// Cancel whatever this unit is mid-way through: a nuke it's painting, an addon it's
+ 		// building, or a Zerg morph. (A production queue is cancelled via its status chips.)
+@@ -1345,7 +1344,7 @@
+ 			case C_STIM:  c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Stim_Packs), my_player); break;
+ 			case C_SIEGE: c.enabled = unit_can_use_tech(u, get_tech_type(TechTypes::Tank_Siege_Mode), my_player); break;
+ 			case C_BUILD: case C_TRAIN: case C_MORPH: case C_MORPHBLDG:
+-			case C_UPGRADE: case C_RESEARCH: case C_SPELL: case C_CLOAK: case C_LIFT: case C_LOAD: case C_UNLOADALL: break;   // enabled already set
++			case C_UPGRADE: case C_RESEARCH: case C_SPELL: case C_CLOAK: case C_BURROW: case C_LIFT: case C_LOAD: case C_UNLOADALL: break;   // enabled already set
+ 			default:      c.enabled = true;
+ 			}
+ 		}
+@@ -1413,7 +1412,8 @@
+ 			card_text += '\t'; card_text += format("%d", minc).c_str();
+ 			card_text += '\t'; card_text += format("%d", gasc).c_str();
+ 			card_text += '\t'; card_text += (afford ? '1' : '0');
+-			card_text += '\t'; card_text += (c.req != UnitTypes::None) ? unit_name(c.req) : "";
++			card_text += '\t'; card_text += (c.req != UnitTypes::None) ? unit_name(c.req)
++                : !c.enabled && c.tech != TechTypes::None && !player_has_researched(my_player, c.tech) ? tech_name(get_tech_type(c.tech)) : "";
+ 			card_text += '\t'; card_text += desc;
+ 			card_text += '\t'; card_text += (active_act >= 0 && (int)c.act == active_act) ? '1' : '0';
+ 			int command_icon = icon;
+@@ -1518,6 +1518,12 @@
+ 	// Producer status for the JS overlay: "<progress%>\t<name>\t<name>…" (the first name
+ 	// is what's in progress), or empty if idle. Covers unit training and — since those
+ 	// live on a different field — tech research and upgrades.
++	bool archon_merging(const unit_t* u) const {
++        if (!unit_is(u, UnitTypes::Protoss_Archon) && !unit_is(u, UnitTypes::Protoss_Dark_Archon)) return false;
++        if (u->order_type->id == Orders::CompletingArchonSummon) return true;
++        for (const auto& order : u->order_queue) if (order.order_type->id == Orders::CompletingArchonSummon) return true;
++        return false;
++    }
+ 	const char* build_status() {
+ 		status_text.clear();
+ 		unit_t* u = primary_selected();
+@@ -1526,7 +1532,10 @@
+ 		// production queue. A Drone walking to morph still shows its normal stats.
+ 		if (ut_worker(u)) return status_text.c_str();
+ 		auto pct = [](int done, int total) { return total > 0 ? 100 * done / total : 0; };
+-		if (!u->build_queue.empty()) {
++		if (archon_merging(u)) {
++            int bt = u->unit_type->build_time;
++            status_text = format("%d\t%s", std::min(99, pct(bt - u->remaining_build_time, bt)), unit_name(u->unit_type->id));
++        } else if (!u->build_queue.empty()) {
+ 			int prog = 0;
+ 			if (u->current_build_unit) {
+ 				int bt = u->current_build_unit->unit_type->build_time;
+@@ -1575,8 +1584,13 @@
+     }
+     const char* cargo_status() {
+         cargo_text.clear();auto* u=primary_selected();if(!u||!unit_provides_space(u))return cargo_text.c_str();
+-        for(auto* passenger:loaded_units(u))cargo_text+=format("%u\t%d\t%d\t%d\n",get_unit_id(passenger).raw_value,
+-            int(passenger->unit_type->id),passenger->hp.ceil().integer_part(),passenger->unit_type->hitpoints.ceil().integer_part());
++        for(auto* passenger:loaded_units(u)) {
++            int space=passenger->unit_type->space_required;
++            int frame=u_hallucination(passenger)?31:ut_hero(passenger)?19:u->parasite_flags?25:13;
++            cargo_text+=format("%u\t%d\t%d\t%d\t%d\t%d\t%d\n",get_unit_id(passenger).raw_value,
++                int(passenger->unit_type->id),passenger->hp.ceil().integer_part(),passenger->unit_type->hitpoints.ceil().integer_part(),
++                space,frame+(space==4?4:space==2?2:0),int(u->unit_type->space_provided));
++        }
+         return cargo_text.c_str();
+     }
+ 
+@@ -1622,25 +1636,24 @@
+ 	enum err_kind { E_NONE = 0, E_MINERALS, E_GAS, E_SUPPLY, E_ENERGY };
+ 	int err_sound_cache[5] = { -1, -2, -2, -2, -1 };   // per kind, lazy (-2 = unresolved)
+ 
+-	const char* supply_error_msg() const {
+-		int r = (int)my_race;   // 1 = Terran, 2 = Protoss, else Zerg
+-		return r == 1 ? "You must construct additional supply depots"
+-		     : r == 2 ? "You must construct additional pylons"
+-		     :          "Not enough food — build more overlords";
+-	}
+-	const char* err_message(err_kind k) const {
+-		return k == E_MINERALS ? "Not enough minerals"
+-		     : k == E_GAS      ? "Not enough vespene gas"
+-		     : k == E_ENERGY   ? "Not enough energy"
+-		     : k == E_SUPPLY   ? supply_error_msg() : "";
+-	}
++    int error_supply_race = -1;
++    const char* supply_error_msg() {
++        int race=error_supply_race>=0?error_supply_race:int(my_race);
++        return stat_name(843+race);
++    }
++    const char* err_message(err_kind k) {
++        return k==E_MINERALS?stat_name(849):k==E_GAS?stat_name(850)
++            :k==E_ENERGY?stat_name(863 + int(primary_selected()?unit_race(primary_selected()):my_race)):k==E_SUPPLY?supply_error_msg():"";
++    }
++
+ 	// The race's advisor error line by filename (Terran's are lowercase tAdErr, so the
+ 	// lookup is case-insensitive): 00 = minerals, 01 = gas, 02 = supply.
+ 	int err_sound(err_kind k) {
+-		if (err_sound_cache[k] == -2) {
+-			int r = (int)my_race;
++		if (err_sound_cache[k] == -2 || k == E_SUPPLY || k == E_ENERGY) {
++			int r = k == E_SUPPLY && error_supply_race >= 0 ? error_supply_race : (int)my_race;
++			if(k == E_ENERGY && primary_selected()) r=int(unit_race(primary_selected()));
+ 			char buf[10] = { r == 1 ? 'T' : r == 2 ? 'P' : 'Z', 'A', 'd', 'E', 'r', 'r', '0',
+-			                 char('0' + (k == E_GAS ? 1 : k == E_SUPPLY ? 2 : 0)), 0, 0 };
++			                 char('0' + (k == E_GAS ? 1 : k == E_SUPPLY ? 2 : k == E_ENERGY ? 6 : 0)), 0, 0 };
+ 			err_sound_cache[k] = find_sound(buf);
+ 		}
+ 		return err_sound_cache[k];
+@@ -1675,7 +1688,7 @@
+ 		if ((int)st.current_minerals[my_player] < minc) return E_MINERALS;
+ 		if ((int)st.current_gas[my_player] < gasc) return E_GAS;
+ 		if (ut && (c.act == C_TRAIN || c.act == C_MORPH) &&
+-		    !has_available_supply_for(my_player, ut, false)) return E_SUPPLY;
++		    !has_available_supply_for(my_player, ut, false)) { error_supply_race=int(unit_race(ut)); return E_SUPPLY; }
+ 		return E_NONE;
+ 	}
+ 
+@@ -1986,7 +1999,7 @@
+ 		bool seeding = !events_seeded;
+ 		for (unit_t* u : ptr(st.player_units[my_player])) {
+ 			uint16_t id = get_unit_id(u).raw_value;
+-			if (u_completed(u)) {
++			if (u_completed(u) && !archon_merging(u)) {
+ 				auto previous = announced.find(id);
+ 				bool fresh = previous == announced.end() || previous->second != int(u->unit_type->id);
+ 				announced[id] = int(u->unit_type->id);
+@@ -2061,11 +2074,13 @@
+ 	bool run_command(char key) {
+ 		for (auto& c : card) {
+ 			if (c.key != key) continue;
+-			if (!c.enabled) {
+-				// Grayed spells are only ever blocked on energy — say so, don't fail silent.
+-				if (c.act == C_SPELL || c.act == C_CLOAK) raise_error(E_ENERGY);
+-				return true;
+-			}
++			if (!c.enabled) return true;
++            if ((c.act == C_SPELL || c.act == C_CLOAK) && c.tech != TechTypes::None) {
++                auto* caster=primary_selected();
++                if (caster && caster->energy < fp8::integer(get_tech_type(c.tech)->energy_cost)) {
++                    raise_error(E_ENERGY); return true;
++                }
++            }
+ 			// Check construction when its button is pressed and again at placement.
+ 			// Landing an existing building costs nothing.
+ 			switch (c.act) {
+@@ -2331,6 +2346,7 @@
+ 	// turn yellow→orange→red as HP drops, in an order seeded by the unit's
+ 	// wireframe_randomizer (an approximation of BW's exact rule). Shields tint the outline blue.
+ 	grp_t wire_grp;       // grpwire.grp: 32x32 group tiles (131 frames, multi-selectable ids)
++	grp_t wire_transport_grp; // Original 32x32, 32x64 and 64x64 passenger silhouettes.
+ 	grp_t wire_big_grp;   // wirefram.grp: 64x64 single-unit wireframes (all 228 unit types)
+ 	bool wire_grp_loaded = false;
+ 	a_string wires_text;
+@@ -2344,6 +2360,8 @@
+ 			wire_grp = read_grp(data_loading::data_reader_le(data.data(), data.data() + data.size()));
+ 			load_data_file(data, "unit\\wirefram\\wirefram.grp");
+ 			wire_big_grp = read_grp(data_loading::data_reader_le(data.data(), data.data() + data.size()));
++            load_data_file(data, "unit\\wirefram\\tranwire.grp");
++            wire_transport_grp = read_grp(data_loading::data_reader_le(data.data(), data.data() + data.size()));
+ 		}
+ 		return !wire_grp.frames.empty();
+ 	}
+@@ -2403,7 +2421,17 @@
+ 		unit_t* u = selected_nth(i);
+ 		if (!u) return nullptr;
+ 		size_t box = (size_t)wire_box();
+-		const grp_t& grp = box == 64 ? wire_big_grp : wire_grp;
++        return render_wireframe_unit(u, box == 64 ? wire_big_grp : wire_grp, box);
++    }
++    const uint8_t* render_cargo_wireframe(size_t index) {
++        if (!load_wire_grp()) return nullptr;
++        auto* transport=primary_selected();if(!transport||!unit_provides_space(transport))return nullptr;
++        size_t n=0;
++        for(auto* passenger:loaded_units(transport))if(n++==index)
++            return render_wireframe_unit(passenger,wire_transport_grp,64);
++        return nullptr;
++    }
++    const uint8_t* render_wireframe_unit(unit_t* u, const grp_t& grp, size_t box) {
+ 		size_t fi = (size_t)u->unit_type->id;
+ 		if (fi >= grp.frames.size()) return nullptr;
+ 		const auto& f = grp.frames[fi];
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -15,6 +15,7 @@
+ #include <cctype>
+ 
+ using namespace bwgame;
++static int g_terran_ai_level = 2;
+ 
+ // --- imports provided by the JS host ------------------------------------
+ extern "C" {
+@@ -171,7 +172,8 @@
+     if(original_ai_slot>=0) {
+         g_campaign->melee_ai=true;
+         g_ui->st.players[original_ai_slot].controller=player_t::controller_computer_game;
+-        g_campaign->ai_start(original_ai_slot,0x784f4c54u,0); // Original Brood War TLOx (Terran Easy).
++        const uint32_t scripts[]={0x784f4c54u,0x78454d54u,0x78494854u}; // TLOx / TMEx / THIx, original Brood War scripts.
++        g_campaign->ai_start(original_ai_slot,scripts[std::max(0,std::min(2,g_terran_ai_level))],0);
+         if(!g_campaign->ai_error.empty())error("Terran AI: %s",g_campaign->ai_error.c_str());
+     }
+ 
+@@ -321,6 +323,7 @@
+     auto* u = g_ui ? g_ui->primary_selected() : nullptr;
+     if (!u || g_ui->current_selection.size() != 1) return 0;
+     if (g_ui->ut_worker(u)) return 0;
++    if (g_ui->archon_merging(u)) return 5;
+     if (!g_ui->u_completed(u)) return 4;
+     if (!u->build_queue.empty()) return 1;
+     if (g_ui->unit_is_researching(u)) return 2;
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -278,6 +278,9 @@
+         for(auto* u:ptr(st.player_units[owner])) {
+             if(unit_dying(u)||!u_completed(u)||!u->build_queue.empty()||!unit_can_build(u,ut))continue;
+             if(u_order_not_interruptible(u)||u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
++            // PlaceAddon starts its secondary build order on a later frame.
++            // Training during either phase would be overwritten by that order.
++            if(u->order_type->id==Orders::PlaceAddon || u->secondary_order_type->id==Orders::BuildAddon)continue;
+             af.action_select(owner,u);
+             if(!ut_building(ut)) {
+                 if(!has_available_supply_for(owner,ut,false))return false;
+@@ -306,29 +309,35 @@
+                     if(tx<0||ty<0||tx+ut->placement_size.x/32>int(game_st.map_tile_width)||ty+ut->placement_size.y/32>int(game_st.map_tile_height))continue;
+                     xy pos=xy(tx*32,ty*32)+ut->placement_size/2;
+                     if(melee_ai) {
+-                        // Leave SCV/army corridors instead of walling the
+-                        // depot in with the first barracks and supply depots.
++                        // Reserve both the footprint and add-on pad, including
++                        // SCV orders whose buildings have not appeared yet.
++                        auto reserved=[&](const unit_type_t* type,xy center) {
++                            rect area{center-type->placement_size/2,center+type->placement_size/2};
++                            int id=int(type->id),addon=id==106?107:id==113?120:id==114?115:id==116?117:-1;
++                            if(addon>=0) {
++                                const auto* at=get_unit_type(UnitTypes(addon));
++                                xy ap=area.from+at->addon_position;
++                                area.to.x=std::max(area.to.x,ap.x+at->placement_size.x);
++                                area.to.y=std::max(area.to.y,ap.y+at->placement_size.y);
++                            }
++                            return area;
++                        };
++                        rect area=reserved(ut,pos);area.from-=xy(16,16);area.to+=xy(16,16);
+                         bool crowded=false;
+-                        rect area{pos-ut->placement_size/2-xy(16,16),pos+ut->placement_size/2+xy(16,16)};
+-                        for(auto* other:find_units(area))if(!unit_dying(other)&&ut_building(other))crowded=true;
++                        auto overlaps=[&](rect other){return area.from.x<other.to.x&&area.to.x>other.from.x&&area.from.y<other.to.y&&area.to.y>other.from.y;};
++                        for(auto* other:find_units(area))if(!unit_dying(other)&&ut_building(other)&&overlaps(reserved(other->unit_type,other->position)))crowded=true;
++                        for(auto* other:ptr(st.player_units[owner]))if(!unit_dying(other)) {
++                            if(u_grounded_building(other)&&overlaps(reserved(other->unit_type,other->position)))crowded=true;
++                            if(ut_worker(other)&&!other->current_build_unit&&!other->build_queue.empty()&&ut_building(other->build_queue.front())
++                                && overlaps(reserved(other->build_queue.front(),other->order_target.pos)))crowded=true;
++                        }
+                         if(crowded)continue;
+                         int addon=type==106?107:type==113?120:type==114?115:type==116?117:-1;
+                         if(addon>=0) {
+                             const auto* at=get_unit_type(UnitTypes(addon));
+                             xy ap=pos-ut->placement_size/2+at->addon_position+at->placement_size/2;
+-                            if(!can_place_building(u,owner,at,ap,false,false))continue;
++                            if(!can_place_building(u,owner,at,ap,false,true))continue;
+                         }
+-                        // Keep future add-on pads clear when placing other structures.
+-                        for(auto* other:ptr(st.player_units[owner]))if(!unit_dying(other)&&u_grounded_building(other)) {
+-                            int id=int(other->unit_type->id);
+-                            int ai=id==106?107:id==113?120:id==114?115:id==116?117:-1;
+-                            if(ai<0)continue;
+-                            const auto* at=get_unit_type(UnitTypes(ai));
+-                            xy ap=other->position-other->unit_type->placement_size/2+at->addon_position;
+-                            xy left=pos-ut->placement_size/2,right=pos+ut->placement_size/2;
+-                            if(left.x<ap.x+at->placement_size.x&&right.x>ap.x&&left.y<ap.y+at->placement_size.y&&right.y>ap.y)crowded=true;
+-                        }
+-                        if(crowded)continue;
+                     }
+                     if(can_place_building(u,owner,ut,pos,false,false)){af.action_build(owner,order,ut,{size_t(tx),size_t(ty)});++a.built;return true;}
+                 }
+@@ -339,7 +348,7 @@
+     void ai_melee_prerequisites(a_vector<request>& req) {
+         // Original campaign scripts expect the AI manager to provide missing
+         // tech buildings. Supply that manager work for a four-SCV melee start;
+-        // the original TLOx bytes still own army composition and attack timing.
++        // the original script bytes still own army composition and attack timing.
+         bool needs_gas=false;
+         for(size_t i=0;i<req.size();++i) {
+             auto r=req[i];const auto* ut=get_unit_type(UnitTypes(r.type));
+@@ -366,6 +375,13 @@
+             case 120:need(113);break;
+             }
+         }
++        // Covert Ops and Physics Lab cannot share a Science Facility. Likewise
++        // Comsat and Silo need separate Command Centers; reserve enough parents.
++        for(auto group : {std::array<int,3>{116,117,118},std::array<int,3>{106,107,108}}) {
++            int parents=0,priority=0;
++            for(auto r:req)if(r.type==group[1]||r.type==group[2]) {parents+=r.amount;priority=std::max(priority,r.priority);}
++            if(parents)ai_request(req,group[0],parents,priority);
++        }
+         if(needs_gas)ai_request(req,110,1,90);
+     }
+     void ai_manage(int owner) {
+@@ -376,7 +392,12 @@
+         for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u)&&!u_burrowed(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+         auto req=a.builds;
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+-        if(melee_ai && st.players[owner].race==race_t::terran)ai_melee_prerequisites(req);
++        if(melee_ai && st.players[owner].race==race_t::terran) {
++            // Campaign scripts start with an established economy. A melee start
++            // has four SCVs, so maintain a working mineral/gas line as it grows.
++            ai_request(req,7,16,80);
++            ai_melee_prerequisites(req);
++        }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});

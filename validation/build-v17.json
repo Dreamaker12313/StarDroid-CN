@@ -1,0 +1,51 @@
+{
+  "version": "0.17",
+  "versionCode": 18,
+  "apkBytes": 3641712,
+  "apkSha256": "3bb98fd96e3d7b2144c89c2fb52b5efbcc11be5b1820036d309889ecacf79ee1",
+  "signerSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "checks": [
+    "Fresh engine build completed; updated campaign and bot hashes reviewed and recorded",
+    "All seven bundled WASM hashes match ENGINE-BUILD.json",
+    "Build completed APK v2/v3 signing verification, alignment, CRC and byte comparison of all packaged assets"
+  ],
+  "engines": [
+    {
+      "file": "openbw.wasm",
+      "size": 2372022,
+      "sha256": "0d6d24e725dc79d9ca299c033bf6e593aba60015d5bd8b73569b12507afc5485"
+    },
+    {
+      "file": "openbw-campaign.wasm",
+      "size": 2372022,
+      "sha256": "0d6d24e725dc79d9ca299c033bf6e593aba60015d5bd8b73569b12507afc5485"
+    },
+    {
+      "file": "openbw-bot.wasm",
+      "size": 6134102,
+      "sha256": "a9a9a90e61fff18c9b0927292c46187b8a6b852280cacc64108d910dae8e60f3"
+    },
+    {
+      "file": "media-decoder.wasm",
+      "size": 665157,
+      "sha256": "57cf86b9153081a1dc850b93c8e24250e35b144e6022cb5488bac10be23ac1be"
+    },
+    {
+      "file": "portrait-decoder.wasm",
+      "size": 285594,
+      "sha256": "26b628f3f36d30ae998e850269adbc06a8fdf856fac6cf371635d47e83317cb0"
+    },
+    {
+      "file": "menu-decoder.wasm",
+      "size": 285433,
+      "sha256": "9400381a97bfec5c04970be2234dd84ef2b9b890175e8a2c6890a26a6a51b9d2"
+    },
+    {
+      "file": "cinematic-decoder.wasm",
+      "size": 287265,
+      "sha256": "c167ce8fd74bb51267476a6b8abaf01e8c8a510b2421953aabcc7281c12d503f"
+    }
+  ],
+  "patchSha256": "fc0110411c5e37ee7429fdad4a7dac3ec234f8da75902434bebb68c0659293cb",
+  "androidHardwareTested": false
+}

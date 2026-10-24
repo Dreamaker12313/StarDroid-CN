@@ -1,0 +1,96 @@
+{
+  "checks": [
+    "Original Adjutant and Duke portraits; speech animates; native pause freezes frames",
+    "Money button grants 10,000/10,000; 16× speed advances faster; SCV builds full-health depot within 12 frames of foundation",
+    "Reset disables instant production and restores speed; cheat-altered replays disabled"
+  ],
+  "errors": [],
+  "logs": [],
+  "briefing": {
+    "draws": 1,
+    "paused": false,
+    "cacheBytes": 134400,
+    "pending": 0,
+    "error": "",
+    "surfaces": [
+      {
+        "unit": -1,
+        "talking": false,
+        "file": "",
+        "frame": -1,
+        "frames": 0,
+        "visible": false
+      },
+      {
+        "unit": 106,
+        "talking": false,
+        "file": "portrait/TAdvisor\\TAdFid00.smk",
+        "frame": 0,
+        "frames": 10,
+        "visible": true
+      }
+    ]
+  },
+  "duke": {
+    "draws": 5,
+    "paused": false,
+    "cacheBytes": 403200,
+    "pending": 0,
+    "error": "",
+    "surfaces": [
+      {
+        "unit": -1,
+        "talking": false,
+        "file": "",
+        "frame": -1,
+        "frames": 0,
+        "visible": false
+      },
+      {
+        "unit": 23,
+        "talking": false,
+        "file": "portrait/UDuke\\UDuFid00.smk",
+        "frame": 0,
+        "frames": 10,
+        "visible": true
+      }
+    ]
+  },
+  "scv": {
+    "draws": 10,
+    "paused": false,
+    "cacheBytes": 537600,
+    "pending": 0,
+    "error": "",
+    "surfaces": [
+      {
+        "unit": 7,
+        "talking": true,
+        "file": "portrait/tSCV\\TSCTlk00.smk",
+        "frame": 4,
+        "frames": 10,
+        "visible": true
+      },
+      {
+        "unit": -1,
+        "talking": false,
+        "file": "portrait/UDuke\\UDuFid00.smk",
+        "frame": -1,
+        "frames": 0,
+        "visible": false
+      }
+    ]
+  },
+  "speed": {
+    "framesInHalfSecond": 190
+  },
+  "depot": {
+    "tile": [
+      7,
+      4
+    ],
+    "start": 1119,
+    "foundation": 1167,
+    "completed": 1169
+  }
+}

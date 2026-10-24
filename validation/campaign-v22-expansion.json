@@ -1,0 +1,50 @@
+{
+  "missions": {
+    "expprotoss01": {
+      "state": {
+        "frame": 2404,
+        "ai": "3\t11\t0\t0\t0\t10256\t10000\t10256\t10000\n4\t11\t0\t0\t0\t10312\t10000\t10312\t10000\n",
+        "error": "",
+        "outcome": 0,
+        "units": 288,
+        "voices": 2,
+        "next": "expprotoss02"
+      }
+    },
+    "expterran02": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t13\t0\t0\t0\t10000\t10000\t10000\t10000\n6\t2\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 177,
+        "voices": 2,
+        "next": "expterran03"
+      }
+    },
+    "expzerg03": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t199\t0\t1\t1\t20096\t20224\t19046\t19224\n1\t392\t0\t19\t0\t30352\t30264\t27977\t28364\n4\t251\t0\t8\t0\t25152\t25096\t24177\t24546\n5\t201\t0\t0\t0\t20248\t20408\t19698\t19858\n6\t101\t0\t1\t1\t30296\t30264\t28621\t28664\n7\t2\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 592,
+        "voices": 2,
+        "next": "expzerg04a"
+      }
+    },
+    "expbonus": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t6\t0\t0\t0\t0\t0\t0\t0\n2\t1\t0\t0\t0\t0\t0\t0\t0\n5\t16\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 176,
+        "voices": 2,
+        "next": "expzerg10"
+      }
+    }
+  },
+  "checks": [],
+  "errors": []
+}

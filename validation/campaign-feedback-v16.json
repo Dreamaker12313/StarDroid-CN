@@ -1,0 +1,189 @@
+{
+  "missions": {
+    "zerg01": {
+      "briefMusic": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": true,
+        "phase": "briefing",
+        "track": "music\\zrdyroom.wav",
+        "playing": true,
+        "time": 0.798637,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 939874,
+        "error": null
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": true,
+        "phase": "game",
+        "track": "music\\zerg1.wav",
+        "playing": true,
+        "time": 0.147542,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 9366652,
+        "error": null
+      },
+      "beacon": {
+        "unit": {
+          "id": 3664,
+          "name": "Beacon",
+          "owner": 3,
+          "x": 112,
+          "y": 1664,
+          "order": 23
+        },
+        "card": "Beacon\t\t\t",
+        "details": ""
+      },
+      "rings": {
+        "own": {
+          "green": 113,
+          "red": 0,
+          "changed": 208,
+          "debug": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=32,1568\nselected_owner=3 selection_palette=0\nrescues=0 sound=-1:none\nsim_selection=0 first=none\nunit=Drone owner=3\ncompleted=1 remaining_build_time=0 research_time=-1\norder=3 order2=23\nattack_move=2 attack_unit=10\nground_weapon=43\npos=312,1768 hp=40\nmove_target=312,1768 order_target=0,0\n"
+        },
+        "enemy": {
+          "green": 36,
+          "red": 59,
+          "changed": 154,
+          "debug": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\ncamera=1408,1473\nselected_owner=5 selection_palette=16\nrescues=0 sound=-1:none\nsim_selection=0 first=none\nprimary=none\n"
+        }
+      }
+    },
+    "protoss01": {
+      "briefMusic": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": true,
+        "phase": "briefing",
+        "track": "music\\prdyroom.wav",
+        "playing": true,
+        "time": 0.782653,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 3228892,
+        "error": null
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "game",
+        "track": "music\\protoss1.wav",
+        "playing": true,
+        "time": 0.057169,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 9253222,
+        "error": null
+      },
+      "rescue": {
+        "target": {
+          "id": 3648,
+          "name": "Nexus",
+          "owner": 1,
+          "x": 480,
+          "y": 2224,
+          "order": 161
+        },
+        "after": {
+          "id": 3648,
+          "name": "Nexus",
+          "owner": 7,
+          "x": 480,
+          "y": 2224,
+          "order": 23
+        },
+        "debug": "fog_player=7 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=0\ncamera=976,1584\nrescues=2 sound=34:Misc\\PRescue.wav\nsim_selection=0 first=none\nprimary=none\n",
+        "messages": "",
+        "outcome": 0,
+        "audio": [
+          {
+            "duration": 1.6370068027210884,
+            "channels": 1
+          },
+          {
+            "duration": 5.669977324263039,
+            "channels": 1
+          }
+        ]
+      }
+    },
+    "terran01": {
+      "briefMusic": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "briefing",
+        "track": "music\\trdyroom.wav",
+        "playing": true,
+        "time": 0.747872,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 1712097,
+        "error": null
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "game",
+        "track": "music\\terran1.wav",
+        "playing": true,
+        "time": 0.094317,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 9891260,
+        "error": null
+      },
+      "rescue": {
+        "target": {
+          "id": 3722,
+          "name": "Jim Raynor",
+          "owner": 2,
+          "x": 1014,
+          "y": 1031,
+          "order": 161
+        },
+        "after": {
+          "id": 3722,
+          "name": "Jim Raynor",
+          "owner": 1,
+          "x": 1014,
+          "y": 1031,
+          "order": 3
+        },
+        "debug": "fog_player=1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=0\ncamera=704,768\nrescues=1 sound=33:Misc\\TRescue.wav\nsim_selection=0 first=none\nprimary=none\n",
+        "messages": "",
+        "outcome": 0,
+        "audio": [
+          {
+            "duration": 1.896326530612245,
+            "channels": 1
+          },
+          {
+            "duration": 3.947392290249433,
+            "channels": 1
+          }
+        ]
+      }
+    }
+  },
+  "errors": []
+}

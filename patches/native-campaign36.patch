@@ -1,0 +1,113 @@
+--- a/data_loading.h
++++ b/data_loading.h
+@@ -1220,6 +1220,7 @@
+ 	}
+ 
+ 	const hash_table_entry* find_hash_table_entry(const a_string& filename) const {
++		if (hash_table.empty()) return nullptr;
+ 		auto hash0 = string_hash(filename.c_str(), 0, crypt_table);
+ 		auto hash1 = string_hash(filename.c_str(), 1, crypt_table);
+ 		auto hash2 = string_hash(filename.c_str(), 2, crypt_table);
+@@ -1231,7 +1232,8 @@
+ 			do {
+ 				auto& he = hash_table[index];
+ 				if (he.block_index == 0xffffffff) break;
+-				if (he.hash1 == hash1 && he.hash2 == hash2) {
++				// Deleted entries keep probe chains but are never readable files.
++				if (he.block_index != 0xfffffffe && he.hash1 == hash1 && he.hash2 == hash2) {
+ 					found = true;
+ 					break;
+ 				}
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -190,6 +190,9 @@
+ 		int duration = a.time_n;
+ 		if (a.type == 7) {
+ 			int voice = sound_duration(a.sound_index);
++			// Map-only exports omit recordings. Keep their editor-recorded duration
++			// so dialogue and scripted entrances still run in the original order.
++			if (!voice) voice = std::max(0, a.time_n);
+ 			// time_n stores the editor WAV length; group2_n is the timing adjustment.
+ 			// Adding the WAV length twice made exchanges pause for an extra line.
+ 			duration = a.group2_n;
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -15519,6 +15519,12 @@
+ 	bool initialize_flingy(flingy_t* f, const flingy_type_t* flingy_type, xy pos, int owner, direction_t heading) {
+ 		f->flingy_type = flingy_type;
+ 		f->movement_flags = 0;
++		// Recycled unit/projectile slots must not inherit dormant motion state.
++		// Free slots are recreated on load, so stale values also broke continuation.
++		f->current_speed = 0_fp8;
++		f->velocity = {};
++		f->current_velocity_direction = heading;
++		f->desired_velocity_direction = heading;
+ 		f->next_speed = 0_fp8;
+ 		f->flingy_top_speed = flingy_type->top_speed;
+ 		f->flingy_acceleration = flingy_type->acceleration;
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -44,6 +44,21 @@
+     }
+     void ai_start(int owner, uint32_t id, int location) {
+         if (owner < 0 || owner >= 8) return;
++        // StarEdit's location alliance scripts refer to owners of units in the
++        // trigger region, not automatically to the human player. In BW T7,
++        // Enmy makes the entrance guards hostile to the computer commandos.
++        // These two built-ins execute immediately, so no new saved thread state
++        // is needed and existing snapshot files remain compatible.
++        if (id==0x796d6e45u || id==0x796c6c41u) { // Enmy / Ally
++            if (location>0 && size_t(location)<=st.locations.size()) {
++                auto alliances=st.alliances[owner];
++                const auto& region=st.locations[location-1];
++                for(auto* u:find_units(region.area))if(!unit_dying(u)&&!ut_turret(u)&&u->owner!=owner&&u->owner<8)
++                    alliances[u->owner]=id==0x796d6e45u?0:1;
++                action_functions(st,ai_actions).action_set_alliances(owner,alliances);
++            }
++            return;
++        }
+         thread t; t.owner=owner; t.id=id;
+         t.pos=game_st.start_locations[owner];
+         if (location>0 && size_t(location)<=st.locations.size()) { auto a=st.locations[location-1].area; t.pos=(a.from+a.to)/2; }
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -5962,6 +5962,7 @@
+                 || (u->order_type->id==Orders::Nothing && u_disabled(u)==!enabled))) return;
+ 			u_unset_status_flag(u,unit_t::status_flag_disabled);
+ 			u->order_signal &= ~1;
++            u_unset_status_flag(u,unit_t::status_flag_order_not_interruptible);
+             set_unit_order(u,get_order_type(enabled?Orders::CloseDoor:Orders::OpenDoor));
+             if (enabled) {
+                 u_unset_status_flag(u,unit_t::status_flag_no_collide);
+@@ -8274,10 +8275,10 @@
+ 			order_HiddenGun(u);
+ 			break;
+ 		case Orders::OpenDoor:
+-			if(u->order_signal&1){u->order_signal&=~1;u_set_status_flag(u,unit_t::status_flag_no_collide);u->sprite->elevation_level=1;set_unit_order(u,get_order_type(Orders::Nothing));u_set_status_flag(u,unit_t::status_flag_disabled);}
++			if(u->order_signal&1){u->order_signal&=~1;u_set_status_flag(u,unit_t::status_flag_no_collide);u->sprite->elevation_level=1;u_unset_status_flag(u,unit_t::status_flag_order_not_interruptible);set_unit_order(u,get_order_type(Orders::Nothing));u_set_status_flag(u,unit_t::status_flag_disabled);}
+ 			break;
+ 		case Orders::CloseDoor:
+-			if(u->order_signal&1){u->order_signal&=~1;u_unset_status_flag(u,unit_t::status_flag_no_collide);u->sprite->elevation_level=u->unit_type->elevation_level;set_unit_order(u,get_order_type(Orders::Nothing));}
++			if(u->order_signal&1){u->order_signal&=~1;u_unset_status_flag(u,unit_t::status_flag_no_collide);u->sprite->elevation_level=u->unit_type->elevation_level;u_unset_status_flag(u,unit_t::status_flag_order_not_interruptible);set_unit_order(u,get_order_type(Orders::Nothing));}
+ 			break;
+ 		case Orders::HideTrap:
+ 			order_TrapAnimation(u,false);
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -53,8 +53,15 @@
+             if (location>0 && size_t(location)<=st.locations.size()) {
+                 auto alliances=st.alliances[owner];
+                 const auto& region=st.locations[location-1];
++                std::array<bool,8> affected{};
+                 for(auto* u:find_units(region.area))if(!unit_dying(u)&&!ut_turret(u)&&u->owner!=owner&&u->owner<8)
+-                    alliances[u->owner]=id==0x796d6e45u?0:1;
++                    affected[u->owner]=true;
++                for(int player=0;player<8;++player)if(affected[player]) {
++                    int value=id==0x796d6e45u?0:1;
++                    alliances[player]=value;
++                    auto reciprocal=st.alliances[player];reciprocal[owner]=value;
++                    action_functions(st,ai_actions).action_set_alliances(player,reciprocal);
++                }
+                 action_functions(st,ai_actions).action_set_alliances(owner,alliances);
+             }
+             return;

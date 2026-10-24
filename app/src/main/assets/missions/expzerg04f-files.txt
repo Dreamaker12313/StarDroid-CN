@@ -1,0 +1,10 @@
+campaign\expzerg\zerg04f\staredit\scenario.chk
+campaign\expzerg\zerg04f\staredit\wav\z4b00zke.wav
+campaign\expzerg\zerg04f\staredit\wav\z4b01men.wav
+campaign\expzerg\zerg04f\staredit\wav\z4b02zke.wav
+campaign\expzerg\zerg04f\staredit\wav\z4b03men.wav
+campaign\expzerg\zerg04f\staredit\wav\z4b04zke.wav
+campaign\expzerg\zerg04f\staredit\wav\z4m00zke.wav
+campaign\expzerg\zerg04f\staredit\wav\z4m10zke.wav
+campaign\expzerg\zerg04f\staredit\wav\z4m11men.wav
+campaign\expzerg\zerg04f\staredit\wav\z4m12zke.wav

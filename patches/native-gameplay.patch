@@ -1,0 +1,102 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -254,7 +254,8 @@
+ 	build_kit kit;
+ 
+ 	const unit_type_t* pending_build = nullptr;   // building awaiting a placement click
+-	bool pending_land = false;                    // that placement is a flying building landing
++	bool pending_land = false;
++	bool pending_nydus = false;                    // that placement is a flying building landing
+ 	const unit_type_t* pending_addon = nullptr;   // placing an addon: pending_build is the parent
+ 	bool targeting = false;                       // an order awaiting a target click
+ 	bool campaign_control_lock = false;
+@@ -281,7 +282,7 @@
+ 	               C_BUILDMENU, C_ADVMENU, C_BUILD, C_TRAIN, C_MORPH, C_MORPHBLDG, C_STIM, C_SIEGE, C_UNSIEGE, C_REPAIR,
+ 	               C_SELECT,     // select the player's units of cmd.ut (SCVs / Probes / Larvae)
+ 	               C_RALLY, C_RESEARCH, C_UPGRADE,
+-	               C_LIFT, C_LAND,      // Terran flying buildings
++	               C_LIFT, C_LAND, C_NYDUS,      // Terran flying buildings
+ 	               C_UNLOAD, C_UNLOADALL,     // eject cargo from a bunker / transport
+ 	               C_RETURN,                  // worker return cargo
+ 	               C_BURROW, C_UNBURROW,      // Zerg burrow
+@@ -1133,6 +1134,9 @@
+ 				// hotkey. Passing "Larva" picked 'l' and lit the l in "Select" instead.
+ 				card.push_back({pick_key("Select"), "Select Larva", C_SELECT, U::Zerg_Larva});
+ 		}
++		// The far end is a free build order issued by the completed canal itself.
++		if (id == U::Zerg_Nydus_Canal && u_completed(u) && !u->building.nydus.exit)
++			card.push_back({'n', "Build Nydus Exit", C_NYDUS, U::Zerg_Nydus_Canal, true});
+ 		// Unit abilities (not part of the build/upgrade/research enumeration).
+ 		if (id == U::Terran_Marine || id == U::Terran_Firebat)
+ 			card.push_back({'t', "Stim Pack", C_STIM, U::None});
+@@ -1255,7 +1259,7 @@
+ 			case C_STIM:  c.enabled = player_has_researched(my_player, TechTypes::Stim_Packs); break;
+ 			case C_SIEGE: c.enabled = player_has_researched(my_player, TechTypes::Tank_Siege_Mode); break;
+ 			case C_BUILD: case C_TRAIN: case C_MORPH: case C_MORPHBLDG:
+-			case C_UPGRADE: case C_RESEARCH: case C_SPELL: break;   // enabled already set
++			case C_UPGRADE: case C_RESEARCH: case C_SPELL: case C_LIFT: break;   // enabled already set
+ 			default:      c.enabled = true;
+ 			}
+ 		}
+@@ -1764,7 +1768,7 @@
+ 		debug_text += format("order=%d order2=%d\n", (int)u->order_type->id, (int)u->secondary_order_type->id);
+ 		debug_text += format("attack_move=%d attack_unit=%d\n",
+ 			(int)u->unit_type->attack_move->id, (int)u->unit_type->attack_unit->id);
+-		debug_text += format("ground_weapon=%d\n", (int)u->unit_type->ground_weapon->id);
++		debug_text += format("ground_weapon=%d\n", u->unit_type->ground_weapon ? (int)u->unit_type->ground_weapon->id : -1);
+ 		debug_text += format("pos=%d,%d hp=%d\n", u->sprite->position.x, u->sprite->position.y, u->hp.integer_part());
+ 		debug_text += format("move_target=%d,%d order_target=%d,%d\n",
+ 			u->move_target.pos.x, u->move_target.pos.y, u->order_target.pos.x, u->order_target.pos.y);
+@@ -1882,7 +1886,7 @@
+ 
+ 	void start_target(targ_t t) { clear_pending(); targeting = true; pending_targ = t; }
+ 
+-	void clear_pending() { pending_build = nullptr; pending_land = false; pending_addon = nullptr; }
++	void clear_pending() { pending_build = nullptr; pending_land = false; pending_nydus = false; pending_addon = nullptr; }
+ 
+ 	// Helpers for the flying-building commands, which act on the selected building itself.
+ 	xy u_pos_of_selected() { unit_t* u = primary_selected(); return u ? u->sprite->position : xy(); }
+@@ -1939,6 +1943,8 @@
+ 			case C_LIFT:      sync_selection(); cmd_liftoff(u_pos_of_selected()); break;
+ 			case C_LAND:      pending_build = get_unit_type(c.ut != UnitTypes::None ? c.ut : landing_type());
+ 			                  pending_land = true; menu = 0; refresh_card(); break;
++			case C_NYDUS:     pending_build = get_unit_type(UnitTypes::Zerg_Nydus_Canal);
++			                  pending_nydus = true; menu = 0; refresh_card(); break;
+ 			case C_UNLOAD:    sync_selection(); cmds.unload(c.unit); break;
+ 			case C_UNLOADALL: sync_selection(); cmds.unload_all(key_shift()); break;
+ 			case C_RETURN:    sync_selection(); cmds.return_cargo(key_shift()); break;
+@@ -2025,12 +2031,16 @@
+ 
+ 	bool placement_valid(int mx, int my) {
+ 		if (!pending_build || mx < 0 || my < 0 || mx >= screen_width || my >= screen_height) return false;
+-		// Addon/landing checks retain their dedicated action semantics.
+-		if (pending_addon || pending_land) return true;
+ 		auto* builder = primary_selected();int tx,ty;
+ 		placement_tile(screen_to_map(mx,my),tx,ty);
+ 		xy center(tx*32+pending_build->placement_size.x/2,ty*32+pending_build->placement_size.y/2);
+-		return builder && can_place_building(builder,my_player,pending_build,center,false,false);
++		if (!builder || !can_place_building(builder,my_player,pending_build,center,false,false)) return false;
++		if (pending_addon) {
++			xy addon_center(tx*32+pending_addon->addon_position.x+pending_addon->placement_size.x/2,
++			                ty*32+pending_addon->addon_position.y+pending_addon->placement_size.y/2);
++			return can_place_building(builder,my_player,pending_addon,addon_center,false,false);
++		}
++		return true;
+ 	}
+ 
+ 	void place_pending(int mx, int my) {
+@@ -2051,12 +2061,12 @@
+ 		}
+ 		// Landing an existing building is free; only a real build spends, and the cost is
+ 		// taken now, at placement — report a shortfall and keep the ghost up.
+-		if (!pending_land) {
++		if (!pending_land && !pending_nydus) {
+ 			if ((int)st.current_minerals[my_player] < pending_build->mineral_cost) { raise_error(E_MINERALS); return; }
+ 			if ((int)st.current_gas[my_player] < pending_build->gas_cost) { raise_error(E_GAS); return; }
+ 		}
+ 		sync_primary();   // build is a single-unit action (see sync_primary)
+-		cmd_build(pending_land ? Orders::BuildingLand : kit.build_order, pending_build, tx, ty);
++		cmd_build(pending_land ? Orders::BuildingLand : pending_nydus ? Orders::BuildNydusExit : kit.build_order, pending_build, tx, ty);
+ 		if (!pending_land) play_sound(4 + int(unit_race(pending_build)),xy(),nullptr,false);
+ 		if (auto* u = primary_selected()) play_unit_ack(u,u->unit_type->first_yes_sound,u->unit_type->last_yes_sound);
+ 		clear_pending();   // one-shot; re-open the menu to place another

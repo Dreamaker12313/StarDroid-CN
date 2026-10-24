@@ -1,0 +1,23 @@
+{
+  "checks": [
+    "All five original UI sound files decode and play without an audio error",
+    "Native Diagnostics modal navigation leaves the existing title page visible and interactive",
+    "Repeated Android Back during briefing assembly queues one complete exit and returns to main",
+    "Start during assembly waits for entrance/exit, skips speech and starts one live mission",
+    "Normal Cancel and duplicate Cancel complete the exit without launching gameplay"
+  ],
+  "errors": [],
+  "sounds": {
+    "available": [
+      "mousedown2",
+      "mouseover",
+      "swishin",
+      "swishlock",
+      "swishout"
+    ],
+    "decoded": 5,
+    "played": 8,
+    "paused": false,
+    "error": ""
+  }
+}

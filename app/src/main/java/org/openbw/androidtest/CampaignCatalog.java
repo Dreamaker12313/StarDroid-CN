@@ -1,0 +1,77 @@
+package org.openbw.androidtest;
+/** Generated from missions.json; archive paths are an allowlist. */
+final class CampaignCatalog {
+    static final Object[][] ALL = {{50,"terrantutorial","Boot Camp","campaign/terran/tutorial/",false},
+        {1,"terran01","Wasteland","campaign/terran/terran01/",false},
+        {2,"terran02","Backwater Station","campaign/terran/terran02/",false},
+        {3,"terran03","Desperate Alliance","campaign/terran/terran03/",false},
+        {4,"terran04","The Jacobs Installation","campaign/terran/terran04/",false},
+        {5,"terran05","Revolution","campaign/terran/terran05/",false},
+        {6,"terran06","Norad II","campaign/terran/terran06/",false},
+        {8,"terran08","The Trump Card","campaign/terran/terran08/",false},
+        {9,"terran09","The Big Push","campaign/terran/terran09/",false},
+        {11,"terran11","New Gettysburg","campaign/terran/terran11/",false},
+        {12,"terran12","The Hammer Falls","campaign/terran/terran12/",false},
+        {101,"zerg01","Among the Ruins","campaign/zerg/zerg01/",false},
+        {102,"zerg02","Egression","campaign/zerg/zerg02/",false},
+        {103,"zerg03","The Swarm","campaign/zerg/zerg03/",false},
+        {104,"zerg04","Agent of the Swarm","campaign/zerg/zerg04/",false},
+        {105,"zerg05","The Amerigo","campaign/zerg/zerg05/",false},
+        {106,"zerg06","The Dark Templar","campaign/zerg/zerg06/",false},
+        {107,"zerg07","The Culling","campaign/zerg/zerg07/",false},
+        {108,"zerg08","Eye for an Eye","campaign/zerg/zerg08/",false},
+        {109,"zerg09","The Invasion of Aiur","campaign/zerg/zerg09/",false},
+        {110,"zerg10","Full Circle","campaign/zerg/zerg10/",false},
+        {201,"protoss01","First Strike","campaign/protoss/protoss01/",false},
+        {202,"protoss02","Into the Flames","campaign/protoss/protoss02/",false},
+        {203,"protoss03","Higher Ground","campaign/protoss/protoss03/",false},
+        {204,"protoss04","The Hunt for Tassadar","campaign/protoss/protoss04/",false},
+        {205,"protoss05","Choosing Sides","campaign/protoss/protoss05/",false},
+        {206,"protoss06","Into the Darkness","campaign/protoss/protoss06/",false},
+        {207,"protoss07","Homeland","campaign/protoss/protoss07/",false},
+        {208,"protoss08","The Trial of Tassadar","campaign/protoss/protoss08/",false},
+        {209,"protoss09","Shadow Hunters","campaign/protoss/protoss09/",false},
+        {210,"protoss10","Eye of the Storm","campaign/protoss/protoss10/",false},
+        {301,"expprotoss01","Escape from Aiur","campaign/expprotoss/protoss01/",true},
+        {302,"expprotoss02","Dunes of Shakuras","campaign/expprotoss/protoss02/",true},
+        {303,"expprotoss03","Legacy of the Xel'Naga","campaign/expprotoss/protoss03/",true},
+        {304,"expprotoss04","The Quest for Uraj","campaign/expprotoss/protoss04/",true},
+        {305,"expprotoss05","The Battle of Braxis","campaign/expprotoss/protoss05/",true},
+        {306,"expprotoss06","Return to Char","campaign/expprotoss/protoss06/",true},
+        {307,"expprotoss07","The Insurgent","campaign/expprotoss/protoss07/",true},
+        {308,"expprotoss08","Countdown","campaign/expprotoss/protoss08/",true},
+        {401,"expterran01","First Strike","campaign/expterran/terran01/",true},
+        {402,"expterran02","The Dylarian Shipyards","campaign/expterran/terran02/",true},
+        {403,"expterran03","Ruins of Tarsonis","campaign/expterran/terran03/",true},
+        {404,"expterran04","Assault on Korhal","campaign/expterran/terran04/",true},
+        {405,"expterran05a","Emperor's Fall (Ground Zero)","campaign/expterran/terran05a/",true},
+        {415,"expterran05b","Emperor's Fall (Birds of War)","campaign/expterran/terran05b/",true},
+        {406,"expterran06","Emperor's Flight","campaign/expterran/terran06/",true},
+        {407,"expterran07","Patriot's Blood","campaign/expterran/terran07/",true},
+        {408,"expterran08","To Chain the Beast","campaign/expterran/terran08/",true},
+        {501,"expzerg01","Vile Disruption","campaign/expzerg/zerg01/",true},
+        {502,"expzerg02","Reign of Fire","campaign/expzerg/zerg02/",true},
+        {503,"expzerg03","The Kel-Morian Combine","campaign/expzerg/zerg03/",true},
+        {504,"expzerg04a","The Liberation of Korhal","campaign/expzerg/zerg04a/",true},
+        {514,"expzerg04b","The Liberation of Korhal","campaign/expzerg/zerg04b/",true},
+        {524,"expzerg04c","The Liberation of Korhal","campaign/expzerg/zerg04c/",true},
+        {534,"expzerg04d","The Liberation of Korhal","campaign/expzerg/zerg04d/",true},
+        {544,"expzerg04e","The Liberation of Korhal","campaign/expzerg/zerg04e/",true},
+        {554,"expzerg04f","The Liberation of Korhal","campaign/expzerg/zerg04f/",true},
+        {505,"expzerg05","True Colors","campaign/expzerg/zerg05/",true},
+        {506,"expzerg06","Fury of the Swarm","campaign/expzerg/zerg06/",true},
+        {507,"expzerg07","Drawing of the Web","campaign/expzerg/zerg07/",true},
+        {508,"expzerg08","To Slay the Beast","campaign/expzerg/zerg08/",true},
+        {509,"expzerg09","The Reckoning","campaign/expzerg/zerg09/",true},
+        {510,"expzerg10","Omega","campaign/expzerg/zerg10/",true},
+        {599,"expbonus","Dark Origin","campaign/expzerg/bonus/",true}};
+    static Object[] get(int code) { for(Object[] m:ALL)if(((Integer)m[0])==code)return m;throw new IllegalArgumentException("Unknown mission"); }
+    static Object[] get(String id) { for(Object[] m:ALL)if(m[1].equals(id))return m;throw new IllegalArgumentException("Unknown mission"); }
+    static String id(int code) { return (String)get(code)[1]; }
+    static boolean supported(String id) { for(Object[] m:ALL)if(m[1].equals(id))return true;return false; }
+    static boolean supported(int code) { for(Object[] m:ALL)if(((Integer)m[0])==code)return true;return false; }
+    static String title(int code) { return (String)get(code)[2]; }
+    static String prefix(String id) { return ((String)get(id)[3]).replace('/', '\\'); }
+    static String missionForPath(String path) { for(Object[] m:ALL)if(path.toLowerCase(java.util.Locale.ROOT).equals(((String)m[3]).replace('/', '\\')+"staredit\\scenario.chk"))return (String)m[1];throw new IllegalArgumentException("Unknown mission path"); }
+    static boolean expansion(int code) { return (Boolean)get(code)[4]; }
+}

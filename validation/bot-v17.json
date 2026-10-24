@@ -1,0 +1,88 @@
+{
+  "checks": [
+    "Updated bot WASM loads and runs 600 live lockstep ticks; Zerg workers gather and bot supply is active; unit details and touch exports remain available"
+  ],
+  "errors": [],
+  "layouts": [],
+  "bot": {
+    "start": 31,
+    "frame": 631,
+    "supply": 8,
+    "enemy": [
+      {
+        "id": 3656,
+        "name": "Larva",
+        "owner": 1,
+        "x": 1850,
+        "y": 1081,
+        "order": 77
+      },
+      {
+        "id": 3657,
+        "name": "Drone",
+        "owner": 1,
+        "x": 1940,
+        "y": 1058,
+        "order": 90
+      },
+      {
+        "id": 3658,
+        "name": "Drone",
+        "owner": 1,
+        "x": 1940,
+        "y": 1020,
+        "order": 87
+      },
+      {
+        "id": 3659,
+        "name": "Drone",
+        "owner": 1,
+        "x": 1940,
+        "y": 1108,
+        "order": 87
+      },
+      {
+        "id": 3660,
+        "name": "Drone",
+        "owner": 1,
+        "x": 1940,
+        "y": 971,
+        "order": 87
+      },
+      {
+        "id": 3661,
+        "name": "Overlord",
+        "owner": 1,
+        "x": 1361,
+        "y": 582,
+        "order": 6
+      },
+      {
+        "id": 3662,
+        "name": "Larva",
+        "owner": 1,
+        "x": 1793,
+        "y": 1091,
+        "order": 77
+      },
+      {
+        "id": 3663,
+        "name": "Larva",
+        "owner": 1,
+        "x": 1772,
+        "y": 1081,
+        "order": 77
+      },
+      {
+        "id": 3664,
+        "name": "Hatchery",
+        "owner": 1,
+        "x": 1792,
+        "y": 1040,
+        "order": 23
+      }
+    ],
+    "details": "0\t-1\t100\t-1\t200\t0\t0\t0\t4\t10\t1\t0\nweapon\t329\t0\t5\t0\t1\t241\narmor\t292\t0\t0\t0\t1\t411",
+    "touch": "function"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "completedCasesPassed": 5,
+  "incompleteCases": 1,
+  "reportedDeviceCrashReproduced": false,
+  "sanitizer": "GCC AddressSanitizer; -O1 -g1 -fno-omit-frame-pointer; leak detection disabled",
+  "cases": [
+    {
+      "case": "cargo",
+      "passed": true,
+      "addressSanitizerFinding": false,
+      "lastResult": "PASS Bunker/Dropship/Shuttle/transport Overlord empty, full and unload command states"
+    },
+    {
+      "case": "sound",
+      "passed": true,
+      "addressSanitizerFinding": false,
+      "lastResult": "PASS original Ultralisk selection/annoyed/normal cycle; original score fill/end composed to 2200 ms; playback clock; independent complete lobby sounds"
+    },
+    {
+      "case": "image-reuse",
+      "passed": true,
+      "addressSanitizerFinding": false,
+      "lastResult": "PASS recycled image clears frozen position for identical save continuation"
+    },
+    {
+      "case": "hero-weave-1",
+      "passed": true,
+      "addressSanitizerFinding": false,
+      "lastResult": "PASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation"
+    },
+    {
+      "case": "hero-weave-2",
+      "passed": true,
+      "addressSanitizerFinding": false,
+      "lastResult": "PASS early hero, all six types, parallel hero/upgrade buildings, economy and exact save continuation"
+    },
+    {
+      "case": "hero-weave-0",
+      "passed": false,
+      "completed": false,
+      "reason": "Exceeded 240-second host sanitizer time limit; no completed result."
+    }
+  ],
+  "limitations": "Host memory checks only. Terran and Protoss Hero Mode each ran 60000 frames and save/restore continuation. Zerg did not finish within the investigation limit. No on-device native stack is available yet. Initial economy runs used a slot-layout fixture without suitable resource placement and were discarded; corrected runs use the bundled Weave map."
+}

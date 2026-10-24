@@ -1,0 +1,12 @@
+campaign\zerg\zerg08\staredit\scenario.chk
+campaign\zerg\zerg08\staredit\wav\combeep0.wav
+campaign\zerg\zerg08\staredit\wav\z8b00zad.wav
+campaign\zerg\zerg08\staredit\wav\z8b01zad.wav
+campaign\zerg\zerg08\staredit\wav\z8b02zad.wav
+campaign\zerg\zerg08\staredit\wav\z8b03uda.wav
+campaign\zerg\zerg08\staredit\wav\z8m00uda.wav
+campaign\zerg\zerg08\staredit\wav\z8m20uda.wav
+campaign\zerg\zerg08\staredit\wav\z8m40uki.wav
+campaign\zerg\zerg08\staredit\wav\z8m41uze.wav
+campaign\zerg\zerg08\staredit\wav\z8m42uki.wav
+campaign\zerg\zerg08\staredit\wav\z8m60uki.wav

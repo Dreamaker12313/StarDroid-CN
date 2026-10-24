@@ -1,0 +1,20 @@
+{
+  "t": {
+    "rimPixels": 789,
+    "matching": 789,
+    "portraitPixels": 2197,
+    "bad": []
+  },
+  "z": {
+    "rimPixels": 618,
+    "matching": 618,
+    "portraitPixels": 2164,
+    "bad": []
+  },
+  "p": {
+    "rimPixels": 890,
+    "matching": 890,
+    "portraitPixels": 1658,
+    "bad": []
+  }
+}

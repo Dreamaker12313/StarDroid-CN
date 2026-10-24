@@ -1,0 +1,55 @@
+{
+  "cleanSource": "vendor/openbw-469d2037e2fd.tar.gz",
+  "files": [
+    {
+      "file": "web/wasm_main.cpp",
+      "sha256": "217592567f505feb9ddbdd8fe6aa718abbe3b93959e9a892a3bc93dcded04b05"
+    },
+    {
+      "file": "web/wasm_backend.cpp",
+      "sha256": "f078f806f90d8a13993a88974cdadd05c379c97364d5fb362dfd4d63f8fe03b5"
+    },
+    {
+      "file": "web/sandbox.h",
+      "sha256": "d497a9fefca0af368b052a3b3843a8705fdedae1ba38716df86c54114f8a6792"
+    },
+    {
+      "file": "web/campaign.h",
+      "sha256": "f122a6924e2108578c188c38dfecc5287c07ba737f26c2ccdf4567d04a640ce7"
+    },
+    {
+      "file": "actions.h",
+      "sha256": "298b74bbb14a2ca1a4a6ca7d4e8c6e66d30fb3d15bdcc85e5d7985286f626aa5"
+    },
+    {
+      "file": "bwgame.h",
+      "sha256": "a2d618be588e97428fe4d39d0a3d9a98b42a92fdc4d05c94973fed715fae591b"
+    },
+    {
+      "file": "web/campaign_ai.h",
+      "sha256": "aa06eb70c5581c136796980f1633e33b528f520a92e5edac7d25ab12f83279d1"
+    },
+    {
+      "file": "web/bot/patch-vendor.py",
+      "sha256": "197646c37360ca3f6345148a95f5d7972c741bc3965a731acb898010ed8ee860"
+    },
+    {
+      "file": "web/bot/build-web.sh",
+      "sha256": "7dd0dbb72b14d1e80f6d90bed714c0a92e6a74cf3bf4db661395aa32e51e66c3"
+    },
+    {
+      "file": "ui/ui.h",
+      "sha256": "e955641841519b74fbad225cf8592917bc434c71e51f8ba67bc377e9d56eb807"
+    },
+    {
+      "file": "data_loading.h",
+      "sha256": "42aded79be0430fc5efdfe3a6bcfdecc21b1e60f86ffed80d38a88814c29b9fe"
+    },
+    {
+      "file": "web/campaign_catalog.h",
+      "sha256": "47be1b51c739e6b82c3172c80d045ceb59c956ddc0d74111998b0b8c4d81083b"
+    }
+  ],
+  "patchSha256": "3e5601478ad8302f66eea45052239e28238fdee3c79eb0c5d623042c35fcc43a",
+  "exactMatch": true
+}

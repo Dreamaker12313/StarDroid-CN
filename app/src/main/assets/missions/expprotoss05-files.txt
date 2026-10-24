@@ -1,0 +1,12 @@
+campaign\expprotoss\protoss05\staredit\scenario.chk
+campaign\expprotoss\protoss05\staredit\wav\combeep0.wav
+campaign\expprotoss\protoss05\staredit\wav\nullsound.wav
+campaign\expprotoss\protoss05\staredit\wav\p5b00art.wav
+campaign\expprotoss\protoss05\staredit\wav\p5b01stu.wav
+campaign\expprotoss\protoss05\staredit\wav\p5b02zer.wav
+campaign\expprotoss\protoss05\staredit\wav\p5b03art.wav
+campaign\expprotoss\protoss05\staredit\wav\p5b04zer.wav
+campaign\expprotoss\protoss05\staredit\wav\p5b05art.wav
+campaign\expprotoss\protoss05\staredit\wav\p5m00art.wav
+campaign\expprotoss\protoss05\staredit\wav\p5m01zer.wav
+campaign\expprotoss\protoss05\staredit\wav\tpwrdown.wav

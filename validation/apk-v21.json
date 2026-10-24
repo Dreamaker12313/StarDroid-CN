@@ -1,0 +1,12 @@
+{
+  "package": "org.openbw.androidtest",
+  "versionName": "0.21",
+  "versionCode": 22,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "apkSha256": "ac01d565a8964870dcf977373e7a35eebac85ce95877a37e904b0ef83ac1f781",
+  "apkBytes": 3666598,
+  "zipCRC": true,
+  "packagedAssetsCompared": 59,
+  "assetByteMatch": true,
+  "hardwareTested": false
+}

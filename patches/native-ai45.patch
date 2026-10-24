@@ -1,0 +1,182 @@
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -175,7 +175,9 @@
+         g_ui->st.players[original_ai_slot].controller=player_t::controller_computer_game;
+         const uint32_t terran[]={0x784f4c54u,0x78454d54u,0x78494854u}; // TLOx / TMEx / THIx
+         const uint32_t protoss[]={0x784f4c50u,0x78454d50u,0x78494850u}; // PLOx / PMEx / PHIx
+-        const auto* scripts=g_ui->st.players[original_ai_slot].race==race_t::protoss?protoss:terran;
++        const uint32_t zerg[]={0x784f4c5au,0x78454d5au,0x7849485au}; // ZLOx / ZMEx / ZHIx
++        const auto race=g_ui->st.players[original_ai_slot].race;
++        const auto* scripts=race==race_t::zerg?zerg:race==race_t::protoss?protoss:terran;
+         g_campaign->ai_start(original_ai_slot,scripts[std::max(0,std::min(2,g_terran_ai_level))],0);
+         if(!g_campaign->ai_error.empty())error("Skirmish AI: %s",g_campaign->ai_error.c_str());
+     }
+@@ -554,7 +556,7 @@
+ 
+ // Local skirmish using original-script runtime and portable snapshots.
+ OPENBW_EXPORT(openbw_init_race_ai) void openbw_init_race_ai(int width,int height,int race,int opponent,int ai_race) {
+-    if(opponent<1||opponent>=8||(ai_race!=1&&ai_race!=2))error("Invalid computer opponent");
++    if(opponent<1||opponent>=8||(ai_race<0||ai_race>2))error("Invalid computer opponent");
+     mp_slot slots[]={{0,race_t(race)},{opponent,race_t(ai_race)}};
+     init_game(width,height,0,slots,2,false,opponent);
+ }
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -1,4 +1,4 @@
+-// Bounded interpreter for original campaign scripts and Terran/Protoss skirmish managers.
++// Bounded interpreter for original campaign scripts and Terran/Protoss/Zerg skirmish managers.
+ // Opcode layout reference: PyMS AIBIN.py, bfc5d3aad0b5614a5aff72c223f8efa00afddfa4.
+ // Loads both original and expansion script indexes and campaign instructions.
+ // Town placement/defence/target selection are OpenBW implementations, not an
+@@ -304,15 +304,17 @@
+     }
+     bool ai_expand(int owner) {
+         if(ai_clock%240)return false;
+-        const auto race=st.players[owner].race;const int depot=race==race_t::protoss?154:106;
++        const auto race=st.players[owner].race;const int depot=race==race_t::zerg?131:race==race_t::protoss?154:106;
+         auto depots=ai_depots(owner);if(depots.empty()||ai_count(owner,depot)>int(depots.size()))return false;
+         int remaining=0;
+         for(auto* r:ptr(st.player_units[11]))if(unit_is_mineral_field(r))
+             for(auto* base:depots)if(xy_length(base->position-r->position)<384){remaining+=r->building.resource.resource_count;break;}
+         int desired=1+(ai_clock>10000+(2-melee_ai_level)*4000)+(ai_clock>26000+(2-melee_ai_level)*6000);
+-        if(int(depots.size())>=desired&&remaining>4000)return false;
+-        if(depots.size()>=4||st.current_minerals[owner]<400)return false;
++        int bases=int(depots.size());
++        if(race==race_t::zerg)bases=ai_zerg_bases(owner);
++        if(bases>=desired&&remaining>4000)return false;
+         const auto* cc=get_unit_type(UnitTypes(depot));
++        if(bases>=4||!has_available_resources_for(owner,cc))return false;
+         a_vector<unit_t*> workers;
+         for(auto* u:ptr(st.player_units[owner]))if(!ai_busy_worker(u)&&!u->worker.resources_carried)workers.push_back(u);
+         if(workers.empty())return false;
+@@ -426,6 +428,7 @@
+             // PlaceAddon starts its secondary build order on a later frame.
+             // Training during either phase would be overwritten by that order.
+             if(u->order_type->id==Orders::PlaceAddon || u->secondary_order_type->id==Orders::BuildAddon)continue;
++            if(melee_ai&&(unit_is(u,UnitTypes::Zerg_Hydralisk)||unit_is(u,UnitTypes::Zerg_Mutalisk))&&ai_attacking(a,u))continue;
+             af.action_select(owner,u);
+             if(!ut_building(ut)) {
+                 if(!has_available_supply_for(owner,ut,false))return false;
+@@ -592,6 +595,91 @@
+         if(ai_clock%2400==0)for(auto* u:ptr(st.player_units[owner]))
+             if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::PlaceProtossBuilding&&!u->current_build_unit&&!u->build_queue.empty()&&u->build_queue.front()->id!=UnitTypes::Protoss_Nexus&&xy_length(u->position-u->order_target.pos)>160){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
+     }
++    // Macro Hatcheries supply larvae/creep; only separate resource locations
++    // count as expansions. A Hive still satisfies Hatchery/Lair requests.
++    int ai_zerg_bases(int owner) {
++        a_vector<xy> centers;
++        for(auto* depot:ai_depots(owner)) {
++            bool near=false;for(auto p:centers)if(xy_length(p-depot->position)<640)near=true;
++            if(!near)centers.push_back(depot->position);
++        }
++        return int(centers.size());
++    }
++    void ai_zerg_prerequisites(int owner,a_vector<request>& req) {
++        bool gas=false;
++        for(size_t i=0;i<req.size();++i) {
++            auto r=req[i];const auto* ut=get_unit_type(UnitTypes(r.type));gas=gas||ut->gas_cost>0;
++            auto need=[&](int type,int n=1){ai_request(req,type,n,r.priority);};
++            // Do not recall fighting Hydralisks/Mutalisks just to morph them.
++            // Their global count must not prevent a fresh morph source hatching.
++            auto morph_source=[&](int type){
++                int missing=std::max(0,r.amount-ai_count(owner,r.type));
++                if(missing)need(type,ai_count(owner,type)-ai_count(owner,type,false,true)+missing);
++            };
++            switch(r.type) {
++            case 37:need(142);break; // Zergling
++            case 38:need(135);break; // Hydralisk
++            case 39:need(140);break; // Ultralisk
++            case 43:case 47:need(141);break; // Mutalisk / Scourge
++            case 44:case 62:need(137);morph_source(43);break;
++            case 45:need(138);break;
++            case 46:need(136);break;
++            case 103:need(132);need(135);morph_source(38);break;
++            case 132:need(131);need(142);break;
++            case 133:need(132);need(138);break;
++            case 135:need(142);break;
++            case 136:case 140:need(133);break;
++            case 137:need(141);need(133);break;
++            case 138:case 141:need(132);break;
++            case 142:case 139:need(131);break;
++            case 144:morph_source(143);need(139);break;
++            case 146:morph_source(143);need(142);break;
++            }
++        }
++        if(gas)ai_request(req,149,1,94);
++    }
++    void ai_zerg_support(int owner) {
++        action_functions af(st,ai_actions);int detectors=0;
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
++            bool overlord=unit_is(u,UnitTypes::Zerg_Overlord),queen=unit_is(u,UnitTypes::Zerg_Queen),defiler=unit_is(u,UnitTypes::Zerg_Defiler);
++            if(!overlord&&!queen&&!defiler)continue;
++            // Keep most supply providers at home; send two detectors with the army.
++            if(overlord&&++detectors>2)continue;
++            if(queen&&u->energy>=fp8::integer(75)&&player_has_researched(owner,TechTypes::Ensnare)&&u->order_type->id!=Orders::CastEnsnare) {
++                unit_t* target=nullptr;int score=1;
++                for(auto* other:find_units(square_at(u->position,288))) {
++                    if(unit_dying(other)||ut_building(other)||ut_turret(other)||u_invincible(other)||other->ensnare_timer||!unit_target_is_enemy(u,other)||!unit_can_see_target(u,other))continue;
++                    int count=0;for(auto* near:find_units(square_at(other->position,64)))if(!unit_dying(near)&&!ut_building(near)&&!ut_turret(near))count+=unit_target_is_enemy(u,near)?1:-2;
++                    if(count>score){score=count;target=other;}
++                }
++                if(target){af.action_select(owner,u);if(af.action_order(owner,get_order_type(Orders::CastEnsnare),target->position,nullptr,nullptr,false))continue;}
++            }
++            if(defiler&&u->energy>=fp8::integer(100)&&u->order_type->id!=Orders::CastDarkSwarm) {
++                unit_t* ally=nullptr;
++                for(auto id:towns[owner].attackers)if(auto* other=get_unit(id)) {
++                    if(unit_dying(other)||u_flying(other)||units_distance(u,other)>256||(!unit_is(other,UnitTypes::Zerg_Zergling)&&!unit_is(other,UnitTypes::Zerg_Ultralisk)&&!unit_is(other,UnitTypes::Zerg_Lurker)))continue;
++                    bool enemy=false,covered=false;
++                    for(auto* near:find_units(square_at(other->position,96))) {
++                        if(unit_is(near,UnitTypes::Spell_Dark_Swarm))covered=true;
++                        else if(!unit_dying(near)&&!ut_turret(near)&&unit_target_is_enemy(u,near)&&unit_can_see_target(u,near))enemy=true;
++                    }
++                    if(enemy&&!covered){ally=other;break;}
++                }
++                if(ally){af.action_select(owner,u);if(af.action_order(owner,get_order_type(Orders::CastDarkSwarm),ally->position,nullptr,nullptr,false))continue;}
++            }
++            if(!ai_idle(u))continue;
++            unit_t* escort=nullptr;int distance=0x7fffffff;
++            for(auto id:towns[owner].attackers)if(auto* other=get_unit(id))if(!unit_dying(other)&&!ut_worker(other)) {
++                int d=xy_length(u->position-other->position);if(d<distance){distance=d;escort=other;}
++            }
++            if(escort){af.action_select(owner,u);af.action_order(owner,get_order_type(Orders::Follow),escort->position,escort,nullptr,false);}
++        }
++        // A Drone that never reached its placement must not reserve a building
++        // forever. Once morphing starts the Drone is already the structure.
++        if(ai_clock%2400==0)for(auto* u:ptr(st.player_units[owner]))
++            if(ut_worker(u)&&!unit_dying(u)&&u->order_type->id==Orders::DroneStartBuild&&!u->current_build_unit&&!u->build_queue.empty()&&u->build_queue.front()->id!=UnitTypes::Zerg_Hatchery&&xy_length(u->position-u->order_target.pos)>160){cancel_build_queue(u);issue_order(u,false,get_order_type(Orders::Stop),{});}
++    }
+     void ai_manage(int owner) {
+         auto& a=towns[owner];if(!a.active)return;
+         a.attackers.erase(std::remove_if(a.attackers.begin(),a.attackers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),a.attackers.end());
+@@ -636,12 +724,29 @@
+             // that do not occur in the selected campaign army definition.
+             if(ai_clock%2400==0&&ai_clock>techTime+4500)ai_attack(owner,true);
+         }
++        if(melee_ai && st.players[owner].race==race_t::zerg) {
++            int bases=std::max(1,ai_zerg_bases(owner));
++            // Drones are consumed by construction; replace them normally from
++            // larvae and leave enough larva income for army and Overlords.
++            ai_request(req,41,std::min(54,18*bases),80);
++            int techTime=6500+(2-melee_ai_level)*3500;
++            if(ai_clock>2400){ai_request(req,37,8,50);ai_request(req,38,4,55);}
++            if(ai_clock>techTime){ai_request(req,43,4,84);ai_request(req,103,2,87);ai_request(req,45,1,83);ai_request(a.techs,int(TechTypes::Lurker_Aspect),1,90);ai_request(a.techs,int(TechTypes::Ensnare),1,80);}
++            if(ai_clock>techTime+4500){ai_request(req,39,melee_ai_level==2?3:1,88);ai_request(req,46,1,86);ai_request(req,44,2,89);ai_request(req,62,1,85);ai_request(req,47,4,82);}
++            ai_zerg_prerequisites(owner,req);
++            if(bases>1)ai_request(req,149,bases,94);
++            // Local Hatcheries provide larvae even where expansion starts are
++            // cramped; the expansion manager separately finds fresh resources.
++            if(ai_clock>6000)ai_request(req,131,std::min(5,bases+1),75);
++            ai_expand(owner);ai_zerg_support(owner);
++            if(ai_clock%2400==0&&ai_clock>techTime+4500)ai_attack(owner,true);
++        }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+         if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         std::stable_sort(req.begin(),req.end(),[](const request& l,const request& r){return l.priority>r.priority;});
+         int accepted=0;
+         for(auto r:req)if(ai_count(owner,r.type,false,!ut_worker(get_unit_type(UnitTypes(r.type)))&&!ut_building(get_unit_type(UnitTypes(r.type)))
+-            &&!(melee_ai&&st.players[owner].race==race_t::protoss&&r.priority>=80))<r.amount) {
++            &&!(melee_ai&&st.players[owner].race!=race_t::terran&&r.priority>=80))<r.amount) {
+             const auto* target=get_unit_type(UnitTypes(r.type));
+             bool reserve=false;
+             if(melee_ai&&r.priority>=86&&!ut_building(target)&&!ut_worker(target))

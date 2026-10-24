@@ -1,0 +1,10 @@
+#classic-results{position:absolute;inset:0;z-index:80;background:none;touch-action:manipulation;image-rendering:pixelated}
+#classic-results[hidden]{display:none}
+#classic-results.scores{background:#000 center/640px 480px no-repeat}
+#classic-results button{margin:0;padding:0;border:0;border-radius:0;box-shadow:none;background:none;display:flex;align-items:center;justify-content:center;outline:none;touch-action:manipulation}
+#classic-results .result-dialog-art{position:absolute;inset:0;opacity:.88;image-rendering:pixelated}
+#classic-results .result-message-button{background:var(--dialog-button-art) center/100% 100%;image-rendering:pixelated}
+#classic-results .result-message-button:hover,#classic-results .result-message-button:focus-visible{background-image:var(--dialog-hover-art)}
+#classic-results .result-main{position:absolute;inset:0;width:640px;height:480px;pointer-events:none}
+#classic-results .original-text{image-rendering:pixelated}
+#classic-results .result-bar{box-shadow:inset 0 1px #ffffff50,inset 0 -1px #0008}

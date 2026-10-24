@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="StarDroidTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:colorAccent">#b7bd89</item>
+        <item name="android:colorControlHighlight">@android:color/transparent</item>
+    </style>
+</resources>

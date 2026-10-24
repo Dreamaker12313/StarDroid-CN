@@ -1,0 +1,119 @@
+{
+  "version": "0.27",
+  "android": "9",
+  "abi": "x86_64",
+  "apkSha256": "f909c5f6f7166f171c146e8328b02cf8438ef355e881740a403b81eac89f518a",
+  "testApkSha256": "16cd8b075146fc638d33cb680b5bac4ea5a01448c944899fb2f33658731ac01f",
+  "title": {
+    "page": "main",
+    "modal": "",
+    "failure": ""
+  },
+  "chooser": {
+    "page": "main",
+    "modal": "choose",
+    "failure": ""
+  },
+  "broodwar": {
+    "page": "campaign",
+    "modal": "",
+    "failure": ""
+  },
+  "briefing": {
+    "page": "briefing",
+    "modal": "",
+    "failure": ""
+  },
+  "briefingFontHeight": 16,
+  "briefingDrag": true,
+  "hatchery": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "larva": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "disabledCommandTouch": true,
+  "egg": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "egg-paused": {
+    "page": "game",
+    "modal": "menu",
+    "failure": ""
+  },
+  "options": {
+    "page": "game",
+    "modal": "options",
+    "failure": ""
+  },
+  "chrysalis": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "hatchery-before-morph": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "lairMorphTouch": true,
+  "lair": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "audioTrackPlaying": true,
+  "mixedNonzeroSamples": 16381,
+  "victory": {
+    "page": "game",
+    "modal": "outcome",
+    "failure": ""
+  },
+  "results": {
+    "page": "results",
+    "modal": "",
+    "failure": ""
+  },
+  "botUnits": "3657\tSCV\t0\t1080\t264\t3\n3658\tSCV\t0\t1056\t264\t3\n3659\tSCV\t0\t1032\t264\t3\n3660\tSCV\t0\t1008\t264\t3\n3661\tCommand Center\t0\t1056\t208\t23\n3655\tEgg\t1\t1715\t1050\t42\n3656\tEgg\t1\t1755\t1094\t42\n3662\tDrone\t1\t1940\t1058\t87\n3663\tDrone\t1\t1893\t1020\t85\n3664\tDrone\t1\t1897\t1084\t85\n3665\tSpawning Pool\t1\t1552\t1088\t23\n3666\tOverlord\t1\t1792\t1040\t93\n3667\tDrone\t1\t1572\t882\t6\n3668\tEgg\t1\t1754\t1084\t42\n3669\tHatchery\t1\t1792\t1040\t23\n3670\tMineral Field\t11\t1888\t80\t23\n3671\tMineral Field\t11\t1952\t80\t23\n3672\tMineral Field\t11\t1984\t112\t23\n3673\tMineral Field\t11\t1984\t144\t23\n3674\tMineral Field\t11\t2016\t176\t23\n3675\tMineral Field\t11\t1984\t208\t23\n3676\tMineral Field\t11\t2016\t240\t23\n3677\tMineral Field\t11\t32\t1808\t23\n3678\tMineral Field\t11\t64\t1840\t23\n3679\tMineral Field\t11\t2016\t1808\t23\n3680\tMineral Field\t11\t1984\t1840\t23\n3681\tMineral Field\t11\t2016\t1872\t23\n3682\tMineral Field\t11\t1984\t1904\t23\n3683\tMineral Field\t11\t1984\t1936\t23\n3684\tMineral Field\t11\t1952\t1968\t23\n3685\tMineral Field\t11\t1888\t1968\t23\n3686\tMineral Field\t11\t32\t1872\t23\n3687\tMineral Field\t11\t64\t1904\t23\n3688\tMineral Field\t11\t64\t1936\t23\n3689\tMineral Field\t11\t96\t1968\t23\n3690\tMineral Field\t11\t160\t1968\t23\n3691\tMineral Field\t11\t32\t240\t23\n3692\tMineral Field\t11\t64\t208\t23\n3693\tMineral Field\t11\t32\t176\t23\n3694\tMineral Field\t11\t64\t144\t23\n3695\tMineral Field\t11\t64\t112\t23\n3696\tMineral Field\t11\t96\t80\t23\n3697\tMineral Field\t11\t160\t80\t23\n3698\tMineral Field\t11\t1152\t48\t23\n3699\tMineral Field\t11\t1216\t48\t23\n3700\tMineral Field\t11\t1280\t144\t23\n3701\tMineral Field\t11\t1248\t112\t23\n3702\tMineral Field\t11\t1248\t80\t23\n3703\tMineral Field\t11\t1088\t16\t23\n3704\tMineral Field\t11\t1056\t48\t23\n3705\tMineral Field\t11\t960\t48\t23\n3706\tMineral Field\t11\t1024\t16\t23\n3707\tMineral Field\t11\t64\t1104\t23\n3708\tMineral Field\t11\t64\t976\t23\n3709\tMineral Field\t11\t64\t1040\t23\n3710\tMineral Field\t11\t64\t1136\t23\n3711\tMineral Field\t11\t96\t1168\t23\n3712\tMineral Field\t11\t160\t1168\t23\n3713\tMineral Field\t11\t32\t1072\t23\n3714\tMineral Field\t11\t32\t1008\t23\n3715\tMineral Field\t11\t32\t944\t23\n3716\tMineral Field\t11\t2016\t976\t23\n3717\tMineral Field\t11\t1984\t1008\t23\n3718\tMineral Field\t11\t2016\t1040\t23\n3719\tMineral Field\t11\t1984\t1072\t23\n3720\tMineral Field\t11\t2016\t1104\t23\n3721\tMineral Field\t11\t1952\t1200\t23\n3722\tMineral Field\t11\t1984\t1168\t23\n3723\tMineral Field\t11\t1984\t1136\t23\n3724\tMineral Field\t11\t1984\t944\t23\n3725\tVespene Geyser\t11\t832\t192\t23\n3726\tVespene Geyser\t11\t256\t832\t23\n3727\tMineral Field\t11\t1024\t2000\t23\n3728\tMineral Field\t11\t1088\t2000\t23\n3729\tMineral Field\t11\t1280\t1872\t23\n3730\tMineral Field\t11\t1248\t1904\t23\n3731\tMineral Field\t11\t1248\t1936\t23\n3732\tMineral Field\t11\t1216\t1968\t23\n3733\tMineral Field\t11\t1152\t1968\t23\n3734\tMineral Field\t11\t1056\t1968\t23\n3735\tMineral Field\t11\t960\t1968\t23\n3736\tVespene Geyser\t11\t832\t1824\t23\n3737\tVespene Geyser\t11\t1792\t864\t23\n3738\tVespene Geyser\t11\t256\t1984\t23\n3739\tVespene Geyser\t11\t256\t64\t23\n3740\tVespene Geyser\t11\t1792\t1984\t23\n3741\tVespene Geyser\t11\t1792\t64\t23\n3742\tPsi Disrupter\t11\t720\t1064\t23\n3743\tPsi Disrupter\t11\t720\t984\t23\n3744\tPsi Disrupter\t11\t1096\t1328\t23\n3745\tPsi Disrupter\t11\t952\t1328\t23\n3746\tPsi Disrupter\t11\t1328\t1064\t23\n3747\tPsi Disrupter\t11\t1328\t984\t23\n3748\tPsi Disrupter\t11\t1096\t720\t23\n2049\tPsi Disrupter\t11\t952\t720\t23\n",
+  "skirmish": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "terran-queue": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "protoss-health-shields": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "widescreen": {
+    "page": "game",
+    "modal": "",
+    "failure": ""
+  },
+  "portraitVariantsAndOpacity": true,
+  "cinematic": {
+    "page": "movie",
+    "modal": "",
+    "failure": ""
+  },
+  "passed": true,
+  "environment": {
+    "emulator": "37.2.12",
+    "cpuAcceleration": false,
+    "graphics": "SwiftShader",
+    "resolution": "960x640",
+    "physicalDeviceTested": false,
+    "hostSpeakerOutput": false
+  }
+}

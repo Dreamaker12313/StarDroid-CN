@@ -1,0 +1,133 @@
+{
+  "checks": [
+    "Terran construction, SCV training, infantry armor upgrade, Stim research finish; disabling restores normal training",
+    "Protoss warp-in completes through normal animation and displays original portrait",
+    "Zerg Drone and Spawning Pool morphs complete through normal engine paths"
+  ],
+  "errors": [],
+  "logs": [],
+  "terran": {
+    "trained": 5,
+    "before": 4,
+    "depot": {
+      "id": 3663,
+      "name": "Supply Depot",
+      "owner": 3,
+      "x": 368,
+      "y": 1024,
+      "order": 23,
+      "buildFrames": 2
+    },
+    "bay": {
+      "id": 3662,
+      "name": "Engineering Bay",
+      "owner": 3,
+      "x": 480,
+      "y": 1008,
+      "order": 23,
+      "buildFrames": 2
+    },
+    "barracks": {
+      "id": 3661,
+      "name": "Barracks",
+      "owner": 3,
+      "x": 480,
+      "y": 1104,
+      "order": 23,
+      "buildFrames": 2
+    },
+    "academy": {
+      "id": 3660,
+      "name": "Academy",
+      "owner": 3,
+      "x": 592,
+      "y": 1056,
+      "order": 23,
+      "buildFrames": 2
+    },
+    "upgradeStart": "fog_player=3 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=1 [ttl=67 kind=0 pos=480,1008]\nselection=1\nsim_selection=1 first=Engineering Bay\nunit=Engineering Bay owner=3\ncompleted=1 remaining_build_time=0 research_time=4000\norder=76 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=480,1008 hp=850\nmove_target=480,1008 order_target=0,0\n",
+    "upgradeEnd": "fog_player=3 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=1 [ttl=67 kind=0 pos=480,1008]\nselection=1\nsim_selection=1 first=Engineering Bay\nunit=Engineering Bay owner=3\ncompleted=1 remaining_build_time=0 research_time=-1\norder=23 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=480,1008 hp=850\nmove_target=480,1008 order_target=0,0\n",
+    "upgradeStatus": "",
+    "researchStart": "fog_player=3 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=1 [ttl=27 kind=0 pos=592,1056]\nselection=1\nsim_selection=1 first=Academy\nunit=Academy owner=3\ncompleted=1 remaining_build_time=0 research_time=1200\norder=75 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=592,1056 hp=600\nmove_target=592,1056 order_target=0,0\n",
+    "researchEnd": "fog_player=3 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=1 [ttl=26 kind=0 pos=592,1055]\nselection=1\nsim_selection=1 first=Academy\nunit=Academy owner=3\ncompleted=1 remaining_build_time=0 research_time=-1\norder=23 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=592,1056 hp=600\nmove_target=592,1056 order_target=0,0\n",
+    "researchStatus": "",
+    "normalTraining": 6,
+    "normalStatus": "13\tSCV"
+  },
+  "protoss": {
+    "pylon": {
+      "id": 3664,
+      "name": "Pylon",
+      "owner": 0,
+      "x": 1152,
+      "y": 224,
+      "order": 164,
+      "buildFrames": 71
+    },
+    "dump": "fog_player=0 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\nsim_selection=1 first=Probe\nunit=Pylon owner=0\ncompleted=1 remaining_build_time=0 research_time=0\norder=164 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=1152,224 hp=300\nmove_target=1152,224 order_target=0,0\n"
+  },
+  "protossPortrait": {
+    "draws": 1,
+    "paused": false,
+    "cacheBytes": 134400,
+    "pending": 0,
+    "error": "",
+    "surfaces": [
+      {
+        "unit": 156,
+        "talking": false,
+        "file": "portrait/PAdvisor\\PAdFid00.smk",
+        "frame": 0,
+        "frames": 10,
+        "visible": true
+      },
+      {
+        "unit": -1,
+        "talking": false,
+        "file": "",
+        "frame": -1,
+        "frames": 0,
+        "visible": false
+      }
+    ]
+  },
+  "zerg": {
+    "trained": 5,
+    "before": 4,
+    "pool": {
+      "id": 3661,
+      "name": "Spawning Pool",
+      "owner": 2,
+      "x": 816,
+      "y": 1888,
+      "order": 23,
+      "buildFrames": 12
+    },
+    "dump": "fog_player=2 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=0\nselection=1\nsim_selection=1 first=Spawning Pool\nunit=Spawning Pool owner=2\ncompleted=1 remaining_build_time=0 research_time=0\norder=23 order2=23\nattack_move=23 attack_unit=23\nground_weapon=0\npos=816,1888 hp=750\nmove_target=816,1888 order_target=0,0\n"
+  },
+  "zergPortrait": {
+    "draws": 1,
+    "paused": false,
+    "cacheBytes": 134400,
+    "pending": 0,
+    "error": "",
+    "surfaces": [
+      {
+        "unit": 142,
+        "talking": false,
+        "file": "portrait/ZAdvisor\\ZAdFid00.smk",
+        "frame": 0,
+        "frames": 10,
+        "visible": true
+      },
+      {
+        "unit": -1,
+        "talking": false,
+        "file": "",
+        "frame": -1,
+        "frames": 0,
+        "visible": false
+      }
+    ]
+  }
+}

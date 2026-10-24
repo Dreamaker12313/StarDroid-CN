@@ -1,0 +1,30 @@
+{
+  "version": "0.16",
+  "versionCode": 17,
+  "package": "org.openbw.androidtest",
+  "apk": {
+    "filename": "OpenBW-Android-0.16.apk",
+    "bytes": 3629152,
+    "sha256": "a8ab4aaa8c5955e6219351760451cade02c9b78403b71357a4a6110068c85eda"
+  },
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "updateCompatibleWith015": true,
+  "apkAssetBytesVerified": true,
+  "apkZipCrcAndAlignmentVerified": true,
+  "physicalAndroidTested": false,
+  "checks": [
+    "19 original music tracks decoded",
+    "Actual Terran/Zerg/Protoss music playback",
+    "Original rescue WAV output and ownership transfer",
+    "No campaign elimination message on rescue",
+    "Beacon HUD health/details hidden",
+    "Friendly/enemy selection-ring pixel differences",
+    "Yellow status-icon pixels",
+    "Separate title/game click sounds",
+    "Terran normal/selected Start clips without projector overlay",
+    "Background/resume, music through game menus",
+    "Bot startup and worker mining",
+    "Fresh engine build and pinned campaign hash verification",
+    "Generated ADPCM exact-boundary and guarded-output regression"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "missions": {
+    "expprotoss05": {
+      "state": {
+        "frame": 2404,
+        "ai": "6\t48\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 438,
+        "voices": 3,
+        "next": "expprotoss06"
+      }
+    },
+    "expterran04": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t64\t0\t3\t0\t40520\t40208\t40245\t40083\n1\t90\t0\t6\t0\t40376\t40248\t40026\t40148\n",
+        "error": "",
+        "outcome": 0,
+        "units": 500,
+        "voices": 0,
+        "next": "expterran05a"
+      }
+    },
+    "expterran05a": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t102\t0\t0\t0\t0\t0\t0\t0\n1\t22\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 751,
+        "voices": 7,
+        "next": "expterran06"
+      }
+    },
+    "expterran06": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t13\t0\t4\t0\t608\t0\t208\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 489,
+        "voices": 5,
+        "next": "expterran07"
+      }
+    }
+  },
+  "checks": [],
+  "errors": [],
+  "method": "Startup runs periodically heal player units; Brood War Zerg 1 also heals its seven rescue Hives so unattended combat does not trigger the original defeat objective. This is a smoke test, not a campaign balance or complete-playthrough test."
+}

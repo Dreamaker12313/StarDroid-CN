@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT compatibility shim; actual NativeArt/NativeGlue/NativeResults classes; alpha-composition rounding tolerance 1/255",
+  "fontFixture": "Supplied core FONT entries require fallback; synthetic glyph verifies original tint transparency",
+  "outcomeThemes": 6,
+  "tabRenders": 24,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "3b054eb9e0275493bcc2976e5917ec2356ec5a8d7475a07151f166527128887c",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "fdc5f814efff146cd896c02defc3d201f0c11ee441a87dbfb12906a2e25b52d0",
+    "tests/run_results56.py": "6b8f8c0f63ed5c7b2ab391bb959510a0b148ef629d337520e0f6db1121e93b96",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "66120f77ef4d2c1827d878f38eebe2179608b06f0af44dcf80a4f6d04c0f1347",
+    "tests/extract_interface46.cpp": "015e256acf7ec0eac94a2d165f8e4a537b00c0f058595df15ea70c41ab922660"
+  }
+}

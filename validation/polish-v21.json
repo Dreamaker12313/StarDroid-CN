@@ -1,0 +1,703 @@
+{
+  "checks": [
+    "Protoss 2: Aldaris continues beyond the old 12.08s cutoff and finishes his 13.08s recording before the next speaker",
+    "Original Psi art renders in all four quadrants; confirmed Forge placement plays an original Probe acknowledgement",
+    "Reaver single/group: one Scarab button in bottom-left, working fighter production, live gray/blue-frame ammo count; Probe armor/shield/weapon order; fixed Forge slots; spaced widescreen group/status",
+    "Original menu button states and centered score title; score total/elapsed font families follow gluscore.bin",
+    "Terran 5: real Raynor/Kerrigan transmission events advance once per recording; no duplicated WAV-length wait or minimum-three-second delay",
+    "Terran 1 does not show an empty Advanced Build submenu"
+  ],
+  "missions": {
+    "protoss02": {
+      "briefStart": {
+        "voice": {
+          "ready": true,
+          "failed": false,
+          "duration": 13079.36507936508,
+          "position": 119.00226757369614
+        },
+        "art": {
+          "originalRoom": true,
+          "layout": "rez/glurdyp.bin",
+          "selectedStart": false,
+          "fonts": {
+            "small": true,
+            "large": true,
+            "button": true
+          },
+          "dialogueFont": "font14",
+          "lineHeight": 19,
+          "contentHeight": 95,
+          "scrollDistance": 0,
+          "scrollOffset": 0,
+          "scrollDuration": 13079.36507936508,
+          "speechPosition": 98.68480725623586,
+          "manualScroll": false,
+          "animations": [
+            "glue/readyp/glow.smk",
+            "glue/readyp/ring.smk"
+          ],
+          "active": true,
+          "suspended": false,
+          "phase": "ready",
+          "elapsed": 1106.8999999996277,
+          "slideAmount": 0,
+          "glassIndex": 138,
+          "speakerFrames": 4,
+          "sounds": {
+            "available": [
+              "mousedown2",
+              "mouseover",
+              "swishin",
+              "swishlock",
+              "swishout",
+              "button"
+            ],
+            "decoded": 2,
+            "played": 2,
+            "lastPlayed": "swishlock",
+            "paused": false,
+            "error": ""
+          }
+        },
+        "glow": [
+          {
+            "clip": "glue/readyp/glow.smk",
+            "blend": "screen",
+            "filter": "brightness(0.25)"
+          },
+          {
+            "clip": "glue/readyp/ring.smk",
+            "blend": "",
+            "filter": ""
+          }
+        ]
+      },
+      "briefEnd": {
+        "history": [],
+        "missing": [],
+        "briefIndex": 0,
+        "briefPhase": "ready",
+        "playing": true,
+        "actionIndex": 4,
+        "transmission": {
+          "position": 12309.478458049889,
+          "remaining": 769.8866213151905,
+          "fallback": false
+        },
+        "voice": {
+          "ready": true,
+          "failed": false,
+          "duration": 13079.36507936508,
+          "position": 12318.185941043082
+        },
+        "slots": [
+          87,
+          77,
+          -1,
+          -1
+        ],
+        "messages": [],
+        "status": "0\t0\t0\t0\t0\t0",
+        "ai": "",
+        "aiError": "",
+        "aiTrace": "",
+        "decodedVoices": 1,
+        "allocatedMissionBytes": 1720650
+      },
+      "probe": {
+        "race": 2,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button"
+          ],
+          "decoded": 4,
+          "played": 4,
+          "lastPlayed": "swishout",
+          "paused": false,
+          "error": ""
+        },
+        "originalConsole": true,
+        "originalFonts": [
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "32",
+          "50",
+          "16x"
+        ],
+        "speechFont": "font10",
+        "timerFont": "font16",
+        "resourceFrames": [
+          0,
+          3,
+          6
+        ],
+        "commandIcons": 8,
+        "minimap": {
+          "x": 4,
+          "y": 412,
+          "w": 96,
+          "h": 64
+        },
+        "minimapTerrain": true,
+        "dialogArt": "dlgs/protoss.grp",
+        "selectedType": 64,
+        "details": [
+          {
+            "kind": "armor",
+            "icon": 303,
+            "level": 0,
+            "base": 0,
+            "bonus": 0,
+            "hits": 1
+          },
+          {
+            "kind": "shield",
+            "icon": 310,
+            "level": 0,
+            "base": 0,
+            "bonus": 0,
+            "hits": 1
+          },
+          {
+            "kind": "weapon",
+            "icon": 351,
+            "level": 0,
+            "base": 5,
+            "bonus": 0,
+            "hits": 1
+          }
+        ],
+        "commandSlots": [
+          {
+            "label": "Move",
+            "slot": 0
+          },
+          {
+            "label": "Stop",
+            "slot": 1
+          },
+          {
+            "label": "Attack",
+            "slot": 2
+          },
+          {
+            "label": "Gather",
+            "slot": 4
+          },
+          {
+            "label": "Build",
+            "slot": 6
+          }
+        ],
+        "submenu": false
+      },
+      "unitLayout": {
+        "wire": {
+          "x": 484.6387023925781,
+          "y": 572.2999877929688,
+          "width": 94.39999389648438,
+          "height": 94.4000244140625
+        },
+        "name": {
+          "x": 709.1383056640625,
+          "y": 572.2999877929688,
+          "width": 224.20001220703125,
+          "height": 20.6500244140625
+        },
+        "details": {
+          "x": 712.0883178710938,
+          "y": 647.5250244140625,
+          "width": 168.14996337890625,
+          "height": 53.0999755859375
+        },
+        "info": {
+          "x": 203.81251525878906,
+          "y": 572.2999877929688,
+          "width": 989.72509765625,
+          "height": 135.70001220703125
+        }
+      },
+      "forgeBuild": {
+        "x": 424,
+        "y": 30
+      },
+      "buildAck": [
+        {
+          "name": "sound/Protoss/Probe/PPrYes00.wav",
+          "played": false
+        },
+        {
+          "name": "sound/Protoss/Probe/PPrYes01.wav",
+          "played": false
+        },
+        {
+          "name": "sound/Protoss/Probe/PPrYes02.wav",
+          "played": false
+        },
+        {
+          "name": "sound/Protoss/Probe/PPrYes03.wav",
+          "played": true
+        }
+      ],
+      "forgeBefore": [
+        {
+          "label": "Armor · 100 minerals / 100 gas",
+          "slot": 1
+        },
+        {
+          "label": "Ground Weapons · 100 minerals / 100 gas",
+          "slot": 0
+        },
+        {
+          "label": "Plasma Shields · 200 minerals / 200 gas",
+          "slot": 2
+        }
+      ],
+      "forgeAfter": [
+        {
+          "label": "Armor · 100 minerals / 100 gas",
+          "slot": 1
+        },
+        {
+          "label": "Plasma Shields · 200 minerals / 200 gas",
+          "slot": 2
+        }
+      ],
+      "pylon": {
+        "id": 3724,
+        "name": "Pylon",
+        "owner": 7,
+        "x": 512,
+        "y": 576,
+        "order": 23
+      },
+      "psiQuadrants": [
+        {
+          "sx": -1,
+          "sy": -1,
+          "changed": 338
+        },
+        {
+          "sx": 1,
+          "sy": -1,
+          "changed": 3000
+        },
+        {
+          "sx": -1,
+          "sy": 1,
+          "changed": 3000
+        },
+        {
+          "sx": 1,
+          "sy": 1,
+          "changed": 2323
+        }
+      ],
+      "group": [
+        {
+          "x": 638.9375,
+          "y": 584.1000366210938,
+          "width": 48.675048828125
+        },
+        {
+          "x": 714.1625366210938,
+          "y": 584.1000366210938,
+          "width": 48.67498779296875
+        },
+        {
+          "x": 638.9375,
+          "y": 638.6749877929688,
+          "width": 48.675048828125
+        },
+        {
+          "x": 714.1625366210938,
+          "y": 638.6749877929688,
+          "width": 48.67498779296875
+        }
+      ],
+      "reavers": [
+        {
+          "id": 5703,
+          "name": "Reaver",
+          "owner": 7,
+          "x": 2656,
+          "y": 192,
+          "order": 58
+        },
+        {
+          "id": 5689,
+          "name": "Reaver",
+          "owner": 7,
+          "x": 2682,
+          "y": 160,
+          "order": 58
+        },
+        {
+          "id": 5688,
+          "name": "Reaver",
+          "owner": 7,
+          "x": 2656,
+          "y": 224,
+          "order": 58
+        }
+      ],
+      "reaver": {
+        "race": 2,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button"
+          ],
+          "decoded": 5,
+          "played": 9,
+          "lastPlayed": "button",
+          "paused": false,
+          "error": ""
+        },
+        "originalConsole": true,
+        "originalFonts": [
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "32",
+          "50",
+          "16x"
+        ],
+        "speechFont": "font10",
+        "timerFont": "font16",
+        "resourceFrames": [
+          0,
+          3,
+          6
+        ],
+        "commandIcons": 27,
+        "minimap": {
+          "x": 4,
+          "y": 412,
+          "w": 96,
+          "h": 64
+        },
+        "minimapTerrain": true,
+        "dialogArt": "dlgs/protoss.grp",
+        "selectedType": 83,
+        "details": [
+          {
+            "kind": "armor",
+            "icon": 303,
+            "level": 0,
+            "base": 0,
+            "bonus": 0,
+            "hits": 1
+          },
+          {
+            "kind": "shield",
+            "icon": 310,
+            "level": 0,
+            "base": 0,
+            "bonus": 0,
+            "hits": 1
+          },
+          {
+            "kind": "ammo",
+            "icon": 85,
+            "level": 0,
+            "base": 100,
+            "bonus": 0,
+            "hits": 1
+          }
+        ],
+        "commandSlots": [
+          {
+            "label": "Move",
+            "slot": 0
+          },
+          {
+            "label": "Stop",
+            "slot": 1
+          },
+          {
+            "label": "Attack",
+            "slot": 2
+          },
+          {
+            "label": "Hold",
+            "slot": 4
+          },
+          {
+            "label": "Patrol",
+            "slot": 3
+          },
+          {
+            "label": "Build Scarab · 15 minerals",
+            "slot": 6
+          }
+        ],
+        "submenu": false
+      },
+      "reaverAfter": {
+        "race": 2,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button"
+          ],
+          "decoded": 5,
+          "played": 10,
+          "lastPlayed": "button",
+          "paused": false,
+          "error": ""
+        },
+        "originalConsole": true,
+        "originalFonts": [
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "32",
+          "50",
+          "16x"
+        ],
+        "speechFont": "font10",
+        "timerFont": "font16",
+        "resourceFrames": [
+          0,
+          3,
+          6
+        ],
+        "commandIcons": 27,
+        "minimap": {
+          "x": 4,
+          "y": 412,
+          "w": 96,
+          "h": 64
+        },
+        "minimapTerrain": true,
+        "dialogArt": "dlgs/protoss.grp",
+        "selectedType": 83,
+        "details": [
+          {
+            "kind": "armor",
+            "icon": 303,
+            "level": 0,
+            "base": 0,
+            "bonus": 0,
+            "hits": 1
+          },
+          {
+            "kind": "shield",
+            "icon": 310,
+            "level": 0,
+            "base": 0,
+            "bonus": 0,
+            "hits": 1
+          },
+          {
+            "kind": "ammo",
+            "icon": 85,
+            "level": 1,
+            "base": 100,
+            "bonus": 0,
+            "hits": 1
+          }
+        ],
+        "commandSlots": [
+          {
+            "label": "Move",
+            "slot": 0
+          },
+          {
+            "label": "Stop",
+            "slot": 1
+          },
+          {
+            "label": "Attack",
+            "slot": 2
+          },
+          {
+            "label": "Hold",
+            "slot": 4
+          },
+          {
+            "label": "Patrol",
+            "slot": 3
+          },
+          {
+            "label": "Build Scarab · 15 minerals",
+            "slot": 6
+          }
+        ],
+        "submenu": false
+      },
+      "menu": {
+        "opened": true,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button"
+          ],
+          "decoded": 5,
+          "played": 11,
+          "lastPlayed": "button",
+          "paused": false,
+          "error": ""
+        },
+        "normal": 589,
+        "disabled": 581
+      },
+      "victory": {
+        "phase": "scores",
+        "won": true,
+        "tab": 0,
+        "race": 2,
+        "players": [
+          {
+            "me": false,
+            "race": 2,
+            "color": 2,
+            "units": 1,
+            "buildings": 0,
+            "minerals": 0,
+            "gas": 0,
+            "kills": 0,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 0,
+            "buildingScore": 0,
+            "spent": 0,
+            "slot": 2
+          },
+          {
+            "me": false,
+            "race": 0,
+            "color": 6,
+            "units": 79,
+            "buildings": 8,
+            "minerals": 7456,
+            "gas": 8576,
+            "kills": 0,
+            "lost": 38,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 7575,
+            "buildingScore": 1465,
+            "spent": 1300,
+            "slot": 6
+          },
+          {
+            "me": true,
+            "race": 2,
+            "color": 7,
+            "units": 23,
+            "buildings": 4,
+            "minerals": 170,
+            "gas": 0,
+            "kills": 38,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 13900,
+            "buildingScore": 600,
+            "spent": 0,
+            "slot": 7
+          }
+        ],
+        "titleBox": {
+          "next": 258,
+          "x": 16,
+          "y": 18,
+          "width": 204,
+          "height": 24,
+          "text": "",
+          "flags": 16392,
+          "id": 2,
+          "type": 10,
+          "smk": 0,
+          "tx": 0,
+          "ty": 0,
+          "rx": 0,
+          "ry": 0,
+          "rx2": 0,
+          "ry2": 0,
+          "rw": 0,
+          "rh": 0
+        },
+        "fonts": {
+          "title": "font16x",
+          "total": "font16x",
+          "elapsed": "font16",
+          "tabs": "font10"
+        },
+        "art": "glue/scorepv"
+      }
+    },
+    "terran05": {
+      "dialogue": {
+        "first": [],
+        "events": [
+          {
+            "type": 7,
+            "idx": 717,
+            "wav": 171,
+            "duration": 5352,
+            "frame": 33
+          },
+          {
+            "type": 7,
+            "idx": 716,
+            "wav": 76,
+            "duration": 3430,
+            "frame": 161
+          },
+          {
+            "type": 7,
+            "idx": 715,
+            "wav": 72,
+            "duration": 2092,
+            "frame": 243
+          },
+          {
+            "type": 7,
+            "idx": 714,
+            "wav": 79,
+            "duration": 6501,
+            "frame": 293
+          },
+          {
+            "type": 7,
+            "idx": 713,
+            "wav": 74,
+            "duration": 1345,
+            "frame": 448
+          }
+        ]
+      }
+    },
+    "terran01": {}
+  },
+  "errors": []
+}

@@ -1,0 +1,21 @@
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -1613,7 +1613,8 @@
+ 		size_t height = area.to.y - area.from.y;
+ 		uint8_t* p = data + data_pitch * (size_t)area.from.y + (size_t)area.from.x;
+ 		memset(p, index, width);
+-		memset(p + data_pitch * height, index, width);
++		// Rectangle ends are exclusive; the last row is height - 1.
++		memset(p + data_pitch * (height - 1), index, width);
+ 		for (size_t y = 0; y != height; ++y) {
+ 			p[data_pitch * y] = index;
+ 			p[data_pitch * y + width - 1] = index;
+@@ -1631,7 +1632,7 @@
+ 		uint32_t* p = data + data_pitch * (size_t)area.from.y + (size_t)area.from.x;
+ 		for (size_t x = 0; x != width; ++x) {
+ 			p[x] = color;
+-			p[height * data_pitch + x] = color;
++			p[(height - 1) * data_pitch + x] = color;
+ 		}
+ 		for (size_t y = 0; y != height; ++y) {
+ 			p[data_pitch * y] = color;

@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "All three new missions exported under 48 MB heap, validated installation, every served entry matches original bundle",
+    "Unused, missing legacy sound references removed; active speech retained",
+    "All nine mission openings validated, corrupt/wrong-format replacements preserve installed data"
+  ],
+  "missions": {
+    "terran05": {
+      "entries": 18,
+      "bytes": 1565554
+    },
+    "zerg02": {
+      "entries": 9,
+      "bytes": 1355733
+    },
+    "protoss02": {
+      "entries": 15,
+      "bytes": 1724399
+    }
+  }
+}

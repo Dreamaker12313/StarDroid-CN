@@ -1,0 +1,11 @@
+campaign\protoss\protoss10\staredit\scenario.chk
+campaign\protoss\protoss10\staredit\wav\combeep0.wav
+campaign\protoss\protoss10\staredit\wav\p9m00pad.wav
+campaign\protoss\protoss10\staredit\wav\p9m02ura.wav
+campaign\protoss\protoss10\staredit\wav\pab00ufd.wav
+campaign\protoss\protoss10\staredit\wav\pab01uta.wav
+campaign\protoss\protoss10\staredit\wav\pab02uta.wav
+campaign\protoss\protoss10\staredit\wav\pab03uze.wav
+campaign\protoss\protoss10\staredit\wav\pab05ura.wav
+campaign\protoss\protoss10\staredit\wav\pab06uta.wav
+campaign\protoss\protoss10\staredit\wav\pam00uta.wav

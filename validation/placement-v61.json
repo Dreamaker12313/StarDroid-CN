@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
+  "output": "PASS 3857 checks, 1728 edge/zoom/control positions: always below visible preview, overlap allowed, real touch routing blocks underlying buttons/commands/minimap and the gap, drag capture, migration/persistence and three-race renders",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "d35c8c6c2b326f8da80ba3cc4a6cc16b79cee452618f01c568175799983efda2",
+    "app/src/main/java/org/openbw/androidtest/PlacementButtons.java": "230491ae1d965610c57f538d116294ccc1f6cf6d1e2b4675cd8becb70799871c",
+    "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "66120f77ef4d2c1827d878f38eebe2179608b06f0af44dcf80a4f6d04c0f1347",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "tests/run_placement61.py": "e86fe6134786d50cef34c1f626c0b42200a83170c143a7a57fa335e1680cb871"
+  }
+}

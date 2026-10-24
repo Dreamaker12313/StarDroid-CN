@@ -1,0 +1,702 @@
+{
+  "checks": [
+    "User-provided sparse MPQ loads without full archive allocation; briefing voice decodes",
+    "Original starting units and 40 minerals; original objectives active",
+    "SCV transmission fires from original elapsed-time trigger and its WAV decodes",
+    "Army crosses map, nearby Raynor transfers to player, introduction plays once and objectives update",
+    "Normal gather orders mine resources; original Zergling guards fight on the route",
+    "SCV builds Barracks, advisor transmission runs, training Marines meets original Victory trigger",
+    "Raynor dies to actual enemy damage (HP lowered for test), original death message and Defeat trigger run"
+  ],
+  "errors": [],
+  "logs": [
+    "log: [wasm] openbw_init: map 'T1) Wasteland' 2048x2048, slot 1 of 1, units=12, fog_player=1",
+    "log: Build accepted at [[30,48]]"
+  ],
+  "briefing": {
+    "history": [],
+    "missing": [],
+    "briefIndex": 2,
+    "playing": true,
+    "status": "0\t5\t0\t0\t1\t0",
+    "ai": "",
+    "aiError": "",
+    "aiTrace": "",
+    "decodedVoices": 3,
+    "allocatedMissionBytes": 1176664
+  },
+  "start": {
+    "game": {
+      "frame": 33,
+      "paused": false,
+      "audio": "running",
+      "soundBuffers": 4
+    },
+    "mission": {
+      "history": [
+        {
+          "type": 12,
+          "idx": 19,
+          "wav": 0,
+          "frame": 2
+        },
+        {
+          "type": 8,
+          "idx": 0,
+          "wav": 281,
+          "frame": 2
+        },
+        {
+          "type": 9,
+          "idx": 20,
+          "wav": 0,
+          "frame": 2
+        },
+        {
+          "type": 12,
+          "idx": 21,
+          "wav": 0,
+          "frame": 2
+        }
+      ],
+      "missing": [],
+      "briefIndex": 0,
+      "playing": false,
+      "status": "21\t5\t0\t0\t1\t0",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 4,
+      "allocatedMissionBytes": 1176664
+    }
+  },
+  "initial": {
+    "units": "3710\tCommand Center\t1\t1056\t1744\t23\n3711\tSupply Depot\t1\t1296\t1696\t23\n3737\tMarine\t1\t172\t167\t3\n3738\tMarine\t1\t174\t135\t3\n3739\tMarine\t1\t209\t154\t3\n3740\tSCV\t1\t126\t150\t3\n3741\tSCV\t1\t83\t151\t3\n3742\tMarine\t1\t197\t121\t3\n3743\tSCV\t1\t56\t117\t3\n3744\tSCV\t1\t88\t104\t3\n3745\tSCV\t1\t132\t103\t3\n3747\tMarine\t1\t173\t95\t3\n3722\tJim Raynor\t2\t1014\t1031\t161\n3704\tZergling\t4\t208\t1896\t3\n3707\tZergling\t4\t248\t1877\t3\n3712\tZergling\t4\t264\t1516\t3\n3713\tZergling\t4\t301\t1502\t3\n3714\tZergling\t4\t1135\t1345\t3\n3715\tZergling\t4\t1887\t1320\t3\n3716\tZergling\t4\t1166\t1342\t3\n3717\tZergling\t4\t1925\t1289\t3\n3718\tZergling\t4\t1894\t1282\t3\n3719\tZergling\t4\t1394\t1195\t3\n3720\tZergling\t4\t67\t1143\t3\n3721\tZergling\t4\t431\t1079\t3\n3723\tZergling\t4\t448\t1051\t3\n3730\tZergling\t4\t1806\t899\t3\n3731\tZergling\t4\t1728\t562\t3\n3732\tZergling\t4\t1748\t530\t3\n3733\tZergling\t4\t1328\t289\t3\n3734\tZergling\t4\t1277\t302\t3\n3735\tZergling\t4\t1285\t269\t3\n3736\tZergling\t4\t1330\t254\t3\n3746\tZergling\t4\t1841\t114\t3\n3748\tZergling\t4\t1840\t93\t3\n2049\tZergling\t4\t1625\t47\t3\n3705\tMineral Field\t11\t1312\t1872\t23\n3706\tMineral Field\t11\t1248\t1872\t23\n3708\tMineral Field\t11\t1344\t1840\t23\n3709\tMineral Field\t11\t1248\t1808\t23\n3724\tMineral Field\t11\t448\t1008\t23\n3725\tMineral Field\t11\t512\t976\t23\n3726\tMineral Field\t11\t576\t976\t23\n3727\tMineral Field\t11\t544\t944\t23\n3728\tMineral Field\t11\t640\t944\t23\n3729\tMineral Field\t11\t480\t912\t23\n",
+    "resources": "40\t0\t10\t18",
+    "status": "21\t5\t0\t0\t1\t0"
+  },
+  "chkSha256": "4b0e5009c4ae80cfb4cb13ede30842db0aa05bb3be2eedad695fb093fa5786f6",
+  "firstDialogue": {
+    "history": [
+      {
+        "type": 12,
+        "idx": 19,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 281,
+        "frame": 2
+      },
+      {
+        "type": 9,
+        "idx": 20,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 12,
+        "idx": 21,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 274
+      },
+      {
+        "type": 7,
+        "idx": 25,
+        "wav": 332,
+        "frame": 274
+      }
+    ],
+    "missing": [],
+    "briefIndex": 0,
+    "playing": false,
+    "status": "21\t5\t0\t0\t1\t0",
+    "ai": "",
+    "aiError": "",
+    "aiTrace": "",
+    "decodedVoices": 5,
+    "allocatedMissionBytes": 1176664
+  },
+  "rescue": {
+    "units": "3722\tJim Raynor\t1\t1014\t1031\t3\n3710\tCommand Center\t1\t1056\t1744\t23\n3711\tSupply Depot\t1\t1296\t1696\t23\n3737\tMarine\t1\t1045\t1069\t3\n3738\tMarine\t1\t1047\t1037\t3\n3739\tMarine\t1\t1082\t1056\t3\n3740\tSCV\t1\t973\t980\t3\n3741\tSCV\t1\t956\t1053\t3\n3742\tMarine\t1\t1070\t1023\t3\n3743\tSCV\t1\t954\t1004\t3\n3744\tSCV\t1\t944\t978\t3\n3745\tSCV\t1\t996\t1003\t3\n3747\tMarine\t1\t1030\t993\t3\n3704\tZergling\t4\t208\t1896\t3\n3707\tZergling\t4\t248\t1877\t3\n3712\tZergling\t4\t264\t1516\t3\n3713\tZergling\t4\t301\t1502\t3\n3714\tZergling\t4\t1135\t1345\t3\n3715\tZergling\t4\t1887\t1320\t3\n3716\tZergling\t4\t1166\t1342\t3\n3717\tZergling\t4\t1925\t1289\t3\n3718\tZergling\t4\t1894\t1282\t3\n3719\tZergling\t4\t1394\t1195\t3\n3720\tZergling\t4\t67\t1143\t3\n3721\tZergling\t4\t431\t1079\t3\n3723\tZergling\t4\t448\t1051\t3\n3730\tZergling\t4\t1806\t899\t3\n3731\tZergling\t4\t1728\t562\t3\n3732\tZergling\t4\t1748\t530\t3\n3733\tZergling\t4\t1328\t289\t3\n3734\tZergling\t4\t1277\t302\t3\n3735\tZergling\t4\t1285\t269\t3\n3736\tZergling\t4\t1330\t254\t3\n3746\tZergling\t4\t1841\t114\t3\n3748\tZergling\t4\t1840\t93\t3\n2049\tZergling\t4\t1625\t47\t3\n3705\tMineral Field\t11\t1312\t1872\t23\n3706\tMineral Field\t11\t1248\t1872\t23\n3708\tMineral Field\t11\t1344\t1840\t23\n3709\tMineral Field\t11\t1248\t1808\t23\n3724\tMineral Field\t11\t448\t1008\t23\n3725\tMineral Field\t11\t512\t976\t23\n3726\tMineral Field\t11\t576\t976\t23\n3727\tMineral Field\t11\t544\t944\t23\n3728\tMineral Field\t11\t640\t944\t23\n3729\tMineral Field\t11\t480\t912\t23\n",
+    "resources": "40\t0\t10\t18",
+    "status": "9\t5\t0\t1\t1\t0"
+  },
+  "rescueEvents": {
+    "history": [
+      {
+        "type": 12,
+        "idx": 19,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 281,
+        "frame": 2
+      },
+      {
+        "type": 9,
+        "idx": 20,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 12,
+        "idx": 21,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 274
+      },
+      {
+        "type": 7,
+        "idx": 25,
+        "wav": 332,
+        "frame": 274
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 576
+      },
+      {
+        "type": 10,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 5,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 7,
+        "idx": 8,
+        "wav": 157,
+        "frame": 1086
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 6,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 12,
+        "idx": 9,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 229,
+        "frame": 1206
+      },
+      {
+        "type": 9,
+        "idx": 12,
+        "wav": 0,
+        "frame": 1206
+      }
+    ],
+    "missing": [],
+    "briefIndex": 0,
+    "playing": false,
+    "status": "9\t5\t0\t1\t1\t0",
+    "ai": "",
+    "aiError": "",
+    "aiTrace": "",
+    "decodedVoices": 7,
+    "allocatedMissionBytes": 1176664
+  },
+  "mining": {
+    "units": "3722\tJim Raynor\t1\t1104\t1591\t3\n3710\tCommand Center\t1\t1056\t1744\t23\n3711\tSupply Depot\t1\t1296\t1696\t23\n3737\tMarine\t1\t1135\t1629\t3\n3738\tMarine\t1\t1137\t1597\t3\n3739\tMarine\t1\t1172\t1616\t3\n3740\tSCV\t1\t1194\t1836\t85\n3741\tSCV\t1\t1204\t1780\t87\n3742\tMarine\t1\t1160\t1583\t3\n3743\tSCV\t1\t1151\t1805\t85\n3744\tSCV\t1\t1300\t1844\t87\n3745\tSCV\t1\t1270\t1844\t90\n3747\tMarine\t1\t1120\t1553\t3\n3704\tZergling\t4\t208\t1896\t3\n3707\tZergling\t4\t248\t1877\t3\n3712\tZergling\t4\t264\t1516\t3\n3713\tZergling\t4\t301\t1502\t3\n3715\tZergling\t4\t1887\t1320\t3\n3717\tZergling\t4\t1925\t1289\t3\n3718\tZergling\t4\t1894\t1282\t3\n3719\tZergling\t4\t1394\t1195\t3\n3720\tZergling\t4\t67\t1143\t3\n3721\tZergling\t4\t431\t1079\t3\n3723\tZergling\t4\t448\t1051\t3\n3730\tZergling\t4\t1806\t899\t3\n3731\tZergling\t4\t1728\t562\t3\n3732\tZergling\t4\t1748\t530\t3\n3733\tZergling\t4\t1328\t289\t3\n3734\tZergling\t4\t1277\t302\t3\n3735\tZergling\t4\t1285\t269\t3\n3736\tZergling\t4\t1330\t254\t3\n3746\tZergling\t4\t1841\t114\t3\n3748\tZergling\t4\t1840\t93\t3\n2049\tZergling\t4\t1625\t47\t3\n3705\tMineral Field\t11\t1312\t1872\t23\n3706\tMineral Field\t11\t1248\t1872\t23\n3708\tMineral Field\t11\t1344\t1840\t23\n3709\tMineral Field\t11\t1248\t1808\t23\n3724\tMineral Field\t11\t448\t1008\t23\n3725\tMineral Field\t11\t512\t976\t23\n3726\tMineral Field\t11\t576\t976\t23\n3727\tMineral Field\t11\t544\t944\t23\n3728\tMineral Field\t11\t640\t944\t23\n3729\tMineral Field\t11\t480\t912\t23\n",
+    "resources": "360\t0\t10\t18",
+    "status": "9\t5\t0\t1\t1\t0"
+  },
+  "barracks": {
+    "units": "3703\tBarracks\t1\t1024\t1584\t23\n3722\tJim Raynor\t1\t1104\t1591\t3\n3710\tCommand Center\t1\t1056\t1744\t23\n3711\tSupply Depot\t1\t1296\t1696\t23\n3737\tMarine\t1\t1135\t1629\t3\n3738\tMarine\t1\t1137\t1597\t3\n3739\tMarine\t1\t1172\t1616\t3\n3740\tSCV\t1\t1092\t1563\t3\n3741\tSCV\t1\t1300\t1835\t87\n3742\tMarine\t1\t1160\t1583\t3\n3743\tSCV\t1\t1204\t1844\t90\n3744\tSCV\t1\t1204\t1780\t87\n3745\tSCV\t1\t1300\t1844\t87\n3747\tMarine\t1\t1120\t1553\t3\n3704\tZergling\t4\t208\t1896\t3\n3707\tZergling\t4\t248\t1877\t3\n3712\tZergling\t4\t264\t1516\t3\n3713\tZergling\t4\t301\t1502\t3\n3715\tZergling\t4\t1887\t1320\t3\n3717\tZergling\t4\t1925\t1289\t3\n3718\tZergling\t4\t1894\t1282\t3\n3719\tZergling\t4\t1394\t1195\t3\n3720\tZergling\t4\t67\t1143\t3\n3721\tZergling\t4\t431\t1079\t3\n3723\tZergling\t4\t448\t1051\t3\n3730\tZergling\t4\t1806\t899\t3\n3731\tZergling\t4\t1728\t562\t3\n3732\tZergling\t4\t1748\t530\t3\n3733\tZergling\t4\t1328\t289\t3\n3734\tZergling\t4\t1277\t302\t3\n3735\tZergling\t4\t1285\t269\t3\n3736\tZergling\t4\t1330\t254\t3\n3746\tZergling\t4\t1841\t114\t3\n3748\tZergling\t4\t1840\t93\t3\n2049\tZergling\t4\t1625\t47\t3\n3705\tMineral Field\t11\t1312\t1872\t23\n3706\tMineral Field\t11\t1248\t1872\t23\n3708\tMineral Field\t11\t1344\t1840\t23\n3709\tMineral Field\t11\t1248\t1808\t23\n3724\tMineral Field\t11\t448\t1008\t23\n3725\tMineral Field\t11\t512\t976\t23\n3726\tMineral Field\t11\t576\t976\t23\n3727\tMineral Field\t11\t544\t944\t23\n3728\tMineral Field\t11\t640\t944\t23\n3729\tMineral Field\t11\t480\t912\t23\n",
+    "resources": "554\t0\t10\t18",
+    "status": "9\t5\t1\t1\t1\t0"
+  },
+  "barracksEvents": {
+    "history": [
+      {
+        "type": 12,
+        "idx": 19,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 281,
+        "frame": 2
+      },
+      {
+        "type": 9,
+        "idx": 20,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 12,
+        "idx": 21,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 274
+      },
+      {
+        "type": 7,
+        "idx": 25,
+        "wav": 332,
+        "frame": 274
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 576
+      },
+      {
+        "type": 10,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 5,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 7,
+        "idx": 8,
+        "wav": 157,
+        "frame": 1086
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 6,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 12,
+        "idx": 9,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 229,
+        "frame": 1206
+      },
+      {
+        "type": 9,
+        "idx": 12,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 10,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7552
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7552
+      },
+      {
+        "type": 7,
+        "idx": 22,
+        "wav": 404,
+        "frame": 7552
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 281,
+        "frame": 7712
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7712
+      },
+      {
+        "type": 9,
+        "idx": 23,
+        "wav": 0,
+        "frame": 7712
+      },
+      {
+        "type": 32,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7712
+      },
+      {
+        "type": 17,
+        "idx": 24,
+        "wav": 0,
+        "frame": 7712
+      }
+    ],
+    "missing": [],
+    "briefIndex": 0,
+    "playing": false,
+    "status": "9\t5\t1\t1\t1\t0",
+    "ai": "",
+    "aiError": "",
+    "aiTrace": "",
+    "decodedVoices": 8,
+    "allocatedMissionBytes": 1176664
+  },
+  "victory": {
+    "units": "3701\tMarine\t1\t1072\t1632\t3\n5754\tMarine\t1\t1048\t1632\t3\n3702\tMarine\t1\t1024\t1632\t3\n5762\tMarine\t1\t1000\t1632\t3\n5764\tMarine\t1\t976\t1632\t3\n3703\tBarracks\t1\t1024\t1584\t23\n3722\tJim Raynor\t1\t1104\t1591\t3\n3710\tCommand Center\t1\t1056\t1744\t23\n3711\tSupply Depot\t1\t1296\t1696\t23\n3737\tMarine\t1\t1135\t1629\t3\n3738\tMarine\t1\t1137\t1597\t3\n3739\tMarine\t1\t1172\t1616\t3\n3740\tSCV\t1\t1092\t1563\t3\n3741\tSCV\t1\t1126\t1771\t85\n3742\tMarine\t1\t1160\t1583\t3\n3743\tSCV\t1\t1300\t1844\t87\n3744\tSCV\t1\t1257\t1845\t90\n3745\tSCV\t1\t1126\t1781\t85\n3747\tMarine\t1\t1120\t1553\t3\n3704\tZergling\t4\t208\t1896\t3\n3707\tZergling\t4\t248\t1877\t3\n3712\tZergling\t4\t264\t1516\t3\n3713\tZergling\t4\t301\t1502\t3\n3715\tZergling\t4\t1887\t1320\t3\n3717\tZergling\t4\t1925\t1289\t3\n3718\tZergling\t4\t1894\t1282\t3\n3719\tZergling\t4\t1394\t1195\t3\n3720\tZergling\t4\t67\t1143\t3\n3721\tZergling\t4\t431\t1079\t3\n3723\tZergling\t4\t448\t1051\t3\n3730\tZergling\t4\t1806\t899\t3\n3731\tZergling\t4\t1728\t562\t3\n3732\tZergling\t4\t1748\t530\t3\n3733\tZergling\t4\t1328\t289\t3\n3734\tZergling\t4\t1277\t302\t3\n3735\tZergling\t4\t1285\t269\t3\n3736\tZergling\t4\t1330\t254\t3\n3746\tZergling\t4\t1841\t114\t3\n3748\tZergling\t4\t1840\t93\t3\n2049\tZergling\t4\t1625\t47\t3\n3705\tMineral Field\t11\t1312\t1872\t23\n3708\tMineral Field\t11\t1344\t1840\t23\n3709\tMineral Field\t11\t1248\t1808\t23\n3724\tMineral Field\t11\t448\t1008\t23\n3725\tMineral Field\t11\t512\t976\t23\n3726\tMineral Field\t11\t576\t976\t23\n3727\tMineral Field\t11\t544\t944\t23\n3728\tMineral Field\t11\t640\t944\t23\n3729\tMineral Field\t11\t480\t912\t23\n",
+    "resources": "594\t0\t15\t18",
+    "status": "9\t10\t1\t1\t1\t0"
+  },
+  "outcome": 1,
+  "finalAudio": {
+    "history": [
+      {
+        "type": 12,
+        "idx": 19,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 281,
+        "frame": 2
+      },
+      {
+        "type": 9,
+        "idx": 20,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 12,
+        "idx": 21,
+        "wav": 0,
+        "frame": 2
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 274
+      },
+      {
+        "type": 7,
+        "idx": 25,
+        "wav": 332,
+        "frame": 274
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 576
+      },
+      {
+        "type": 10,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 5,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1086
+      },
+      {
+        "type": 7,
+        "idx": 8,
+        "wav": 157,
+        "frame": 1086
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 6,
+        "idx": 0,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 12,
+        "idx": 9,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 229,
+        "frame": 1206
+      },
+      {
+        "type": 9,
+        "idx": 12,
+        "wav": 0,
+        "frame": 1206
+      },
+      {
+        "type": 10,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7552
+      },
+      {
+        "type": 30,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7552
+      },
+      {
+        "type": 7,
+        "idx": 22,
+        "wav": 404,
+        "frame": 7552
+      },
+      {
+        "type": 8,
+        "idx": 0,
+        "wav": 281,
+        "frame": 7712
+      },
+      {
+        "type": 31,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7712
+      },
+      {
+        "type": 9,
+        "idx": 23,
+        "wav": 0,
+        "frame": 7712
+      },
+      {
+        "type": 32,
+        "idx": 0,
+        "wav": 0,
+        "frame": 7712
+      },
+      {
+        "type": 17,
+        "idx": 24,
+        "wav": 0,
+        "frame": 7712
+      }
+    ],
+    "missing": [],
+    "briefIndex": 0,
+    "playing": false,
+    "status": "9\t10\t1\t1\t1\t0",
+    "ai": "",
+    "aiError": "",
+    "aiTrace": "",
+    "decodedVoices": 8,
+    "allocatedMissionBytes": 1176664
+  },
+  "defeat": {
+    "outcome": 2,
+    "mission": {
+      "history": [
+        {
+          "type": 12,
+          "idx": 19,
+          "wav": 0,
+          "frame": 2
+        },
+        {
+          "type": 8,
+          "idx": 0,
+          "wav": 281,
+          "frame": 2
+        },
+        {
+          "type": 9,
+          "idx": 20,
+          "wav": 0,
+          "frame": 2
+        },
+        {
+          "type": 12,
+          "idx": 21,
+          "wav": 0,
+          "frame": 2
+        },
+        {
+          "type": 30,
+          "idx": 0,
+          "wav": 0,
+          "frame": 248
+        },
+        {
+          "type": 7,
+          "idx": 25,
+          "wav": 332,
+          "frame": 248
+        },
+        {
+          "type": 10,
+          "idx": 0,
+          "wav": 0,
+          "frame": 408
+        },
+        {
+          "type": 5,
+          "idx": 0,
+          "wav": 0,
+          "frame": 408
+        },
+        {
+          "type": 30,
+          "idx": 0,
+          "wav": 0,
+          "frame": 408
+        },
+        {
+          "type": 7,
+          "idx": 8,
+          "wav": 157,
+          "frame": 568
+        },
+        {
+          "type": 31,
+          "idx": 0,
+          "wav": 0,
+          "frame": 648
+        },
+        {
+          "type": 6,
+          "idx": 0,
+          "wav": 0,
+          "frame": 648
+        },
+        {
+          "type": 12,
+          "idx": 9,
+          "wav": 0,
+          "frame": 648
+        },
+        {
+          "type": 8,
+          "idx": 0,
+          "wav": 229,
+          "frame": 648
+        },
+        {
+          "type": 9,
+          "idx": 12,
+          "wav": 0,
+          "frame": 648
+        },
+        {
+          "type": 31,
+          "idx": 0,
+          "wav": 0,
+          "frame": 648
+        },
+        {
+          "type": 5,
+          "idx": 0,
+          "wav": 0,
+          "frame": 2955
+        },
+        {
+          "type": 8,
+          "idx": 0,
+          "wav": 281,
+          "frame": 2955
+        },
+        {
+          "type": 9,
+          "idx": 14,
+          "wav": 0,
+          "frame": 2955
+        }
+      ],
+      "missing": [],
+      "briefIndex": 0,
+      "playing": false,
+      "status": "9\t0\t0\t0\t0\t1",
+      "ai": "",
+      "aiError": "",
+      "aiTrace": "",
+      "decodedVoices": 4,
+      "allocatedMissionBytes": 1176664
+    }
+  }
+}

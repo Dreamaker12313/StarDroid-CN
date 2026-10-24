@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>StarDroid</title><link rel="stylesheet" href="menus.css"><link rel="stylesheet" href="title.css">
+<script src="ui-assets.js"></script><script src="ui-original.js"></script><script src="music.js"></script><script src="missions.js"></script><script src="title.js" defer></script></head>
+<body>
+<main id="title-stage">
+  <section id="title-splash" aria-label="StarCraft Brood War title screen"><img id="title-art" alt="StarCraft Brood War"><button id="title-enter" aria-label="Continue to main menu"></button></section>
+  <section id="title-main" hidden aria-label="Main menu">
+    <img id="main-art" class="page-art" alt="">
+    <button id="title-single" class="planet-button" aria-label="Single Player"><canvas id="planet-single"></canvas><span>Single Player</span></button>
+    <button id="title-files" class="planet-button" aria-label="Multiplayer"><canvas id="planet-multi"></canvas><span>Multiplayer</span></button>
+    <button id="title-options" class="planet-button" aria-label="App Options"><canvas id="planet-editor"></canvas><span>App Options</span></button>
+    <button id="title-exit" class="planet-button" aria-label="Exit"><canvas id="planet-exit"></canvas><span>Exit</span></button>
+    <button id="title-intro" class="text-button">View Intro</button><button id="title-credits" class="text-button">Show Credits</button>
+    <small class="title-version">StarDroid · 1.0</small>
+  </section>
+  <section id="title-registry" hidden aria-label="Registry"></section>
+  <section id="title-campaign" hidden aria-label="Campaign selection"></section>
+  <div id="title-modal" role="dialog" aria-modal="true" hidden><div id="title-modal-content"></div></div>
+  <section id="title-options-page" class="title-panel" hidden>
+    <div class="title-panel-card"><h1>App Options</h1><button id="title-game-files" class="sc-button">Game Files &amp; Campaigns</button>
+      <div id="music-settings"><label><input type="checkbox" id="opt-music"> Play original music</label><p id="music-status" role="status"></p>
+      <label>Volume <input id="music-volume" type="range" min="0" max="100" value="30" aria-label="Music volume"></label>
+      <label hidden>Track <select id="music-track"><option value="auto">Automatic</option></select></label><button id="music-next" hidden>Next track</button></div>
+      <p>Tap a unit to select · drag to pan<br>Hold, then drag to select · pinch to zoom</p>
+      <p>Drag a building preview, then tap Build.<br>Menu is above the unit portrait.</p>
+      <button id="title-diagnostics" class="sc-button">Diagnostics &amp; Credits</button><button class="sc-button title-back">Previous</button>
+    </div>
+  </section>
+  <section id="title-unavailable" class="title-panel" hidden><div class="title-panel-card"><p id="title-unavailable-text"></p><button class="sc-button title-back">Previous</button></div></section>
+  <p id="title-status" role="status">Loading original interface…</p>
+</main>
+</body></html>

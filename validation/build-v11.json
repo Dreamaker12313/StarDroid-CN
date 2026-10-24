@@ -1,0 +1,62 @@
+{
+  "version": "0.11",
+  "versionCode": 12,
+  "apkSha256": "cf8c3b8c79e4570a5d630eac35968cd71f3620af27243c326e40a22b0802426c",
+  "apkSize": 3505528,
+  "signerSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "package": "org.openbw.androidtest",
+  "assetsByteCompared": 41,
+  "signature": [
+    "Verifies",
+    "Verified using v1 scheme (JAR signing): false",
+    "Verified using v2 scheme (APK Signature Scheme v2): true",
+    "Verified using v3 scheme (APK Signature Scheme v3): true",
+    "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+    "Verified using v4 scheme (APK Signature Scheme v4): false",
+    "Verified for SourceStamp: false",
+    "Number of signers: 1",
+    "Signer #1 certificate DN: CN=OpenBW Android Test, O=Personal Development, C=US",
+    "Signer #1 certificate SHA-256 digest: 40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+    "Signer #1 certificate SHA-1 digest: e60e5587c29ae8c18f5613b8afde75929d95159f",
+    "Signer #1 certificate MD5 digest: fa7437bcd9e291431923f18a33306455",
+    "Signer #1 key algorithm: RSA",
+    "Signer #1 key size (bits): 2048",
+    "Signer #1 public key SHA-256 digest: 5250d0dbf3a200890f53a5b77d9439834e625f37d2f9e6cd475c0c9b8f2e1a96",
+    "Signer #1 public key SHA-1 digest: 3349f987150661b845e317cae82b341f23a91433",
+    "Signer #1 public key MD5 digest: b307df11320c29219ae2438be49ec2fa"
+  ],
+  "checks": {
+    "interface": [
+      "Original dark-until-hover race figures and stationary character widgets",
+      "Stationary main-menu planets; Registry create/select/delete/persistence; original three-race selector with seven SMKs; unavailable campaigns and unimported missions guarded",
+      "Original briefing script: Adjutant in slot 4, simultaneous Duke in slot 1, scrolling original font text, Replay clears prior speakers",
+      "Registry/briefing slide entrance and exit freeze on suspend; speech waits for assembly; five original sounds available; hover projector reaches loop and fades away; original speaker frame; duplicate Start cannot skip exit",
+      "Menu pauses engine/audio; background/resume preserves menu pause; objectives, 16x speed, money, instant/reset, mute, keyboard isolation, manual pause, restart confirmation, end-to-title",
+      "Original command-grid geometry, portrait and Menu bounds verified at 640\u00d7360, 900\u00d7412 and 1280\u00d7720; Terran/Zerg/Protoss command/build cards fit nine cells"
+    ],
+    "hud": [
+      "Original-width 122px Command Center name, all resource counts are bitmap text, three icon queue cells, original queue/bar geometry and live-engine cancellation",
+      "Actual mission trigger messages and mission objectives use bitmap glyphs; battlefield transmission has no card background"
+    ],
+    "font-startup": [
+      "valid font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8",
+      "missing font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8",
+      "unreadable font import: title, custom game, portraits/menu, briefing and campaign all start with unreadable StarDat font8"
+    ],
+    "polish": [
+      "Real Mission 3: no Medic or mission-locked Ghost in card; raw Medic train rejected even with completed Academy, money and instant production; original numeric top clock",
+      "Active upgrade production shows its original icon and Upgrading caption; tapping it cancels correctly",
+      "Live Infantry Armor research raises selected SCV armor icon to level 1 with base+bonus tooltip; upgrade buttons have original icons; skirmish can still train Medics",
+      "One tap selects an own unit; a single ground tap issues an engine move order",
+      "Mineral tap gathers; drag selects a group; cancelled drag, two-finger pan/pinch and background interruption preserve selection without stray orders; pinch changes engine resolution"
+    ],
+    "bot": [
+      "Updated bot WASM loads and runs 600 live lockstep ticks; Zerg workers gather and bot supply is active; unit details and touch exports remain available"
+    ],
+    "source-patch": [
+      "Patch applies cleanly to pinned source archive",
+      "Every patched source is byte-identical to the actual compiled source"
+    ]
+  },
+  "hardwareValidation": "Pending testing on user Android device"
+}

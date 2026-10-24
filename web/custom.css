@@ -1,0 +1,16 @@
+body.custom-setup #overlay{padding:0;overflow:hidden;background:#000}
+body.custom-setup #overlay>.card{display:none}
+#custom-game{position:absolute;inset:0;background:#000 center/640px 480px no-repeat;image-rendering:pixelated;overflow:hidden;text-align:left;touch-action:manipulation}
+#custom-game[hidden]{display:none}
+#custom-game button{margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;touch-action:manipulation}
+#custom-game .custom-button{display:flex;align-items:center;justify-content:center}
+#custom-game #custom-map-list{overflow-y:auto;overflow-x:hidden;scrollbar-color:#445143 #070907;scrollbar-width:thin}
+#custom-game .custom-map{display:block;width:100%;height:21px;padding-left:3px;text-align:left}
+#custom-game .custom-map[aria-selected=true]{background:#10111c}
+#custom-game .custom-select{justify-content:flex-start;background:var(--select-normal) center/100% 100%;padding:0 19px 0 3px}
+#custom-game .custom-select:hover,#custom-game .custom-select:focus-visible{background-image:var(--select-hot)}
+#custom-game .custom-select:disabled{opacity:.35}
+#custom-game .custom-choices{z-index:10;border:1px solid #74755c;background:#060706;box-sizing:border-box;overflow:auto}
+#custom-game .custom-choices button{display:block;width:100%;height:21px;padding-left:3px;text-align:left}
+#custom-game .custom-choices button[aria-selected=true],#custom-game .custom-choices button:hover{background:#171b14}
+#custom-game #custom-status{color:#d6d8ad}

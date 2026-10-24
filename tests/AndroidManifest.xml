@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.openbw.androidtest.validation">
+ <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="35"/>
+ <application android:label="OpenBW native validation"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeParityInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeGameplayInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativePolishInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeFeedbackInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeRevisionInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeMissionExportInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeHoverInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeSaveInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeCampaignInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeControlsInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeBriefingInstrumentation" android:targetPackage="org.openbw.androidtest"/>
+ <instrumentation android:name="org.openbw.androidtest.NativeRevision41Instrumentation" android:targetPackage="org.openbw.androidtest"/>
+</manifest>

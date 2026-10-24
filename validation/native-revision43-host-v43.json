@@ -1,0 +1,1219 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "commands",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "commands"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS innate tech, group ammunition, merge pairs, cargo visibility, battery recharge\n"
+    },
+    {
+      "name": "visibility",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "visibility"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS cloak detection, initial explored structures, current map-revealer vision\n"
+    },
+    {
+      "name": "placement",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "placement"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS original invalid terrain, creep, pylon and geyser warnings\n"
+    },
+    {
+      "name": "cards",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "cards"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS ammunition type 72 capacity 4\nPASS ammunition type 82 capacity 8\nPASS ammunition type 83 capacity 5\nPASS ammunition type 81 capacity 10\nPASS research gates, energy feedback and scenario availability\n"
+    },
+    {
+      "name": "merging",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "merging"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nMERGE 50 order=106 state=0 time=280 bt=300\nMERGE 100 order=106 state=0 time=230 bt=300\nMERGE 150 order=106 state=0 time=180 bt=300\nMERGE 200 order=106 state=0 time=130 bt=300\nMERGE 250 order=106 state=0 time=80 bt=300\nMERGE 300 order=106 state=0 time=30 bt=300\nMERGE RESULT 68 first=0 last=99 A=67:0 B=68:3\nPASS Archon progress 0..99 and completion sound\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nMERGE 50 order=106 state=0 time=261 bt=300\nMERGE 100 order=106 state=0 time=211 bt=300\nMERGE 150 order=106 state=0 time=161 bt=300\nMERGE 200 order=106 state=0 time=111 bt=300\nMERGE 250 order=106 state=0 time=61 bt=300\nMERGE 300 order=106 state=0 time=11 bt=300\nMERGE RESULT 63 first=0 last=99 A=61:0 B=63:3\nPASS Dark Archon progress 0..99 and completion sound\n"
+    },
+    {
+      "name": "cargo",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "cargo"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nCARGO\n3663\t5\t150\t150\t4\t17\t8\n3661\t2\t80\t80\t2\t15\t8\n3660\t0\t40\t40\t1\t13\t8\n3659\t32\t50\t50\t1\t13\t8\nPASS cargo DAT capacity and original transport wireframe pixels\n"
+    },
+    {
+      "name": "warnings",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "warnings"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS resource, energy and three mixed-race supply warnings with advisor sounds\n"
+    },
+    {
+      "name": "retired",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "retired"
+      ],
+      "map": "weave.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=9, fog_player=0\nPASS retired bot save rejected before mutation; human Zerg remains playable\n"
+    },
+    {
+      "name": "map-(2)Eldritch Lake",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(2)Eldritch Lake.scm",
+      "metrics": {},
+      "tail": "openbw_init: map 'Eldritch Lake' 4096x4096, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "map-(2)Gemini Station",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(2)Gemini Station.scm",
+      "metrics": {},
+      "tail": "openbw_init: map 'Gemini Station' 3072x4096, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "map-(2)Giant Steps",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(2)Giant Steps.scm",
+      "metrics": {},
+      "tail": "openbw_init: map 'Giant Steps' 3072x3072, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "map-(4)Crossfire",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(4)Crossfire.scx",
+      "metrics": {},
+      "tail": "openbw_init: map 'Crossfire' 6144x3072, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "map-(4)High Noon",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(4)High Noon.scm",
+      "metrics": {},
+      "tail": "openbw_init: map 'High Noon' 6144x4096, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "map-(4)Perdition's Flame",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(4)Perdition's Flame.scm",
+      "metrics": {},
+      "tail": "openbw_init: map 'Perdition's Flame' 4096x6144, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "map-(4)Sarengo Canyon",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(4)Sarengo Canyon.scm",
+      "metrics": {},
+      "tail": "openbw_init: map 'Sarengo Canyon' 4096x6144, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "map-(4)Watering Hole",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "smoke"
+      ],
+      "map": "(4)Watering Hole.scm",
+      "metrics": {},
+      "tail": "openbw_init: map 'Watering Hole' 6144x6144, slot 0 of 2, units=5, fog_player=0\nPASS map terrain, AI economy/build space and save continuation\n"
+    },
+    {
+      "name": "protoss-high-noon-0",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "protoss",
+        "0",
+        "60000"
+      ],
+      "map": "(4)High Noon.scm",
+      "metrics": {
+        "bases": 4,
+        "gas": 3,
+        "attacks": 12,
+        "minerals": 33070,
+        "gasGathered": 7970,
+        "firstDamage": 10331,
+        "powerRecovered": 0
+      },
+      "tail": "1672,2243 order=2 build=-1\nWORKER 1596,2101 order=82 build=-1\nWORKER 1913,2123 order=81 build=-1\nWORKER 1931,2091 order=86 build=-1\nWORKER 1803,2091 order=86 build=-1\nWORKER 1835,2091 order=151 build=-1\nWORKER 1931,2091 order=86 build=-1\nWORKER 1803,2091 order=86 build=-1\nWORKER 1938,2112 order=85 build=-1\nWORKER 1803,2091 order=85 build=-1\nWORKER 1844,2091 order=86 build=-1\nWORKER 1844,2091 order=86 build=-1\nWORKER 1931,2091 order=86 build=-1\nWORKER 1716,2095 order=151 build=-1\nWORKER 1803,2091 order=85 build=-1\nWORKER 1718,2183 order=85 build=-1\nWORKER 1829,2091 order=86 build=-1\nWORKER 1844,2123 order=86 build=-1\nWORKER 1686,2207 order=85 build=-1\nWORKER 1734,2123 order=86 build=-1\nWORKER 1803,2091 order=90 build=-1\nWORKER 1863,2146 order=85 build=-1\nWORKER 1931,2091 order=86 build=-1\nWORKER 1803,2091 order=87 build=-1\nWORKER 1803,2138 order=90 build=-1\nWORKER 1803,2123 order=87 build=-1\nWORKER 1803,2095 order=85 build=-1\nWORKER 1844,2091 order=87 build=-1\nWORKER 1790,2123 order=86 build=-1\nWORKER 1773,2123 order=86 build=-1\nWORKER 1895,2123 order=86 build=-1\nWORKER 1803,2091 order=86 build=-1\nWORKER 1736,2123 order=86 build=-1\nWORKER 1863,2123 order=86 build=-1\nWORKER 1840,2091 order=86 build=-1\nWORKER 1887,2123 order=87 build=-1\nWORKER 1844,2113 order=86 build=-1\nWORKER 1871,2123 order=86 build=-1\nWORKER 1844,2091 order=85 build=-1\nWORKER 1803,2123 order=86 build=-1\nWORKER 1805,2205 order=85 build=-1\nWORKER 1858,2190 order=90 build=-1\nWORKER 1869,2123 order=86 build=-1\nWORKER 1905,2123 order=90 build=-1\nWORKER 1931,2091 order=87 build=-1\nMETRICS bases=4 gas=3 attacks=12 minerals=33070 gasGathered=7970 firstDamage=10331 powerRecovered=0\nopenbw_init: map 'High Noon' 6144x4096, slot 0 of 2, units=5, fog_player=0\nPASS Protoss level=0 frames=60000 freshInitSave32=exact\n"
+    },
+    {
+      "name": "protoss-high-noon-1",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "protoss",
+        "1",
+        "60000"
+      ],
+      "map": "(4)High Noon.scm",
+      "metrics": {
+        "bases": 4,
+        "gas": 4,
+        "attacks": 12,
+        "minerals": 37662,
+        "gasGathered": 15750,
+        "firstDamage": 10528,
+        "powerRecovered": 0
+      },
+      "tail": "40,1444 order=83 build=-1\nWORKER 3067,1444 order=81 build=-1\nWORKER 2996,1675 order=87 build=-1\nWORKER 3106,1444 order=84 build=-1\nWORKER 3156,1492 order=87 build=-1\nWORKER 3124,1560 order=86 build=-1\nWORKER 3028,1588 order=151 build=-1\nWORKER 3156,1547 order=151 build=-1\nWORKER 3132,1556 order=86 build=-1\nWORKER 3124,1492 order=86 build=-1\nWORKER 3124,1559 order=86 build=-1\nWORKER 2946,1508 order=85 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3090,1588 order=86 build=-1\nWORKER 3156,1492 order=86 build=-1\nWORKER 2948,1483 order=85 build=-1\nWORKER 3105,1588 order=85 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 2960,1492 order=90 build=-1\nWORKER 3156,1547 order=87 build=-1\nWORKER 3080,1588 order=86 build=-1\nWORKER 3144,1492 order=86 build=-1\nWORKER 3028,1588 order=87 build=-1\nWORKER 2969,1492 order=90 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3156,1547 order=86 build=-1\nWORKER 3156,1492 order=86 build=-1\nWORKER 3156,1556 order=86 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3152,1556 order=87 build=-1\nWORKER 2932,1532 order=90 build=-1\nWORKER 3156,1556 order=86 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3124,1588 order=87 build=-1\nWORKER 3124,1556 order=85 build=-1\nWORKER 3122,1502 order=85 build=-1\nWORKER 3124,1494 order=86 build=-1\nWORKER 3156,1490 order=90 build=-1\nWORKER 3124,1492 order=86 build=-1\nWORKER 3012,1492 order=85 build=-1\nWORKER 3033,1554 order=90 build=-1\nWORKER 3095,1588 order=86 build=-1\nWORKER 3124,1492 order=87 build=-1\nWORKER 3028,1620 order=86 build=-1\nMETRICS bases=4 gas=4 attacks=12 minerals=37662 gasGathered=15750 firstDamage=10528 powerRecovered=0\nopenbw_init: map 'High Noon' 6144x4096, slot 0 of 2, units=5, fog_player=0\nPASS Protoss level=1 frames=60000 freshInitSave32=exact\n"
+    },
+    {
+      "name": "protoss-high-noon-2",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "protoss",
+        "2",
+        "60000"
+      ],
+      "map": "(4)High Noon.scm",
+      "metrics": {
+        "bases": 4,
+        "gas": 4,
+        "attacks": 12,
+        "minerals": 34270,
+        "gasGathered": 17006,
+        "firstDamage": 9818,
+        "powerRecovered": 0
+      },
+      "tail": "56,1460 order=151 build=-1\nWORKER 2950,1444 order=81 build=-1\nWORKER 3124,1492 order=85 build=-1\nWORKER 3156,1547 order=151 build=-1\nWORKER 3156,1556 order=87 build=-1\nWORKER 3156,1554 order=90 build=-1\nWORKER 3145,1553 order=85 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3010,1555 order=85 build=-1\nWORKER 2932,1507 order=90 build=-1\nWORKER 3124,1547 order=87 build=-1\nWORKER 3007,1551 order=85 build=-1\nWORKER 3028,1620 order=87 build=-1\nWORKER 3119,1572 order=90 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3124,1563 order=86 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3124,1492 order=90 build=-1\nWORKER 3156,1492 order=86 build=-1\nWORKER 3139,1556 order=87 build=-1\nWORKER 3156,1547 order=86 build=-1\nWORKER 3156,1492 order=86 build=-1\nWORKER 3076,1588 order=151 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3150,1547 order=86 build=-1\nWORKER 3124,1495 order=86 build=-1\nWORKER 3124,1565 order=86 build=-1\nWORKER 3156,1492 order=87 build=-1\nWORKER 3012,1492 order=85 build=-1\nWORKER 3124,1556 order=86 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3028,1599 order=85 build=-1\nWORKER 3028,1588 order=86 build=-1\nWORKER 3028,1596 order=86 build=-1\nWORKER 3124,1588 order=87 build=-1\nWORKER 3085,1588 order=86 build=-1\nWORKER 2948,1483 order=85 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3000,1558 order=85 build=-1\nWORKER 3156,1489 order=90 build=-1\nWORKER 3028,1588 order=86 build=-1\nWORKER 3134,1547 order=86 build=-1\nWORKER 3028,1588 order=87 build=-1\nWORKER 2948,1522 order=85 build=-1\nWORKER 3156,1556 order=86 build=-1\nMETRICS bases=4 gas=4 attacks=12 minerals=34270 gasGathered=17006 firstDamage=9818 powerRecovered=0\nopenbw_init: map 'High Noon' 6144x4096, slot 0 of 2, units=5, fog_player=0\nPASS Protoss level=2 frames=60000 freshInitSave32=exact\n"
+    },
+    {
+      "name": "protoss-weave-hard",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "protoss",
+        "2",
+        "60000"
+      ],
+      "map": "weave.scx",
+      "metrics": {
+        "bases": 2,
+        "gas": 2,
+        "attacks": 10,
+        "minerals": 24050,
+        "gasGathered": 10004,
+        "firstDamage": 16965,
+        "powerRecovered": 0
+      },
+      "tail": "d=1\nBUILDING 156 1664,896 completed=1 powered=1\nBUILDING 156 1728,1152 completed=1 powered=1\nBUILDING 154 1792,1040 completed=1 powered=1\nREQ 60 wave=0 def=1 count=2\nREQ 65 wave=6 def=2 count=13\nREQ 66 wave=4 def=1 count=8\nREQ 70 wave=2 def=1 count=2\nWORKER 2008,167 order=3 build=-1\nWORKER 1981,198 order=3 build=-1\nWORKER 1878,143 order=3 build=-1\nWORKER 1623,875 order=6 build=-1\nWORKER 2008,238 order=3 build=-1\nWORKER 1956,227 order=3 build=-1\nWORKER 1838,104 order=3 build=-1\nWORKER 1888,110 order=3 build=-1\nWORKER 1843,341 order=3 build=-1\nWORKER 1972,170 order=3 build=-1\nWORKER 1768,148 order=3 build=-1\nWORKER 1892,340 order=3 build=-1\nWORKER 1823,180 order=3 build=-1\nWORKER 1863,278 order=3 build=-1\nWORKER 1812,116 order=3 build=-1\nWORKER 1905,221 order=3 build=-1\nWORKER 1913,195 order=3 build=-1\nWORKER 1912,292 order=3 build=-1\nWORKER 2005,331 order=3 build=-1\nWORKER 1908,266 order=3 build=-1\nWORKER 2035,239 order=3 build=-1\nWORKER 1780,116 order=3 build=-1\nWORKER 1948,376 order=3 build=-1\nWORKER 2036,331 order=3 build=-1\nWORKER 2008,195 order=3 build=-1\nWORKER 1853,60 order=3 build=-1\nWORKER 1872,210 order=3 build=-1\nWORKER 1919,364 order=3 build=-1\nWORKER 1867,328 order=3 build=-1\nWORKER 1962,317 order=3 build=-1\nWORKER 1959,350 order=3 build=-1\nWORKER 2018,275 order=3 build=-1\nWORKER 1933,138 order=3 build=-1\nWORKER 1986,375 order=3 build=-1\nWORKER 1998,300 order=3 build=-1\nWORKER 1980,144 order=3 build=-1\nWORKER 1984,116 order=3 build=-1\nWORKER 1800,140 order=3 build=-1\nWORKER 1893,68 order=3 build=-1\nWORKER 2031,365 order=3 build=-1\nMETRICS bases=2 gas=2 attacks=10 minerals=24050 gasGathered=10004 firstDamage=16965 powerRecovered=0\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0\nPASS Protoss level=2 frames=60000 freshInitSave32=exact\n"
+    },
+    {
+      "name": "protoss-eldritch-hard",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "protoss",
+        "2",
+        "60000"
+      ],
+      "map": "(2)Eldritch Lake.scm",
+      "metrics": {
+        "bases": 2,
+        "gas": 2,
+        "attacks": 13,
+        "minerals": 19550,
+        "gasGathered": 10960,
+        "firstDamage": 10833,
+        "powerRecovered": 0
+      },
+      "tail": "G 157 3968,1184 completed=1 powered=1\nBUILDING 156 3680,1408 completed=1 powered=1\nBUILDING 154 3744,1296 completed=1 powered=1\nREQ 60 wave=0 def=1 count=2\nREQ 65 wave=6 def=2 count=32\nREQ 66 wave=4 def=1 count=24\nREQ 70 wave=2 def=1 count=2\nWORKER 2044,239 order=81 build=-1\nWORKER 1892,105 order=84 build=-1\nWORKER 1956,232 order=84 build=-1\nWORKER 2021,244 order=83 build=-1\nWORKER 2020,267 order=82 build=-1\nWORKER 1997,199 order=81 build=-1\nWORKER 2058,324 order=3 build=-1\nWORKER 2170,183 order=3 build=-1\nWORKER 2132,196 order=3 build=-1\nWORKER 1996,234 order=3 build=-1\nWORKER 2192,222 order=3 build=-1\nWORKER 1993,89 order=3 build=-1\nWORKER 2228,164 order=3 build=-1\nWORKER 2167,210 order=3 build=-1\nWORKER 2091,123 order=3 build=-1\nWORKER 2052,157 order=3 build=-1\nWORKER 2028,126 order=3 build=-1\nWORKER 2054,218 order=3 build=-1\nWORKER 2063,181 order=3 build=-1\nWORKER 1928,87 order=3 build=-1\nWORKER 1959,173 order=3 build=-1\nWORKER 1945,226 order=3 build=-1\nWORKER 2132,100 order=3 build=-1\nWORKER 2058,128 order=3 build=-1\nWORKER 2024,35 order=3 build=-1\nWORKER 1982,124 order=3 build=-1\nWORKER 2199,190 order=3 build=-1\nWORKER 1972,283 order=3 build=-1\nWORKER 2097,150 order=3 build=-1\nWORKER 1908,194 order=3 build=-1\nWORKER 2226,117 order=3 build=-1\nWORKER 2020,196 order=3 build=-1\nWORKER 1956,61 order=3 build=-1\nWORKER 2228,228 order=3 build=-1\nWORKER 2067,244 order=82 build=-1\nWORKER 2140,263 order=3 build=-1\nWORKER 2036,61 order=3 build=-1\nWORKER 2134,154 order=3 build=-1\nWORKER 2143,127 order=3 build=-1\nWORKER 1956,120 order=3 build=-1\nMETRICS bases=2 gas=2 attacks=13 minerals=19550 gasGathered=10960 firstDamage=10833 powerRecovered=0\nopenbw_init: map 'Eldritch Lake' 4096x4096, slot 0 of 2, units=5, fog_player=0\nPASS Protoss level=2 frames=60000 freshInitSave32=exact\n"
+    },
+    {
+      "name": "protoss-power-recovery",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "protoss",
+        "2",
+        "60000",
+        "disrupt"
+      ],
+      "map": "(4)High Noon.scm",
+      "metrics": {
+        "bases": 4,
+        "gas": 4,
+        "attacks": 12,
+        "minerals": 34502,
+        "gasGathered": 17166,
+        "firstDamage": 9818,
+        "powerRecovered": 18628
+      },
+      "tail": "1,1437 order=83 build=-1\nWORKER 3156,1492 order=86 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3140,1444 order=82 build=-1\nWORKER 2948,1483 order=85 build=-1\nWORKER 3156,1556 order=87 build=-1\nWORKER 2948,1483 order=85 build=-1\nWORKER 3156,1492 order=86 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3156,1556 order=86 build=-1\nWORKER 3124,1556 order=87 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 2990,1493 order=85 build=-1\nWORKER 3124,1492 order=86 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 2932,1507 order=85 build=-1\nWORKER 3156,1492 order=87 build=-1\nWORKER 3124,1539 order=86 build=-1\nWORKER 3133,1556 order=86 build=-1\nWORKER 3156,1556 order=86 build=-1\nWORKER 3156,1547 order=90 build=-1\nWORKER 3124,1588 order=87 build=-1\nWORKER 3053,1588 order=86 build=-1\nWORKER 3124,1494 order=87 build=-1\nWORKER 3156,1492 order=90 build=-1\nWORKER 3124,1574 order=86 build=-1\nWORKER 2977,1551 order=85 build=-1\nWORKER 3125,1556 order=86 build=-1\nWORKER 3156,1492 order=86 build=-1\nWORKER 3124,1547 order=86 build=-1\nWORKER 2957,1517 order=90 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3030,1588 order=87 build=-1\nWORKER 3124,1500 order=86 build=-1\nWORKER 3124,1588 order=86 build=-1\nWORKER 3124,1556 order=86 build=-1\nWORKER 3028,1620 order=87 build=-1\nWORKER 3116,1543 order=85 build=-1\nWORKER 2946,1508 order=85 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3028,1588 order=86 build=-1\nWORKER 2996,1620 order=86 build=-1\nWORKER 3028,1588 order=86 build=-1\nWORKER 3028,1620 order=86 build=-1\nWORKER 3069,1588 order=86 build=-1\nMETRICS bases=4 gas=4 attacks=12 minerals=34502 gasGathered=17166 firstDamage=9818 powerRecovered=18628\nopenbw_init: map 'High Noon' 6144x4096, slot 0 of 2, units=5, fog_player=0\nPASS Protoss level=2 frames=60000 freshInitSave32=exact\n"
+    },
+    {
+      "name": "terran-high-noon-hard",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "ai",
+        "2",
+        "60000"
+      ],
+      "map": "(4)High Noon.scm",
+      "metrics": {
+        "advancedTypesSeen": [
+          1,
+          9,
+          12,
+          34
+        ],
+        "completedBases": 4,
+        "completedRefineries": 4,
+        "mineralsGathered": 33634,
+        "gasGathered": 14596
+      },
+      "tail": "20 queuedType=-1 state=2 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=3118,1588 order=86 target=3136,1616 queuedType=-1 state=2 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 110 pos=3840,320 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1310723 can5=0\nU 7 pos=3003,1561 order=85 target=3136,1616 queuedType=-1 state=1 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=2900,1509 order=85 target=3168,1520 queuedType=-1 state=1 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=3071,1588 order=87 target=3072,1608 queuedType=-1 state=5 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=3098,1588 order=86 target=3136,1616 queuedType=-1 state=2 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=3124,1588 order=87 target=3132,1606 queuedType=-1 state=5 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=3124,1506 order=86 target=3168,1520 queuedType=-1 state=2 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=3028,1588 order=86 target=3072,1616 queuedType=-1 state=2 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 7 pos=3124,1588 order=86 target=3136,1616 queuedType=-1 state=2 time=0 build=-1 secondary=23:0 queue=0 status=9633793 can5=0\nU 106 pos=3616,304 order=23 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1310723 can5=0\nREQ 0 wave=0 def=2 count=39\nREQ 1 wave=0 def=4 count=4\nREQ 2 wave=0 def=1 count=5\nREQ 3 wave=0 def=1 count=7\nREQ 5 wave=0 def=1 count=7\nREQ 8 wave=0 def=1 count=11\nREQ 9 wave=0 def=3 count=3\nREQ 12 wave=0 def=2 count=3\nREQ 32 wave=0 def=1 count=7\nREQ 58 wave=0 def=1 count=1\nSUPPLY 374/384\nPASS original AI level 2 frames 60000\n"
+    },
+    {
+      "name": "terran-weave-hard",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "ai",
+        "2",
+        "60000"
+      ],
+      "map": "weave.scx",
+      "metrics": {
+        "advancedTypesSeen": [
+          1,
+          9,
+          12,
+          34
+        ],
+        "completedBases": 2,
+        "completedRefineries": 2,
+        "mineralsGathered": 24050,
+        "gasGathered": 10924
+      },
+      "tail": " 110 pos=1792,864 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1310723 can5=0\nU 7 pos=1978,311 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=1860,348 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 109 pos=1744,1152 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1310723 can5=0\nU 7 pos=1956,215 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=1865,126 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=1920,295 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=1979,249 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=1831,335 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=2005,214 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=1991,142 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 7 pos=1863,195 order=3 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1245185 can5=0\nU 106 pos=1792,1040 order=23 target=0,0 queuedType=-1 state=0 time=0 build=-1 secondary=23:0 queue=0 status=1310723 can5=0\nREQ 0 wave=4 def=2 count=22\nREQ 2 wave=4 def=1 count=1\nREQ 3 wave=0 def=1 count=1\nREQ 5 wave=2 def=1 count=3\nREQ 8 wave=4 def=1 count=1\nREQ 32 wave=0 def=1 count=5\nREQ 58 wave=0 def=1 count=1\nSUPPLY 200/200\nPASS original AI level 2 frames 60000\n"
+    },
+    {
+      "name": "mission-terrantutorial",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "50",
+        "2400"
+      ],
+      "map": "terrantutorial.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Terran Tutorial' 2048x2048, slot 1 of 1, units=19, fog_player=1\nPASS mission 50 frames=2400 initialFogSnapshots=11 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran01",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "1",
+        "2400"
+      ],
+      "map": "terran01.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T1) Wasteland' 2048x2048, slot 1 of 1, units=12, fog_player=1\nPASS mission 1 frames=2400 initialFogSnapshots=6 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran02",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "2",
+        "2400"
+      ],
+      "map": "terran02.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T2) Backwater Station' 2048x2048, slot 1 of 1, units=11, fog_player=1\nPASS mission 2 frames=2400 initialFogSnapshots=10 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran03",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "3",
+        "2400"
+      ],
+      "map": "terran03.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T3) Desperate Alliance' 3072x3072, slot 1 of 1, units=34, fog_player=1\nPASS mission 3 frames=2400 initialFogSnapshots=23 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran04",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "4",
+        "2400"
+      ],
+      "map": "terran04.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Untitled Scenario' 4096x4096, slot 0 of 1, units=12, fog_player=0\nPASS mission 4 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran05",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "5",
+        "2400"
+      ],
+      "map": "terran05.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T5) The Antigan Revolt' 3072x3072, slot 0 of 1, units=9, fog_player=0\nPASS mission 5 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran06",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "6",
+        "2400"
+      ],
+      "map": "terran06.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T6) New Year's Day' 3072x3072, slot 0 of 1, units=8, fog_player=0\nPASS mission 6 frames=2400 initialFogSnapshots=1 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran08",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "8",
+        "2400"
+      ],
+      "map": "terran08.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T8) The Trump Card' 4096x3072, slot 0 of 1, units=39, fog_player=0\nPASS mission 8 frames=2400 initialFogSnapshots=33 outcome=2 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran09",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "9",
+        "2400"
+      ],
+      "map": "terran09.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Big Push' 4096x4096, slot 0 of 1, units=21, fog_player=0\nPASS mission 9 frames=2400 initialFogSnapshots=6 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran11",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "11",
+        "2400"
+      ],
+      "map": "terran11.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T11) New Gettysburg' 4096x3072, slot 0 of 1, units=18, fog_player=0\nPASS mission 11 frames=2400 initialFogSnapshots=15 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-terran12",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "12",
+        "2400"
+      ],
+      "map": "terran12.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'T12) The Hammer Falls' 4096x4096, slot 1 of 1, units=31, fog_player=1\nPASS mission 12 frames=2400 initialFogSnapshots=20 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg01",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "101",
+        "2400"
+      ],
+      "map": "zerg01.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Z1) Among the Ruins' 2048x2048, slot 3 of 1, units=19, fog_player=3\nPASS mission 101 frames=2400 initialFogSnapshots=15 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg02",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "102",
+        "2400"
+      ],
+      "map": "zerg02.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Z2) Egression' 3072x3072, slot 3 of 1, units=17, fog_player=3\nPASS mission 102 frames=2400 initialFogSnapshots=22 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg03",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "103",
+        "2400"
+      ],
+      "map": "zerg03.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'staredit\\wav\\Z3B00zad.wav' 2048x3072, slot 3 of 1, units=21, fog_player=3\nPASS mission 103 frames=2400 initialFogSnapshots=16 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg04",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "104",
+        "2400"
+      ],
+      "map": "zerg04.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Z4) Agent of the Swarm' 3072x3072, slot 3 of 1, units=28, fog_player=3\nPASS mission 104 frames=2400 initialFogSnapshots=17 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg05",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "105",
+        "2400"
+      ],
+      "map": "zerg05.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Assimilation' 4096x4096, slot 3 of 1, units=9, fog_player=3\nPASS mission 105 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg06",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "106",
+        "2400"
+      ],
+      "map": "zerg06.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Z6) The Dark Templar' 4096x4096, slot 3 of 1, units=23, fog_player=3\nPASS mission 106 frames=2400 initialFogSnapshots=17 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg07",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "107",
+        "2400"
+      ],
+      "map": "zerg07.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Z7) The Culling' 4096x4096, slot 3 of 1, units=20, fog_player=3\nPASS mission 107 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg08",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "108",
+        "2400"
+      ],
+      "map": "zerg08.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Z8) The Dark Templar' 4096x4096, slot 3 of 1, units=36, fog_player=3\nPASS mission 108 frames=2400 initialFogSnapshots=20 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg09",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "109",
+        "2400"
+      ],
+      "map": "zerg09.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Z9) The Invasion of Aiur' 4096x4096, slot 3 of 1, units=21, fog_player=3\nPASS mission 109 frames=2400 initialFogSnapshots=20 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-zerg10",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "110",
+        "2400"
+      ],
+      "map": "zerg10.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Untitled Scenario' 4096x8192, slot 3 of 1, units=21, fog_player=3\nPASS mission 110 frames=2400 initialFogSnapshots=21 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss01",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "201",
+        "2400"
+      ],
+      "map": "protoss01.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P1) First Strike' 3072x3072, slot 7 of 1, units=8, fog_player=7\nPASS mission 201 frames=2400 initialFogSnapshots=16 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss02",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "202",
+        "2400"
+      ],
+      "map": "protoss02.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P2) Into the Flames' 3072x2048, slot 7 of 1, units=12, fog_player=7\nPASS mission 202 frames=2400 initialFogSnapshots=14 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss03",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "203",
+        "2400"
+      ],
+      "map": "protoss03.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P3) Higher Ground' 4096x3072, slot 7 of 1, units=18, fog_player=7\nPASS mission 203 frames=2400 initialFogSnapshots=18 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss04",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "204",
+        "2400"
+      ],
+      "map": "protoss04.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P4) The Hunt for Tassadar' 4096x4096, slot 7 of 1, units=10, fog_player=7\nPASS mission 204 frames=2400 initialFogSnapshots=1 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss05",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "205",
+        "2400"
+      ],
+      "map": "protoss05.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P5) Choosing Sides' 4096x4096, slot 7 of 1, units=17, fog_player=7\nPASS mission 205 frames=2400 initialFogSnapshots=14 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss06",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "206",
+        "2400"
+      ],
+      "map": "protoss06.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Protoss 06' 4096x4096, slot 7 of 1, units=3, fog_player=7\nPASS mission 206 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss07",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "207",
+        "2400"
+      ],
+      "map": "protoss07.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P7) Homeland' 4096x4096, slot 7 of 1, units=44, fog_player=7\nPASS mission 207 frames=2400 initialFogSnapshots=34 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss08",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "208",
+        "2400"
+      ],
+      "map": "protoss08.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P8) The Trial of Tassadar' 4096x4096, slot 7 of 1, units=19, fog_player=7\nPASS mission 208 frames=2400 initialFogSnapshots=23 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss09",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "209",
+        "2400"
+      ],
+      "map": "protoss09.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'P9) Shadow Hunters' 4096x4096, slot 7 of 1, units=15, fog_player=7\nPASS mission 209 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-protoss10",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "210",
+        "2400"
+      ],
+      "map": "protoss10.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Untitled Scenario' 6144x6144, slot 1 of 1, units=16, fog_player=1\nPASS mission 210 frames=2400 initialFogSnapshots=15 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss01",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "301",
+        "2400"
+      ],
+      "map": "expprotoss01.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Escape From Aiur' 4096x3072, slot 2 of 1, units=10, fog_player=2\nPASS mission 301 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss02",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "302",
+        "2400"
+      ],
+      "map": "expprotoss02.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Dunes of Shakuras' 3072x3072, slot 5 of 1, units=8, fog_player=5\nPASS mission 302 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss03",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "303",
+        "2400"
+      ],
+      "map": "expprotoss03.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Legacy of the Xel'Naga' 3072x3072, slot 1 of 1, units=13, fog_player=1\nPASS mission 303 frames=2400 initialFogSnapshots=29 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss04",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "304",
+        "2400"
+      ],
+      "map": "expprotoss04.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Quest for Uraj' 3072x4096, slot 1 of 1, units=2, fog_player=1\nPASS mission 304 frames=2400 initialFogSnapshots=12 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss05",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "305",
+        "2400"
+      ],
+      "map": "expprotoss05.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Battle of Braxis' 4096x4096, slot 1 of 1, units=15, fog_player=1\nPASS mission 305 frames=2400 initialFogSnapshots=12 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss06",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "306",
+        "2400"
+      ],
+      "map": "expprotoss06.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Return to Char' 4096x4096, slot 1 of 1, units=25, fog_player=1\nPASS mission 306 frames=2400 initialFogSnapshots=31 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss07",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "307",
+        "2400"
+      ],
+      "map": "expprotoss07.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Insurgent' 4096x4096, slot 1 of 1, units=39, fog_player=1\nPASS mission 307 frames=2400 initialFogSnapshots=31 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expprotoss08",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "308",
+        "2400"
+      ],
+      "map": "expprotoss08.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Countdown' 6144x6144, slot 1 of 1, units=36, fog_player=1\nPASS mission 308 frames=2400 initialFogSnapshots=74 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran01",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "401",
+        "2400"
+      ],
+      "map": "expterran01.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'First Strike' 3072x3072, slot 5 of 1, units=17, fog_player=5\nPASS mission 401 frames=2400 initialFogSnapshots=14 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran02",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "402",
+        "2400"
+      ],
+      "map": "expterran02.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Raid on the Dylarian Shipyards' 6144x4096, slot 6 of 1, units=1, fog_player=6\nPASS mission 402 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran03",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "403",
+        "2400"
+      ],
+      "map": "expterran03.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Ruins of Tarsonis' 3072x4096, slot 6 of 1, units=1, fog_player=6\nPASS mission 403 frames=2400 initialFogSnapshots=3 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran04",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "404",
+        "2400"
+      ],
+      "map": "expterran04.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Assault on Korhal' 4096x4096, slot 6 of 1, units=21, fog_player=6\nPASS mission 404 frames=2400 initialFogSnapshots=24 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran05a",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "405",
+        "2400"
+      ],
+      "map": "expterran05a.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Emperor's Fall (Ground Zero)' 6144x4096, slot 6 of 1, units=44, fog_player=6\nPASS mission 405 frames=2400 initialFogSnapshots=65 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran05b",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "415",
+        "2400"
+      ],
+      "map": "expterran05b.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Emperor's Fall (Birds of War)' 6144x4096, slot 6 of 1, units=22, fog_player=6\nPASS mission 415 frames=2400 initialFogSnapshots=42 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran06",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "406",
+        "2400"
+      ],
+      "map": "expterran06.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Emperor's Flight' 4096x4096, slot 6 of 1, units=1, fog_player=6\nPASS mission 406 frames=2400 initialFogSnapshots=17 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran07",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "407",
+        "2400"
+      ],
+      "map": "expterran07.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Patriot's Blood' 6144x4096, slot 2 of 1, units=0, fog_player=2\nPASS mission 407 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expterran08",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "408",
+        "2400"
+      ],
+      "map": "expterran08.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'To Chain the Beast' 6144x6144, slot 6 of 1, units=37, fog_player=6\nPASS mission 408 frames=2400 initialFogSnapshots=67 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg01",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "501",
+        "2400"
+      ],
+      "map": "expzerg01.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Untitled Scenario' 3072x4096, slot 3 of 1, units=8, fog_player=3\nPASS mission 501 frames=2400 initialFogSnapshots=7 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg02",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "502",
+        "2400"
+      ],
+      "map": "expzerg02.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Untitled Scenario' 4096x4096, slot 3 of 1, units=1, fog_player=3\nPASS mission 502 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg03",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "503",
+        "2400"
+      ],
+      "map": "expzerg03.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Kel-Morian Combine' 4096x4096, slot 3 of 1, units=28, fog_player=3\nPASS mission 503 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg04a",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "504",
+        "2400"
+      ],
+      "map": "expzerg04a.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Liberation of Korhal' 6144x2048, slot 3 of 1, units=28, fog_player=3\nPASS mission 504 frames=2400 initialFogSnapshots=17 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg04b",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "514",
+        "2400"
+      ],
+      "map": "expzerg04b.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Liberation of Korhal' 6144x2048, slot 3 of 1, units=30, fog_player=3\nPASS mission 514 frames=2400 initialFogSnapshots=18 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg04c",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "524",
+        "2400"
+      ],
+      "map": "expzerg04c.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Liberation of Korhal' 6144x2048, slot 3 of 1, units=32, fog_player=3\nPASS mission 524 frames=2400 initialFogSnapshots=19 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg04d",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "534",
+        "2400"
+      ],
+      "map": "expzerg04d.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Liberation of Korhal' 6144x2048, slot 3 of 1, units=34, fog_player=3\nPASS mission 534 frames=2400 initialFogSnapshots=20 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg04e",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "544",
+        "2400"
+      ],
+      "map": "expzerg04e.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Liberation of Korhal' 6144x2048, slot 3 of 1, units=36, fog_player=3\nPASS mission 544 frames=2400 initialFogSnapshots=21 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg04f",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "554",
+        "2400"
+      ],
+      "map": "expzerg04f.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Liberation of Korhal' 6144x2048, slot 3 of 1, units=38, fog_player=3\nPASS mission 554 frames=2400 initialFogSnapshots=22 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg05",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "505",
+        "2400"
+      ],
+      "map": "expzerg05.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'True Colors' 4096x6144, slot 3 of 1, units=2, fog_player=3\nPASS mission 505 frames=2400 initialFogSnapshots=254 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg06",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "506",
+        "2400"
+      ],
+      "map": "expzerg06.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Fury of the Swarm' 6144x4096, slot 3 of 1, units=69, fog_player=3\nPASS mission 506 frames=2400 initialFogSnapshots=71 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg07",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "507",
+        "2400"
+      ],
+      "map": "expzerg07.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Drawing of the Web' 4096x4096, slot 3 of 1, units=30, fog_player=3\nPASS mission 507 frames=2400 initialFogSnapshots=90 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg08",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "508",
+        "2400"
+      ],
+      "map": "expzerg08.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'To Slay the Beast' 6144x3072, slot 3 of 1, units=37, fog_player=3\nPASS mission 508 frames=2400 initialFogSnapshots=24 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg09",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "509",
+        "2400"
+      ],
+      "map": "expzerg09.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'The Reckoning' 4096x3072, slot 3 of 1, units=53, fog_player=3\nPASS mission 509 frames=2400 initialFogSnapshots=83 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expzerg10",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "510",
+        "2400"
+      ],
+      "map": "expzerg10.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Omega' 6144x6144, slot 3 of 1, units=42, fog_player=3\nPASS mission 510 frames=2400 initialFogSnapshots=32 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    },
+    {
+      "name": "mission-expbonus",
+      "passed": true,
+      "exitCode": 0,
+      "args": [
+        "mission",
+        "599",
+        "2400"
+      ],
+      "map": "expbonus.mpq",
+      "metrics": {},
+      "tail": "openbw_init: map 'Untitled Scenario' 3072x3072, slot 1 of 1, units=1, fog_player=1\nPASS mission 599 frames=2400 initialFogSnapshots=0 outcome=0 saveContinuation=exact fullPlaythrough=false\n"
+    }
+  ],
+  "originalCoreAssets": true,
+  "resourceAssistance": false,
+  "passiveHumanHealedDuringLongAiTests": true,
+  "missionCount": 64,
+  "missionFrames": 2400,
+  "fullPlaythrough": false,
+  "sourceSha256": {
+    "native/runtime.cpp": "1e0d897ebff58b56c159ce9a173fadca8df35382545040873972a81b84e04950",
+    "native/save_state.h": "3f2379d38017a7e67e827e338f14bf3db20e87573548984a1021b459dafbab1d",
+    "scripts/prepare_native.py": "761731a2101be0b6c3bb02cb8acad243865850f79fb53740fa1e09751e9c2b87",
+    "tests/build_native_host.py": "529dc7200096fe9ad9059eca9e3816d634299cd40cf9101f52e2e432616d6081",
+    "tests/native_revision41.cpp": "e7741307e9b285a880d3312cd3c23b56bc43d745db1f118bd7d1da557622b141",
+    "tests/native_revision42.cpp": "c4b8ca65574ab11e35deb0be3862b45dd79cc924b92ed702a1991e8195370703",
+    "tests/native_revision43.cpp": "6f548e17c356260e5d1f460e7d5b194e2847919b76aed6d99ba4732627a97d25",
+    "tests/run_revision43.py": "ecf7f23867eabfc03b03fe1006c4104555723b8ca83709315788fc576fe2a71f",
+    "patches/campaign.patch": "ca688d15ba6d24a64c3b9d260bd208ee3dbed3c927c36d936deaa92f70a9d609",
+    "patches/native-ai43.patch": "db4d250f42c33f7067e057be6e3c471c8777f0de66afd35422437b2ff5f44cd5",
+    "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+    "patches/native-controls38.patch": "04f5614d3b4797215cc58442ed18e21bb39891cdfc01d79d7f557e373f4487d0",
+    "patches/native-finale37.patch": "f1050e7a66ee1a37f7159bfcf72f4a7fc94585da4e3ca4aeda21442782165f66",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+    "patches/native-polish39.patch": "9a323dd664fa4685d0cee3ab531791c59ae970273eaa71ad4b65a78dc210a0a8",
+    "patches/native-polish40.patch": "2b588458a28921ad8ff8e5f88e3c573ec54e64490f29ae8d6b9d83deaeccfc49",
+    "patches/native-polish41.patch": "4776feefa2455e2114f97cc5ffb4b286cb072cfec1ff3bc2fe85f3f34cd75ea5",
+    "patches/native-polish42.patch": "92d7b77fc836e310d235f64b7c97029f82a422500501d2c2f94b32bcf045b667",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6"
+  },
+  "hostExecutableSha256": "4332df0779c2785204f3030fc6da9a6710137b627f24ee7e0830884e770b3ed3"
+}

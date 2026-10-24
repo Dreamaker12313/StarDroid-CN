@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "version": "1.0",
+  "versionCode": 67,
+  "apkSha256": "72cf2ed1e1cf8594e85133e46dbbcae6f762c1a16913c4e725bb9b0df1660214",
+  "apkBytes": 2228298,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "updateIdentityFromBuild66Verified": true,
+  "unchangedNativeAndAssetEntries": 76,
+  "nativeEngineRebuilt": false,
+  "gameplayChanged": false,
+  "lintErrors": 0,
+  "lintWarnings": 10,
+  "physicalDevicesTested": false,
+  "reportedCrashReproduced": false
+}

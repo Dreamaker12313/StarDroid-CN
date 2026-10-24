@@ -1,0 +1,37 @@
+{
+  "version": "0.30",
+  "passed": true,
+  "scope": "Synthetic native engine fixtures; no original game archives or maps",
+  "originalGameAssets": false,
+  "originalCampaignPlaythrough": false,
+  "zerg3PrematureVictoryReproduced": false,
+  "checks": [
+    "six trap types: hidden, detected, revealed, fog and no armor",
+    "hero command cards, mission restrictions and energy gating",
+    "Drone/SCV/Probe refinery taps and gas orders",
+    "four door types: iscript signal context and collision transitions",
+    "force allies, shared victory/vision and map invincibility/burrow flags",
+    "six traps acquire enemies, animate reveal and begin firing",
+    "Lurker combat burrow respects alliances",
+    "offscreen acknowledgments, neutral critter and race-specific completion speech",
+    "nearby selection radius, fog and explicit order protection",
+    "synthetic countdown and delayed trigger resume"
+  ],
+  "checkGroups": 10,
+  "stdout": "PASS six trap types: hidden, detected, revealed, fog and no armor\nPASS hero command cards, mission restrictions and energy gating\nPASS Drone/SCV/Probe refinery taps and gas orders\nPASS four door types: iscript signal context and collision transitions\nPASS force allies, shared victory/vision and map invincibility/burrow flags\nPASS six traps acquire enemies, animate reveal and begin firing\nPASS Lurker combat burrow respects alliances\nPASS offscreen acknowledgments, neutral critter and race-specific completion speech\nPASS nearby selection radius, fog and explicit order protection\nPASS synthetic countdown and delayed trigger resume\nFEEDBACK_RESULT PASS\n",
+  "stderr": "",
+  "binarySha256": "af85fce443220e817e6874acfeb8c757fdf8d36f9158d34dd0197ac79d952328",
+  "sourceSha256": {
+    "UPSTREAM.json": "33afc9db197e6c6d693c05dc792cb8cd10332ee76f1969aa392ee713049c71af",
+    "native/runtime.cpp": "9f779547d4d80bd9afa54f9bbfbaea48e9a39482cc0a775a2c3bdd7bddff5186",
+    "native/audio.h": "b09844e77190a80efc9853321a82a75bde4cba0e23847492a83db1c82ba8d73a",
+    "patches/campaign.patch": "3e5601478ad8302f66eea45052239e28238fdee3c79eb0c5d623042c35fcc43a",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "scripts/prepare_native.py": "8b0b7e18526abf36e0f3ce4da74da9ee48fa3f55c7b3fd588dc4465abf789401",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "scripts/prepare_feedback.py": "b15e627e5d16c7dcb881186746311ba64f599f216b81549b40f7db1f42b2a694",
+    "tests/build_native_host.py": "5f476776b4630e2689b05d45b3d85f7bc0e616414847bab68a777d9f877e6df1",
+    "tests/native_feedback.cpp": "4950cd44fdfd77cc853f530a132ede52ca2006b73b0e6ade8a34bfd976ca41ea"
+  }
+}

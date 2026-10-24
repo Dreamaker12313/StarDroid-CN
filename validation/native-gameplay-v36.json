@@ -1,0 +1,842 @@
+{
+  "passed": true,
+  "passCount": 202,
+  "failCount": 0,
+  "checks": [
+    {
+      "test": "Missing prerequisite stays disabled, race 1",
+      "passed": true
+    },
+    {
+      "test": "Blocked placement and empty minerals, race 1",
+      "passed": true
+    },
+    {
+      "test": "Build Supply Depot",
+      "passed": true
+    },
+    {
+      "test": "Build Refinery",
+      "passed": true
+    },
+    {
+      "test": "Build Barracks",
+      "passed": true
+    },
+    {
+      "test": "Build Engineering Bay",
+      "passed": true
+    },
+    {
+      "test": "Build Academy",
+      "passed": true
+    },
+    {
+      "test": "Build Bunker",
+      "passed": true
+    },
+    {
+      "test": "Build Missile Turret",
+      "passed": true
+    },
+    {
+      "test": "Build Factory",
+      "passed": true
+    },
+    {
+      "test": "Build Starport",
+      "passed": true
+    },
+    {
+      "test": "Build Science Facility",
+      "passed": true
+    },
+    {
+      "test": "Build Armory",
+      "passed": true
+    },
+    {
+      "test": "Build Command Center",
+      "passed": true
+    },
+    {
+      "test": "Addon Comsat Station",
+      "passed": true
+    },
+    {
+      "test": "Addon Machine Shop",
+      "passed": true
+    },
+    {
+      "test": "Addon Control Tower",
+      "passed": true
+    },
+    {
+      "test": "Addon Covert Ops",
+      "passed": true
+    },
+    {
+      "test": "Addon Physics Lab",
+      "passed": true
+    },
+    {
+      "test": "Addon Nuclear Silo",
+      "passed": true
+    },
+    {
+      "test": "Research Stim Packs",
+      "passed": true
+    },
+    {
+      "test": "Research Lockdown",
+      "passed": true
+    },
+    {
+      "test": "Research EMP Shockwave",
+      "passed": true
+    },
+    {
+      "test": "Research Spider Mines",
+      "passed": true
+    },
+    {
+      "test": "Research Tank Siege Mode",
+      "passed": true
+    },
+    {
+      "test": "Research Irradiate",
+      "passed": true
+    },
+    {
+      "test": "Research Yamato Gun",
+      "passed": true
+    },
+    {
+      "test": "Research Cloaking Field",
+      "passed": true
+    },
+    {
+      "test": "Research Personnel Cloaking",
+      "passed": true
+    },
+    {
+      "test": "Research Restoration",
+      "passed": true
+    },
+    {
+      "test": "Research Optical Flare",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Infantry Armor",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Vehicle Plating",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Ship Plating",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Infantry Weapons",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Vehicle Weapons",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Ship Weapons",
+      "passed": true
+    },
+    {
+      "test": "Upgrade U-238 Shells",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Ion Thrusters",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Titan Reactor",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Ocular Implants",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Moebius Reactor",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Apollo Reactor",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Colossus Reactor",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Caduceus Reactor",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Charon Booster",
+      "passed": true
+    },
+    {
+      "test": "Produce SCV",
+      "passed": true
+    },
+    {
+      "test": "Produce Marine",
+      "passed": true
+    },
+    {
+      "test": "Produce Firebat",
+      "passed": true
+    },
+    {
+      "test": "Produce Medic",
+      "passed": true
+    },
+    {
+      "test": "Produce Ghost",
+      "passed": true
+    },
+    {
+      "test": "Produce Vulture",
+      "passed": true
+    },
+    {
+      "test": "Produce Goliath",
+      "passed": true
+    },
+    {
+      "test": "Produce Siege Tank",
+      "passed": true
+    },
+    {
+      "test": "Produce Wraith",
+      "passed": true
+    },
+    {
+      "test": "Produce Dropship",
+      "passed": true
+    },
+    {
+      "test": "Produce Science Vessel",
+      "passed": true
+    },
+    {
+      "test": "Produce Battlecruiser",
+      "passed": true
+    },
+    {
+      "test": "Produce Valkyrie",
+      "passed": true
+    },
+    {
+      "test": "Produce Nuclear Missile",
+      "passed": true
+    },
+    {
+      "test": "Mineral, gas and supply rejection, race 1",
+      "passed": true
+    },
+    {
+      "test": "Five-slot queue and exact cancellation refunds, race 1",
+      "passed": true
+    },
+    {
+      "test": "Busy building Lift Off is disabled",
+      "passed": true
+    },
+    {
+      "test": "Lift, blocked landing, free landing and producer lock",
+      "passed": true
+    },
+    {
+      "test": "Addon preview rejects blocked parent/addon footprints",
+      "passed": true
+    },
+    {
+      "test": "Tank requires attached Machine Shop, not another Factory's addon",
+      "passed": true
+    },
+    {
+      "test": "Siege Tank transforms both directions",
+      "passed": true
+    },
+    {
+      "test": "SCV can halt and resume construction",
+      "passed": true
+    },
+    {
+      "test": "Cancel construction race 1",
+      "passed": true
+    },
+    {
+      "test": "Race fixture completes 1",
+      "passed": true
+    },
+    {
+      "test": "Missing prerequisite stays disabled, race 2",
+      "passed": true
+    },
+    {
+      "test": "Blocked placement and empty minerals, race 2",
+      "passed": true
+    },
+    {
+      "test": "Power required for Protoss buildings",
+      "passed": true
+    },
+    {
+      "test": "Build Pylon",
+      "passed": true
+    },
+    {
+      "test": "Build Assimilator",
+      "passed": true
+    },
+    {
+      "test": "Build Gateway",
+      "passed": true
+    },
+    {
+      "test": "Build Forge",
+      "passed": true
+    },
+    {
+      "test": "Build Cybernetics Core",
+      "passed": true
+    },
+    {
+      "test": "Build Photon Cannon",
+      "passed": true
+    },
+    {
+      "test": "Build Shield Battery",
+      "passed": true
+    },
+    {
+      "test": "Build Pylon",
+      "passed": true
+    },
+    {
+      "test": "Build Citadel of Adun",
+      "passed": true
+    },
+    {
+      "test": "Build Robotics Facility",
+      "passed": true
+    },
+    {
+      "test": "Build Stargate",
+      "passed": true
+    },
+    {
+      "test": "Build Pylon",
+      "passed": true
+    },
+    {
+      "test": "Build Robotics Support Bay",
+      "passed": true
+    },
+    {
+      "test": "Build Observatory",
+      "passed": true
+    },
+    {
+      "test": "Build Fleet Beacon",
+      "passed": true
+    },
+    {
+      "test": "Build Templar Archives",
+      "passed": true
+    },
+    {
+      "test": "Build Pylon",
+      "passed": true
+    },
+    {
+      "test": "Build Arbiter Tribunal",
+      "passed": true
+    },
+    {
+      "test": "Build Nexus",
+      "passed": true
+    },
+    {
+      "test": "Research Psionic Storm",
+      "passed": true
+    },
+    {
+      "test": "Research Hallucination",
+      "passed": true
+    },
+    {
+      "test": "Research Recall",
+      "passed": true
+    },
+    {
+      "test": "Research Stasis Field",
+      "passed": true
+    },
+    {
+      "test": "Research Disruption Web",
+      "passed": true
+    },
+    {
+      "test": "Research Mind Control",
+      "passed": true
+    },
+    {
+      "test": "Research Maelstrom ",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Armor",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Plating",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Ground Weapons",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Air Weapons",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Plasma Shields",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Singularity Charge",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Leg Enhancements",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Scarab Damage",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Reaver Capacity",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Gravitic Drive",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Sensor Array",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Gravitic Boosters",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Khaydarin Amulet",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Apial Sensors",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Gravitic Thrusters",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Carrier Capacity",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Khaydarin Core",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Argus Jewel",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Argus Talisman",
+      "passed": true
+    },
+    {
+      "test": "Produce Probe",
+      "passed": true
+    },
+    {
+      "test": "Produce Zealot",
+      "passed": true
+    },
+    {
+      "test": "Produce Dragoon",
+      "passed": true
+    },
+    {
+      "test": "Produce High Templar",
+      "passed": true
+    },
+    {
+      "test": "Produce Dark Templar",
+      "passed": true
+    },
+    {
+      "test": "Produce Shuttle",
+      "passed": true
+    },
+    {
+      "test": "Produce Reaver",
+      "passed": true
+    },
+    {
+      "test": "Produce Observer",
+      "passed": true
+    },
+    {
+      "test": "Produce Scout",
+      "passed": true
+    },
+    {
+      "test": "Produce Carrier",
+      "passed": true
+    },
+    {
+      "test": "Produce Arbiter",
+      "passed": true
+    },
+    {
+      "test": "Produce Corsair",
+      "passed": true
+    },
+    {
+      "test": "Mineral, gas and supply rejection, race 2",
+      "passed": true
+    },
+    {
+      "test": "Five-slot queue and exact cancellation refunds, race 2",
+      "passed": true
+    },
+    {
+      "test": "Ammunition cost and capacity: Carrier",
+      "passed": true
+    },
+    {
+      "test": "Ammunition cost and capacity: Reaver",
+      "passed": true
+    },
+    {
+      "test": "Merge High Templar",
+      "passed": true
+    },
+    {
+      "test": "Merge Dark Templar",
+      "passed": true
+    },
+    {
+      "test": "Power loss blocks production and restoration enables it",
+      "passed": true
+    },
+    {
+      "test": "Cancel construction race 2",
+      "passed": true
+    },
+    {
+      "test": "Race fixture completes 2",
+      "passed": true
+    },
+    {
+      "test": "Missing prerequisite stays disabled, race 0",
+      "passed": true
+    },
+    {
+      "test": "Blocked placement and empty minerals, race 0",
+      "passed": true
+    },
+    {
+      "test": "Creep required for Zerg buildings",
+      "passed": true
+    },
+    {
+      "test": "Build Hatchery",
+      "passed": true
+    },
+    {
+      "test": "Build Spawning Pool",
+      "passed": true
+    },
+    {
+      "test": "Build Extractor",
+      "passed": true
+    },
+    {
+      "test": "Build Evolution Chamber",
+      "passed": true
+    },
+    {
+      "test": "Build Hydralisk Den",
+      "passed": true
+    },
+    {
+      "test": "Build Creep Colony",
+      "passed": true
+    },
+    {
+      "test": "Morph Sunken Colony",
+      "passed": true
+    },
+    {
+      "test": "Build Creep Colony",
+      "passed": true
+    },
+    {
+      "test": "Morph Spore Colony",
+      "passed": true
+    },
+    {
+      "test": "Morph Lair",
+      "passed": true
+    },
+    {
+      "test": "Build Spire",
+      "passed": true
+    },
+    {
+      "test": "Build Queen's Nest",
+      "passed": true
+    },
+    {
+      "test": "Morph Hive",
+      "passed": true
+    },
+    {
+      "test": "Build Hatchery",
+      "passed": true
+    },
+    {
+      "test": "Build Nydus Canal",
+      "passed": true
+    },
+    {
+      "test": "Build Defiler Mound",
+      "passed": true
+    },
+    {
+      "test": "Build Ultralisk Cavern",
+      "passed": true
+    },
+    {
+      "test": "Morph Greater Spire",
+      "passed": true
+    },
+    {
+      "test": "Research Burrowing",
+      "passed": true
+    },
+    {
+      "test": "Research Spawn Broodling",
+      "passed": true
+    },
+    {
+      "test": "Research Ensnare",
+      "passed": true
+    },
+    {
+      "test": "Research Plague",
+      "passed": true
+    },
+    {
+      "test": "Research Consume",
+      "passed": true
+    },
+    {
+      "test": "Research Lurker Aspect",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Carapace",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Flyer Carapace",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Melee Attacks",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Missile Attacks",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Flyer Attacks",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Ventral Sacs",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Antennae",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Pneumatized Carapace",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Metabolic Boost",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Adrenal Glands",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Muscular Augments",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Grooved Spines",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Gamete Meiosis",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Metasynaptic Node",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Chitinous Plating",
+      "passed": true
+    },
+    {
+      "test": "Upgrade Anabolic Synthesis",
+      "passed": true
+    },
+    {
+      "test": "Produce Drone",
+      "passed": true
+    },
+    {
+      "test": "Produce Zergling",
+      "passed": true
+    },
+    {
+      "test": "Produce Hydralisk",
+      "passed": true
+    },
+    {
+      "test": "Produce Mutalisk",
+      "passed": true
+    },
+    {
+      "test": "Produce Overlord",
+      "passed": true
+    },
+    {
+      "test": "Produce Queen",
+      "passed": true
+    },
+    {
+      "test": "Produce Scourge",
+      "passed": true
+    },
+    {
+      "test": "Produce Defiler",
+      "passed": true
+    },
+    {
+      "test": "Produce Ultralisk",
+      "passed": true
+    },
+    {
+      "test": "Produce Lurker",
+      "passed": true
+    },
+    {
+      "test": "Produce Guardian",
+      "passed": true
+    },
+    {
+      "test": "Produce Devourer",
+      "passed": true
+    },
+    {
+      "test": "Mineral, gas and supply rejection, race 0",
+      "passed": true
+    },
+    {
+      "test": "Egg identity, cancellation and full refund",
+      "passed": true
+    },
+    {
+      "test": "Infest damaged Command Center and produce Infested Terran",
+      "passed": true
+    },
+    {
+      "test": "Nydus exit placement, free cost and bidirectional link",
+      "passed": true
+    },
+    {
+      "test": "Building morph cancellation retains building and 75% refund",
+      "passed": true
+    },
+    {
+      "test": "Lurker burrows and unburrows",
+      "passed": true
+    },
+    {
+      "test": "Cancel construction race 0",
+      "passed": true
+    },
+    {
+      "test": "Race fixture completes 0",
+      "passed": true
+    }
+  ],
+  "version": "0.36",
+  "originalCoreAssets": true,
+  "fullCampaignPlaythrough": false,
+  "binarySha256": "dde75401c1ba8a9051ad2e5d4dc3de7af6077884626dcf649d781a80c84389c8",
+  "sourceSha256": {
+    "native/runtime.cpp": "1773ebe54140c918758c68f5f9dd55faf5dfc9fbdabec6d83aba4d08b02ce14c",
+    "native/save_state.h": "0ce1d94898fe79bb1d2149b3ff75a9e80a1acc9b146bc150b96c10e4dfd07982",
+    "native/audio.h": "b09844e77190a80efc9853321a82a75bde4cba0e23847492a83db1c82ba8d73a",
+    "tests/native_gameplay.cpp": "0072b4b40c19def4dacddfb9469621877dbdd8fed97318c29d30fb12fde956e0",
+    "tests/native_gameplay_cases.h": "dadb24baf8f5b145602263184b1ba6ee5c4e4c68cfad6c03ba524b44d2e6924e",
+    "scripts/prepare_native.py": "26d49ec1fb73857aafe5f2ad591dc32be2782aafee8f0e3112d36bd301786650",
+    "scripts/prepare_feedback.py": "b15e627e5d16c7dcb881186746311ba64f599f216b81549b40f7db1f42b2a694",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "UPSTREAM.json": "33afc9db197e6c6d693c05dc792cb8cd10332ee76f1969aa392ee713049c71af",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/campaign.patch": "3e5601478ad8302f66eea45052239e28238fdee3c79eb0c5d623042c35fcc43a",
+    "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6",
+    "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c"
+  },
+  "coreDataSha256": {
+    "STARDAT.MPQ": "dede48dd9b313817b118a4c117101c9a70cf19264756e9db4e9be1af7f852e9a",
+    "BROODAT.MPQ": "5315b4f166bd4cbb125e5009883e52975cac9a669860abc92ab718341c569a35",
+    "patch_rt.mpq": "58bd856aac2328b42af4b9538c248367150c876e57ec596a9f30e3e81d8ddf11"
+  }
+}

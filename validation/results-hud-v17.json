@@ -1,0 +1,270 @@
+{
+  "screens": [
+    {
+      "result": {
+        "phase": "scores",
+        "won": true,
+        "tab": 0,
+        "race": 1,
+        "players": [
+          {
+            "me": true,
+            "race": 1,
+            "color": 2,
+            "units": 4,
+            "buildings": 1,
+            "minerals": 50,
+            "gas": 0,
+            "kills": 0,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 200,
+            "buildingScore": 400,
+            "spent": 0,
+            "slot": 2
+          }
+        ],
+        "art": "glue/scoretv"
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "victory",
+        "track": "music\\tvict.wav",
+        "playing": true,
+        "time": 2.478104,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 1625279,
+        "error": null
+      }
+    },
+    {
+      "result": {
+        "phase": "scores",
+        "won": false,
+        "tab": 0,
+        "race": 1,
+        "players": [
+          {
+            "me": true,
+            "race": 1,
+            "color": 0,
+            "units": 4,
+            "buildings": 1,
+            "minerals": 50,
+            "gas": 0,
+            "kills": 0,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 200,
+            "buildingScore": 400,
+            "spent": 0,
+            "slot": 0
+          }
+        ],
+        "art": "glue/scoretd"
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "defeat",
+        "track": "music\\tdefeat.wav",
+        "playing": true,
+        "time": 2.454048,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 1735304,
+        "error": null
+      }
+    },
+    {
+      "result": {
+        "phase": "scores",
+        "won": true,
+        "tab": 0,
+        "race": 0,
+        "players": [
+          {
+            "me": true,
+            "race": 0,
+            "color": 3,
+            "units": 5,
+            "buildings": 1,
+            "minerals": 50,
+            "gas": 0,
+            "kills": 0,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 300,
+            "buildingScore": 300,
+            "spent": 0,
+            "slot": 3
+          }
+        ],
+        "art": "glue/scorezv"
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "victory",
+        "track": "music\\zvict.wav",
+        "playing": true,
+        "time": 2.571048,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 1066451,
+        "error": null
+      }
+    },
+    {
+      "result": {
+        "phase": "scores",
+        "won": false,
+        "tab": 0,
+        "race": 0,
+        "players": [
+          {
+            "me": true,
+            "race": 0,
+            "color": 2,
+            "units": 5,
+            "buildings": 1,
+            "minerals": 50,
+            "gas": 0,
+            "kills": 0,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 300,
+            "buildingScore": 300,
+            "spent": 0,
+            "slot": 2
+          }
+        ],
+        "art": "glue/scorezd"
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "defeat",
+        "track": "music\\zdefeat.wav",
+        "playing": true,
+        "time": 2.552443,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 684188,
+        "error": null
+      }
+    },
+    {
+      "result": {
+        "phase": "scores",
+        "won": true,
+        "tab": 0,
+        "race": 2,
+        "players": [
+          {
+            "me": true,
+            "race": 2,
+            "color": 0,
+            "units": 4,
+            "buildings": 1,
+            "minerals": 50,
+            "gas": 0,
+            "kills": 0,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 200,
+            "buildingScore": 400,
+            "spent": 0,
+            "slot": 0
+          }
+        ],
+        "art": "glue/scorepv"
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "victory",
+        "track": "music\\pvict.wav",
+        "playing": true,
+        "time": 2.526755,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 1061421,
+        "error": null
+      }
+    },
+    {
+      "result": {
+        "phase": "scores",
+        "won": false,
+        "tab": 0,
+        "race": 2,
+        "players": [
+          {
+            "me": true,
+            "race": 2,
+            "color": 3,
+            "units": 4,
+            "buildings": 1,
+            "minerals": 50,
+            "gas": 0,
+            "kills": 0,
+            "lost": 0,
+            "razed": 0,
+            "buildingsLost": 0,
+            "unitScore": 200,
+            "buildingScore": 400,
+            "spent": 0,
+            "slot": 3
+          }
+        ],
+        "art": "glue/scorepd"
+      },
+      "music": {
+        "enabled": true,
+        "volume": 0.3,
+        "muted": false,
+        "paused": false,
+        "ducked": false,
+        "phase": "defeat",
+        "track": "music\\pdefeat.wav",
+        "playing": true,
+        "time": 2.479719,
+        "loading": false,
+        "tracks": 19,
+        "packedBytes": 2103465,
+        "error": null
+      }
+    }
+  ],
+  "checks": [
+    "Original custom panels/fonts/control frames; invalid import stays in setup; valid local map parses dimensions/starts and waits for OK",
+    "Terran: real HP changes render green/yellow/red; original blue status border/gray icons; empty/resource portraits have no world-sprite fallback",
+    "Zerg: real HP changes render green/yellow/red; original blue status border/gray icons; empty/resource portraits have no world-sprite fallback",
+    "Protoss: real HP changes render green/yellow/red; original blue status border/gray icons; empty/resource portraits have no world-sprite fallback",
+    "Actual Zerg 1 Overlord detector and four live Control fields; 64×64 map fills 128px well at phone landscape size"
+  ],
+  "errors": []
+}

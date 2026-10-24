@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "physicalPhone": false,
+  "output": "PASS original connection/join/lobby/create artwork; seven renders; actual terrain preview; bounded nonoverlapping hit targets; entry gating",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "73b26319c91f8e72082313e10f6d15ababe9584da691885f9f41d2cf60c56619",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "c28a1dc1c23bebc8bc5b20c5a0dc46f41c513cec188b74324b89fd21d3d9710e",
+    "app/src/main/java/org/openbw/androidtest/NativeMapPreview.java": "7f77090c49c185b626ae52ecd564dc7feb487a898ad0de0d9dcb3e75c642dec1",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "c800369ec6d54c30db55c5d243e97d965d641a0bbbf9c99a5e4e92b01df02f19",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "48df39c65a6975b50b00c77471700b82f1ade9b778482e474c3b1bf0768a3943",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "app/src/main/java/org/openbw/androidtest/RoomProtocol.java": "bf1fd196d14a564a91b6ec627af2f057b2f2c1385b858b05f5b7787aa5484fc3",
+    "app/src/main/java/org/openbw/androidtest/RoomSnapshot.java": "343bb7fb799fb22882cff994338215d068327b00f896f9acd372a8e1ce3c6de1",
+    "app/src/main/java/org/openbw/androidtest/RoomMatch.java": "8052395c053e5b2da0fb2a74d655008495fdb5ac22241602d65c9e26d4a81bb5",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "7f6fecd2ea604ca29966a74198aaba8079cd938000356e3839b3500146519d65",
+    "tests/run_ui55.py": "b8560b0b62af491597449c74bf2540bf9fb03d7c6604bad0e4f0ccedbfe754f3"
+  }
+}

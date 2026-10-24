@@ -1,0 +1,17 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -3301,12 +3301,14 @@
+ 	// affordable — without needing a re-select. The JS host only touches the DOM when
+ 	// the card text actually changes, so refreshing every frame is cheap.
+ 	int edge_dir = 0;   // current edge-scroll direction (0 none, 1=N clockwise to 8=NW)
++	bool host_controls_edge_scroll = false; // Android integrates touch movement once per display frame.
+ 
+ 	// Scroll the camera when the cursor rests against a screen edge (classic RTS
+ 	// edge panning). ui.update() clamps screen_pos to the map afterwards. The host
+ 	// parks the cursor off-screen (negative) on mouse-leave so this stops then.
+ 	void edge_scroll() {
+ 		edge_dir = 0;
++		if (host_controls_edge_scroll) return;
+ 		const int margin = 6, speed = 16;
+ 		if (mouse_x < 0 || mouse_y < 0) return;
+ 		int dx = 0, dy = 0;

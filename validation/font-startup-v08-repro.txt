@@ -1,0 +1,1 @@
+PASS ["Unfixed 0.8 reproduces the exact reported startup failure, even with a valid font import"]

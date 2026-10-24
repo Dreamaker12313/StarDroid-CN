@@ -1,0 +1,80 @@
+{
+  "checks": [
+    "Original dlgs/terran.grp Menu/terrain/dialog frames; 96×96 mission minimap centered without stretching; touch and keyboard terrain toggles agree and preserve green local unit markers on a black background; five framed units arranged 3+2; bitmap timer; menu pauses gameplay"
+  ],
+  "errors": [],
+  "layouts": [],
+  "minimap": {
+    "bounds": {
+      "x": 22,
+      "y": 363,
+      "width": 96,
+      "height": 96
+    },
+    "unitPixels": 149,
+    "art": "dlgs/terran.grp"
+  },
+  "hud": {
+    "timer": {
+      "width": 128,
+      "height": 19,
+      "box": {
+        "x": 176,
+        "y": 0,
+        "width": 160,
+        "height": 23.75,
+        "top": 0,
+        "right": 336,
+        "bottom": 23.75,
+        "left": 176
+      }
+    },
+    "resourceIcons": [
+      {
+        "w": 14,
+        "h": 14,
+        "width": 14
+      },
+      {
+        "w": 14,
+        "h": 14,
+        "width": 14
+      },
+      {
+        "w": 14,
+        "h": 14,
+        "width": 14
+      }
+    ],
+    "details": [
+      {
+        "w": 36,
+        "h": 34,
+        "box": {
+          "x": 242,
+          "y": 439,
+          "width": 36,
+          "height": 34,
+          "top": 439,
+          "right": 278,
+          "bottom": 473,
+          "left": 242
+        }
+      },
+      {
+        "w": 36,
+        "h": 34,
+        "box": {
+          "x": 281,
+          "y": 439,
+          "width": 36,
+          "height": 34,
+          "top": 439,
+          "right": 317,
+          "bottom": 473,
+          "left": 281
+        }
+      }
+    ]
+  }
+}

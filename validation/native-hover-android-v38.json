@@ -1,0 +1,22 @@
+{
+  "apkSha256": "c768ce5150e078a4ad3f867ba584623d0aeeae022f6ad522eb0b13f335bec7a0",
+  "testApkSha256": "e5db1f4a654de9098bf12647078cbeeeb2bf09049d6144f03f2fad16d9a9399e",
+  "version": "0.38",
+  "android": "9",
+  "abi": "x86_64",
+  "originalGameAssets": false,
+  "unitPricesSupplyAndDescriptions": true,
+  "hoverUsesCurrentCardAndExits": true,
+  "holdNeverActivatesButQuickTapDoes": true,
+  "holdSlideInspectionAcrossButtons": true,
+  "dragSelectionChangeAndCancelSafety": true,
+  "introChooserOriginalExpansionCancelAndCampaignPreference": true,
+  "cinematicPlaybackTested": false,
+  "originalChooserArtworkTested": false,
+  "passed": true,
+  "emulator": "37.2.12",
+  "display": "1280x720, 240 dpi",
+  "acceleration": false,
+  "physicalDeviceTested": false,
+  "originalCoreAssets": false
+}

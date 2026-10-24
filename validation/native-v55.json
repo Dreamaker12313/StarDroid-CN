@@ -1,0 +1,119 @@
+{
+  "passed": true,
+  "physicalDevices": false,
+  "cases": [
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 0,
+      "trace": "8-0-0.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 1,
+      "trace": "8-0-1.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 2,
+      "trace": "8-0-2.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 3,
+      "trace": "8-0-3.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 4,
+      "trace": "8-0-4.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 5,
+      "trace": "8-0-5.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 6,
+      "trace": "8-0-6.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 8,
+      "ffa": 0,
+      "slot": 7,
+      "trace": "8-0-7.txt",
+      "sha256": "b2c4c66df17ae4d054c897c1732c366e54e557fa411205adecccdfffb3ec859f"
+    },
+    {
+      "humans": 6,
+      "ffa": 1,
+      "slot": 0,
+      "trace": "6-1-0.txt",
+      "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+    },
+    {
+      "humans": 6,
+      "ffa": 1,
+      "slot": 1,
+      "trace": "6-1-1.txt",
+      "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+    },
+    {
+      "humans": 6,
+      "ffa": 1,
+      "slot": 2,
+      "trace": "6-1-2.txt",
+      "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+    },
+    {
+      "humans": 6,
+      "ffa": 1,
+      "slot": 3,
+      "trace": "6-1-3.txt",
+      "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+    },
+    {
+      "humans": 6,
+      "ffa": 1,
+      "slot": 4,
+      "trace": "6-1-4.txt",
+      "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+    },
+    {
+      "humans": 6,
+      "ffa": 1,
+      "slot": 5,
+      "trace": "6-1-5.txt",
+      "sha256": "2e45ccb08eab521f40a62e6cb9ed5ac8549e70388e74ad44420c860d696b5206"
+    }
+  ],
+  "framesPerPerspective": 1440,
+  "checkpointsPerPerspective": 360,
+  "feedback": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=9, fog_player=0\nPASS Ultralisk original descending range plays normal ZUlWht WAV\nPASS mass larvae partial morph shortage=0\nPASS mass larvae partial morph shortage=1\nPASS mass larvae partial morph shortage=2\nPASS Guardian replacement morph at 200 supply\nopenbw_init: map 'First Strike' 3072x3072, slot 5 of 1, units=17, fog_player=5\nPASS original First Strike triggers: reveal while paused; base and Duran automatically join without approaching again\n",
+  "sourceSha256": {
+    "native/multiplayer.h": "8977888202fd0df30ac19cc37decc6c96a7bc7423749c3b42bfdbf581b0eae6f",
+    "native/runtime.cpp": "e270feff9df0491567e2d564ec95a64497dae6b31d67d0381d7896b626a4d531",
+    "patches/native-polish55.patch": "f9c05de5addfccbc2906dded592299c9f04177d515f9f15223ec040038a71b9e",
+    "patches/native-polish58.patch": "613bf7009bc1bbd6229b1b95c602a0ac9f1c353d0007f09a3cd1891729c5ae33",
+    "patches/native-polish59.patch": "d8c014bcc48bcc725da55237ae2926ad993c700c522f6f6c1a9bb657b8fa66ca",
+    "native/hero_mode.h": "371cce07d5ff3fffbd9fd7244f47b21bff83306fabd210e75b869eae38ea80c7",
+    "native/save_state.h": "d6026805e57b02d24f370841ea79d8165162b1465659af63462a8cbf1dc1584d",
+    "tests/native_revision55.cpp": "81f0a4baaa91df81d60da81e68c3183601f03e39923735c036dbfb3ab4cb6645",
+    "tests/create_room_map55.py": "f03d3a977ef1e1c775d354926f10c008ff5f857658451f030e6abc5ddb17ebac",
+    "tests/run_native55.py": "25fa44f64a9eac66a2c0ae55ad95ba9554b7531d1fbb0dd862f84e96c69d70d3"
+  }
+}

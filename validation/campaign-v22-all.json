@@ -1,0 +1,964 @@
+{
+  "missions": {
+    "terrantutorial": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 44,
+        "voices": 5,
+        "next": "terran01"
+      }
+    },
+    "terran01": {
+      "state": {
+        "frame": 2407,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 46,
+        "voices": 2,
+        "next": "terran02"
+      }
+    },
+    "terran02": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 94,
+        "voices": 1,
+        "next": "terran03"
+      }
+    },
+    "terran03": {
+      "state": {
+        "frame": 2404,
+        "ai": "4\t30\t0\t0\t1\t5320\t5048\t5220\t4948\n",
+        "error": "",
+        "outcome": 0,
+        "units": 197,
+        "voices": 2,
+        "next": "terran04"
+      }
+    },
+    "terran04": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 121,
+        "voices": 0,
+        "next": "terran05"
+      }
+    },
+    "terran05": {
+      "state": {
+        "frame": 2404,
+        "ai": "2\t2\t0\t0\t0\t0\t0\t0\t0\n3\t2\t0\t0\t0\t0\t0\t0\t0\n6\t2\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 177,
+        "voices": 0,
+        "next": "terran06"
+      }
+    },
+    "terran06": {
+      "state": {
+        "frame": 2404,
+        "ai": "2\t1\t0\t0\t0\t0\t0\t0\t0\n6\t1\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 225,
+        "voices": 0,
+        "next": "terran08"
+      }
+    },
+    "terran08": {
+      "state": {
+        "frame": 2404,
+        "ai": "4\t337\t1\t0\t0\t4256\t4000\t4056\t3900\n",
+        "error": "",
+        "outcome": 0,
+        "units": 238,
+        "voices": 4,
+        "next": "terran09"
+      }
+    },
+    "terran09": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 302,
+        "voices": 0,
+        "next": "terran11"
+      }
+    },
+    "terran11": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t39\t0\t1\t0\t10176\t6096\t9351\t5421\n3\t31\t0\t2\t0\t3136\t3120\t2636\t2720\n",
+        "error": "",
+        "outcome": 0,
+        "units": 256,
+        "voices": 3,
+        "next": "terran12"
+      }
+    },
+    "terran12": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t316\t0\t0\t0\t10152\t10240\t10152\t10240\n6\t319\t0\t0\t0\t10408\t10280\t10408\t10280\n",
+        "error": "",
+        "outcome": 0,
+        "units": 331,
+        "voices": 2,
+        "next": null
+      }
+    },
+    "zerg01": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 114,
+        "voices": 4,
+        "next": "zerg02"
+      }
+    },
+    "zerg02": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t29\t1\t1\t1\t5104\t5232\t4904\t5232\n",
+        "error": "",
+        "outcome": 0,
+        "units": 151,
+        "voices": 1,
+        "next": "zerg03"
+      },
+      "hatchery": {
+        "race": 0,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button",
+            "youwin",
+            "youlose"
+          ],
+          "decoded": 4,
+          "played": 4,
+          "lastPlayed": "swishout",
+          "paused": false,
+          "error": ""
+        },
+        "originalConsole": true,
+        "originalFonts": [
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "32",
+          "50",
+          "16x"
+        ],
+        "speechFont": "font10",
+        "timerFont": "font16",
+        "resourceFrames": [
+          0,
+          1,
+          4
+        ],
+        "commandIcons": 4,
+        "minimap": {
+          "x": 4,
+          "y": 380,
+          "w": 96,
+          "h": 96
+        },
+        "minimapTerrain": true,
+        "dialogArt": "dlgs/zerg.grp",
+        "selectedType": 131,
+        "details": [],
+        "commandSlots": [
+          {
+            "label": "Lair · 150 minerals / 100 gas",
+            "slot": 6
+          },
+          {
+            "label": "Burrowing · 100 minerals / 100 gas",
+            "slot": 2
+          },
+          {
+            "label": "Set Rally Point",
+            "slot": 5
+          },
+          {
+            "label": "Select Larva",
+            "slot": 0
+          }
+        ],
+        "submenu": false
+      },
+      "larva": {
+        "race": 0,
+        "sounds": {
+          "available": [
+            "mousedown2",
+            "mouseover",
+            "swishin",
+            "swishlock",
+            "swishout",
+            "button",
+            "youwin",
+            "youlose"
+          ],
+          "decoded": 4,
+          "played": 4,
+          "lastPlayed": "swishout",
+          "paused": false,
+          "error": ""
+        },
+        "originalConsole": true,
+        "originalFonts": [
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "32",
+          "50",
+          "16x"
+        ],
+        "speechFont": "font10",
+        "timerFont": "font16",
+        "resourceFrames": [
+          0,
+          1,
+          4
+        ],
+        "commandIcons": 11,
+        "minimap": {
+          "x": 4,
+          "y": 380,
+          "w": 96,
+          "h": 96
+        },
+        "minimapTerrain": true,
+        "dialogArt": "dlgs/zerg.grp",
+        "selectedType": 35,
+        "details": [
+          {
+            "kind": "armor",
+            "icon": 297,
+            "level": 0,
+            "base": 10,
+            "bonus": 0,
+            "hits": 1
+          }
+        ],
+        "commandSlots": [
+          {
+            "label": "Zergling · 50 minerals",
+            "slot": 1
+          },
+          {
+            "label": "Hydralisk · 75 minerals / 25 gas",
+            "slot": 3
+          },
+          {
+            "label": "Drone · 50 minerals",
+            "slot": 0
+          },
+          {
+            "label": "Overlord · 100 minerals",
+            "slot": 2
+          },
+          {
+            "label": "Mutalisk · 100 minerals / 100 gas",
+            "slot": 4
+          },
+          {
+            "label": "Scourge · 25 minerals / 75 gas",
+            "slot": 5
+          }
+        ],
+        "submenu": false
+      },
+      "locked": {
+        "disabled": true,
+        "classes": "cmd off"
+      },
+      "egg": {
+        "kind": 4,
+        "target": 41,
+        "slots": [
+          {
+            "label": "Cancel Drone",
+            "image": true
+          }
+        ]
+      },
+      "chrysalis": {
+        "details": [],
+        "unit": "fog_player=-1 shared_vision=[1,2,4,8] susp=0(op0 by -1)\ncursor ok=1 arrow_frames=5 mouse=-1,-1 edge=0\nalerts=1 [ttl=56 kind=1 pos=336,128]\nselection=1\ncamera=544,288\nselected_owner=11 selection_palette=8\nrescues=0 sound=-1:none\nrescue_flashes=0\nready_notifications=0 ready_type=-1 ready_sound=-1:none\nsim_selection=1 first=Young Chrysalis\nprimary=none\n"
+      },
+      "lairBuilt": true,
+      "geyser": {
+        "id": 3736,
+        "name": "Vespene Geyser",
+        "owner": 11,
+        "x": 960,
+        "y": 256,
+        "order": 23
+      },
+      "placement": {
+        "x": 248,
+        "y": 132
+      },
+      "buildSound": true,
+      "extractor": "Extractor\tHP 750/750\tGas 4851\t",
+      "beacon": {
+        "before": "0",
+        "after": "0",
+        "owner": 3
+      },
+      "settings": {
+        "page": "sound",
+        "w": 542.800048828125,
+        "h": 486.75,
+        "style": 4333
+      },
+      "victorySound": true
+    },
+    "zerg03": {
+      "state": {
+        "frame": 2404,
+        "ai": "6\t35\t0\t0\t1\t8136\t8224\t8136\t8224\n",
+        "error": "",
+        "outcome": 0,
+        "units": 140,
+        "voices": 1,
+        "next": "zerg04"
+      }
+    },
+    "zerg04": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t97\t0\t2\t0\t9032\t9056\t8907\t9031\n",
+        "error": "",
+        "outcome": 0,
+        "units": 209,
+        "voices": 8,
+        "next": "zerg05"
+      }
+    },
+    "zerg05": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 178,
+        "voices": 2,
+        "next": "zerg06"
+      }
+    },
+    "zerg06": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t41\t0\t0\t1\t5352\t5256\t4802\t4706\n",
+        "error": "",
+        "outcome": 0,
+        "units": 188,
+        "voices": 4,
+        "next": "zerg07"
+      }
+    },
+    "zerg07": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 246,
+        "voices": 0,
+        "next": "zerg08"
+      }
+    },
+    "zerg08": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t27\t0\t4\t0\t8400\t8000\t8000\t8000\n2\t31\t0\t0\t0\t8368\t8000\t8018\t7650\n",
+        "error": "",
+        "outcome": 0,
+        "units": 208,
+        "voices": 2,
+        "next": "zerg09"
+      }
+    },
+    "zerg09": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t25\t0\t0\t0\t5000\t5000\t5000\t5000\n2\t25\t1\t7\t0\t5000\t5000\t4300\t4700\n6\t25\t0\t0\t0\t5000\t5000\t5000\t5000\n",
+        "error": "",
+        "outcome": 0,
+        "units": 370,
+        "voices": 1,
+        "next": "zerg10"
+      }
+    },
+    "zerg10": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t55\t0\t1\t0\t20064\t20232\t18814\t19032\n2\t65\t0\t2\t0\t8192\t8176\t6592\t6776\n7\t65\t0\t1\t0\t8096\t8224\t6496\t6724\n",
+        "error": "",
+        "outcome": 0,
+        "units": 448,
+        "voices": 1,
+        "next": null
+      }
+    },
+    "protoss01": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t29\t0\t1\t1\t4288\t4000\t3988\t3750\n",
+        "error": "",
+        "outcome": 0,
+        "units": 124,
+        "voices": 1,
+        "next": "protoss02"
+      }
+    },
+    "protoss02": {
+      "state": {
+        "frame": 2404,
+        "ai": "6\t33\t0\t0\t1\t6192\t6192\t5992\t5992\n",
+        "error": "",
+        "outcome": 0,
+        "units": 144,
+        "voices": 2,
+        "next": "protoss03"
+      }
+    },
+    "protoss03": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t45\t0\t1\t1\t5232\t5192\t4057\t3967\n6\t42\t0\t2\t1\t8136\t8192\t7086\t7242\n",
+        "error": "",
+        "outcome": 0,
+        "units": 205,
+        "voices": 1,
+        "next": "protoss04"
+      }
+    },
+    "protoss04": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 200,
+        "voices": 1,
+        "next": "protoss05"
+      }
+    },
+    "protoss05": {
+      "state": {
+        "frame": 2404,
+        "ai": "3\t40\t0\t4\t0\t5248\t5304\t3773\t3879\n4\t38\t0\t2\t0\t5080\t5288\t3780\t4088\n",
+        "error": "",
+        "outcome": 0,
+        "units": 269,
+        "voices": 1,
+        "next": "protoss06"
+      }
+    },
+    "protoss06": {
+      "state": {
+        "frame": 2405,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 224,
+        "voices": 1,
+        "next": "protoss07"
+      }
+    },
+    "protoss07": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t61\t0\t0\t1\t10416\t10192\t9066\t8842\n4\t52\t1\t0\t1\t10128\t10248\t8628\t8798\n",
+        "error": "",
+        "outcome": 0,
+        "units": 347,
+        "voices": 3,
+        "next": "protoss08"
+      }
+    },
+    "protoss08": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t54\t0\t2\t1\t10080\t10352\t8630\t9052\n3\t66\t0\t3\t1\t10184\t10280\t8459\t8930\n",
+        "error": "",
+        "outcome": 0,
+        "units": 259,
+        "voices": 2,
+        "next": "protoss09"
+      }
+    },
+    "protoss09": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t38\t2\t0\t0\t15000\t15096\t13900\t13996\n5\t43\t0\t4\t0\t30008\t30336\t28108\t28436\n6\t38\t0\t2\t0\t20056\t20176\t18406\t18576\n",
+        "error": "",
+        "outcome": 0,
+        "units": 368,
+        "voices": 1,
+        "next": "protoss10"
+      }
+    },
+    "protoss10": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t79\t0\t0\t0\t8400\t8304\t6900\t6804\n3\t45\t1\t0\t0\t8416\t8256\t6916\t6956\n",
+        "error": "",
+        "outcome": 0,
+        "units": 449,
+        "voices": 2,
+        "next": null
+      }
+    },
+    "expprotoss01": {
+      "state": {
+        "frame": 2404,
+        "ai": "3\t11\t0\t0\t0\t10256\t10000\t10256\t10000\n4\t11\t0\t0\t0\t10312\t10000\t10312\t10000\n",
+        "error": "",
+        "outcome": 0,
+        "units": 297,
+        "voices": 2,
+        "next": "expprotoss02"
+      }
+    },
+    "expprotoss02": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 160,
+        "voices": 0,
+        "next": "expprotoss03"
+      }
+    },
+    "expprotoss03": {
+      "state": {
+        "frame": 2406,
+        "ai": "1\t12\t0\t0\t0\t250\t75\t250\t75\n3\t38\t0\t1\t0\t30184\t30288\t30159\t30213\n4\t34\t0\t1\t0\t30360\t30304\t30335\t30229\n",
+        "error": "",
+        "outcome": 0,
+        "units": 176,
+        "voices": 5,
+        "next": "expprotoss04"
+      }
+    },
+    "expprotoss04": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t26\t0\t0\t0\t0\t0\t0\t0\n1\t2\t0\t0\t0\t1000\t100\t1000\t100\n5\t15\t0\t4\t0\t328\t208\t128\t208\n",
+        "error": "",
+        "outcome": 0,
+        "units": 250,
+        "voices": 4,
+        "next": "expprotoss05"
+      }
+    },
+    "expprotoss05": {
+      "state": {
+        "frame": 2404,
+        "ai": "6\t48\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 438,
+        "voices": 3,
+        "next": "expprotoss06"
+      }
+    },
+    "expprotoss06": {
+      "state": {
+        "frame": 2404,
+        "ai": "4\t81\t0\t0\t1\t60552\t60352\t60552\t60352\n5\t64\t0\t0\t0\t60200\t60344\t60200\t60344\n",
+        "error": "",
+        "outcome": 0,
+        "units": 616,
+        "voices": 1,
+        "next": "expprotoss07"
+      }
+    },
+    "expprotoss07": {
+      "state": {
+        "frame": 2404,
+        "ai": "5\t71\t0\t0\t1\t20712\t20224\t20712\t20224\n",
+        "error": "",
+        "outcome": 0,
+        "units": 349,
+        "voices": 2,
+        "next": "expprotoss08"
+      }
+    },
+    "expprotoss08": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t65\t0\t1\t1\t50504\t50232\t50354\t50182\n4\t67\t0\t1\t0\t50432\t50280\t49932\t49880\n5\t76\t0\t0\t0\t50752\t50272\t50152\t49672\n",
+        "error": "",
+        "outcome": 0,
+        "units": 797,
+        "voices": 1,
+        "next": null
+      }
+    },
+    "expterran01": {
+      "state": {
+        "frame": 2406,
+        "ai": "0\t65\t0\t1\t1\t10528\t10248\t10278\t10048\n",
+        "error": "",
+        "outcome": 0,
+        "units": 317,
+        "voices": 1,
+        "next": "expterran02"
+      }
+    },
+    "expterran02": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t13\t0\t0\t0\t10000\t10000\t10000\t10000\n6\t2\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 174,
+        "voices": 3,
+        "next": "expterran03"
+      }
+    },
+    "expterran03": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t22\t1\t0\t0\t20088\t20304\t19713\t20004\n1\t4\t0\t0\t0\t0\t0\t0\t0\n3\t40\t0\t1\t1\t20192\t20232\t19867\t19857\n4\t29\t0\t1\t0\t20128\t20360\t19803\t19985\n5\t38\t0\t0\t1\t20176\t20240\t19776\t19840\n6\t2\t0\t0\t0\t500\t100\t500\t100\n",
+        "error": "",
+        "outcome": 0,
+        "units": 354,
+        "voices": 9,
+        "next": "expterran04"
+      }
+    },
+    "expterran04": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t64\t0\t3\t0\t40520\t40208\t40245\t40083\n1\t90\t0\t6\t0\t40376\t40248\t40026\t40148\n",
+        "error": "",
+        "outcome": 0,
+        "units": 500,
+        "voices": 0,
+        "next": "expterran05a"
+      }
+    },
+    "expterran05a": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t102\t0\t0\t0\t0\t0\t0\t0\n1\t22\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 751,
+        "voices": 5,
+        "next": "expterran06"
+      }
+    },
+    "expterran05b": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t85\t0\t1\t0\t50000\t50000\t49950\t49975\n1\t62\t0\t1\t0\t50272\t50272\t50122\t50172\n",
+        "error": "",
+        "outcome": 0,
+        "units": 499,
+        "voices": 4,
+        "next": "expterran06"
+      }
+    },
+    "expterran06": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t13\t0\t4\t0\t608\t0\t208\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 489,
+        "voices": 5,
+        "next": "expterran07"
+      }
+    },
+    "expterran07": {
+      "state": {
+        "frame": 2405,
+        "ai": "6\t3\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 320,
+        "voices": 5,
+        "next": "expterran08"
+      }
+    },
+    "expterran08": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t59\t0\t0\t1\t50384\t50392\t50384\t50392\n4\t84\t0\t0\t0\t50720\t50288\t50720\t50288\n5\t71\t0\t1\t0\t50080\t50304\t50030\t50304\n6\t2\t0\t0\t0\t1500\t300\t1500\t300\n",
+        "error": "",
+        "outcome": 0,
+        "units": 720,
+        "voices": 1,
+        "next": null
+      }
+    },
+    "expzerg01": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 196,
+        "voices": 0,
+        "next": "expzerg02"
+      }
+    },
+    "expzerg02": {
+      "state": {
+        "frame": 2412,
+        "ai": "7\t18\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 260,
+        "voices": 9,
+        "next": "expzerg03"
+      }
+    },
+    "expzerg03": {
+      "state": {
+        "frame": 2414,
+        "ai": "0\t199\t0\t1\t1\t20096\t20224\t19046\t19224\n1\t394\t0\t19\t0\t30352\t30264\t27977\t28364\n4\t254\t0\t8\t0\t25152\t25096\t24177\t24546\n5\t204\t0\t0\t0\t20248\t20416\t19698\t19866\n6\t101\t0\t1\t1\t30296\t30264\t28621\t28664\n7\t2\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 592,
+        "voices": 2,
+        "next": "expzerg04a"
+      }
+    },
+    "expzerg04a": {
+      "state": {
+        "frame": 2406,
+        "ai": "1\t90\t1\t4\t0\t50200\t50208\t49725\t50058\n4\t62\t1\t2\t1\t65168\t65240\t64668\t64790\n6\t76\t0\t2\t0\t75240\t75272\t75140\t75222\n",
+        "error": "",
+        "outcome": 0,
+        "units": 457,
+        "voices": 0,
+        "next": "expzerg05"
+      }
+    },
+    "expzerg04b": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t90\t1\t4\t0\t50200\t50208\t49725\t50058\n4\t62\t1\t2\t1\t65160\t65240\t64660\t64790\n6\t76\t0\t2\t0\t75288\t75272\t75188\t75222\n",
+        "error": "",
+        "outcome": 0,
+        "units": 461,
+        "voices": 0,
+        "next": "expzerg05"
+      }
+    },
+    "expzerg04c": {
+      "state": {
+        "frame": 2409,
+        "ai": "1\t90\t1\t10\t0\t50096\t50088\t49321\t49938\n4\t62\t1\t2\t1\t65168\t65240\t64668\t64790\n6\t76\t0\t2\t0\t75240\t75328\t75140\t75278\n",
+        "error": "",
+        "outcome": 0,
+        "units": 463,
+        "voices": 0,
+        "next": "expzerg05"
+      }
+    },
+    "expzerg04d": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t90\t1\t9\t0\t50128\t50112\t49403\t49962\n4\t62\t1\t2\t1\t65160\t65240\t64660\t64790\n6\t76\t0\t2\t0\t75120\t75328\t75020\t75278\n",
+        "error": "",
+        "outcome": 0,
+        "units": 455,
+        "voices": 0,
+        "next": "expzerg05"
+      }
+    },
+    "expzerg04e": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t90\t1\t7\t0\t50096\t50056\t49571\t49956\n4\t62\t1\t2\t1\t65120\t65280\t64620\t64830\n6\t76\t0\t2\t0\t75176\t75272\t75076\t75222\n",
+        "error": "",
+        "outcome": 0,
+        "units": 463,
+        "voices": 0,
+        "next": "expzerg05"
+      }
+    },
+    "expzerg04f": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t90\t1\t7\t0\t50128\t50112\t49503\t49962\n4\t62\t1\t2\t1\t65160\t65232\t64660\t64782\n6\t76\t0\t2\t0\t75160\t75272\t75060\t75222\n",
+        "error": "",
+        "outcome": 0,
+        "units": 464,
+        "voices": 0,
+        "next": "expzerg05"
+      }
+    },
+    "expzerg05": {
+      "state": {
+        "frame": 2404,
+        "ai": "",
+        "error": "",
+        "outcome": 0,
+        "units": 515,
+        "voices": 3,
+        "next": "expzerg06"
+      }
+    },
+    "expzerg06": {
+      "state": {
+        "frame": 2404,
+        "ai": "5\t63\t0\t1\t0\t60272\t60232\t60147\t60057\n6\t24\t0\t5\t0\t60096\t60120\t59846\t60120\n",
+        "error": "",
+        "outcome": 0,
+        "units": 440,
+        "voices": 0,
+        "next": "expzerg07"
+      }
+    },
+    "expzerg07": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t40\t0\t1\t0\t75264\t75176\t74914\t74926\n5\t28\t0\t0\t0\t50248\t50248\t50248\t50248\n",
+        "error": "",
+        "outcome": 0,
+        "units": 358,
+        "voices": 0,
+        "next": "expzerg08"
+      }
+    },
+    "expzerg08": {
+      "state": {
+        "frame": 2404,
+        "ai": "4\t102\t0\t4\t0\t75600\t75392\t75000\t74867\n6\t136\t0\t3\t1\t75792\t75248\t75317\t74748\n",
+        "error": "",
+        "outcome": 0,
+        "units": 532,
+        "voices": 0,
+        "next": "expzerg09"
+      }
+    },
+    "expzerg09": {
+      "state": {
+        "frame": 2404,
+        "ai": "1\t69\t0\t0\t0\t30208\t30376\t30008\t30176\n6\t60\t0\t0\t0\t30128\t30472\t30128\t30472\n",
+        "error": "",
+        "outcome": 0,
+        "units": 297,
+        "voices": 1,
+        "next": "expzerg10"
+      }
+    },
+    "expzerg10": {
+      "state": {
+        "frame": 2405,
+        "ai": "0\t124\t0\t0\t0\t30440\t30272\t30240\t30072\n1\t112\t0\t0\t0\t30480\t30264\t29230\t29014\n6\t139\t0\t1\t0\t30384\t30248\t29584\t29473\n",
+        "error": "",
+        "outcome": 0,
+        "units": 713,
+        "voices": 1,
+        "next": null
+      }
+    },
+    "expbonus": {
+      "state": {
+        "frame": 2404,
+        "ai": "0\t6\t0\t0\t0\t0\t0\t0\t0\n2\t1\t0\t0\t0\t0\t0\t0\t0\n5\t16\t0\t0\t0\t0\t0\t0\t0\n",
+        "error": "",
+        "outcome": 0,
+        "units": 176,
+        "voices": 2,
+        "next": "expzerg10"
+      }
+    }
+  },
+  "checks": [
+    "Lair morph completes; Extractor placement plays the original DON sound and shows HP plus gas; beacon transfer is silent.",
+    "Zerg 2: Lair command, disabled Mutalisk, Egg target icon, no Chrysalis armor, blue settings and original victory sound.",
+    "Original/Expansion chooser and original expansion campaign artwork."
+  ],
+  "errors": [],
+  "method": "Startup runs periodically heal player units; Brood War Zerg 1 also heals its seven rescue Hives so unattended combat does not trigger the original defeat objective. This is a smoke test, not a campaign balance or complete-playthrough test.",
+  "title": {
+    "page": "campaign",
+    "game": "broodwar",
+    "loaded": true,
+    "animations": [
+      "glue/expcampaign/disk.smk",
+      "glue/expcampaign/xterr.smk",
+      "glue/expcampaign/xterron.smk",
+      "glue/expcampaign/xzerg.smk",
+      "glue/expcampaign/xzergon.smk",
+      "glue/expcampaign/xprot.smk",
+      "glue/expcampaign/xproton.smk",
+      "glue/mainmenu/single.smk",
+      "glue/mainmenu/singleon.smk",
+      "glue/mainmenu/multi.smk",
+      "glue/mainmenu/multion.smk",
+      "glue/mainmenu/editor.smk",
+      "glue/mainmenu/editoron.smk",
+      "glue/mainmenu/exit.smk",
+      "glue/mainmenu/exiton.smk",
+      "glue/campaign/disk.smk",
+      "glue/campaign/terr.smk",
+      "glue/campaign/terron.smk",
+      "glue/campaign/zerg.smk",
+      "glue/campaign/zergon.smk",
+      "glue/campaign/prot.smk",
+      "glue/campaign/proton.smk"
+    ],
+    "originalFont": true,
+    "campaignPalette": true,
+    "suspended": false,
+    "lastFrameTime": 3660.7,
+    "transitioning": false,
+    "slideAmount": 0,
+    "profiles": 1,
+    "modal": false,
+    "sounds": {
+      "available": [
+        "mousedown2",
+        "mouseover",
+        "swishin",
+        "swishlock",
+        "swishout"
+      ],
+      "decoded": 4,
+      "played": 8,
+      "lastPlayed": "swishlock",
+      "paused": false,
+      "error": ""
+    }
+  }
+}

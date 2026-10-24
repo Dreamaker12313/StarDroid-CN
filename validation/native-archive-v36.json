@@ -1,0 +1,14 @@
+{
+  "version": "0.36",
+  "passed": true,
+  "scope": "Synthetic MPQ hash-table lookup regression",
+  "stdout": "PASS empty, deleted, colliding and fully deleted MPQ hash tables\n",
+  "stderr": "",
+  "binarySha256": "e348f05423d83eff2170c5a31c1a761644cec166c461796947c9e2db0584bfe9",
+  "sourceSha256": {
+    "tests/native_archive.cpp": "96e4a6e1f546fb70914262d590c46f19100e0f4e084f4b1edd57685fd83da172",
+    "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+    "scripts/prepare_native.py": "26d49ec1fb73857aafe5f2ad591dc32be2782aafee8f0e3112d36bd301786650",
+    "UPSTREAM.json": "33afc9db197e6c6d693c05dc792cb8cd10332ee76f1969aa392ee713049c71af"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "version": "0.22",
+  "sdk": "wasi-sdk-33.0-x86_64-linux",
+  "patchSha256": "ca688d15ba6d24a64c3b9d260bd208ee3dbed3c927c36d936deaa92f70a9d609",
+  "binaries": [
+    {
+      "file": "openbw.wasm",
+      "size": 2411340,
+      "sha256": "36d69a7ad98a32c2c8577f42bf4444a0ecd862ef69059a2cd963562f4022dbc8"
+    },
+    {
+      "file": "openbw-campaign.wasm",
+      "size": 2411340,
+      "sha256": "36d69a7ad98a32c2c8577f42bf4444a0ecd862ef69059a2cd963562f4022dbc8"
+    },
+    {
+      "file": "media-decoder.wasm",
+      "size": 665157,
+      "sha256": "57cf86b9153081a1dc850b93c8e24250e35b144e6022cb5488bac10be23ac1be"
+    },
+    {
+      "file": "portrait-decoder.wasm",
+      "size": 285594,
+      "sha256": "26b628f3f36d30ae998e850269adbc06a8fdf856fac6cf371635d47e83317cb0"
+    },
+    {
+      "file": "menu-decoder.wasm",
+      "size": 285433,
+      "sha256": "9400381a97bfec5c04970be2234dd84ef2b9b890175e8a2c6890a26a6a51b9d2"
+    },
+    {
+      "file": "cinematic-decoder.wasm",
+      "size": 287265,
+      "sha256": "c167ce8fd74bb51267476a6b8abaf01e8c8a510b2421953aabcc7281c12d503f"
+    }
+  ],
+  "cmake": "4.4.0",
+  "sourceDateEpoch": 1791849600,
+  "historical": "0.22 web modules retained as history. External Zerg bot and its dependencies removed in native 0.43."
+}

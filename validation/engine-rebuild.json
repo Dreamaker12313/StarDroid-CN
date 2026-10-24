@@ -1,0 +1,32 @@
+{
+  "sdk": "wasi-sdk-33.0-x86_64-linux",
+  "patchSha256": "b3daa3868551e917c92953af7b6d87bbb2b175ca697fa9064cac121cc383c957",
+  "independentRebuildMatches": true,
+  "binaries": [
+    {
+      "file": "openbw.wasm",
+      "size": 2310388,
+      "sha256": "f973fa24717589ca93ef5eb3daf74b794431d17ca8e7a2cab2de472e94f54d4c"
+    },
+    {
+      "file": "openbw-campaign.wasm",
+      "size": 2310388,
+      "sha256": "f973fa24717589ca93ef5eb3daf74b794431d17ca8e7a2cab2de472e94f54d4c"
+    },
+    {
+      "file": "openbw-bot.wasm",
+      "size": 6073275,
+      "sha256": "aafab9978d8a0e5c99ed604ea1c2bb35722d8e3e33cc2ad94e1e30defab8b6de"
+    },
+    {
+      "file": "media-decoder.wasm",
+      "size": 665540,
+      "sha256": "80ef1f504d6161a12f81b2b84462b1a8b4ef8a758f23e214a6aad240c4321b6c"
+    },
+    {
+      "file": "portrait-decoder.wasm",
+      "size": 285594,
+      "sha256": "26b628f3f36d30ae998e850269adbc06a8fdf856fac6cf371635d47e83317cb0"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "version": "0.13",
+  "versionCode": 14,
+  "apkBytes": 3509624,
+  "apkSha256": "424eb6beed023e5e34f42f44a783a472f16d528a3d23b4dd4ad1ddfde042f7a0",
+  "checks": [
+    "Every APK asset byte matches the tested source assets; ZIP integrity passes",
+    "No proprietary extracted MPQ/FNT/PCX/SMK/WAV files packaged",
+    "All six WASM hashes match the existing verified 0.12 engine; no simulation changes",
+    "Authoritative briefing/font/HUD sources match generated and packaged runtime files",
+    "font-startup-v13.json: passed",
+    "reference-v13.json: passed",
+    "interface-v13.json: passed",
+    "Android 0.13/versionCode14 compiles and retains the previous package and signing certificate; v2/v3 signatures verify"
+  ],
+  "deviceTesting": "Desktop Chromium/WASM and APK validation only; phone testing pending"
+}

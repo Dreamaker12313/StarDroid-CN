@@ -1,0 +1,18 @@
+{
+  "version": "0.7",
+  "versionCode": 7,
+  "package": "org.openbw.androidtest",
+  "minSdk": 26,
+  "targetSdk": 35,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "apkBytes": 3476427,
+  "apkSha256": "def96c734d1af006d691cd5cc51d4b24aa27a2859f2fefdc3bbbdea0d8adcaa2",
+  "checks": [
+    "Java compile and D8 pass",
+    "APK v2/v3 signing verified with existing certificate",
+    "zipalign checked",
+    "APK ZIP CRC and every packaged asset byte checked",
+    "All six WASM hashes verified against ENGINE-BUILD.json"
+  ],
+  "androidDeviceTest": false
+}

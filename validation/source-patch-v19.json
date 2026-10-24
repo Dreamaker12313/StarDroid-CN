@@ -1,0 +1,17 @@
+{
+  "verified": true,
+  "files": {
+    "web/wasm_main.cpp": "381caf39a29e25f765f8324df0e66c014f8dfbaf2cd941ea87e7e8c4a7c4dc8b",
+    "web/wasm_backend.cpp": "f078f806f90d8a13993a88974cdadd05c379c97364d5fb362dfd4d63f8fe03b5",
+    "web/sandbox.h": "e52eae44376bbdaea80573f65ffcc05729ca3ee96f0d3b27e19e4548ad60a7dc",
+    "web/campaign.h": "378b103bb3e9850af0d791e658a7a6089c09ea0fe78942bba768490c1fd0e366",
+    "actions.h": "298b74bbb14a2ca1a4a6ca7d4e8c6e66d30fb3d15bdcc85e5d7985286f626aa5",
+    "bwgame.h": "74f8c198b50ab82a41fd960ee7111a031c3ee9f0b901ac6be27bd1f532ac15bb",
+    "web/campaign_ai.h": "bf8ad955178abc1464be9f32834a30a185e64e7e98e9aff7c2c8211196c8c5fd",
+    "web/bot/patch-vendor.py": "197646c37360ca3f6345148a95f5d7972c741bc3965a731acb898010ed8ee860",
+    "web/bot/build-web.sh": "7dd0dbb72b14d1e80f6d90bed714c0a92e6a74cf3bf4db661395aa32e51e66c3",
+    "ui/ui.h": "a563dd14ed5d1919fa96bea21fef9e3d2858bbed8f8051b31e74b4d06ae839af",
+    "data_loading.h": "42aded79be0430fc5efdfe3a6bcfdecc21b1e60f86ffed80d38a88814c29b9fe"
+  },
+  "patchSha256": "d614512824644f1a77ed48e4b3e641f87eb8baf0c4c520b4b30938055bc0c50a"
+}

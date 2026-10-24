@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "checks": [
+    "pristine source is unpatched",
+    "gameplay patch applies",
+    "applied patch is detected",
+    "ordered presentation, feedback, revision, mission and polish patches apply",
+    "feedback patch is idempotent",
+    "fresh reconstruction is byte-identical"
+  ],
+  "sourceSha256": {
+    "UPSTREAM.json": "6b81e721c7193682a68fef987b38feee4315c6705207cf89d44ef546bd3898e9",
+    "patches/campaign.patch": "ca688d15ba6d24a64c3b9d260bd208ee3dbed3c927c36d936deaa92f70a9d609",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+    "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6",
+    "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+    "patches/native-finale37.patch": "f1050e7a66ee1a37f7159bfcf72f4a7fc94585da4e3ca4aeda21442782165f66",
+    "patches/native-controls38.patch": "04f5614d3b4797215cc58442ed18e21bb39891cdfc01d79d7f557e373f4487d0",
+    "patches/native-polish39.patch": "9a323dd664fa4685d0cee3ab531791c59ae970273eaa71ad4b65a78dc210a0a8",
+    "patches/native-polish40.patch": "2b588458a28921ad8ff8e5f88e3c573ec54e64490f29ae8d6b9d83deaeccfc49",
+    "patches/native-polish41.patch": "4776feefa2455e2114f97cc5ffb4b286cb072cfec1ff3bc2fe85f3f34cd75ea5",
+    "patches/native-polish42.patch": "92d7b77fc836e310d235f64b7c97029f82a422500501d2c2f94b32bcf045b667",
+    "patches/native-ai43.patch": "db4d250f42c33f7067e057be6e3c471c8777f0de66afd35422437b2ff5f44cd5",
+    "patches/native-polish44.patch": "99840a772d41ff39162adb5908fbc68ab0a17aabb116b6ef0c0d39566eb3862c",
+    "scripts/prepare_native.py": "3e756f284819692c39433f8e38aafb7eddc6d57da5d4bb10bf590e22082f5086",
+    "scripts/prepare_presentation.py": "bfc28fc5356831dd60cb0ce29a5f1296fd08ee047ee347727adf39678d7d9d46",
+    "scripts/prepare_feedback.py": "b15e627e5d16c7dcb881186746311ba64f599f216b81549b40f7db1f42b2a694",
+    "tests/native_patch_preparation.py": "4fee7b21d5ede167a5e2dded486038e1ef2bb000341b9d746610c49a82f340a5"
+  }
+}

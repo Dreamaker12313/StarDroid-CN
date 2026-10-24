@@ -1,0 +1,4 @@
+PASS testmono.raw 6 correct PCM bytes
+PASS teststereo.raw 8 correct PCM bytes
+PASS testfull.raw 4096 correct PCM bytes
+PASS: mono/stereo sample values, exact boundaries, rejected short output and control-byte tail

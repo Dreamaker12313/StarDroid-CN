@@ -1,0 +1,23 @@
+[hidden] { display: none !important; }
+#topbar #campaign-objectives-button { width:auto; padding:0 9px; font-size:12px; }
+#campaign-progress { position:fixed;top:57px;right:10px;font:12px system-ui;color:#e0efff;background:#06101cd9;padding:5px 9px;border-radius:6px;pointer-events:none;z-index:4; }
+#campaign-cinematic { position:fixed;top:84px;right:12px;font:11px system-ui;color:#81d9f6;pointer-events:none; }
+#campaign-subtitle { position:fixed;top:88px;left:50%;transform:translateX(-50%);max-width:440px;width:64vw;box-sizing:border-box;white-space:pre-line;background:#04101ded;border-left:3px solid #69d9ff;padding:10px 14px;border-radius:6px;color:#edf6ff;font:14px/1.35 system-ui;pointer-events:none;z-index:6; }
+#campaign-objectives { position:fixed;top:62px;left:20px;max-width:350px;max-height:65vh;overflow:auto;background:#101d2af5;padding:18px;z-index:10;border:1px solid #476780;border-radius:10px; }
+#campaign-objectives-text { white-space:pre-line;font-size:15px;line-height:1.6; }
+#campaign-objectives p { font-size:12px;max-width:310px;color:#a5b6c9; }
+#campaign-objectives-close { float:right;margin:0 0 8px 12px;padding:6px 12px; }
+#campaign-briefing { position:fixed;inset:0;z-index:20;background:#080f18;overflow:auto;display:grid;place-items:center;padding:16px;box-sizing:border-box;color:#edf6ff;font-family:system-ui; }
+.brief-card { width:min(800px,100%); }
+.brief-heading { display:flex;justify-content:space-between;align-items:center;color:#8eb7d6; }
+.brief-heading small { font-size:11px;letter-spacing:2px; }
+.brief-heading h1 { color:#f0f6ff;font-size:28px;margin:5px 0 8px; }
+#brief-speaker { color:#6cd8ff;font-size:16px;margin:8px 0; }
+#brief-text { min-height:100px;font-size:15px;line-height:1.5;max-width:760px;white-space:pre-line; }
+.brief-actions { display:flex;gap:10px;margin-top:16px; }
+.brief-actions button { margin:0;padding:11px 18px;min-height:42px;font-size:14px; }
+#brief-start { background:#186589;color:white;margin-left:auto; }
+.brief-card p { font-size:12px;color:#8b9faf;margin:12px 0 0; }
+@media (max-height:450px) { #campaign-briefing{padding:10px 20px;} .brief-heading h1{font-size:23px;} #brief-text{font-size:14px;min-height:100px;} .brief-actions{margin-top:10px;} }
+
+#campaign-ai-warning { position:fixed;top:84px;right:10px;max-width:70vw;padding:8px;background:#5c1717ed;color:#fff;font:12px system-ui;z-index:9; }

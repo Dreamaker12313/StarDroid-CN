@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "Real BROODAT.MPQ: packed and decoded round-trip; unrelated file hidden; source unchanged",
+    "Real STARDAT.MPQ: packed and decoded round-trip; unrelated file hidden; source unchanged",
+    "Real patch_rt.mpq: packed and decoded round-trip; unrelated file hidden; source unchanged",
+    "607 MB archive: selected data beyond 512 MB exported under 48 MB heap; round-trip exact",
+    "Wrong archive / missing required mission rejected",
+    "MPQ inside an executable-style prefix supported"
+  ],
+  "largeInputBytes": 607068704,
+  "exportZipBytes": 3895,
+  "heapLimitMB": 48
+}

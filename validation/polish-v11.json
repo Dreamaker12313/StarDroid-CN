@@ -1,0 +1,62 @@
+{
+  "checks": [
+    "Real Mission 3: no Medic or mission-locked Ghost in card; raw Medic train rejected even with completed Academy, money and instant production; original numeric top clock",
+    "Active upgrade production shows its original icon and Upgrading caption; tapping it cancels correctly",
+    "Live Infantry Armor research raises selected SCV armor icon to level 1 with base+bonus tooltip; upgrade buttons have original icons; skirmish can still train Medics",
+    "One tap selects an own unit; a single ground tap issues an engine move order",
+    "Mineral tap gathers; drag selects a group; cancelled drag, two-finger pan/pinch and background interruption preserve selection without stray orders; pinch changes engine resolution"
+  ],
+  "errors": [],
+  "layouts": [],
+  "classic": {
+    "card": "Barracks\tHP 1000/1000\t\t\nm\tMarine\t1\t0\t50\t0\t1\t\t\t0\t0\nf\tFirebat\t1\t32\t50\t25\t0\t\t\t0\t32\nl\tLift Off\t1\t-1\t0\t0\t1\t\t\t0\t-1\nr\tSet Rally Point\t1\t-1\t0\t0\t1\t\t\t0\t-1",
+    "afterCard": "Barracks\tHP 1000/1000\t\t\nm\tMarine\t1\t0\t50\t0\t1\t\t\t0\t0\nf\tFirebat\t1\t32\t50\t25\t1\t\t\t0\t32\nl\tLift Off\t1\t-1\t0\t0\t1\t\t\t0\t-1\nr\tSet Rally Point\t1\t-1\t0\t0\t1\t\t\t0\t-1",
+    "medics": [],
+    "academy": {
+      "id": 3572,
+      "name": "Academy",
+      "owner": 1,
+      "x": 304,
+      "y": 2944,
+      "order": 23
+    },
+    "timer": "29:55",
+    "aiError": ""
+  },
+  "timer": {
+    "text": "29:55",
+    "rect": {
+      "x": 192,
+      "y": 0,
+      "width": 128,
+      "height": 19,
+      "top": 0,
+      "right": 320,
+      "bottom": 19,
+      "left": 192
+    },
+    "fontHeight": 19
+  },
+  "upgrade": {
+    "upgradeCard": "Engineering Bay\tHP 850/850\t\t\na\tInfantry Armor\t1\t-1\t100\t100\t1\t\t+1 infantry armor\t0\t292\nw\tInfantry Weapons\t1\t-1\t100\t100\t1\t\t+1 infantry damage\t0\t288\nl\tLift Off\t1\t-1\t0\t0\t1\t\t\t0\t-1",
+    "stats": "0\t-1\t100\t-1\t200\t0\nweapon\t329\t0\t5\t0\t1\t241\narmor\t292\t1\t0\t1\t1\t411",
+    "medics": 1,
+    "worker": {
+      "id": 3665,
+      "name": "SCV",
+      "owner": 3,
+      "x": 447,
+      "y": 1049,
+      "order": 3
+    },
+    "bay": {
+      "id": 3663,
+      "name": "Engineering Bay",
+      "owner": 3,
+      "x": 480,
+      "y": 1008,
+      "order": 23,
+      "buildFrames": 2
+    }
+  }
+}
