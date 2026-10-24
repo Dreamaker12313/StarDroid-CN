@@ -1,10 +1,12 @@
 # StarDroid 1.0
 
+[View the GitHub release and all downloads](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0)
+
 An Android adaptation of classic StarCraft and Brood War, put together by **ToadWarrior**.
 
 ## Download and install
 
-Download **[StarDroid-1.0.apk](https://github.com/kinopiowarrior/StarDroid/raw/refs/heads/main/distribution/StarDroid-1.0.apk)**. The [source archive](https://github.com/kinopiowarrior/StarDroid/archive/refs/heads/main.zip) is available separately. It supports Android 8.0+ on ARM64 and x86-64. Install over an existing matching installation without uninstalling to keep its imported content, profiles, settings, and saves.
+Download **[StarDroid-1.0.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0/StarDroid-1.0.apk)**. The [source archive](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0/StarDroid-1.0-source.zip) is available separately. The APK supports Android 8.0+ on ARM64 and x86-64. Install over an existing matching installation without uninstalling to keep its imported content, profiles, settings, and saves.
 
 The APK contains the engine and Android app, **not the original game data**. Import your own `StarDat.mpq`, `BrooDat.mpq`, and `Patch_rt.mpq`. Import the original `StarCraft.mpq` and `BroodWar.mpq` installation-media archives for campaign and movie content. See the [installation and controls guide](https://github.com/kinopiowarrior/StarDroid#install) for the complete setup steps and touch gestures.
 
