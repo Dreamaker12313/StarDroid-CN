@@ -45,9 +45,7 @@ import java.util.concurrent.Executors;
 /** Offline Android host with a native C++ game engine and Android rendering. */
 public final class MainActivity extends Activity {
   private static final String[] MPQS = {"STARDAT.MPQ", "BROODAT.MPQ", "patch_rt.mpq"};
-  private static final int PICK_DATA = 10, PICK_MAP = 11, PICK_REPLAY = 12, PICK_SAVE = 13, EXPORT_SAVE = 14;
-  private int exportSaveSlot = -1;
-  private boolean savePickerActive;
+  private static final int PICK_DATA = 10, PICK_MAP = 11, PICK_REPLAY = 12;
   private NativeNearby nearbyPermissionRequest;
   private NativeNearby nearbyBluetoothRequest;
   void requestNearbyBluetooth(NativeNearby owner,boolean discoverable) {
@@ -82,10 +80,6 @@ public final class MainActivity extends Activity {
   @Override
   public void onCreate(Bundle state) {
     super.onCreate(state);
-    if (state != null) {
-      exportSaveSlot = state.getInt("export-save-slot", -1);
-      savePickerActive = state.getBoolean("save-picker-active", false);
-    }
     AppDiagnostics.install(this);
     NativeCache.beginSession(getCacheDir());
     try { PortText.load(getAssets().open("native/ui-languages.tsv")); }
@@ -119,14 +113,8 @@ public final class MainActivity extends Activity {
           return insets;
         });
     fullscreen();
-    if (ready() && !savePickerActive) startTitle();
+    if (ready()) startTitle();
     else showHome();
-  }
-
-  @Override protected void onSaveInstanceState(Bundle state) {
-    state.putInt("export-save-slot", exportSaveSlot);
-    state.putBoolean("save-picker-active", savePickerActive);
-    super.onSaveInstanceState(state);
   }
 
   private File missionFile(int n) {
@@ -209,10 +197,6 @@ public final class MainActivity extends Activity {
     text(language, "Game voices and campaign text use the language of the imported files.", 13, 0xff8da4cf);
     LinearLayout input = section(panel, "Controls");
     button(input, "Gamepad controls", this::requestGamepadSettings).setEnabled(!busy());
-    LinearLayout saves = section(panel, "Saved games");
-    button(saves, "Import StarDroid save", this::pickSave).setEnabled(!busy());
-    button(saves, "Export StarDroid save", () -> chooseSaveSlot(false, null)).setEnabled(!busy());
-    text(saves, "Transfer StarDroid .obwsave files between devices or a PC. Original StarCraft .sng/.snx saves are not compatible yet.", 13, 0xff8da4cf);
     noticeView = notice.isEmpty() ? null : text(panel, notice, 14, 0xffc5cfeb);
     LinearLayout setup = section(panel, "Game files");
     text(
@@ -457,29 +441,6 @@ public final class MainActivity extends Activity {
       if(owner!=null)owner.bluetoothResult(request==49,request==49?result>0:result==RESULT_OK);
       return;
     }
-    if (request == PICK_SAVE) {
-      savePickerActive = false; showHome();
-      if (result == RESULT_OK && data != null && data.getData() != null)
-        chooseSaveSlot(true, data.getData());
-      return;
-    }
-    if (request == EXPORT_SAVE) {
-      savePickerActive = false; showHome();
-      final int slot = exportSaveSlot; exportSaveSlot = -1;
-      if (result == RESULT_OK && data != null && data.getData() != null && slot >= 0) {
-        final Uri uri = data.getData(); importing = true; showHome();
-        io.execute(() -> {
-          String message;
-          try (java.io.OutputStream out = getContentResolver().openOutputStream(uri, "wt")) {
-            if (out == null) throw new IOException("Cannot open the save destination.");
-            new NativeSaves(getFilesDir()).exportSave(slot, out);
-            message = "Saved game exported.";
-          } catch (Exception error) { message = "Save export failed: " + error.getMessage(); }
-          finishSaveTransfer(message);
-        });
-      }
-      return;
-    }
     if (request == PICK_REPLAY) {
       final byte[] bytes = pendingReplay;
       pendingReplay = null;
@@ -650,67 +611,6 @@ public final class MainActivity extends Activity {
     intent.setType("*/*");
     intent.addCategory(Intent.CATEGORY_OPENABLE);
     startActivityForResult(intent, PICK_MAP);
-  }
-
-  private void pickSave() {
-    try {
-      savePickerActive = true;
-      startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*")
-          .addCategory(Intent.CATEGORY_OPENABLE), PICK_SAVE);
-    } catch (Exception error) {
-      savePickerActive = false;
-      notice = "No file picker is available: " + error.getMessage(); showHome();
-    }
-  }
-
-  private void chooseSaveSlot(boolean importingSave, Uri source) {
-    if (busy()) return;
-    NativeSaves saves = new NativeSaves(getFilesDir());
-    String[] labels = new String[NativeSaves.SLOTS];
-    boolean[] occupied = new boolean[NativeSaves.SLOTS];
-    for (int slot = 0; slot < labels.length; slot++) {
-      String detail = PortText.text("Empty");
-      try { org.json.JSONObject info = saves.info(slot); occupied[slot] = true;
-        detail = info.optString("name", info.optString("title", PortText.text("Saved game")));
-      } catch (java.io.FileNotFoundException empty) {
-        // An empty slot has no snapshot to overwrite or export.
-      } catch (Exception damaged) { occupied[slot] = true; detail = PortText.text("Unreadable save"); }
-      labels[slot] = PortText.text("Slot") + " " + (slot + 1) + " · " + detail;
-    }
-    new AlertDialog.Builder(this).setTitle(PortText.text(importingSave ? "Import into slot" : "Export saved game"))
-        .setItems(labels, (dialog, slot) -> {
-          if (importingSave) {
-            Runnable replace = () -> importSave(source, slot);
-            if (occupied[slot]) new AlertDialog.Builder(this).setTitle(PortText.text("Replace saved game?"))
-                .setMessage(labels[slot]).setPositiveButton(PortText.text("Replace"), (confirm, ignored) -> replace.run())
-                .setNegativeButton(PortText.text("Cancel"), null).show();
-            else replace.run();
-          } else if (!occupied[slot]) Toast.makeText(this, PortText.text("This slot is empty."), Toast.LENGTH_SHORT).show();
-          else {
-            exportSaveSlot = slot; savePickerActive = true;
-            try { startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).setType("application/octet-stream")
-                .addCategory(Intent.CATEGORY_OPENABLE).putExtra(Intent.EXTRA_TITLE, "StarDroid-slot-" + (slot + 1) + ".obwsave"), EXPORT_SAVE); }
-            catch (Exception error) { exportSaveSlot = -1; savePickerActive = false; notice = "No file picker is available: " + error.getMessage(); showHome(); }
-          }
-        }).setNegativeButton(PortText.text("Cancel"), null).show();
-  }
-
-  private void importSave(Uri source, int slot) {
-    if (source == null || busy()) return;
-    importing = true; notice = "Importing saved game…"; showHome();
-    io.execute(() -> {
-      String message;
-      try (InputStream in = getContentResolver().openInputStream(source)) {
-        if (in == null) throw new IOException("Cannot read the selected save.");
-        new NativeSaves(getFilesDir()).importSave(in, displayName(source), getCacheDir(), slot);
-        message = "Saved game imported. Use Load Saved to continue.";
-      } catch (Exception error) { message = "Save import failed: " + error.getMessage(); }
-      finishSaveTransfer(message);
-    });
-  }
-
-  private void finishSaveTransfer(String message) {
-    runOnUiThread(() -> { importing = false; notice = message; if (!isDestroyed()) showHome(); });
   }
 
   private String diagnostics() {

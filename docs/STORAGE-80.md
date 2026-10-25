@@ -1,4 +1,4 @@
-# Cache and save transfer changes (build 80)
+# Cache changes (build 80)
 
 ## Why Android could show almost 4 GB of cache
 
@@ -24,13 +24,9 @@ This moves a little disk preparation from app startup to the moment a cinematic 
 
 Brood War's alternative campaign interface was separately checked (94,827 compact bytes). Only one interface bundle slot is opened by the app; the two interface entries are not both counted in the seven-slot total.
 
-At the first Activity start in a process, `NativeCache.beginSession` removes only recognized abandoned map/save import/export files and unfinished MPQ preparations and an abandoned single-movie staging file in the private cache. It runs once per process to avoid deleting live work during an Activity recreation. It does not touch imported MPQs, installed map packs, settings, or save slots. Missing source bundles also remove their obsolete prepared slot/stamp when archives are reopened.
+At the first Activity start in a process, `NativeCache.beginSession` removes only recognized abandoned map-import files, save-transfer leftovers from earlier development builds, unfinished MPQ preparations, and an abandoned single-movie staging file in the private cache. It runs once per process to avoid deleting live work during an Activity recreation. It does not touch imported MPQs, installed map packs, settings, or save slots. Missing source bundles also remove their obsolete prepared slot/stamp when archives are reopened.
 
-## Save transfer
-
-App Options can import/export a single-player StarDroid `.obwsave` through Android's document picker, including a backup copied from a PC. Import validates the ZIP entries, manifest, state/map SHA-256, native state magic/schema, native checksum, and reconstructed MPQ bounds before atomically replacing the chosen slot. Corrupt or unsupported input leaves that slot unchanged. Legacy sparse-map saves remain supported.
-
-This is portable StarDroid save transfer, not a converter for original Blizzard PC `.sng` / `.snx` saves. Those formats are rejected with a specific explanation. See [PC-SAVE-COMPATIBILITY.md](PC-SAVE-COMPATIBILITY.md).
+Normal in-game saving and loading are unchanged. There are no save-file import/export controls.
 
 ## Validation
 
@@ -38,7 +34,7 @@ This is portable StarDroid save transfer, not a converter for original Blizzard 
 
 `python3 tests/run_cinematic_cache80.py --data-dir /path/to/owned/archives`
 
-- Java production-method tests cover cache migration and rollback, save export/import, legacy sparse maps, damaged state/map data, unsupported versions/engines, original-PC-save rejection, slot preservation, and temporary-file cleanup.
+- Java production-method tests cover cache migration and rollback, normal in-game saving/loading, legacy sparse maps, damaged state/map data, slot preservation, and temporary-file cleanup.
 - An independent native MPQ reader compares 269 original music/story/movie/interface/font and mission assets byte-for-byte after compaction, including the full Wasteland and Reign of Fire import lists. Those two mission caches shrink to 1,172,744 and 3,367,966 bytes respectively.
 - Synthetic raw, encrypted, offset-encrypted, sector-table, checksum-table, padded-tail, and whole-file cases verify the rekeying path, including a cipher stream longer than its 64 KiB buffer.
 - The cinematic test exercises the production archive-loading/playback lifecycle and compares all 17 supplied movies against original-archive playback after the temporary MPQ has been closed and deleted, including decoded audio, representative video frames, rewind, and end of playback. See `validation/cinematic-cache80.json` for results and any baseline decoder warnings.

@@ -1,16 +1,16 @@
 # PC save compatibility
 
-Review date: 2026-10-26. This review distinguishes transferring a StarDroid save through a PC from resuming a save made by Blizzard's PC game.
+Review date: 2026-10-26. This is a format research note; the release does not provide save-file import/export. Normal in-game saving and loading remain available.
 
-## Supported transfer format
+## Internal save format
 
 StarDroid saves use `.obwsave`: a ZIP containing `manifest.json`, `state.bin`, and the saved map (`map.mpq` or `map.sparse`). `NativeSaves.java` validates the manifest and map/state SHA-256 values. The native state is StarDroid's explicit-field `OBWSAV1` codec, currently schema 4, with readers for schemas 1–4. `native/save_state.h::header` checks the format, map/data signature, and match settings; `restore` decodes and validates a replacement world before committing it.
 
-Copying this format between storage locations is possible. Renaming another engine's save to `.obwsave` does not convert its state.
+Renaming another engine's save to `.obwsave` does not convert its state.
 
 ## Original StarCraft / Brood War saves
 
-Classic single-player saves normally use `.sng` and `.snx`. This checkout does **not** contain a reader or converter for their saved simulation state. Original PC saves therefore cannot currently resume in StarDroid. Import must reject them clearly without replacing an existing slot. Loading only their mission or map would restart play and must not be presented as restoring the save.
+Classic single-player saves normally use `.sng` and `.snx`. This checkout does **not** contain a reader or converter for their saved simulation state. Original PC saves therefore cannot currently resume in StarDroid. Loading only their mission or map would restart play and must not be presented as restoring the save.
 
 No original `.sng` / `.snx` fixture was available in the supplied project/data for continuation tests. This is an implementation and validation gap, not a claim that conversion is impossible.
 

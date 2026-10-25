@@ -20,11 +20,14 @@ public final class CacheSaves80Test {
     }
     return out.toByteArray();
   }
-  static void rejected(NativeSaves store,File slot,File cache,byte[] input,String name,String message)throws Exception {
+  static void rejectedRead(NativeSaves store,File slot,File cache,byte[] damaged)throws Exception {
     byte[] before=bytes(slot);boolean failed=false;
-    try{store.importSave(new ByteArrayInputStream(input),name,cache,0);}catch(Exception e){failed=true;if(message!=null)check(e.getMessage().contains(message),"Wrong rejection: "+e);}
-    check(failed,"Accepted invalid save "+name);check(Arrays.equals(before,bytes(slot)),"Rejected import changed existing save");
-    File[] left=cache.listFiles((d,n)->n.startsWith("save-import-")||n.startsWith("saved-map-"));check(left!=null&&left.length==0,"Import leaked temporary files");
+    try {
+      Files.write(slot.toPath(),damaged);
+      try(NativeSaves.Loaded ignored=store.read(0,cache)){}catch(Exception e){failed=true;}
+      check(failed,"Accepted damaged saved game");
+      File[] left=cache.listFiles((d,n)->n.startsWith("saved-map-"));check(left!=null&&left.length==0,"Failed load leaked temporary map");
+    } finally {Files.write(slot.toPath(),before);}
   }
   public static void main(String[] args)throws Exception {
     File base=new File(args[0]),cache=new File(base,"cache");cache.mkdirs();
@@ -45,34 +48,21 @@ public final class CacheSaves80Test {
     // The compact cache is the same map format saved by normal gameplay.
     JSONObject info=new JSONObject().put("missionCode",0).put("race",1).put("frame",10).put("name","Test match").put("opponentRace",1);
     byte[] state=snapshot();store.write(0,info,state,compact);
-    ByteArrayOutputStream export=new ByteArrayOutputStream();store.exportSave(0,export);byte[] portable=export.toByteArray();
-    check(portable.length>100,"Export empty");
-    store.importSave(new ByteArrayInputStream(portable),"PC backup.obwsave",cache,1);
-    try(NativeSaves.Loaded loaded=store.read(1,cache)){check(Arrays.equals(state,loaded.state),"Imported state changed");check(Arrays.equals(exact,bytes(loaded.map)),"Imported map changed");}
-    check(store.info(1).getString("name").equals("Test match"),"Imported details changed");
     File slot=new File(data,"saves/slot-1.obwsave");
-    for(String name:new String[]{"original.sng","original.snx","original.sav"})rejected(store,slot,cache,"StarCraft saved game".getBytes("UTF-8"),name,"Original StarCraft PC saves");
-    rejected(store,slot,cache,"StarCraft saved game".getBytes("UTF-8"),"renamed.obwsave",null);
-    rejected(store,slot,cache,new byte[]{1,2,3},"broken.obwsave",null);
-    byte[] broken=state.clone();broken[40]^=1;rejected(store,slot,cache,changeEntry(portable,"state.bin",broken),"broken.obwsave","damaged");
-    rejected(store,slot,cache,changeEntry(portable,"map.mpq",new byte[64]),"broken.obwsave","damaged");
-    JSONObject badInfo=new JSONObject(store.info(0).toString()).put("multiplayer",true);
-    rejected(store,slot,cache,changeEntry(portable,"manifest.json",badInfo.toString().getBytes("UTF-8")),"multi.obwsave","single-player");
-    badInfo=new JSONObject(store.info(0).toString()).put("stateSha256",NativeSaves.digest(broken));
-    rejected(store,slot,cache,changeEntry(changeEntry(portable,"state.bin",broken),"manifest.json",badInfo.toString().getBytes("UTF-8")),"checksum.obwsave","damaged");
-    byte[] fakeMap=new byte[64];badInfo=new JSONObject(store.info(0).toString()).put("mapBytes",fakeMap.length).put("mapSha256",NativeSaves.digest(fakeMap));
-    rejected(store,slot,cache,changeEntry(changeEntry(portable,"map.mpq",fakeMap),"manifest.json",badInfo.toString().getBytes("UTF-8")),"fake-map.obwsave","archive");
-    // Valid ZIP hashes cannot make a different engine's state compatible.
-    badInfo=new JSONObject(store.info(0).toString());byte[] alien=state.clone();alien[0]='X';
-    badInfo.put("stateSha256",NativeSaves.digest(alien));byte[] alienZip=changeEntry(changeEntry(portable,"state.bin",alien),"manifest.json",badInfo.toString().getBytes("UTF-8"));
-    rejected(store,slot,cache,alienZip,"alien.obwsave","Unsupported StarDroid");
-    byte[] future=state.clone();put64(future,8,99);badInfo=new JSONObject(store.info(0).toString()).put("stateSha256",NativeSaves.digest(future));
-    rejected(store,slot,cache,changeEntry(changeEntry(portable,"state.bin",future),"manifest.json",badInfo.toString().getBytes("UTF-8")),"future.obwsave","Unsupported StarDroid");
-    // Large logical legacy map snapshots continue to restore via format2.
+    byte[] saved=bytes(slot);
+    try(NativeSaves.Loaded loaded=store.read(0,cache)){check(Arrays.equals(state,loaded.state),"Saved state changed");check(Arrays.equals(exact,bytes(loaded.map)),"Saved map changed");}
+    check(store.info(0).getString("name").equals("Test match"),"Saved details changed");
+    byte[] broken=state.clone();broken[40]^=1;
+    rejectedRead(store,slot,cache,changeEntry(saved,"state.bin",broken));
+    rejectedRead(store,slot,cache,changeEntry(saved,"map.mpq",new byte[64]));
+    rejectedRead(store,slot,cache,new byte[]{1,2,3});
+    boolean badWrite=false;try{store.write(0,info,new byte[1],compact);}catch(Exception e){badWrite=true;}
+    check(badWrite&&Arrays.equals(saved,bytes(slot)),"Invalid snapshot changed existing save");
+    badWrite=false;try{store.write(0,info,state,new File(base,"missing-map.mpq"));}catch(Exception e){badWrite=true;}
+    check(badWrite&&Arrays.equals(saved,bytes(slot)),"Missing map changed existing save");
+    // Normal gameplay can still load older sparse map snapshots via format2.
     store.write(2,info,state,map);check(store.info(2).getInt("format")==2,"Legacy sparse map not retained");
-    ByteArrayOutputStream sparseExport=new ByteArrayOutputStream();store.exportSave(2,sparseExport);
-    store.importSave(new ByteArrayInputStream(sparseExport.toByteArray()),"old.obwsave",cache,3);
-    try(NativeSaves.Loaded loaded=store.read(3,cache)){check(loaded.map.length()==map.length(),"Legacy sparse map length changed");check(Arrays.equals(state,loaded.state),"Legacy snapshot changed");}
+    try(NativeSaves.Loaded loaded=store.read(2,cache)){check(loaded.map.length()==map.length(),"Legacy sparse map length changed");check(Arrays.equals(state,loaded.state),"Legacy snapshot changed");}
     check(cache.listFiles((d,n)->n.startsWith("saved-map-")).length==0,"Loaded map close leaked file");
     // Only recognized work files are removed; durable user content is outside cache.
     File engine=new File(cache,"native-mpq");engine.mkdirs();
@@ -84,6 +74,6 @@ public final class CacheSaves80Test {
     check(!new File(cache,"save-import-orphan.obwsave").exists()&&!new File(engine,"saved-map-orphan.mpq").exists(),"Cleanup left stale work files");
     check(!new File(engine,"cinematic.mpq").exists()&&!new File(engine,"cinematic.stamp").exists()&&!new File(engine,"cinematic.tmp").exists(),"Abandoned movie staging survived startup");
     File newer=new File(cache,"map-import-new.scx");Files.write(newer.toPath(),new byte[]{1});NativeCache.beginSession(cache);check(newer.isFile(),"Repeated startup removed live import");
-    System.out.println("PASS "+checks+" cache migration/rollback and portable save import/export checks");
+    System.out.println("PASS "+checks+" cache migration/rollback and normal in-game save/load checks");
   }
 }

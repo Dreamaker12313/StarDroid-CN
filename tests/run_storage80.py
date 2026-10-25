@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify compact MPQ migration and portable save transfer, without game data in source."""
+"""Verify compact MPQ migration and normal in-game saves, without game data in source."""
 import argparse, hashlib, json, struct, subprocess, zipfile
 from pathlib import Path
 r=Path(__file__).resolve().parents[1]
@@ -126,4 +126,4 @@ public class RealCache80 {public static void main(String[] a)throws Exception {
   run([b/'native-cache80',a.data_dir/(game+'.mpq'),paths.with_suffix('.mpq'),paths])
   real.append(dict(bundle=stem,originalBytes=(a.data_dir/(game+'.mpq')).stat().st_size,compactBytes=paths.with_suffix('.mpq').stat().st_size,entries=len(paths.read_text().splitlines())))
 files=[src/(n+'.java') for n in production]+[r/'tests/CacheSaves80Test.java',r/'tests/native_cache80.cpp',Path(__file__)]
-(r/'validation/storage80.json').write_text(json.dumps(dict(passed=True,physicalAndroid=False,originalPcSavesSupported=False,portableStarDroidSavesSupported=True,checks=outputs,realArchiveCaches=real,sourceSha256={str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}),indent=2)+'\n')
+(r/'validation/storage80.json').write_text(json.dumps(dict(passed=True,physicalAndroid=False,originalPcSavesSupported=False,saveFileTransferSupported=False,checks=outputs,realArchiveCaches=real,sourceSha256={str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}),indent=2)+'\n')

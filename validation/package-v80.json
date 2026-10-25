@@ -2,8 +2,8 @@
   "passed": true,
   "version": "1.0.10",
   "versionCode": 80,
-  "apkSha256": "40f2fab866ba4edd3eaf25175549098a854fc3b8dfb4c263a2cad74056040b6c",
-  "apkBytes": 2356082,
+  "apkSha256": "1a86ccfd2e89d0718ac83b76ee178124d65c8b75ae315612dc753084f149f185",
+  "apkBytes": 2350882,
   "previousApkSha256": "f2e1a5c3716dcba86e1eb5293d48870df110b4b5029dd6e47c5316ac8233b0e9",
   "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
   "originalReleaseSigningIdentity": true,
@@ -16,6 +16,8 @@
   ],
   "addedAssets": [],
   "unchangedNativeAndAssetEntries": 74,
+  "saveFileTransferSupported": false,
+  "inGameSaveLoadRetained": true,
   "permissionsUnchanged": true,
   "multiplayerProtocolBuild": 80,
   "decoderBinaryChanges": [],
@@ -28,7 +30,7 @@
     "x86_64/libopenbw.so": "19723a3bcf0ce51a71fa015d9c9c3f58589ad4baf1e27045d0d79fe00c12ace6",
     "x86_64/libsmacker.so": "c504df589281429def05f2d10636ee369bf317ac646d10a1d1d003491b85a0a0"
   },
-  "translationRows": 674,
+  "translationRows": 657,
   "lintErrors": 0,
   "lintWarnings": 15,
   "physicalDevicesTested": false,
@@ -45,6 +47,6 @@
     "cinematic-cache80.json"
   ],
   "sourceSha256": {
-    "tests/check_revision80_package.py": "5ae2c6cb4ecfcf661fec38a66ade8e58a9f3eb4d397824ede351b369bbe3877d"
+    "tests/check_revision80_package.py": "a4f042095eff9aa30ef9be75598423a24449c33fe789297efcdfae2c4ad7e325"
   }
 }

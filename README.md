@@ -142,7 +142,7 @@ More details: [player guide](docs/PLAYER-GUIDE.md) · [current changes](docs/REL
 
 ## Development
 
-The current source targets **1.0.10 / build 80**. It adds gamepad settings, invincibility, reliable/scalable control groups, Drone cancellation fixes, broader AI ammunition production, compact caches, and portable StarDroid save transfer. Original PC `.sng`/`.snx` save conversion remains unsupported. See [build 80 changes](docs/CHANGES-1.0.10.md) and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
+The current source targets **1.0.10 / build 80**. It adds gamepad settings, invincibility, reliable/scalable control groups, Drone cancellation fixes, broader AI ammunition production, and compact caches. Normal in-game saving and loading are unchanged. See [build 80 changes](docs/CHANGES-1.0.10.md) and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
 
 The current Android app uses a native C++ engine, JNI, Android Canvas, and AudioTrack. The older web implementation remains as historical source and is not shipped in the APK.
 

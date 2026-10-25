@@ -64,9 +64,9 @@ with zipfile.ZipFile(APK) as package, zipfile.ZipFile(PREVIOUS) as previous:
     assert sha((ROOT / 'vendor/libsmacker/smacker.c').read_bytes()) == 'd2a9adda0f8d36e952cdb44ec2fefbbe1f4146319272e779eed15f6c06a813a5'
     assert not any(n.lower().endswith(('.mpq', '.p12', '.jks', '.keystore', '.gid', '.fnt', '.wasm', '.html', '.js')) for n in package.namelist())
     dex = b''.join(package.read(n) for n in package.namelist() if n.endswith('.dex'))
-    for value in ['Diagnostics / credits', 'Copy', 'Original larvae selection', '+ over camera area', 'Interface language', 'One larva morph per press', 'Invincibility', 'Gamepad controls', 'Import StarDroid save', 'Export StarDroid save', 'prepareEntry', 'gamepad-controls']:
+    for value in ['Diagnostics / credits', 'Copy', 'Original larvae selection', '+ over camera area', 'Interface language', 'One larva morph per press', 'Invincibility', 'Gamepad controls', 'prepareEntry', 'gamepad-controls']:
         assert value.encode() in dex, value
-    for value in ['Menu files need repair', 'Repair menu files', 'Diagnostic report', 'Menu artwork needs attention', 'Landroid/webkit/WebView;']:
+    for value in ['Import StarDroid save', 'Export StarDroid save', 'importSave', 'exportSave', 'pickSave', 'chooseSaveSlot', 'finishSaveTransfer', 'save-picker-active', 'export-save-slot', 'Menu files need repair', 'Repair menu files', 'Diagnostic report', 'Menu artwork needs attention', 'Landroid/webkit/WebView;']:
         assert value.encode() not in dex, value
     for abi, machine in [('arm64-v8a', 183), ('x86_64', 62)]:
         for name in ('libopenbw.so', 'libsmacker.so'):
@@ -114,6 +114,7 @@ report = {
     'nativeEngineRebuilt': True, 'nativeEngineVersion': '1.0.10-build80',
     'changedNativeAndAssetEntries': changed, 'addedAssets': [],
     'unchangedNativeAndAssetEntries': len(old) - len(changed),
+    'saveFileTransferSupported': False, 'inGameSaveLoadRetained': True,
     'permissionsUnchanged': True, 'multiplayerProtocolBuild': 80,
     'decoderBinaryChanges': sorted(set(changed) & decoders), 'decoderSourceUnchanged': True, 'jniMethodsVerified': len(methods),
     'loadAlignmentBytes': 16384, 'librarySha256': libraries,

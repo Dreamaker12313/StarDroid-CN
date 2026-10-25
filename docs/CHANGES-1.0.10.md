@@ -29,7 +29,7 @@ Default controller bindings:
 
 Alternative bindings include Hold Position, Select Larvae and zoom controls. Touch remains available. Held inputs are cleared on focus loss, controller disconnection and settings changes. Digital and analog trigger reports are deduplicated.
 
-## Storage and save transfer
+## Smaller caches
 
 Imported content previously retained each source CD archive's entire logical size in the cache, producing almost 4 GB of apparent cache with a mission loaded. Sparse files did not necessarily occupy that much physical storage. Cache preparation now packs only the needed blocks and rekeys offset-encrypted data without changing decoded assets. Existing caches migrate automatically, and new imports use the same fix.
 
@@ -37,9 +37,7 @@ Movies are now prepared individually only when played. Once the decoder owns the
 
 With the supplied classic files, normal persistent content cache totals about **235 MB (225 MiB)**, plus a compact active mission, instead of nearly 4 GB apparent size. A single movie temporarily uses additional disk space while opening; opening it may take a little longer. Video quality, audio and imported files remain unchanged. Actual savings depend on the device's filesystem and imported files. See [STORAGE-80.md](STORAGE-80.md) for measurements.
 
-App Options adds **Import StarDroid save** and **Export StarDroid save**, with slot selection and validation before replacement. A `.obwsave` backup can be transferred through a PC or between Android devices.
-
-**Original PC StarCraft `.sng` / Brood War `.snx` saves are not supported by this update.** They need a separate state converter and real save fixtures; neither this engine nor OpenSnowstorm supplies one. This limitation is stated in the UI, and unsupported files leave existing saves unchanged. See [PC-SAVE-COMPATIBILITY.md](PC-SAVE-COMPATIBILITY.md).
+Normal in-game saving and loading are unchanged. Save-file import/export is not included.
 
 ## OpenSnowstorm review
 
@@ -49,6 +47,6 @@ App Options adds **Import StarDroid save** and **Export StarDroid save**, with s
 
 Install the signed APK over the existing app; do not uninstall to update. The application ID and signing certificate are unchanged. Use **build 80 on all nearby multiplayer devices** because AI behavior has changed. No game-data re-import is required. Diagnostics / credits remains available.
 
-Validation passed: 10 worker/cheat regression groups, 13 AI production groups and a natural Hard AI match, 22 campaign regression groups, 345 controller/group checks, 122 scrollbar checks, 63 storage checks, 269 original-asset comparisons and all 17 cinematics. The package check verified both native architectures, all 42 JNI methods, the original signing identity and 16 KiB alignment. Lint reported zero errors. Focused reports are in `validation/`. They use original locally imported data where indicated. Physical Android/controller testing and full campaign playthroughs are still pending.
+Validation passed: 10 worker/cheat regression groups, 13 AI production groups and a natural Hard AI match, 22 campaign regression groups, 345 controller/group checks, 122 scrollbar checks, 24 cache/save checks, 269 original-asset comparisons and all 17 cinematics. The package check verified both native architectures, all 42 JNI methods, the original signing identity and 16 KiB alignment. Lint reported zero errors. Focused reports are in `validation/`. They use original locally imported data where indicated. Physical Android/controller testing and full campaign playthroughs are still pending.
 
 The source checkout retains the historical build 78 native prebuilts. Rebuild both ABIs with `python3 scripts/build.py`; do not package those old libraries with `--skip-engine`. The provided 1.0.10 APK contains freshly rebuilt build 80 engines.
