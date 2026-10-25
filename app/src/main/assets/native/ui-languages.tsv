@@ -627,3 +627,32 @@ Reading map pack…	Чтение набора карт…	Kartenpaket wird geles
 Import up to 10000 maps at once.	Можно импортировать до 10000 карт за раз.	Bis zu 10000 Karten gleichzeitig importieren.	Importa hasta 10000 mapas a la vez.	Importez jusqu’à 10000 cartes à la fois.
 Map pack exceeds 8 GiB.	Набор карт превышает 8 ГиБ.	Kartenpaket übersteigt 8 GiB.	El paquete de mapas supera los 8 GiB.	Le pack de cartes dépasse 8 Gio.
 Not enough storage to import maps.	Недостаточно места для импорта карт.	Nicht genug Speicher für den Kartenimport.	No hay espacio para importar mapas.	Espace insuffisant pour importer les cartes.
+Invincibility	Неуязвимость	Unverwundbarkeit	Invencibilidad	Invincibilité
+Gamepad controls	Управление геймпадом	Gamepad-Steuerung	Controles del mando	Commandes de la manette
+Enable gamepad	Включить геймпад	Gamepad aktivieren	Activar mando	Activer la manette
+Swap pointer and camera sticks	Поменять стики указателя и камеры	Sticks für Zeiger und Kamera tauschen	Intercambiar sticks de puntero y cámara	Inverser les sticks du pointeur et de la caméra
+Pointer speed	Скорость указателя	Zeigergeschwindigkeit	Velocidad del puntero	Vitesse du pointeur
+Camera speed	Скорость камеры	Kamerageschwindigkeit	Velocidad de la cámara	Vitesse de la caméra
+Stick dead zone	Мёртвая зона стиков	Stick-Totzone	Zona muerta del stick	Zone morte des sticks
+Button assignments	Назначение кнопок	Tastenbelegung	Asignación de botones	Affectation des boutons
+Reset to defaults	Сбросить настройки	Standardwerte wiederherstellen	Restablecer valores predeterminados	Rétablir les paramètres par défaut
+Left stick moves the pointer; right stick moves the camera. Hold Select / click and move the pointer to drag a selection. Touch controls remain available.	Левый стик двигает указатель, правый — камеру. Удерживайте «Выбрать / щёлкнуть» и двигайте указатель, чтобы выделить область. Сенсорное управление также доступно.	Der linke Stick bewegt den Zeiger, der rechte die Kamera. Halte „Auswählen / Klicken“ und bewege den Zeiger, um einen Auswahlrahmen zu ziehen. Die Touch-Steuerung bleibt verfügbar.	El stick izquierdo mueve el puntero; el derecho mueve la cámara. Mantén Seleccionar / clic y mueve el puntero para arrastrar una selección. Los controles táctiles siguen disponibles.	Le stick gauche déplace le pointeur ; le droit déplace la caméra. Maintenez Sélectionner / clic et déplacez le pointeur pour tracer une sélection. Les commandes tactiles restent disponibles.
+Select / click	Выбрать / щёлкнуть	Auswählen / Klicken	Seleccionar / clic	Sélectionner / clic
+Move / interact	Двигаться / взаимодействовать	Bewegen / Interagieren	Mover / interactuar	Déplacer / interagir
+Cancel / back	Отмена / назад	Abbrechen / Zurück	Cancelar / volver	Annuler / retour
+Hold position	Удерживать позицию	Position halten	Mantener posición	Tenir la position
+Select larvae	Выбрать личинок	Larven auswählen	Seleccionar larvas	Sélectionner les larves
+Previous group	Предыдущая группа	Vorherige Gruppe	Grupo anterior	Groupe précédent
+Next group	Следующая группа	Nächste Gruppe	Grupo siguiente	Groupe suivant
+Recall group	Выбрать группу	Gruppe auswählen	Seleccionar grupo	Sélectionner le groupe
+Assign group	Назначить группу	Gruppe zuweisen	Asignar grupo	Affecter le groupe
+Game menu	Меню игры	Spielmenü	Menú del juego	Menu du jeu
+Zoom in	Приблизить	Heranzoomen	Acercar	Zoom avant
+Zoom out	Отдалить	Herauszoomen	Alejar	Zoom arrière
+Precision pointer	Точный указатель	Präziser Zeiger	Puntero preciso	Pointeur précis
+Left shoulder	Левый бампер	Linke Schultertaste	Botón superior izquierdo	Bouton supérieur gauche
+Right shoulder	Правый бампер	Rechte Schultertaste	Botón superior derecho	Bouton supérieur droit
+Left trigger	Левый курок	Linker Trigger	Gatillo izquierdo	Gâchette gauche
+Right trigger	Правый курок	Rechter Trigger	Gatillo derecho	Gâchette droite
+Left stick press	Нажатие левого стика	Linken Stick drücken	Pulsar stick izquierdo	Appui sur le stick gauche
+Right stick press	Нажатие правого стика	Rechten Stick drücken	Pulsar stick derecho	Appui sur le stick droit

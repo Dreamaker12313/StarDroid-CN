@@ -1,0 +1,135 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -6623,6 +6623,7 @@
+ 				if (!success) {
+ 					// todo: callback for sound
+ 					remove_one_order(u, get_order_type(Orders::DroneBuild));
++					cancel_build_queue(u);
+ 					set_unit_order(u, u->unit_type->return_to_idle);
+ 				}
+ 			}
+@@ -6642,6 +6643,7 @@
+ 				} else {
+ 					// todo: callback for sound
+ 					remove_one_order(u, get_order_type(Orders::DroneBuild));
++					cancel_build_queue(u);
+ 					if (u->sprite->images.back().modifier == 10) u->sprite->images.back().offset.y = 7;
+ 					queue_order_front(u, get_order_type(Orders::ResetCollision), {});
+ 				}
+@@ -6655,6 +6657,7 @@
+ 		if (u->build_queue.empty()) error("order_DroneBuild: empty build queue");
+ 		const unit_type_t* build_type = u->build_queue.front();
+ 		auto done = [&]() {
++			cancel_build_queue(u);
+ 			if (u->sprite->images.back().modifier == 10) u->sprite->images.back().offset.y = 7;
+ 			queue_order_front(u, get_order_type(Orders::ResetCollision), {});
+ 			u_unset_status_flag(u, unit_t::status_flag_order_not_interruptible);
+@@ -13836,6 +13839,9 @@
+ 
+ 	virtual void on_scenario_attack(unit_t*, unit_t*) {}
+ 	virtual void on_combat_damage(unit_t*, int) {}
++	// Local single-player damage immunity. Never rewrite scenario invincibility
++	// flags: AI targeting and scripted Kill/Remove actions retain their meaning.
++	virtual bool cheat_damage_immune(const unit_t*) const { return false; }
+ 
+ 	void on_unit_damage(unit_t* u, unit_t* source_unit, bool reveal_source) {
+ 		if (!source_unit || source_unit->owner == u->owner) return;
+@@ -13859,7 +13865,7 @@
+ 	}
+ 
+ 	void unit_deal_damage(unit_t* u, fp8 damage, unit_t* source_unit, int source_owner, bool reveal_source = true, bool notify = true) {
+-		if (u->hp == 0_fp8) return;
++		if (u->hp == 0_fp8 || cheat_damage_immune(u)) return;
+ 		// Source-less decay, stim and trigger HP edits are not attacks. Weapon hits
+ 		// notify separately so shield hits and projectiles with dead owners still count.
+ 		if (notify && damage > 0_fp8 && source_unit) on_combat_damage(u, source_owner);
+@@ -13900,7 +13906,7 @@
+ 
+ 	void weapon_deal_damage(const weapon_type_t* weapon, fp8 damage, int damage_divisor, unit_t* target, direction_t heading, unit_t* source_unit, int source_owner) {
+ 		if (target->hp == 0_fp8) return;
+-		if (u_invincible(target)) return;
++		if (u_invincible(target) || cheat_damage_immune(target)) return;
+ 		if (u_hallucination(target)) damage *= 2;
+ 		damage /= damage_divisor;
+ 		damage += fp8::integer(target->acid_spore_count);
+@@ -14140,11 +14146,12 @@
+ 			}
+ 			if (target->stasis_timer) continue;
+ 			target->energy = 0_fp8;
+-			target->shield_points = 0_fp8;
++			if (!cheat_damage_immune(target)) target->shield_points = 0_fp8;
+ 		}
+ 	}
+ 
+ 	void spawn_broodlings(unit_t* target, const unit_t* source_unit) {
++		if (cheat_damage_immune(target)) return;
+ 		if (!u_hallucination(target)) {
+ 			const unit_type_t* broodling_type = get_unit_type(UnitTypes::Zerg_Broodling);
+ 			auto spawn = [&](xy pos) {
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -1392,6 +1392,18 @@
+ 			    && u_completed(silo->building.silo.nuke) && !unit_dying(silo->building.silo.nuke)) return true;
+ 		return false;
+ 	}
++	bool pending_worker_construction(const unit_t* u) const {
++		if (!ut_worker(u) || !u_completed(u) || u->build_queue.empty()
++		    || !ut_building(u->build_queue.front()) || u->current_build_unit) return false;
++		auto building_order = [](Orders order) {
++			return order == Orders::DroneStartBuild || order == Orders::DroneLand
++			    || order == Orders::DroneBuild || order == Orders::PlaceBuilding
++			    || order == Orders::PlaceProtossBuilding;
++		};
++		if (building_order(u->order_type->id)) return true;
++		for (const auto& order : u->order_queue) if (building_order(order.order_type->id)) return true;
++		return false;
++	}
+ 	const char* card_for_unit(unit_t* u, UnitTypes id) {
+ 		using U = UnitTypes;
+         if (archon_merging(u) || (u_completed(u) && unit_unpowered(u))
+@@ -1507,7 +1519,10 @@
+ 		else if (u_grounded_building(u) && u->secondary_order_type->id == Orders::BuildAddon &&
+ 		         u->current_build_unit && !u_completed(u->current_build_unit))
+ 			cancel_op = 52;
+-		else if (unit_race(u) == race_t::zerg && !u->build_queue.empty() && !(game_st.hero_mode && unit_is(u,U::Zerg_Evolution_Chamber)))
++		else if (pending_worker_construction(u))
++			cancel_op = 32;   // pending worker build: cancel queue AND its walk to the site
++		else if (unit_race(u) == race_t::zerg && !u_completed(u) && !u->build_queue.empty()
++		         && !(game_st.hero_mode && unit_is(u,U::Zerg_Evolution_Chamber)))
+ 			cancel_op = 25;
+ 		else if (u_grounded_building(u) && !u_completed(u))
+ 			cancel_op = 24;   // a building still going up (Terran/Protoss); refunds and frees the worker
+@@ -1584,6 +1599,10 @@
+                 break;
+ 			case C_DARCHON: c.enabled = selected_merge_pair(UnitTypes::Protoss_Dark_Templar, TechTypes::Dark_Archon_Meld); break;
+ 			case C_RECHARGE: break;
++			case C_CANCEL:
++				// Landing has a short atomic animation; do not offer a no-op Cancel.
++				c.enabled = c.unit != 32 || (!u_order_not_interruptible(u) && !u_iscript_nobrk(u));
++				break;
+ 			case C_BUILD: case C_TRAIN: case C_MORPH: case C_MORPHBLDG:
+ 			case C_UPGRADE: case C_RESEARCH: case C_SPELL: case C_CLOAK: case C_BURROW: case C_LIFT: case C_LOAD: case C_UNLOADALL: break;   // enabled already set
+ 			default:      c.enabled = true;
+@@ -2090,6 +2109,14 @@
+ 	}
+ 
+     bool test_instant = false;
++    bool test_invincible = false; // session-only; new games and loaded saves start disabled
++    bool cheat_damage_immune(const unit_t* u) const override {
++        return test_invincible && !spectator && u && u->owner == my_player;
++    }
++    void set_test_invincible(bool enabled) {
++        test_invincible = enabled;
++        if (enabled) rep_on = false; // a replay must never omit a local cheat
++    }
+     void apply_testing_cheats() {
+         if (!test_instant || campaign_control_lock || scenario_units_paused()) return;
+         for (unit_t* u : ptr(st.player_units[my_player])) {
+@@ -2445,6 +2472,7 @@
+ 			                  if (c.unit == 46) cmds.cancel_nuke();
+ 			                  else if (c.unit == 52) cmds.cancel_addon();
+ 			                  else if (c.unit == 24) cmds.cancel_build();
++			                  else if (c.unit == 32) cmds.cancel_slot(0);
+ 			                  else cmds.cancel_morph();
+ 			                  break;
+ 			}

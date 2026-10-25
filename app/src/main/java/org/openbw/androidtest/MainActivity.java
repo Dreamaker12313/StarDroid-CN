@@ -71,6 +71,7 @@ public final class MainActivity extends Activity {
   private FrameLayout root;
   private NativeSurface game;
   private boolean optionsVisible = true, activityResumed;
+  private boolean gamepadSettingsVisible;
   private boolean importing;
   private int activeMission = 1;
   private TextView noticeView;
@@ -80,6 +81,7 @@ public final class MainActivity extends Activity {
   public void onCreate(Bundle state) {
     super.onCreate(state);
     AppDiagnostics.install(this);
+    NativeCache.beginSession(getCacheDir());
     try { PortText.load(getAssets().open("native/ui-languages.tsv")); }
     catch (IOException e) { AppDiagnostics.recordFailure("UI translations", e); }
     refreshLanguage();
@@ -193,6 +195,8 @@ public final class MainActivity extends Activity {
     LinearLayout language = section(panel, "Interface language");
     button(language, languageName(), this::chooseLanguage).setEnabled(!busy());
     text(language, "Game voices and campaign text use the language of the imported files.", 13, 0xff8da4cf);
+    LinearLayout input = section(panel, "Controls");
+    button(input, "Gamepad controls", this::requestGamepadSettings).setEnabled(!busy());
     noticeView = notice.isEmpty() ? null : text(panel, notice, 14, 0xffc5cfeb);
     LinearLayout setup = section(panel, "Game files");
     text(
@@ -552,6 +556,26 @@ public final class MainActivity extends Activity {
     showHome();
   }
 
+  void requestGamepadSettings() {
+    if (gamepadSettingsVisible || isFinishing()) return;
+    gamepadSettingsVisible = true;
+    if (game != null) game.reloadGamepadSettings();
+    GamepadSettings.show(this, getSharedPreferences("native-settings", 0), () -> {
+      gamepadSettingsVisible = false;
+      if (game != null) game.reloadGamepadSettings();
+    });
+  }
+
+  @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent event) {
+    if (!optionsVisible && !gamepadSettingsVisible && game != null && game.handleGamepadMotion(event)) return true;
+    return super.dispatchGenericMotionEvent(event);
+  }
+
+  @Override public boolean dispatchKeyEvent(android.view.KeyEvent event) {
+    if (!optionsVisible && !gamepadSettingsVisible && game != null && game.handleGamepadKey(event)) return true;
+    return super.dispatchKeyEvent(event);
+  }
+
   void requestExit() {
     finish();
   }
@@ -676,6 +700,7 @@ public final class MainActivity extends Activity {
   public void onWindowFocusChanged(boolean focus) {
     super.onWindowFocusChanged(focus);
     if (focus) fullscreen();
+    else if (game != null) game.resetGamepadInput();
   }
 
   @Override

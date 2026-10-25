@@ -10,7 +10,7 @@ import argparse,ast,hashlib,json,re,subprocess
 r=Path(__file__).resolve().parents[1];b=r/'build-native/map-scroll79';b.mkdir(parents=True,exist_ok=True)
 src=r/'app/src/main/java/org/openbw/androidtest'
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('data',type=Path)
-p.add_argument('--extract',type=Path,default=r/'build-native/reign79/extract');a=p.parse_args()
+p.add_argument('--extract',type=Path,default=r/'build-native/reign79/extract');p.add_argument('--report',type=Path,default=r/'validation/map-scroll-v79.json');a=p.parse_args()
 assets=b/'assets'
 names={'rez/glucustm.bin'}|{'glue/palnl/'+x for x in ['backgnd.pcx','tfont.pcx','teffect.pcx','dlg.grp','tile.grp']}
 names|={prefix+'font'+size+'.fnt' for prefix in ['font/','files/font/'] for size in ['8','10','14','16','16x']}
@@ -59,7 +59,7 @@ import android.graphics.*;import android.view.*;import java.util.*;import java.i
 public class MapScroll79Test {
  static int checks;static void check(boolean b,String why){checks++;if(!b)throw new AssertionError(why);}
  static void near(float a,float b,String why){check(Math.abs(a-b)<.05f,why+" "+a+" vs "+b);}
- static class Button {RectF rect;Runnable action,longAction;boolean enabled,vertical,placementButton;java.util.function.Consumer<Float>slider;
+ static class Button {RectF rect;Runnable action,longAction;boolean enabled,vertical,placementButton,controlGroup;java.util.function.Consumer<Float>slider;
  Button(RectF r,Runnable a,boolean e){rect=r;action=a;enabled=e;}}
  static class Activity{void runOnUiThread(Runnable r){r.run();}void pickNativeMap(){}}
  static class Controls{float pinchSpeed=1;boolean pinchZoom,confirmBuild,minimapOrders,doubleTap,holdSelect;long miniHoldMs=400,doubleTapMs=250,holdMs=450;
@@ -134,4 +134,4 @@ subprocess.run(['javac','-d',str(b/'classes'),*[str(b/n) for n in sources],*map(
 result=subprocess.run(['java','-Djava.awt.headless=true','-cp',str(b/'classes'),'org.openbw.androidtest.MapScroll79Test',str(assets),str(b)],capture_output=True,text=True)
 print(result.stdout+result.stderr,end='');result.check_returncode()
 files=[src/'NativeGlue.java',src/'NativeSurface.java',Path(__file__)]
-(r/'validation/map-scroll-v79.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'canvas':'AWT shim using original NativeArt/NativeGlue and production NativeSurface map browser/touch methods','result':result.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}},indent=2)+'\n')
+a.report.write_text(json.dumps({'passed':True,'physicalAndroid':False,'canvas':'AWT shim using original NativeArt/NativeGlue and production NativeSurface map browser/touch methods','result':result.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}},indent=2)+'\n')

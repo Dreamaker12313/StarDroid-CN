@@ -1,0 +1,186 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "retainedMovieCacheBytes": 0,
+  "movies": [
+    {
+      "game": "StarCraft",
+      "path": "smk\\starintr.smk",
+      "temporaryBytes": 37269328,
+      "baselineDecoderWarnings": [
+        "libsmacker::palette_render(s,p,size) - ERROR: overflow, 0x40 attempt to copy 2 entries from 12 to 13"
+      ],
+      "candidateDecoderWarnings": [
+        "libsmacker::palette_render(s,p,size) - ERROR: overflow, 0x40 attempt to copy 2 entries from 12 to 13"
+      ]
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\terran1.smk",
+      "temporaryBytes": 20344652,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\terran2.smk",
+      "temporaryBytes": 8878636,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\terran3.smk",
+      "temporaryBytes": 13453088,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\terran4.smk",
+      "temporaryBytes": 43705304,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\zerg1.smk",
+      "temporaryBytes": 14096660,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\zerg2.smk",
+      "temporaryBytes": 72668192,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\zerg3.smk",
+      "temporaryBytes": 8796704,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\zerg4.smk",
+      "temporaryBytes": 24144060,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\protoss1.smk",
+      "temporaryBytes": 14573872,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\protoss2.smk",
+      "temporaryBytes": 37817124,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\protoss3.smk",
+      "temporaryBytes": 7998148,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "StarCraft",
+      "path": "smk\\protoss4.smk",
+      "temporaryBytes": 34447928,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "BroodWar",
+      "path": "smk\\starxintr.smk",
+      "temporaryBytes": 78663684,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "BroodWar",
+      "path": "smk\\xprotoss.smk",
+      "temporaryBytes": 75385584,
+      "baselineDecoderWarnings": [],
+      "candidateDecoderWarnings": []
+    },
+    {
+      "game": "BroodWar",
+      "path": "smk\\xterran.smk",
+      "temporaryBytes": 54130916,
+      "baselineDecoderWarnings": [
+        "Decoder note: rewind first frame differs from initial frame (baseline behavior)"
+      ],
+      "candidateDecoderWarnings": [
+        "Decoder note: rewind first frame differs from initial frame (baseline behavior)"
+      ]
+    },
+    {
+      "game": "BroodWar",
+      "path": "smk\\xzerg.smk",
+      "temporaryBytes": 56388688,
+      "baselineDecoderWarnings": [
+        "Decoder note: rewind first frame differs from initial frame (baseline behavior)"
+      ],
+      "candidateDecoderWarnings": [
+        "Decoder note: rewind first frame differs from initial frame (baseline behavior)"
+      ]
+    }
+  ],
+  "checks": [
+    "PASS 19 production cinematic lifecycle and one-entry-cache checks",
+    "Prepared one movie: 37269328 bytes",
+    "PASS smk\\starintr.smk: byte-identical; 138.719s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 20344652 bytes",
+    "PASS smk\\terran1.smk: byte-identical; 78.5921s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 8878636 bytes",
+    "PASS smk\\terran2.smk: byte-identical; 33.7966s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 13453088 bytes",
+    "PASS smk\\terran3.smk: byte-identical; 52.3948s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 43705304 bytes",
+    "PASS smk\\terran4.smk: byte-identical; 145.585s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 14096660 bytes",
+    "PASS smk\\zerg1.smk: byte-identical; 49.3951s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 72668192 bytes",
+    "PASS smk\\zerg2.smk: byte-identical; 243.709s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 8796704 bytes",
+    "PASS smk\\zerg3.smk: byte-identical; 33.4633s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 24144060 bytes",
+    "PASS smk\\zerg4.smk: byte-identical; 90.5243s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 14573872 bytes",
+    "PASS smk\\protoss1.smk: byte-identical; 52.1948s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 37817124 bytes",
+    "PASS smk\\protoss2.smk: byte-identical; 132.387s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 7998148 bytes",
+    "PASS smk\\protoss3.smk: byte-identical; 30.7303s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 34447928 bytes",
+    "PASS smk\\protoss4.smk: byte-identical; 113.122s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 78663684 bytes",
+    "PASS smk\\starxintr.smk: byte-identical; 228.444s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 75385584 bytes",
+    "PASS smk\\xprotoss.smk: byte-identical; 203.113s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 54130916 bytes",
+    "PASS smk\\xterran.smk: byte-identical; 143.519s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end",
+    "Prepared one movie: 56388688 bytes",
+    "PASS smk\\xzerg.smk: byte-identical; 164.917s video/audio survives archive deletion; original frame/PCM/rewind parity, audio end"
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "88f07e13cf83fccc0061fab68597d763bd3cacff2019720e8cb1b75fffdbae53",
+    "app/src/main/java/org/openbw/androidtest/NativeCache.java": "285324d81071896ffdf39077491f1b66a5e0c0fca6f6813c0d9d2c3d5ec18b0d",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "fd4fc7b59184ed0be03681587d6571134bfe8356c56661dbc534082f005089c1",
+    "native/runtime.cpp": "4142205d16532183955564a5af8e09528e1bece90728039d4ac086362fe5fd57",
+    "native/audio.h": "000f98ed0b3866a3c09f9c73c26e9f1b8a5f3f67765519d7c3921236f7483fa0",
+    "vendor/libsmacker/smacker.c": "d2a9adda0f8d36e952cdb44ec2fefbbe1f4146319272e779eed15f6c06a813a5",
+    "tests/CinematicCache80Test.java": "fe43b6c1eca508abb3b5d44f3a3223451a04dfc6c4baac56a2817cd71c0318f4",
+    "tests/native_cinematic_cache80.cpp": "af4b8b7e75f1ca8e6c793c68bcfb48d0866a3db91b9572edd9e135da676fbb5b",
+    "tests/run_cinematic_cache80.py": "b846ed9d6e80360100748a921a6d93bcf0d11066097ba580d4d749709b3d7e07"
+  }
+}

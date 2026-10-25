@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "originalArchivesTested": true,
+  "checks": [
+    "PASS Drone idle/stale queue card and real walking-build Cancel: no future building, no resource change",
+    "PASS building-placement Escape exits placement without changing worker order",
+    "PASS failed Drone placement discards stale construction queue",
+    "PASS resources spent during walk: failed construction clears intent without charge/refund",
+    "PASS actual Hatchery morph Cancel returns Drone, refunds 75%, leaves idle card clean; atomic landing seen=1",
+    "PASS SCV and Probe pending-build cancellation shares deterministic cleanup",
+    "PASS invincibility protects owned/new units and buildings before HP/shield/Matrix loss; AI/allied players remain vulnerable",
+    "PASS combat spell edge cases: EMP shields and Broodlings instant kill protected; energy drain retained",
+    "PASS owner transfer and disabling restore damage; scripted kills remain effective",
+    "PASS save/load and new match reset cheat; multiplayer command gate rejects it"
+  ],
+  "limitations": [
+    "Controlled original-map host regressions, not a device test or full mission playthrough.",
+    "Invincibility is session-only; saved games and new matches start with it disabled.",
+    "Scripted kills, unit consumption/morphs and spell disables retain normal behavior."
+  ],
+  "sourceSha256": {
+    "patches/native-controls80.patch": "7909f322665ad884104afcb17c8dfe3e043e5c2cc655d1c5346e95dd48a9a0d6",
+    "native/runtime.cpp": "4142205d16532183955564a5af8e09528e1bece90728039d4ac086362fe5fd57",
+    "tests/native_controls80.cpp": "0576e5f442c8f901534e484bd03bd1d4105c21badc778a0093ad5f85f967faec",
+    "tests/run_controls80.py": "f64a5f4d94d9e52c33feac97c51c316c3aa8c45c930d5b318839c0fe135b6f6e"
+  }
+}

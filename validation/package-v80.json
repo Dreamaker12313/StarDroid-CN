@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "version": "1.0.10",
+  "versionCode": 80,
+  "apkSha256": "1a86ccfd2e89d0718ac83b76ee178124d65c8b75ae315612dc753084f149f185",
+  "apkBytes": 2350882,
+  "previousApkSha256": "f2e1a5c3716dcba86e1eb5293d48870df110b4b5029dd6e47c5316ac8233b0e9",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "originalReleaseSigningIdentity": true,
+  "nativeEngineRebuilt": true,
+  "nativeEngineVersion": "1.0.10-build80",
+  "changedNativeAndAssetEntries": [
+    "assets/native/ui-languages.tsv",
+    "lib/arm64-v8a/libopenbw.so",
+    "lib/x86_64/libopenbw.so"
+  ],
+  "addedAssets": [],
+  "unchangedNativeAndAssetEntries": 74,
+  "saveFileTransferSupported": false,
+  "inGameSaveLoadRetained": true,
+  "permissionsUnchanged": true,
+  "multiplayerProtocolBuild": 80,
+  "decoderBinaryChanges": [],
+  "decoderSourceUnchanged": true,
+  "jniMethodsVerified": 42,
+  "loadAlignmentBytes": 16384,
+  "librarySha256": {
+    "arm64-v8a/libopenbw.so": "01af60ba95b79784b1c71ef0a378b5e0f0eafb1dd6257cd717cb16122f2f0c73",
+    "arm64-v8a/libsmacker.so": "4c014c5387efa3c344215163cd5f321c88db8c5844c9bb528d0d6fcb413888d8",
+    "x86_64/libopenbw.so": "19723a3bcf0ce51a71fa015d9c9c3f58589ad4baf1e27045d0d79fe00c12ace6",
+    "x86_64/libsmacker.so": "c504df589281429def05f2d10636ee369bf317ac646d10a1d1d003491b85a0a0"
+  },
+  "translationRows": 657,
+  "lintErrors": 0,
+  "lintWarnings": 15,
+  "physicalDevicesTested": false,
+  "regressionReports": [
+    "controls-v80.json",
+    "gamepad-v80.json",
+    "storage80.json",
+    "ai-production-final80.json",
+    "protocol-v80.json",
+    "map-scroll-v80.json",
+    "campaign-v80.json",
+    "music-v80.json",
+    "native-build80.json",
+    "cinematic-cache80.json"
+  ],
+  "sourceSha256": {
+    "tests/check_revision80_package.py": "a4f042095eff9aa30ef9be75598423a24449c33fe789297efcdfae2c4ad7e325"
+  }
+}

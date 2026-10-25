@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "methods": [
+    "controlGroup",
+    "controlGroupRows",
+    "drawControlGroups",
+    "reloadGamepadSettings",
+    "handleGamepadKey",
+    "handleGamepadMotion",
+    "gamepadDirection",
+    "activateGamepad",
+    "gamepadActionHeld",
+    "gamepadButton",
+    "gamepadWorld",
+    "gamepadClick",
+    "gamepadTouch",
+    "resetGamepadDrag",
+    "resetGamepad",
+    "advanceGamepad",
+    "touch"
+  ],
+  "result": "PASS 345 production group/controller checks: redraw and touch jitter, assign/recall/cancel, UI scale/resource overlap, preferences, sticks/deadzone/swap, left-drag/right-click, HUD routing, rebinding, duplicate trigger lifecycle, modal isolation, reset and disconnect",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "fd4fc7b59184ed0be03681587d6571134bfe8356c56661dbc534082f005089c1",
+    "app/src/main/java/org/openbw/androidtest/GamepadControls.java": "dd03141a97a2790c2cc4daef904f7605da25da5f080c7e5ace82f41865da000b",
+    "app/src/main/java/org/openbw/androidtest/GamepadSettings.java": "37535cf7e9e6efe30b2846e50ed2d60d7f33c69ad266a063f7ce7b503c7ac029",
+    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "1e6ec70f4804f346b1ae7c3bf4a9c0f5171b1344f3acda48448e88e2e6844c7b",
+    "tests/run_gamepad80.py": "eb994ed78ec387924f663cc139d56fcdda18302b4fa2ee55ad889c3b9cc6dca3"
+  }
+}

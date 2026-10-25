@@ -11,6 +11,7 @@ from pathlib import Path
 r = Path(__file__).resolve().parents[1]
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--data-dir', type=Path)
+p.add_argument('--report', type=Path, default=r/'validation/music-v79.json')
 a = p.parse_args()
 b = r/'build-native/music79'
 b.mkdir(parents=True, exist_ok=True)
@@ -99,7 +100,7 @@ if a.data_dir:
     run([b/'native-music79',a.data_dir/'StarCraft.mpq',a.data_dir/'BroodWar.mpq',b/'StarCraft.mpq',b/'BroodWar.mpq',b])
     run(['java','-Xmx128m','-cp',str(b/'classes'),'org.openbw.androidtest.MusicThemesTest',b])
 files = [src/'NativeSurface.java',src/'MusicData.java',src/'MusicThemes.java',src/'MissionBundle.java',src/'NativeData.java',r/'native/audio.h',Path(__file__),r/'tests/native_music79.cpp',r/'tests/MusicThemesTest.java']
-(r/'validation/music-v79.json').write_text(json.dumps({
+a.report.write_text(json.dumps({
     'passed': True, 'physicalAndroid': False, 'originalArchivesTested': bool(a.data_dir),
     'checks': [s for s in outputs if s],
     'sourceSha256': {str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}

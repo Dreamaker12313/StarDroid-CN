@@ -1,0 +1,104 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "originalPcSavesSupported": false,
+  "saveFileTransferSupported": false,
+  "checks": [
+    "",
+    "PASS 24 cache migration/rollback and normal in-game save/load checks",
+    "",
+    "PASS 5 native decoded assets byte-identical after compaction",
+    "",
+    "StarCraft-music: 506995955 -> 103769783 bytes; 19 files\nStarCraft-story: 506995955 -> 1252032 bytes; 62 files\nStarCraft-movies: 506995955 -> 337872480 bytes; 13 files\nStarCraft-interface: 506995955 -> 74411 bytes; 8 files\nStarCraft-mission: 506995955 -> 1172744 bytes; 9 files\nBroodWar-music: 495683706 -> 127678871 bytes; 19 files\nBroodWar-story: 495683706 -> 2699141 bytes; 82 files\nBroodWar-movies: 495683706 -> 264427320 bytes; 4 files\nBroodWar-interface: 495683706 -> 94827 bytes; 8 files\nBroodWar-mission: 495683706 -> 3367966 bytes; 37 files\nStarDat-interface: 66938872 -> 273992 bytes; 8 files",
+    "PASS 8 native decoded assets byte-identical after compaction",
+    "PASS 37 native decoded assets byte-identical after compaction",
+    "PASS 4 native decoded assets byte-identical after compaction",
+    "PASS 19 native decoded assets byte-identical after compaction",
+    "PASS 82 native decoded assets byte-identical after compaction",
+    "PASS 8 native decoded assets byte-identical after compaction",
+    "PASS 9 native decoded assets byte-identical after compaction",
+    "PASS 13 native decoded assets byte-identical after compaction",
+    "PASS 19 native decoded assets byte-identical after compaction",
+    "PASS 62 native decoded assets byte-identical after compaction",
+    "PASS 8 native decoded assets byte-identical after compaction"
+  ],
+  "realArchiveCaches": [
+    {
+      "bundle": "BroodWar-interface",
+      "originalBytes": 495683706,
+      "compactBytes": 94827,
+      "entries": 8
+    },
+    {
+      "bundle": "BroodWar-mission",
+      "originalBytes": 495683706,
+      "compactBytes": 3367966,
+      "entries": 37
+    },
+    {
+      "bundle": "BroodWar-movies",
+      "originalBytes": 495683706,
+      "compactBytes": 264427320,
+      "entries": 4
+    },
+    {
+      "bundle": "BroodWar-music",
+      "originalBytes": 495683706,
+      "compactBytes": 127678871,
+      "entries": 19
+    },
+    {
+      "bundle": "BroodWar-story",
+      "originalBytes": 495683706,
+      "compactBytes": 2699141,
+      "entries": 82
+    },
+    {
+      "bundle": "StarCraft-interface",
+      "originalBytes": 506995955,
+      "compactBytes": 74411,
+      "entries": 8
+    },
+    {
+      "bundle": "StarCraft-mission",
+      "originalBytes": 506995955,
+      "compactBytes": 1172744,
+      "entries": 9
+    },
+    {
+      "bundle": "StarCraft-movies",
+      "originalBytes": 506995955,
+      "compactBytes": 337872480,
+      "entries": 13
+    },
+    {
+      "bundle": "StarCraft-music",
+      "originalBytes": 506995955,
+      "compactBytes": 103769783,
+      "entries": 19
+    },
+    {
+      "bundle": "StarCraft-story",
+      "originalBytes": 506995955,
+      "compactBytes": 1252032,
+      "entries": 62
+    },
+    {
+      "bundle": "StarDat-interface",
+      "originalBytes": 66938872,
+      "compactBytes": 273992,
+      "entries": 8
+    }
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "88f07e13cf83fccc0061fab68597d763bd3cacff2019720e8cb1b75fffdbae53",
+    "app/src/main/java/org/openbw/androidtest/NativeSaves.java": "c3f722f409593741672acf1490152d3b3ec722b6286c346173dbfd5f023c4702",
+    "app/src/main/java/org/openbw/androidtest/NativeMapArchive.java": "6dcbed76bca127d923e23f7d9ea3551d6cab42103d2f5b83c183d129b48b8569",
+    "app/src/main/java/org/openbw/androidtest/NativeCache.java": "285324d81071896ffdf39077491f1b66a5e0c0fca6f6813c0d9d2c3d5ec18b0d",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "941a4b6bb9a866105aaa874719176d1938fcff587f04d6dff5c6eb128166fab6",
+    "app/src/main/java/org/openbw/androidtest/CampaignCatalog.java": "5126fcd1d4b4f860b133ecd54da440cf2b5630e2b45641dcf753b0c0c7fdd321",
+    "tests/CacheSaves80Test.java": "bd26f18f8a800ecb80862c6b1295272a023fcaca5c61b82f4c67eb2a5daa5f76",
+    "tests/native_cache80.cpp": "994182800a7566f428c90a7d6bb680864a9b488fadf32bf748e7ac6474bf42d5",
+    "tests/run_storage80.py": "b75a9afe22336563eb85ebf1b016790a62ddc29df3c4889acc319b35611752e3"
+  }
+}

@@ -16,6 +16,17 @@ final class NativeSurface extends SurfaceView
   private final File files, cache;
   private final SharedPreferences prefs;
   private final ControlSettings controls = new ControlSettings();
+  private final GamepadControls gamepad = new GamepadControls();
+  private final HashMap<Integer,Integer> gamepadHeld = new HashMap<Integer,Integer>();
+  private float padX=320,padY=200,padPointerX,padPointerY,padCameraX,padCameraY,padHatX,padHatY;
+  private boolean padActive,padPrecision,padNativeDrag,padTouchDrag;
+  private int padDevice=-1,padGroup=1;
+  private long padClickAt;
+  private Bitmap padCursor;
+  private Bitmap[] padArrows;
+  private int[] padArrowX,padArrowY;
+  private boolean padArrowChecked;
+  private String padDragPage="",padDragModal="";
   private final Object gate = new Object();
   private final Object surfaceGate = new Object();
   private final ConcurrentLinkedQueue<Runnable> tasks = new ConcurrentLinkedQueue<Runnable>();
@@ -127,7 +138,7 @@ final class NativeSurface extends SurfaceView
   private static final class Button {
     RectF rect;
     Runnable action, longAction;
-    boolean enabled,vertical,placementButton;
+    boolean enabled,vertical,placementButton,controlGroup;
     java.util.function.Consumer<Float> slider;
 
     Button(RectF r, Runnable a, boolean e) {
@@ -153,6 +164,7 @@ final class NativeSurface extends SurfaceView
     cache = new File(a.getCacheDir(), "native-mpq");
     prefs = a.getSharedPreferences("native-settings", 0);
     controls.load(prefs);
+    gamepad.load(prefs);
     fps = prefs.getInt("fps", 60);
     resourcePercent = ControlSettings.clamp(prefs.getInt("resource-percent", 100), 100, 150);
     commandPercent = ControlSettings.clamp(prefs.getInt("command-percent", 100), 100, 120);
@@ -219,6 +231,7 @@ final class NativeSurface extends SurfaceView
     enqueue(
         () -> {
           accumulator = 0;
+          resetGamepad();
           cancelGesture();
           if (audio != null) audio.foreground(false);
           syncAudio();
@@ -425,8 +438,15 @@ final class NativeSurface extends SurfaceView
     availableMovies.clear();
     for (int i = 0; i < bundle.length; i++) {
       File source = ProjectFiles.existing(files, bundle[i]);
-      File p = NativeData.prepare(source, cache, "content" + i);
-      NativeBridge.open(4 + i, p == null ? "" : p.getPath());
+      if (i < 5) {
+        File p = NativeData.prepare(source, cache, "content" + i);
+        NativeBridge.open(4 + i, p == null ? "" : p.getPath());
+      } else {
+        // Cinematics are opened individually on demand. Close the old mapping
+        // before reclaiming full-movie caches created by earlier versions.
+        NativeBridge.open(4 + i, "");
+        NativeData.discard(cache, "content" + i);
+      }
       if (i >= 5 && source.isFile()) try (java.util.zip.ZipFile z = new java.util.zip.ZipFile(source)) {
         JSONArray entries = new JSONObject(new String(NativeData.read(z.getInputStream(z.getEntry("manifest.json")), 131072), "UTF-8")).getJSONArray("entries");
         for (int j = 0; j < entries.length(); j++) availableMovies.add(NativeArt.normal(entries.getJSONObject(j).getString("name")));
@@ -465,7 +485,19 @@ final class NativeSurface extends SurfaceView
       if (hud != null) {hud.close(); hud = null;}
       NativeBridge.endGame(); activeGame = false;
       NativeBridge.sound(null, 63, false);
-      cinematic = new NativeArt.Movie(broodwar ? 10 : 9, path);
+      int movieSlot = broodwar ? 10 : 9;
+      try {
+        File source = ProjectFiles.existing(files, broodwar ? StoryData.EXP_MOVIES : StoryData.MOVIES);
+        File movie = NativeData.prepareEntry(source, cache, "cinematic", path);
+        if (movie == null) throw new IOException("Imported cinematic is unavailable");
+        NativeBridge.open(movieSlot, movie.getPath());
+        cinematic = new NativeArt.Movie(movieSlot, path);
+      } finally {
+        // libsmacker copies the movie into its own storage during movieOpenAsset.
+        // Neither its video frames nor audio depend on this temporary MPQ afterward.
+        NativeBridge.open(movieSlot, "");
+        NativeData.discard(cache, "cinematic");
+      }
       cinematicDone = next;
       cinematicStart = clock;
       page = "movie"; logicalWidth = 640; modal = "";
@@ -656,6 +688,7 @@ final class NativeSurface extends SurfaceView
     speechMusicGain += (targetGain - speechMusicGain) * (float)(1 - Math.exp(-dt / (targetGain < speechMusicGain ? 90 : 240)));
     syncAudio();
     advanceLists(dt);
+    advanceGamepad(dt);
     if (page.equals("movie")
         && cinematic != null
         && clock - cinematicStart >= cinematic.frames * (double) cinematic.interval) {
@@ -737,7 +770,7 @@ final class NativeSurface extends SurfaceView
     c.scale(scale,scale);
     c.clipRect(0,0,logicalWidth,480);
     buttons.clear();
-    try {draw(c,dt);} finally {c.restoreToCount(save);}
+    try {draw(c,dt);drawGamepadCursor(c);} finally {c.restoreToCount(save);}
   }
 
   private void draw(Canvas c, double dt) {
@@ -808,7 +841,7 @@ final class NativeSurface extends SurfaceView
         String timer = NativeBridge.text(7);
         if (!timer.equals("0:00") || missionCode == 3)
           hud.large.draw(c, timer, (logicalWidth - 128) / 2f,
-              controls.controlGroups || resourcePercent > 125 ? 36 : 3, 128, 1, 2, 0);
+              controls.controlGroups ? Math.round(6+(controlGroupRows()*32-2)*commandPercent/100f) : resourcePercent > 125 ? 36 : 3, 128, 1, 2, 0);
       }
       if (placement && NativeBridge.value(0, 0) != 2) placement = false;
       if (modal.isEmpty()) {
@@ -878,9 +911,10 @@ final class NativeSurface extends SurfaceView
     if(page.equals("game") && nearby!=null && !nearby.status.equals("Connected") && lastOutcome==0)
       hud.small.draw(c,nearby.status,logicalWidth/2f-180,52,360,1,2,0);
     if(page.equals("game") && nearby!=null && networkStats && lastOutcome==0) {
-      paint.setColor(0xb0000000);c.drawRect(12,70,logicalWidth-12,106,paint);
-      hud.small.draw(c,nearby.summary(),20,73,logicalWidth-40,0,2,0);
-      hud.small.draw(c,String.format(Locale.ROOT,"Display %.0f FPS | Draw %.1f ms/frame",displayFps,drawMs),20,89,logicalWidth-40,0,2,0);
+      float networkY=controls.controlGroups&&controlGroupRows()>1?86:70;
+      paint.setColor(0xb0000000);c.drawRect(12,networkY,logicalWidth-12,networkY+36,paint);
+      hud.small.draw(c,nearby.summary(),20,networkY+3,logicalWidth-40,0,2,0);
+      hud.small.draw(c,String.format(Locale.ROOT,"Display %.0f FPS | Draw %.1f ms/frame",displayFps,drawMs),20,networkY+19,logicalWidth-40,0,2,0);
     }
     if (page.equals("game") && placement && modal.isEmpty()) drawPlacementButtons(c);
     if (!modal.isEmpty()) {
@@ -1747,27 +1781,43 @@ final class NativeSurface extends SurfaceView
     } else next.run();
   }
 
+  private void controlGroup(int group, boolean assign) {
+    cancelGesture();
+    // An empty slot is useful immediately: tap assigns the current selection.
+    // Existing slots still recall; holding replaces an assignment.
+    boolean setting=assign || NativeBridge.value(21,group)==0;
+    NativeBridge.command(25,group,setting?1:0,0,0);
+    int count=NativeBridge.value(21,group);
+    if(setting) {
+      hint=count>0?"Group "+group+": "+count+(count==1?" unit":" units")
+          :"Select units, then tap an empty group or hold a group to assign";
+      hintUntil=clock+2600;
+    }
+    padGroup=group;
+  }
+
+  private int controlGroupRows() {
+    return 8+316*commandPercent/100f > logicalWidth-204*resourcePercent/100f-8 ? 2 : 1;
+  }
+
   private void drawControlGroups(Canvas c) {
     if (!controls.controlGroups) return;
+    float scale=commandPercent/100f;
+    int columns=controlGroupRows()==1?10:5;
     for (int i = 0; i < 10; i++) {
       final int group = (i + 1) % 10;
-      RectF rect = new RectF(8 + i * 32, 2, 36 + i * 32, 32);
-      int count = NativeBridge.value(21, group);
-      boolean hot = pressed != null && pressed.rect.equals(rect);
-      c.drawBitmap(hud.panel(28, 30, true, true), rect.left, rect.top, NativeArt.PIXELS);
-      hud.large.draw(c, Integer.toString(group), rect.left, rect.top + 5, 28, 1, hot ? 4 : count > 0 ? 7 : 5, 0);
-      Button button = new Button(rect, () -> {
-        cancelGesture(); NativeBridge.command(25, group, 0, 0, 0);
-        if (NativeBridge.value(21, group) == 0) {
-          hint = "Select units, then hold a group button to assign"; hintUntil = clock + 2600;
-        }
-      }, true);
-      button.longAction = () -> {
-        cancelGesture(); NativeBridge.command(25, group, 1, 0, 0);
-        int size = NativeBridge.value(21, group);
-        hint = size > 0 ? "Group " + group + ": " + size + (size == 1 ? " unit" : " units") : "Group " + group + " cleared";
-        hintUntil = clock + 1800;
-      };
+      float x=8+(i%columns)*32*scale,y=2+(i/columns)*32*scale;
+      RectF rect = new RectF(x,y,x+28*scale,y+30*scale);
+      int count=NativeBridge.value(21,group);
+      boolean hot=pressed!=null&&pressed.rect.equals(rect);
+      c.save();c.translate(rect.left,rect.top);c.scale(scale,scale);
+      c.drawBitmap(hud.panel(28,30,true,true),0,0,NativeArt.PIXELS);
+      hud.large.draw(c,Integer.toString(group),0,count>0?1:5,28,1,hot?4:count>0?7:5,0);
+      if(count>0)hud.small.draw(c,Integer.toString(count),0,19,28,1,2,0);
+      c.restore();
+      Button button=new Button(rect,()->controlGroup(group,false),true);
+      button.longAction=()->controlGroup(group,true);
+      button.controlGroup=true;
       buttons.add(button);
     }
   }
@@ -2025,7 +2075,7 @@ final class NativeSurface extends SurfaceView
       option(c,"View / copy diagnostics",x+26,y+240,320,()->activity.runOnUiThread(activity::requestDiagnostics));
     } else if (modal.equals("ui-sizes")) {
       option(c, "Resources: " + resourcePercent + "%", x + 26, y + 48, 320, () -> {resourcePercent = resourcePercent >= 150 ? 100 : resourcePercent + 25; saveSettings();});
-      option(c, "Command buttons: " + commandPercent + "%", x + 26, y + 92, 320, () -> {commandPercent = commandPercent >= 120 ? 100 : commandPercent + 10; saveSettings();});
+      option(c, "Commands & control groups: " + commandPercent + "%", x + 26, y + 92, 320, () -> {commandPercent = commandPercent >= 120 ? 100 : commandPercent + 10; saveSettings();});
       option(c, "Descriptions & messages: " + descriptionPercent + "%", x + 26, y + 136, 320, () -> {descriptionPercent = descriptionPercent >= 150 ? 100 : descriptionPercent + 25; saveSettings();});
       option(c, "Selection & move buttons: " + touchPercent + "%", x + 26, y + 180, 320, () -> {touchPercent = touchPercent >= 150 ? 100 : touchPercent + 25; saveSettings();});
       option(c, "Reset interface sizes", x + 26, y + 232, 320, () -> {resourcePercent = commandPercent = descriptionPercent = touchPercent = 100; saveSettings();});
@@ -2040,6 +2090,8 @@ final class NativeSurface extends SurfaceView
       toggle(c, "Instant production", instant, x + 26, y + 84, () -> {instant = !instant; NativeBridge.command(10, instant ? 1 : 0, 0, 0, 0);});
       option(c, "Reveal map", x + 26, y + 116, 320, () -> NativeBridge.command(11, 0, 0, 0, 0));
       option(c, "Force victory (end match)", x + 26, y + 158, 320, () -> {NativeBridge.command(13, 1, 0, 0, 0); modal = "";});
+      toggle(c,"Invincibility",NativeBridge.value(22,0)!=0,x+26,y+200,
+          ()->NativeBridge.command(29,NativeBridge.value(22,0)==0?1:0,0,0,0));
     } else if (modal.equals("control-help")) {
       body(c, "Tap a friendly unit to select it.\n"
           + (controls.doubleTap ? "Double tap to select its type.\n" : "Double tap selection is off.\n")
@@ -2050,7 +2102,7 @@ final class NativeSurface extends SurfaceView
           + "Tap or drag the minimap to move the camera.\n"
           + (controls.confirmBuild ? "Position a building, then tap Build.\n" : "Release your finger to place a building.\n")
           + (controls.tooltips ? "Hold a command to read its details.\n" : "Command descriptions are off.\n")
-          + (controls.controlGroups ? "Groups: hold assigns; tap recalls; double tap centers.\n" : "")
+          + (controls.controlGroups ? "Groups: tap empty to assign; hold replaces; tap recalls; double tap centers.\n" : "")
           + "Tap a production icon to cancel it.\nBack cancels targeting or opens this menu.", x + 26, y + 47, 320, 232);
     } else if (modal.equals("controls") || modal.startsWith("control-")) {
       drawControls(c, x, y);
@@ -2118,6 +2170,7 @@ final class NativeSurface extends SurfaceView
       option(c, "Camera settings", x + 22, y + 103, 324, () -> modal = "control-camera");
       option(c, "Command settings", x + 22, y + 151, 324, () -> modal = "control-orders");
       option(c, "Gesture guide", x + 22, y + 199, 324, () -> modal = "control-help");
+      option(c,"Gamepad controls",x+22,y+247,324,()->activity.runOnUiThread(activity::requestGamepadSettings));
     } else if (modal.equals("control-select")) {
       toggle(c, "Original larvae selection", controls.originalLarvae, x + 22, y + 44, () -> changeControls(() -> controls.originalLarvae = !controls.originalLarvae));
       toggle(c, "One larva morph per press", controls.singleLarvaMorph, x + 22, y + 78, () -> changeControls(() -> controls.singleLarvaMorph = !controls.singleLarvaMorph));
@@ -2696,6 +2749,7 @@ final class NativeSurface extends SurfaceView
     enqueue(
         () -> {
           try {
+            if(copy.getActionMasked()==MotionEvent.ACTION_DOWN)resetGamepad();
             touch(copy);
           } finally {
             copy.recycle();
@@ -2858,7 +2912,10 @@ final class NativeSurface extends SurfaceView
           pressed.slider.accept(Math.max(0, Math.min(1, (pressed.vertical?(y-pressed.rect.top)/pressed.rect.height():(x-pressed.rect.left)/pressed.rect.width()))));
           return;
         }
-        if (distance > 10 / physicalScale()) {
+        // Holding a small group button must tolerate normal finger jitter.
+        // The previous fixed ten-physical-pixel cutoff silently discarded it
+        // even while the finger was still inside the button.
+        if (pressed!=null && (pressed.controlGroup ? !pressed.rect.contains(x,y) : distance > 10 / physicalScale())) {
           pressed = null;
           if (!scrollingList.isEmpty()) gesture = "list";
         }
@@ -3158,6 +3215,208 @@ final class NativeSurface extends SurfaceView
     };
   }
 
+  void resetGamepadInput() { enqueue(this::resetGamepad); }
+
+  void reloadGamepadSettings() { enqueue(()->{resetGamepad();gamepad.load(prefs);}); }
+
+  boolean handleGamepadMotion(MotionEvent event) {
+    if(!gamepad.enabled||!GamepadControls.source(event.getSource())||event.getActionMasked()!=MotionEvent.ACTION_MOVE)return false;
+    MotionEvent copy=MotionEvent.obtain(event);
+    enqueue(()->{try{
+      activateGamepad(copy.getDeviceId());
+      float lx=gamepad.axis(copy,MotionEvent.AXIS_X),ly=gamepad.axis(copy,MotionEvent.AXIS_Y);
+      float rx=gamepad.axis(copy,MotionEvent.AXIS_Z),ry=gamepad.axis(copy,MotionEvent.AXIS_RZ);
+      // Some controllers report the right stick as RX/RY instead of Z/RZ.
+      InputDevice device=copy.getDevice();
+      if(device!=null&&device.getMotionRange(MotionEvent.AXIS_Z,copy.getSource())==null){
+        rx=gamepad.axis(copy,MotionEvent.AXIS_RX);ry=gamepad.axis(copy,MotionEvent.AXIS_RY);
+      }
+      padPointerX=gamepad.swapSticks?rx:lx;padPointerY=gamepad.swapSticks?ry:ly;
+      padCameraX=gamepad.swapSticks?lx:rx;padCameraY=gamepad.swapSticks?ly:ry;
+      padHatX=copy.getAxisValue(MotionEvent.AXIS_HAT_X);padHatY=copy.getAxisValue(MotionEvent.AXIS_HAT_Y);
+      gamepadButton(KeyEvent.KEYCODE_BUTTON_L2,Math.max(copy.getAxisValue(MotionEvent.AXIS_LTRIGGER),copy.getAxisValue(MotionEvent.AXIS_BRAKE))>.5f,2);
+      gamepadButton(KeyEvent.KEYCODE_BUTTON_R2,Math.max(copy.getAxisValue(MotionEvent.AXIS_RTRIGGER),copy.getAxisValue(MotionEvent.AXIS_GAS))>.5f,2);
+    }finally{copy.recycle();}});
+    return true;
+  }
+
+  boolean handleGamepadKey(KeyEvent event) {
+    int key=event.getKeyCode();
+    InputDevice deviceInfo=event.getDevice();
+    boolean controller=GamepadControls.source(event.getSource())
+        ||deviceInfo!=null&&GamepadControls.source(deviceInfo.getSources());
+    if(!gamepad.enabled||!controller||(!GamepadControls.button(key)&&!gamepadDirection(key)))return false;
+    if(event.getAction()!=KeyEvent.ACTION_DOWN&&event.getAction()!=KeyEvent.ACTION_UP)return false;
+    if(event.getRepeatCount()!=0)return true;
+    final boolean down=event.getAction()==KeyEvent.ACTION_DOWN;final int device=event.getDeviceId();
+    enqueue(()->{activateGamepad(device);gamepadButton(key,down,1);});
+    return true;
+  }
+
+  @Override public boolean onGenericMotionEvent(MotionEvent event) {
+    return handleGamepadMotion(event)||super.onGenericMotionEvent(event);
+  }
+
+  private static boolean gamepadDirection(int key) {
+    return key==KeyEvent.KEYCODE_DPAD_LEFT||key==KeyEvent.KEYCODE_DPAD_RIGHT
+        ||key==KeyEvent.KEYCODE_DPAD_UP||key==KeyEvent.KEYCODE_DPAD_DOWN;
+  }
+
+  private void activateGamepad(int device) {
+    if(padDevice!=device)resetGamepad();
+    padDevice=device;padActive=true;
+    padX=GamepadControls.limit(padX,logicalWidth);padY=GamepadControls.limit(padY,480);
+  }
+
+  private boolean gamepadActionHeld(int action) {
+    for(int key:gamepadHeld.keySet())if(gamepad.action(key)==action)return true;
+    return false;
+  }
+
+  private void gamepadButton(int key,boolean down,int source) {
+    int action=gamepad.action(key),before=gamepadHeld.containsKey(key)?gamepadHeld.get(key):0;
+    boolean heldBefore=gamepadActionHeld(action);
+    int after=down?before|source:before&~source;
+    if(after==0)gamepadHeld.remove(key);else gamepadHeld.put(key,after);
+    boolean heldAfter=gamepadActionHeld(action);
+    padPrecision=gamepadActionHeld(GamepadControls.PRECISION);
+    if(gamepadDirection(key)||action==GamepadControls.NONE||action==GamepadControls.PRECISION)return;
+    if(action==GamepadControls.CLICK){if(heldBefore!=heldAfter)gamepadClick(heldAfter);return;}
+    if(!down||before!=0||after==0)return;
+    if(action==GamepadControls.CANCEL){back();return;}
+    if(action==GamepadControls.MENU){
+      resetGamepadDrag();if(page.equals("game")){if(modal.isEmpty())openMenu();else modal="";}
+      else activity.runOnUiThread(activity::requestGamepadSettings);
+      return;
+    }
+    if(!activeGame||!page.equals("game")||!modal.isEmpty()||pendingScreen!=null)return;
+    if(action==GamepadControls.ORDER){
+      if(hud!=null&&hud.minimap.contains(padX,padY))mini(padX,padY,true);
+      else if(gamepadWorld(padX,padY)){
+        NativeBridge.command(0,(int)(padX/zoom),(int)(padY/zoom),0,0);
+        NativeBridge.command(1,1,3,(int)(padX/zoom),(int)(padY/zoom));
+        NativeBridge.command(1,0,3,(int)(padX/zoom),(int)(padY/zoom));
+      }
+    }else if(action==GamepadControls.ATTACK||action==GamepadControls.STOP||action==GamepadControls.HOLD||action==GamepadControls.LARVAE){
+      int keyChar=action==GamepadControls.ATTACK?'a':action==GamepadControls.STOP?'s':action==GamepadControls.HOLD?'h':'s';
+      // Larva hotkey is only sent while a Hatchery/Lair/Hive is selected.
+      int type=NativeBridge.value(1,0);
+      if(action!=GamepadControls.LARVAE||(type>=131&&type<=133))NativeBridge.command(2,keyChar,0,0,0);
+    }else if(action==GamepadControls.PREVIOUS_GROUP||action==GamepadControls.NEXT_GROUP){
+      padGroup=GamepadControls.nextGroup(padGroup,action==GamepadControls.NEXT_GROUP?1:-1);
+      hint="Control group "+padGroup;hintUntil=clock+1800;
+    }else if(action==GamepadControls.RECALL_GROUP||action==GamepadControls.ASSIGN_GROUP){
+      controlGroup(padGroup,action==GamepadControls.ASSIGN_GROUP);
+    }else if(action==GamepadControls.ZOOM_IN||action==GamepadControls.ZOOM_OUT){
+      resetGamepadDrag();zoom=Math.max(zoomOut?.5f:1,Math.min(3,zoom+(action==GamepadControls.ZOOM_IN?.25f:-.25f)));
+      resizeWorld();saveSettings();
+    }
+  }
+
+  private boolean gamepadWorld(float x,float y) {
+    if(!activeGame||!page.equals("game")||!modal.isEmpty()||hud==null||y>=cameraBottom(x))return false;
+    if(hud.minimap.contains(x,y)||hud.hit(x,y)!=null)return false;
+    for(Button button:buttons)if(button.rect.contains(x,y))return false;
+    return true;
+  }
+
+  private void gamepadClick(boolean down) {
+    long now=android.os.SystemClock.uptimeMillis();
+    if(down){
+      if(pendingScreen!=null)return;
+      padClickAt=now;padDragPage=page;padDragModal=modal;
+      padNativeDrag=gamepadWorld(padX,padY);padTouchDrag=!padNativeDrag;
+      if(padNativeDrag){
+        NativeBridge.command(0,(int)(padX/zoom),(int)(padY/zoom),0,0);
+        NativeBridge.command(1,1,1,(int)(padX/zoom),(int)(padY/zoom));
+      }else gamepadTouch(MotionEvent.ACTION_DOWN,now);
+    }else{
+      if(!padDragPage.equals(page)||!padDragModal.equals(modal)){resetGamepadDrag();return;}
+      if(padNativeDrag)NativeBridge.command(1,0,1,(int)(padX/zoom),(int)(padY/zoom));
+      else if(padTouchDrag)gamepadTouch(MotionEvent.ACTION_UP,now);
+      padNativeDrag=padTouchDrag=false;
+    }
+  }
+
+  private void gamepadTouch(int action,long now) {
+    float scale=physicalScale();
+    MotionEvent event=MotionEvent.obtain(padClickAt,now,action,
+        padX*scale+(physicalWidth-logicalWidth*scale)/2,
+        padY*scale+(physicalHeight-480*scale)/2,0);
+    try{touch(event);}finally{event.recycle();}
+  }
+
+  private void resetGamepadDrag() {
+    if(padNativeDrag&&activeGame)NativeBridge.command(5,0,0,0,0);
+    if(padTouchDrag)cancelGesture();
+    padNativeDrag=padTouchDrag=false;
+  }
+
+  private void resetGamepad() {
+    resetGamepadDrag();gamepadHeld.clear();padPrecision=false;padActive=false;padDevice=-1;
+    padPointerX=padPointerY=padCameraX=padCameraY=padHatX=padHatY=0;
+    if(activeGame)NativeBridge.command(0,-100,-100,0,0);
+  }
+
+  private void advanceGamepad(double milliseconds) {
+    if(!padActive||!gamepad.enabled)return;
+    if(padDevice>=0&&InputDevice.getDevice(padDevice)==null){resetGamepad();return;}
+    if((padNativeDrag||padTouchDrag)&&(!padDragPage.equals(page)||!padDragModal.equals(modal)))resetGamepadDrag();
+    double dt=Math.max(0,Math.min(100,milliseconds))/1000.;
+    float oldX=padX,oldY=padY;
+    double speed=360*gamepad.pointerSpeed*(padPrecision?.25:1);
+    padX=GamepadControls.limit(padX+(float)(padPointerX*speed*dt),logicalWidth);
+    padY=GamepadControls.limit(padY+(float)(padPointerY*speed*dt),480);
+    updateHover(padX,padY,false);
+    if(padTouchDrag&&(oldX!=padX||oldY!=padY))gamepadTouch(MotionEvent.ACTION_MOVE,android.os.SystemClock.uptimeMillis());
+    if(activeGame&&page.equals("game")&&modal.isEmpty()&&pendingScreen==null){
+      float cx=padCameraX+padHatX+(gamepadHeld.containsKey(KeyEvent.KEYCODE_DPAD_RIGHT)?1:0)-(gamepadHeld.containsKey(KeyEvent.KEYCODE_DPAD_LEFT)?1:0);
+      float cy=padCameraY+padHatY+(gamepadHeld.containsKey(KeyEvent.KEYCODE_DPAD_DOWN)?1:0)-(gamepadHeld.containsKey(KeyEvent.KEYCODE_DPAD_UP)?1:0);
+      panCamera(Math.max(-1,Math.min(1,cx))*480*gamepad.cameraSpeed*dt/zoom,
+          Math.max(-1,Math.min(1,cy))*480*gamepad.cameraSpeed*dt/zoom);
+      if(padNativeDrag||gamepadWorld(padX,padY))NativeBridge.command(0,(int)(padX/zoom),(int)(padY/zoom),0,0);
+      else NativeBridge.command(0,-100,-100,0,0);
+    }
+  }
+
+  private void drawGamepadCursor(Canvas canvas) {
+    if(!padActive||!gamepad.enabled)return;
+    if(activeGame&&page.equals("game")&&modal.isEmpty()&&(padNativeDrag||gamepadWorld(padX,padY))){
+      try{
+        int box=NativeBridge.value(23,0);
+        if(box>0&&box<=256){
+          if(padCursor==null||padCursor.getWidth()!=box){if(padCursor!=null)padCursor.recycle();padCursor=Bitmap.createBitmap(box,box,Bitmap.Config.ARGB_8888);}
+          if(NativeBridge.cursor(padCursor)){canvas.drawBitmap(padCursor,padX-box/2f,padY-box/2f,NativeArt.PIXELS);return;}
+        }
+      }catch(Exception ignored){} // Missing cursor artwork must not disable the controller.
+    }
+    if(!padArrowChecked&&art!=null){
+      padArrowChecked=true;
+      try{
+        byte[] data=art.read("cursor/arrow.grp"),palette=art.read("tileset/badlands.wpe");
+        if(data!=null&&data.length>=6&&palette!=null&&palette.length>=1024){
+          int count=Math.min(64,NativeArt.u16(data,0)),boxX=NativeArt.u16(data,2),boxY=NativeArt.u16(data,4);
+          if(count>0&&data.length>=6+count*8){
+            int[] colors=new int[256];for(int i=0;i<256;i++)colors[i]=Color.rgb(palette[i*4]&255,palette[i*4+1]&255,palette[i*4+2]&255);
+            padArrows=new Bitmap[count];padArrowX=new int[count];padArrowY=new int[count];
+            for(int i=0;i<count;i++){
+              padArrows[i]=NativeArt.grp(data,i,colors,false,false);
+              padArrowX[i]=(data[6+i*8]&255)-boxX/2;padArrowY[i]=(data[7+i*8]&255)-boxY/2;
+            }
+          }
+        }
+      }catch(Exception ignored){}
+    }
+    if(padArrows!=null&&padArrows.length>0){
+      int frame=(int)(clock/100)%padArrows.length;
+      if(padArrows[frame]!=null){canvas.drawBitmap(padArrows[frame],padX+padArrowX[frame],padY+padArrowY[frame],NativeArt.PIXELS);return;}
+    }
+    // A small high-contrast arrow remains usable with incomplete data imports.
+    Path arrow=new Path();arrow.moveTo(padX,padY);arrow.lineTo(padX+1,padY+18);arrow.lineTo(padX+6,padY+13);arrow.lineTo(padX+13,padY+13);arrow.close();
+    Paint pointer=new Paint(Paint.ANTI_ALIAS_FLAG);pointer.setColor(Color.BLACK);pointer.setStyle(Paint.Style.STROKE);pointer.setStrokeWidth(3);canvas.drawPath(arrow,pointer);
+    pointer.setStyle(Paint.Style.FILL);pointer.setColor(0xff8fdb55);canvas.drawPath(arrow,pointer);
+  }
+
   @Override
   public boolean onKeyDown(int key, android.view.KeyEvent event) {
     if(profileEditing){
@@ -3183,6 +3442,11 @@ final class NativeSurface extends SurfaceView
       return true;
     }
     if (!modal.isEmpty() || !page.equals("game")) return super.onKeyDown(key, event);
+    if(key>=KeyEvent.KEYCODE_0&&key<=KeyEvent.KEYCODE_9){
+      final int group=key-KeyEvent.KEYCODE_0;final boolean assign=event.isCtrlPressed();
+      if(event.getRepeatCount()==0)enqueue(()->{cancelGesture();NativeBridge.command(25,group,assign?1:0,0,0);});
+      return true;
+    }
     int chr = event.getUnicodeChar();
     if (chr > 0) {
       enqueue(() -> NativeBridge.command(2, chr, 0, 0, 0));

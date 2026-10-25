@@ -1,0 +1,67 @@
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -959,12 +959,44 @@
+                 if(!player_has_researched(owner,tech)&&unit_tech_available(u,get_tech_type(tech),true))
+                     ai_request(towns[owner].techs,int(tech),1,85);
+     }
++    void ai_fighter_production(int owner) {
++        // Ammunition belongs to the unit, not its owner's town or chosen race.
++        // Campaign guards, captured units and heroes need the same paid queue
++        // as melee armies, even when they have no active base script.
++        if(campaign_control_lock||scenario_units_paused()||owner<0||owner>=8||owner==my_player
++            ||st.players[owner].controller!=player_t::controller_computer_game)return;
++        action_functions af(st,ai_actions);
++        for(auto* u:ptr(st.player_units[owner])) {
++            if((!unit_is_carrier(u)&&!unit_is_reaver(u))||unit_dying(u)||!u_completed(u)
++                ||u_hallucination(u)||unit_is_disabled(u)||!u->build_queue.empty())continue;
++            // TrainFighter is a secondary order: do not replace movement,
++            // attack, hold-position or transport orders. Normal action checks
++            // enforce map availability, capacity and actual resource payment.
++            af.action_select(owner,u);af.action_train_fighter(owner);
++        }
++    }
++    int ai_supply_demand(int owner,const a_vector<request>& req) {
++        int wanted=4;
++        for(auto r:req) {
++            const auto* type=get_unit_type(UnitTypes(r.type));
++            if(ut_building(type)||unit_race(type)!=st.players[owner].race
++                ||!game_st.unit_type_allowed[owner][type->id])continue;
++            bool home=!ut_worker(type)&&!(melee_ai&&st.players[owner].race!=race_t::terran&&r.priority>=80);
++            if(ai_count(owner,r.type,false,home)>=r.amount)continue;
++            bool producer=false;
++            for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&unit_can_build(u,type)){producer=true;break;}
++            if(!producer)continue;
++            auto required=type->supply_required;
++            if(ut_two_units_in_one_egg(type))required*=2;
++            if(type->id==UnitTypes::Zerg_Lurker)required-=get_unit_type(UnitTypes::Zerg_Hydralisk)->supply_required;
++            wanted=std::max(wanted,int((required.raw_value+1)/2));
++        }
++        return wanted;
++    }
+     void ai_protoss_support(int owner) {
+         action_functions af(st,ai_actions);
+         for(auto* u:ptr(st.player_units[owner])) {
+             if(unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)||ai_lifting(owner,u))continue;
+-            // Carrier and Reaver ammunition is purchased through normal actions.
+-            if(unit_is_carrier(u)||unit_is_reaver(u)) {af.action_select(owner,u);af.action_train_fighter(owner);continue;}
+             if(!unit_is(u,UnitTypes::Protoss_Observer)&&!unit_is(u,UnitTypes::Protoss_High_Templar)&&!unit_is(u,UnitTypes::Protoss_Dark_Archon))continue;
+             if(!ai_idle(u))continue;
+             unit_t* escort=nullptr;int distance=0x7fffffff;
+@@ -1205,7 +1237,7 @@
+             if(ai_clock>6000&&ai_clock%1800==0)ai_attack(owner,true);
+         }
+         int race=int(st.players[owner].race),supply=int(kit_for(st.players[owner].race).supply);
+-        if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(4) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
++        if(a.supply && race>=0 && race<3 && st.supply_available[owner][race]<fp1::integer(200) && st.supply_available[owner][race]-st.supply_used[owner][race]<fp1::integer(ai_supply_demand(owner,req)) && ai_count(owner,supply)==ai_count(owner,supply,true))ai_request(req,supply,ai_count(owner,supply)+1,140);
+         int expansionBudget=reserveExpansion?get_unit_type(UnitTypes(race==0?131:race==1?106:154))->mineral_cost:0;
+         auto constructionBudget=ai_hero_construction_budget(owner);
+         auto heroBudget=ai_train_heroes(owner,expansionBudget+constructionBudget.first,constructionBudget.second,req);
+@@ -1369,7 +1401,7 @@
+         for(auto& t:threads)if(!t.done&&t.wake<=ai_clock)ai_run(t);
+         if(!spawned.empty()){threads.insert(threads.end(),spawned.begin(),spawned.end());spawned.clear();}
+         if(ai_clock%12==0)for(int p=0;p<8;++p)
+-            if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_lurkers(p);ai_tanks(p);if(ai_clock%24==0)ai_combat_abilities(p);}
++            if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_lurkers(p);ai_tanks(p);if(ai_clock%24==0){ai_combat_abilities(p);ai_fighter_production(p);}}
+         if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_defend(p);ai_manage(p);}
+     }
+     a_string ai_status() {
