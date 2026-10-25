@@ -10,11 +10,33 @@ Importing copies content into private app storage. Keep the original archives el
 
 Use **Import maps / ZIP…** in the custom-game or host map selector for `.scm`, `.scx`, and ZIP map collections. Campaign bundles belong in **Import game files**. The included community map is **Weave**; additional game maps are not bundled.
 
+## Interface language
+
+Open **App Options → Interface language** to choose **English**, **Deutsch**,
+**Русский**, **Español** or **Français**. All five UI languages are available
+with any imported game data. Import Russian MPQs through **Import game files**;
+duplicate filename suffixes such as `(1)` are accepted. The setting is saved and
+changes the port's menus, settings and interface labels. Voices, original unit
+names and campaign text follow the imported game data; the setting does not
+translate recordings. Technical diagnostic details remain available.
+
 ## Touch controls and settings
 
 Open **Menu → Options → Touch Controls** during a match. Its **Gesture guide** reflects your current preferences. The [README gesture table](../README.md#touch-controls) describes fresh-install defaults.
 
 ### Selection
+
+**Original larvae selection** is on by default under **Selection settings**.
+The Select Larvae command selects only larvae attached to the selected Hatchery,
+Lair or Hive, up to three. Turn it off to select up to twelve larvae across your
+buildings. Selection hold, double-tap and drag tolerances are grouped under
+**Timing & accuracy**.
+
+**One larva morph per press**, in the same Selection settings, is off by default.
+Turn it on to morph one selected larva with each tap or hotkey press. Remaining
+larvae keep their morph buttons; three quick presses can morph three larvae.
+Zerglings and Scourge still hatch as pairs from one larva. Hydralisk, Mutalisk and
+building morphs are unaffected. This is separate from Original larvae selection.
 
 - **Drag to pan / hold to select** is the default. Start dragging immediately to move the camera; hold briefly first to draw a selection box. The default selection hold is about 180 ms.
 - You can switch to **Drag to select / two fingers pan** under **Selection settings**.
@@ -28,6 +50,13 @@ Open **Menu → Options → Touch Controls** during a match. Its **Gesture guide
 - Pinch zoom and **Allow zoom out** are on by default. Existing saved preferences take priority when updating.
 - Tap or drag the minimap to move the camera. **Minimap hold issues orders** is off by default in 1.0.1, including when applying a preset. Enable it in **Camera settings** if you want holding to issue an order; its default hold duration is about 450 ms. Updating preserves any existing saved choice.
 - **Camera settings** includes pan speed, pinch sensitivity, reverse drag, and minimap hold timing.
+
+### Widescreen
+
+In **Menu → Options → Video Options**, choose **Off**, **On**, or
+**+ over camera area** on the Widescreen row. The third choice includes the
+phone's camera cutout area in the game display. The camera hole can cover pixels
+in that area; regular On keeps the safe inset. App Options retains safe margins.
 
 ### Orders and descriptions
 
@@ -58,6 +87,16 @@ Turn **Build buttons follow placement** off for a fixed button position. **Comma
 Enable **Show control-group buttons** under **Selection settings**. Hold a numbered group to assign the current selection, tap to recall it, and double-tap to center the camera.
 
 Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. Sound options control effects and music separately. **Miscellaneous → Cheats** contains the single-player cheat controls, including **Force victory (end match)**.
+
+### Campaign objects and voices
+
+Move a worker into contact with a carryable mission object to pick it up. A
+worker already carrying minerals, gas or another object must drop that cargo
+first. Carried objects survive saves and drop when their carrier dies. Build 77
+fixes neutral-owned objectives such as the psi emitter in Reign of Fire.
+Mission dialogue has its own audio channel and overlapping transmission lines
+queue; game effects cannot replace it. Leaving the mission or loading a save
+intentionally resets the old world's audio.
 
 ## Local multiplayer
 
@@ -132,3 +171,17 @@ build without another reproduction. The decoded stack stays local across
 restarts; raw memory dumps and app log buffers are not copied.
 
 Technical reference: [Android native exit traces](https://developer.android.com/reference/android/app/ApplicationExitInfo#getTraceInputStream()).
+
+## Large map packs
+
+Use **Custom Game → Import maps/ZIP** for nested ZIP packs with up to 10,000
+`.scm`/`.scx` maps in one import. The limits are 8 GiB of uncompressed ZIP data
+(including ignored files), 64 MiB per map and 50,000 ZIP entries. The app streams
+files to storage and validates them in the background, reports progress, skips
+invalid maps and deduplicates identical maps. Keep enough free storage for the
+uncompressed pack plus at least 64 MiB. Nearby map-transfer limits are unchanged.
+
+Computer players can ferry ground attackers with Dropships, Shuttles and
+Overlords with Ventral Sacs when terrain blocks their route. The same controller
+runs in all campaign missions and custom games. It respects mission unit and
+upgrade restrictions, transport capacity and ownership, and resumes saved trips.

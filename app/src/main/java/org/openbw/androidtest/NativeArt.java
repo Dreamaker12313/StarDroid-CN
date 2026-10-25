@@ -20,7 +20,7 @@ final class NativeArt {
     if (p < 1 || p >= b.length) return "";
     int e = p;
     while (e < b.length && b[e] != 0) e++;
-    return new String(b, p, e - p, CP);
+    return new String(b, p, e - p, GameLanguage.charset());
   }
 
   static String clean(String s) {
@@ -49,7 +49,7 @@ final class NativeArt {
     int width, height, stride;
 
     PCX(byte[] b, boolean transparent, int glass) {
-      if (b == null || b.length < 897 || b[0] != 10 || b[2] != 1 || b[3] != 8 || b[65] != 1)
+      if (b == null || b.length < 897 || b[0] != 10 || (b[2] != 0 && b[2] != 1) || b[3] != 8 || b[65] != 1)
         throw new IllegalArgumentException("Missing or invalid PCX");
       width = u16(b, 8) - u16(b, 4) + 1;
       height = u16(b, 10) - u16(b, 6) + 1;
@@ -66,6 +66,11 @@ final class NativeArt {
         palette[i] = Color.rgb(b[p] & 255, b[p + 1] & 255, b[p + 2] & 255);
       }
       int p = 128, o = 0;
+      if (b[2] == 0) {
+        if (pixels.length > b.length - 897) throw new IllegalArgumentException("Truncated uncompressed PCX");
+        System.arraycopy(b, p, pixels, 0, pixels.length);
+        o = pixels.length;
+      }
       while (o < pixels.length) {
         if (p >= b.length - 769) throw new IllegalArgumentException("Truncated PCX");
         int v = b[p++] & 255, n = (v & 192) == 192 ? v & 63 : 1;
@@ -148,24 +153,34 @@ final class NativeArt {
     final byte[] data;
     final PCX tint;
     final int[] palette;
-    final boolean game, fallback;
+    final boolean game, fallback, wide;
+    final Font substitute;
     final int low, high, height, spacing;
     final Map<Integer, Bitmap> glyphs = new HashMap<Integer, Bitmap>();
     int fixedColor, shadedColor;
+    private SystemFont systemFont;
 
     Font withShadedColor(int color) {
-      Font copy = new Font(fallback ? null : data, tint, palette, spacing, height);
+      if (substitute != null) return new Font(substitute.withShadedColor(color), height, spacing);
+      Font copy = new Font(fallback ? null : data, tint, palette, spacing, height, wide);
       copy.shadedColor = color;
       return copy;
     }
 
     Font withColor(int color) {
-      Font copy = new Font(fallback ? null : data, tint, palette, spacing, height);
+      if (substitute != null) return new Font(substitute.withColor(color), height, spacing);
+      Font copy = new Font(fallback ? null : data, tint, palette, spacing, height, wide);
       copy.fixedColor = color;
       return copy;
     }
 
     Font(byte[] bytes, PCX tint, int[] palette, int spacing, int size) {
+      this(bytes, tint, palette, spacing, size, false);
+    }
+
+    Font(byte[] bytes, PCX tint, int[] palette, int spacing, int size, boolean wide) {
+      this.wide = wide;
+      substitute = null;
       fallback = bytes == null;
       if (fallback) {
         bytes = new byte[12];
@@ -179,12 +194,30 @@ final class NativeArt {
       low = data[4] & 255;
       high = data[5] & 255;
       height = data[7] & 255;
-      if (high < low || height > 64 || 8 + 4 * (high - low + 1) > data.length)
+      if (high < low || height < 1 || height > 64 || 8 + 4 * (high - low + 1) > data.length)
         throw new IllegalArgumentException("Invalid FONT");
       this.tint = tint;
       this.palette = palette;
       this.spacing = spacing;
       game = tint.stride >= 64 && tint.pixels.length >= 192;
+    }
+
+    // Keep the available original letterforms and color ramps when only a
+    // different size exists. The normal renderer still owns layout/wrapping.
+    Font(Font source, int height, int spacing) {
+      substitute = source;
+      data = source.data;
+      tint = source.tint;
+      palette = source.palette;
+      low = source.low;
+      high = source.high;
+      this.height = height;
+      this.spacing = spacing;
+      game = source.game;
+      wide = source.wide;
+      fallback = false;
+      fixedColor = source.fixedColor;
+      shadedColor = source.shadedColor;
     }
 
     int[] ramp(int c) {
@@ -240,24 +273,38 @@ final class NativeArt {
     }
 
     Bitmap glyph(int code, int color) {
-      int key = code + color * 256;
+      int key = (code & 65535) | color << 16;
       if (glyphs.containsKey(key)) return glyphs.get(key);
-      if (fallback) {
-        int w = Math.max(1, (int) Math.ceil(height * .65));
-        Bitmap bitmap = Bitmap.createBitmap(w, height, Bitmap.Config.ARGB_8888);
-        Paint ink = new Paint(Paint.ANTI_ALIAS_FLAG);
-        ink.setTextSize(height);
-        ink.setTypeface(Typeface.MONOSPACE);
-        int[] ramp = ramp(color);
-        int tintIndex = ramp[0] * tint.stride + ramp[1] * 8 + 1;
-        int originalColor = tintIndex < tint.pixels.length ? palette[tint.pixels[tintIndex] & 255] : 0xffcbd3e8;
-        ink.setColor(shadedColor != 0 ? shadedColor : fixedColor != 0 ? fixedColor : originalColor);
-        new Canvas(bitmap).drawText(Character.toString((char) code), 0, height - 2, ink);
+      if (substitute != null) {
+        Bitmap original = substitute.glyph(code, color);
+        if (original == null) return null;
+        int w = Math.max(1, Math.round((original.getWidth() - 1) * height / (float) substitute.height) + 1);
+        Bitmap scaled = Bitmap.createBitmap(w, height, Bitmap.Config.ARGB_8888);
+        new Canvas(scaled).drawBitmap(original, null, new RectF(0, 0, w, height), PIXELS);
+        glyphs.put(key, scaled);
+        return scaled;
+      }
+      int nativeCode = GameLanguage.glyphCode(code);
+      int nativeOffset = nativeCode >= low && nativeCode <= high ? u32(data, 8 + (nativeCode - low) * 4) : 0;
+      if (fallback || nativeOffset < 1 || nativeOffset + 4 > data.length) {
+        int[] r = ramp(color), shades = new int[4];
+        for (int i = 0; i < shades.length; i++) {
+          int index = r[0] * tint.stride + r[1] * 8 + i + 1;
+          int rgb = index < tint.pixels.length ? palette[tint.pixels[index] & 255] : 0xffcbd3e8;
+          if (Color.red(rgb) >= 248 && Color.green(rgb) == 0 && Color.blue(rgb) >= 248)
+            rgb = i == 0 ? 0xffcbd3e8 : shades[i - 1];
+          if (shadedColor != 0) {
+            int light = Math.max(Color.red(rgb), Math.max(Color.green(rgb), Color.blue(rgb)));
+            rgb = Color.rgb(Color.red(shadedColor) * light / 255,
+                Color.green(shadedColor) * light / 255, Color.blue(shadedColor) * light / 255);
+          }
+          shades[i] = fixedColor != 0 ? fixedColor : rgb;
+        }
+        Bitmap bitmap = systemFont().glyph(code, shades);
         glyphs.put(key, bitmap);
         return bitmap;
       }
-      if (code < low || code > high) return null;
-      int p = u32(data, 8 + (code - low) * 4);
+      int p = nativeOffset;
       if (p < 1 || p + 4 > data.length) return null;
       int w = data[p++] & 255, h = data[p++] & 255, ox = data[p++] & 255, oy = data[p++] & 255;
       if (w > 64 || h > 64 || ox + w > 96 || oy + h > height || w == 0) return null;
@@ -279,8 +326,10 @@ final class NativeArt {
           if (!transparent)
             out[(n / w + oy) * cw + n % w + ox] =
                 fixedColor != 0 && (rgb & 0xffffff) != 0 ? fixedColor : rgb;
+          n++;
         }
-        n++;
+        // A zero-colour byte is a transparent run only. It does not emit an
+        // extra pixel. Localized fonts use these runs between every row.
       }
       Bitmap image = Bitmap.createBitmap(out, cw, height, Bitmap.Config.ARGB_8888);
       glyphs.put(key, image);
@@ -288,6 +337,17 @@ final class NativeArt {
     }
 
     int advance(int c) {
+      if (substitute != null) {
+        if (c == 32 || c == 9) return Math.max(1, Math.round(substitute.advance(c) * height / (float) substitute.height));
+        if (c < 32) return 0;
+        Bitmap b = glyph(c, 2);
+        return b == null ? 0 : b.getWidth() - 1 + spacing;
+      }
+      if (fallback) {
+        if (c == 9) return advance(32) * 4;
+        if (c < 32) return 0;
+        return systemFont().advance(c);
+      }
       if (c == 32) return (data[6] & 255) / 2;
       if (c == 9) return (data[6] & 255) * 2;
       if (c < 32) return 0;
@@ -295,13 +355,20 @@ final class NativeArt {
       return b == null ? 0 : b.getWidth() - 1 + spacing;
     }
 
+    private SystemFont systemFont() {
+      if (systemFont == null) systemFont = new SystemFont(height, spacing, wide);
+      return systemFont;
+    }
+
     int measure(String s) {
+      s = PortText.text(s);
       int w = 0;
       for (int i = 0; i < s.length(); i++) w += advance(s.charAt(i));
       return w;
     }
 
     List<String> lines(String s, int width) {
+      s = PortText.text(s);
       ArrayList<String> lines = new ArrayList<String>();
       StringBuilder line = new StringBuilder();
       int x = 0;
@@ -365,6 +432,83 @@ final class NativeArt {
     }
   }
 
+  /** Rasterize the installed Android sans font once, then use the menu's own
+   * highlight/face/shadow ramp. No external or bundled game font is needed. */
+  private static final class SystemFont {
+    final int height, spacing, baseline;
+    final Paint ink = new Paint(Paint.ANTI_ALIAS_FLAG);
+    final Map<Integer, Mask> masks = new HashMap<Integer, Mask>();
+
+    static final class Mask {
+      int width, advance;
+      int[] pixels;
+    }
+
+    SystemFont(int height, int spacing, boolean wide) {
+      this.height = height;
+      this.spacing = spacing;
+      ink.setTypeface(Typeface.create("sans-serif", height >= 14 ? Typeface.BOLD : Typeface.NORMAL));
+      ink.setTextScaleX(wide ? 1.15f : 1f);
+      ink.setTextSize(height);
+      // Size from visible letters, not platform-dependent line padding.
+      Rect bounds = new Rect();
+      ink.getTextBounds("Hg", 0, 2, bounds);
+      if (bounds.height() > height - 2)
+        ink.setTextSize(height * Math.max(1, height - 2) / (float) bounds.height());
+      ink.getTextBounds("Hg", 0, 2, bounds);
+      baseline = Math.max(0, (height - 1 - bounds.height()) / 2) - bounds.top;
+      ink.setColor(Color.WHITE);
+    }
+
+    Mask mask(int code) {
+      Mask cached = masks.get(code);
+      if (cached != null) return cached;
+      String letter = Character.toString((char) code);
+      Rect bounds = new Rect();
+      float size = ink.getTextSize();
+      ink.getTextBounds(letter, 0, 1, bounds);
+      if (bounds.height() > height - 1) {
+        ink.setTextSize(size * Math.max(1, height - 1) / (float) bounds.height());
+        ink.getTextBounds(letter, 0, 1, bounds);
+      }
+      int left = Math.max(0, -bounds.left);
+      int body = Math.max(Math.round(ink.measureText(letter)), bounds.right + left);
+      Mask result = new Mask();
+      result.advance = Math.max(1, body + (code == 32 ? 0 : spacing));
+      result.width = Math.max(result.advance, body + 1);
+      Bitmap mask = Bitmap.createBitmap(result.width, height, Bitmap.Config.ARGB_8888);
+      float y = Math.max(-bounds.top, Math.min(baseline, height - 1 - bounds.bottom));
+      new Canvas(mask).drawText(letter, left, y, ink);
+      result.pixels = new int[result.width * height];
+      mask.getPixels(result.pixels, 0, result.width, 0, 0, result.width, height);
+      mask.recycle();
+      ink.setTextSize(size);
+      masks.put(code, result);
+      return result;
+    }
+
+    int advance(int code) { return mask(code).advance; }
+
+    Bitmap glyph(int code, int[] shades) {
+      Mask mask = mask(code);
+      int w = mask.width;
+      int[] out = new int[w * height];
+      for (int y = 0; y < height - 1; y++) for (int x = 0; x < w - 1; x++) {
+        int alpha = mask.pixels[y * w + x] >>> 24;
+        if (alpha != 0) out[(y + 1) * w + x + 1] = (alpha * 3 / 4 << 24) | (shades[3] & 0xffffff);
+      }
+      for (int y = 0; y < height; y++) for (int x = 0; x < w; x++) {
+        int alpha = mask.pixels[y * w + x] >>> 24;
+        if (alpha == 0) continue;
+        int above = y == 0 ? 0 : mask.pixels[(y - 1) * w + x] >>> 24;
+        int below = y == height - 1 ? 0 : mask.pixels[(y + 1) * w + x] >>> 24;
+        int shade = height < 12 || above < 96 ? 0 : below < 96 ? 2 : 1;
+        out[y * w + x] = (alpha << 24) | (shades[shade] & 0xffffff);
+      }
+      return Bitmap.createBitmap(out, w, height, Bitmap.Config.ARGB_8888);
+    }
+  }
+
   static final class Widget {
     int id, type, x, y, w, h, flags, smk, tx, ty, rx, ry, rx2, ry2, rw, rh;
     String text;
@@ -395,7 +539,7 @@ final class NativeArt {
       Set<Integer> seen = new HashSet<Integer>();
       int p = u32(b, 66);
       while (p > 0) {
-        if (p + 86 > b.length || !seen.add(p) || seen.size() > 512)
+        if (p > b.length - 86 || !seen.add(p) || seen.size() > 512)
           throw new IllegalArgumentException("Invalid dialog chain");
         Widget w = new Widget();
         w.x = u16(b, p + 4);
@@ -418,6 +562,7 @@ final class NativeArt {
         widgets.add(w);
         p = u32(b, p);
       }
+      if (p < 0 || widgets.isEmpty()) throw new IllegalArgumentException("Invalid or empty dialog");
     }
 
     Widget get(int id) {
@@ -430,7 +575,7 @@ final class NativeArt {
       Set<Integer> seen = new HashSet<Integer>();
       int p = w.smk;
       while (p > 0) {
-        if (p + 30 > b.length || !seen.add(p)) break;
+        if (p > b.length - 30 || !seen.add(p)) break;
         Anim a = new Anim();
         a.name = normal(str(b, u32(b, p + 10)));
         a.flags = u16(b, p + 4);
@@ -492,11 +637,64 @@ final class NativeArt {
   final Map<String, byte[]> bytes = new HashMap<String, byte[]>();
   final Map<String, PCX> images = new HashMap<String, PCX>();
   final Map<String, byte[]> fonts = new HashMap<String, byte[]>();
+  private final Map<String, String> fontEncodings = new HashMap<String, String>();
+  private final Set<String> unavailableFonts = new HashSet<String>();
+  private final Map<String, String> rejected = new LinkedHashMap<String, String>();
+  private final Map<String, String> selected = new LinkedHashMap<String, String>();
+  private final Map<String, String> fontStatus = new LinkedHashMap<String, String>();
+  private final Set<String> missing = new LinkedHashSet<String>();
+  private static final int[] SOURCES = {2, 1, 0, 4};
+  private static final String[] SOURCE_NAMES = {"StarDat.mpq", "BrooDat.mpq", "Patch_rt.mpq", "map", "imported interface"};
+
+  private interface Decoder<T> { T decode(int source, byte[] data); }
+
+  // A patch can contain an unreadable entry while a lower-priority archive has
+  // a usable copy. Validate each candidate before committing to that source.
+  private <T> T decode(String name, Decoder<T> decoder) {
+    String n = normal(name);
+    for (int slot : SOURCES) {
+      try {
+        byte[] data = NativeBridge.asset(slot, n);
+        if (data == null || data.length == 0) continue;
+        T decoded = decoder.decode(slot, data);
+        if (selected.size() < 96 || selected.containsKey(n))
+          selected.put(n, SOURCE_NAMES[slot] + " (" + data.length + " bytes)");
+        missing.remove(n);
+        return decoded;
+      } catch (RuntimeException error) {
+        String key = SOURCE_NAMES[slot] + ": " + n;
+        if (rejected.size() < 16 || rejected.containsKey(key))
+          rejected.put(key, error.getClass().getSimpleName() + ": " + error.getMessage());
+      }
+    }
+    if (missing.size() < 48) missing.add(n);
+    throw new IllegalArgumentException("Missing or unreadable asset: " + n);
+  }
+
+  String diagnostics() {
+    StringBuilder result = new StringBuilder();
+    result.append("Font choices:\n");
+    for (Map.Entry<String, String> entry : fontStatus.entrySet())
+      result.append("font").append(entry.getKey()).append(": ").append(entry.getValue()).append('\n');
+    result.append("Loaded assets:\n");
+    for (Map.Entry<String, String> entry : selected.entrySet())
+      result.append(entry.getKey()).append(" <- ").append(entry.getValue()).append('\n');
+    result.append("Missing/unreadable candidates (another path may have loaded):\n");
+    for (String path : missing) result.append(path).append('\n');
+    result.append("Rejected candidates:\n");
+    for (Map.Entry<String, String> entry : rejected.entrySet())
+      result.append(entry.getKey()).append(" — ").append(entry.getValue()).append('\n');
+    return result.toString();
+  }
+
+  Dialog dialog(String name) { return decode("rez/" + name + ".bin", (slot, data) -> new Dialog(data)); }
 
   byte[] read(String name) {
     String n = normal(name);
     if (bytes.containsKey(n)) return bytes.get(n);
-    byte[] b = NativeBridge.asset(-1, n);
+    byte[] b;
+    try { b = decode(n, (slot, data) -> data); }
+    catch (IllegalArgumentException missing) { return null; }
     if (b != null && b.length < 1024 * 1024) bytes.put(n, b);
     return b;
   }
@@ -504,28 +702,96 @@ final class NativeArt {
   PCX pcx(String name, boolean alpha, int glass) {
     String k = name + ":" + alpha + ":" + glass;
     if (images.containsKey(k)) return images.get(k);
-    PCX p = new PCX(read(name), alpha, glass);
+    PCX p = decode(name, (slot, data) -> new PCX(data, alpha, glass));
     images.put(k, p);
     return p;
   }
 
   Font font(String size, PCX tint, int[] pal, int spacing) {
     int height = Integer.parseInt(size.replace("x", ""));
+    Font exact = originalFont(size, tint, pal, spacing);
+    if (exact != null) {
+      fontStatus.put(size, "ORIGINAL: font" + size + ".fnt; " + fontSource(size));
+      return exact;
+    }
+    List<String> alternatives = new ArrayList<String>(Arrays.asList("8", "10", "12", "14", "16", "16x", "32", "50"));
+    alternatives.remove(size);
+    Collections.sort(alternatives, (a, b) -> Double.compare(fontDistance(a, size), fontDistance(b, size)));
+    for (String candidate : alternatives) {
+      Font original = originalFont(candidate, tint, pal, spacing);
+      if (original != null) {
+        fontStatus.put(size, "ORIGINAL SUBSTITUTE: font" + candidate + ".fnt scaled to " + height
+            + " px; " + fontSource(candidate));
+        return new Font(original, height, spacing);
+      }
+    }
+    fontStatus.put(size, "STYLED SYSTEM FALLBACK: Android sans-serif "
+        + (height >= 14 ? "bold" : "regular") + (size.endsWith("x") ? ", wide buttons" : "")
+        + ", menu palette shading; no usable original font in either path at any supported size");
+    return new Font(null, tint, pal, spacing, height, size.endsWith("x"));
+  }
+
+  private static double fontDistance(String candidate, String requested) {
+    int actual = Integer.parseInt(candidate.replace("x", ""));
+    int desired = Integer.parseInt(requested.replace("x", ""));
+    return Math.abs(Math.log(actual / (double) desired))
+        + (candidate.endsWith("x") == requested.endsWith("x") ? 0 : .05);
+  }
+
+  private String fontSource(String size) {
+    for (String prefix : new String[]{"files/font/", "font/"}) {
+      String path = prefix + "font" + size + ".fnt";
+      if (selected.containsKey(path)) return path + " <- " + selected.get(path)
+          + "; " + fontEncodings.get(size);
+    }
+    return "validated original font";
+  }
+
+  private Font originalFont(String size, PCX tint, int[] pal, int spacing) {
+    if (unavailableFonts.contains(size)) return null;
+    int height = Integer.parseInt(size.replace("x", ""));
     byte[] b = fonts.get(size);
-    if (b != null) return new Font(b, tint, pal, spacing, height);
-    for (String prefix : new String[] {"files/font/", "font/"}) {
+    if (b != null) return new Font(b, tint, pal, spacing, height, size.endsWith("x"));
+    for (String prefix : GameLanguage.russianData ? new String[]{"font/", "files/font/"} : new String[]{"files/font/", "font/"}) {
       try {
-        b = read(prefix + "font" + size + ".fnt");
-        if (b == null || b.length < 8 || !new String(b, 0, 4, CP).equals("FONT")) continue;
-        Font font = new Font(b, tint, pal, spacing, height);
-        fonts.put(size, b);
+        Font font = decode(prefix + "font" + size + ".fnt", (slot, data) -> {
+          byte[] readable = fontBytes(slot, data);
+          Font decoded = new Font(readable, tint, pal, spacing, height, size.endsWith("x"));
+          fontEncodings.put(size, readable == data ? "plain FONT" : "installed font decrypted; checksum verified");
+          return decoded;
+        });
+        fonts.put(size, font.data);
         return font;
       } catch (RuntimeException unavailableFont) {
         // Installed archives may contain unreadable font payloads. Try the
         // next original source, then use the readable UI fallback.
       }
     }
-    return new Font(null, tint, pal, spacing, height);
+    unavailableFonts.add(size);
+    return null;
+  }
+
+  private byte[] fontBytes(int source, byte[] data) {
+    if (ClassicFontCipher.isPlain(data)) return data;
+    if (!ClassicFontCipher.isWrapped(data))
+      throw new IllegalArgumentException("Unsupported font data; original file exists");
+    String failure = "Encrypted font: installation metadata unavailable";
+    // Prefer metadata from the font's own archive; an installed patch can use
+    // the base game's metadata. Neither metadata nor its contents are logged.
+    for (int slot : source == 0 ? new int[]{0} : new int[]{source, 0}) {
+      byte[] metadata = null;
+      try {
+        byte[] stored = NativeBridge.asset(slot, "font/font.gid");
+        if (stored == null) continue;
+        metadata = stored.clone();
+        return ClassicFontCipher.decodeFont(data, metadata);
+      } catch (RuntimeException invalid) {
+        failure = "Encrypted font: installed metadata or font checksum could not be validated";
+      } finally {
+        if (metadata != null) Arrays.fill(metadata, (byte) 0);
+      }
+    }
+    throw new IllegalArgumentException(failure);
   }
 
   void clearImages() {

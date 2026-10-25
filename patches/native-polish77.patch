@@ -1,0 +1,186 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -7821,6 +7821,12 @@
+ 	}
+ 
+ 	void execute_main_order(unit_t* u) {
++		// Map/trigger ownership can give objective items Neutral or guard orders.
++		// Their pickup behavior is intrinsic, independent of the owning controller.
++		if (campaign_carryable_powerup(u) && u_completed(u) && !unit_dying(u)) {
++			if (!unit_is_disabled(u)) order_campaign_powerup(u);
++			return;
++		}
+ 		switch (u->order_type->id) {
+ 		case Orders::Die:
+ 			order_Die(u);
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -693,12 +693,17 @@
+ 
+ 	// Select up to 12 of the player's units of a type — handy for the fiddly-to-click
+ 	// ones (workers, and especially Zerg larvae clustered at the hatchery).
++	bool original_larvae_selection = true;
+ 	void select_units_of_type(UnitTypes type) {
++		unit_t* parent = primary_selected();
++		bool local = original_larvae_selection && type == UnitTypes::Zerg_Larva;
++		if (local && (!parent || !unit_is_hatchery(parent) || unit_dying(parent))) return;
+ 		current_selection_clear();
+ 		for (unit_t* u : ptr(st.player_units[my_player])) {
+-			if (unit_is(u, type) && !unit_dying(u)) {
++			if (unit_is(u, type) && !unit_dying(u) && !us_hidden(u)
++				&& (!local || u->connected_unit == parent)) {
+ 				current_selection_add(u);
+-				if (current_selection.size() >= 12) break;
++				if (current_selection.size() >= (local ? 3u : 12u)) break;
+ 			}
+ 		}
+ 		on_selection(false);
+@@ -1565,7 +1570,7 @@
+ 		// Energy for casters and energy buildings (Comsat, Nuclear Silo…); shown alongside
+ 		// shields for the Protoss casters that have both.
+ 		if (ut_has_energy(sel) && !u_hallucination(sel)) {
+-			if (!stat2.empty()) stat2 += " \xc2\xb7 ";   // " · "
++			if (!stat2.empty()) stat2 += " \xb7 ";   // " · "
+ 			stat2 += format("Energy %d/%d", sel->energy.integer_part(), unit_max_energy(sel).integer_part()).c_str();
+ 		}
+ 		card_text += title;
+@@ -1579,7 +1584,7 @@
+ 		bool fx_first = true;
+ 		auto fx_add = [&](bool on, const char* name) {
+ 			if (!on) return;
+-			if (!fx_first) fx += " \xc2\xb7 ";   // " · "
++			if (!fx_first) fx += " \xb7 ";   // " · "
+ 			fx += name; fx_first = false;
+ 		};
+ 		fx_add(sel->stim_timer,                   "Stim");
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -654,7 +654,8 @@
+ 		if (r) return r;
+ 		int best_prio = priority;
+ 		for (auto& c : sound_channels) {
+-			if (c.flags & 0x20) continue;
++			// Combat effects must not evict a selected-unit voice.
++			if (c.flags & (0x20 | 2)) continue;
+ 			if (c.priority < best_prio) {
+ 				best_prio = c.priority;
+ 				r = &c;
+@@ -776,10 +777,10 @@
+ 			sound_filenames[i] = tbl[index];
+ 		}
+ 		native_sound::frequency = 44100;
+-		native_sound::channels = 8;
++		native_sound::channels = 32;
+ 		native_sound::init();
+ 
+-		sound_channels.resize(8);
++		sound_channels.resize(32);
+ 
+ 		load_data_file(images_tbl.data, "arr/images.tbl");
+ 
+--- a/data_loading.h
++++ b/data_loading.h
+@@ -449,7 +449,7 @@
+ }
+ 
+ template<bool little_endian = true>
+-void decompress(uint8_t* input, size_t input_size, uint8_t* output, size_t output_size) {
++void decompress(uint8_t* input, size_t input_size, uint8_t* output, size_t output_size, bool strict = false) {
+ 	data_reader<little_endian> source_r(input, input + input_size);
+ 	auto r = make_bit_reader(source_r);
+ 	int type = r.template get<uint8_t>();
+@@ -647,6 +647,8 @@
+ 					else if (distance_bits == 5) distance |= r.template get_bits<5>();
+ 					else distance |= r.template get_bits<6>();
+ 				}
++				if (strict && (distance >= out_pos || len > output_size - out_pos))
++					error("decompress: invalid match bounds");
+ 				size_t src_pos = out_pos - 1 - distance;
+ 				if (src_pos > output_size) {
+ 					len = 0;
+@@ -669,6 +671,19 @@
+ 		}
+ 
+ 	} else error("decompress: type %d not supported", type);
++	if (strict) {
++		if (!r.template get_bits<1>() || 2 + get_length() != 519)
++			error("decompress: missing end marker");
++		// Ignore only the unused bits of the final encoded byte. Extra cipher
++		// words must contain at most three zero alignment bytes.
++		size_t bits = r.bits_n % 8;
++		r.data >>= bits;
++		r.bits_n -= bits;
++		size_t padding = r.bits_n / 8 + source_r.left();
++		if (padding > 3) error("decompress: excess alignment padding");
++		while (padding--) if (r.template get<uint8_t>() != 0)
++			error("decompress: nonzero alignment padding");
++	}
+ }
+ 
+ static const uint8_t huffman_weight_tables[9][256 + 2] = {
+@@ -1052,12 +1067,20 @@
+ 	size_t file_position = 0;
+ 	mpq_archive_file_reader(a_string arg_filename, base_reader_T& r, size_t sector_size, block_table_entry be, uint32_t key, const crypt_table_t& crypt_table) : filename(std::move(arg_filename)), r(r), sector_size(sector_size), be(be), key(key), crypt_table(crypt_table) {
+ 
+-		if (~be.flags & 0x200 && ~be.flags & 0x100) {
+-			error("mpq: %s: file is not compressed", filename);
+-		}
+-
+ 		sector_data.resize(sector_size);
+ 		r.seek(be.data_offset);
++		if (!(be.flags & 0x300)) {
++			// Uncompressed entries have no sector-offset table. Localized data
++			// also uses these for game sprites, not only Java menu assets.
++			const bool padded = (be.flags & 0x10000)
++				&& be.compressed_size == ((size_t(be.size) + 3) & ~size_t(3));
++			if (be.compressed_size != be.size && !padded)
++				error("mpq: %s: invalid raw file size", filename);
++			for (size_t offset = 0; offset < be.size; offset += sector_size)
++				compressed_sectors.push_back(offset);
++			compressed_sectors.push_back(be.compressed_size);
++			return;
++		}
+ 
+ 		const size_t sectors = (be.size + sector_size - 1) / sector_size;
+ 		const bool has_sector_checksums = (be.flags & 0x04000000) != 0;
+@@ -1105,9 +1128,31 @@
+ 
+ 		size_t current_sector_size = std::min(sector_size, size_t(be.size) - current_sector * sector_size);
+ 
+-		if (sector_data_size == current_sector_size && sector_data_size <= sector_size) {
++		// Some classic installers pad the last encrypted raw sector to a whole
++		// cipher word (e.g. Russian BrooDat orders.dat: 62 bytes stored as 64).
++		// Do not interpret its first data byte as a compression mask.
++		const bool padded_raw = (be.flags & 0x10000) && current_sector_size < sector_size
++			&& sector_data_size > current_sector_size
++			&& sector_data_size == ((current_sector_size + 3) & ~size_t(3));
++		if ((sector_data_size == current_sector_size || padded_raw) && sector_data_size <= sector_size) {
+ 			if (be.flags & 0x10000) make_encrypted_reader(r, sector_data_size, key + (uint32_t)current_sector, crypt_table).get_bytes(sector_data.data(), sector_data_size);
+ 			else r.get_bytes(sector_data.data(), sector_data_size);
++			// Padding can also make a compressed tail as large as a raw one.
++			// Accept that rare classic-installer case only with an exact PKWARE
++			// decode, valid end marker and no more than three zero pad bytes.
++			if ((be.flags & 0x10200) == 0x10200 && current_sector_size < sector_size
++				&& sector_data_size >= 4 && sector_data[0] == 8 && sector_data[1] == 0) {
++				a_vector<uint8_t> decoded(current_sector_size);
++				bool valid = false;
++				try {
++					decompress(sector_data.data() + 1, sector_data_size - 1,
++						decoded.data(), current_sector_size, true);
++					valid = true;
++				} catch (const std::exception&) { }
++				if (valid) { memcpy(sector_data.data(), decoded.data(), current_sector_size); return; }
++			}
++			for (size_t i = current_sector_size; i < sector_data_size; ++i)
++				if (sector_data[i] != 0) error("mpq: %s: invalid encrypted sector padding", filename);
+ 		} else {
+ 			if (be.flags & 0x10000) get_data(make_encrypted_reader(r, sector_data_size, key + (uint32_t)current_sector, crypt_table));
+ 			else get_data(r);
+@@ -1146,6 +1191,7 @@
+ 	}
+ 
+ 	void get_bytes(uint8_t* dst, size_t n) {
++		if (!n) return;
+ 		if (file_position + n > be.size) error("mpq: %s: attempt to read past end", filename);
+ 		if (file_position / sector_size != current_sector) read_sector();
+ 		size_t sector_offset = file_position % sector_size;

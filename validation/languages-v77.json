@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "russianBroodWarTested": false,
+  "import": "PASS Russian StarCraft normal import: 31 maps, story/audio and campaign artwork; first mission prepared for the native engine.",
+  "cases": [
+    {
+      "data": "english",
+      "output": "PASS 387 language checks; Russian=false; archive encoding, original-font loading, Cyrillic/accent glyphs, locale gating, translated label bounds and menu captures."
+    },
+    {
+      "data": "russian",
+      "output": "PASS 486 language checks; Russian=true; archive encoding, original-font loading, Cyrillic/accent glyphs, locale gating, translated label bounds and menu captures."
+    }
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "8511d8b333e6be756676e731919f70d1342bfe0626ae3db4226b9b4b5c573c19",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "6bb79de77b500c8b58a343c62c3e907d35490aaa2dc4d60e6c2d2c4a7cfa3388",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "6e4ad96d580162ed71f4b41524877a5973cc4f73e128a60697c0eb995189cfac",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "e91927be6e7d44fc47e43b004688e96bcb72f28e18f41fe23521029757fc5cc7",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "392b11660fa050a2cd4c1ad9e51430ae586c1f5590b35974d50ad00ea61d9f49",
+    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "037797b9b848ac5193c5623a370a77b8c47b8b0dde98d9f366b6c4fbc1b1aa41",
+    "app/src/main/assets/native/ui-languages.tsv": "1cdebbf82d0a0f31d62505f720465ec328747301cff3649a353de3f1ad95dbf4",
+    "tests/run_languages77.py": "118842edeaf134828472db520bf1349f50acda8229e441d13ca0293471acd5cd",
+    "tests/Language77Test.java": "64f05e649e52760008c375ab08c4a94a47a35d627703c88e6c1d0cd336a7d845"
+  }
+}

@@ -1,4 +1,99 @@
-# StarDroid 1.0.1 validation (minimap default, build 71)
+# StarDroid 1.0.8 validation (build 78)
+
+Current reports: [map imports](validation/maps-v78.json), [native AI and larva input](validation/native-v78.json), [languages](validation/languages-v78.json), [speech/preferences](validation/presentation-v78.json), [saves](validation/saves-v78.json), [protocol](validation/protocol-v78.json) and [APK](validation/package-v78.json).
+
+- 2,501 distinct map scenarios imported and reimported with a 128 MiB Java heap; 5,111 assertions cover sorting, deduplication, progress, corrupt entries, safe paths, count/size bounds and temporary-file cleanup.
+- Dropships, Shuttles and upgraded Overlords each deliver nine attackers across real disconnected terrain in campaign and melee modes, including repeat trips, capacity, upgrade gating, destroyed-carrier cleanup and deterministic save/restore. The Shuttle case also exercises scripted attacks without a production town. A ferried SCV resumes Command Center construction.
+- The original Zerg 4 mission advances 18,000 frames: 31 ground units observed loading, 21 unloading, no AI interpreter error. Ship losses and combat occur normally; this is not a full playthrough.
+- All 64 campaign maps load and advance 48 frames. Transport requests for 144 computer-player slots respect each mission's unit and upgrade restrictions.
+- Larva checks cover single/group morphs, rapid and spaced presses, remaining-larva buttons, queued-input saves, insufficient minerals, two Zerglings per larva and unchanged Hydralisk group morphs.
+- 488 English-data and 491 Russian-data language assertions cover all five choices, Cyrillic/accent glyphs, original fonts and label bounds. 17 speech/preferences and 1,430 nearby protocol assertions pass.
+- Schema 4 saves round-trip in memory and across processes, preserve airlifts, read schemas 1–3 and reject corrupt or mismatched saves. Previously removed external-bot saves remain unsupported.
+- Release assembly/lint, original signing identity, JNI exports, both ABIs, unchanged permissions and 16 KiB ELF/APK alignment are checked by `tests/check_revision78_package.py`.
+
+Physical Android installation, touch/audio/cutout behavior and Bluetooth/Wi-Fi Direct radio testing remain pending. These are bounded regression scenarios, not 64 full playthroughs. Original game archives remain external.
+
+The following sections describe historical builds and their recorded sources.
+
+# StarDroid 1.0.7 validation (build 77)
+
+Reports: [native gameplay](validation/native-v77.json), [archive decoding](validation/archive-v77.json), [languages](validation/languages-v77.json), [speech and preferences](validation/presentation-v77.json), [protocol](validation/protocol-v77.json), [fonts](validation/encrypted-fonts-v1.0.7.json), [menu regression](validation/menu-recovery-v1.0.7.json), [imports](validation/menu-import-v1.0.7.json), and [APK](validation/package-v77.json).
+
+- Actual English Reign of Fire: 6,500 simulated frames, original mission SCV carrying the psi emitter, and the reported `Z2M20RAY.wav` line with concurrent effects. All 18 worker/object combinations cover pickup, following, save/load, death/drop and reacquisition. Neutral and guard ownership plus resource/double-carry exclusions pass.
+- Hatchery, Lair and Hive select only connected larvae, at most three; empty buildings and the opt-out global selection pass. Preference migration defaults on and saves explicit off.
+- Native sound pool tests protect unit speech and mission speech from effects. Production Java presentation passes 17 checks covering queued transmissions, save restoration, fast-speed subtitle lifetime and briefing completion. These are mixer/state tests, not listening tests on a phone.
+- Supplied Russian StarCraft normal import: 31 maps, story/audio and campaign artwork. Imported first mission runs 1,200 native frames, renders and round-trips its save exactly. Russian BroodWar campaign archive was unavailable; Russian BrooDat core data was tested.
+- 110 synthetic raw/encrypted sector checks include zero/word/multi-sector boundaries, padded tails, compression-size collisions and false-positive protection. Actual Russian orders data and the formerly damaged platform explosion palette decode byte-identically to the English assets.
+- 387 English-data and 486 Russian-data language checks cover detection, CP1251/CP1252, imported fonts, Cyrillic and accented glyphs, five language choices and translated original dialog bounds. The FONT transparent-run pixel regression passes. Rendered menu/label previews were visually inspected using a desktop Canvas shim; animated Smacker layers are omitted.
+- 1,854 encrypted-font checks retain the StarDat font fix. This run did not supply an independent reference; the independent byte comparison from build 76 remains historical evidence. Menu regression passes 3,686 font checks, 41 asset checks and 13 fallback label/action checks. Import regression passes 33 checks.
+- 1,430 protocol assertions pass, including incompatible-build rejection, data/map checksums, ordering, delays, pauses and disconnect behavior. Build 77 is required on every multiplayer device.
+- Final release assembly and lint pass (0 errors, 10 warnings). Original signing certificate, application ID, version 1.0.7/code 77, API 26/35, all 40 JNI methods and 16 KiB APK/ELF alignment verified. Both ABI libraries match the APK; all existing bundled assets remain unchanged and only the translation table is added. Smacker source is unchanged and was rebuilt.
+- No new original fonts, game archives, installation metadata or signing keys are bundled. Credits diagnostics and Copy remain; menu repair/report UI remains removed.
+- Physical Android installation, touch controls, cutout behavior, listening tests and multiplayer radios were not tested. No full campaign playthrough is claimed. Historical device/runtime evidence below is not a new build-77 test.
+
+# Historical validation: StarDroid 1.0.6 (original encrypted fonts, build 76)
+
+Reports: [encrypted original fonts](validation/encrypted-fonts-v1.0.6.json), [menu/font regression](validation/menu-recovery-v1.0.6.json), [import handoff](validation/menu-import-v1.0.6.json), and [APK checks](validation/menu-package-v1.0.6.json).
+
+- The tester's actual StarDat.mpq contains all eight original fonts at their normal names. Their installer encryption caused the old FONT decoder to reject them. The supplied StarCraft.mpq contains campaign artwork and no entries at the 16 supported font paths.
+- Reproduced 1.0.5 falling back for all five menu font slots on these same archives. The new decoder passes 1,717 checks and matches an independent decoding of all eight fonts byte for byte. Exact original fonts are selected by the production menu renderer; malformed metadata/envelopes retain the readable fallback.
+- The actual StarCraft.mpq passes the production import path: 31 maps and campaign artwork. The imported sparse MPQ feeds the native decoder and both campaign menus without a missing-font warning. BroodWar.mpq did not transfer and was not tested.
+- 3,686 font checks, 41 asset checks, 13 fallback label/action checks and 33 synthetic import checks pass. Original-font substitutes, no-font fallback, partial imports and safe replacements remain covered. Credits invokes the original Diagnostics / credits screen.
+- Extra menu reports, font inventories and repair banners are removed. General diagnostics, credits, Copy and network diagnostics remain. Existing imports load the fix automatically; ordinary future imports do too. No repair button.
+- Host font renders inspected. These use the real bitmap fonts but an AWT Canvas shim and omit animated Smacker layers. No physical Android device test was performed.
+- Release assembly and lint pass (0 errors, 10 existing warnings). Version 1.0.6/code 76, the original signing certificate and 16 KiB APK alignment verified. All 76 native-library and asset entries match 1.0.5 byte for byte; no original fonts, game archives or installation metadata are distributed.
+
+# Historical validation: StarDroid 1.0.5 (font recovery, build 75)
+
+Reports: [menu/font regression](validation/menu-recovery-v1.0.5.json), [import handoff](validation/menu-import-v1.0.5.json), and [APK checks](validation/menu-package-v1.0.5.json).
+
+- Original fonts are preferred across all installed archive sources and both known font paths. Missing sizes reuse the closest readable original size, including optional font12/32/50, before using the installed Android font.
+- 3,686 font checks, 41 asset checks and 13 fallback action/label checks pass. Coverage includes exact-font preference, imported and optional original-size substitutes, colors, cached glyph metrics, accents, wrapping and real dialog bounds.
+- 33 production import checks pass. Palette-only normal imports are decoded through the real sparse MPQ/native reader and both menu classes retain artwork, render styled system fonts and omit artwork-repair warnings. Complete/partial original-font imports also pass.
+- Before/after host previews inspected. Android sans-serif is represented by desktop sans-serif in the AWT shim; this is not an exact Samsung render.
+- Release assembly and lint pass (0 errors, 10 existing warnings). Version 1.0.5/code 75, original release certificate and 16 KiB alignment verified. All 76 native-library/asset entries unchanged from 1.0.4.
+- No reimport required for existing installations. Ordinary imports continue to reload the same font selection; no repair button added.
+- The tester's actual archive was not supplied. Its report confirms no expected font entries in StarCraft.mpq but was generated before menu loading. No physical-device test was performed.
+
+# Historical validation: StarDroid 1.0.4 (partial interface imports, build 74)
+
+Reports: [partial import regression](validation/menu-import-v1.0.4.json), [menu recovery](validation/menu-recovery-v1.0.4.json), and [APK checks](validation/menu-package-v1.0.4.json).
+
+- The supplied 1.0.3 diagnostic report confirms the incomplete-font validation error and a missing interface bundle. It does not name the missing font.
+- 32 production import checks pass: full and partial imports, 31 maps, full-size PCX, missing unused font, missing menu font, palette-only imports, exact missing-file reporting, existing-file protection and fingerprints.
+- Reproduced the 1.0.3 validator rejecting a valid background and all five menu fonts when font50 was absent. Baseline Java sources match hashes in the recorded 1.0.3 build manifest. The fixture is synthetic; it does not establish which font is absent from the tester's archive.
+- Partial import, sparse MPQ reconstruction, native decoder and both campaign menu classes verified together. Both menus select the imported palette and all five menu fonts with no fallback despite absent font50.
+- 33 asset regression checks and 13 fallback labels/actions pass using real external core archives and fault injection.
+- Release assembly and lint pass (0 errors, 10 existing warnings). Original release signature, version 1.0.4/code 74, minimum API 26/target API 35 and 16 KiB alignment verified. All 76 native-library and asset entries unchanged from the intact 1.0.2 baseline; no native changes in 1.0.3 or this update.
+- No physical-device test was performed. The tester's actual StarCraft.mpq has not been supplied. Fonts genuinely absent from the archive will still need a complete source; the fix retains available artwork and reports missing entries.
+
+# Historical validation: StarDroid 1.0.3 (menu import and reports, build 73)
+
+Reports: [import regression](validation/menu-import-v1.0.3.json), [menu recovery](validation/menu-recovery-v1.0.3.json), and [APK checks](validation/menu-package-v1.0.3.json).
+
+- Reproduced 1.0.2 rejecting a valid 308,097-byte campaign background at its 256 KiB limit.
+- Normal fresh import and reimport tested with 31 base maps, embedded Install.exe MPQ, alternate font paths, bounded oversize rejection, safe failed replacement and SHA-256 report output.
+- End-to-end interface handoff: import, sparse MPQ reconstruction, native decoding and both campaign layouts using the restored palette and all five original-font slots. Synthetic assets exercise the interfaces without distributing game data.
+- 33 asset checks and 13 fallback button labels/actions pass with real external core assets. Proportional fallback text and exact loaded/missing source reporting checked. Host Canvas renders inspected.
+- Signed release assembly and lint pass (0 errors, 10 existing warnings). Application ID, version 1.0.3/code 73, original release certificate, minimum API 26/target API 35 and 16 KiB alignment verified.
+- All 76 native-library and bundled-asset entries unchanged from 1.0.2; native engine not rebuilt.
+- Physical Android installation, import picker, share/save UI and touch interaction remain untested. The affected tester's actual archive was not supplied. Their screenshot identifies palcs/backgnd.pcx as unavailable but does not identify the underlying archive version or confirm the size-limit cause on that device.
+
+# Historical validation: StarDroid 1.0.2 (menu recovery, build 72)
+
+Reports: [menu recovery](validation/menu-recovery-v1.0.2.json) and [APK checks](validation/menu-package-v1.0.2.json).
+
+- Reproduced the old campaign-menu exception with real classic core archives missing the campaign palette.
+- 30 asset checks pass, including missing palettes, bad patch entries, decoder exceptions, valid imported fonts, raw PCX and malformed bounds. All 13 main/campaign fallback labels and actions are checked using production rendering call sites.
+- Interface metadata tests distinguish a font-only bundle from a bundle containing campaign artwork, and retain incomplete-font rejection.
+- Main and campaign screens were rendered with the real NativeArt/NativeGlue code through an AWT Canvas shim and inspected. This is not an Android device render.
+- Release assembly and lint pass: 0 errors, 10 existing warnings.
+- APK version 1.0.2/code 72, application ID org.openbw.androidtest, minimum API 26 and target API 35 verified.
+- Original release signing certificate and 16 KiB native-library ZIP alignment verified.
+- All 76 native-library and asset entries match the supplied 1.0.1 source package byte for byte.
+- No physical device test was performed. The affected person's actual archives and diagnostic report were not provided, so the exact failing file on that device remains unconfirmed.
+
+# Historical validation: StarDroid 1.0.1 (minimap default, build 71)
 
 Report: [minimap-default-v1.0.1.json](validation/minimap-default-v1.0.1.json).
 

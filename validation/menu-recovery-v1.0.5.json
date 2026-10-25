@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "version": "1.0.5",
+  "versionCode": 75,
+  "output": "PASS 3686 font checks: original-size reuse, no-font fallback, cached glyphs, colors, accents, proportional wrapping and real dialog label bounds. AWT stand-in for Android sans font.\nPASS 41 asset checks plus 13 fallback button labels/actions; real core menus, missing palette, damaged patch, MPQ exception, imported font recovery, raw PCX and malformed bounds. Host Canvas shim; no physical device test.",
+  "interfaceImport": "PASS interface metadata: font-only import distinguished from campaign palette; complete palette detected; missing unused font no longer discards menu files.",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "ec85c434523622aa6caee91e15a346760fa6b1db72445dc16e8373297e23c258",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "c1913ef2215db93b771983a916c3e95ceed95252dfd27553a2ec1972de852d99",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "5d99e9f99799271478338db557b0d7f01beb096bc57141f48a9196f6371c2134",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "0ca06bf9953ec4e08c3526f89edccba50da830c65a8e0c497f5059463e64c71e",
+    "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "d6645a558b54b8c48814a4531b02932a97aa6e44d4520f306a169392d0e8441d",
+    "app/src/main/java/org/openbw/androidtest/GameContent.java": "ef80e8e90d3959f1b59ac02d9874800c8e254fdce157abbe727ba9c85c56a7db",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "7a0bf5934464ed3d909e897363eb8e9c91a5bb09278fbb694319d3bfb3093d24",
+    "tests/run_menu_recovery.py": "675e8e003b26da293a92087777aba58ce1e6ad23da91f578dbfd35e5ab48c7ae",
+    "tests/FontFallbackTest.java": "ca92077899f5e6559e92eee5ca2b6d10ad01f21ca4d00457514fdb7595f08d6d"
+  }
+}

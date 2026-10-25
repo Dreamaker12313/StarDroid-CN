@@ -23,7 +23,7 @@ public final class NativeMapsHarness {
    List<NativeMaps.Staged> traversal=NativeMaps.stage(new ByteArrayInputStream(zip(1,true)),"pack.zip",cache);
    check(traversal.get(0).name.equals("0.scx")&&traversal.get(0).file.getParentFile().equals(cache),"ZIP path escaped staging");
    int before=cache.list().length;
-   try{NativeMaps.stage(new ByteArrayInputStream(zip(129,true)),"large.zip",cache);throw new AssertionError("Map count unbounded");}catch(IOException expected){}
+   try{NativeMaps.stage(new ByteArrayInputStream(zip(NativeMaps.MAX_COUNT+1,true)),"large.zip",cache);throw new AssertionError("Map count unbounded");}catch(IOException expected){}
    check(cache.list().length==before,"Failed import left temporary files");
    try{NativeMaps.stage(new ByteArrayInputStream(zip(1,false)),"empty.zip",cache);throw new AssertionError("Non-map ZIP accepted");}catch(IOException expected){}
    System.out.println("PASS eight-map ZIP and individual imports, persistent collection, deduplication, path isolation, count bounds and failed-import cleanup");

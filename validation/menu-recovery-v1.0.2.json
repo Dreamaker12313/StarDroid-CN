@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "version": "1.0.2",
+  "versionCode": 72,
+  "output": "PASS 30 asset checks plus 13 fallback button labels/actions; real core menus, missing palette, damaged patch, MPQ exception, imported font recovery, raw PCX and malformed bounds. Host Canvas shim; no physical device test.",
+  "interfaceImport": "PASS interface metadata: font-only import distinguished from campaign palette; complete palette detected; incomplete font set still rejected.",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "12f2410e832d834205228394e8b2275e1522304b6bcf9a0b5b1bad84d8145f34",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "497eca803677097730a7dab65f4d0cb7d07e2793f5f5d82714db1226720f6b61",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "5d99e9f99799271478338db557b0d7f01beb096bc57141f48a9196f6371c2134",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "51ebfd1e16fb6b2e13451045d4b474a835d025ece33079a893c38d6ce2726151",
+    "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "1453ddc310d5e795a8911443f7d4cb8376228f2f55434a6948175ef81a7c2dd8",
+    "app/src/main/java/org/openbw/androidtest/GameContent.java": "92eb630abf0bdb7ffcedea9f005e13693e4aead962bf1a4ca768c439843a64bd",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "b7a4c46409bfeda014a1cad215c4981fe802ec4cbf982c84ae21181aae6f0987",
+    "tests/run_menu_recovery.py": "e17739bd4d74e856b7ec57e1a8fff21b353f2da31ffc6858c033c561682b1cbf"
+  },
+  "baselineReproduction": "REPRODUCED 1.0.1 campaign failure: Missing or invalid PCX"
+}

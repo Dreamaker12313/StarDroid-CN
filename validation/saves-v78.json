@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "version": "1.0.8",
+  "physicalAndroid": false,
+  "output": "PASS persistent graph, pools, orders, cargo links, bullets, creep, fog, replay, AI and mission round trip\nPASS schema 1/2/3 compatibility and schema 4 round trip\nPASS pending mission wait resumes\nPASS damaged/truncated files rejected before changing live world\nPASS mismatched map/data rejected\nPASS wrote persistent snapshot 282656 bytes\nPASS persistent graph, pools, orders, cargo links, bullets, creep, fog, replay, AI and mission round trip\nPASS schema 1/2/3 compatibility and schema 4 round trip\nPASS pending mission wait resumes\nPASS damaged/truncated files rejected before changing live world\nPASS mismatched map/data rejected\n",
+  "sourceSha256": {
+    "native/save_state.h": "6d86ac14f28f73f89b9c15c1f87f671bd4d90bffe3c80c8d052b9cf85687c482",
+    "native/multiplayer.h": "a8cf9ef71f8eea114853194ff21cccc6102442fb92458e06e7954067552746cf",
+    "tests/native_saves.cpp": "1538eb78e620ee86efeb4aaee853e9b9940528db2f463afd35c3cf921ab50055",
+    "tests/native_fixture.h": "978bb1b25ba507aa450e256eda4446b35d665d098857f68388a9fc97ff259030"
+  },
+  "schema": 4,
+  "readSchemas": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "freshProcessRead": true,
+  "binarySha256": "a5c454183ccc6038311a2d11dd09231b585ba668e16a0e051a0dd4fe5275b71f"
+}

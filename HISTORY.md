@@ -1,3 +1,19 @@
+# 1.0.8 · build 78
+
+Large map packs (10,000 maps / 8 GiB), optional one-larva-per-press morphing,
+five-language UI, and campaign/custom-game transport AI for Dropships,
+Shuttles and upgraded Overlords. Save schema 4 reads older saves and stores
+active airlifts. Nearby multiplayer requires build 78 on all devices.
+See [release notes](docs/RELEASE-1.0.8.md) and [validation](VALIDATION.md).
+
+# 1.0.7 · build 77
+
+Campaign object pickup, protected mission speech, original larvae selection,
+widescreen over the camera cutout, Russian data/text decoding and five interface
+languages. Keeps the encrypted StarDat fonts, clean menus and Credits diagnostics.
+Both native ABIs rebuilt; multiplayer build 77 required. See
+[release notes](docs/RELEASE-1.0.7.md) and [validation](VALIDATION.md).
+
 # OpenBW Android 0.61
 
 Following Build and Cancel controls always stay below the visible placement

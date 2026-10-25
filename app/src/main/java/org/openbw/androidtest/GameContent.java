@@ -30,8 +30,10 @@ final class GameContent {
             if (count == 0) throw new IOException("No campaign maps found. Choose the large " + (expansion ? "BroodWar.mpq" : "StarCraft.mpq") + " archive.");
             if (!expansion) {
                 try {
-                    try (FileOutputStream out = new FileOutputStream(stage)) { MissionBundle.exportInterface(input, InterfaceData.names(), out, progress); }
-                    InterfaceData.install(stage, new File(directory, InterfaceData.NAME));
+                    InterfaceData.importArchive(input, directory, progress);
+                    File target = new File(directory, InterfaceData.NAME);
+                    if (!InterfaceData.hasCampaignPalette(target))
+                        problems.add("Campaign artwork is unavailable in this archive.");
                 } catch (Exception e) { problems.add("Interface: " + e.getMessage()); }
             }
             try {

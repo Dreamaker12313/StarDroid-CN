@@ -28,10 +28,10 @@ This downloads the pinned tools, prepares the vendored engine with the patches i
 
 Outputs:
 
-- `dist/StarDroid-1.0.1.apk`
+- `dist/StarDroid-1.0.8.apk`
 - `dist/SHA256SUMS.txt`
 
-The visible version is **1.0.1**, with Android version code **71** for this release. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
+The visible version is **1.0.8**, with Android version code **78** for this release. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
 
 Use `STARDROID_ANDROID_TOOLS` to select a tool-cache directory. The historical `OPENBW_ANDROID_TOOLS` variable is still accepted. The default is `.tools/` in the repository. The helper writes a local `local.properties` pointing Gradle at the staged SDK.
 
@@ -77,6 +77,18 @@ Run `prepare_native.py` once before building both ABIs. The generated `native-en
 ## Tests and validation
 
 `tests/` contains focused Java and native harnesses. Many historic runners require local classic MPQs, extracted fixtures, or previously built helper programs; they are not a single self-contained test suite. Those game-data fixtures are intentionally not distributed.
+
+For this release's installed-font regression, run the menu and import harnesses first, then supply your own archives. The last runner exercises the normal StarCraft import, native MPQ extraction, original font decoding and Java menu rendering. Its AWT Canvas shim is a host check, not an Android device test. Installation metadata is temporary and is excluded from reports and the source package.
+
+```sh
+python3 tests/run_menu_recovery.py /path/to/classic-game-data
+python3 tests/run_menu_import.py
+python3 tests/run_encrypted_fonts.py \
+  --stardat /path/to/StarDat.mpq --broodat /path/to/BrooDat.mpq \
+  --patch /path/to/patch_rt.mpq --starcraft /path/to/StarCraft.mpq
+```
+
+The encrypted-font runner requires an installed StarDat containing encrypted fonts and its matching installation metadata. Optional `--reference-fonts` compares all eight decoded files with a caller-provided independent decoding; `--baseline-source` accepts the 1.0.5 source ZIP to reproduce its fallback behavior.
 
 After tool setup, the pure Java room/protocol test uses the included test-only JSON dependency:
 
@@ -137,3 +149,49 @@ For a change, run checks relevant to that change and test on a real device where
 | `docs/` | Player/developer guides, change notes, and hero data. |
 
 The pinned engine revision and archive hash are in [UPSTREAM.json](../UPSTREAM.json). Third-party attribution is in [THIRD_PARTY.md](../THIRD_PARTY.md).
+
+## Earlier regression checks
+
+Build 77 introduced `patches/native-polish77.patch`; the current stack applies
+`native-polish78.patch` after it. Both native ABIs must be rebuilt; the
+prebuilt libraries in this source package match build 78. Nearby protocol build
+78 rejects older simulation builds. UI strings are in the five-column UTF-8
+`app/src/main/assets/native/ui-languages.tsv` file. Imported game strings use
+Windows-1251 for the detected Russian installation and Windows-1252 otherwise.
+
+See [VALIDATION.md](../VALIDATION.md) for actual results and limitations. With your
+own game archives, run:
+
+```sh
+python3 scripts/prepare_native.py
+python3 tests/build_native_host.py revision77 --fast --skip-prepare
+build-native/host/native-revision77 EN_CORE_DIR app/src/main/assets/native/weave.scx EN_BROODWAR_MPQ
+python3 tests/run_menu_recovery.py EN_CORE_DIR
+python3 tests/run_menu_import.py
+python3 tests/run_languages77.py EN_CORE_DIR RU_CORE_DIR RU_STARCRAFT_MPQ
+build-native/host/native-revision77 RU_CORE_DIR app/src/main/assets/native/weave.scx build-native/languages77/cache/terran01.mpq russian
+python3 tests/test_encrypted_sector77.py
+python3 tests/run_presentation77.py
+```
+
+Each core directory must contain `STARDAT.MPQ`, `BROODAT.MPQ` and
+`patch_rt.mpq`. The imported campaign cache is required for the Russian native
+test because the supplied `StarCraft.mpq` is an installer with an embedded MPQ.
+The tests use external game files only; never add their extracted output to a
+source or APK package. Language preview images use a desktop Canvas shim and
+omit animated menu layers. They are not Android screenshots.
+
+## Build 78 regression checks
+
+`tests/Maps78Test.java` exercises the production disk importer with 2,501 distinct
+map scenarios, reimport deduplication, progress and rejection/cleanup limits.
+`tests/native_revision78.cpp` checks one-larva input, transport AI on real island
+terrain, deterministic in-flight saves, and the original Zerg 4 attacks.
+`tests/Language78Test.java` checks all five languages with English and Russian
+assets; `tests/run_presentation78.py` checks speech and preference persistence.
+
+Build with `python3 tests/build_native_host.py revision78 --skip-prepare`.
+Run `build-native/host/native-revision78 EN_CORE_DIR WEAVE_SCX STARCRAFT_MPQ`.
+For the all-mission smoke/restriction sweep append `sweep BROODWAR_MPQ`.
+Game data is not included. The native patch stack ends in `native-polish78.patch`.
+Save schema 4 remains able to read schemas 1–3; new saves need build 78 or later.

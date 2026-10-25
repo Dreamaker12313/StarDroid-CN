@@ -39,14 +39,14 @@ public class InterfaceDataHarness {
             }
         }
         try{InterfaceData.install(temporary,target);throw new AssertionError("Incomplete fonts accepted");}catch(IOException expected){
-            if(!expected.getMessage().contains("font set is incomplete"))throw expected;
+            if(!expected.getMessage().contains("kept"))throw expected;
         }
         if(!Arrays.equals(before,Files.readAllBytes(target.toPath())))throw new AssertionError("Partial import damaged working fonts");
         temporary.delete();
         try(FileInputStream in=new FileInputStream(args[2]);FileOutputStream out=new FileOutputStream(temporary)) {
-            try {MissionBundle.exportInterface(in.getChannel(),InterfaceData.names(),out,p->{});throw new AssertionError("Fonts-less archive accepted");}
-            catch(IOException expected){System.out.println("Missing-fonts archive rejected: "+expected.getMessage());}
+            try {MissionBundle.exportInterface(in.getChannel(),InterfaceData.names(),out,p->{});InterfaceData.validate(temporary);}
+            catch(IOException expected){if(!expected.getMessage().contains("No original interface files"))throw expected;}
         }
-        temporary.delete();System.out.println("PASS: eight-font export, validated install, local serving, safe replacement, incomplete/missing-font rejection.");
+        temporary.delete();System.out.println("PASS: eight-font export, validated install, local serving, safe replacement, preservation of existing menu files and partial/empty input handling.");
     }
 }

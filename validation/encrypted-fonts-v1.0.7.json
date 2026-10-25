@@ -1,0 +1,15 @@
+{
+  "version": "1.0.7",
+  "versionCode": 77,
+  "passed": true,
+  "physicalAndroid": false,
+  "actualImport": "PASS actual StarCraft.mpq normal import: 31 maps and campaign artwork; no font repair warning.",
+  "output": "PASS 1854 encrypted-font checks: all eight original fonts, independent reference comparison when supplied, exact menu fonts, malformed metadata/trailers, fallback recovery and source preservation.",
+  "independentDecodedFontComparison": false,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "tests/EncryptedFontTest.java": "c54fd7b0842e81cfb28f90b55656b9798dd5bfd6cdb8445d8faa28c3c835fbbd",
+    "tests/run_encrypted_fonts.py": "3fa6b7192ed7a0c091c9719ea2afa72233f83b72c5a2ab98335c371cb24ce70f"
+  }
+}

@@ -10,7 +10,7 @@
 #include <vector>
 namespace naudio {
 struct Clip { int rate=22050, channels=1; std::vector<float> pcm; };
-struct Voice { std::shared_ptr<Clip> clip; double position=0; float left=1,right=1; bool loop=false; };
+struct Voice { std::shared_ptr<Clip> clip; double position=0; float left=1,right=1; bool loop=false; int effect_id=-1; };
 static std::mutex mutex;
 static std::vector<std::shared_ptr<Clip>> clips;
 static std::array<Voice,64> voices;
@@ -52,6 +52,18 @@ inline void clear(){std::lock_guard<std::mutex> l(mutex);for(auto& v:voices)v={}
 // Lobby roster changes rebuild the world while its menu transition is playing.
 inline void clear_game(){std::lock_guard<std::mutex> l(mutex);for(int i=0;i<57;i++)voices[i]={};clips.clear();}
 inline void play_clip(std::shared_ptr<Clip> clip,int channel){std::lock_guard<std::mutex> l(mutex);voices[channel]={};voices[channel].clip=std::move(clip);}
+// Trigger Play WAV effects have their own pool. They cannot replace dialogue,
+// music, movies or ordinary unit speech; repeated active effects are coalesced.
+inline bool effect_playing(int id){std::lock_guard<std::mutex> l(mutex);for(int i=48;i<56;i++)if(voices[i].clip&&voices[i].effect_id==id)return true;return false;}
+inline void play_effect(std::shared_ptr<Clip> clip,int id){
+ std::lock_guard<std::mutex> l(mutex);int chosen=48;
+ for(int i=48;i<56;i++){
+  if(voices[i].clip&&voices[i].effect_id==id)return;
+  if(!voices[i].clip){chosen=i;break;}
+  if(voices[i].position/voices[i].clip->rate>voices[chosen].position/voices[chosen].clip->rate)chosen=i;
+ }
+ voices[chosen]={};voices[chosen].clip=std::move(clip);voices[chosen].effect_id=id;
+}
 inline std::shared_ptr<Clip> score_clip(const Clip& fill,const Clip& end,int milliseconds){
  if(milliseconds<500||milliseconds>10000)throw std::runtime_error("Invalid score duration");
  auto out=std::make_shared<Clip>();out->rate=fill.rate;out->channels=fill.channels;

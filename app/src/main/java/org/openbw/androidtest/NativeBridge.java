@@ -31,7 +31,10 @@ final class NativeBridge {
 
   static native void frame(Bitmap target, int steps, double milliseconds);
 
-  static native String text(int query);
+  private static native byte[] rawText(int query);
+  static String text(int query) { return GameLanguage.decode(rawText(query)); }
+  static native byte[] archiveText(String archivePath);
+  static native byte[] mapScenario(String archivePath);
 
   static native int value(int query, int argument);
 
@@ -52,6 +55,7 @@ final class NativeBridge {
   static native int sound(byte[] wav, int channel, boolean loop);
 
   static native int campaignSound(int stringId);
+  static native void campaignEffect(int stringId);
 
   static native void mix(short[] samples, int sampleRate);
 

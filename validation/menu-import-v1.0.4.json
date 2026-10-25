@@ -1,0 +1,26 @@
+{
+  "version": "1.0.4",
+  "versionCode": 74,
+  "passed": true,
+  "physicalAndroid": false,
+  "fixtures": "Synthetic MPQs with the real 31-mission allowlist and valid 640x480 PCX; no tester archive supplied.",
+  "output": "PASS 32 checks: normal import, 31 maps, full-size background, missing unused font, missing menu font, palette-only import, safe replacements, exact missing-file reports and fingerprints.",
+  "backgroundBytes": 308097,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "c55926c62c6b67c41c17653d6ffe291555546ddf83c4980513e2b3475a19de89",
+    "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "fae9bc9dcdbe3f5e67effcb5acb72caa08a8d3437c0c355ff4d28ec99405ba99",
+    "app/src/main/java/org/openbw/androidtest/GameContent.java": "ef80e8e90d3959f1b59ac02d9874800c8e254fdce157abbe727ba9c85c56a7db",
+    "app/src/main/java/org/openbw/androidtest/CampaignData.java": "0c428aa5ec5c490128569e99e9d494f4e4b84bb4c56eb669ad94e4ec8a503056",
+    "app/src/main/java/org/openbw/androidtest/CampaignCatalog.java": "5126fcd1d4b4f860b133ecd54da440cf2b5630e2b45641dcf753b0c0c7fdd321",
+    "app/src/main/java/org/openbw/androidtest/MusicData.java": "bd192578dccc51adfab7df8a1b6746ea1f8d1ce4f21af70011a96afdcfe1a421",
+    "app/src/main/java/org/openbw/androidtest/StoryData.java": "d9c3765a44cd1362c674d156e49f10755d25fa18be2194ab1a0dd65defab6bb0",
+    "app/src/main/java/org/openbw/androidtest/CinematicCatalog.java": "25ffead113330188b087c9cfb7da7cde75147e41d0fe901a8a44811bfa7fc594",
+    "app/src/main/java/org/openbw/androidtest/ProjectFiles.java": "b762639c742f539346bcc2e92810dfb46089949590e84aa81f0b23de5a073622",
+    "app/src/main/java/org/openbw/androidtest/DiagnosticFiles.java": "562ce7b0d24b4e89286519a2110f0dff6b85a9228313f6019354a75580a813e6",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+    "tests/run_menu_import.py": "f7241f6fb74a80b8e9fb374e2972b50cad732a1808b84920f1f87b242be67551"
+  },
+  "menuHandoff": "PASS partial import (font50 absent) -> sparse MPQ -> native decode -> both campaign menus: imported palette and all five menu fonts selected, no system font or palette recovery.",
+  "baselineReproduction": "REPRODUCED 1.0.3: valid background and all menu fonts rejected because font50 is absent: The original font set is incomplete. Choose the large StarCraft.mpq or original Install.exe."
+}

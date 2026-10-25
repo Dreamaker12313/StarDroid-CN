@@ -80,6 +80,11 @@ public final class MainActivity extends Activity {
   public void onCreate(Bundle state) {
     super.onCreate(state);
     AppDiagnostics.install(this);
+    try { PortText.load(getAssets().open("native/ui-languages.tsv")); }
+    catch (IOException e) { AppDiagnostics.recordFailure("UI translations", e); }
+    refreshLanguage();
+    for (String oldReport : new String[]{"menu-health", "menu-diagnostics", "import-report"})
+      getSharedPreferences(oldReport, 0).edit().clear().apply();
     final android.content.Context app = getApplicationContext();
     io.execute(() -> AppDiagnostics.loadPreviousExits(app));
     root = new FrameLayout(this);
@@ -89,7 +94,10 @@ public final class MainActivity extends Activity {
     root.setOnApplyWindowInsetsListener(
         (v, insets) -> {
           int left = 0, top = 0, right = 0, bottom = 0;
-          if (Build.VERSION.SDK_INT >= 28 && insets.getDisplayCutout() != null) {
+          android.content.SharedPreferences display = getSharedPreferences("native-settings", 0);
+          boolean extend = !optionsVisible && display.getBoolean("wide", false)
+              && display.getBoolean("wide-over-camera", false);
+          if (!extend && Build.VERSION.SDK_INT >= 28 && insets.getDisplayCutout() != null) {
             left = insets.getDisplayCutout().getSafeInsetLeft();
             right = insets.getDisplayCutout().getSafeInsetRight();
             top = insets.getDisplayCutout().getSafeInsetTop();
@@ -111,7 +119,8 @@ public final class MainActivity extends Activity {
     return ProjectFiles.existing(getFilesDir(), CampaignData.filename(CampaignCatalog.id(n)));
   }
 
-  private boolean busy() { return importing; }
+  private boolean mapImportRunning;
+  private boolean busy() { return importing || mapImportRunning; }
 
   private int dp(int value) {
     return Math.round(value * getResources().getDisplayMetrics().density);
@@ -135,7 +144,7 @@ public final class MainActivity extends Activity {
 
   private TextView text(LinearLayout parent, String value, int sp, int color) {
     TextView v = new TextView(this);
-    v.setText(value);
+    v.setText(PortText.text(value));
     v.setTextSize(sp);
     v.setTextColor(color);
     v.setPadding(0, dp(5), 0, dp(5));
@@ -145,7 +154,7 @@ public final class MainActivity extends Activity {
 
   private Button button(LinearLayout parent, String title, Runnable action) {
     Button v = new Button(this);
-    v.setText(title);
+    v.setText(PortText.text(title));
     v.setAllCaps(false);
     v.setTextColor(new ColorStateList(new int[][] {new int[] {-android.R.attr.state_enabled}, new int[] {}},
         new int[] {0xff64718d, 0xffdce6ff}));
@@ -181,6 +190,9 @@ public final class MainActivity extends Activity {
     text(panel, "App Options", 25, 0xffdce6ff);
     text(panel, "StarDroid · " + BuildConfig.VERSION_NAME, 13, 0xff8da4cf);
     if (ready()) button(panel, "Return to game menu", () -> startTitle()).setEnabled(!busy());
+    LinearLayout language = section(panel, "Interface language");
+    button(language, languageName(), this::chooseLanguage).setEnabled(!busy());
+    text(language, "Game voices and campaign text use the language of the imported files.", 13, 0xff8da4cf);
     noticeView = notice.isEmpty() ? null : text(panel, notice, 14, 0xffc5cfeb);
     LinearLayout setup = section(panel, "Game files");
     text(
@@ -223,10 +235,7 @@ public final class MainActivity extends Activity {
     }
     text(
         installed,
-        (interfaceFile().exists() ? "✓ " : "○ ")
-            + "Original interface   ·   "
-            + (musicFile().exists() ? "✓ " : "○ ")
-            + "Music",
+        InterfaceData.installedSummary(interfaceFile()) + " · " + (musicFile().exists() ? "✓ " : "○ ") + "Music",
         14,
         0xffc5cfeb);
     java.util.Set<String> availableMovies = StoryData.installedMovies(getFilesDir());
@@ -239,6 +248,36 @@ public final class MainActivity extends Activity {
       text(installed, (expansion ? "Brood War" : "StarCraft") + " · " + have + " / " + total
           + " movies", 14, have == total ? 0xffa6c8ac : 0xffe0c782);
     }
+  }
+
+  private void refreshLanguage() {
+    GameLanguage.russianData = GameLanguage.installedRussian(dataDir());
+    android.content.SharedPreferences p = getSharedPreferences("native-settings", 0);
+    String code = p.getString("ui-language", "en");
+    PortText.select(code);
+    p.edit().putString("ui-language", PortText.language).putBoolean("russian-data", GameLanguage.russianData).apply();
+  }
+
+  private String languageName() {
+    switch (PortText.language) {
+      case "ru": return "Русский";
+      case "de": return "Deutsch";
+      case "es": return "Español";
+      case "fr": return "Français";
+      default: return "English";
+    }
+  }
+
+  private void chooseLanguage() {
+    String[] codes = PortText.availableLanguages(GameLanguage.russianData);
+    String[] labels = new String[]{"English","Русский","Deutsch","Español","Français"};
+    int selected = java.util.Arrays.asList(codes).indexOf(PortText.language);
+    new AlertDialog.Builder(this).setTitle(PortText.text("Interface language"))
+        .setSingleChoiceItems(labels, Math.max(0, selected), (dialog, which) -> {
+          PortText.select(codes[which]);
+          getSharedPreferences("native-settings",0).edit().putString("ui-language",codes[which]).apply();
+          dialog.dismiss(); showHome();
+        }).setNegativeButton(PortText.text("Cancel"),null).show();
   }
 
   private LinearLayout section(LinearLayout parent, String heading) {
@@ -277,7 +316,7 @@ public final class MainActivity extends Activity {
     runOnUiThread(
         () -> {
           notice = value;
-          if (!isDestroyed() && noticeView != null) noticeView.setText(value);
+          if (!isDestroyed() && noticeView != null) noticeView.setText(PortText.text(value));
         });
   }
 
@@ -339,6 +378,7 @@ public final class MainActivity extends Activity {
   }
 
   private String canonical(String name) {
+    name = name.replaceAll("(?i)\\s*\\(\\d+\\)(?=\\.mpq$)", "");
     for (String candidate : MPQS) if (candidate.equalsIgnoreCase(name)) return candidate;
     return null;
   }
@@ -408,13 +448,13 @@ public final class MainActivity extends Activity {
                 if (out == null) throw new IOException("Unable to open replay destination");
                 out.write(bytes);
                 runOnUiThread(
-                    () -> Toast.makeText(this, "Replay saved", Toast.LENGTH_SHORT).show());
+                    () -> Toast.makeText(this, PortText.text("Replay saved"), Toast.LENGTH_SHORT).show());
               } catch (Exception e) {
                 runOnUiThread(
                     () ->
                         Toast.makeText(
                                 this,
-                                "Replay could not be saved: " + e.getMessage(),
+                                PortText.text("Replay could not be saved: " + e.getMessage()),
                                 Toast.LENGTH_LONG)
                             .show());
               }
@@ -425,25 +465,31 @@ public final class MainActivity extends Activity {
     if (request == PICK_MAP) {
       if (result == RESULT_OK && data != null) {
         final ArrayList<Uri> selected = new ArrayList<Uri>();
+        final NativeSurface mapView = game;
+        if(mapView==null || mapImportRunning)return;
+        mapImportRunning=true;mapView.mapImportProgress("Reading map pack…", true);
         if (data.getClipData() != null) for (int i = 0; i < data.getClipData().getItemCount(); i++) selected.add(data.getClipData().getItemAt(i).getUri());
         else if (data.getData() != null) selected.add(data.getData());
         io.execute(() -> {
           ArrayList<NativeMaps.Staged> maps = new ArrayList<NativeMaps.Staged>();
           try {
-            if (selected.size() > NativeMaps.MAX_COUNT) throw new IOException("Import up to 128 maps at once.");
+            if (selected.size() > NativeMaps.MAX_COUNT) throw new IOException("Import up to 10000 maps at once.");
             long totalMapBytes = 0;
             for (Uri uri : selected) {
               InputStream in = getContentResolver().openInputStream(uri);
               if (in == null) throw new IOException("Cannot open selected map.");
               List<NativeMaps.Staged> staged = NativeMaps.stage(in, displayName(uri), getCacheDir());
               maps.addAll(staged); for (NativeMaps.Staged map : staged) totalMapBytes += map.file.length();
-              if (totalMapBytes > NativeMaps.MAX_BATCH) throw new IOException("Map pack exceeds 256 MB.");
-              if (maps.size() > NativeMaps.MAX_COUNT) throw new IOException("Import up to 128 maps at once.");
+              if (totalMapBytes > NativeMaps.MAX_BATCH) throw new IOException("Map pack exceeds 8 GiB.");
+              if (maps.size() > NativeMaps.MAX_COUNT) throw new IOException("Import up to 10000 maps at once.");
             }
-            runOnUiThread(() -> game.mapsSelected(maps, ""));
+            NativeMaps.Imported imported = NativeMaps.importMaps(maps, getFilesDir(),
+                map -> NativeMapCheck.validate(NativeBridge.mapScenario(map.getPath())),
+                (done, count) -> mapView.mapImportProgress(done + " / " + count, true));
+            runOnUiThread(() -> {mapImportRunning=false;if(game==mapView)mapView.mapsImported(imported, "");if(optionsVisible)showHome();});
           } catch (Exception e) {
             for (NativeMaps.Staged map : maps) map.file.delete();
-            runOnUiThread(() -> game.mapsSelected(Collections.emptyList(), e.getMessage()));
+            runOnUiThread(() -> {mapImportRunning=false;if(game==mapView)mapView.mapsImported(null, e.getMessage());if(optionsVisible){notice=e.getMessage();showHome();}});
           }
         });
       }
@@ -463,13 +509,14 @@ public final class MainActivity extends Activity {
           ArrayList<String> results = new ArrayList<String>();
           for (Uri uri : uris) {
             try {
-              results.add(importContent(uri));
+              results.add(displayName(uri) + ": " + importContent(uri));
             } catch (Exception e) {
               String error = displayName(uri) + ": " + e.getMessage();
               results.add(error);
               log("Import: " + error);
             }
           }
+          refreshLanguage();
           final String resultText = String.join("\n", results);
           runOnUiThread(
               () -> {
@@ -486,6 +533,7 @@ public final class MainActivity extends Activity {
       return;
     }
     optionsVisible = false;
+    refreshDisplayArea();
     root.removeAllViews();
     if (game == null) game = new NativeSurface(this);
     else game.title();
@@ -497,6 +545,7 @@ public final class MainActivity extends Activity {
   private void stopGame() {
     if (game != null) game.suspend();
     optionsVisible = true;
+    refreshDisplayArea();
   }
 
   void requestAppOptions() {
@@ -532,6 +581,7 @@ public final class MainActivity extends Activity {
   }
 
   void pickNativeMap() {
+    if(mapImportRunning)return;
     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
     intent.setType("*/*");
@@ -577,16 +627,16 @@ public final class MainActivity extends Activity {
     ScrollView scroll = new ScrollView(this);
     scroll.addView(body);
     new AlertDialog.Builder(this)
-        .setTitle("Diagnostics / credits")
+        .setTitle(PortText.text("Diagnostics / credits"))
         .setView(scroll)
         .setPositiveButton(
-            "Copy",
+            PortText.text("Copy"),
             (d, w) -> {
               ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE))
                   .setPrimaryClip(ClipData.newPlainText("StarDroid diagnostics", value));
-              Toast.makeText(this, "Diagnostics copied", Toast.LENGTH_SHORT).show();
+              Toast.makeText(this, PortText.text("Diagnostics copied"), Toast.LENGTH_SHORT).show();
             })
-        .setNegativeButton("Close", null)
+        .setNegativeButton(PortText.text("Close"), null)
         .show();
   }
 
@@ -600,6 +650,13 @@ public final class MainActivity extends Activity {
   }
 
   private void fullscreen() {
+    if (Build.VERSION.SDK_INT >= 28) {
+      WindowManager.LayoutParams attributes = getWindow().getAttributes();
+      attributes.layoutInDisplayCutoutMode = Build.VERSION.SDK_INT >= 30
+          ? WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+          : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+      getWindow().setAttributes(attributes);
+    }
     if (Build.VERSION.SDK_INT >= 30) {
       getWindow().setDecorFitsSystemWindows(false);
       WindowInsetsController c = getWindow().getInsetsController();
@@ -608,6 +665,11 @@ public final class MainActivity extends Activity {
         c.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
       }
     } else getWindow().getDecorView().setSystemUiVisibility(5894);
+  }
+
+  void refreshDisplayArea() {
+    fullscreen();
+    if (root != null) root.requestApplyInsets();
   }
 
   @Override

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "version": "1.0.8",
+  "physicalAndroid": false,
+  "output": "PASS 1430 nearby protocol assertions; version, map, ordering, delays, pauses, desync, leave and disconnect\n",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "d3a3bc16d81e00d572310fc4ce5ce0a20988171f3c1bd0e6e593a02546999fc1",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "2131d7d524735f4f32ce185101d5d2c9c9ef5d701863c134cdac11b028df2db7",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCache.java": "2f49e859ea90f02d7547b9c6329ca10b1c59f586b3614f1ee1999890dbc250f2",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "tests/NearbyProtocolTest.java": "e94526f60257f8bd78a2cf4df24d9fefe914045c0c3f63f83c41c9f22fd78306"
+  },
+  "build": 78
+}

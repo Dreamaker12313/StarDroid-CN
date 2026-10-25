@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "version": "1.0.5",
+  "versionCode": 75,
+  "physicalAndroid": false,
+  "apkSha256": "a8862b99bb53d1ed6fff57bde3f981bcd94fc637b6e751780f4646f3ba368488",
+  "apkBytes": 2240090,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "originalReleaseSigningIdentity": true,
+  "nativeAndAssetEntriesUnchanged": 76,
+  "nativeEngineRebuilt": false,
+  "zipAlignmentBytes": 16384,
+  "lint": "0 errors, 10 warnings"
+}

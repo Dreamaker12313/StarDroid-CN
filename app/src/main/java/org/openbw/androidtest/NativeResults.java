@@ -62,7 +62,7 @@ final class NativeResults {
   }
 
   static String fit(NativeArt.Font font, String text, int width) {
-    text = NativeArt.clean(text).replace('\n', ' ');
+    text = NativeArt.clean(PortText.text(text)).replace('\n', ' ');
     if (font.measure(text) <= width) return text;
     while (!text.isEmpty() && font.measure(text + "...") > width) text = text.substring(0, text.length() - 1);
     return text + "...";

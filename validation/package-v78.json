@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "version": "1.0.8",
+  "versionCode": 78,
+  "apkSha256": "dd5e132ce44f1d4d0a013cc7ac60f6278e9520d3c61c6b31e036cd34d92530da",
+  "apkBytes": 2317066,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "originalReleaseSigningIdentity": true,
+  "nativeEngineRebuilt": true,
+  "nativeEngineVersion": "1.0.8-build78",
+  "changedNativeAndAssetEntries": [
+    "assets/native/ui-languages.tsv",
+    "lib/arm64-v8a/libopenbw.so",
+    "lib/x86_64/libopenbw.so"
+  ],
+  "addedAssets": [],
+  "unchangedNativeAndAssetEntries": 74,
+  "permissionsUnchanged": true,
+  "multiplayerProtocolBuild": 78,
+  "decoderBinariesRebuilt": true,
+  "decoderSourceUnchanged": true,
+  "jniMethodsVerified": 41,
+  "loadAlignmentBytes": 16384,
+  "librarySha256": {
+    "arm64-v8a/libopenbw.so": "20b420720b9f8d78e95c4c4870774b133b48e828face964bb0c0794dbb36b5fc",
+    "arm64-v8a/libsmacker.so": "673240725d24d5754a092d9ed5a1e03572a450acf156903763a62b0a1d09a9b6",
+    "x86_64/libopenbw.so": "e3f33e39444c2112981426f5da2ba3c5d973cc017c7d6413b265e7b5e2afd01d",
+    "x86_64/libsmacker.so": "615bca00db5c797fac3975a85fbcd55f34520bfe43f768ceddc21af213287872"
+  },
+  "translationRows": 628,
+  "lintErrors": 0,
+  "lintWarnings": 11,
+  "physicalDevicesTested": false,
+  "regressionReports": [
+    "languages-v78.json",
+    "presentation-v78.json",
+    "native-v78.json",
+    "maps-v78.json",
+    "protocol-v78.json",
+    "saves-v78.json"
+  ],
+  "sourceSha256": {
+    "tests/check_revision78_package.py": "f1e1f1862724417a47dce0a740509a20d5481b5e8ca5ff0f849201f25a9369c6"
+  }
+}

@@ -1,0 +1,629 @@
+# English	Русский	Deutsch	Español	Français
+App Options	Параметры приложения	App-Optionen	Opciones de la aplicación	Options de l’application
+Interface language	Язык интерфейса	Sprache der Oberfläche	Idioma de la interfaz	Langue de l’interface
+Game voices and campaign text use the language of the imported files.	Озвучка и текст кампании используют язык импортированных файлов.	Sprachausgabe und Kampagnentexte verwenden die Sprache der importierten Dateien.	Las voces y los textos de campaña usan el idioma de los archivos importados.	Les voix et les textes de campagne utilisent la langue des fichiers importés.
+Return to game menu	Вернуться в меню игры	Zurück zum Spielmenü	Volver al menú del juego	Retour au menu du jeu
+Game files	Файлы игры	Spieldateien	Archivos del juego	Fichiers du jeu
+Required: StarDat.mpq, BrooDat.mpq, Patch_rt.mpq	Требуются: StarDat.mpq, BrooDat.mpq, Patch_rt.mpq	Erforderlich: StarDat.mpq, BrooDat.mpq, Patch_rt.mpq	Necesarios: StarDat.mpq, BrooDat.mpq, Patch_rt.mpq	Requis : StarDat.mpq, BrooDat.mpq, Patch_rt.mpq
+StarCraft campaign and movies: StarCraft.mpq	Кампания и видео StarCraft: StarCraft.mpq	StarCraft-Kampagne und Videos: StarCraft.mpq	Campaña y vídeos de StarCraft: StarCraft.mpq	Campagne et vidéos StarCraft : StarCraft.mpq
+Brood War campaign and movies: BroodWar.mpq	Кампания и видео Brood War: BroodWar.mpq	Brood-War-Kampagne und Videos: BroodWar.mpq	Campaña y vídeos de Brood War: BroodWar.mpq	Campagne et vidéos Brood War : BroodWar.mpq
+Original Install.exe archives and previous mission ZIPs are also accepted.	Также поддерживаются оригинальные архивы Install.exe и ранее созданные ZIP-файлы миссий.	Originale Install.exe-Archive und bisherige Missions-ZIPs werden ebenfalls unterstützt.	También se admiten archivos Install.exe originales y ZIP de misiones anteriores.	Les archives Install.exe originales et les anciens ZIP de missions sont aussi acceptés.
+Import game files	Импортировать файлы игры	Spieldateien importieren	Importar archivos del juego	Importer les fichiers du jeu
+Importing…	Импорт…	Import läuft…	Importando…	Importation…
+Importing selected files…	Импорт выбранных файлов…	Ausgewählte Dateien werden importiert…	Importando archivos seleccionados…	Importation des fichiers sélectionnés…
+Installed content	Установленные материалы	Installierte Inhalte	Contenido instalado	Contenu installé
+Ready	Готово	Bereit	Listo	Prêt
+Missing	Отсутствует	Fehlt	Falta	Manquant
+Imported	Импортировано	Importiert	Importado	Importé
+Import	Импорт	Importieren	Importar	Importer
+Interface	Интерфейс	Oberfläche	Interfaz	Interface
+Original interface	Оригинальный интерфейс	Originaloberfläche	Interfaz original	Interface d’origine
+Music	Музыка	Musik	Música	Musique
+maps	карт	Karten	mapas	cartes
+movies	видео	Videos	vídeos	vidéos
+Diagnostics / credits	Диагностика / авторы	Diagnose / Mitwirkende	Diagnóstico / créditos	Diagnostic / crédits
+Diagnostics copied	Диагностика скопирована	Diagnose kopiert	Diagnóstico copiado	Diagnostic copié
+Copy	Копировать	Kopieren	Copiar	Copier
+Close	Закрыть	Schließen	Cerrar	Fermer
+Single Player	Одиночная игра	Einzelspieler	Un jugador	Un joueur
+Multiplayer	Сетевая игра	Mehrspieler	Multijugador	Multijoueur
+Play Introduction	Вступительный ролик	Intro abspielen	Ver introducción	Voir l’introduction
+View Intro	Вступление	Intro ansehen	Ver intro	Voir l’intro
+Select Introduction	Выбрать вступление	Intro auswählen	Elegir introducción	Choisir l’introduction
+Credits	Авторы	Mitwirkende	Créditos	Crédits
+Exit	Выход	Beenden	Salir	Quitter
+Quit	Выйти	Beenden	Salir	Quitter
+Back	Назад	Zurück	Atrás	Retour
+Cancel	Отмена	Abbrechen	Cancelar	Annuler
+Confirm	Подтвердить	Bestätigen	Confirmar	Confirmer
+OK	ОК	OK	Aceptar	OK
+Continue	Продолжить	Fortsetzen	Continuar	Continuer
+Previous	Назад	Zurück	Anterior	Précédent
+Next	Далее	Weiter	Siguiente	Suivant
+Up	Вверх	Hoch	Arriba	Haut
+Down	Вниз	Runter	Abajo	Bas
+Previous (Esc)	Назад (Esc)	Zurück (Esc)	Anterior (Esc)	Précédent (Échap)
+On	Вкл.	An	Sí	Oui
+Off	Выкл.	Aus	No	Non
+Left	Слева	Links	Izquierda	Gauche
+Right	Справа	Rechts	Derecha	Droite
+Original	Оригинал	Original	Original	Original
+Custom	Свои	Eigene	Personalizado	Personnalisé
+Campaign	Кампания	Kampagne	Campaña	Campagne
+Terran Campaign	Кампания терранов	Terraner-Kampagne	Campaña terran	Campagne terran
+Zerg Campaign	Кампания зергов	Zerg-Kampagne	Campaña zerg	Campagne zerg
+Protoss Campaign	Кампания протоссов	Protoss-Kampagne	Campaña protoss	Campagne protoss
+Terran	Терраны	Terraner	Terran	Terran
+Zerg	Зерги	Zerg	Zerg	Zerg
+Protoss	Протоссы	Protoss	Protoss	Protoss
+Episode I	Эпизод I	Episode I	Ep. I	Ép. I
+Episode II	Эпизод II	Episode II	Ep. II	Ép. II
+Episode III	Эпизод III	Episode III	Ep. III	Ép. III
+Episode IV	Эпизод IV	Episode IV	Ep. IV	Ép. IV
+Episode V	Эпизод V	Episode V	Ep. V	Ép. V
+Episode VI	Эпизод VI	Episode VI	Ep. VI	Ép. VI
+StarCraft — Original	StarCraft — Оригинал	StarCraft — Original	StarCraft — Original	StarCraft — Original
+Brood War — Expansion	Brood War — Дополнение	Brood War — Erweiterung	Brood War — Expansión	Brood War — Extension
+Expansion	Дополнение	Erweiterung	Expansión	Extension
+Load Game	Загрузить игру	Spiel laden	Cargar partida	Charger une partie
+Load Saved	Загрузить	Spiel laden	Cargar partida	Charger
+Load Replay	Загрузить повтор	Replay laden	Cargar repetición	Charger replay
+Play Replay	Смотреть повтор	Replay ansehen	Ver repetición	Voir un replay
+Play Custom	Своя игра	Eigenes Spiel	Personalizada	Personnalisée
+Custom Game	Своя игра	Eigenes Spiel	Partida personalizada	Partie personnalisée
+Select Game	Выбрать игру	Spiel auswählen	Elegir partida	Choisir une partie
+Create Game	Создать игру	Spiel erstellen	Crear partida	Créer une partie
+Start Game	Начать игру	Spiel starten	Iniciar partida	Lancer la partie
+Start Mission	Начать миссию	Mission starten	Iniciar misión	Lancer la mission
+Restart Mission	Начать заново	Mission neu starten	Reiniciar misión	Recommencer la mission
+End Mission	Завершить миссию	Mission beenden	Terminar misión	Terminer la mission
+Resume Game	Продолжить игру	Spiel fortsetzen	Continuar partida	Reprendre la partie
+Return to menu	Вернуться в меню	Zurück zum Menü	Volver al menú	Retour au menu
+Game Menu	Меню игры	Spielmenü	Menú del juego	Menu du jeu
+Game Options	Настройки игры	Spieloptionen	Opciones del juego	Options du jeu
+Options	Настройки	Optionen	Opciones	Options
+Save Game	Сохранить игру	Spiel speichern	Guardar partida	Sauvegarder
+Save Replay	Сохранить повтор	Replay speichern	Guardar repetición	Enregistrer le replay
+Saved game	Сохранённая игра	Gespeichertes Spiel	Partida guardada	Partie sauvegardée
+Saving game…	Сохранение игры…	Spiel wird gespeichert…	Guardando partida…	Sauvegarde en cours…
+Game loaded	Игра загружена	Spiel geladen	Partida cargada	Partie chargée
+Game saved in Slot	Игра сохранена в ячейке	Spiel gespeichert in Platz	Partida guardada en la ranura	Partie sauvegardée dans l’emplacement
+Multiplayer game saved in Slot	Сетевая игра сохранена в ячейке	Mehrspielerspiel gespeichert in Platz	Partida multijugador guardada en la ranura	Partie multijoueur sauvegardée dans l’emplacement
+Slot	Ячейка	Platz	Ranura	Emplacement
+Load Slot	Загрузить ячейку	Platz laden	Cargar ranura	Charger l’emplacement
+Replace Save	Заменить сохранение	Spielstand ersetzen	Sustituir partida	Remplacer la sauvegarde
+Replace the game in Slot	Заменить игру в ячейке	Spiel ersetzen in Platz	Sustituir la partida en la ranura	Remplacer la partie dans l’emplacement
+Empty	Пусто	Leer	Vacío	Vide
+Delete	Удалить	Löschen	Eliminar	Supprimer
+New Player ID	Новый игрок	Neues Spielerprofil	Nuevo perfil	Nouveau profil
+Delete Player ID	Удалить игрока	Spielerprofil löschen	Eliminar perfil	Supprimer un profil
+New ID	Новый	Neu	Nuevo	Nouveau
+Delete ID	Удалить	Löschen	Eliminar	Supprimer
+Enter a name (up to 24 characters).	Введите имя (до 24 символов).	Namen eingeben (max. 24 Zeichen).	Escribe un nombre (máx. 24 caracteres).	Saisissez un nom (24 caractères max.).
+32 IDs saved. Delete one to add another.	Сохранено 32 имени. Удалите одно, чтобы добавить новое.	32 Profile gespeichert. Vor dem Hinzufügen eines löschen.	Hay 32 perfiles. Elimina uno para añadir otro.	32 profils enregistrés. Supprimez-en un pour en ajouter un autre.
+Select Player	Выбрать игрока	Spieler auswählen	Elegir jugador	Choisir un joueur
+Sound & Music	Звук и музыка	Ton und Musik	Sonido y música	Son et musique
+Sound	Звук	Ton	Sonido	Son
+Mute all sound	Выключить весь звук	Alle Töne stummschalten	Silenciar todo	Couper tous les sons
+Play original music	Оригинальная музыка	Originalmusik abspielen	Reproducir música original	Musique d’origine
+Effects	Эффекты	Effekte	Efectos	Effets
+Music Track	Музыкальная тема	Musiktitel	Pista musical	Piste musicale
+Automatic (your race)	Автоматически (ваша раса)	Automatisch (Ihr Volk)	Automática (tu raza)	Automatique (votre race)
+Next track	Следующая тема	Nächster Titel	Pista siguiente	Piste suivante
+Preview sound	Проверить звук	Ton testen	Probar sonido	Tester le son
+Score sound	Звук результатов	Ergebniston	Sonido de resultados	Son des résultats
+Game Speed	Скорость игры	Spielgeschwindigkeit	Velocidad del juego	Vitesse du jeu
+Speed	Скорость	Geschwindigkeit	Velocidad	Vitesse
+Slowest	Самая низкая	Sehr langsam	Muy lenta	Très lente
+Slower	Низкая	Langsamer	Más lenta	Plus lente
+Slow	Медленная	Langsam	Lenta	Lente
+Normal	Обычная	Normal	Normal	Normale
+Fast	Быстрая	Schnell	Rápida	Rapide
+Faster	Высокая	Schneller	Más rápida	Plus rapide
+Fastest	Самая высокая	Sehr schnell	Muy rápida	Très rapide
+Fastest (1x)	Максимум (1x)	Maximum (1x)	Máxima (1x)	Maximum (1x)
+2x Fastest	Максимум ×2	Maximum ×2	Máxima ×2	Maximum ×2
+4x Fastest	Максимум ×4	Maximum ×4	Máxima ×4	Maximum ×4
+8x Fastest	Максимум ×8	Maximum ×8	Máxima ×8	Maximum ×8
+16x Fastest	Максимум ×16	Maximum ×16	Máxima ×16	Maximum ×16
+Actual speed depends on your device.	Фактическая скорость зависит от устройства.	Die tatsächliche Geschwindigkeit hängt vom Gerät ab.	La velocidad real depende del dispositivo.	La vitesse réelle dépend de l’appareil.
+Video Options	Настройки видео	Grafikoptionen	Opciones de vídeo	Options vidéo
+Show order & rally lines	Линии приказов и сбора	Befehls- und Sammellinien	Líneas de órdenes y reunión	Lignes d’ordres et de ralliement
+Widescreen	Широкий экран	Breitbild	Pantalla panorámica	Écran large
++ over camera area	+ область камеры	+ Kamerabereich	+ zona de cámara	+ zone caméra
+Allow zoom out	Разрешить отдаление	Herauszoomen erlauben	Permitir alejar la vista	Autoriser le dézoom
+View zoom	Масштаб вида	Ansichtszoom	Zoom de vista	Zoom de la vue
+Frame rate	Частота кадров	Bildrate	Fotogramas por segundo	Images par seconde
+Interface Sizes	Размеры интерфейса	Oberflächengrößen	Tamaños de interfaz	Tailles de l’interface
+Interface sizes	Размеры интерфейса	Oberflächengrößen	Tamaños de interfaz	Tailles de l’interface
+Command buttons	Кнопки команд	Befehlsschaltflächen	Botones de órdenes	Boutons de commande
+Selection & move buttons	Кнопки выбора и движения	Auswahl- und Bewegungstasten	Botones de selección y movimiento	Boutons de sélection et déplacement
+Descriptions & messages	Описания и сообщения	Beschreibungen und Meldungen	Descripciones y mensajes	Descriptions et messages
+Reset interface sizes	Сбросить размеры	Größen zurücksetzen	Restablecer tamaños	Réinitialiser les tailles
+Miscellaneous	Прочее	Sonstiges	Otros	Divers
+Cheats	Чит-коды	Cheats	Trucos	Triches
+Reveal map	Открыть карту	Karte aufdecken	Revelar mapa	Révéler la carte
+Instant production	Мгновенное производство	Sofortige Produktion	Producción instantánea	Production instantanée
+Force victory (end match)	Победить (завершить игру)	Sieg erzwingen (Spielende)	Forzar victoria (terminar)	Forcer la victoire (terminer)
+Nearby enemies defend their base	Враги рядом защищают базу	Nahe Feinde verteidigen Basis	Enemigos cercanos defienden la base	Ennemis proches défendent leur base
+When enabled, attacked bases call nearby idle combat units to help.	Атакованная база зовёт на помощь ближайшие свободные боевые единицы.	Angegriffene Basen rufen nahe, untätige Kampfeinheiten zu Hilfe.	Las bases atacadas piden ayuda a unidades de combate cercanas e inactivas.	Les bases attaquées appellent les unités de combat proches et inactives à l’aide.
+Scripted mission attacks still run.	Атаки по сценарию миссии продолжаются.	Geskriptete Missionsangriffe bleiben aktiv.	Los ataques programados de la misión siguen activos.	Les attaques prévues par la mission restent actives.
+Touch Controls	Сенсорное управление	Touch-Steuerung	Controles táctiles	Commandes tactiles
+Selection Settings	Настройки выбора	Auswahleinstellungen	Ajustes de selección	Réglages de sélection
+Selection settings	Настройки выбора	Auswahleinstellungen	Ajustes de selección	Réglages de sélection
+Camera Settings	Настройки камеры	Kameraeinstellungen	Ajustes de cámara	Réglages de caméra
+Camera settings	Настройки камеры	Kameraeinstellungen	Ajustes de cámara	Réglages de caméra
+Command Settings	Настройки команд	Befehlseinstellungen	Ajustes de órdenes	Réglages des commandes
+Command settings	Настройки команд	Befehlseinstellungen	Ajustes de órdenes	Réglages des commandes
+Gesture guide	Подсказки по жестам	Gestenübersicht	Guía de gestos	Guide des gestes
+Original larvae selection	Оригинальный выбор личинок	Originale Larvenauswahl	Selección original de larvas	Sélection d’origine des larves
+Hold tap always selects	Удержание всегда выбирает	Halten wählt immer aus	Mantener pulsado selecciona	Appui long pour sélectionner
+Double tap selects same type	Двойное касание: один тип	Doppeltippen wählt gleichen Typ	Doble toque: mismo tipo	Double appui : même type
+Selection button	Кнопка выбора	Auswahltaste	Botón de selección	Bouton de sélection
+Show control group buttons	Кнопки групп управления	Gruppentasten anzeigen	Mostrar botones de grupos	Afficher les boutons de groupes
+Timing & accuracy	Время и точность	Zeit und Genauigkeit	Tiempo y precisión	Délai et précision
+Drag	Перетаскивание	Ziehen	Arrastre	Glissement
+Pan / hold to select	Камера / удержание для выбора	Kamera / halten zum Auswählen	Mover vista / mantener para elegir	Caméra / maintenir pour sélectionner
+Select / two fingers pan	Выбор / два пальца — камера	Auswahl / zwei Finger: Kamera	Seleccionar / dos dedos: cámara	Sélection / deux doigts : caméra
+Selection hold	Удержание для выбора	Auswahl-Haltedauer	Pulsación para seleccionar	Durée d’appui pour sélectionner
+Tap tolerance	Допуск касания	Tipptoleranz	Tolerancia del toque	Tolérance de l’appui
+Exact	Точно	Exakt	Exacta	Exacte
+Double tap window	Интервал двойного касания	Doppeltipp-Zeitfenster	Intervalo del doble toque	Délai du double appui
+Pan speed	Скорость камеры	Kamerageschwindigkeit	Velocidad de cámara	Vitesse de caméra
+Pinch sensitivity	Чувствительность масштаба	Zoom-Empfindlichkeit	Sensibilidad de zoom	Sensibilité du zoom
+Pinch zoom	Масштаб двумя пальцами	Zoom mit zwei Fingern	Zoom con dos dedos	Zoom à deux doigts
+Reverse camera drag	Обратное движение камеры	Kameraziehen umkehren	Invertir arrastre de cámara	Inverser le déplacement caméra
+Scroll while placing	Прокрутка при строительстве	Beim Platzieren scrollen	Desplazar al colocar	Défiler pendant le placement
+Minimap hold issues orders	Удержание миникарты: приказ	Minikarte halten: Befehl	Mantener minimapa: orden	Appui long minicarte : ordre
+Minimap order hold	Удержание для приказа	Minikarten-Haltedauer	Pulsación de orden en minimapa	Durée d’appui sur la minicarte
+Two fingers always pan, even with zoom off.	Два пальца двигают камеру даже без масштабирования.	Zwei Finger bewegen die Kamera, auch ohne Zoom.	Dos dedos mueven la cámara incluso sin zoom.	Deux doigts déplacent la caméra même sans zoom.
+Disable ground-tap orders	Не отдавать приказы касанием	Boden-Tippbefehle deaktivieren	Desactivar órdenes al tocar suelo	Désactiver les ordres au sol
+Enabled army taps	Касания для армии	Armee-Tippbefehl	Toques del ejército	Appuis de l’armée
+Army ground taps	Касания земли армией	Armee-Bodentipps	Toques del ejército en suelo	Appuis de l’armée au sol
+Attack move	Атака с движением	Angriffsbewegung	Atacar al mover	Avancer en attaquant
+Attack-move taps	Касания: атака с движением	Tippen: Angriffsbewegung	Toques: atacar al mover	Appuis : avancer en attaquant
+Move taps	Касания: движение	Tippen: Bewegung	Toques: mover	Appuis : déplacement
+Hover and hold descriptions	Подсказки при удержании	Beschreibungen beim Halten	Descripciones al mantener	Descriptions par appui long
+Description hold	Удержание для подсказки	Beschreibung-Haltedauer	Pulsación para descripción	Durée d’appui pour description
+Confirm building placement	Подтверждать строительство	Bauplatz bestätigen	Confirmar construcción	Confirmer la construction
+Build buttons follow placement	Кнопки у места строительства	Bautasten folgen Platzierung	Botones junto a la construcción	Boutons près de la construction
+Building finger offset	Отступ от пальца при стройке	Bauabstand zum Finger	Distancia al dedo al construir	Décalage du doigt à la construction
+Show attack / move toggle	Переключатель атаки / движения	Angriff/Bewegung umschalten	Mostrar selector atacar / mover	Sélecteur attaque / déplacement
+Drag to pan; hold, then drag to select.	Двигайте пальцем для камеры; удерживайте и тяните для выбора.	Ziehen bewegt die Kamera; halten und ziehen wählt aus.	Arrastra para mover la cámara; mantén y arrastra para seleccionar.	Glissez pour déplacer la caméra ; maintenez puis glissez pour sélectionner.
+Drag to select; use two fingers to pan.	Тяните для выбора; два пальца двигают камеру.	Ziehen wählt aus; zwei Finger bewegen die Kamera.	Arrastra para seleccionar; usa dos dedos para mover la cámara.	Glissez pour sélectionner ; déplacez la caméra avec deux doigts.
+Double tap to select its type.	Двойное касание выбирает единицы этого типа.	Doppeltippen wählt Einheiten desselben Typs.	Toca dos veces para seleccionar unidades del mismo tipo.	Un double appui sélectionne les unités du même type.
+Double tap selection is off.	Выбор двойным касанием выключен.	Doppeltipp-Auswahl ist aus.	La selección por doble toque está desactivada.	La sélection par double appui est désactivée.
+Pinch with two fingers to zoom.	Сведите или разведите два пальца для масштаба.	Zwei Finger zusammen- oder auseinanderziehen zum Zoomen.	Junta o separa dos dedos para cambiar el zoom.	Pincez ou écartez deux doigts pour zoomer.
+Pinch zoom is off.	Масштаб двумя пальцами выключен.	Zwei-Finger-Zoom ist aus.	El zoom con dos dedos está desactivado.	Le zoom à deux doigts est désactivé.
+Position a building, then tap Build.	Выберите место здания и нажмите «Строить».	Gebäude platzieren und dann Bauen antippen.	Coloca un edificio y toca Construir.	Placez un bâtiment, puis touchez Construire.
+Release your finger to place a building.	Отпустите палец для размещения здания.	Finger loslassen, um das Gebäude zu platzieren.	Suelta el dedo para colocar el edificio.	Relâchez le doigt pour placer le bâtiment.
+Hold a command to read its details.	Удерживайте команду, чтобы прочитать описание.	Befehl halten, um Details zu lesen.	Mantén una orden para leer sus detalles.	Maintenez une commande pour lire ses détails.
+Command descriptions are off.	Описания команд выключены.	Befehlsbeschreibungen sind aus.	Las descripciones de órdenes están desactivadas.	Les descriptions des commandes sont désactivées.
+Groups: hold assigns; tap recalls; double tap centers.	Группы: удержание назначает, касание выбирает, двойное — центрирует.	Gruppen: halten weist zu; tippen wählt; doppeltippen zentriert.	Grupos: mantén para asignar; toca para elegir; doble toque para centrar.	Groupes : maintenir pour assigner, appuyer pour choisir, deux fois pour centrer.
+Tap a production icon to cancel it.	Нажмите значок производства для отмены.	Produktionssymbol antippen, um abzubrechen.	Toca un icono de producción para cancelarla.	Touchez une icône de production pour l’annuler.
+Back cancels targeting or opens this menu.	«Назад» отменяет выбор цели или открывает меню.	Zurück bricht die Zielwahl ab oder öffnet dieses Menü.	Atrás cancela la selección de objetivo o abre este menú.	Retour annule le ciblage ou ouvre ce menu.
+Tap a friendly unit to select it.	Нажмите союзную единицу для выбора.	Eigene Einheit antippen, um sie auszuwählen.	Toca una unidad aliada para seleccionarla.	Touchez une unité alliée pour la sélectionner.
+Workers move, gather and build.	Рабочие двигаются, добывают и строят.	Arbeiter bewegen sich, sammeln und bauen.	Los trabajadores se mueven, recolectan y construyen.	Les ouvriers se déplacent, récoltent et construisent.
+Ground-tap orders are off. Use command buttons.	Приказы касанием выключены. Используйте кнопки команд.	Boden-Tippbefehle sind aus. Befehlstasten verwenden.	Las órdenes al tocar el suelo están desactivadas. Usa los botones.	Les ordres au sol sont désactivés. Utilisez les boutons de commande.
+Tap or drag the minimap to move the camera.	Нажмите или тяните по миникарте для движения камеры.	Auf die Minikarte tippen oder ziehen bewegt die Kamera.	Toca o arrastra el minimapa para mover la cámara.	Touchez ou faites glisser la minicarte pour déplacer la caméra.
+Sound, speed and display preferences	Звук, скорость и изображение	Ton-, Tempo- und Anzeigeoptionen	Sonido, velocidad y pantalla	Son, vitesse et affichage
+Mission Objectives	Цели миссии	Missionsziele	Objetivos de misión	Objectifs de mission
+StarCraft Tips	Советы StarCraft	StarCraft-Tipps	Consejos de StarCraft	Conseils StarCraft
+Show Tips at Startup	Советы при запуске	Tipps beim Start anzeigen	Mostrar consejos al iniciar	Conseils au démarrage
+Previous Tip	Предыдущий совет	Vorheriger Tipp	Consejo anterior	Conseil précédent
+Next Tip	Следующий совет	Nächster Tipp	Consejo siguiente	Conseil suivant
+Build workers to gather minerals and Vespene Gas. Keep training units while you explore.	Создавайте рабочих для добычи минералов и газа веспен. Исследуя карту, продолжайте создавать войска.	Arbeiter sammeln Mineralien und Vespingas. Während der Erkundung weiter Einheiten ausbilden.	Crea trabajadores para recolectar minerales y gas vespeno. Sigue entrenando unidades mientras exploras.	Créez des ouvriers pour récolter des minerais et du gaz vespène. Continuez à former des unités pendant l’exploration.
+Current progress will be lost.	Текущий прогресс будет потерян.	Der aktuelle Fortschritt geht verloren.	Se perderá el progreso actual.	La progression actuelle sera perdue.
+Continue?	Продолжить?	Fortfahren?	¿Continuar?	Continuer ?
+Unsaved progress in the current game will be lost.	Несохранённый прогресс текущей игры будет потерян.	Ungespeicherter Fortschritt im aktuellen Spiel geht verloren.	Se perderá el progreso no guardado de la partida actual.	La progression non sauvegardée de la partie actuelle sera perdue.
+Victory	Победа	Sieg	Victoria	Victoire
+Victory!	Победа!	Sieg!	¡Victoria!	Victoire !
+Defeat	Поражение	Niederlage	Derrota	Défaite
+Congratulations!	Поздравляем!	Glückwunsch!	¡Felicidades!	Félicitations !
+You are victorious!	Вы победили!	Sie haben gewonnen!	¡Has ganado!	Vous avez gagné !
+You have been defeated.	Вы потерпели поражение.	Sie wurden besiegt.	Has sido derrotado.	Vous avez été vaincu.
+Tap to continue	Нажмите, чтобы продолжить	Tippen zum Fortfahren	Toca para continuar	Touchez pour continuer
+Total Score	Общий счёт	Gesamtpunktzahl	Puntuación total	Score total
+Overview	Обзор	Übersicht	Resumen	Vue d’ensemble
+Units	Войска	Einheiten	Unidades	Unités
+Structures	Здания	Gebäude	Estructuras	Bâtiments
+Resources	Ресурсы	Ressourcen	Recursos	Ressources
+Produced	Создано	Produziert	Producidas	Produites
+Killed	Уничтожено	Getötet	Eliminadas	Tuées
+Lost	Потеряно	Verloren	Perdidas	Perdues
+Constructed	Построено	Errichtet	Construidas	Construits
+Razed	Разрушено	Zerstört	Destruidas	Détruits
+Spent	Потрачено	Ausgegeben	Gastados	Dépensées
+Elapsed Time	Время игры	Spielzeit	Tiempo transcurrido	Temps écoulé
+Technology	Технологии	Technologie	Tecnología	Technologie
+Minerals	Минералы	Mineralien	Minerales	Minerais
+Gas	Газ	Gas	Gas	Gaz
+Vespene Gas	Газ веспен	Vespingas	Gas vespeno	Gaz vespène
+Damage	Урон	Schaden	Daño	Dégâts
+Armor	Броня	Panzerung	Armadura	Armure
+Kills	Убийств	Abschüsse	Bajas	Victimes
+Detector	Детектор	Detektor	Detector	Détecteur
+Upgrade level	Уровень улучшения	Ausbaustufe	Nivel de mejora	Niveau d’amélioration
+Used:	Использовано:	Belegt:	Usado:	Utilisé :
+Provided:	Доступно:	Verfügbar:	Disponible:	Disponible :
+Total:	Всего:	Gesamt:	Total:	Total :
+Max:	Макс.:	Max.:	Máx.:	Max. :
+Interceptors	Перехватчики	Interceptor	Interceptores	Intercepteurs
+Scarabs	Скарабеи	Skarabäen	Escarabajos	Scarabs
+Move	Двигаться	Bewegen	Mover	Déplacer
+Stop	Стоп	Stopp	Detener	Arrêter
+Attack	Атаковать	Angreifen	Atacar	Attaquer
+Patrol	Патруль	Patrouille	Patrullar	Patrouiller
+Hold	Удерживать	Halten	Mantener	Tenir
+Hold Position	Держать позицию	Position halten	Mantener posición	Tenir la position
+Gather	Добывать	Sammeln	Recolectar	Récolter
+Return Cargo	Вернуть груз	Fracht abliefern	Entregar carga	Rapporter la cargaison
+Build	Строить	Bauen	Construir	Construire
+Advanced Build	Особые здания	Erweiterte Gebäude	Construcción avanzada	Construction avancée
+Train	Создать	Ausbilden	Entrenar	Former
+Research	Исследовать	Erforschen	Investigar	Rechercher
+Upgrade	Улучшить	Verbessern	Mejorar	Améliorer
+Morph	Мутация	Morphen	Mutar	Transformer
+Set Rally Point	Точка сбора	Sammelpunkt setzen	Fijar punto de reunión	Point de ralliement
+Select Larvae	Выбрать личинок	Larven auswählen	Seleccionar larvas	Sélectionner les larves
+Select Larva	Выбрать личинок	Larven auswählen	Seleccionar larvas	Sélectionner les larves
+Burrow	Зарыться	Eingraben	Enterrar	Enfouir
+Unburrow	Выкопаться	Ausgraben	Desenterrar	Déterrer
+Cloak	Маскировка	Tarnen	Camuflar	Camoufler
+Decloak	Снять маскировку	Enttarnen	Desactivar camuflaje	Désactiver le camouflage
+Lift Off	Взлететь	Abheben	Despegar	Décoller
+Land	Приземлиться	Landen	Aterrizar	Atterrir
+Load	Загрузить	Einladen	Cargar	Charger
+Unload	Выгрузить	Ausladen	Descargar	Décharger
+Unload All	Выгрузить всех	Alle ausladen	Descargar todo	Tout décharger
+Repair	Ремонт	Reparieren	Reparar	Réparer
+Heal	Лечить	Heilen	Curar	Soigner
+Siege Mode	Осадный режим	Belagerungsmodus	Modo asedio	Mode siège
+Tank Mode	Походный режим	Panzermodus	Modo tanque	Mode char
+More	Ещё	Mehr	Más	Plus
+More commands	Другие команды	Weitere Befehle	Más órdenes	Autres commandes
+Shows the next page of commands.	Показывает следующую страницу команд.	Zeigt die nächste Befehlsseite.	Muestra la siguiente página de órdenes.	Affiche la page de commandes suivante.
+Select target	Выберите цель	Ziel auswählen	Elige un objetivo	Choisissez une cible
+Select unit	Выбрать единицу	Einheit auswählen	Seleccionar unidad	Sélectionner une unité
+Selects this unit from the group.	Выбирает эту единицу из группы.	Wählt diese Einheit aus der Gruppe.	Selecciona esta unidad del grupo.	Sélectionne cette unité du groupe.
+Unload passenger	Выгрузить пассажира	Passagier ausladen	Descargar pasajero	Décharger le passager
+Passenger	Пассажир	Passagier	Pasajero	Passager
+Tap to unload.	Нажмите для выгрузки.	Zum Ausladen antippen.	Toca para descargar.	Touchez pour décharger.
+Cancel production	Отменить производство	Produktion abbrechen	Cancelar producción	Annuler la production
+Cancels this item in the production queue.	Отменяет этот пункт в очереди производства.	Bricht diesen Eintrag in der Produktionswarteschlange ab.	Cancela este elemento de la cola de producción.	Annule cet élément de la file de production.
+Building	Строительство	Bau	Construcción	Construction
+Morphing	Мутация	Morphvorgang	Mutación	Transformation
+Summoning	Призыв	Herbeirufung	Invocación	Invocation
+Researching	Исследование	Forschung	Investigación	Recherche
+Upgrading	Улучшение	Ausbau	Mejora	Amélioration
+Group	Группа	Gruppe	Grupo	Groupe
+Select units, then hold a group button to assign	Выберите войска и удерживайте кнопку группы	Einheiten auswählen, dann Gruppentaste halten	Selecciona unidades y mantén un botón de grupo	Sélectionnez des unités, puis maintenez un bouton de groupe
+Drag once to select units	Проведите пальцем для выбора	Einmal ziehen zum Auswählen	Arrastra una vez para seleccionar	Glissez une fois pour sélectionner
+Drag to select	Тяните для выбора	Ziehen zum Auswählen	Arrastra para seleccionar	Glissez pour sélectionner
+Selection mode cancelled	Режим выбора отменён	Auswahlmodus beendet	Modo de selección cancelado	Mode de sélection annulé
+Nearby Multiplayer	Игра поблизости	Mehrspieler in der Nähe	Multijugador cercano	Multijoueur à proximité
+Network	Сеть	Netzwerk	Red	Réseau
+Network Diagnostics	Диагностика сети	Netzwerkdiagnose	Diagnóstico de red	Diagnostic réseau
+Show network overlay	Показывать состояние сети	Netzwerkanzeige einblenden	Mostrar estado de red	Afficher l’état du réseau
+Select Connection	Выбрать подключение	Verbindung auswählen	Elegir conexión	Choisir la connexion
+Choose a connection, then host or join a game.	Выберите подключение, затем создайте игру или присоединитесь.	Verbindung wählen, dann ein Spiel erstellen oder beitreten.	Elige una conexión y crea una partida o únete.	Choisissez une connexion, puis créez ou rejoignez une partie.
+Connect nearby devices directly over Bluetooth.	Соедините устройства напрямую через Bluetooth.	Geräte in der Nähe direkt über Bluetooth verbinden.	Conecta dispositivos cercanos directamente por Bluetooth.	Reliez les appareils proches directement par Bluetooth.
+Find nearby devices over Bluetooth. Each connection switches to Wi-Fi Direct when available.	Поиск устройств через Bluetooth. Если доступен Wi-Fi Direct, соединение перейдёт на него.	Geräte über Bluetooth suchen. Verbindungen wechseln nach Möglichkeit zu Wi-Fi Direct.	Busca dispositivos por Bluetooth. La conexión pasa a Wi-Fi Direct si está disponible.	Recherchez les appareils par Bluetooth. La connexion passe au Wi-Fi Direct si disponible.
+Host or join a game. Keep Bluetooth and Wi-Fi on.	Создайте игру или присоединитесь. Не выключайте Bluetooth и Wi-Fi.	Spiel erstellen oder beitreten. Bluetooth und WLAN eingeschaltet lassen.	Crea una partida o únete. Mantén Bluetooth y Wi-Fi activados.	Créez ou rejoignez une partie. Gardez le Bluetooth et le Wi-Fi activés.
+Host Game	Создать игру	Spiel hosten	Crear partida	Héberger une partie
+Join Game	Присоединиться	Spiel beitreten	Unirse a partida	Rejoindre une partie
+Host	Хост	Host	Anfitrión	Hôte
+Join	Присоединиться	Beitreten	Unirse	Rejoindre
+Guest	Гость	Gast	Invitado	Invité
+Player	Игрок	Spieler	Jugador	Joueur
+Player (Open)	Игрок (свободно)	Spieler (offen)	Jugador (libre)	Joueur (libre)
+Computer	Компьютер	Computer	Ordenador	Ordinateur
+Closed	Закрыто	Geschlossen	Cerrado	Fermé
+Random	Случайно	Zufällig	Aleatorio	Aléatoire
+Teams	Команды	Teams	Equipos	Équipes
+Free for All	Каждый за себя	Jeder gegen jeden	Todos contra todos	Chacun pour soi
+Melee	Схватка	Gefecht	Refriega	Mêlée
+Game Type	Тип игры	Spieltyp	Tipo de partida	Type de partie
+Difficulty	Сложность	Schwierigkeit	Dificultad	Difficulté
+Easy	Лёгкая	Leicht	Fácil	Facile
+Medium	Средняя	Mittel	Media	Moyenne
+Hard	Сложная	Schwer	Difícil	Difficile
+Hero Mode	Режим героев	Heldenmodus	Modo héroes	Mode héros
+Choose Teams or Free for All	Выберите команды или каждый за себя	Teams oder Jeder gegen jeden wählen	Elige equipos o todos contra todos	Choisissez équipes ou chacun pour soi
+Choose at least two opposing teams.	Нужно не менее двух противоборствующих команд.	Mindestens zwei gegnerische Teams wählen.	Elige al menos dos equipos rivales.	Choisissez au moins deux équipes adverses.
+Same team shares vision and victory.	В одной команде общие обзор и победа.	Ein Team teilt Sicht und Sieg.	Un equipo comparte visión y victoria.	Une équipe partage la vision et la victoire.
+Choose settings, then create game.	Выберите настройки и создайте игру.	Einstellungen wählen, dann Spiel erstellen.	Elige los ajustes y crea la partida.	Choisissez les réglages, puis créez la partie.
+Tap slots and settings to change.	Нажимайте ячейки и настройки для изменения.	Plätze und Einstellungen zum Ändern antippen.	Toca las plazas y los ajustes para cambiarlos.	Touchez les places et les réglages pour les modifier.
+Tap names to move players; tap T1-T8 to set teams.	Нажмите имя для перемещения; T1–T8 — для выбора команды.	Namen antippen verschiebt Spieler; T1–T8 legt Teams fest.	Toca nombres para mover jugadores; T1–T8 para asignar equipos.	Touchez un nom pour déplacer un joueur, T1–T8 pour les équipes.
+Tap a player to move them. Tap open slots or races to change them.	Нажмите игрока для перемещения. Нажмите свободное место или расу для изменения.	Spieler antippen, um sie zu verschieben. Offene Plätze oder Völker antippen zum Ändern.	Toca un jugador para moverlo. Toca plazas libres o razas para cambiarlas.	Touchez un joueur pour le déplacer, une place libre ou une race pour la modifier.
+Tap your race to change it.	Нажмите свою расу, чтобы изменить её.	Eigenes Volk antippen zum Ändern.	Toca tu raza para cambiarla.	Touchez votre race pour la changer.
+Tap a destination slot to move	Нажмите нужное место для перемещения	Zielplatz antippen zum Verschieben von	Toca una plaza de destino para mover a	Touchez la place de destination pour déplacer
+Starting in	Начало через	Start in	Empieza en	Début dans
+Waiting for host	Ожидание хоста	Warten auf Host	Esperando al anfitrión	En attente de l’hôte
+Select a host	Выберите хост	Host auswählen	Elige un anfitrión	Choisissez un hôte
+Select the host device. Accept Android's pairing request on each device.	Выберите устройство хоста. Подтвердите сопряжение Android на обоих устройствах.	Hostgerät wählen. Android-Kopplung auf beiden Geräten bestätigen.	Elige el dispositivo anfitrión. Acepta el emparejamiento de Android en ambos dispositivos.	Choisissez l’appareil hôte. Acceptez l’appairage Android sur les deux appareils.
+Search Again	Повторить поиск	Erneut suchen	Buscar de nuevo	Rechercher à nouveau
+Connect to	Подключиться к	Verbinden mit	Conectar con	Se connecter à
+Hosting as	Хост	Host als	Anfitrión	Hébergement sous
+Connected	Подключено	Verbunden	Conectado	Connecté
+Device connected	Устройство подключено	Gerät verbunden	Dispositivo conectado	Appareil connecté
+Connecting. Accept Android's Bluetooth pairing request on both devices.	Подключение. Подтвердите сопряжение Bluetooth на обоих устройствах.	Verbindung wird hergestellt. Bluetooth-Kopplung auf beiden Geräten bestätigen.	Conectando. Acepta el emparejamiento Bluetooth en ambos dispositivos.	Connexion. Acceptez l’appairage Bluetooth sur les deux appareils.
+Check that the two devices show this code:	Убедитесь, что на обоих устройствах указан этот код:	Prüfen, ob beide Geräte diesen Code anzeigen:	Comprueba que ambos dispositivos muestran este código:	Vérifiez que les deux appareils affichent ce code :
+Codes match	Коды совпадают	Codes stimmen überein	Los códigos coinciden	Les codes correspondent
+Send	Отправить	Senden	Enviar	Envoyer
+Type a message…	Введите сообщение…	Nachricht eingeben…	Escribe un mensaje…	Écrivez un message…
+Unknown device	Неизвестное устройство	Unbekanntes Gerät	Dispositivo desconocido	Appareil inconnu
+Inactive	Неактивно	Inaktiv	Inactivo	Inactif
+Not started	Не запущено	Nicht gestartet	Sin iniciar	Non démarré
+No active match	Нет активной игры	Kein aktives Spiel	No hay partida activa	Aucune partie active
+Local transport	Локальное подключение	Lokale Verbindung	Conexión local	Connexion locale
+Bluetooth connected — Wi-Fi Direct unavailable	Bluetooth подключён — Wi-Fi Direct недоступен	Bluetooth verbunden — Wi-Fi Direct nicht verfügbar	Bluetooth conectado — Wi-Fi Direct no disponible	Bluetooth connecté — Wi-Fi Direct indisponible
+Bluetooth fallback — Wi-Fi Direct unavailable	Используется Bluetooth — Wi-Fi Direct недоступен	Bluetooth-Ersatz — Wi-Fi Direct nicht verfügbar	Se usa Bluetooth — Wi-Fi Direct no disponible	Bluetooth utilisé — Wi-Fi Direct indisponible
+Wi-Fi Direct connected	Wi-Fi Direct подключён	Wi-Fi Direct verbunden	Wi-Fi Direct conectado	Wi-Fi Direct connecté
+Wi-Fi Direct connected · Bluetooth standby	Wi-Fi Direct подключён · Bluetooth в резерве	Wi-Fi Direct verbunden · Bluetooth bereit	Wi-Fi Direct conectado · Bluetooth en espera	Wi-Fi Direct connecté · Bluetooth en veille
+Setting up Wi-Fi Direct…	Настройка Wi-Fi Direct…	Wi-Fi Direct wird eingerichtet…	Configurando Wi-Fi Direct…	Configuration de Wi-Fi Direct…
+Turn on Bluetooth to connect	Включите Bluetooth для подключения	Bluetooth zum Verbinden einschalten	Activa Bluetooth para conectar	Activez le Bluetooth pour vous connecter
+Bluetooth was not enabled	Bluetooth не был включён	Bluetooth wurde nicht aktiviert	Bluetooth no se ha activado	Le Bluetooth n’a pas été activé
+Bluetooth was turned off	Bluetooth выключен	Bluetooth wurde ausgeschaltet	Bluetooth se ha desactivado	Le Bluetooth a été désactivé
+Bluetooth permission was removed	Разрешение Bluetooth отозвано	Bluetooth-Berechtigung entzogen	Se retiró el permiso de Bluetooth	L’autorisation Bluetooth a été retirée
+Allow Nearby devices permission, then try again	Разрешите доступ к устройствам поблизости и повторите	Berechtigung für Geräte in der Nähe erlauben, dann erneut versuchen	Permite dispositivos cercanos e inténtalo de nuevo	Autorisez les appareils à proximité, puis réessayez
+Allow precise Location permission for Android's Bluetooth discovery, then try again	Разрешите точное местоположение для поиска Bluetooth и повторите	Genauen Standort für die Bluetooth-Suche erlauben, dann erneut versuchen	Permite ubicación precisa para buscar por Bluetooth y vuelve a intentarlo	Autorisez la position précise pour la recherche Bluetooth, puis réessayez
+Allow the host device to be visible, then host again	Сделайте устройство хоста видимым и создайте игру снова	Hostgerät sichtbar machen, dann erneut hosten	Haz visible el dispositivo anfitrión y vuelve a crear la partida	Rendez l’appareil hôte visible, puis hébergez à nouveau
+This device does not support Bluetooth	Это устройство не поддерживает Bluetooth	Dieses Gerät unterstützt kein Bluetooth	Este dispositivo no admite Bluetooth	Cet appareil ne prend pas en charge le Bluetooth
+Cannot scan. Check Bluetooth and Location in Android settings, then retry.	Поиск недоступен. Проверьте Bluetooth и местоположение в настройках Android.	Suche nicht möglich. Bluetooth und Standort in Android prüfen, dann erneut versuchen.	No se puede buscar. Revisa Bluetooth y ubicación en Android e inténtalo de nuevo.	Recherche impossible. Vérifiez Bluetooth et localisation dans Android, puis réessayez.
+Connection timed out. Check that the host is running the same StarDroid version	Время подключения истекло. Проверьте, что версии StarDroid совпадают	Zeitüberschreitung. Prüfen, ob der Host dieselbe StarDroid-Version nutzt	Conexión agotada. Comprueba que el anfitrión usa la misma versión de StarDroid	Connexion expirée. Vérifiez que l’hôte utilise la même version de StarDroid
+Connection cancelled	Подключение отменено	Verbindung abgebrochen	Conexión cancelada	Connexion annulée
+Local connection was interrupted	Локальное подключение прервано	Lokale Verbindung unterbrochen	Se interrumpió la conexión local	La connexion locale a été interrompue
+Opponent left the match	Противник покинул игру	Gegner hat das Spiel verlassen	El rival abandonó la partida	L’adversaire a quitté la partie
+Bluetooth hosting stopped	Хост Bluetooth остановлен	Bluetooth-Host beendet	Se detuvo el anfitrión Bluetooth	Hébergement Bluetooth arrêté
+Pairing confirmation timed out	Истекло время подтверждения сопряжения	Kopplungsbestätigung abgelaufen	Se agotó la confirmación de emparejamiento	Confirmation d’appairage expirée
+Pairing is not confirmed	Сопряжение не подтверждено	Kopplung nicht bestätigt	Emparejamiento sin confirmar	Appairage non confirmé
+Pairing timed out	Время сопряжения истекло	Kopplung abgelaufen	Emparejamiento agotado	Appairage expiré
+Could not connect to this host	Не удалось подключиться к хосту	Verbindung zum Host fehlgeschlagen	No se pudo conectar al anfitrión	Connexion à l’hôte impossible
+Could not open Bluetooth connection	Не удалось открыть подключение Bluetooth	Bluetooth-Verbindung fehlgeschlagen	No se pudo abrir la conexión Bluetooth	Ouverture de la connexion Bluetooth impossible
+Could not pair this device	Не удалось выполнить сопряжение	Gerätekopplung fehlgeschlagen	No se pudo emparejar el dispositivo	Appairage de cet appareil impossible
+Could not search for nearby devices	Не удалось найти устройства поблизости	Gerätesuche fehlgeschlagen	No se pudieron buscar dispositivos cercanos	Recherche d’appareils proches impossible
+Could not send game data	Не удалось отправить данные игры	Senden der Spieldaten fehlgeschlagen	No se pudieron enviar los datos del juego	Envoi des données de jeu impossible
+Could not start Bluetooth	Не удалось запустить Bluetooth	Bluetooth-Start fehlgeschlagen	No se pudo iniciar Bluetooth	Démarrage du Bluetooth impossible
+Could not start local discovery	Не удалось начать локальный поиск	Lokale Suche fehlgeschlagen	No se pudo iniciar la búsqueda local	Démarrage de la recherche locale impossible
+Could not start local multiplayer	Не удалось запустить сетевую игру	Lokaler Mehrspielerstart fehlgeschlagen	No se pudo iniciar el multijugador local	Démarrage du multijoueur local impossible
+Could not switch connections	Не удалось сменить подключение	Verbindungswechsel fehlgeschlagen	No se pudo cambiar de conexión	Changement de connexion impossible
+Could not verify this connection	Не удалось проверить подключение	Verbindungsprüfung fehlgeschlagen	No se pudo verificar la conexión	Vérification de la connexion impossible
+Wi-Fi invitation failed	Приглашение Wi-Fi не удалось	WLAN-Einladung fehlgeschlagen	Falló la invitación Wi-Fi	Invitation Wi-Fi échouée
+Invalid Wi-Fi invitation	Неверное приглашение Wi-Fi	Ungültige WLAN-Einladung	Invitación Wi-Fi no válida	Invitation Wi-Fi invalide
+Invalid game settings	Неверные настройки игры	Ungültige Spieleinstellungen	Ajustes de partida no válidos	Réglages de partie invalides
+Invalid game snapshot	Неверный снимок игры	Ungültiger Spielstand	Estado de partida no válido	État de partie invalide
+Invalid player slot	Неверное место игрока	Ungültiger Spielerplatz	Plaza de jugador no válida	Place de joueur invalide
+Invalid player slots	Неверные места игроков	Ungültige Spielerplätze	Plazas de jugadores no válidas	Places de joueurs invalides
+Invalid team number	Неверный номер команды	Ungültige Teamnummer	Número de equipo no válido	Numéro d’équipe invalide
+Invalid teams	Неверные команды	Ungültige Teams	Equipos no válidos	Équipes invalides
+Maps	Карты	Karten	Mapas	Cartes
+Import a map	Импортировать карту	Karte importieren	Importar mapa	Importer une carte
+Preview unavailable	Предпросмотр недоступен	Vorschau nicht verfügbar	Vista previa no disponible	Aperçu indisponible
+Starting locations	Стартовые позиции	Startpositionen	Posiciones iniciales	Positions de départ
+Size	Размер	Größe	Tamaño	Taille
+Tileset	Ландшафт	Geländetyp	Terreno	Terrain
+Badlands	Пустоши	Ödland	Tierras baldías	Terres désolées
+Space Platform	Космическая платформа	Weltraumplattform	Plataforma espacial	Plateforme spatiale
+Installation	Комплекс	Anlage	Instalación	Installation
+Ashworld	Вулканический мир	Aschewelt	Mundo de cenizas	Monde de cendres
+Jungle	Джунгли	Dschungel	Jungla	Jungle
+Desert	Пустыня	Wüste	Desierto	Désert
+Ice	Лёд	Eis	Hielo	Glace
+Twilight	Сумерки	Zwielicht	Crepúsculo	Crépuscule
+Page	Страница	Seite	Página	Page
+This map needs at least two starting locations	Для карты нужны хотя бы две стартовые позиции	Die Karte benötigt mindestens zwei Startpositionen	El mapa necesita al menos dos posiciones iniciales	La carte nécessite au moins deux positions de départ
+Multiplayer needs at least two starting locations.	Для сетевой игры нужны хотя бы две стартовые позиции.	Mehrspieler benötigt mindestens zwei Startpositionen.	Multijugador necesita al menos dos posiciones iniciales.	Le multijoueur nécessite au moins deux positions de départ.
+This map needs 1–8 start locations for Melee.	Для схватки нужны 1–8 стартовых позиций.	Für Gefecht werden 1–8 Startpositionen benötigt.	Refriega necesita de 1 a 8 posiciones iniciales.	Le mode mêlée nécessite 1 à 8 positions de départ.
+Could not load	Не удалось загрузить	Laden fehlgeschlagen	No se pudo cargar	Chargement impossible
+Could not save	Не удалось сохранить	Speichern fehlgeschlagen	No se pudo guardar	Sauvegarde impossible
+Unable to continue	Невозможно продолжить	Fortsetzen nicht möglich	No se puede continuar	Impossible de continuer
+Replay saved	Повтор сохранён	Replay gespeichert	Repetición guardada	Replay enregistré
+Replay could not be saved	Не удалось сохранить повтор	Replay konnte nicht gespeichert werden	No se pudo guardar la repetición	Impossible d’enregistrer le replay
+Replay loading is not implemented yet.	Загрузка повторов пока не поддерживается.	Das Laden von Replays wird noch nicht unterstützt.	La carga de repeticiones aún no está disponible.	Le chargement des replays n’est pas encore disponible.
+Unable to open replay destination	Не удалось открыть место сохранения повтора	Replay-Ziel konnte nicht geöffnet werden	No se pudo abrir el destino de la repetición	Impossible d’ouvrir la destination du replay
+Start a game before saving.	Сначала начните игру.	Vor dem Speichern ein Spiel starten.	Inicia una partida antes de guardar.	Lancez une partie avant de sauvegarder.
+Unreadable save	Сохранение не читается	Spielstand nicht lesbar	Partida ilegible	Sauvegarde illisible
+Saved game is damaged	Сохранённая игра повреждена	Spielstand beschädigt	Partida guardada dañada	Sauvegarde endommagée
+Saved map is damaged	Сохранённая карта повреждена	Gespeicherte Karte beschädigt	Mapa guardado dañado	Carte sauvegardée endommagée
+Saved map is too large	Сохранённая карта слишком велика	Gespeicherte Karte zu groß	Mapa guardado demasiado grande	Carte sauvegardée trop volumineuse
+Unsupported saved game version	Версия сохранения не поддерживается	Spielstandversion nicht unterstützt	Versión de partida no compatible	Version de sauvegarde non prise en charge
+Invalid save details	Неверные данные сохранения	Ungültige Spielstanddaten	Datos de guardado no válidos	Données de sauvegarde invalides
+Invalid save slot	Неверная ячейка сохранения	Ungültiger Speicherplatz	Ranura de guardado no válida	Emplacement de sauvegarde invalide
+Not a multiplayer save	Это не сохранение сетевой игры	Kein Mehrspielerspielstand	No es una partida multijugador	Ce n’est pas une sauvegarde multijoueur
+Cannot create saves folder	Не удалось создать папку сохранений	Spielstandordner konnte nicht erstellt werden	No se pudo crear la carpeta de partidas	Impossible de créer le dossier des sauvegardes
+Mission map is unavailable. Reload the mission and try again.	Карта миссии недоступна. Загрузите миссию заново.	Missionskarte fehlt. Mission erneut laden und wieder versuchen.	El mapa de misión no está disponible. Recarga la misión e inténtalo de nuevo.	Carte de mission indisponible. Rechargez la mission et réessayez.
+Mission map is incomplete	Карта миссии неполная	Missionskarte unvollständig	Mapa de misión incompleto	Carte de mission incomplète
+Mission details do not match	Данные миссии не совпадают	Missionsdaten stimmen nicht überein	Los datos de misión no coinciden	Les données de mission ne correspondent pas
+Mission identity does not match	Идентификатор миссии не совпадает	Missionskennung stimmt nicht überein	La identidad de misión no coincide	L’identifiant de mission ne correspond pas
+Cannot open selected map.	Не удалось открыть выбранную карту.	Ausgewählte Karte konnte nicht geöffnet werden.	No se pudo abrir el mapa seleccionado.	Impossible d’ouvrir la carte choisie.
+No scenario in this map.	В карте нет сценария.	Kein Szenario in dieser Karte.	El mapa no contiene un escenario.	Aucun scénario dans cette carte.
+Missing map dimensions.	Отсутствуют размеры карты.	Kartenabmessungen fehlen.	Faltan las dimensiones del mapa.	Dimensions de carte manquantes.
+Unsupported map size.	Размер карты не поддерживается.	Kartengröße nicht unterstützt.	Tamaño de mapa no compatible.	Taille de carte non prise en charge.
+Map is too large.	Карта слишком велика.	Karte ist zu groß.	El mapa es demasiado grande.	La carte est trop volumineuse.
+Truncated map.	Данные карты неполные.	Kartendatei unvollständig.	Mapa incompleto.	Carte tronquée.
+Map pack exceeds 256 MB.	Набор карт превышает 256 МБ.	Kartenpaket übersteigt 256 MB.	El paquete de mapas supera los 256 MB.	Le pack de cartes dépasse 256 Mo.
+Import up to 128 maps at once.	Можно импортировать до 128 карт за раз.	Bis zu 128 Karten gleichzeitig importieren.	Importa hasta 128 mapas a la vez.	Importez jusqu’à 128 cartes à la fois.
+Cannot read the selected ZIP.	Не удалось прочитать выбранный ZIP.	Ausgewählte ZIP-Datei nicht lesbar.	No se pudo leer el ZIP seleccionado.	Impossible de lire le ZIP sélectionné.
+No file picker is available	Выбор файлов недоступен	Keine Dateiauswahl verfügbar	No hay selector de archivos disponible	Aucun sélecteur de fichiers disponible
+Menu artwork could not load. Use App Options to re-import.	Не удалось загрузить оформление меню. Повторите импорт в параметрах приложения.	Menügrafik konnte nicht geladen werden. In den App-Optionen erneut importieren.	No se pudieron cargar los gráficos del menú. Vuelve a importarlos en Opciones.	Impossible de charger les graphismes du menu. Réimportez-les dans les options.
+Menu loading failed	Ошибка загрузки меню	Menü konnte nicht geladen werden	Error al cargar el menú	Échec du chargement du menu
+Engine error (returned to menu)	Ошибка движка (возврат в меню)	Engine-Fehler (zurück zum Menü)	Error del motor (vuelta al menú)	Erreur du moteur (retour au menu)
+Optional mission opening	Вступление миссии (необязательно)	Optionaler Missionsvorspann	Introducción de misión opcional	Introduction de mission facultative
+Cinematic	Видеоролик	Zwischensequenz	Cinemática	Cinématique
+Tutorial	Обучение	Tutorial	Tutorial	Didacticiel
+Campaign artwork	Оформление кампании	Kampagnengrafik	Gráficos de campaña	Graphismes de campagne
+View / copy diagnostics	Просмотр / копирование диагностики	Diagnose ansehen / kopieren	Ver / copiar diagnóstico	Voir / copier le diagnostic
+Import maps/ZIP	Импорт карт/ZIP	Karten/ZIP importieren	Importar mapas/ZIP	Importer cartes/ZIP
+Advanced	Дополнительно	Erweitert	Avanzado	Avancé
+A game needs a human player	В игре нужен человек	Ein menschlicher Spieler ist erforderlich	La partida necesita un jugador humano	La partie nécessite un joueur humain
+Both devices need the same app version	На обоих устройствах нужна одна версия приложения	Beide Geräte benötigen dieselbe App-Version	Ambos dispositivos necesitan la misma versión	Les deux appareils doivent utiliser la même version
+No multiplayer session	Нет сетевой игры	Keine Mehrspielersitzung	No hay sesión multijugador	Aucune session multijoueur
+Moves to the chosen location.	Перемещается в указанное место.	Bewegt sich zum gewählten Ort.	Se mueve al lugar elegido.	Se déplace vers l’endroit choisi.
+Stops the current order.	Прекращает выполнение приказа.	Beendet den aktuellen Befehl.	Detiene la orden actual.	Arrête l’ordre actuel.
+Attacks a target, or moves to a location while engaging enemies.	Атакует цель или движется в указанное место, атакуя врагов по пути.	Greift ein Ziel an oder bewegt sich zum Zielort und bekämpft dabei Feinde.	Ataca un objetivo o avanza hacia un lugar atacando a los enemigos.	Attaque une cible ou avance vers un lieu en combattant les ennemis.
+Gathers minerals or Vespene Gas from the chosen resource.	Добывает минералы или газ веспен из выбранного источника.	Sammelt Mineralien oder Vespingas an der gewählten Quelle.	Recolecta minerales o gas vespeno del recurso elegido.	Récolte des minerais ou du gaz vespène à la source choisie.
+Holds position and attacks enemies in range.	Держит позицию и атакует врагов в радиусе действия.	Hält die Position und greift Feinde in Reichweite an.	Mantiene la posición y ataca a enemigos al alcance.	Tient la position et attaque les ennemis à portée.
+Patrols between the current position and the chosen location.	Патрулирует между текущей позицией и указанной точкой.	Patrouilliert zwischen aktueller Position und Zielort.	Patrulla entre la posición actual y el lugar elegido.	Patrouille entre la position actuelle et l’endroit choisi.
+Opens the basic structure menu.	Открывает меню основных зданий.	Öffnet das Menü für einfache Gebäude.	Abre el menú de estructuras básicas.	Ouvre le menu des bâtiments de base.
+Opens the advanced structure menu.	Открывает меню особых зданий.	Öffnet das Menü für erweiterte Gebäude.	Abre el menú de estructuras avanzadas.	Ouvre le menu des bâtiments avancés.
+Spends health to temporarily increase movement and attack speed.	Тратит здоровье, временно повышая скорость движения и атаки.	Verbraucht Lebenspunkte, um Bewegungs- und Angriffstempo kurzzeitig zu erhöhen.	Gasta salud para aumentar temporalmente la velocidad de movimiento y ataque.	Dépense de la vie pour accélérer temporairement les déplacements et les attaques.
+Deploys the tank for long-range ground attacks. Cannot move while deployed.	Разворачивает танк для дальних наземных атак. В этом режиме танк неподвижен.	Stellt den Panzer für Bodenangriffe mit großer Reichweite auf. Er kann sich dabei nicht bewegen.	Despliega el tanque para ataques terrestres de largo alcance. No puede moverse desplegado.	Déploie le char pour des attaques terrestres à longue portée. Il devient immobile.
+Returns to mobile tank mode.	Возвращает танк в подвижный режим.	Wechselt zum mobilen Panzermodus zurück.	Vuelve al modo tanque móvil.	Rétablit le mode char mobile.
+Repairs a damaged mechanical unit or structure using resources.	Ремонтирует повреждённую механическую единицу или здание за ресурсы.	Repariert beschädigte mechanische Einheiten oder Gebäude gegen Ressourcen.	Repara una unidad mecánica o estructura dañada usando recursos.	Répare une unité mécanique ou un bâtiment endommagé avec des ressources.
+Selects the associated units.	Выбирает связанные с этим зданием единицы.	Wählt die zugehörigen Einheiten aus.	Selecciona las unidades asociadas.	Sélectionne les unités associées.
+Sets the destination for newly produced units.	Задаёт место назначения для новых единиц.	Legt das Ziel neu produzierter Einheiten fest.	Fija el destino de las unidades recién creadas.	Définit la destination des nouvelles unités.
+Lifts this structure into the air.	Поднимает это здание в воздух.	Lässt dieses Gebäude abheben.	Eleva esta estructura en el aire.	Fait décoller ce bâtiment.
+Lands this structure at the chosen location.	Приземляет здание в указанном месте.	Landet dieses Gebäude am gewählten Ort.	Aterriza esta estructura en el lugar elegido.	Fait atterrir ce bâtiment à l’endroit choisi.
+Creates a connected Nydus Canal exit on creep.	Создаёт связанный выход канала нидуса на слизи.	Erstellt einen verbundenen Nyduskanal-Ausgang auf Kriecher.	Crea una salida conectada del canal nydus sobre biomateria.	Crée une sortie reliée du canal de Nydus sur le mucus.
+Unloads this passenger.	Выгружает этого пассажира.	Lädt diesen Passagier aus.	Descarga a este pasajero.	Décharge ce passager.
+Unloads all passengers. Flying transports first ask for a landing location.	Выгружает всех пассажиров. Для воздушного транспорта сначала нужно выбрать место высадки.	Lädt alle Passagiere aus. Für fliegende Transporter zuerst einen Landeplatz wählen.	Descarga a todos los pasajeros. Los transportes aéreos piden primero un lugar de desembarco.	Décharge tous les passagers. Les transports aériens demandent d’abord un lieu de débarquement.
+Select a friendly unit to recharge its shields using this battery's energy.	Выберите союзную единицу для восстановления щитов за счёт энергии батареи.	Eine eigene Einheit wählen, um ihre Schilde mit Batterieenergie aufzuladen.	Elige una unidad aliada para recargar sus escudos con la energía de esta batería.	Choisissez une unité alliée pour recharger ses boucliers avec l’énergie de la batterie.
+Select a friendly ground unit to load. Nydus Canals transfer eligible Zerg units directly to their linked exit.	Выберите союзную наземную единицу для загрузки. Канал нидуса сразу переносит подходящих зергов к связанному выходу.	Eigene Bodeneinheit zum Einladen wählen. Nyduskanäle bringen geeignete Zerg direkt zum verbundenen Ausgang.	Elige una unidad terrestre aliada para cargarla. Los canales nydus llevan zerg compatibles directamente a la salida conectada.	Choisissez une unité terrestre alliée à charger. Les canaux de Nydus transfèrent les Zerg compatibles à leur sortie reliée.
+Centers the camera on the connected Nydus exit. Units leave it automatically.	Центрирует камеру на связанном выходе нидуса. Единицы выходят автоматически.	Zentriert die Kamera auf den Nydus-Ausgang. Einheiten verlassen ihn automatisch.	Centra la cámara en la salida nydus conectada. Las unidades salen automáticamente.	Centre la caméra sur la sortie de Nydus reliée. Les unités sortent automatiquement.
+Returns carried resources to a nearby resource depot.	Возвращает добытые ресурсы на ближайшую базу.	Bringt getragene Ressourcen zum nahen Depot.	Entrega los recursos transportados en un depósito cercano.	Rapporte les ressources transportées à un dépôt proche.
+Hides underground. Detectors can reveal burrowed units.	Прячется под землёй. Детекторы могут обнаружить зарывшиеся единицы.	Verbirgt sich unter der Erde. Detektoren können eingegrabene Einheiten entdecken.	Se oculta bajo tierra. Los detectores pueden revelar unidades enterradas.	Se cache sous terre. Les détecteurs peuvent révéler les unités enfouies.
+Returns to the surface.	Возвращается на поверхность.	Kehrt an die Oberfläche zurück.	Vuelve a la superficie.	Revient à la surface.
+Cloaks the unit while draining energy. Detectors can reveal it.	Маскирует единицу, расходуя энергию. Детекторы могут её обнаружить.	Tarnt die Einheit und verbraucht Energie. Detektoren können sie entdecken.	Camufla la unidad consumiendo energía. Los detectores pueden revelarla.	Camoufle l’unité en consommant de l’énergie. Les détecteurs peuvent la révéler.
+Ends cloaking and its energy drain.	Снимает маскировку и прекращает расход энергии.	Beendet Tarnung und Energieverbrauch.	Desactiva el camuflaje y su consumo de energía.	Arrête le camouflage et sa consommation d’énergie.
+Merges two Dark Templars into a Dark Archon.	Объединяет двух тёмных храмовников в тёмного архонта.	Verschmilzt zwei Dunkle Templer zu einem Dunklen Archon.	Fusiona dos templarios tétricos en un arconte oscuro.	Fusionne deux Templiers noirs en un Archonte noir.
+Cancels the current action or closes this command menu.	Отменяет текущее действие или закрывает меню команд.	Bricht die aktuelle Aktion ab oder schließt dieses Befehlsmenü.	Cancela la acción actual o cierra este menú de órdenes.	Annule l’action actuelle ou ferme ce menu de commandes.
+Increases damage dealt by Terran infantry.	Повышает урон пехоты терранов.	Erhöht den Schaden terranischer Infanterie.	Aumenta el daño de la infantería terran.	Augmente les dégâts de l’infanterie terran.
+Increases damage dealt by Terran ground vehicles.	Повышает урон наземной техники терранов.	Erhöht den Schaden terranischer Bodenfahrzeuge.	Aumenta el daño de los vehículos terrestres terran.	Augmente les dégâts des véhicules terrestres terran.
+Increases damage dealt by Terran air units.	Повышает урон авиации терранов.	Erhöht den Schaden terranischer Lufteinheiten.	Aumenta el daño de las unidades aéreas terran.	Augmente les dégâts des unités aériennes terran.
++1 infantry armor	+1 к броне пехоты	+1 Infanteriepanzerung	+1 armadura de infantería	+1 armure d’infanterie
++1 vehicle armor	+1 к броне техники	+1 Fahrzeugpanzerung	+1 armadura de vehículos	+1 armure de véhicules
++1 ship armor	+1 к броне кораблей	+1 Schiffspanzerung	+1 armadura de naves	+1 armure de vaisseaux
++1 Marine range	+1 к дальности морпехов	+1 Marine-Reichweite	+1 alcance de marine	+1 portée des Marines
+Faster Vultures	Ускоряет стервятников	Schnellere Adler	Buitres más rápidos	Vautours plus rapides
++50 Medic energy	+50 к энергии медиков	+50 Sanitäter-Energie	+50 energía de médico	+50 énergie des Médics
++3 Goliath air range	+3 к дальности ПВО голиафов	+3 Goliath-Luftreichweite	+3 alcance antiaéreo de goliat	+3 portée antiaérienne des Goliaths
++50 Science Vessel energy	+50 к энергии научных судов	+50 Forschungsschiff-Energie	+50 energía de nave científica	+50 énergie des Vaisseaux laboratoires
++2 Ghost sight	+2 к обзору призраков	+2 Ghost-Sichtweite	+2 visión de fantasma	+2 vision des Fantômes
++50 Ghost energy	+50 к энергии призраков	+50 Ghost-Energie	+50 energía de fantasma	+50 énergie des Fantômes
++50 Wraith energy	+50 к энергии миражей	+50 Raumjäger-Energie	+50 energía de espectro	+50 énergie des Ombres
++50 Battlecruiser energy	+50 к энергии крейсеров	+50 Schwerer-Kreuzer-Energie	+50 energía de crucero	+50 énergie des Cuirassés
+Increases damage dealt by Zerg melee units.	Повышает урон зергов ближнего боя.	Erhöht den Schaden von Zerg-Nahkämpfern.	Aumenta el daño de los zerg cuerpo a cuerpo.	Augmente les dégâts des Zerg de mêlée.
+Increases damage dealt by Hydralisks and Lurkers.	Повышает урон гидралисков и скрытней.	Erhöht den Schaden von Hydralisken und Lurkern.	Aumenta el daño de hidraliscos y merodeadores.	Augmente les dégâts des Hydralisks et des Sapeurs.
+Increases damage dealt by air units.	Повышает урон воздушных единиц.	Erhöht den Schaden von Lufteinheiten.	Aumenta el daño de las unidades aéreas.	Augmente les dégâts des unités aériennes.
++1 ground armor	+1 к наземной броне	+1 Bodenpanzerung	+1 armadura terrestre	+1 armure terrestre
++1 air armor	+1 к воздушной броне	+1 Luftpanzerung	+1 armadura aérea	+1 armure aérienne
+Overlords carry units	Владыки перевозят единицы	Overlords transportieren Einheiten	Los superamos transportan unidades	Les Dominants transportent des unités
++2 Overlord sight	+2 к обзору владык	+2 Overlord-Sichtweite	+2 visión de superamo	+2 vision des Dominants
+Faster Overlords	Ускоряет владык	Schnellere Overlords	Superamos más rápidos	Dominants plus rapides
+Faster Zerglings	Ускоряет зерглингов	Schnellere Zerglinge	Zerglings más rápidos	Zerglings plus rapides
+Faster Zergling attack	Ускоряет атаку зерглингов	Schnellerer Zergling-Angriff	Ataques de zergling más rápidos	Attaques des Zerglings plus rapides
+Faster Hydralisks	Ускоряет гидралисков	Schnellere Hydralisken	Hidraliscos más rápidos	Hydralisks plus rapides
++1 Hydralisk range	+1 к дальности гидралисков	+1 Hydralisken-Reichweite	+1 alcance de hidralisco	+1 portée des Hydralisks
++50 Queen energy	+50 к энергии королев	+50 Königinnen-Energie	+50 energía de reina	+50 énergie des Reines
++50 Defiler energy	+50 к энергии осквернителей	+50 Vergifter-Energie	+50 energía de profanador	+50 énergie des Saboteurs
++2 Ultralisk armor	+2 к броне ультралисков	+2 Ultralisken-Panzerung	+2 armadura de ultralisco	+2 armure des Ultralisks
+Faster Ultralisks	Ускоряет ультралисков	Schnellere Ultralisken	Ultraliscos más rápidos	Ultralisks plus rapides
+Increases damage dealt by Protoss ground units.	Повышает урон наземных протоссов.	Erhöht den Schaden von Protoss-Bodeneinheiten.	Aumenta el daño de las unidades terrestres protoss.	Augmente les dégâts des unités terrestres protoss.
+Increases shield armor for all Protoss units and buildings.	Усиливает щиты всех единиц и зданий протоссов.	Erhöht die Schildpanzerung aller Protoss-Einheiten und -Gebäude.	Aumenta la armadura de escudos de todas las unidades y estructuras protoss.	Renforce les boucliers de toutes les unités et de tous les bâtiments protoss.
++2 Dragoon range	+2 к дальности драгунов	+2 Dragoner-Reichweite	+2 alcance de dragón	+2 portée des Dragons
+Faster Zealots	Ускоряет зилотов	Schnellere Berserker	Fanáticos más rápidos	Disciples plus rapides
+Increases Scarab damage by 25.	Повышает урон скарабеев на 25.	Erhöht Skarabäenschaden um 25.	Aumenta el daño de escarabajos en 25.	Augmente les dégâts des Scarabs de 25.
+Reaver holds 10 Scarabs	Ривер вмещает 10 скарабеев	Räuber fasst 10 Skarabäen	El reaver lleva 10 escarabajos	Le Destructeur transporte 10 Scarabs
+Faster Shuttles	Ускоряет шаттлы	Schnellere Shuttles	Lanzaderas más rápidas	Navettes plus rapides
++2 Observer sight	+2 к обзору наблюдателей	+2 Beobachter-Sichtweite	+2 visión de observador	+2 vision des Observateurs
+Faster Observers	Ускоряет наблюдателей	Schnellere Beobachter	Observadores más rápidos	Observateurs plus rapides
++50 High Templar energy	+50 к энергии высших храмовников	+50 Hoher-Templer-Energie	+50 energía de alto templario	+50 énergie des Hauts Templiers
++2 Scout sight	+2 к обзору разведчиков	+2 Scout-Sichtweite	+2 visión de explorador	+2 vision des Scouts
+Faster Scouts	Ускоряет разведчиков	Schnellere Scouts	Exploradores más rápidos	Scouts plus rapides
+Carrier holds 8 Interceptors	Авианосец вмещает 8 перехватчиков	Träger fasst 8 Interceptor	El portanaves lleva 8 interceptores	Le Porte-nefs transporte 8 Intercepteurs
++50 Arbiter energy	+50 к энергии арбитров	+50 Arbiter-Energie	+50 energía de árbitro	+50 énergie des Arbitres
++50 Corsair energy	+50 к энергии корсаров	+50 Korsaren-Energie	+50 energía de corsario	+50 énergie des Corsaires
++50 Dark Archon energy	+50 к энергии тёмных архонтов	+50 Dunkler-Archon-Energie	+50 energía de arconte oscuro	+50 énergie des Archontes noirs
++speed & attack, costs HP	+скорость и атака, тратит здоровье	+Tempo und Angriff, kostet Leben	+velocidad y ataque, cuesta salud	+vitesse et attaque, coûte de la vie
+Freezes a mechanical unit	Обездвиживает механическую единицу	Legt eine mechanische Einheit lahm	Inmoviliza una unidad mecánica	Immobilise une unité mécanique
+Drains energy & shields	Истощает энергию и щиты	Entzieht Energie und Schilde	Agota energía y escudos	Épuise l’énergie et les boucliers
+Vultures lay mines	Стервятники ставят мины	Adler legen Minen	Los buitres colocan minas	Les Vautours posent des mines
+Reveals an area	Открывает область	Deckt ein Gebiet auf	Revela un área	Révèle une zone
+Siege mode: long range	Осадный режим: большая дальность	Belagerungsmodus: große Reichweite	Modo asedio: largo alcance	Mode siège : longue portée
+Absorbs 250 damage	Поглощает 250 урона	Absorbiert 250 Schaden	Absorbe 250 de daño	Absorbe 250 points de dégâts
+Damages biological units	Повреждает биологические единицы	Schädigt biologische Einheiten	Daña unidades biológicas	Blesse les unités biologiques
+Heavy single-target blast	Мощный удар по одной цели	Starker Angriff auf ein Einzelziel	Potente impacto contra un objetivo	Puissant tir sur une cible unique
+Wraith cloak	Маскировка миража	Raumjäger-Tarnung	Camuflaje de espectro	Camouflage des Ombres
+Ghost cloak	Маскировка призрака	Ghost-Tarnung	Camuflaje de fantasma	Camouflage des Fantômes
+Removes status effects	Снимает эффекты состояния	Entfernt Statuseffekte	Elimina efectos de estado	Supprime les effets d’état
+Blinds a unit	Ослепляет единицу	Blendet eine Einheit	Ciega una unidad	Aveugle une unité
+Ground units can burrow	Наземные единицы могут зарываться	Bodeneinheiten können sich eingraben	Las unidades terrestres pueden enterrarse	Les unités terrestres peuvent s’enfouir
+Morph Hydralisk to Lurker	Мутация гидралиска в скрытня	Hydralisk zu Lurker morphen	Transforma hidralisco en merodeador	Transforme un Hydralisk en Sapeur
+Kills a unit, spawns broodlings	Убивает единицу и создаёт выводок	Tötet eine Einheit, erzeugt Brütlinge	Mata una unidad y crea crías	Tue une unité et crée des Rejetons
+Area damage over time	Периодический урон по области	Gebietsschaden über Zeit	Daño de área con el tiempo	Dégâts de zone progressifs
+Eat a unit for energy	Поглотить единицу ради энергии	Einheit für Energie verschlingen	Consume una unidad para obtener energía	Dévore une unité pour gagner de l’énergie
+Slows units in an area	Замедляет единицы в области	Verlangsamt Einheiten im Gebiet	Ralentiza unidades en un área	Ralentit les unités d’une zone
+See through a unit	Обзор через чужую единицу	Sicht einer Einheit nutzen	Comparte la visión de una unidad	Partage la vision d’une unité
+Blocks ranged attacks	Блокирует дальние атаки	Blockiert Fernangriffe	Bloquea ataques a distancia	Bloque les attaques à distance
+Infest a damaged Terran CC	Заразить повреждённый командный центр терранов	Beschädigte terranische Kommandozentrale verseuchen	Infesta un centro de mando terran dañado	Infeste un Centre de commandement terran endommagé
+Area damage	Урон по области	Gebietsschaden	Daño de área	Dégâts de zone
+Illusory copies of a unit	Иллюзорные копии единицы	Illusionäre Kopien einer Einheit	Copias ilusorias de una unidad	Copies illusoires d’une unité
+Teleport units to the Arbiter	Телепортирует единицы к арбитру	Teleportiert Einheiten zum Arbiter	Teletransporta unidades al árbitro	Téléporte des unités vers l’Arbitre
+Freezes units in an area	Обездвиживает единицы в области	Legt Einheiten im Gebiet lahm	Inmoviliza unidades en un área	Immobilise les unités d’une zone
+Blocks ground attacks	Блокирует наземные атаки	Blockiert Bodenangriffe	Bloquea ataques terrestres	Bloque les attaques terrestres
+Take control of a unit	Захватить управление единицей	Kontrolle über eine Einheit übernehmen	Toma el control de una unidad	Prend le contrôle d’une unité
+Burns energy as damage	Сжигает энергию, нанося урон	Verbrennt Energie als Schaden	Convierte energía en daño	Convertit l’énergie en dégâts
+Stuns biological units	Оглушает биологические единицы	Betäubt biologische Einheiten	Aturde unidades biológicas	Étourdit les unités biologiques
+All players ready	Все игроки готовы	Alle Spieler bereit	Todos los jugadores listos	Tous les joueurs sont prêts
+Both players ready	Оба игрока готовы	Beide Spieler bereit	Ambos jugadores listos	Les deux joueurs sont prêts
+Both ready — cached map	Оба готовы — карта в кэше	Beide bereit — Karte im Cache	Ambos listos — mapa en caché	Tous deux prêts — carte en cache
+Checking game data…	Проверка данных игры…	Spieldaten werden geprüft…	Comprobando datos del juego…	Vérification des données de jeu…
+Checking game versions…	Проверка версий игры…	Spielversionen werden geprüft…	Comprobando versiones…	Vérification des versions…
+Choose a map before hosting	Выберите карту перед созданием игры	Vor dem Hosten eine Karte wählen	Elige un mapa antes de crear la partida	Choisissez une carte avant d’héberger
+Choose at least two opposing sides	Выберите хотя бы две противоборствующие стороны	Mindestens zwei gegnerische Seiten wählen	Elige al menos dos bandos rivales	Choisissez au moins deux camps adverses
+Connecting…	Подключение…	Verbindung wird hergestellt…	Conectando…	Connexion…
+Connection lost. The match has stopped	Соединение потеряно. Игра остановлена	Verbindung verloren. Das Spiel wurde gestoppt	Conexión perdida. La partida se ha detenido	Connexion perdue. La partie s’est arrêtée
+Connection stopped	Соединение остановлено	Verbindung beendet	Conexión detenida	Connexion arrêtée
+Could not initialize multiplayer	Не удалось запустить сетевую игру	Mehrspieler konnte nicht gestartet werden	No se pudo iniciar el multijugador	Impossible d’initialiser le multijoueur
+Game data differs. Import the same core files on all devices	Данные различаются. Импортируйте одинаковые основные файлы на все устройства	Spieldaten unterscheiden sich. Auf allen Geräten dieselben Basisdateien importieren	Los datos difieren. Importa los mismos archivos básicos en todos los dispositivos	Les données diffèrent. Importez les mêmes fichiers de base sur tous les appareils
+Game data differs. Import the same core files on both devices	Данные различаются. Импортируйте одинаковые основные файлы на оба устройства	Spieldaten unterscheiden sich. Auf beiden Geräten dieselben Basisdateien importieren	Los datos difieren. Importa los mismos archivos básicos en ambos dispositivos	Les données diffèrent. Importez les mêmes fichiers de base sur les deux appareils
+Games went out of sync at frame	Игра потеряла синхронизацию на кадре	Spiele wurden asynchron bei Frame	Las partidas se desincronizaron en el fotograma	Désynchronisation au tour
+Host disconnected. The match has stopped	Хост отключился. Игра остановлена	Host getrennt. Das Spiel wurde gestoppt	El anfitrión se desconectó. La partida se ha detenido	L’hôte s’est déconnecté. La partie s’est arrêtée
+Install the same StarDroid version on all devices	Установите одинаковую версию StarDroid на все устройства	Auf allen Geräten dieselbe StarDroid-Version installieren	Instala la misma versión de StarDroid en todos los dispositivos	Installez la même version de StarDroid sur tous les appareils
+Install the same StarDroid version on both devices	Установите одинаковую версию StarDroid на оба устройства	Auf beiden Geräten dieselbe StarDroid-Version installieren	Instala la misma versión de StarDroid en ambos dispositivos	Installez la même version de StarDroid sur les deux appareils
+Loading game…	Загрузка игры…	Spiel wird geladen…	Cargando partida…	Chargement de la partie…
+Loading is unavailable	Загрузка недоступна	Laden nicht verfügbar	La carga no está disponible	Chargement indisponible
+Local connection cannot keep up	Локальное соединение не успевает	Lokale Verbindung ist zu langsam	La conexión local no puede mantener el ritmo	La connexion locale est trop lente
+Local receiver cannot keep up	Приёмник не успевает получать данные	Lokaler Empfänger ist zu langsam	El receptor local no puede mantener el ritmo	Le récepteur local est trop lent
+Map cached — ready for host	Карта в кэше — ожидание хоста	Karte im Cache — bereit für Host	Mapa en caché — listo para el anfitrión	Carte en cache — prêt pour l’hôte
+Map transfer failed its checksum	Ошибка контрольной суммы переданной карты	Prüfsumme der übertragenen Karte stimmt nicht	Falló la suma de verificación del mapa transferido	La somme de contrôle de la carte transférée ne correspond pas
+Measuring network…	Проверка сети…	Netzwerk wird gemessen…	Midiendo la red…	Mesure du réseau…
+Multiplayer connection failed	Ошибка сетевого подключения	Mehrspielerverbindung fehlgeschlagen	Falló la conexión multijugador	Échec de la connexion multijoueur
+Nearby connection failed	Ошибка подключения поблизости	Verbindung zum nahen Gerät fehlgeschlagen	Falló la conexión cercana	Échec de la connexion de proximité
+Nearby map exceeds 8 MB	Карта для сетевой игры превышает 8 МБ	Karte für lokales Spiel übersteigt 8 MB	El mapa para juego cercano supera los 8 MB	La carte de proximité dépasse 8 Mo
+No open player slot	Нет свободного места игрока	Kein freier Spielerplatz	No hay plazas libres	Aucune place libre
+Only the host can load a match	Только хост может загружать игру	Nur der Host kann ein Spiel laden	Solo el anfitrión puede cargar la partida	Seul l’hôte peut charger une partie
+Only the host can save an active match	Только хост может сохранить текущую игру	Nur der Host kann ein aktives Spiel speichern	Solo el anfitrión puede guardar una partida activa	Seul l’hôte peut sauvegarder une partie active
+Opponent	Противник	Gegner	Rival	Adversaire
+Opponent finished the match	Противник завершил игру	Gegner hat das Spiel beendet	El rival terminó la partida	L’adversaire a terminé la partie
+Other device stopped responding	Другое устройство перестало отвечать	Das andere Gerät antwortet nicht mehr	El otro dispositivo dejó de responder	L’autre appareil ne répond plus
+Paused on the other device	Пауза на другом устройстве	Auf anderem Gerät pausiert	Pausado en el otro dispositivo	Pause sur l’autre appareil
+Preparing game…	Подготовка игры…	Spiel wird vorbereitet…	Preparando partida…	Préparation de la partie…
+Ready — waiting for host	Готово — ожидание хоста	Bereit — warten auf Host	Listo — esperando al anfitrión	Prêt — en attente de l’hôte
+Receiving map	Получение карты	Karte wird empfangen	Recibiendo mapa	Réception de la carte
+Receiving map…	Получение карты…	Karte wird empfangen…	Recibiendo mapa…	Réception de la carte…
+Receiving saved game	Получение сохранения	Spielstand wird empfangen	Recibiendo partida guardada	Réception de la sauvegarde
+Receiving saved game…	Получение сохранения…	Spielstand wird empfangen…	Recibiendo partida guardada…	Réception de la sauvegarde…
+Saved game ready on both devices	Сохранение готово на обоих устройствах	Spielstand auf beiden Geräten bereit	Partida guardada lista en ambos dispositivos	Sauvegarde prête sur les deux appareils
+Saved game ready — waiting for host	Сохранение готово — ожидание хоста	Spielstand bereit — warten auf Host	Partida guardada lista — esperando al anfitrión	Sauvegarde prête — en attente de l’hôte
+Saving is unavailable	Сохранение недоступно	Speichern nicht verfügbar	No se puede guardar	Sauvegarde indisponible
+Sending map	Отправка карты	Karte wird gesendet	Enviando mapa	Envoi de la carte
+Sharing map…	Передача карты…	Karte wird geteilt…	Compartiendo mapa…	Partage de la carte…
+Sharing saved game…	Передача сохранения…	Spielstand wird geteilt…	Compartiendo partida guardada…	Partage de la sauvegarde…
+The guest must be connected before loading	Гость должен подключиться до загрузки	Der Gast muss vor dem Laden verbunden sein	El invitado debe conectarse antes de cargar	L’invité doit être connecté avant le chargement
+The saved game has fewer player slots than connected devices	В сохранении меньше мест, чем подключённых устройств	Der Spielstand hat weniger Plätze als verbundene Geräte	La partida guardada tiene menos plazas que dispositivos conectados	La sauvegarde contient moins de places que d’appareils connectés
+This device is not hosting a compatible StarDroid game	На устройстве нет совместимой игры StarDroid	Dieses Gerät hostet kein kompatibles StarDroid-Spiel	Este dispositivo no aloja una partida compatible de StarDroid	Cet appareil n’héberge pas de partie StarDroid compatible
+This map is too large for nearby play	Карта слишком велика для игры поблизости	Diese Karte ist zu groß für lokales Spiel	El mapa es demasiado grande para juego cercano	Cette carte est trop volumineuse pour le jeu de proximité
+Waiting for other device…	Ожидание другого устройства…	Warten auf anderes Gerät…	Esperando al otro dispositivo…	En attente de l’autre appareil…
+Waiting for players	Ожидание игроков	Warten auf Spieler	Esperando jugadores	En attente des joueurs
+Waiting for players…	Ожидание игроков…	Warten auf Spieler…	Esperando jugadores…	En attente des joueurs…
+Cannot change a running game	Нельзя изменить текущую игру	Laufendes Spiel kann nicht geändert werden	No se puede cambiar una partida en curso	Impossible de modifier une partie en cours
+Cannot save an out-of-sync match	Нельзя сохранить рассинхронизированную игру	Asynchrones Spiel kann nicht gespeichert werden	No se puede guardar una partida desincronizada	Impossible de sauvegarder une partie désynchronisée
+Wi-Fi authentication failed	Ошибка проверки Wi-Fi	WLAN-Authentifizierung fehlgeschlagen	Falló la autenticación Wi-Fi	Échec de l’authentification Wi-Fi
+Wi-Fi Direct error	Ошибка Wi-Fi Direct	Wi-Fi-Direct-Fehler	Error de Wi-Fi Direct	Erreur Wi-Fi Direct
+One larva morph per press	Одна личинка за нажатие	Eine Larve pro Tastendruck	Una larva por pulsación	Une larve par pression
+Reading map pack…	Чтение набора карт…	Kartenpaket wird gelesen…	Leyendo paquete de mapas…	Lecture du pack de cartes…
+Import up to 10000 maps at once.	Можно импортировать до 10000 карт за раз.	Bis zu 10000 Karten gleichzeitig importieren.	Importa hasta 10000 mapas a la vez.	Importez jusqu’à 10000 cartes à la fois.
+Map pack exceeds 8 GiB.	Набор карт превышает 8 ГиБ.	Kartenpaket übersteigt 8 GiB.	El paquete de mapas supera los 8 GiB.	Le pack de cartes dépasse 8 Gio.
+Not enough storage to import maps.	Недостаточно места для импорта карт.	Nicht genug Speicher für den Kartenimport.	No hay espacio para importar mapas.	Espace insuffisant pour importer les cartes.

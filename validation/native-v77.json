@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "version": "1.0.7",
+  "versionCode": 77,
+  "physicalAndroid": false,
+  "english": [
+    "PASS 18 campaign-item/worker combinations: neutral pickup, following, save/restore, death, reacquisition",
+    "PASS guard ownership and resource/double-carry exclusions",
+    "PASS Hatchery/Lair/Hive parent filtering, 3-larva limit, empty parent and opt-out global selection",
+    "PASS protected unit speech, 32 game channels, separate trigger effects, dialogue/music isolation and duplicate coalescing",
+    "PASS original Reign of Fire introduction, Raynor/effect overlap and mission SCV carrying psi emitter after 6500 frames"
+  ],
+  "russian": [
+    "PASS supplied Russian core archives and StarCraft.mpq: native first-mission load, 1200 frames, render and exact save round trip"
+  ],
+  "russianBroodWarTested": false,
+  "originalArchivesBundled": false,
+  "preparedSourceSha256": {
+    "bwgame.h": "5f54854058d6a93d84e58d6d7d910fcfbae149d3a9dfe5609cd5fccb26d01f27",
+    "web/sandbox.h": "9563d49858e48d758e7f24470034df54490b8a26d31bcf095bd535a48723e649",
+    "ui/ui.h": "d9de9b69b9d51caecd0fbf491e20cfeb0acdb2132ce85b0fd1eae359d07f731e",
+    "data_loading.h": "88f2d4b45b2abff19cbf5748043f96834ce0ebac5f1797dcc029666115635594"
+  },
+  "sourceSha256": {
+    "native/runtime.cpp": "3636679cb63ec504dd9321351a16eedb097b3101c5bbb68ce30bf0d97ce7cade",
+    "native/audio.h": "000f98ed0b3866a3c09f9c73c26e9f1b8a5f3f67765519d7c3921236f7483fa0",
+    "native/generated/wasm_main.cpp": "6fe40ff3fe0aba8ccd7534bcf9778b5858162ef2d4f3e1a0dcff79353823cd95",
+    "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2",
+    "native/save_state.h": "d6026805e57b02d24f370841ea79d8165162b1465659af63462a8cbf1dc1584d",
+    "patches/native-polish77.patch": "5ba1e0dabec615513824d8d58312aa31fc127c715141b20a41079c2f227d0643",
+    "scripts/prepare_native.py": "ac328421a16521da0a908b6554d8db6d1dd6590cecac1c92c41da3ecda040590",
+    "tests/native_revision77.cpp": "3cb07250e64545054b0754794bd3c5f43c612a2aa0a5c59a151da7290547c0ac",
+    "tests/native_multiplayer.cpp": "3c55a13bfd061d47dc87c746ed07d7830bc17ee2cbbc03af400a776ba87cb498",
+    "tests/build_native_host.py": "e76eb153a417475730d4c944379fc56cdde19e757a0af949692f51eb7f9edbed"
+  },
+  "russianArchiveByteComparisons": {
+    "orders.dat": {
+      "matchesEnglishAsset": true,
+      "sha256": "0b79cc64f1cd8b23c77419bdf1fb39fb91cde1359c1ad9cb73884d5cceb8f7c9"
+    },
+    "platform/bexpl.pcx": {
+      "matchesEnglishAsset": true,
+      "sha256": "44264954681841c47022cea3164e3ab6574c49e41af4df8a3750ce53d6361ff6"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "output": "PASS 17 presentation/preferences checks: dialogue/effects separation, queued speech and save restoration, fast-speed subtitle lifetime, briefing audio completion, larvae default/migration/persistence.",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeCampaign.java": "9204fd27ebe687d25c5b3a02910f6feefd31b3d55201616cacd373c81f074b73",
+    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "0e2010f39e03458a433307d9a9951e9caccad5e735576abbcbb79981cedc320f",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "392b11660fa050a2cd4c1ad9e51430ae586c1f5590b35974d50ad00ea61d9f49",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "e91927be6e7d44fc47e43b004688e96bcb72f28e18f41fe23521029757fc5cc7",
+    "tests/Presentation77Test.java": "82017ff7d6172acb9f136f625738ddcc13e465d8843640484a935bbbe4d0084d",
+    "tests/run_presentation77.py": "e16ae49e09d7ea5b040e0303c2d64ce18d4264f254d24cbd0719887369e4a0b8"
+  }
+}

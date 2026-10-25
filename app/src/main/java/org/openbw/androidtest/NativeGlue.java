@@ -11,6 +11,8 @@ final class NativeGlue implements AutoCloseable {
   final NativeArt.Font tiny, small, large, button, dialogue;
   final String name;
   final String paletteName;
+  final String recovery;
+  final String artworkRecovery;
   final Map<Integer, NativeArt.PCX> panels = new HashMap<Integer, NativeArt.PCX>();
   final Map<Integer, Bitmap> fixedPanelDecorations = new HashMap<Integer, Bitmap>();
   final Map<Integer, Bitmap> movingPanels = new HashMap<Integer, Bitmap>();
@@ -38,11 +40,26 @@ final class NativeGlue implements AutoCloseable {
   NativeGlue(NativeArt art, String bin, String pal, boolean slide) {
     this.art = art;
     name = bin;
-    paletteName = pal;
     this.slide = slide;
-    layout = new NativeArt.Dialog(art.read("rez/" + bin + ".bin"));
-    background = art.pcx("glue/" + pal + "/backgnd.pcx", false, -1);
-    tint = art.pcx("glue/" + pal + "/tfont.pcx", false, -1);
+    layout = art.dialog(bin);
+    NativeArt.PCX bg, colors;
+    String issue = "", actualPalette = pal;
+    try {
+      bg = art.pcx("glue/" + pal + "/backgnd.pcx", false, -1);
+      colors = art.pcx("glue/" + pal + "/tfont.pcx", false, -1);
+    } catch (RuntimeException missingPalette) {
+      // Some classic installation-media variants provide the fonts but omit
+      // palcs. Preserve the dialog/actions with the core archive's neutral UI.
+      if (pal.equals("palnl")) throw missingPalette;
+      issue = missingPalette.getMessage();
+      actualPalette = "palnl";
+      bg = art.pcx("glue/palnl/backgnd.pcx", false, -1);
+      colors = art.pcx("glue/palnl/tfont.pcx", false, -1);
+    }
+    paletteName = actualPalette;
+    artworkRecovery = issue;
+    background = bg;
+    tint = colors;
     small = art.font("10", tint, background.palette, 1);
     tiny = art.font("8", tint, background.palette, 1);
     large = art.font("16", tint, background.palette, 1);
@@ -54,9 +71,23 @@ final class NativeGlue implements AutoCloseable {
       alt = large;
     }
     button = alt;
+    List<String> fallbackFonts = new ArrayList<String>();
+    if (tiny.fallback) fallbackFonts.add("8");
+    if (small.fallback) fallbackFonts.add("10");
+    if (dialogue.fallback) fallbackFonts.add("14");
+    if (large.fallback) fallbackFonts.add("16");
+    if (button.fallback) fallbackFonts.add("16x");
+    if (!fallbackFonts.isEmpty()) issue += (issue.isEmpty() ? "" : "\n")
+        + "Original fonts unavailable: " + String.join(", ", fallbackFonts)
+        + ". Styled Android font with menu palette shading is in use.";
+    if (tiny.substitute != null || small.substitute != null || dialogue.substitute != null
+        || large.substitute != null || button.substitute != null)
+      issue += (issue.isEmpty() ? "" : "\n")
+          + "Available original font sizes are reused for missing sizes. See Font choices below.";
+    recovery = issue;
     int glass = 138;
     try {
-      glass = art.pcx("glue/" + pal + "/teffect.pcx", false, -1).pixels[1] & 255;
+      glass = art.pcx("glue/" + paletteName + "/teffect.pcx", false, -1).pixels[1] & 255;
     } catch (Exception ignored) {
     }
     for (NativeArt.Widget w : layout.widgets) {
@@ -278,17 +309,32 @@ final class NativeGlue implements AutoCloseable {
     if (!labelVisible(id)) return;
     String text =
         override == null
-            ? w.text.substring((w.flags & 0x200) != 0 && !w.text.isEmpty() ? 1 : 0)
+            ? MenuLabels.forDialog(name, id, w.text.substring((w.flags & 0x200) != 0 && !w.text.isEmpty() ? 1 : 0))
             : override;
     NativeArt.Font font =
         (w.flags & 0x4000) != 0 ? button : (w.flags & 0x800) != 0 || w.type == 14 ? large : (w.flags & 0x400) != 0 ? small : tiny;
     int width = Math.max(1, (w.rw > 0 ? w.rw : w.w) - w.tx), height = Math.max(1, (w.rh > 0 ? w.rh : w.h) - w.ty);
     int align = (w.flags & 0x200000) != 0 ? 1 : (w.flags & 0x400000) != 0 ? 2 : 0;
-    int textHeight = font.lines(text, width).size() * font.height;
+    int layoutWidth = labelWidth(font, text, width, height);
+    int textHeight = font.lines(text, layoutWidth).size() * font.height;
     float y = w.y + w.ty + ((w.flags & 0x4000000) != 0 ? height - textHeight
         : (w.flags & 0x2000000) != 0 ? (height - textHeight) / 2f : 0);
-    font.draw(c, text, w.x + w.tx + shift(w), y, width, align,
+    c.save();
+    c.translate(w.x + w.tx + shift(w), y);
+    c.scale(width / (float)layoutWidth, 1);
+    font.draw(c, text, 0, 0, layoutWidth, align,
         enabled ? hot == id ? 4 : w.type == 14 ? 3 : 2 : 5, 0);
+    c.restore();
+  }
+
+  // Keep the complete translation in fixed classic button artwork. Only narrow
+  // text that would otherwise wrap beyond the button; ordinary labels retain
+  // the original bitmap font's exact metrics and explicit line breaks.
+  static int labelWidth(NativeArt.Font font, String text, int width, int height) {
+    if (font.lines(text,width).size()*font.height<=height) return width;
+    int widest=width;
+    for(String line:PortText.text(text).split("\n"))widest=Math.max(widest,font.measure(line));
+    return widest;
   }
 
   void scrollbar(Canvas c,float x,float y,int height,float value) {

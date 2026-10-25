@@ -45,7 +45,7 @@ int main(int argc,char** argv) {try {
     ui.current_action_state.selection[0].push_back(drone);f->select(drone);ui.groups[2].push_back(ui.get_unit_id(drone));
     ui.ai_actions.selection[1].push_back(marine);ui.fog_snapshots[marine->sprite->index].valid=true;ui.fog_snapshots[marine->sprite->index].images.push_back(*marine->sprite->main_image);
     ui.rep_on=true;uint8_t command[]={26,0};ui.rep_record(0,command,2);ui.announced[ui.get_unit_id(marine).raw_value]=int(U::Terran_Marine);ui.events_seeded=true;
-    native_save::HostState host;host.bot_slot=1;host.bot_enabled=true;host.bot_frame=12;host.turns[2]={1,2,3};
+    native_save::HostState host;host.bot_slot=1;host.bot_enabled=false;host.bot_frame=12;host.turns[2]={1,2,3};
     auto saved=native_save::save(ui,&ui,host);native_save::verify(saved);
     if(argc>1&&std::string(argv[1])=="write") {std::ofstream out(argv[2],std::ios::binary);out.write((char*)saved.data(),saved.size());std::cout<<"PASS wrote persistent snapshot "<<saved.size()<<" bytes\n";return 0;}
     if(argc>1&&std::string(argv[1])=="read") {std::ifstream in(argv[2],std::ios::binary);saved.assign(std::istreambuf_iterator<char>(in),{});}
@@ -64,12 +64,15 @@ int main(int argc,char** argv) {try {
     require(ui.defence_alerts[1].wake==748&&ui.defence_alerts[1].source==id,"Pending base defence lost in save");
     auto again=native_save::save(ui,&ui,restoredHost);require(saved==again,"Snapshot did not round trip exactly");
     std::cout<<"PASS persistent graph, pools, orders, cargo links, bullets, creep, fog, replay, AI and mission round trip\n";
-    std::vector<uint8_t> legacy;native_save::Codec oldCodec(false,legacy,ui.st);oldCodec.version=1;
-    native_save::header(oldCodec,ui,&ui);oldCodec.io(host);oldCodec.world();oldCodec.presentation(ui,&ui);
-    uint64_t legacyHash=native_save::hash(legacy);oldCodec.io(legacyHash);
-    native_save::restore(ui,&ui,legacy);require(ui.defence_alerts[1].until==0,"Legacy save has phantom defence alert");
-    native_save::restore(ui,&ui,saved);drone=ui.get_unit(id);
-    std::cout<<"PASS schema 1 compatibility and schema 2 pending defence restore\n";
+    for(int version=1;version<=3;version++) {
+      std::vector<uint8_t> legacy;native_save::Codec oldCodec(false,legacy,ui.st);oldCodec.version=version;
+      native_save::header(oldCodec,ui,&ui);oldCodec.io(host);oldCodec.world();oldCodec.presentation(ui,&ui);
+      uint64_t legacyHash=native_save::hash(legacy);oldCodec.io(legacyHash);
+      native_save::restore(ui,&ui,legacy);if(version==1)require(ui.defence_alerts[1].until==0,"Legacy save has phantom defence alert");
+      require(ui.towns[1].lifts.empty()&&ui.pending_larva_morphs.empty(),"Legacy save has phantom airlift/input state");
+      native_save::restore(ui,&ui,saved);drone=ui.get_unit(id);
+    }
+    std::cout<<"PASS schema 1/2/3 compatibility and schema 4 round trip\n";
     // Continue a real pending trigger Wait after restoring, without repeating the action.
     f->game.triggers[0].actions[1].type=13;f->game.triggers[0].actions[1].extra_n=8;f->game.triggers[0].actions[1].num_n=4;
     for(int i=0;i<8;i++)ui.process_triggers();require(!f->st.trigger_waiting[0],"Pending mission wait never resumed");

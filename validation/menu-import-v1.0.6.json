@@ -1,0 +1,26 @@
+{
+  "version": "1.0.6",
+  "versionCode": 76,
+  "passed": true,
+  "physicalAndroid": false,
+  "fixtures": "Synthetic MPQs with the real 31-mission allowlist and valid 640x480 PCX; caller-owned actual archives are tested separately by run_encrypted_fonts.py.",
+  "output": "PASS 33 checks: normal import, 31 maps, full-size background, missing unused font, missing menu font, palette-only import, safe replacements, exact missing-file reports and fingerprints.",
+  "backgroundBytes": 308097,
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "c55926c62c6b67c41c17653d6ffe291555546ddf83c4980513e2b3475a19de89",
+    "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "3737770642666be7df65f5b962873041d44b1b0bdd7e3944e9894eb9679bd4f0",
+    "app/src/main/java/org/openbw/androidtest/GameContent.java": "47178f9645d2d36c582f8d887d40cb1b7374e82d8d5cd8d0849f04ce76b39276",
+    "app/src/main/java/org/openbw/androidtest/CampaignData.java": "0c428aa5ec5c490128569e99e9d494f4e4b84bb4c56eb669ad94e4ec8a503056",
+    "app/src/main/java/org/openbw/androidtest/CampaignCatalog.java": "5126fcd1d4b4f860b133ecd54da440cf2b5630e2b45641dcf753b0c0c7fdd321",
+    "app/src/main/java/org/openbw/androidtest/MusicData.java": "bd192578dccc51adfab7df8a1b6746ea1f8d1ce4f21af70011a96afdcfe1a421",
+    "app/src/main/java/org/openbw/androidtest/StoryData.java": "d9c3765a44cd1362c674d156e49f10755d25fa18be2194ab1a0dd65defab6bb0",
+    "app/src/main/java/org/openbw/androidtest/CinematicCatalog.java": "25ffead113330188b087c9cfb7da7cde75147e41d0fe901a8a44811bfa7fc594",
+    "app/src/main/java/org/openbw/androidtest/ProjectFiles.java": "b762639c742f539346bcc2e92810dfb46089949590e84aa81f0b23de5a073622",
+    "app/src/main/java/org/openbw/androidtest/DiagnosticFiles.java": "562ce7b0d24b4e89286519a2110f0dff6b85a9228313f6019354a75580a813e6",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "8a74c768c28b6c56cf58a8b97d45863154f5f4b13869d786ad0301332cb51ff6",
+    "tests/run_menu_import.py": "f20841de5cd0b3a9f57f635a6312499f2caecd02ce209ce366360541cc44985b"
+  },
+  "menuHandoff": "PASS partial import (font50 absent) -> sparse MPQ -> native decode -> both campaign menus: imported palette and all five menu fonts selected, no system font or palette recovery.",
+  "paletteOnlyHandoff": "PASS palette-only normal import -> sparse MPQ -> native decoder -> both menus retain campaign palette, use styled system fonts and have no artwork repair warning."
+}

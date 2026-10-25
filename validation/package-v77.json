@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "version": "1.0.7",
+  "versionCode": 77,
+  "apkSha256": "ebf225c08fbae02eb17a4f74a60d44fa76afbf92855bde6602abaedf2986d3bf",
+  "apkBytes": 2292414,
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "originalReleaseSigningIdentity": true,
+  "nativeEngineRebuilt": true,
+  "nativeEngineVersion": "1.0.7-build77",
+  "changedNativeAndAssetEntries": [
+    "lib/arm64-v8a/libopenbw.so",
+    "lib/arm64-v8a/libsmacker.so",
+    "lib/x86_64/libopenbw.so",
+    "lib/x86_64/libsmacker.so"
+  ],
+  "addedAssets": [
+    "assets/native/ui-languages.tsv"
+  ],
+  "unchangedNativeAndAssetEntries": 72,
+  "permissionsUnchanged": true,
+  "multiplayerProtocolBuild": 77,
+  "decoderBinariesRebuilt": true,
+  "decoderSourceUnchanged": true,
+  "jniMethodsVerified": 40,
+  "loadAlignmentBytes": 16384,
+  "librarySha256": {
+    "arm64-v8a/libopenbw.so": "2450574f291d836539930d62aa3b1ecc09809759f13c0ce8ac00687902f96f16",
+    "arm64-v8a/libsmacker.so": "673240725d24d5754a092d9ed5a1e03572a450acf156903763a62b0a1d09a9b6",
+    "x86_64/libopenbw.so": "7d80bb716616cabb3a02c4dbf26c08ea881428a821d6512445bf1b30b360129d",
+    "x86_64/libsmacker.so": "615bca00db5c797fac3975a85fbcd55f34520bfe43f768ceddc21af213287872"
+  },
+  "translationRows": 623,
+  "lintErrors": 0,
+  "lintWarnings": 10,
+  "physicalDevicesTested": false,
+  "regressionReports": [
+    "languages-v77.json",
+    "presentation-v77.json",
+    "native-v77.json",
+    "protocol-v77.json",
+    "archive-v77.json",
+    "encrypted-fonts-v1.0.7.json",
+    "menu-recovery-v1.0.7.json",
+    "menu-import-v1.0.7.json"
+  ],
+  "sourceSha256": {
+    "tests/check_revision77_package.py": "ff68fdf23882b3cd5a877787ee01f5aade26e47cc7fd1fff1ab482908dfd67b8"
+  }
+}

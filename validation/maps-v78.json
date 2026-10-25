@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "version": "1.0.8",
+  "physicalAndroid": false,
+  "output": "PASS 5111 checks: 2501 distinct maps, bounded streaming, sorted collection, reimport deduplication, progress, partial rejection, ZIP traversal, 10000-map/64-MiB limits and cleanup\n",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeMaps.java": "c1e60a0d6f679c5acca0f46dae41cf1b5399779a8e3e565800bf18e972f3f58c",
+    "app/src/main/java/org/openbw/androidtest/NativeMapCheck.java": "82caa4ae945471367741e54fe1a190d9a88db016cc0ce64fe3eecd3e11d91f3d",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "2fa7b8168e9c8da60fbffc3d3f7aadb551ed7e677dec639922d65605d9f6b85e",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "749b0fb034e18d29440f8d5b847c2a10e3a924a3a899dbef47ad3df0d0816725",
+    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "558dc2e112d9feef00df7f28f9efbbee6facfb34819231792304a71260f04afb",
+    "native/runtime.cpp": "31fd8a2ceb37ef26ab656b33e78c253f550a63f06bef2213e68e7340d771f369",
+    "tests/Maps78Test.java": "0a26ce1d6d3aa66395d157a990b2e1dbedcf781fd597bf8f3e7891c318a588fc"
+  },
+  "testedMaps": 2501,
+  "maxMaps": 10000,
+  "maxExpandedBytes": 8589934592,
+  "maxMapBytes": 67108864,
+  "heapLimitMiB": 128
+}

@@ -9,7 +9,7 @@ final class ControlSettings {
   int dragMode, holdMs, radius, doubleTapMs, tooltipMs, miniHoldMs, placementOffset, selectionButton;
   float panSpeed, pinchSpeed;
   boolean doubleTap, holdSelect, attackTap, pinchZoom, reversePan, minimapOrders,
-      tooltips, confirmBuild, placementButtonsFollow, placementScroll, groundOrders, controlGroups, commandModeButton;
+      tooltips, confirmBuild, placementButtonsFollow, placementScroll, groundOrders, controlGroups, commandModeButton, originalLarvae, singleLarvaMorph;
 
   ControlSettings() { preset("Comfortable"); }
 
@@ -22,6 +22,7 @@ final class ControlSettings {
     panSpeed = pinchSpeed = 1;
     doubleTap = holdSelect = attackTap = pinchZoom = tooltips = confirmBuild = placementButtonsFollow = placementScroll = true;
     minimapOrders = false; reversePan = false; groundOrders = true; selectionButton = 1; controlGroups = false; commandModeButton = true;
+    originalLarvae = true; singleLarvaMorph = false;
   }
 
   void load(SharedPreferences prefs) {
@@ -34,6 +35,8 @@ final class ControlSettings {
       groundOrders = j.optBoolean("groundOrders", true);
       controlGroups = j.optBoolean("controlGroups", false);
       commandModeButton = j.optBoolean("commandModeButton", true);
+      originalLarvae = j.optBoolean("originalLarvae", true);
+      singleLarvaMorph = j.optBoolean("singleLarvaMorph", false);
       dragMode = clamp(j.optInt("dragMode", dragMode), 0, 1);
       holdMs = clamp(j.optInt("holdMs", holdMs), 100, 600);
       radius = clamp(j.optInt("radius", radius), 0, 40);
@@ -66,7 +69,8 @@ final class ControlSettings {
           .put("doubleTap", doubleTap).put("holdSelect", holdSelect).put("attackTap", attackTap)
           .put("pinchZoom", pinchZoom).put("reversePan", reversePan)
           .put("minimapOrders", minimapOrders).put("tooltips", tooltips).put("confirmBuild", confirmBuild)
-          .put("placementButtonsFollow", placementButtonsFollow).put("placementScroll", placementScroll);
+          .put("placementButtonsFollow", placementButtonsFollow).put("placementScroll", placementScroll)
+          .put("originalLarvae", originalLarvae).put("singleLarvaMorph", singleLarvaMorph);
       prefs.edit().putString("touch-controls", j.toString()).apply();
     } catch (Exception e) { throw new IllegalStateException(e); }
   }

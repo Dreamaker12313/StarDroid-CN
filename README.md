@@ -6,11 +6,13 @@
 
 StarDroid adapts the OpenBW engine for Android devices. Play campaigns, set up custom battles against computer opponents, or host a nearby multiplayer match. The interface uses the classic artwork, fonts, music, and sounds imported from your own game files.
 
-**Version 1.0.1 · Android 8.0+ · ARM64 and x86-64**
+**Version 1.0.8 · Android 8.0+ · ARM64 and x86-64**
 
 Put together by **ToadWarrior**.
 
-[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.1/StarDroid-1.0.1.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0.1) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.1/StarDroid-1.0.1-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
+[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/StarDroid-1.0.8.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0.8) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/StarDroid-1.0.8-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
+
+Version **1.0.8** imports map ZIPs with up to 10,000 maps, adds an optional **One larva morph per press** control, offers English, Russian, German, Spanish and French UI, and adds shared campaign/custom-game AI transport handling for Dropships, Shuttles and upgraded Overlords. Original fonts, protected dialogue, clean menus and **Diagnostics / credits** remain. Install `StarDroid-1.0.8.apk` over the existing app. [Changes and update steps](docs/RELEASE-1.0.8.md).
 
 ## Features
 
@@ -27,7 +29,7 @@ StarDroid is an unofficial fan project. **Game data is not included.** You need 
 
 ## Install
 
-1. Download **[StarDroid-1.0.1.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.1/StarDroid-1.0.1.apk)** on your Android device. The source-code ZIP is for development, not installation.
+1. Download **[StarDroid-1.0.8.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/StarDroid-1.0.8.apk)** on your Android device. The source-code ZIP is for development, not installation.
 2. Open the APK on your Android device. If Android asks, allow the browser or file manager you are using to install apps from that source.
 3. Launch **StarDroid**. The import screen appears automatically when required files are missing.
 4. Tap **Import game files**, choose the files below, and let importing finish. You can select multiple files if your file picker supports it.
@@ -47,7 +49,7 @@ Copy these from your own classic installation or installation media to a locatio
 | Original `Install.exe` archives | Also accepted as sources of installation-media content. |
 | Previously exported mission ZIPs | Supported for importing compatible campaign bundles. |
 
-Capitalization of the three required MPQ filenames does not matter. Import the original archives; you do not need to unpack their internal files. The core MPQs alone do not supply every campaign mission and movie. **Installed content** shows what is available and what is missing. The same import screen is available later through **App Options**.
+Capitalization of the three required MPQ filenames does not matter. Duplicate download suffixes such as `StarDat(1).mpq` are accepted. Import the original archives; you do not need to unpack their internal files. The core MPQs alone do not supply every campaign mission and movie. **Installed content** shows what is available and what is missing. The same import screen is available later through **App Options**.
 
 This release targets classic game data. A modern launcher installation or Remastered-only assets are not a documented substitute for these files. No game-file downloads are provided here.
 
@@ -58,7 +60,7 @@ This release targets classic game data. A modern launcher installation or Remast
 - Enough free space for imported archives and campaign/media content; these are much larger than the APK.
 - Bluetooth for local multiplayer. Wi-Fi Direct is optional and depends on Android version and hardware support.
 
-The [download checksums](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.1/SHA256SUMS.txt) record the SHA-256 of the published APK and source archive.
+The [download checksums](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/SHA256SUMS.txt) record the SHA-256 of the published APK and source archive.
 
 ## Quick start
 
@@ -78,7 +80,7 @@ Open **Custom Game**, choose or import a map, and set the game type, speed, diff
 
 ### Local multiplayer
 
-1. Install the **same release build** and compatible game data on every device. Some updates still display version 1.0, so use the same release APK.
+1. Install the **same release build** and compatible game data on every device. Build 78 has a simulation compatibility check; use the same release APK on every device.
 2. Open **Multiplayer**, choose a player name and expansion, then select **Bluetooth + Wi-Fi Direct** or **Bluetooth**.
 3. On the host, choose **Host Game**, select a map and settings, and create the lobby.
 4. On other devices, choose **Join Game**, select the host, and join. Accept Android pairing prompts and confirm that the displayed pairing codes match.
@@ -134,7 +136,7 @@ Tassadar and Zeratul can merge into their hero Archon. Both hero slots remain oc
 - If an APK will not install over an existing app, check CPU architecture and signing identity. Independently signed builds cannot replace the distributed APK in place.
 - Replay loading/export is not a supported player feature in this release.
 
-More details: [player guide](docs/PLAYER-GUIDE.md) · [current changes](docs/RELEASE-1.0.1.md) · [1.0 changes](docs/FIXES-1.0.md) · [validation record](VALIDATION.md).
+More details: [player guide](docs/PLAYER-GUIDE.md) · [current changes](docs/RELEASE-1.0.8.md) · [1.0 changes](docs/FIXES-1.0.md) · [validation record](VALIDATION.md).
 
 ## Development
 
@@ -146,7 +148,7 @@ On an x86-64 Linux development machine with Python 3.10+, JDK 17, Git, and `patc
 python3 scripts/build.py
 ```
 
-The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.1.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
+The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.8.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
 
 Automated checks cover upgrade progression, command cards, touch routing, saves, multiplayer protocol behavior, UI layouts, and screen-edge rendering with AddressSanitizer and guarded buffers. These do not replace physical-device checks; installation, radio interoperability, touch, audio, and full campaign playthroughs need broader device testing. See [VALIDATION.md](VALIDATION.md) for exact coverage and limitations.
 

@@ -63,7 +63,7 @@ static void net_restore(std::vector<uint8_t>& bytes) {
  g_ui->my_player=local;g_ui->my_race=race;g_ui->kit=bwgame::kit_for(race);g_ui->fog_player=local;
  // Simulation command selections belong to all players and are retained. UI state
  // and unsubmitted taps belong to one device and must never leak to its opponent.
- g_ui->current_selection_clear();g_ui->groups={};g_ui->outgoing.clear();g_ui->clear_pending();g_ui->targeting=false;
+ g_ui->current_selection_clear();g_ui->groups={};g_ui->outgoing.clear();g_ui->pending_larva_morphs.clear();g_ui->clear_pending();g_ui->targeting=false;
  g_ui->screen_pos=g_ui->game_st.start_locations[local]-bwgame::xy(320,240);g_ui->clamp_viewport();
  if(saved_player!=local){g_ui->fog_snapshots.assign(2500,{});for(int p=0;p<12;p++)for(auto* u:bwgame::ptr(g_ui->st.player_units[p]))if(u->sprite&&g_ui->unit_persists_in_fog(u)&&!g_ui->unit_hidden_by_fog(u))g_ui->snapshot_fog_sprite(u->sprite);}g_ui->events_seeded=false;g_ui->last_life.clear();g_ui->last_stim.clear();g_ui->announced.clear();g_ui->alerts.clear();g_ui->advisor_queue.clear();
  g_ui->outcome=0;g_ui->rep_on=false;g_ui->rep_out.clear();net_remaining=0;
@@ -89,6 +89,8 @@ static uint64_t net_hash() {
   mix(g_campaign->ai_clock);mix(g_campaign->ai_random);
   for(auto& t:g_campaign->threads){mix(t.owner);mix(t.pc);mix(t.wake);mix(t.file);mix(t.id);mix(t.done);for(auto v:t.calls)mix(v);}
   for(auto& t:g_campaign->towns){mix(t.active);mix(t.center.x);mix(t.center.y);mix(t.built);mix(t.trained);mix(t.attacks);mix(t.orders);for(auto& q:t.builds){mix(q.type);mix(q.amount);mix(q.priority);}}
+  for(auto& town:g_campaign->towns)for(auto& lift:town.lifts) {mix(lift.transport.raw_value);mix(lift.phase);mix(lift.started);mix(lift.retry);mix(lift.build_type);mix(lift.target.x);mix(lift.target.y);mix(lift.landing.x);mix(lift.landing.y);for(auto id:lift.passengers)mix(id.raw_value);}
+
  }
 
  for(int owner=0;owner<12;owner++) {

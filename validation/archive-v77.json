@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "version": "1.0.7",
+  "versionCode": 77,
+  "syntheticCases": 110,
+  "cases": [
+    "encrypted padded tails",
+    "encrypted unpadded tails",
+    "plain raw sectors",
+    "word-aligned sectors",
+    "nonzero padding rejection",
+    "empty files and multi-sector boundaries",
+    "raw files with no compression/offset table"
+  ],
+  "preparedDataLoadingSha256": "88f2d4b45b2abff19cbf5748043f96834ce0ebac5f1797dcc029666115635594",
+  "sourceSha256": {
+    "tests/test_encrypted_sector77.py": "f44bfb8c9c7408b6801368d2fb255a47e58147c177816f97c0ae1ecd385ce9d7",
+    "patches/native-polish77.patch": "5ba1e0dabec615513824d8d58312aa31fc127c715141b20a41079c2f227d0643",
+    "scripts/prepare_native.py": "ac328421a16521da0a908b6554d8db6d1dd6590cecac1c92c41da3ecda040590"
+  }
+}

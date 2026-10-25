@@ -1,0 +1,326 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -453,7 +453,16 @@
+ 		// Every applied action is also recorded, so the replay matches the game exactly —
+ 		// including in multiplayer, where the peer's actions come through here too.
+ 		apply_bw_commands(*this, owner, data, size,
+-			[this](int o, const uint8_t* d, size_t n) { rep_record(o, d, n); });
++			[this](int o, const uint8_t* d, size_t n) {
++                rep_record(o, d, n);
++                if(o==my_player && n && d[0]==35) {
++                    // apply_bw_commands invokes this before read_action; selection is retained.
++                    for(auto* u:action_functions(st,current_action_state).selected_units(o)) {
++                        auto id=get_unit_id(u);
++                        pending_larva_morphs.erase(std::remove(pending_larva_morphs.begin(),pending_larva_morphs.end(),id),pending_larva_morphs.end());
++                    }
++                }
++            });
+ 	}
+ 
+ 	// Push the UI's visual selection into the sim's per-player selection, capped to BW's
+@@ -481,6 +490,9 @@
+ 	}
+ 
+ 	unit_t* primary_selected() {
++        // Keep morph buttons available after one selected larva becomes an egg.
++        if(single_larva_morph)for(auto id:current_selection)if(auto* u=get_unit(id))
++            if(u->owner==my_player&&!unit_dying(u)&&unit_is(u,UnitTypes::Zerg_Larva))return u;
+ 		for (auto uid : current_selection) {
+ 			unit_t* u = get_unit(uid);
+ 			if (u && u->owner == my_player) return u;
+@@ -694,6 +706,9 @@
+ 	// Select up to 12 of the player's units of a type — handy for the fiddly-to-click
+ 	// ones (workers, and especially Zerg larvae clustered at the hatchery).
+ 	bool original_larvae_selection = true;
++    bool single_larva_morph=false;
++    // Local input reservations last only until this player's morph command is applied.
++    a_vector<unit_id> pending_larva_morphs;
+ 	void select_units_of_type(UnitTypes type) {
+ 		unit_t* parent = primary_selected();
+ 		bool local = original_larvae_selection && type == UnitTypes::Zerg_Larva;
+@@ -2361,7 +2376,18 @@
+ 			                      }
+ 			                  } else { sync_selection(); cmd_type(31, c.ut); }
+ 			                  break;
+-			case C_MORPH:     sync_selection(); cmd_type(35, c.ut); break;
++			case C_MORPH:
++                if(single_larva_morph && primary_selected() && unit_is(primary_selected(),UnitTypes::Zerg_Larva)) {
++                    pending_larva_morphs.erase(std::remove_if(pending_larva_morphs.begin(),pending_larva_morphs.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||!unit_is(u,UnitTypes::Zerg_Larva);}),pending_larva_morphs.end());
++                    for(auto id:current_selection) {
++                        auto* larva=get_unit(id);
++                        if(!larva||larva->owner!=my_player||unit_dying(larva)||!unit_is(larva,UnitTypes::Zerg_Larva)
++                            ||!larva->build_queue.empty()||std::find(pending_larva_morphs.begin(),pending_larva_morphs.end(),id)!=pending_larva_morphs.end())continue;
++                        uint16_t raw=id.raw_value;cmds.select(&raw,1);cmd_type(35,c.ut);
++                        pending_larva_morphs.push_back(id);break;
++                    }
++                } else {sync_selection();cmd_type(35,c.ut);}
++                break;
+ 			case C_MORPHBLDG: sync_selection(); cmd_type(53, c.ut); break;
+ 			case C_SELECT:    select_units_of_type(c.ut); break;
+ 			case C_RALLY:     start_target(T_RALLY); break;
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -9,6 +9,10 @@
+ struct campaign_ai : play_ui {
+     using play_ui::play_ui;
+     struct request { int type, amount, priority; };
++    struct airlift {
++        unit_id transport; a_vector<unit_id> passengers;
++        xy target, landing; int phase=0, started=0, retry=0, build_type=-1;
++    };
+     struct town {
+         bool active = false, campaign = false, supply = true;
+         xy center;
+@@ -16,6 +20,7 @@
+         std::array<int,228> defence{}, wave{}, limits{};
+         int nuke_rate=0;
+         a_vector<unit_id> attackers;
++        a_vector<airlift> lifts;
+         int built = 0, trained = 0, attacks = 0, orders = 0, opcodes = 0;
+     };
+     struct thread {
+@@ -132,6 +137,133 @@
+         if(best)return best->sprite->position;
+         return buildings ? ai_target(owner,from,false):from;
+     }
++    bool ai_lifting(int owner,unit_t* u) {
++        if(owner<0||owner>=8)return false;
++        auto id=get_unit_id(u);
++        for(auto& lift:towns[owner].lifts)if(lift.transport==id||std::find(lift.passengers.begin(),lift.passengers.end(),id)!=lift.passengers.end())return true;
++        return false;
++    }
++    bool ai_transport(unit_t* u) {
++        return !unit_dying(u)&&u_completed(u)&&u_flying(u)&&!ut_building(u)&&!unit_is_disabled(u)&&unit_provides_space(u);
++    }
++    bool ai_landing(unit_t* cargo,xy target,xy from,xy& result,int offset=0) {
++        int best=0x7fffffff;bool found=false;
++        // A clear tile in the destination's ground component; avoid unloading
++        // onto buildings/water. Prefer the near side of the base, with room to fan out.
++        for(int y=-16;y<=16;++y)for(int x=-16;x<=16;++x) {
++            xy pos=(target/32+xy(x,y))*32+xy(16,16);
++            if(!unit_type_can_fit_at(cargo->unit_type,pos)||!is_reachable(pos,target)||is_blocked(cargo,pos).first)continue;
++            int d=xy_length(pos-target);
++            int score=std::abs(d-(256+offset%4*64))*3+xy_length(pos-from);
++            if(score<best){best=score;result=pos;found=true;}
++        }
++        return found;
++    }
++    void ai_transport_requests(int owner,int spaces,a_vector<request>& req) {
++        if(spaces<=0)return;
++        auto race=st.players[owner].race;int type=race==race_t::terran?11:race==race_t::protoss?69:42;
++        if(!game_st.unit_type_allowed[owner][UnitTypes(type)])return;
++        a_vector<request> transport;
++        ai_request(transport,type,std::min(4,(spaces+7)/8),110);
++        if(race==race_t::terran)ai_melee_prerequisites(transport);
++        else if(race==race_t::protoss)ai_protoss_prerequisites(transport);
++        else {
++            if(!player_has_upgrade(owner,UpgradeTypes::Ventral_Sacs)) {
++                if(game_st.max_upgrade_levels[owner][UpgradeTypes::Ventral_Sacs]==0)return;
++                ai_request(towns[owner].upgrades,int(UpgradeTypes::Ventral_Sacs),1,110);
++                ai_request(transport,132,1,110);ai_zerg_prerequisites(owner,transport);
++            }
++        }
++        for(auto item:transport)if(game_st.unit_type_allowed[owner][UnitTypes(item.type)])ai_request(req,item.type,item.amount,item.priority);
++    }
++    unit_t* ai_available_transport(int owner,xy from) {
++        unit_t* best=nullptr;int distance=0x7fffffff;
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(!ai_transport(u)||ai_lifting(owner,u)||!loaded_units(u).empty()||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
++            auto order=u->order_type->id;
++            if(!ai_idle(u)&&order!=Orders::Follow&&order!=Orders::AttackMove&&!(order==Orders::PickupIdle&&!u->order_target.unit))continue;
++            int d=xy_length(u->position-from);if(d<distance){distance=d;best=u;}
++        }
++        return best;
++    }
++    xy ai_drop_target(int owner,unit_t* u) {
++        if(u->order_type->id==Orders::AttackMove&&is_in_map_bounds(u->order_target.pos))return u->order_target.pos;
++        return ai_target(owner,towns[owner].center);
++    }
++    void ai_register_blocked_attacks(int owner) {
++        // Trigger Order actions and area-attack scripts also use AttackMove.
++        // They may run without a production town; ferry their existing army too.
++        for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&u_completed(u)&&!u_flying(u)&&!ut_building(u)&&!ut_worker(u)
++            &&!ut_turret(u)&&!u_loaded(u)&&!us_hidden(u)&&u->order_type->id==Orders::AttackMove&&!ai_attacking(towns[owner],u)
++            &&is_in_map_bounds(u->order_target.pos)&&!is_reachable(u,u->order_target.pos))towns[owner].attackers.push_back(get_unit_id(u));
++    }
++    void ai_airlifts(int owner,a_vector<request>& req) {
++        auto& a=towns[owner];
++        for(auto it=a.lifts.begin();it!=a.lifts.end();) {
++            auto& lift=*it;auto* ship=get_unit(lift.transport);
++            if(!ship||unit_dying(ship)||ship->owner!=owner) {it=a.lifts.erase(it);continue;}
++            lift.passengers.erase(std::remove_if(lift.passengers.begin(),lift.passengers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),lift.passengers.end());
++            if(lift.passengers.empty()){it=a.lifts.erase(it);continue;}
++            if(!ai_transport(ship)){++it;continue;}
++            if(lift.phase==0) {
++                unit_t* next=nullptr;int loaded=0;
++                for(auto id:lift.passengers) {auto* u=get_unit(id);if(u_loaded(u)){++loaded;continue;}if(!next)next=u;}
++                if(!next || ai_clock-lift.started>=720) {
++                    // Do not let one blocked/oversized passenger stall a partly full ship.
++                    lift.passengers.erase(std::remove_if(lift.passengers.begin(),lift.passengers.end(),[&](unit_id id){auto* u=get_unit(id);if(u_loaded(u))return false;issue_order(u,false,get_order_type(Orders::Stop),{});return true;}),lift.passengers.end());
++                    if(!loaded){issue_order(ship,false,get_order_type(Orders::Stop),{});it=a.lifts.erase(it);continue;}
++                    lift.phase=1;lift.started=ai_clock;lift.retry=ai_clock+240;
++                    issue_order(ship,false,get_order_type(Orders::MoveUnload),{lift.landing,nullptr});
++                } else if(!u_order_not_interruptible(next)&&!u_iscript_nobrk(next)) {
++                    if(u_burrowed(next)) {if(next->order_type->id!=Orders::Unburrowing)issue_order(next,false,get_order_type(Orders::Unburrowing),{});}
++                    else if(unit_is_sieged_tank(next)) {action_functions af(st,ai_actions);af.action_select(owner,next);af.action_unsiege(owner,false);}
++                    else if(unit_can_load_target(ship,next)) {
++                        if(ship->order_target.unit!=next)issue_order(ship,false,get_order_type(Orders::PickupTransport),{next->position,next});
++                        if(next->order_type->id!=Orders::EnterTransport)issue_order(next,false,get_order_type(Orders::EnterTransport),{ship->position,ship});
++                    }
++                }
++            } else {
++                for(auto cargo=lift.passengers.begin();cargo!=lift.passengers.end();) {
++                    auto* u=get_unit(*cargo);
++                    if(u_loaded(u)){++cargo;continue;}
++                    if(lift.build_type>=0) {
++                        auto* type=get_unit_type(UnitTypes(lift.build_type));xy tile=(lift.target-type->placement_size/2)/32;
++                        action_functions af(st,ai_actions);af.action_select(owner,u);
++                        if(af.action_build(owner,get_order_type(kit_for(st.players[owner].race).build_order),type,{size_t(tile.x),size_t(tile.y)}))++a.built;
++                    } else issue_order(u,false,get_order_type(Orders::AttackMove),{lift.target,nullptr});
++                    cargo=lift.passengers.erase(cargo);
++                }
++                if(lift.passengers.empty()) {issue_order(ship,false,get_order_type(Orders::Stop),{});it=a.lifts.erase(it);continue;}
++                if(ai_clock>=lift.retry && ship->order_type->id!=Orders::MoveUnload) {
++                    // Retry a clear adjacent landing after dynamic blockers move.
++                    auto* cargo=get_unit(lift.passengers.front());xy pos;
++                    if(ai_landing(cargo,lift.target,ship->position,pos,(ai_clock-lift.started)/240))lift.landing=pos;
++                    issue_order(ship,false,get_order_type(Orders::MoveUnload),{lift.landing,nullptr});lift.retry=ai_clock+240;
++                }
++            }
++            ++it;
++        }
++        int spaces=0;
++        for(auto id:a.attackers) {
++            auto* u=get_unit(id);if(!u)continue;xy target=ai_drop_target(owner,u);
++            if(unit_dying(u)||u->owner!=owner||u_flying(u)||u_loaded(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||is_reachable(u,target))continue;
++            spaces+=u->unit_type->space_required;
++            if(ai_lifting(owner,u)||a.lifts.size()>=4)continue;
++            auto* ship=ai_available_transport(owner,u->position);if(!ship)continue;
++            airlift lift;lift.transport=get_unit_id(ship);lift.target=target;lift.started=ai_clock;
++            if(!ai_landing(u,target,u->position,lift.landing))continue;
++            int capacity=int(ship->unit_type->space_provided);
++            for(auto otherId:a.attackers) {
++                auto* cargo=get_unit(otherId);
++                if(!cargo||unit_dying(cargo)||cargo->owner!=owner||!u_completed(cargo)||u_flying(cargo)||u_loaded(cargo)||us_hidden(cargo)
++                    ||ut_building(cargo)||ut_worker(cargo)||ai_lifting(owner,cargo)||is_reachable(cargo,target)||!is_reachable(ai_drop_target(owner,cargo),target)
++                    ||xy_length(cargo->position-u->position)>384||int(cargo->unit_type->space_required)>capacity)continue;
++                capacity-=cargo->unit_type->space_required;lift.passengers.push_back(otherId);
++            }
++            if(!lift.passengers.empty())a.lifts.push_back(lift);
++        }
++        ai_transport_requests(owner,spaces,req);
++    }
+     void ai_attack(int owner,bool all=false) {
+         auto& a=towns[owner]; auto need=a.wave; xy target=ai_target(owner,a.center);
+         int sent=0;
+@@ -142,7 +274,7 @@
+             if(!all && need[type]<=0)continue;
+             if(all&&melee_ai&&ai_count(owner,type,true,true)<=a.defence[type])continue;
+             if(u_order_not_interruptible(u) || u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
+-            issue_order(u,false,get_order_type(Orders::AttackMove),{target,nullptr});
++            issue_order(u,false,get_order_type(is_reachable(u,target)?Orders::AttackMove:Orders::Stop),{target,nullptr});
+             a.attackers.push_back(get_unit_id(u)); --need[type]; ++sent;
+         }
+         if(sent){++a.attacks;ai_trace=format("P%d wave %d: %d units at frame %d",owner+1,a.attacks,sent,st.current_frame);}
+@@ -259,7 +391,7 @@
+         return out;
+     }
+     bool ai_busy_worker(unit_t* u) {
+-        return unit_dying(u)||!ut_worker(u)||!u_completed(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)
++        return u_loaded(u)||ai_lifting(u->owner,u)||unit_dying(u)||!ut_worker(u)||!u_completed(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)
+             ||!u->build_queue.empty()||u->current_build_unit||u->order_type->id==Orders::ConstructingBuilding;
+     }
+     void ai_mine_melee(int owner) {
+@@ -352,6 +484,7 @@
+         }
+     }
+     bool ai_expand(int owner) {
++        for(auto& lift:towns[owner].lifts)if(lift.build_type>=0)return false;
+         const auto race=st.players[owner].race;const int depot=race==race_t::zerg?131:race==race_t::protoss?154:106;
+         // A worker only spends the depot price when construction starts.
+         // Keep that money reserved during the entire approach, including ticks
+@@ -403,7 +536,19 @@
+                 if(u->order_type->id==Orders::Move)d-=100000;
+                 if(d<distance&&can_place_building(u,owner,cc,pos,false,true,true)){distance=d;worker=u;}
+             }
+-            if(!worker)continue;
++            if(!worker) {
++                if(!can_place_building(nullptr,owner,cc,pos,false,true,true))continue;
++                for(auto* u:workers)if(!is_reachable(u,pos)) {
++                    auto* ship=ai_available_transport(owner,u->position);
++                    if(!ship) {
++                        ai_transport_requests(owner,1,towns[owner].builds);return false;
++                    }
++                    airlift lift;lift.transport=get_unit_id(ship);lift.target=pos;lift.started=ai_clock;lift.build_type=depot;
++                    if(!ai_landing(u,pos,u->position,lift.landing))continue;
++                    lift.passengers.push_back(get_unit_id(u));towns[owner].lifts.push_back(lift);return false;
++                }
++                continue;
++            }
+             // Reserve the depot cost once a legal expansion site exists.
+             // Army replacement must not spend it again every manager tick.
+             if(!has_available_resources_for(owner,cc))return true;
+@@ -643,7 +788,7 @@
+     void ai_protoss_support(int owner) {
+         action_functions af(st,ai_actions);
+         for(auto* u:ptr(st.player_units[owner])) {
+-            if(unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
++            if(unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)||ai_lifting(owner,u))continue;
+             // Carrier and Reaver ammunition is purchased through normal actions.
+             if(unit_is_carrier(u)||unit_is_reaver(u)) {af.action_select(owner,u);af.action_train_fighter(owner);continue;}
+             if(!unit_is(u,UnitTypes::Protoss_Observer)&&!unit_is(u,UnitTypes::Protoss_High_Templar)&&!unit_is(u,UnitTypes::Protoss_Dark_Archon))continue;
+@@ -714,7 +859,7 @@
+     void ai_zerg_support(int owner) {
+         action_functions af(st,ai_actions);int detectors=0;
+         for(auto* u:ptr(st.player_units[owner])) {
+-            if(unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
++            if(unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)||ai_lifting(owner,u))continue;
+             bool overlord=unit_is(u,UnitTypes::Zerg_Overlord),queen=unit_is(u,UnitTypes::Zerg_Queen),defiler=unit_is(u,UnitTypes::Zerg_Defiler);
+             if(!overlord&&!queen&&!defiler)continue;
+             // Keep most supply providers at home; send two detectors with the army.
+@@ -828,13 +973,15 @@
+         return nullptr;
+     }
+     void ai_manage(int owner) {
+-        auto& a=towns[owner];if(!a.active)return;
++        auto& a=towns[owner];
+         a.attackers.erase(std::remove_if(a.attackers.begin(),a.attackers.end(),[&](unit_id id){auto* u=get_unit(id);return !u||unit_dying(u)||u->owner!=owner;}),a.attackers.end());
++        auto req=a.builds;ai_register_blocked_attacks(owner);ai_airlifts(owner,req);
++        if(!a.active)return;
+         ai_clear_expansion_path(owner);
+         ai_mine(owner);
+         // Reissue only idle attackers, allowing normal targeting/pathfinding to run.
+-        for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&ai_idle(u)&&!u_burrowed(u))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+-        auto req=a.builds;bool reserveExpansion=false;
++        for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&!u_loaded(u)&&!ai_lifting(owner,u)&&ai_idle(u)&&!u_burrowed(u)&&is_reachable(u,ai_target(owner,u->position)))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
++        bool reserveExpansion=false;
+         ai_hero_requests(owner,req);
+         auto allowed_requests=[&](){req.erase(std::remove_if(req.begin(),req.end(),[&](const request& r){return !game_st.unit_type_allowed[owner][UnitTypes(r.type)];}),req.end());};
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+@@ -979,7 +1126,7 @@
+                 ||unit_dying(u)||!u_completed(u)||unit_is_disabled(u)||u_loaded(u)||us_hidden(u)
+                 ||u_order_not_interruptible(u)||u_iscript_nobrk(u))continue;
+             bool escort=u->order_type->id==Orders::Follow;
+-            if(!ai_idle(u)&&!escort)continue;
++            if(ai_lifting(owner,u)||(!ai_idle(u)&&!escort))continue;
+             int d=units_distance(u,victim);if(d<distance){distance=d;detector=u;}
+         }
+         if(detector){af.action_select(owner,detector);af.action_order(owner,get_order_type(Orders::Move),source->position,nullptr,nullptr,false);}
+@@ -1035,7 +1182,7 @@
+     void ai_lurkers(int owner) {
+         for (auto* u:ptr(st.player_units[owner])) {
+             if (!unit_is(u,UnitTypes::Zerg_Lurker) || unit_dying(u) || !u_completed(u)
+-                || us_hidden(u) || unit_is_disabled(u)) continue;
++                || us_hidden(u) || unit_is_disabled(u) || ai_lifting(owner,u)) continue;
+             auto order=u->order_type->id;
+             if (order==Orders::Burrowing || order==Orders::Unburrowing || u_iscript_nobrk(u)) continue;
+             // A scripted Move must reach its location, including the True Colors
+@@ -1058,7 +1205,7 @@
+         action_functions af(st,ai_actions);
+         for(auto* u:ptr(st.player_units[owner])) {
+             if(!unit_is_tank(u)||ut_turret(u)||unit_dying(u)||!u_completed(u)
+-                ||us_hidden(u)||unit_is_disabled(u)||u_iscript_nobrk(u))continue;
++                ||us_hidden(u)||unit_is_disabled(u)||u_iscript_nobrk(u)||ai_lifting(owner,u))continue;
+             auto order=u->order_type->id;
+             if(order==Orders::Move||order==Orders::Sieging||order==Orders::Unsieging)continue;
+             unit_t* target=nullptr;

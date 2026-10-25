@@ -1,5 +1,5 @@
 #pragma once
-// Portable snapshot schema 3 (also reads schemas 1/2). Never persist process pointers, STL storage or padding.
+// Portable snapshot schema 4 (also reads schemas 1/2/3). Never persist process pointers, STL storage or padding.
 // Pools are allocated before references are decoded; intrusive list order and free
 // slot generations are retained because both affect deterministic continuation.
 #include <unordered_map>
@@ -22,7 +22,7 @@ template<class T> struct Table {
     uint64_t id(const T* p) {if(!p)return 0;auto i=ids.find(p);check(i!=ids.end(),"Unregistered reference in saved game");return i->second;}
 };
 struct Codec {
-    uint64_t version=3;
+    uint64_t version=4;
     bool reading;std::vector<uint8_t>& bytes;size_t pos=0;state& st;
     Codec(bool r,std::vector<uint8_t>& b,state& s):reading(r),bytes(b),st(s) {}
     template<class T> std::enable_if_t<std::is_integral<T>::value> io(T& v) {
@@ -108,7 +108,8 @@ struct Codec {
     void io(action_state& v) { fields(v.player_id,v.actions_data_position,v.next_action_frame,v.selection,v.control_groups); }
     void io(campaign_ai::defence_alert& v) { fields(v.source,v.victim,v.wake,v.until); }
     void io(campaign_ai::request& v) { fields(v.type,v.amount,v.priority); }
-    void io(campaign_ai::town& v) { fields(v.active,v.campaign,v.supply,v.center,v.builds,v.techs,v.upgrades,v.defence,v.wave,v.limits,v.nuke_rate,v.attackers,v.built,v.trained,v.attacks,v.orders,v.opcodes); }
+    void io(campaign_ai::airlift& v) { fields(v.transport,v.passengers,v.target,v.landing,v.phase,v.started,v.retry,v.build_type);check(v.phase>=0&&v.phase<=1&&v.build_type>=-1&&v.build_type<228&&v.passengers.size()<=8); }
+    void io(campaign_ai::town& v) { fields(v.active,v.campaign,v.supply,v.center,v.builds,v.techs,v.upgrades,v.defence,v.wave,v.limits,v.nuke_rate,v.attackers,v.built,v.trained,v.attacks,v.orders,v.opcodes);if(version>=4)sequence(v.lifts,4); }
     void io(campaign_ai::thread& v) { fields(v.owner,v.pc,v.wake,v.file,v.calls,v.id,v.pos,v.done); }
     void io(play_ui::alert_t& v) { fields(v.unit,v.pos,v.ttl,v.kind); }
     void io(play_ui::log_msg& v) { fields(v.text,v.age); }
@@ -176,6 +177,7 @@ struct Codec {
         fields(u.last_event_pos,u.have_last_event,u.last_life,u.last_stim,u.announced,u.ready_notifications,u.last_ready_sound,u.last_ready_type);
         fields(u.events_seeded,u.msg_log,u.player_had_units,u.player_eliminated,u.alert_cooldown,u.event_tick,u.advisor_queue,u.technology_notifications);
         fields(u.rescue_notifications,u.last_rescue_sound,u.fog_snapshots,u.rep,u.rep_on);
+        if(version>=4)sequence(u.pending_larva_morphs,12);
         if(c) {
             fields(c->units_paused,c->objectives,c->countdown_ms,c->timer_paused,c->deaths,c->scores,c->counted_deaths,c->switches);
             fields(c->kills,c->events,c->towns,c->threads,c->spawned,c->ai_actions,c->ai_error,c->ai_trace);
@@ -193,7 +195,7 @@ inline uint64_t assets_signature(play_ui& ui,campaign_ui* campaign) {
 inline void header(Codec& c,play_ui& ui,campaign_ui* campaign) {
     uint64_t magic=0x3156415357424f,version=c.version,signature=assets_signature(ui,campaign);bool isCampaign=campaign;
     auto expected=signature;c.fields(magic,version,signature,isCampaign);
-    check(magic==0x3156415357424f&&(version>=1&&version<=3),"Unsupported saved game version");
+    check(magic==0x3156415357424f&&(version>=1&&version<=4),"Unsupported saved game version");
     c.version=version;
     bool heroes=version>=3?ui.game_st.hero_mode:false,teams=version>=3?ui.game_st.team_game:false;
     if(version>=3)c.fields(heroes,teams);
@@ -292,6 +294,7 @@ inline HostState restore(play_ui& ui,campaign_ui* campaign,std::vector<uint8_t>&
     ui.rep.map_data=ui.rep_map.data();ui.rep.map_data_size=ui.rep_map.size();ui.rep_out.clear();
     ui.iscript_unit=nullptr;ui.iscript_bullet=nullptr;ui.iscript_flingy=nullptr;ui.unit_finder_search_index=0;
     ui.current_selection_sprites.clear();std::fill(ui.current_selection_sprites_set.begin(),ui.current_selection_sprites_set.end(),nullptr);
+    ui.pending_larva_morphs=std::move(n.pending_larva_morphs);
     ui.pending_build=ui.pending_addon=nullptr;ui.pending_land=ui.pending_nydus=ui.targeting=false;ui.menu=0;ui.card.clear();ui.advisor_last=-1;
     ui.mouse_x=ui.mouse_y=-100;ui.last_recalled_group=-1;ui.flash_start=-1;ui.clamp_viewport();
     for(auto& r:ui.st.game->regions.regions){r.pathfinder_flag=0;r.pathfinder_node=nullptr;}

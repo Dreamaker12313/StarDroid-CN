@@ -171,7 +171,9 @@ public final class MissionBundle {
             Entry e = new Entry(); e.name = name; e.block = block; e.slots.add(slot);
             e.offset = u32(blocks, at); e.packed = u32(blocks, at + 4);
             e.size = u32(blocks, at + 8); e.flags = u32(blocks, at + 12);
-            if (ui && (e.packed > 262144 || e.size > 262144)) throw new IOException("Invalid interface entry.");
+            if (ui && (e.packed > 1048576 || e.size > 1048576))
+                throw new IOException("Oversized interface entry: " + name + " (packed=" + e.packed
+                    + ", decoded=" + e.size + "; limit=1048576 bytes).");
             if ((e.flags & 0x80000000L) == 0 || e.packed > (kind.equals("cinematic") ? 128L : 64L) * 1024 * 1024 || base + e.offset > fileSize - e.packed)
                 throw new IOException("Invalid or oversized campaign entry.");
             result.packedBytes += e.packed;

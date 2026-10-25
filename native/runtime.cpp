@@ -79,7 +79,7 @@ static std::array<std::unique_ptr<NativeMPQ>,11> readers;
 static void close_game(){
  net_active=false;
  if(g_ui){g_ui->wnd.destroy();if(g_campaign)delete g_campaign;else delete g_ui;}
- g_ui=nullptr;g_campaign=nullptr;delete g_mission;g_mission=nullptr;delete g_loader;g_loader=nullptr;g_mission_sounds.clear();naudio::clear_game();
+ g_ui=nullptr;g_campaign=nullptr;delete g_mission;g_mission=nullptr;delete g_loader;g_loader=nullptr;g_mission_sounds.clear();naudio::clear_game();naudio::stop(62);
 }
 #include "multiplayer.h"
 static void open_archive(int i,const std::string& path){if(i<0||i>=11)throw std::runtime_error("Invalid archive slot");readers[i].reset();archives[i].open(path);if(archives[i].data)readers[i].reset(new NativeMPQ(std::to_string(i).c_str()));}
@@ -118,6 +118,8 @@ static void command(int op,int a,int b,int c,int d){
  case 22:touch_radius=std::max(0,std::min(40,a));touch_attack_move=b!=0;touch_ground_orders=c!=0;break;
  case 23:nearby_defenders=a!=0;if(g_campaign){g_campaign->base_defence_enabled=nearby_defenders;if(!nearby_defenders)g_campaign->defence_alerts={};}break;
  case 26:if(g_ui)g_ui->host_controls_edge_scroll=a!=0;break;
+ case 27:if(g_ui)g_ui->original_larvae_selection=a!=0;break;
+ case 28:if(g_ui)g_ui->single_larva_morph=a!=0;break;
  case 25:if(g_ui && !g_ui->paused && !g_ui->campaign_control_lock && a>=0 && a<10){g_ui->clear_pending();if(b)g_ui->assign_group(a);else g_ui->recall_group(a);}break;
  case 24:if(g_ui){g_ui->sync_selection();g_ui->cmds.unload(uint16_t(a));}break;
  case 5:openbw_touch_cancel();break;case 6:openbw_set_paused(a);break;case 7:openbw_cancel(a);break;case 8:openbw_set_minimap_terrain(a);break;case 9:openbw_test_money();break;case 10:openbw_test_instant(a);break;case 11:openbw_reveal_map();break;case 12:openbw_resign();break;case 13:openbw_debug_outcome(a);break;case 14:openbw_debug_select(a,b);break;case 15:openbw_debug_set_life(a,b,c);break;case 16:openbw_debug_kill(a);break;case 17:openbw_debug_resources(a,b);break;case 18:openbw_debug_warp(a,b,c);break;case 19:openbw_set_order_lines(a);break;case 21:if(g_ui){g_ui->hud_bottom_inset=std::max(0,a);g_ui->clamp_viewport();}break;case 20:custom_bot_slot=std::max(-1,std::min(7,a));custom_ai_race=std::max(0,std::min(2,b));g_terran_ai_level=std::max(0,std::min(2,c));g_skirmish_expansion=d!=1;break;
@@ -196,6 +198,20 @@ JNI(multiplayerPeerLeft) void JNICALL Java_org_openbw_androidtest_NativeBridge_m
 JNI(resize) void JNICALL Java_org_openbw_androidtest_NativeBridge_resize(JNIEnv* e,jclass,jint w,jint h,jdouble scale){try{openbw_resize(w,h);openbw_set_view_scale(scale);}catch(const std::exception& x){fail(e,x);}}
 JNI(frame) void JNICALL Java_org_openbw_androidtest_NativeBridge_frame(JNIEnv* e,jclass,jobject b,jint steps,jdouble time){try{for(int i=0;i<steps;i++)native_step();openbw_render(time);bitmap(e,b,openbw_framebuffer(),openbw_framebuffer_width(),openbw_framebuffer_height());}catch(const std::exception& x){fail(e,x);}}
 JNI(text) jstring JNICALL Java_org_openbw_androidtest_NativeBridge_text(JNIEnv* e,jclass,jint id){try{return e->NewStringUTF(text_query(id));}catch(const std::exception& x){fail(e,x);return nullptr;}}
+JNI(rawText) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_rawText(JNIEnv* e,jclass,jint id){try{const char* s=text_query(id);return bytes(e,reinterpret_cast<const uint8_t*>(s),strlen(s));}catch(const std::exception& x){fail(e,x);return nullptr;}}
+// Independent reader: background map imports never replace the live game's archive.
+JNI(mapScenario) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_mapScenario(JNIEnv* e,jclass,jstring path){try{
+ bwgame::data_loading::mpq_file<> archive(utf(e,path).c_str());const char* name="staredit\\scenario.chk";
+ auto* h=archive.mpq.find_hash_table_entry(name);if(!h)return nullptr;
+ if(h->block_index>=archive.mpq.block_table.size()||archive.mpq.block_table[h->block_index].size>64*1024*1024)throw std::runtime_error("Map scenario exceeds 64 MB.");
+ bwgame::a_vector<uint8_t> chk;archive(chk,name);return bytes(e,chk.data(),chk.size());
+ }catch(const std::exception& x){fail(e,x);return nullptr;}}
+JNI(archiveText) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_archiveText(JNIEnv* e,jclass,jstring path){try{
+ bwgame::data_loading::mpq_file<> archive(utf(e,path).c_str());const char* name="rez\\stat_txt.tbl";
+ auto* h=archive.mpq.find_hash_table_entry(name);if(!h)return nullptr;
+ if(h->block_index>=archive.mpq.block_table.size()||archive.mpq.block_table[h->block_index].size>1024*1024)throw std::runtime_error("Invalid language table");
+ bwgame::a_vector<uint8_t> table;archive(table,name);return bytes(e,table.data(),table.size());
+ }catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(value) jint JNICALL Java_org_openbw_androidtest_NativeBridge_value(JNIEnv* e,jclass,jint id,jint n){try{if(id==15)return g_ui&&g_ui->rep_on;return value_query(id,n);}catch(const std::exception& x){fail(e,x);return 0;}}
 JNI(saveState) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_saveState(JNIEnv* e,jclass){try{auto data=save_game();return bytes(e,data.data(),data.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(restoreState) void JNICALL Java_org_openbw_androidtest_NativeBridge_restoreState(JNIEnv* e,jclass,jbyteArray b){try{if(!b)throw std::runtime_error("Missing saved game");size_t n=e->GetArrayLength(b);native_save::check(n<=native_save::MAX_BYTES);std::vector<uint8_t> data(n);e->GetByteArrayRegion(b,0,n,(jbyte*)data.data());restore_game(data);}catch(const std::exception& x){fail(e,x);}}
@@ -212,6 +228,10 @@ JNI(asset) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_asset(JNI
 JNI(chk) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_chk(JNIEnv* e,jclass){return bytes(e,openbw_campaign_chk(),openbw_campaign_chk_len());}
 JNI(sound) jint JNICALL Java_org_openbw_androidtest_NativeBridge_sound(JNIEnv* e,jclass,jbyteArray a,jint channel,jboolean loop){try{if(!a){naudio::stop(channel);return 0;}std::vector<uint8_t> b(e->GetArrayLength(a));e->GetByteArrayRegion(a,0,b.size(),(jbyte*)b.data());int id=naudio::add(b.data(),b.size());naudio::play(id,channel,128,0,loop);std::lock_guard<std::mutex> lock(naudio::mutex);auto c=naudio::clips.back();int length=int(1000.*c->pcm.size()/c->channels/c->rate);naudio::clips.pop_back();return length;}catch(const std::exception& x){fail(e,x);return 0;}}
 JNI(campaignSound) jint JNICALL Java_org_openbw_androidtest_NativeBridge_campaignSound(JNIEnv* e,jclass,jint i){try{const auto& b=mission_sound(i);if(b.empty())return 0;int id=naudio::add(b.data(),b.size());naudio::play(id,62,128,0);std::lock_guard<std::mutex> lock(naudio::mutex);auto c=naudio::clips.back();int length=int(1000.*c->pcm.size()/c->channels/c->rate);naudio::clips.pop_back();return length;}catch(const std::exception& x){fail(e,x);return 0;}}
+JNI(campaignEffect) void JNICALL Java_org_openbw_androidtest_NativeBridge_campaignEffect(JNIEnv* e,jclass,jint i){try{
+ if(i<=0||naudio::effect_playing(i))return;const auto& b=mission_sound(i);if(b.empty())return;
+ naudio::play_effect(naudio::wav(b.data(),b.size()),i);
+ }catch(const std::exception& x){fail(e,x);}}
 JNI(mix) void JNICALL Java_org_openbw_androidtest_NativeBridge_mix(JNIEnv* e,jclass,jshortArray a,jint rate){jshort* p=e->GetShortArrayElements(a,nullptr);naudio::mix(p,e->GetArrayLength(a)/2,rate);e->ReleaseShortArrayElements(a,p,0);}
 JNI(audio) void JNICALL Java_org_openbw_androidtest_NativeBridge_audio(JNIEnv*,jclass,jboolean paused,jfloat effects,jfloat music){std::lock_guard<std::mutex> l(naudio::mutex);naudio::paused=paused;naudio::effects=effects;naudio::music=music;}
 JNI(playing) jboolean JNICALL Java_org_openbw_androidtest_NativeBridge_playing(JNIEnv*,jclass,jint ch){return naudio::playing(ch);}

@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "version": "1.0.8",
+  "physicalAndroid": false,
+  "output": "PASS 488 language checks; Russian=false; archive encoding, original-font loading, Cyrillic/accent glyphs, all five languages without data gating, translated label bounds and menu captures.\n\nPASS 491 language checks; Russian=true; archive encoding, original-font loading, Cyrillic/accent glyphs, all five languages without data gating, translated label bounds and menu captures.\n",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "9108b45139f4ec24664715e211fde61ee1d59fe82a8606b60563ac19f4cf63c6",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "6bb79de77b500c8b58a343c62c3e907d35490aaa2dc4d60e6c2d2c4a7cfa3388",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "6e4ad96d580162ed71f4b41524877a5973cc4f73e128a60697c0eb995189cfac",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "2fa7b8168e9c8da60fbffc3d3f7aadb551ed7e677dec639922d65605d9f6b85e",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "749b0fb034e18d29440f8d5b847c2a10e3a924a3a899dbef47ad3df0d0816725",
+    "app/src/main/assets/native/ui-languages.tsv": "09c5327247f87946695ecb67f3a9195944998935c5f97c53e7ae8419ade8130b",
+    "tests/Language78Test.java": "d5f172f8197116e8de7bcfae772b6b2337c99e32368570a6bb0f49484c32579e",
+    "tests/run_languages78.py": "09dd5df026942a1bde529cc4e79f894b049bda1ca2f1b9ddf0ae3449b81d45b3"
+  },
+  "languages": [
+    "en",
+    "ru",
+    "de",
+    "es",
+    "fr"
+  ],
+  "russianRequiresRussianData": false
+}

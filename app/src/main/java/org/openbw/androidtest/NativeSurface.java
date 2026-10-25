@@ -34,7 +34,7 @@ final class NativeSurface extends SurfaceView
   private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
   private String page = "loading", modal = "", failure = "", hint = "", nextScenario = "";
   private boolean expansion = false,
-      wide = false,
+      wide = false, overCamera = false,
       zoomOut = false,
       instant = false,
       activeGame = false;
@@ -171,6 +171,7 @@ final class NativeSurface extends SurfaceView
     } catch (Exception ignored) { profiles.add("Player"); }
     if (!profiles.contains(selectedProfile)) selectedProfile = profiles.isEmpty() ? "" : profiles.get(0);
     wide = prefs.getBoolean("wide", false);
+    overCamera = prefs.getBoolean("wide-over-camera", false);
     zoomOut = prefs.getBoolean("zoom-out", true);
     zoom = prefs.getFloat("zoom", 1);
     effects = prefs.getFloat("effects", 1);
@@ -229,6 +230,7 @@ final class NativeSurface extends SurfaceView
             NativeBridge.endGame();
             loadArchives();
             art = new NativeArt();
+            menuLayouts.clear();
             showTitle();
           } catch (Exception e) {
             error(e);
@@ -407,6 +409,8 @@ final class NativeSurface extends SurfaceView
     String[] core = {"STARDAT.MPQ", "BROODAT.MPQ", "patch_rt.mpq"};
     for (int i = 0; i < 3; i++)
       NativeBridge.open(i, new File(new File(files, "mpq"), core[i]).getPath());
+    GameLanguage.russianData = GameLanguage.isRussian(NativeBridge.asset(-1, "rez/stat_txt.tbl"));
+    prefs.edit().putBoolean("russian-data", GameLanguage.russianData).apply();
     String[] bundle = {
       InterfaceData.NAME,
       MusicData.NAME,
@@ -507,6 +511,7 @@ final class NativeSurface extends SurfaceView
       glue = new NativeGlue(art, bin, pal, slide);
     } catch (Exception e) {
       failure = "Interface: " + e.getMessage();
+      AppDiagnostics.recordFailure("Menu loading failed: " + bin, e);
       glue = null;
     }
     lastTime = 0;
@@ -515,11 +520,17 @@ final class NativeSurface extends SurfaceView
 
   private void showTitle() {
     showMain();
-    byte[] bytes = NativeBridge.asset(expansion ? 1 : 0, "glue/title/title.pcx");
-    if (bytes == null) bytes = art.read("glue/title/title.pcx");
-    if (bytes != null) {
-      titleArtwork = new NativeArt.PCX(bytes, false, -1).image;
+    try {
+      try {
+        titleArtwork = new NativeArt.PCX(NativeBridge.asset(expansion ? 1 : 0,
+            "glue/title/title.pcx"), false, -1).image;
+      } catch (RuntimeException unavailable) {
+        titleArtwork = art.pcx("glue/title/title.pcx", false, -1).image;
+      }
       page = "title";
+    } catch (RuntimeException unavailable) {
+      // The optional splash must never prevent opening the game menu.
+      titleArtwork = null;
     }
   }
 
@@ -807,7 +818,8 @@ final class NativeSurface extends SurfaceView
       else {
         paint.setColor(0xff081329);
         c.drawRect(0, 0, 640, 480, paint);
-        fallback(c, "StarDroid", 220, 60, 28, 0xffc5cce3);
+        fallback(c, "StarDroid", 220, 22, 28, 0xffc5cce3);
+        fallback(c, "Menu artwork could not load. Use App Options to re-import.", 30, 70, 14, 0xffe1cf47);
       }
       if (page.equals("main")) {
         glueButton(c, 3, null, () -> modal = "choose");
@@ -828,8 +840,13 @@ final class NativeSurface extends SurfaceView
         glueButton(c, 5, null, () -> openSaves(false));
         glueButton(c, 11, null, () -> message("Replay loading is not implemented yet."));
         glueButton(c, 10, null, () -> navigate(()->{multiplayerSetup=false;multiplayerSaves=false;showCustom();}));
+
       }
       if (page.equals("briefing")) drawBriefing(c);
+      if (glue == null && (page.equals("main") || page.equals("campaign"))) {
+        button(c, "App Options", 220, 438, 200, 30,
+            () -> activity.runOnUiThread(activity::requestAppOptions), true);
+      }
     }
     if(page.equals("game") && nearby!=null && !nearby.status.equals("Connected") && lastOutcome==0)
       hud.small.draw(c,nearby.status,logicalWidth/2f-180,52,360,1,2,0);
@@ -849,7 +866,7 @@ final class NativeSurface extends SurfaceView
     paint.setColor(color);
     paint.setTextSize(size);
     paint.setTypeface(Typeface.SANS_SERIF);
-    for (String l : NativeArt.clean(s).split("\n")) {
+    for (String l : NativeArt.clean(PortText.text(s)).split("\n")) {
       c.drawText(l, x, y + size, paint);
       y += size + 5;
     }
@@ -911,7 +928,8 @@ final class NativeSurface extends SurfaceView
   private void glueButton(Canvas c, int id, String label, Runnable run) {
     if (glue == null) {
       int n = buttons.size();
-      button(c, label == null ? "Continue" : label, 205, 130 + n * 42, 230, 32, run, true);
+      button(c, label == null ? MenuLabels.forButton(page, id) : label,
+          205, 120 + n * 42, 230, 32, run, true);
       return;
     }
     NativeArt.Widget w = glue.layout.get(id);
@@ -989,6 +1007,17 @@ final class NativeSurface extends SurfaceView
     float x=(logicalWidth-380)/2f,y=140;
     paint.setColor(0xdb080b10);c.drawRoundRect(new RectF(x,y,x+380,y+192),6,6,paint);redBorder(c,x,y,380,192,false);
     boolean create=modal.equals("profile-new");
+    if (glue == null) {
+      text(c, create ? "New Player ID" : "Delete Player ID", x+18, y+16, 344, 1, 2);
+      body(c, create ? profileDraft + (profileEditing ? "|" : "") : "Delete " + profileDelete + "?",
+          x+24, y+65, 332, 54);
+      if (create) add(new RectF(x+24,y+65,x+356,y+119),
+          () -> {profileEditing=true;activity.runOnUiThread(()->showTextKeyboard(profileInput));}, true);
+      button(c, create ? "OK" : "Delete", x+24, y+142, 154, 30, this::confirmProfileDialog,
+          !create || !profileDraft.trim().isEmpty() && (profiles.size()<32 || profiles.contains(profileDraft.trim())));
+      button(c, "Cancel", x+202, y+142, 154, 30, this::cancelProfileDialog, true);
+      return;
+    }
     uiLine(c,create?"New Player ID":"Delete Player ID",glue.large,x+18,y+16,344,30,1,2);
     if(create){
       redBorder(c,x+24,y+65,332,32,profileEditing);
@@ -1002,7 +1031,23 @@ final class NativeSurface extends SurfaceView
   }
 
   private void drawRegistry(Canvas c) {
-    if (glue == null) return;
+    if (glue == null) {
+      int first = Math.min(profileScroll, Math.max(0, profiles.size()-6));
+      for (int i=first; i<Math.min(profiles.size(), first+6); i++) {
+        final String name = profiles.get(i);
+        button(c, (name.equals(selectedProfile) ? "> " : "") + name, 120, 112+(i-first)*34,
+            400, 28, () -> {selectedProfile=name;saveProfiles();}, true);
+      }
+      button(c, "Up", 120, 320, 94, 28, () -> profileScroll=Math.max(0,first-6), first>0);
+      button(c, "Down", 226, 320, 94, 28, () -> profileScroll=first+6, first+6<profiles.size());
+      button(c, "New ID", 120, 360, 190, 32, this::newProfile, profiles.size()<32);
+      button(c, "Delete ID", 330, 360, 190, 32, this::deleteProfile, profiles.contains(selectedProfile));
+      button(c, "OK", 120, 402, 190, 32, () -> {
+        if(registryForMultiplayer) modal="multiplayer-choose"; else navigate(this::showCampaign);
+      }, profiles.contains(selectedProfile));
+      button(c, "Back", 330, 402, 190, 32, () -> navigate(this::showMain), true);
+      return;
+    }
     glue.label(c, 9, null, true);
     NativeArt.Widget box = glue.layout.get(8);
     float offset = glue.shift(box);
@@ -1215,6 +1260,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void drawNearby(Canvas c) {
+    if (glue == null) { drawMenuUnavailable(c, this::showMain); return; }
     if(glue==null||glue.exiting||glue.elapsed<NativeGlue.ENTER_MS)return;
     if(nearbyStage.equals("connection")) {
       customLabel(c,65535,"Select Connection",glue.large,0);
@@ -1361,9 +1407,10 @@ final class NativeSurface extends SurfaceView
     add(new RectF(328,126,352,147),()->mapOffset=Math.max(0,mapOffset-22),mapOffset>0);
     add(new RectF(328,223,352,244),()->mapOffset=Math.min(mapMaxOffset(),mapOffset+22),mapOffset<mapMaxOffset());
     Button bar=new Button(new RectF(328,147,352,223),()->{},mapMaxOffset()>0);bar.vertical=true;bar.slider=v->mapOffset=v*mapMaxOffset();buttons.add(bar);
-    redButton(c,"Import maps/ZIP",206,98,146,26,()->activity.runOnUiThread(activity::pickNativeMap),true);
+    redButton(c,"Import maps/ZIP",206,98,146,26,()->activity.runOnUiThread(activity::pickNativeMap),!importingMaps);
   }
   private void drawCustom(Canvas c) {
+    if (glue == null) { drawMenuUnavailable(c, multiplayerSetup ? this::showNearby : this::showCampaign); return; }
     if(glue==null||glue.exiting||glue.elapsed<NativeGlue.ENTER_MS)return;
     MatchSetup setup=multiplayerSetup?nearbySetup:customSetup;boolean bw=multiplayerSetup?nearbyExpansion:expansion;
     glue.label(c,65535,bw?"Brood War":"StarCraft",true);
@@ -1398,6 +1445,13 @@ final class NativeSurface extends SurfaceView
     glueButton(c,13,null,()->navigate(multiplayerSetup?this::showNearby:this::showCampaign));
   }
 
+  private void drawMenuUnavailable(Canvas c, Runnable back) {
+    body(c, "This screen needs readable original menu files.\nRe-import StarDat.mpq, BrooDat.mpq and Patch_rt.mpq\nfrom the same classic installation. For campaign artwork,\nre-import StarCraft.mpq or the original StarCraft Install.exe.", 45, 130, 550, 120);
+    button(c, "App Options", 120, 280, 400, 36,
+        () -> activity.runOnUiThread(activity::requestAppOptions), true);
+    button(c, "Back", 120, 380, 400, 36, () -> navigate(back), true);
+  }
+
   private void customSelect(Canvas c, int id, String label, Runnable action) {
     NativeArt.Widget w = glue.layout.get(id);
     if (w == null) return;
@@ -1429,7 +1483,7 @@ final class NativeSurface extends SurfaceView
   private boolean drawGameChooser(Canvas c) {
     try {
       NativeArt.PCX bg = art.pcx("glue/palmm/retail_ex.pcx", false, -1);
-      NativeArt.Dialog layout = new NativeArt.Dialog(art.read("rez/glugamemode.bin"));
+      NativeArt.Dialog layout = art.dialog("glugamemode");
       paint.setColor(0x80000000);
       c.drawRect(0, 0, 640, 480, paint);
       float left = (640 - bg.width) / 2f, top = (480 - bg.height) / 2f;
@@ -1629,7 +1683,7 @@ final class NativeSurface extends SurfaceView
 
   private NativeArt.Dialog dialog(String name) {
     if (!menuLayouts.containsKey(name))
-      menuLayouts.put(name, new NativeArt.Dialog(art.read("rez/" + name + ".bin")));
+      menuLayouts.put(name, art.dialog(name));
     return menuLayouts.get(name);
   }
 
@@ -1733,15 +1787,15 @@ final class NativeSurface extends SurfaceView
       Runnable action, boolean enabled) {
     c.drawBitmap(hud.panel(Math.round(w), Math.round(h), true, enabled), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + w / 2, y + h / 2);
-    hud.large.draw(c, enabled ? label : NativeArt.clean(label), x, y + (h - hud.large.height) / 2, (int) w, 1,
-        enabled ? hot ? 2 : 3 : 5, 0);
+    uiLine(c, enabled ? label : NativeArt.clean(label), hud.large, x+4, y, (int)w-8, (int)h, 1,
+        enabled ? hot ? 2 : 3 : 5);
     add(new RectF(x, y, x + w, y + h), action, enabled);
   }
 
   private void originalMenuButton(Canvas c, String layout, int id, String label,
       float x, float y, Runnable action, boolean enabled) {
     NativeArt.Widget w = dialog(layout).get(id);
-    if (w != null) menuButton(c, label == null ? w.text.substring(1) : label,
+    if (w != null) menuButton(c, label == null ? MenuLabels.forDialog(layout, id, NativeArt.clean(w.text)) : label,
         x + w.x, y + w.y, w.w, w.h, action, enabled);
   }
 
@@ -1749,9 +1803,27 @@ final class NativeSurface extends SurfaceView
     c.drawBitmap(hud.panel(Math.round(width), 28, true, true), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + width / 2, y + 14);
     boolean selected = label.startsWith("> ");
-    hud.small.draw(c, selected ? label.substring(2) : label, x + 8, y + 8, (int) width - 16, 1,
-        hot ? 4 : selected ? 7 : 2, 0);
+    uiLine(c, selected ? label.substring(2) : label, hud.small, x + 8, y, (int)width-16, 28, 1,
+        hot ? 4 : selected ? 7 : 2);
     add(new RectF(x, y, x + width, y + 28), action, true);
+  }
+
+  private void setWideMode(int mode) {
+    wide = mode != 0;
+    overCamera = mode == 2;
+    saveSettings();
+    resizeWorld();
+    activity.runOnUiThread(activity::refreshDisplayArea);
+  }
+
+  private void radio(Canvas c, String label, boolean on, float x, float y, int width, Runnable action) {
+    paint.setColor(on ? 0xffd1be56 : 0xff6282bc);
+    paint.setStyle(Paint.Style.STROKE);
+    c.drawCircle(x + 7, y + 10, 6, paint);
+    paint.setStyle(Paint.Style.FILL);
+    if (on) c.drawCircle(x + 7, y + 10, 3, paint);
+    uiLine(c, label, hud.small, x + 20, y, width - 20, 23, 0, on ? 7 : 2);
+    add(new RectF(x - 4, y - 4, x + width, y + 27), action, true);
   }
 
   private void toggle(Canvas c, String label, boolean on, float x, float y, Runnable action) {
@@ -1769,7 +1841,7 @@ final class NativeSurface extends SurfaceView
       paint.setStrokeWidth(1);
     }
     paint.setStyle(Paint.Style.FILL);
-    hud.small.draw(c, label, x + 24, y + 3, 296, 0, hot ? 4 : 2, 0);
+    uiLine(c, label, hud.small, x + 24, y, 296, 23, 0, hot ? 4 : 2);
     add(new RectF(x - 4, y - 4, x + 324, y + 23), action, true);
   }
 
@@ -1827,7 +1899,7 @@ final class NativeSurface extends SurfaceView
       } else menuButton(c, "Previous (Esc)", x + 80, y + 216, 224, 28, this::modalBack, true);
       return true;
     }
-    boolean sheet = Arrays.asList("sound", "speed", "video", "ui-sizes", "network", "misc", "testing", "controls", "control-select", "control-camera", "control-orders", "control-help", "objectives", "tracks").contains(modal);
+    boolean sheet = Arrays.asList("sound", "speed", "video", "ui-sizes", "network", "misc", "testing", "controls", "control-select", "control-timing", "control-camera", "control-orders", "control-help", "objectives", "tracks").contains(modal);
     if (!sheet && !Arrays.asList("menu", "options", "end", "quit", "restart", "exit", "outcome").contains(modal)) return false;
     float x = (logicalWidth - (sheet ? 368 : 264)) / 2f - (sheet ? 0 : 4), y = 32;
     if (modal.equals("outcome")) {
@@ -1841,7 +1913,7 @@ final class NativeSurface extends SurfaceView
     String title = modal.equals("menu") ? "Game Menu" : modal.equals("options") ? "Game Options"
         : modal.equals("sound") ? "Sound & Music" : modal.equals("speed") ? "Game Speed"
         : modal.equals("ui-sizes") ? "Interface Sizes" : modal.equals("network") ? "Network Diagnostics" : modal.equals("video") ? "Video Options" : modal.equals("misc") ? "Miscellaneous" : modal.equals("testing") ? "Cheats"
-        : modal.equals("control-select") ? "Selection Settings" : modal.equals("control-camera") ? "Camera Settings"
+        : modal.equals("control-select") ? "Selection Settings" : modal.equals("control-timing") ? "Timing & accuracy" : modal.equals("control-camera") ? "Camera Settings"
         : modal.equals("control-orders") ? "Command Settings" : modal.startsWith("control") ? "Touch Controls" : modal.equals("objectives") ? "Mission Objectives"
         : modal.equals("tracks") ? "Music Track" : modal.equals("restart") ? "Restart Mission" : "End Mission";
     text(c, title, x, y + 8, sheet ? 368 : 264, 1, 2);
@@ -1896,15 +1968,18 @@ final class NativeSurface extends SurfaceView
       hud.small.draw(c, "Actual speed depends on your device.", x + 24, y + 260, 320, 1, 2, 0);
     } else if (modal.equals("video")) {
       toggle(c, "Show order & rally lines", orderLines, x + 26, y + 48, () -> {orderLines = !orderLines; NativeBridge.command(19, orderLines ? 1 : 0, 0, 0, 0); saveSettings();});
-      toggle(c, "Widescreen", wide, x + 26, y + 84, () -> {wide = !wide; resizeWorld(); saveSettings();});
-      toggle(c, "Allow zoom out", zoomOut, x + 26, y + 120, () -> {zoomOut = !zoomOut; if (!zoomOut) zoom = Math.max(1, zoom); resizeWorld(); saveSettings();});
-      option(c, "View zoom: " + Math.round(zoom * 100) + "%", x + 26, y + 160, 320, () -> {
+      hud.small.draw(c, "Widescreen", x + 26, y + 79, 320, 0, 2, 0);
+      radio(c, "Off", !wide, x + 26, y + 100, 62, () -> setWideMode(0));
+      radio(c, "On", wide && !overCamera, x + 98, y + 100, 62, () -> setWideMode(1));
+      radio(c, "+ over camera area", wide && overCamera, x + 170, y + 100, 176, () -> setWideMode(2));
+      toggle(c, "Allow zoom out", zoomOut, x + 26, y + 139, () -> {zoomOut = !zoomOut; if (!zoomOut) zoom = Math.max(1, zoom); resizeWorld(); saveSettings();});
+      option(c, "View zoom: " + Math.round(zoom * 100) + "%", x + 26, y + 175, 320, () -> {
         float[] levels = {.5f, .67f, 1, 1.25f, 1.5f, 2}; float next = zoomOut ? .5f : 1;
         for (float v : levels) if (v > zoom + .005f && (zoomOut || v >= 1)) {next = v; break;}
         zoom = next; resizeWorld(); saveSettings();
       });
-      option(c, "Frame rate: " + fps, x + 26, y + 200, 320, () -> {fps = fps == 30 ? 60 : fps == 60 ? 90 : fps == 90 ? 120 : 30; saveSettings();});
-      option(c, "Interface sizes", x + 26, y + 240, 320, () -> modal = "ui-sizes");
+      option(c, "Frame rate: " + fps, x + 26, y + 214, 320, () -> {fps = fps == 30 ? 60 : fps == 60 ? 90 : fps == 90 ? 120 : 30; saveSettings();});
+      option(c, "Interface sizes", x + 26, y + 253, 320, () -> modal = "ui-sizes");
     } else if (modal.equals("network")) {
       toggle(c,"Show network overlay",networkStats,x+26,y+48,()->{networkStats=!networkStats;saveSettings();});
       body(c,(nearby==null?"No active match":nearby.summary())+"\n"+String.format(Locale.ROOT,"Display: %.1f FPS\nDrawing: %.2f ms/frame\nTotal frame work: %.2f ms/frame",displayFps,drawMs,frameMs)+"\nInput buffer: "+(nearby==null?168:nearby.setup.frameMs()*4)+" ms.\nWait: blocked on other devices.\nValues retain the last active sample.",x+26,y+88,320,142);
@@ -1958,6 +2033,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void modalBack() {
+    if (modal.equals("control-timing")) { modal = "control-select"; return; }
     if(modal.equals("nearby-error")){showMain();return;}
     if (modal.equals("save") || modal.equals("load")) {modal=activeGame&&page.equals("game")?"menu":"";return;}
     if (modal.startsWith("save-")) {modal=saveMode;return;}
@@ -1988,6 +2064,8 @@ final class NativeSurface extends SurfaceView
     NativeBridge.command(22, controls.radius, controls.attackTap ? 1 : 0, controls.groundOrders ? 1 : 0, 0);
     NativeBridge.command(23, nearbyDefenders ? 1 : 0, 0, 0, 0);
     NativeBridge.command(26, 1, 0, 0, 0); // This host owns timed edge scrolling.
+    NativeBridge.command(27, controls.originalLarvae ? 1 : 0, 0, 0, 0);
+    NativeBridge.command(28, controls.singleLarvaMorph ? 1 : 0, 0, 0, 0);
     if (controls.selectionButton == 0) oneShotSelect = false;
   }
 
@@ -2002,14 +2080,18 @@ final class NativeSurface extends SurfaceView
       option(c, "Command settings", x + 22, y + 151, 324, () -> modal = "control-orders");
       option(c, "Gesture guide", x + 22, y + 199, 324, () -> modal = "control-help");
     } else if (modal.equals("control-select")) {
+      toggle(c, "Original larvae selection", controls.originalLarvae, x + 22, y + 44, () -> changeControls(() -> controls.originalLarvae = !controls.originalLarvae));
+      toggle(c, "One larva morph per press", controls.singleLarvaMorph, x + 22, y + 78, () -> changeControls(() -> controls.singleLarvaMorph = !controls.singleLarvaMorph));
+      toggle(c, "Hold tap always selects", controls.holdSelect, x + 22, y + 112, () -> changeControls(() -> controls.holdSelect = !controls.holdSelect));
+      toggle(c, "Double tap selects same type", controls.doubleTap, x + 22, y + 146, () -> changeControls(() -> controls.doubleTap = !controls.doubleTap));
+      controlOption(c, "Selection button: " + new String[]{"Off", "Left", "Right"}[controls.selectionButton], x, y + 180, () -> controls.selectionButton = (controls.selectionButton + 1) % 3);
+      toggle(c, "Show control group buttons", controls.controlGroups, x + 22, y + 214, () -> changeControls(() -> controls.controlGroups = !controls.controlGroups));
+      option(c, "Timing & accuracy", x + 22, y + 248, 324, () -> modal = "control-timing");
+    } else if (modal.equals("control-timing")) {
       controlOption(c, "Drag: " + (controls.dragMode == 0 ? "Pan / hold to select" : "Select / two fingers pan"), x, y + 45, () -> controls.dragMode = 1 - controls.dragMode);
       controlOption(c, "Selection hold: " + controls.holdMs + " ms", x, y + 76, () -> controls.holdMs = controls.holdMs >= 500 ? 100 : controls.holdMs + 50);
       controlOption(c, "Tap tolerance: " + (controls.radius == 0 ? "Exact" : controls.radius), x, y + 107, () -> controls.radius = controls.radius >= 40 ? 0 : Math.min(40, controls.radius + 4));
-      toggle(c, "Hold tap always selects", controls.holdSelect, x + 22, y + 138, () -> changeControls(() -> controls.holdSelect = !controls.holdSelect));
-      toggle(c, "Double tap selects same type", controls.doubleTap, x + 22, y + 169, () -> changeControls(() -> controls.doubleTap = !controls.doubleTap));
-      controlOption(c, "Double tap window: " + controls.doubleTapMs + " ms", x, y + 200, () -> controls.doubleTapMs = controls.doubleTapMs >= 500 ? 200 : controls.doubleTapMs + 50);
-      controlOption(c, "Selection button: " + new String[]{"Off", "Left", "Right"}[controls.selectionButton], x, y + 231, () -> controls.selectionButton = (controls.selectionButton + 1) % 3);
-      toggle(c, "Show control group buttons", controls.controlGroups, x + 22, y + 264, () -> changeControls(() -> controls.controlGroups = !controls.controlGroups));
+      controlOption(c, "Double tap window: " + controls.doubleTapMs + " ms", x, y + 138, () -> controls.doubleTapMs = controls.doubleTapMs >= 500 ? 200 : controls.doubleTapMs + 50);
     } else if (modal.equals("control-camera")) {
       controlOption(c, "Pan speed: " + Math.round(controls.panSpeed * 100) + "%", x, y + 40, () -> controls.panSpeed = controls.panSpeed >= 2.5f ? .5f : controls.panSpeed + .25f);
       controlOption(c, "Pinch sensitivity: " + Math.round(controls.pinchSpeed * 100) + "%", x, y + 72, () -> controls.pinchSpeed = controls.pinchSpeed >= 2.5f ? .5f : controls.pinchSpeed + .25f);
@@ -2064,6 +2146,7 @@ final class NativeSurface extends SurfaceView
         .putFloat("effects", effects)
         .putFloat("zoom", zoom)
         .putBoolean("wide", wide)
+        .putBoolean("wide-over-camera", overCamera)
         .putBoolean("zoom-out", zoomOut)
         .apply();
   }
@@ -2242,7 +2325,7 @@ final class NativeSurface extends SurfaceView
       String bg = "", tint = "", position = "left";
       int duration = 5000;
       StringBuilder lines = new StringBuilder();
-      for (String line : new String(data, NativeArt.CP).replace("\r", "").split("\n")) {
+      for (String line : GameLanguage.decode(data).replace("\r", "").split("\n")) {
         if (!line.startsWith("</")) {
           lines.append(line).append('\n');
           continue;
@@ -2355,28 +2438,25 @@ final class NativeSurface extends SurfaceView
     showCampaign();
   }
 
-  void mapsSelected(List<NativeMaps.Staged> maps, String failure) {
+  private boolean importingMaps;
+  void mapImportProgress(String status, boolean busy) {
+    enqueue(() -> {mapImportStatus = status; importingMaps = busy;});
+  }
+  void mapsImported(NativeMaps.Imported result, String failure) {
     enqueue(() -> {
-      int imported = 0, rejected = 0; File first = null;
-      for (NativeMaps.Staged map : maps) {
-        try {
-          inspectMap(map.file); // Validate actual scenario before adding to the collection.
-          File installed = NativeMaps.install(map, files);
-          if (first == null) first = installed;
-          imported++;
-        } catch (Exception e) { rejected++; failureMap = e.getMessage(); }
-        finally { map.file.delete(); }
-      }
-      customMaps = NativeMaps.list(files);
-      if (first != null) { selectCustomMap(first); mapOffset = Math.min(mapMaxOffset(),Math.max(0,customMaps.indexOf(first))*22); }
-      else selectCustomMap(customMap);
-      mapImportStatus = imported + " maps imported" + (rejected > 0 ? "; " + rejected + " rejected" : "") + ".";
-      if (!failure.isEmpty() || (imported == 0 && rejected > 0)) {
-        hint = failure.isEmpty() ? failureMap : failure; modal = "map-error";
+      importingMaps = false;
+      if(result!=null) {
+        customMaps = result.collection;
+        if(result.first!=null && page.equals("custom")) {
+          selectCustomMap(result.first);mapOffset=Math.min(mapMaxOffset(),Math.max(0,customMaps.indexOf(result.first))*22);
+        }
+        mapImportStatus = result.accepted + " maps imported" + (result.rejected>0?"; "+result.rejected+" rejected":"") + ".";
+      } else mapImportStatus = "";
+      if (failure!=null && !failure.isEmpty() || result!=null && result.accepted==0 && result.rejected>0) {
+        hint = failure!=null && !failure.isEmpty()?failure:result.failure; modal = "map-error";
       }
     });
   }
-  private String failureMap = "";
 
   private NativeSaves saveStore() {return new NativeSaves(multiplayerSaves?new File(files,"multiplayer"):files);}
 

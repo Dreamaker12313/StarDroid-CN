@@ -20,9 +20,11 @@ final class NativeCampaign {
   int messageRevision;
   int spokenLength;
   int missionVoice;
+  int missionText;
   boolean transmission;
   final ArrayList<String> messages = new ArrayList<String>();
   final ArrayList<Double> messageEnds = new ArrayList<Double>();
+  final ArrayDeque<Action> pendingSpeech = new ArrayDeque<Action>();
 
   NativeCampaign(byte[] chk, int player) {
     Map<String, byte[]> sections = new HashMap<String, byte[]>();
@@ -97,6 +99,8 @@ final class NativeCampaign {
     talking = -1;
     Arrays.fill(portraits, -1);
     missionVoice = 0;
+    missionText = 0;
+    pendingSpeech.clear();
     messages.clear();
     messageEnds.clear();
     showText("", 0);
@@ -129,6 +133,7 @@ final class NativeCampaign {
           remaining = a.duration;
           return;
         case 2:
+          if (NativeBridge.playing(62)) { index--; return; }
           NativeBridge.campaignSound(a.sound);
           break;
         case 3:
@@ -149,6 +154,7 @@ final class NativeCampaign {
           remaining = a.duration;
           return;
         case 8:
+          if (NativeBridge.playing(62)) { index--; return; }
           talking = slot;
           textRemaining = 0;
           int duration = a.sound == 0 ? 0 : NativeBridge.campaignSound(a.sound);
@@ -173,7 +179,10 @@ final class NativeCampaign {
     JSONObject j=new JSONObject();j.put("objectives",objectives);j.put("message",message);j.put("next",next);
     j.put("talking",talking);j.put("messageUntil",messageUntil);j.put("portraits",new JSONArray(portraits));
     j.put("messages",new JSONArray(messages));j.put("messageEnds",new JSONArray(messageEnds));
-    j.put("voice",missionVoice);j.put("voicePosition",NativeBridge.value(19,62));return j;
+    j.put("voice",missionVoice);j.put("voiceText",missionText);j.put("voicePosition",NativeBridge.value(19,62));
+    JSONArray pending = new JSONArray();
+    for (Action a : pendingSpeech) pending.put(new JSONArray(new int[]{a.text,a.sound,a.duration,a.unit}));
+    j.put("pendingSpeech",pending);return j;
   }
   void restore(JSONObject j) throws JSONException {
     enterMission();objectives=j.getString("objectives");message=j.getString("message");next=j.getString("next");
@@ -182,8 +191,29 @@ final class NativeCampaign {
     if(portraitsJson.length()!=4||lines.length()>8||lines.length()!=ends.length())throw new JSONException("Invalid saved dialogue");
     for(int i=0;i<4;i++)portraits[i]=portraitsJson.getInt(i);
     for(int i=0;i<lines.length();i++){messages.add(lines.getString(i));messageEnds.add(ends.getDouble(i));}
-    missionVoice=j.optInt("voice");int position=j.optInt("voicePosition",-1);
+    missionVoice=j.optInt("voice");missionText=j.optInt("voiceText");int position=j.optInt("voicePosition",-1);
     if(missionVoice>0&&position>=0){NativeBridge.campaignSound(missionVoice);NativeBridge.seekSound(62,position);}
+    JSONArray pending=j.optJSONArray("pendingSpeech");
+    if(pending!=null) {
+      if(pending.length()>128)throw new JSONException("Too many queued transmissions");
+      for(int i=0;i<pending.length();i++) {
+        JSONArray row=pending.getJSONArray(i);if(row.length()!=4)throw new JSONException("Invalid queued transmission");
+        Action a=new Action();a.text=row.getInt(0);a.sound=row.getInt(1);a.duration=row.getInt(2);a.unit=row.getInt(3);pendingSpeech.add(a);
+      }
+    }
+  }
+
+  private void present(Action a, int frame) {
+    int length=0;
+    if(a.sound>0){missionVoice=a.sound;missionText=a.text;length=NativeBridge.campaignSound(a.sound);}
+    portraits[0]=a.unit;talking=0;
+    int duration=Math.max(length,Math.max(0,a.duration));
+    String value=text(a.text);
+    if(!value.isEmpty()) {
+      messages.add(value);messageEnds.add(frame+Math.max(duration,6500)/42.);
+      if(messages.size()>8){messages.remove(0);messageEnds.remove(0);}
+    }
+    messageUntil=frame+Math.max(duration,3000)/42.;
   }
 
   void poll() {
@@ -197,26 +227,31 @@ final class NativeCampaign {
           duration = Integer.parseInt(a[3]),
           unit = Integer.parseInt(a[4]);
       if (type == 41) next = NativeArt.normal(text(id));
-      if (type == 7 || type == 8) {missionVoice = wav; NativeBridge.campaignSound(wav);}
+      if (type == 8) NativeBridge.campaignEffect(wav);
       if (type == 7) {
-        portraits[0] = unit;
-        talking = 0;
+        Action speech=new Action();speech.text=id;speech.sound=wav;speech.duration=duration;speech.unit=unit;
+        // Trigger timing follows simulation speed, while audio follows real time.
+        // Queue the next line until the current recording finishes.
+        if(wav>0&&(NativeBridge.playing(62)||!pendingSpeech.isEmpty())) {
+          if(pendingSpeech.size()<128)pendingSpeech.add(speech);
+        } else present(speech,frame);
       }
-      if (type == 7 || type == 9) {
+      if (type == 9) {
         String value = text(id);
         if (!value.isEmpty()) {
           messages.add(value);
           messageEnds.add(frame + Math.max(duration, 6500) / 42.);
           if (messages.size() > 8) {messages.remove(0); messageEnds.remove(0);}
         }
-        if (type == 7) messageUntil = frame + Math.max(duration, 3000) / 42.;
       }
     }
+    if(!NativeBridge.playing(62)&&!pendingSpeech.isEmpty())present(pendingSpeech.removeFirst(),frame);
     for (int i = messages.size() - 1; i >= 0; i--) if (frame > messageEnds.get(i)) {
+      if (NativeBridge.playing(62) && messages.get(i).equals(text(missionText))) continue;
       messages.remove(i); messageEnds.remove(i);
     }
     message = String.join("\n", messages);
-    if (frame > messageUntil) {
+    if (frame > messageUntil && !NativeBridge.playing(62)) {
       talking = -1;
     }
     String[] status = NativeBridge.text(6).split("\t");
