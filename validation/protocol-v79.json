@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "build": 79,
+  "physicalRadioTested": false,
+  "checks": [
+    "Existing production protocol suite, including build-78 rejection before starting a simulation"
+  ],
+  "output": "PASS 1428 nearby protocol assertions; version, map, ordering, delays, pauses, desync, leave and disconnect",
+  "sourceSha256": {
+    "app/build.gradle": "df1bc0f411b1805f12787e78724e861aec886217f2e7ced58951ec0abe67c0c3",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "866cd6b7c44316a2181ceb34f249e6c1ce11cc6b039cddc75b0c1327891182e7",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+    "tests/NearbyProtocolTest.java": "fb22d630f60f01bddf4326b5626108613b8f9d60dad4692a6a889d31953ed2f6"
+  }
+}

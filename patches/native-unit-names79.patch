@@ -1,0 +1,23 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -687,7 +687,19 @@
+ 		}
+ 		return (i >= 0 && i < (int)stat_txt_names.size()) ? stat_txt_names[i].c_str() : "?";
+ 	}
+-	const char* unit_name(UnitTypes id) { return stat_name((int)id); }
++	const char* unit_name(UnitTypes id) {
++        // Campaigns and Use Map Settings maps can rename a unit in UNIS/UNIx.
++        // Aldaris is deliberately a renamed Tassadar, for example. Preserve the
++        // imported map's spelling/encoding; never replace the underlying type.
++        if (size_t(id) < game_st.unit_types.vec.size()) {
++            size_t index = get_unit_type(id)->unit_map_string_index;
++            if (index && index <= game_st.map_strings.size()) {
++                const auto& name = game_st.map_strings[index - 1];
++                if (!name.empty()) return name.c_str();
++            }
++        }
++        return stat_name((int)id);
++    }
+ 	// upgrade/tech .label is a 1-based stat_txt index (0 = none), unlike the unit id.
+ 	const char* upgrade_name(const upgrade_type_t* up) { return stat_name(up->label - 1); }
+ 	const char* tech_name(const tech_type_t* te) { return stat_name(te->label - 1); }

@@ -27,6 +27,7 @@ final class NativeGlue implements AutoCloseable {
 
   final List<Layer> layers = new ArrayList<Layer>();
   final Paint paint = new Paint();
+  private final Paint scrollbarPaint = new Paint();
   final Map<String, Bitmap> selectors = new HashMap<String, Bitmap>();
   final Bitmap[] portraitMasks = new Bitmap[4], portraitFrames = new Bitmap[4], speakerFrames = new Bitmap[4];
   final Paint maskPaint = new Paint();
@@ -339,12 +340,16 @@ final class NativeGlue implements AutoCloseable {
 
   void scrollbar(Canvas c,float x,float y,int height,float value) {
     byte[] data=art.read("glue/palnl/dlg.grp");
-    for(int id:new int[]{16,19,28})if(!selectors.containsKey("scroll:"+id))selectors.put("scroll:"+id,scrollSprite(data,id));
-    Bitmap up=selectors.get("scroll:16"),down=selectors.get("scroll:19"),thumb=selectors.get("scroll:28");
-
+    for(int id:new int[]{16,19})if(!selectors.containsKey("scroll:"+id))selectors.put("scroll:"+id,scrollSprite(data,id));
+    Bitmap up=selectors.get("scroll:16"),down=selectors.get("scroll:19");
     if(up!=null)c.drawBitmap(up,x,y,NativeArt.PIXELS);
     if(down!=null)c.drawBitmap(down,x,y+height-16,NativeArt.PIXELS);
-    if(thumb!=null)c.drawBitmap(thumb,x+1,y+16+Math.max(0,Math.min(1,value))*(height-46),NativeArt.PIXELS);
+    // A small, beveled circular grip stays readable over the original stonework.
+    float cy=y+23+Math.max(0,Math.min(1,value))*(height-46);
+    scrollbarPaint.setColor(0xff151b13);c.drawCircle(x+8,cy+1,6,scrollbarPaint);
+    scrollbarPaint.setColor(0xffa8bc77);c.drawCircle(x+8,cy,5,scrollbarPaint);
+    scrollbarPaint.setColor(0xff475435);c.drawCircle(x+8,cy,3,scrollbarPaint);
+    scrollbarPaint.setColor(0xffd0d99b);c.drawCircle(x+7,cy-1,1,scrollbarPaint);
   }
 
   private Bitmap scrollSprite(byte[] data,int id){
@@ -352,7 +357,13 @@ final class NativeGlue implements AutoCloseable {
     int w=b.getWidth(),h=b.getHeight();int[] pixels=new int[w*h];b.getPixels(pixels,0,w,0,0,w,h);
     // Transparent surrounds, including the old rectangular tile outline.
     for(int y=0;y<h;y++)for(int x=0;x<w;x++){int rgb=pixels[y*w+x]&0xffffff;
-      if(x<2||y<2||x>=w-2||y>=h-2||(rgb>>16&255)<16&&(rgb>>8&255)<16&&(rgb&255)<16)pixels[y*w+x]=0;}
+      if(x<2||y<2||x>=w-2||y>=h-2||(rgb>>16&255)<16&&(rgb>>8&255)<16&&(rgb&255)<16)pixels[y*w+x]=0;
+      else if((pixels[y*w+x]>>>24)!=0){
+        // Keep the original arrow's silhouette and shading; lift its dark ink
+        // toward the classic menu's olive highlight instead of adding a box.
+        int r=92+(rgb>>16&255)*3/5,g=Math.min(255,110+(rgb>>8&255)*3/5),blue=42+(rgb&255)/2;
+        pixels[y*w+x]=(pixels[y*w+x]&0xff000000)|r<<16|g<<8|blue;
+      }}
     b.recycle();return Bitmap.createBitmap(pixels,w,h,Bitmap.Config.ARGB_8888);
   }
 

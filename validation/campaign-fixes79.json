@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "baseCommit": "e0c323121638c67a36956a782f5771e42547c6c0",
+  "androidApkBuilt": false,
+  "physicalAndroid": false,
+  "fullCampaignPlaythrough": false,
+  "originalArchivesTested": true,
+  "baselineReproductions": {
+    "Reign of Fire": "1.0.8 fails when both rescued Drones start Hatcheries before either completes",
+    "Eye for an Eye": "1.0.8 loads all four Nydus canals without their original pairings"
+  },
+  "checks": [
+    {
+      "test": "combined.log",
+      "passed": true,
+      "results": [
+        "PASS Reign of Fire original introduction, emitter pickup, Drone handover and starting resources",
+        "PASS simultaneous Drone construction and exact save/load continuation without false defeat",
+        "PASS cancel returns Drone; remaining Hatchery completes and produces larvae",
+        "PASS Hatchery plus Extractor construction and cancellation",
+        "PASS genuine defeat after losing both Drones or both unfinished buildings",
+        "PASS original Psi Disrupter destruction victory",
+        "PASS Eye for an Eye: both pre-placed Nydus pairs, save/load and right-click traversal in all four directions",
+        "PASS linked Nydus destruction cleanup preserves unrelated pair",
+        "PASS To Chain the Beast and Vile Disruption original Nydus pairs; Escape from Aiur unpaired canals remain unpaired",
+        "PASS custom UMS Nydus links: exact/reordered/one-sided pairs, missing/self/cross-owner/non-Nydus targets, conflicting/duplicate serials and absent/wrong link flags",
+        "PASS all 16 custom unit names found in the 64 original campaign maps (11 missions)",
+        "PASS Aldaris card/save identity and original objective shared vision",
+        "PASS default/invalid/empty map-name fallback and localized byte preservation",
+        "PASS dedicated Stukov identity/portrait and no cross-mission rename leakage",
+        "PASS fogged enemy target: attack/default-order input, red pixels below remembered building, blink/expiry and persistent selection, visible targets and no unseen/mobile information leak"
+      ],
+      "scope": "Combined campaign, Nydus, hero-name and fog rendering tests with the shared AI ability patch enabled; later Web guard covered by targeted ability tests."
+    },
+    {
+      "test": "all-missions.log",
+      "passed": true,
+      "results": [
+        "PASS 64 original maps: 248 directed computer alliances and force flags",
+        "PASS 64 original maps: 8414 condition dispatches across all 13 used types, with initial/later switch and timer states",
+        "PASS human and no-start trap slots stay outside default computer alliance",
+        "PASS Agent of the Swarm: Raynor alliance, original ending condition and hatch wait ordering",
+        "PASS True Colors: three ambush locations, betrayal, burrow, unburrow/exit, Move priority and ceasefire",
+        "PASS True Colors: both original Hatchery transfers initialize creep/larva orders, tick production, cap three and resume after consumption",
+        "MISSIONS_RESULT PASS"
+      ]
+    },
+    {
+      "test": "nydus-asan.log",
+      "passed": true,
+      "results": [
+        "PASS Eye for an Eye: both pre-placed Nydus pairs, save/load and right-click traversal in all four directions",
+        "PASS linked Nydus destruction cleanup preserves unrelated pair",
+        "PASS To Chain the Beast and Vile Disruption original Nydus pairs; Escape from Aiur unpaired canals remain unpaired",
+        "PASS custom UMS Nydus links: exact/reordered/one-sided pairs, missing/self/cross-owner/non-Nydus targets, conflicting/duplicate serials and absent/wrong link flags"
+      ],
+      "sanitizer": "AddressSanitizer; leak detection disabled because this host runs under ptrace"
+    },
+    {
+      "test": "prepare_native.py",
+      "passed": true,
+      "results": [
+        "Final patch stack reconstructs byte-identical engine sources on repeated preparation."
+      ]
+    }
+  ],
+  "limits": [
+    "Controlled objective checks use the original maps with movement assists; not full playthroughs.",
+    "Old saves retain missing Nydus links and need a mission restart.",
+    "The checked-in 1.0.8 native libraries and release APK have not been rebuilt."
+  ],
+  "preparedEngineSha256": {
+    "bwgame.h": "3f01478e3653aa5a93de6404a1890f0ca0349601354a61bc4cd9f571120fe181",
+    "web/campaign.h": "9d8bb4db64c25aea41d38f7d3db0cf0f9df04229ea51965e7d8932212019a02c",
+    "web/campaign_ai.h": "649ca5ba9d392f98daefadbece4cb06bd9f2a99fd2733a0d22aa6f5021e433c9",
+    "web/sandbox.h": "43631beb301c2230b2b7680a026f085ead17c626c8b312f005a1d104dce7c843",
+    "ui/ui.h": "9e7994869f240749b2eea9c59942c19e8a8a6679983f977d0f68b793be8d2803",
+    "web/wasm_main.cpp": "c0ce8b4521608364ceeb76c5492e8d8b824f22c03ccd0bf3ee8a8306b142e9c7"
+  },
+  "sourceSha256": {
+    "patches/native-campaign79.patch": "a8d291a1b8297a6a4bce68b68f13a68a88b25de959fb73b147de104ac8a4b529",
+    "patches/native-unit-names79.patch": "cdec029452b92602b3c0d9abd3aff76b5740ba92045f26b1318bbe0e41004c7e",
+    "patches/native-fog-target79.patch": "566468c4610f499bf4ff00cd89203563980c4bcc00db89d0d9d980d5d33025be",
+    "patches/native-ai-abilities79.patch": "332a8b6aef3e3e8ad18e1be8a210e0faf5a7ee10f5dd0e3fc5bb93b17fdc6f3c",
+    "scripts/prepare_native.py": "9e3403b7acfb5bb42a368ddabb199da11aa8c6b5377a64db081cbfa4bcb4a143",
+    "native/generated/wasm_main.cpp": "88bdfb89fee986643b9dc9a668ab0e65ff3c784b3307ccde02f69049dd81696d",
+    "tests/native_campaign79.cpp": "b73cbe5fdeff0260a55e76f2bc707f95409d828014acdb7d6ae50ff78a7b74de",
+    "tests/native_nydus79_cases.h": "b9337b7e963c4c14630896f97b88d29779911819411552505953bd76996cf8ea",
+    "tests/native_heroes79_cases.h": "c295eaa015bd5ef8cd6953216dadc677ffac1e7f1e85a57659b3180c23087f46",
+    "tests/native_fog_target79_cases.h": "ed723ef9e19164c0d8b415d7bcb071cd7a7de85290d7d442a6b858bad1645ce9",
+    "tests/build_native_host.py": "3086da60ea7ed56d8512ccffb7627b34c2fafdc7468e4e3380a338854130ca82"
+  }
+}

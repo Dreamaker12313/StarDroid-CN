@@ -599,6 +599,9 @@ final class NativeSurface extends SurfaceView
   private void music(String phase) {
     if (!musicPhase.equals(phase)) musicIndex = 0;
     musicPhase = phase;
+    // Classic BroodWar.mpq stores the expansion theme followed by the original
+    // first theme in race1.wav. Play the whole file before race2/race3; appending
+    // StarCraft's race1.wav would play that original theme twice per cycle.
     String race = new String[] {"zerg", "terran", "protoss"}[missionRace],
         prefix = new String[] {"z", "t", "p"}[missionRace];
     String name =
@@ -1404,9 +1407,21 @@ final class NativeSurface extends SurfaceView
     }
     c.restore();
     glue.scrollbar(c,332,130,110,mapMaxOffset()==0?0:mapOffset/mapMaxOffset());
-    add(new RectF(328,126,352,147),()->mapOffset=Math.max(0,mapOffset-22),mapOffset>0);
-    add(new RectF(328,223,352,244),()->mapOffset=Math.min(mapMaxOffset(),mapOffset+22),mapOffset<mapMaxOffset());
-    Button bar=new Button(new RectF(328,147,352,223),()->{},mapMaxOffset()>0);bar.vertical=true;bar.slider=v->mapOffset=v*mapMaxOffset();buttons.add(bar);
+    add(new RectF(328,126,352,146),()->mapOffset=Math.max(0,mapOffset-22),mapOffset>0);
+    add(new RectF(328,224,352,244),()->mapOffset=Math.min(mapMaxOffset(),mapOffset+22),mapOffset<mapMaxOffset());
+    Button bar=new Button(new RectF(328,146,352,224),()->{},mapMaxOffset()>0);bar.vertical=true;
+    final long[] dragStarted={Long.MIN_VALUE};final float[] grip={0};
+    bar.slider=v->{
+      float maximum=mapMaxOffset(),position=v*bar.rect.height()-7,travel=bar.rect.height()-14;
+      if(dragStarted[0]!=downAt){
+        dragStarted[0]=downAt;float thumb=maximum>0?mapOffset/maximum*travel:0;
+        grip[0]=Math.abs(position-thumb)<=9?position-thumb:0;
+      }
+      // Preserve where the finger grabbed the circle. Track taps jump directly;
+      // dragging reaches both ends without changing the selected map.
+      mapOffset=(v<=0?0:v>=1?1:Math.max(0,Math.min(1,(position-grip[0])/travel)))*maximum;
+    };
+    buttons.add(bar);
     redButton(c,"Import maps/ZIP",206,98,146,26,()->activity.runOnUiThread(activity::pickNativeMap),!importingMaps);
   }
   private void drawCustom(Canvas c) {

@@ -1,0 +1,53 @@
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -1506,10 +1506,17 @@
+ 	// Draw the frozen snapshot of a fogged structure/resource. Something at an explored
+ 	// spot we never actually saw (built in fog) has no snapshot and stays hidden. The
+ 	// structure doesn't move, so the live sprite's position still places the copy.
+-	void draw_fog_snapshot(const sprite_t* live, uint8_t* data, size_t data_pitch) {
++	virtual void draw_fog_snapshot(const sprite_t* live, uint8_t* data, size_t data_pitch) {
+ 		auto& snap = fog_snapshots.at(live->index);
+ 		if (!snap.valid) return;
++		// Keep the selected remembered building's circle below its cached body.
++		// Do not show health bars from the live unit while it is out of sight.
++		const unit_t* selected = current_selection_sprites_set.at(live->index);
+ 		for (image_t& image : snap.images) {
++			if (selected && image.modifier != 10) {
++				draw_selection_circle(live, selected, data, data_pitch);
++				selected = nullptr;
++			}
+ 			image.sprite = const_cast<sprite_t*>(live);
+ 			draw_image(&image, data, data_pitch, st.players[live->owner].color);
+ 		}
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -2916,14 +2916,24 @@
+ 		return (uint8_t)(t->owner == my_player ? line_move_color
+ 		              : t->owner < 8 ? line_atk_color : ring_neutral_color);
+ 	}
+-	// Draw the flashing target ring here, inside the sprite pass, so the unit's body occludes
+-	// it exactly like the normal selection circle (which is drawn the same way).
+-	void draw_sprite(const sprite_t* sprite, uint8_t* data, size_t data_pitch) override {
++	// Both live and remembered structures draw the target ring before their body.
++	// Fog snapshots bypass draw_sprite, so they need the same feedback hook.
++	void draw_target_flash(const sprite_t* sprite, uint8_t* data, size_t data_pitch) {
+ 		if (flash_showing()) {
+ 			unit_t* t = get_unit(flash_unit);
+-			if (t && t->sprite == sprite) draw_selection_ring(t, flash_color(), data, data_pitch);
+-		}
++			if (t && t->sprite == sprite && !unit_hidden_by_fog(t))
++				draw_selection_ring(t, flash_color(), data, data_pitch);
++		}
++	}
++	void draw_sprite(const sprite_t* sprite, uint8_t* data, size_t data_pitch) override {
++		draw_target_flash(sprite, data, data_pitch);
+ 		ui_functions::draw_sprite(sprite, data, data_pitch);
++	}
++	void draw_fog_snapshot(const sprite_t* sprite, uint8_t* data, size_t data_pitch) override {
++		// An explored tile alone does not reveal a building constructed out of sight.
++		if (!fog_snapshots.at(sprite->index).valid) return;
++		draw_target_flash(sprite, data, data_pitch);
++		ui_functions::draw_fog_snapshot(sprite, data, data_pitch);
+ 	}
+ 
+ 	// The animated click marker BW drops where you order — the real Cursor_Marker sprite,

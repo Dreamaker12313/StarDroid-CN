@@ -14,6 +14,8 @@ Put together by **ToadWarrior**.
 
 Version **1.0.8** imports map ZIPs with up to 10,000 maps, adds an optional **One larva morph per press** control, offers English, Russian, German, Spanish and French UI, and adds shared campaign/custom-game AI transport handling for Dropships, Shuttles and upgraded Overlords. Original fonts, protected dialogue, clean menus and **Diagnostics / credits** remain. Install `StarDroid-1.0.8.apk` over the existing app. [Changes and update steps](docs/RELEASE-1.0.8.md).
 
+Development source targets **1.0.9 (79)**; its campaign, targeting and AI corrections are not yet in the published APK. See [development changes and validation](docs/CAMPAIGN-FIXES-79.md).
+
 ## Features
 
 - **Campaigns:** StarCraft and Brood War campaign selection, briefings, mission progression, and imported cinematics.

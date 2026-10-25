@@ -260,6 +260,7 @@ OPENBW_EXPORT(openbw_init_campaign) void openbw_init_campaign(int width, int hei
         g_campaign_expansion = entry.expansion;
         mp_slot slot{entry.player,race_t(entry.race)};
         init_game(width,height,entry.player,&slot,1,true);
+        g_campaign->apply_campaign_compatibility(mission);
         return;
     }
     error("Unknown campaign mission");
