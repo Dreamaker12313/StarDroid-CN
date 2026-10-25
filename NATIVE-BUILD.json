@@ -1,7 +1,7 @@
 {
-  "version": "1.0",
-  "versionCode": 70,
-  "status": "earlier-placement-scroll-and-setting-host-validated",
+  "version": "1.0.1",
+  "versionCode": 71,
+  "status": "minimap-default-off-host-validated-device-pending",
   "ndk": "r27d",
   "api": 26,
   "targetApi": 35,
@@ -10,11 +10,11 @@
   "nativeEngineRebuilt": false,
   "sources": {
     "HISTORY.md": "6ad2c8f6a69ceef97982eef9e40f82f40f24aea16c3842c861dca571fbd2beb4",
-    "README.md": "458efcd920c318f292d8e9b2f52dcac9ed3b2fc2cc1ddb0b6b5b42ed8d626e1a",
+    "README.md": "98eaaade93cbdf1208a9a13985d891553eec7d1efb3fe955d402ebf9006c7761",
     "UPSTREAM.json": "6b81e721c7193682a68fef987b38feee4315c6705207cf89d44ef546bd3898e9",
-    "VALIDATION.md": "3e67a4fa9f9dd22cfdd7b3ce95a48a313d35149600b4eb3ab9894d4699e61c95",
-    "app/build.gradle": "fe1c54678569a6a7270df06a390907906938a5261d42b09cab692fc746ede6c9",
-    "app/src/main/AndroidManifest.xml": "ebf2ab77e656fe5984ad95fc2f09279fa2780154c92c4005e7b066930b17567a",
+    "VALIDATION.md": "c5101ed235637b7fd30521a799daf66c0aad0d6f2f6472c1cf39b45a6c849dac",
+    "app/build.gradle": "a19f4dd97cbac92f00aac4eba91863f1fe3ea55da24facfd29db0f992bc873e4",
+    "app/src/main/AndroidManifest.xml": "aae08223aa26ec7b9fc018844a655420ce80353a6a92d71281726c95bdf5d5b2",
     "app/src/main/assets/game/index.html": "479a1efb368302481f8c3801640b35a75c10dbad9447d5bbd4af82cee704fb91",
     "app/src/main/assets/game/menus.js": "7cf2c75ff2d36c08f44cfe65ab8717313cff1fcba1290a04597afd354e17628f",
     "app/src/main/assets/game/testing.js": "4d27d767251336acff60317a3cffbf5ea60c2e0f53fe57a0fb18a58337ba46e4",
@@ -29,7 +29,7 @@
     "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
     "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
     "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
-    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "5a63c15d7eb2545f4ca1902bac43a196557d7515ed742211a7cd75b8b252d3b7",
+    "app/src/main/java/org/openbw/androidtest/ControlSettings.java": "8c8dac9a438df10898f01ce89b76ddffb381887f08f75b4a90c3f84ff1799828",
     "app/src/main/java/org/openbw/androidtest/ExitReport.java": "bc302ece7eb0ee273f35a81aa0e63c9b256a55501f318b5fd14adc6b830ff93b",
     "app/src/main/java/org/openbw/androidtest/GameContent.java": "039073a80187c4a4fd2807221081f1f6c2ed58cdb6a3c21bfd7b6c60c446c47c",
     "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "923ae62bcd069266550aaebb7e35e8cfac50a476c13fa2bf02b0b1edea8206b9",
@@ -75,8 +75,8 @@
     "docs/FIXES-0.59.md": "e7b463abef9ad0f9fb7115b74c339201573143bc0cdea22dc638d2834e9bcdb8",
     "docs/FIXES-0.60.md": "f91b1845be136392ee0158ab82a8166bfdb6b3daabc151ec47d1ef06a8edd115",
     "docs/FIXES-0.61.md": "74508a4da354d7fec0755772e987ec3b8a790bb5b5e0905468b14272451d6f4d",
-    "docs/FIXES-1.0.md": "3fc7fc534dadadadbd4e0f74107b7fe9fc09dd00c7ea0b5680930622b76e884b",
-    "docs/PLAYER-GUIDE.md": "f60b3100080eeb31c1a97856a1af65ac140d3a7d04cb187dae1c0218592c6d80",
+    "docs/FIXES-1.0.md": "79c0e95ef6ba6af3499a2ba378dcb94a1b47e789723f6f159b5ff96a01e197b1",
+    "docs/PLAYER-GUIDE.md": "bf9761e4003500b6f83db4c20caf4b141a4e34aade7096a1f705fce475c38b31",
     "docs/artwork/pylon-launcher.svg": "f9fd7915b0d5187682f96e5db996e908f33cd933df2bdf95981d35ef7654df79",
     "docs/campaign-heroes.json": "ec87c687a14015694b710c0c6328913112a5098b87ff0ad068a5d68c00043b0b",
     "native/audio.h": "6437ac032b9961e0c1cc91c84056be268682ada3754614c9385441930fabf46a",
@@ -115,7 +115,7 @@
     "scripts/build.py": "8d8a8ef03dac225c76c96e45d3061e9123582c620339a7e93e71039d5735c22a",
     "scripts/build_hero_report.py": "2108560f833ea0c61c77197f03b9aa44de245c41ef3ef60e23d39e2e650a39ba",
     "scripts/build_native_engine.py": "c6bf87737c761bbf9d6f69d5eb49033662000c3901d6b5425d6f224b5de655ed",
-    "scripts/build_nearby.py": "0ff47e95e039c7b3fda30a449eea5e56ded4cb57853c71adb4dd5d3e0ec92d8a",
+    "scripts/build_nearby.py": "95b075ddc9e065f3dcf639dab70b391f5ae006c237c5ebd24dc948a66903b220",
     "scripts/prepare_classic.py": "7ddb4818ef898446b6c7d8efd6b26981e51bbea0bf583b34ed772fcae3f7e7af",
     "scripts/prepare_menus.py": "741ee2fabe54e5c495a0e07bda56469947a3e69cc67e5ca82518bf0a13efed02",
     "scripts/prepare_native.py": "422effbd9d613be6154cc87de7bd82ebf03990316737dd6fb3c9d9191e314426",
@@ -213,10 +213,9 @@
   "nativeEngineVersion": "1.0-build69",
   "multiplayerProtocolBuild": 60,
   "interfaceChanges": [
-    "Top/left/right edge scroll begins within 48 logical pixels; the bottom band remains 24 and timed smoothing/max speed are retained.",
-    "Camera settings adds Scroll while placing, default on, with persistence/migration and an immediate stop when disabled.",
-    "Existing selection/target scrolling, ordinary/two-finger pans, Build/Cancel capture and renderer bounds remain intact.",
-    "Version 1.0/code 70; Java-only update with all native libraries and assets identical to build 69. Device confirmation pending."
+    "Minimap hold issues orders defaults to off for fresh/missing settings and all control presets.",
+    "Explicit saved minimapOrders true/false choices are preserved.",
+    "Version 1.0.1/code 71; Java-only update with all 76 native-library and asset entries identical to version 1.0/build 70."
   ],
   "previousInterfaceChanges": [
     "Placement drags scroll beneath the command bar/minimap while clamping the preview to the visible world and preserving captured touch ownership.",
@@ -1118,7 +1117,7 @@
       "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
       "version": "1.0",
       "versionCode": 69,
-      "timing": "PASS 174467 camera checks: all directions, 30\u2013144 Hz, zoom/speed, subpixel pans, stop/reverse, stalls",
+      "timing": "PASS 174467 camera checks: all directions, 30–144 Hz, zoom/speed, subpixel pans, stop/reverse, stalls",
       "output": "PASS 12971 checks, 1728 edge/zoom/control positions: always below visible preview, overlap allowed, real touch routing blocks underlying buttons/commands/minimap and the gap, drag capture, migration/persistence and three-race renders",
       "sourceSha256": {
         "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
@@ -1209,13 +1208,53 @@
     }
   },
   "validation": {
+    "minimap-default-v1.0.1.json": {
+      "version": "1.0.1",
+      "versionCode": 71,
+      "applicationId": "org.openbw.androidtest",
+      "minSdk": 26,
+      "targetSdk": 35,
+      "apk": {
+        "file": "StarDroid-1.0.1.apk",
+        "size": 2230818,
+        "sha256": "8604b3938f5b00aec2e3be045f4482c6d32d476cf42121a2bfb98ff940cfc997"
+      },
+      "signerCertificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+      "matchesVersion1_0Signer": true,
+      "apkSignatureVerified": true,
+      "zipalign16KiBVerified": true,
+      "nativeAndAssetEntriesCompared": 76,
+      "nativeLibrariesAndAssetsUnchanged": true,
+      "preferenceChecks": {
+        "assertionsPassed": 14,
+        "cases": [
+          "fresh settings",
+          "missing settings",
+          "all three presets",
+          "explicit saved true",
+          "explicit saved false",
+          "save/load round trip",
+          "malformed-preference fallback"
+        ]
+      },
+      "runtimeChange": "minimapOrders defaults to false; explicit saved choices are preserved",
+      "physicalDeviceTestsPerformed": false,
+      "buildChecks": {
+        "assembleRelease": "passed",
+        "lintRelease": "passed",
+        "lintErrors": 0,
+        "lintWarnings": 10
+      }
+    }
+  },
+  "historicalValidationBuild70": {
     "placement-scroll-v1.0.json": {
       "passed": true,
       "physicalAndroid": false,
       "canvas": "AWT compatibility shim; real NativeArt, ControlSettings, PlacementButtons and extracted production Surface/HUD methods",
       "version": "1.0",
       "versionCode": 70,
-      "timing": "PASS 178077 camera checks: all directions, 30\u2013144 Hz, zoom/speed, subpixel pans, stop/reverse, stalls",
+      "timing": "PASS 178077 camera checks: all directions, 30–144 Hz, zoom/speed, subpixel pans, stop/reverse, stalls",
       "output": "PASS 13116 checks, 1728 edge/zoom/control positions: always below visible preview, overlap allowed, real touch routing blocks underlying buttons/commands/minimap and the gap, drag capture, migration/persistence and three-race renders",
       "sourceSha256": {
         "app/src/main/java/org/openbw/androidtest/NativeArt.java": "a2b0bcf98f10f4a1daa67718b355e832949950cdc05e92002cc54f9f14e6093d",
@@ -1267,5 +1306,11 @@
         "tests/check_scroll70_package.py": "978a91ab428a6f9e0385fd05007cd12a66adf7049c7a34af3a5baf36428d2722"
       }
     }
-  }
+  },
+  "historicalInterfaceChangesBuild70": [
+    "Top/left/right edge scroll begins within 48 logical pixels; the bottom band remains 24 and timed smoothing/max speed are retained.",
+    "Camera settings adds Scroll while placing, default on, with persistence/migration and an immediate stop when disabled.",
+    "Existing selection/target scrolling, ordinary/two-finger pans, Build/Cancel capture and renderer bounds remain intact.",
+    "Version 1.0/code 70; Java-only update with all native libraries and assets identical to build 69. Device confirmation pending."
+  ]
 }

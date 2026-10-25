@@ -26,7 +26,7 @@ Open **Menu → Options → Touch Controls** during a match. Its **Gesture guide
 
 - Two fingers always pan, even when pinch zoom is disabled.
 - Pinch zoom and **Allow zoom out** are on by default. Existing saved preferences take priority when updating.
-- Tap or drag the minimap to move the camera. Holding there issues an order when **Minimap hold issues orders** is enabled; the default hold is about 450 ms.
+- Tap or drag the minimap to move the camera. **Minimap hold issues orders** is off by default in 1.0.1, including when applying a preset. Enable it in **Camera settings** if you want holding to issue an order; its default hold duration is about 450 ms. Updating preserves any existing saved choice.
 - **Camera settings** includes pan speed, pinch sensitivity, reverse drag, and minimap hold timing.
 
 ### Orders and descriptions

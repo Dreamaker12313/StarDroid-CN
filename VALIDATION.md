@@ -1,6 +1,23 @@
-# StarDroid 1.0 validation (placement scroll preference, build 70)
+# StarDroid 1.0.1 validation (minimap default, build 71)
 
-> Publication note: references below to paused GitHub publication record earlier development decisions. Current download information is in [the release notes](docs/RELEASE-1.0.md). Testing limitations remain as recorded.
+Report: [minimap-default-v1.0.1.json](validation/minimap-default-v1.0.1.json).
+
+- 14 focused preference assertions pass using the production ControlSettings class:
+  fresh and missing settings, all three presets, saved true/false values,
+  save/load round trips, and malformed-preference fallback.
+- Release assembly and Android lint pass: 0 errors and 10 warnings.
+- The signed APK has application ID `org.openbw.androidtest`, version 1.0.1,
+  version code 71, minimum SDK 26, and target SDK 35.
+- APK signature verification passes with the same signing certificate as version
+  1.0. ZIP alignment checks pass, including 16 KiB native-library alignment.
+- All 76 native-library and asset entries match version 1.0 byte for byte.
+  Only the Java default and app version change; explicit saved choices remain intact.
+- Physical-device installation and touch testing were not performed for this update.
+  Earlier device/runtime evidence below remains historical, not a new test run.
+
+# Historical validation: StarDroid 1.0 (placement scroll preference, build 70)
+
+> Publication note: references below to paused GitHub publication record earlier development decisions. Current download information is in [the release notes](docs/RELEASE-1.0.1.md). Testing limitations remain as recorded.
 
 Current reports: `placement-scroll-v1.0.json` and
 `placement-package-v1.0.json`. Build 69 snapshots are preserved in

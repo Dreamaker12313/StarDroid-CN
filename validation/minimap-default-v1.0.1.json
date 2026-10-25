@@ -1,0 +1,38 @@
+{
+  "version": "1.0.1",
+  "versionCode": 71,
+  "applicationId": "org.openbw.androidtest",
+  "minSdk": 26,
+  "targetSdk": 35,
+  "apk": {
+    "file": "StarDroid-1.0.1.apk",
+    "size": 2230818,
+    "sha256": "8604b3938f5b00aec2e3be045f4482c6d32d476cf42121a2bfb98ff940cfc997"
+  },
+  "signerCertificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "matchesVersion1_0Signer": true,
+  "apkSignatureVerified": true,
+  "zipalign16KiBVerified": true,
+  "nativeAndAssetEntriesCompared": 76,
+  "nativeLibrariesAndAssetsUnchanged": true,
+  "preferenceChecks": {
+    "assertionsPassed": 14,
+    "cases": [
+      "fresh settings",
+      "missing settings",
+      "all three presets",
+      "explicit saved true",
+      "explicit saved false",
+      "save/load round trip",
+      "malformed-preference fallback"
+    ]
+  },
+  "runtimeChange": "minimapOrders defaults to false; explicit saved choices are preserved",
+  "physicalDeviceTestsPerformed": false,
+  "buildChecks": {
+    "assembleRelease": "passed",
+    "lintRelease": "passed",
+    "lintErrors": 0,
+    "lintWarnings": 10
+  }
+}

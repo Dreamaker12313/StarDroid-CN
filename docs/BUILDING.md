@@ -28,10 +28,10 @@ This downloads the pinned tools, prepares the vendored engine with the patches i
 
 Outputs:
 
-- `dist/StarDroid-1.0.apk`
+- `dist/StarDroid-1.0.1.apk`
 - `dist/SHA256SUMS.txt`
 
-The visible version remains **1.0**, with Android version code **70** for this release. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
+The visible version is **1.0.1**, with Android version code **71** for this release. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
 
 Use `STARDROID_ANDROID_TOOLS` to select a tool-cache directory. The historical `OPENBW_ANDROID_TOOLS` variable is still accepted. The default is `.tools/` in the repository. The helper writes a local `local.properties` pointing Gradle at the staged SDK.
 
@@ -51,7 +51,7 @@ To sign with a key you control, set these environment variables before building:
 
 All four required variables must be supplied together. Supply credentials locally or through a private CI secret store; do not commit them. `signing/`, keystores, and environment files are ignored.
 
-Android only permits in-place updates with the same application ID and signing identity. A contributor's development-signed APK cannot update the distributed APK. Use a separate test device/emulator when preserving an existing installation's imports and saves matters. The published v1.0 APK retains the project's established release signing identity.
+Android only permits in-place updates with the same application ID and signing identity. A contributor's development-signed APK cannot update the distributed APK. Use a separate test device/emulator when preserving an existing installation's imports and saves matters. Published updates retain the project's established release signing identity.
 
 ## Faster rebuilds
 

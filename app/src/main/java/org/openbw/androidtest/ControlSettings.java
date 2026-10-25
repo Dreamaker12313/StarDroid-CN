@@ -20,8 +20,8 @@ final class ControlSettings {
     radius = name.equals("Precise") ? 8 : 28;
     doubleTapMs = 300; tooltipMs = 220; miniHoldMs = 450; placementOffset = 48;
     panSpeed = pinchSpeed = 1;
-    doubleTap = holdSelect = attackTap = pinchZoom = minimapOrders = tooltips = confirmBuild = placementButtonsFollow = placementScroll = true;
-    reversePan = false; groundOrders = true; selectionButton = 1; controlGroups = false; commandModeButton = true;
+    doubleTap = holdSelect = attackTap = pinchZoom = tooltips = confirmBuild = placementButtonsFollow = placementScroll = true;
+    minimapOrders = false; reversePan = false; groundOrders = true; selectionButton = 1; controlGroups = false; commandModeButton = true;
   }
 
   void load(SharedPreferences prefs) {
