@@ -150,7 +150,7 @@ On an x86-64 Linux development machine with Python 3.10+, JDK 17, Git, and `patc
 python3 scripts/build.py
 ```
 
-The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.8.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
+The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.9.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
 
 Automated checks cover upgrade progression, command cards, touch routing, saves, multiplayer protocol behavior, UI layouts, and screen-edge rendering with AddressSanitizer and guarded buffers. These do not replace physical-device checks; installation, radio interoperability, touch, audio, and full campaign playthroughs need broader device testing. See [VALIDATION.md](VALIDATION.md) for exact coverage and limitations.
 

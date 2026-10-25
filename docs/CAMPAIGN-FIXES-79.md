@@ -1,9 +1,13 @@
 # StarDroid 1.0.9 development changes
 
-These are unreleased source changes targeting 1.0.9 / build 79. The published
-1.0.8 APK and the checked-in 1.0.8 native libraries do not contain them. Rebuild both Android native libraries
-before packaging; do not use `--skip-engine` with the old libraries. The existing
-`NATIVE-BUILD.json` describes the published 1.0.8 artifacts, not these changes.
+These changes target 1.0.9 / build 79. Both Android native libraries have been
+rebuilt, and the APK uses the original release signing identity so it can update
+the existing installation. The GitHub release remains 1.0.8 until a new release
+is published. The repository still contains build 78 prebuilt libraries: rebuild
+both ABIs before packaging; do not use `--skip-engine` with those old files.
+`NATIVE-BUILD.json` describes those checked-in libraries. The new APK build is
+recorded in `validation/native-build79.json` and `validation/package-v79.json`.
+Physical Android device testing is still pending.
 
 ## Reign of Fire
 
@@ -31,13 +35,21 @@ New games retain these connections through saving and loading. Saves made by an
 older engine serialize the missing connections: restart the affected mission to
 receive the corrected initial pairings. No original game files need re-importing.
 
-## Campaign unit names
+## Campaign unit names and portraits
 
 The UI now honors the unit names supplied by UNIS/UNIx map records instead of
 always showing the underlying unit's default name. The Insurgent intentionally
 uses a Tassadar unit named Aldaris. This fix respects that name without changing
-the unit's abilities, model, portrait, or the map's rules. It also applies to other
+the unit's abilities, model, or the map's rules. It also applies to other
 renamed campaign characters and custom-map units, including localized map names.
+
+The portrait lookup also accounts for campaign characters represented by another
+combat unit: Aldaris in Legacy of the Xel'Naga and The Insurgent, DuGalle in To
+Chain the Beast, and Raszagal in To Slay the Beast and The Reckoning. These use
+the matching character's imported idle and talking movies for both selection and
+transmission portraits. Mission identity and a valid map rename scope the change;
+it does not guess from English names, alter unit statistics, or rename portraits
+in custom games. Save loading restores the same presentation rules.
 
 The Insurgent's original triggers deliberately enable shared vision of Aldaris's
 player during the objective. That visibility is preserved. Stukov's dedicated unit
@@ -95,6 +107,19 @@ Host checks confirmed that importing preserves the complete files and the native
 mixer plays the original portion through the end. The same playlist method serves
 campaigns, custom games and nearby multiplayer. No extra copy was appended, which
 would repeat the original first theme twice in each cycle.
+
+Previously, **Next track** skipped whole files, so it exposed only three stops
+and skipped the original theme if pressed during the first part of the combined
+file. It now stops at the embedded original theme before advancing to files 2
+and 3: four selectable stops for Terran, Zerg and Protoss. The track picker still
+lists the three files; the first includes both the Brood War and original themes.
+
+The boundary is derived from the imported music and verified against three
+separate passages of the original theme, without fixed timestamps. Missing,
+unrecognized or damaged reference music keeps the complete-file playback path.
+Natural playback still plays each theme once. Tests cover all three races using
+the supplied music, alternate durations, unrelated audio, malformed files,
+manual selection and pressing Next after the embedded theme has already begun.
 
 ## Multiplayer compatibility
 

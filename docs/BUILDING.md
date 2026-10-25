@@ -31,7 +31,7 @@ Outputs:
 - `dist/StarDroid-1.0.9.apk`
 - `dist/SHA256SUMS.txt`
 
-The unreleased development version is **1.0.9**, with Android version code **79**. The published APK remains 1.0.8; the development changes require rebuilding both native libraries. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
+The unreleased development version is **1.0.9**, with Android version code **79**. The GitHub release and checked-in native libraries remain 1.0.8; rebuild both ABIs to include the development changes. A separately built and signed 1.0.9 APK is recorded in `validation/package-v79.json`. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
 
 Use `STARDROID_ANDROID_TOOLS` to select a tool-cache directory. The historical `OPENBW_ANDROID_TOOLS` variable is still accepted. The default is `.tools/` in the repository. The helper writes a local `local.properties` pointing Gradle at the staged SDK.
 
@@ -152,10 +152,10 @@ The pinned engine revision and archive hash are in [UPSTREAM.json](../UPSTREAM.j
 
 ## Earlier regression checks
 
-Build 77 introduced `patches/native-polish77.patch`; the current stack applies
-`native-polish78.patch` after it. Both native ABIs must be rebuilt; the
-prebuilt libraries in this source package match build 78. Nearby protocol build
-78 rejects older simulation builds. UI strings are in the five-column UTF-8
+Build 77 introduced `patches/native-polish77.patch`; build 78 applied
+`native-polish78.patch` after it. The current stack also includes the campaign,
+unit-name/portrait, fog-target and AI-ability patches for build 79. The checked-in prebuilt
+libraries still match build 78 and must be rebuilt. Nearby protocol build 79 rejects older simulation builds. UI strings are in the five-column UTF-8
 `app/src/main/assets/native/ui-languages.tsv` file. Imported game strings use
 Windows-1251 for the detected Russian installation and Windows-1252 otherwise.
 
@@ -193,5 +193,5 @@ assets; `tests/run_presentation78.py` checks speech and preference persistence.
 Build with `python3 tests/build_native_host.py revision78 --skip-prepare`.
 Run `build-native/host/native-revision78 EN_CORE_DIR WEAVE_SCX STARCRAFT_MPQ`.
 For the all-mission smoke/restriction sweep append `sweep BROODWAR_MPQ`.
-Game data is not included. The native patch stack ends in `native-polish78.patch`.
+Game data is not included. The build 78 patch stack ended in `native-polish78.patch`; the current stack includes the build 79 corrections.
 Save schema 4 remains able to read schemas 1–3; new saves need build 78 or later.

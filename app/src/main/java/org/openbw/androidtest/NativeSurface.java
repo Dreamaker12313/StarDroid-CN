@@ -101,6 +101,8 @@ final class NativeSurface extends SurfaceView
   private String commandError = "";
   private double commandErrorUntil;
   private String musicPhase = "", currentMusicPath = "";
+  private int musicThemeBoundary;
+  private final HashMap<String, Integer> musicThemeStarts = new HashMap<String, Integer>();
   private float speechMusicGain = 1;
   private final ArrayList<Button> buttons = new ArrayList<Button>();
   private final ArrayList<JSONObject> visibleMissions = new ArrayList<JSONObject>();
@@ -617,14 +619,36 @@ final class NativeSurface extends SurfaceView
     if (phase.equals("game") && !musicTrack.equals("auto")) name = "music/" + musicTrack + ".wav";
     if (name.equals(currentMusicPath) && NativeBridge.playing(63)) return;
     currentMusicPath = name;
+    musicThemeBoundary = 0;
     try {
       byte[] b = expansion ? NativeBridge.asset(6, name) : null;
+      if (b != null && phase.equals("game") && name.matches("music/(terran|zerg|protoss)1\\.wav")) {
+        Integer boundary = musicThemeStarts.get(name);
+        if (boundary == null) {
+          try { boundary = MusicThemes.appendedThemeMs(b, NativeBridge.asset(5, name)); }
+          catch (Exception ignored) { boundary = 0; } // Optional reference must not block valid music.
+          musicThemeStarts.put(name, boundary);
+        }
+        musicThemeBoundary = boundary;
+      }
       if (b == null) b = NativeBridge.asset(5, name);
       if (b != null) NativeBridge.sound(b, 63, !phase.equals("game") && !phase.equals("victory") && !phase.equals("defeat"));
       else NativeBridge.sound(null, 63, false);
     } catch (Exception e) {
       failure = "Music: " + e.getMessage();
     }
+  }
+
+  private void nextMusicTrack() {
+    // The first Brood War file contains two themes. Expose its verified second
+    // theme to Next Track without duplicating it in the natural playback loop.
+    boolean embedded = musicTrack.equals("auto") && musicPhase.equals("game")
+        && musicThemeBoundary > 0 && NativeBridge.playing(63)
+        && NativeBridge.soundPosition(63) < musicThemeBoundary;
+    musicTrack = "auto";
+    if (embedded) NativeBridge.seekSound(63, musicThemeBoundary);
+    else { musicIndex++; music("game"); }
+    saveSettings();
   }
 
   private void tick(double dt) {
@@ -1958,7 +1982,7 @@ final class NativeSurface extends SurfaceView
       slider(c, "Effects", effects, x + 26, y + 120, v -> {effects = v; saveSettings();});
       slider(c, "Music", music, x + 26, y + 160, v -> {music = v; saveSettings();});
       option(c, trackLabel(musicTrack), x + 26, y + 204, 320, () -> modal = "tracks");
-      option(c, "Next track", x + 26, y + 243, 150, () -> {musicTrack = "auto"; musicIndex++; music("game"); saveSettings();});
+      option(c, "Next track", x + 26, y + 243, 150, this::nextMusicTrack);
       option(c, "Preview sound", x + 196, y + 243, 150, () -> {syncAudio(); sfx("button");});
     } else if (modal.equals("tracks")) {
       for (int i = 0; i < MUSIC_TRACKS.length; i++) {

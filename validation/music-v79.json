@@ -3,16 +3,19 @@
   "physicalAndroid": false,
   "originalArchivesTested": true,
   "checks": [
-    "PASS production music selection: all races, original/Brood War loops, source fallback, missing assets, manual track and phase isolation\nPASS StarCraft production import, validation and native archive preparation\nPASS BroodWar production import, validation and native archive preparation",
-    "PASS StarCraft terran1 imported byte-identically; full native duration=297.352 seconds; tail and end-of-track verified\nPASS StarCraft zerg1 imported byte-identically; full native duration=282.122 seconds; tail and end-of-track verified\nPASS StarCraft protoss1 imported byte-identically; full native duration=279.754 seconds; tail and end-of-track verified\nPASS terran original theme embedded after 235.664 seconds; energy correlation=1\nPASS BroodWar terran1 imported byte-identically; full native duration=533.016 seconds; tail and end-of-track verified\nPASS zerg original theme embedded after 235.501 seconds; energy correlation=1\nPASS BroodWar zerg1 imported byte-identically; full native duration=517.624 seconds; tail and end-of-track verified\nPASS protoss original theme embedded after 252.709 seconds; energy correlation=1\nPASS BroodWar protoss1 imported byte-identically; full native duration=532.463 seconds; tail and end-of-track verified"
+    "PASS Next Track: four theme stops for every race; natural playback/manual selection preserved; unknown, missing, silent, malformed and unsupported variants never guessed\nPASS production music selection: all races, original/Brood War loops, source fallback, missing assets, manual track and phase isolation\nPASS StarCraft production import, validation and native archive preparation\nPASS BroodWar production import, validation and native archive preparation",
+    "PASS StarCraft terran1 imported byte-identically; full native duration=297.352 seconds; tail and end-of-track verified\nPASS StarCraft zerg1 imported byte-identically; full native duration=282.122 seconds; tail and end-of-track verified\nPASS StarCraft protoss1 imported byte-identically; full native duration=279.754 seconds; tail and end-of-track verified\nPASS terran original theme embedded after 235.664 seconds; energy correlation=1\nPASS BroodWar terran1 imported byte-identically; full native duration=533.016 seconds; tail and end-of-track verified\nPASS zerg original theme embedded after 235.501 seconds; energy correlation=1\nPASS BroodWar zerg1 imported byte-identically; full native duration=517.624 seconds; tail and end-of-track verified\nPASS protoss original theme embedded after 252.709 seconds; energy correlation=1\nPASS BroodWar protoss1 imported byte-identically; full native duration=532.463 seconds; tail and end-of-track verified",
+    "PASS actual zerg four Next Track stops; verified embedded theme starts at 235502 ms\nPASS actual terran four Next Track stops; verified embedded theme starts at 235664 ms\nPASS actual protoss four Next Track stops; verified embedded theme starts at 252709 ms"
   ],
   "sourceSha256": {
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "3239605469665a72829a6533c884cf834c27d83a84e07c91393ce2d0a4ed1d35",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "4da0a75450af0f8bc5508eae90418e0e3f7abd542862c68d968eb580697113a7",
     "app/src/main/java/org/openbw/androidtest/MusicData.java": "bd192578dccc51adfab7df8a1b6746ea1f8d1ce4f21af70011a96afdcfe1a421",
+    "app/src/main/java/org/openbw/androidtest/MusicThemes.java": "94730541abde3a431433f8680d32bfb3dee7a5b1799be8192001730dc953477c",
     "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "c55926c62c6b67c41c17653d6ffe291555546ddf83c4980513e2b3475a19de89",
     "app/src/main/java/org/openbw/androidtest/NativeData.java": "0b98738b1487bc14dcba4f47c274dfc89ecc9ccdefc50fc3032eb2a0fb18e09a",
     "native/audio.h": "000f98ed0b3866a3c09f9c73c26e9f1b8a5f3f67765519d7c3921236f7483fa0",
-    "tests/run_music79.py": "0a8d7fba7229534708ab0be45feee97a1876e39164c6ac9f5eab07928ea40812",
-    "tests/native_music79.cpp": "ad241f404c804db587b2e24c69eeab33f3c854c4c90e82540c09cd7dcfb2591f"
+    "tests/run_music79.py": "15db50f72de6a34709a12f9469a52660128490b17b22782bfb83b4d4f56253e9",
+    "tests/native_music79.cpp": "3bf6cf52e9988c9744b1f721ee51a430b47ef3f77578e5bff2d146a2adb3bfba",
+    "tests/MusicThemesTest.java": "98b2289bae4cbaf03632c03b61f6e2abc191e72be3a2796e3bab998cf3d87261"
   }
 }

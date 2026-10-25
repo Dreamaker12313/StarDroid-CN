@@ -60,11 +60,31 @@
  #ifndef OPENBW_WEB_CAMPAIGN_H
  #define OPENBW_WEB_CAMPAIGN_H
  #include "campaign_ai.h"
-@@ -12,6 +12,28 @@
+@@ -12,6 +12,48 @@
  		if(melee_ai){play_ui::on_victory_state(owner,state);return;}
  		if (owner == my_player && state && !outcome) outcome = state >= 3 ? 1 : 2;
  	}
++    int presentation_mission = 0;
++    int unit_portrait(UnitTypes id) const override {
++        // These original missions reuse a combat unit for another character.
++        // Route only its portrait to the character's imported DAT/SMK entry;
++        // retain the map's unit type, statistics, orders and localized name.
++        // Mission identity, not English text, keeps translated archives working
++        // and avoids guessing at arbitrary custom-map character names.
++        UnitTypes character = id;
++        if ((presentation_mission == 303 || presentation_mission == 307) && id == UnitTypes::Hero_Tassadar)
++            character = UnitTypes::Hero_Aldaris;
++        else if ((presentation_mission == 508 || presentation_mission == 509) && id == UnitTypes::Hero_Dark_Templar)
++            character = UnitTypes::Hero_Raszagal;
++        else if (presentation_mission == 408 && id == UnitTypes::Hero_Norad_II)
++            character = UnitTypes::Hero_Gerard_DuGalle;
++        size_t name = get_unit_type(id)->unit_map_string_index;
++        if (character != id && name && name <= game_st.map_strings.size() && !game_st.map_strings[name - 1].empty())
++            return get_unit_type(character)->portrait;
++        return play_ui::unit_portrait(id);
++    }
 +    void apply_campaign_compatibility(int mission) {
++        presentation_mission = mission;
 +        if (mission != 502) return;
 +        // Reign of Fire's original loss trigger tests Exactly 0 buildings and
 +        // Exactly 0 Drones after their rescue. Exactly counts completed units,

@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "version": "1.0.9",
+  "versionCode": 79,
+  "apkSha256": "f2e1a5c3716dcba86e1eb5293d48870df110b4b5029dd6e47c5316ac8233b0e9",
+  "apkBytes": 2333814,
+  "previousApkSha256": "dd5e132ce44f1d4d0a013cc7ac60f6278e9520d3c61c6b31e036cd34d92530da",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "originalReleaseSigningIdentity": true,
+  "nativeEngineRebuilt": true,
+  "nativeEngineVersion": "1.0.9-build79",
+  "changedNativeAndAssetEntries": [
+    "lib/arm64-v8a/libopenbw.so",
+    "lib/arm64-v8a/libsmacker.so",
+    "lib/x86_64/libopenbw.so",
+    "lib/x86_64/libsmacker.so"
+  ],
+  "addedAssets": [],
+  "unchangedNativeAndAssetEntries": 73,
+  "permissionsUnchanged": true,
+  "multiplayerProtocolBuild": 79,
+  "decoderBinaryChanges": [
+    "lib/arm64-v8a/libsmacker.so",
+    "lib/x86_64/libsmacker.so"
+  ],
+  "decoderSourceUnchanged": true,
+  "jniMethodsVerified": 41,
+  "loadAlignmentBytes": 16384,
+  "librarySha256": {
+    "arm64-v8a/libopenbw.so": "3055408f88e68da53b11250a819882c700c842721805b08fb01e705a45337b06",
+    "arm64-v8a/libsmacker.so": "4c014c5387efa3c344215163cd5f321c88db8c5844c9bb528d0d6fcb413888d8",
+    "x86_64/libopenbw.so": "730884a7069ea956cd92d3a9a4eb1b261be81315434b6f4d7d1f54f5b0a25b3e",
+    "x86_64/libsmacker.so": "c504df589281429def05f2d10636ee369bf317ac646d10a1d1d003491b85a0a0"
+  },
+  "translationRows": 628,
+  "lintErrors": 0,
+  "lintWarnings": 11,
+  "physicalDevicesTested": false,
+  "regressionReports": [
+    "ai-abilities-v79.json",
+    "protocol-v79.json",
+    "map-scroll-v79.json",
+    "music-v79.json",
+    "campaign-portraits79.json",
+    "campaign-final79.json"
+  ],
+  "historicalCampaignReport": {
+    "file": "campaign-fixes79.json",
+    "changedInputsSinceOriginalRun": [
+      "patches/native-campaign79.patch",
+      "patches/native-unit-names79.patch",
+      "native/generated/wasm_main.cpp",
+      "tests/native_heroes79_cases.h"
+    ],
+    "note": "Original baseline/sanitizer evidence; no recorded hashes were rewritten by this package check."
+  },
+  "sourceSha256": {
+    "tests/check_revision79_package.py": "3f3bbb7d72665c689f94fdbc9fc81afab5e6503e633574500468eea61b9bc116"
+  }
+}

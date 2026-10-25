@@ -20,6 +20,9 @@ surface = (src/'NativeSurface.java').read_text()
 start = surface.index('  private void music(String phase) {')
 end = surface.index('\n  private ', start + 1)
 music = surface[start:end]
+start = surface.index('  private void nextMusicTrack() {')
+end = surface.index('\n  private ', start + 1)
+next_track = surface[start:end]
 outputs = []
 
 def run(args):
@@ -32,8 +35,12 @@ harness = b/'Music79Test.java'
 harness.write_text('''package org.openbw.androidtest;
 import java.util.*;import java.io.*;
 public final class Music79Test {
- int musicIndex,missionRace;boolean expansion;String musicPhase="",musicTrack="auto",currentMusicPath="",failure="";
-''' + music + '''
+ int musicIndex,missionRace,musicThemeBoundary;boolean expansion;String musicPhase="",musicTrack="auto",currentMusicPath="",failure="";
+ final HashMap<String,Integer> musicThemeStarts=new HashMap<String,Integer>();
+ void saveSettings(){}
+ void play(String phase){music(phase);}
+ void next(){nextMusicTrack();}
+''' + music + next_track + '''
  static void check(boolean b,String message){if(!b)throw new AssertionError(message);}
  public static void main(String[] args)throws Exception{
   Music79Test h=new Music79Test();
@@ -57,6 +64,7 @@ public final class Music79Test {
   h.music("briefing");check(h.currentMusicPath.equals("music/trdyroom.wav")&&NativeBridge.loop,"Manual track replaced briefing");
   h.music("victory");check(h.currentMusicPath.equals("music/tvict.wav")&&!NativeBridge.loop,"Manual track replaced victory");
   h.music("defeat");check(h.currentMusicPath.equals("music/tdefeat.wav")&&!NativeBridge.loop,"Manual track replaced defeat");
+  MusicThemesTest.runSynthetic();
   System.out.println("PASS production music selection: all races, original/Brood War loops, source fallback, missing assets, manual track and phase isolation");
   if(args.length==2){
    File data=new File(args[0]),out=new File(args[1]);
@@ -73,20 +81,24 @@ public final class Music79Test {
  }
 }
 final class NativeBridge {
- static boolean active,loop,missingExpansion,missingAll;static int slot;
+ static boolean active,loop,missingExpansion,missingAll,failOriginal;static int slot,starts,seeks;static double position;
+ static final HashMap<String,byte[]> fixtures=new HashMap<String,byte[]>();
  static boolean playing(int channel){return active;}
- static byte[] asset(int archive,String name){if(missingAll||(archive==6&&missingExpansion))return null;slot=archive;return new byte[]{1};}
- static int sound(byte[] data,int channel,boolean repeat){active=data!=null;loop=repeat;return 0;}
+ static byte[] asset(int archive,String name){if(archive==5&&failOriginal)throw new IllegalStateException("Damaged reference archive");if(missingAll||(archive==6&&missingExpansion))return null;return fixtures.getOrDefault(archive+":"+name,new byte[]{(byte)archive});}
+ static int sound(byte[] data,int channel,boolean repeat){active=data!=null;loop=repeat;position=0;starts++;if(data!=null&&data.length==1)slot=data[0];return 0;}
+ static double soundPosition(int channel){return position;}
+ static void seekSound(int channel,int ms){position=ms;seeks++;}
 }
 ''')
-production = ['MissionBundle','CampaignCatalog','MusicData','NativeData','NearbyProtocol']
-run(['javac','-cp',jar,'-d',b/'classes',*[src/(name+'.java') for name in production],harness])
+production = ['MissionBundle','CampaignCatalog','MusicData','MusicThemes','NativeData','NearbyProtocol']
+run(['javac','-cp',jar,'-d',b/'classes',*[src/(name+'.java') for name in production],harness,r/'tests/MusicThemesTest.java'])
 run(['java','-Xmx64m','-cp',str(b/'classes')+':'+str(jar),'org.openbw.androidtest.Music79Test',
      *([a.data_dir,b] if a.data_dir else [])])
 if a.data_dir:
     run(['g++','-std=c++17','-O2','-pthread','-I'+str(r/'native-engine'),r/'tests/native_music79.cpp','-o',b/'native-music79'])
-    run([b/'native-music79',a.data_dir/'StarCraft.mpq',a.data_dir/'BroodWar.mpq',b/'StarCraft.mpq',b/'BroodWar.mpq'])
-files = [src/'NativeSurface.java',src/'MusicData.java',src/'MissionBundle.java',src/'NativeData.java',r/'native/audio.h',Path(__file__),r/'tests/native_music79.cpp']
+    run([b/'native-music79',a.data_dir/'StarCraft.mpq',a.data_dir/'BroodWar.mpq',b/'StarCraft.mpq',b/'BroodWar.mpq',b])
+    run(['java','-Xmx128m','-cp',str(b/'classes'),'org.openbw.androidtest.MusicThemesTest',b])
+files = [src/'NativeSurface.java',src/'MusicData.java',src/'MusicThemes.java',src/'MissionBundle.java',src/'NativeData.java',r/'native/audio.h',Path(__file__),r/'tests/native_music79.cpp',r/'tests/MusicThemesTest.java']
 (r/'validation/music-v79.json').write_text(json.dumps({
     'passed': True, 'physicalAndroid': False, 'originalArchivesTested': bool(a.data_dir),
     'checks': [s for s in outputs if s],

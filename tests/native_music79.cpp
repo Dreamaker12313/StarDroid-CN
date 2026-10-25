@@ -1,6 +1,7 @@
 #include "data_loading.h"
 #include "../native/audio.h"
 #include <iostream>
+#include <fstream>
 
 static void require(bool value, const char* message) {
     if (!value) throw std::runtime_error(message);
@@ -29,7 +30,7 @@ static double correlation(const std::vector<double>& a, const std::vector<double
 // Private supplied music is decoded in memory only. No game audio is distributed.
 int main(int argc, char** argv) {
     try {
-        if (argc != 5) return 2;
+        if (argc != 5 && argc != 6) return 2;
         std::array<size_t,3> originalFrames{};
         std::array<std::vector<double>,3> originalEnvelope;
         for (int version = 0; version != 2; ++version) {
@@ -42,6 +43,11 @@ int main(int argc, char** argv) {
                 source(original, name.c_str());
                 imported(retained, name.c_str());
                 require(original == retained, "Import truncated or altered the combined music file");
+                if (argc == 6) {
+                    std::ofstream out(std::string(argv[5]) + "/" + race + (version ? "-bw.wav" : "-sc.wav"), std::ios::binary);
+                    out.write(reinterpret_cast<const char*>(retained.data()), retained.size());
+                    require(bool(out), "Could not write private music test fixture");
+                }
                 auto clip = naudio::wav(retained.data(), retained.size());
                 size_t frames = clip->pcm.size() / clip->channels;
                 require(frames > size_t(clip->rate * (version ? 500 : 270)), "Unexpected shortened original music");
