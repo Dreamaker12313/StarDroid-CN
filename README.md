@@ -6,15 +6,15 @@
 
 StarDroid adapts the OpenBW engine for Android devices. Play campaigns, set up custom battles against computer opponents, or host a nearby multiplayer match. The interface uses the classic artwork, fonts, music, and sounds imported from your own game files.
 
-**Version 1.0.8 · Android 8.0+ · ARM64 and x86-64**
+**Version 1.0.9 · Android 8.0+ · ARM64 and x86-64**
 
 Put together by **ToadWarrior**.
 
-[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/StarDroid-1.0.8.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0.8) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/StarDroid-1.0.8-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
+[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.9/StarDroid-1.0.9.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0.9) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.9/StarDroid-1.0.9-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
 
-Version **1.0.8** imports map ZIPs with up to 10,000 maps, adds an optional **One larva morph per press** control, offers English, Russian, German, Spanish and French UI, and adds shared campaign/custom-game AI transport handling for Dropships, Shuttles and upgraded Overlords. Original fonts, protected dialogue, clean menus and **Diagnostics / credits** remain. Install `StarDroid-1.0.8.apk` over the existing app. [Changes and update steps](docs/RELEASE-1.0.8.md).
+Version **1.0.9** fixes Reign of Fire's false defeat, restores pre-placed Nydus connections, corrects campaign names and portraits, expands computer ability use, improves fog targeting and map scrolling, and gives **Next track** four theme stops for **all three Brood War races**. Install `StarDroid-1.0.9.apk` over the existing app. [Changes and update steps](docs/RELEASE-1.0.9.md).
 
-Development source targets **1.0.9 (79)**; its campaign, targeting and AI corrections are not yet in the published APK. See [development changes and validation](docs/CAMPAIGN-FIXES-79.md).
+The release includes the earlier large-map imports, larvae options, five interface languages, AI transports, original fonts and protected dialogue. **Diagnostics / credits** remains available. See [technical changes and validation](docs/CAMPAIGN-FIXES-79.md).
 
 ## Features
 
@@ -31,7 +31,7 @@ StarDroid is an unofficial fan project. **Game data is not included.** You need 
 
 ## Install
 
-1. Download **[StarDroid-1.0.8.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/StarDroid-1.0.8.apk)** on your Android device. The source-code ZIP is for development, not installation.
+1. Download **[StarDroid-1.0.8.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.9/StarDroid-1.0.9.apk)** on your Android device. The source-code ZIP is for development, not installation.
 2. Open the APK on your Android device. If Android asks, allow the browser or file manager you are using to install apps from that source.
 3. Launch **StarDroid**. The import screen appears automatically when required files are missing.
 4. Tap **Import game files**, choose the files below, and let importing finish. You can select multiple files if your file picker supports it.

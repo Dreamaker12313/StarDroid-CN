@@ -31,7 +31,7 @@ Outputs:
 - `dist/StarDroid-1.0.9.apk`
 - `dist/SHA256SUMS.txt`
 
-The unreleased development version is **1.0.9**, with Android version code **79**. The GitHub release and checked-in native libraries remain 1.0.8; rebuild both ABIs to include the development changes. A separately built and signed 1.0.9 APK is recorded in `validation/package-v79.json`. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
+The release version is **1.0.9**, with Android version code **79**. The checked-in native libraries remain 1.0.8; rebuild both ABIs to include the current source changes. The released 1.0.9 APK contains rebuilt libraries and is recorded in `validation/package-v79.json`. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
 
 Use `STARDROID_ANDROID_TOOLS` to select a tool-cache directory. The historical `OPENBW_ANDROID_TOOLS` variable is still accepted. The default is `.tools/` in the repository. The helper writes a local `local.properties` pointing Gradle at the staged SDK.
 

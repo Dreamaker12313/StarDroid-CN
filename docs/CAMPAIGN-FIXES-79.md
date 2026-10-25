@@ -1,9 +1,8 @@
-# StarDroid 1.0.9 development changes
+# StarDroid 1.0.9 changes
 
-These changes target 1.0.9 / build 79. Both Android native libraries have been
+These changes are included in the released 1.0.9 / build 79 APK. Both Android native libraries have been
 rebuilt, and the APK uses the original release signing identity so it can update
-the existing installation. The GitHub release remains 1.0.8 until a new release
-is published. The repository still contains build 78 prebuilt libraries: rebuild
+the existing installation. The repository still contains build 78 prebuilt libraries: rebuild
 both ABIs before packaging; do not use `--skip-engine` with those old files.
 `NATIVE-BUILD.json` describes those checked-in libraries. The new APK build is
 recorded in `validation/native-build79.json` and `validation/package-v79.json`.
