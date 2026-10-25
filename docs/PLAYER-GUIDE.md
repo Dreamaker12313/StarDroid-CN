@@ -84,9 +84,25 @@ Turn **Build buttons follow placement** off for a fixed button position. **Comma
 
 ### Control groups and interface size
 
-Enable **Show control-group buttons** under **Selection settings**. Hold a numbered group to assign the current selection, tap to recall it, and double-tap to center the camera.
+Enable **Show control-group buttons** under **Selection settings**. Tap an empty numbered group to assign the current selection; hold any group to replace its assignment. Tap an assigned group to recall it, and double-tap to center the camera. The small number shows how many units are assigned. A physical keyboard can use Ctrl+number to assign and number to recall.
 
-Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. Sound options control effects and music separately. **Miscellaneous → Cheats** contains the single-player cheat controls, including **Force victory (end match)**.
+Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. **Command buttons** also scales control groups; they wrap when necessary to avoid overlapping resources. Sound options control effects and music separately. **Miscellaneous → Cheats** contains single-player controls including **Invincibility** and **Force victory (end match)**. Invincibility protects your units from combat damage, leaves scripted mission deaths intact, and resets after loading or starting a game.
+
+### Gamepad controls
+
+Open **App Options → Gamepad controls**, or **Controls → Gamepad controls** during a game. By default, the left stick moves the pointer, the right stick/D-pad pans the camera, A/Cross selects, B/Circle issues right-click orders, X/Square targets an attack, and Y/Triangle cancels. Hold A/Cross while moving the pointer to box-select. Left shoulder slows the pointer for precision; triggers choose a control group, right shoulder recalls it, and left-stick press assigns it. Start opens the game menu.
+
+The settings let you reassign buttons, swap sticks, change speeds and adjust the dead zone. Touch controls remain available. See [all defaults and alternatives](CHANGES-1.0.10.md#control-groups-and-controllers).
+
+### Cache storage
+
+The cache holds working copies of imported content. Build 80 removes empty archive space and prepares movies only when played. Existing movie caches are reclaimed automatically. With the tested classic archives, normal content cache is about 235 MB plus the active mission; a movie temporarily needs extra space while opening. Your original imports and saves are preserved.
+
+### Save backup and transfer
+
+**App Options → Export StarDroid save** writes the chosen slot as a portable `.obwsave` file. Keep a backup on a PC or another device. **Import StarDroid save** validates that file before replacing the slot you choose; then use **Load Saved** in the game menu.
+
+Original PC StarCraft `.sng` and Brood War `.snx` files use a different state format and cannot be resumed by this version. The transfer feature accepts StarDroid saves, not those original PC formats.
 
 ### Campaign objects and voices
 

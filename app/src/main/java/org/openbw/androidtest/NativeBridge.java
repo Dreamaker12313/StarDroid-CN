@@ -65,6 +65,9 @@ final class NativeBridge {
   static native double soundPosition(int channel);
   static native int scoreSound(byte[] fill,byte[] ending,int duration);
 
+  /** Original imported cursor artwork, with its hotspot at the bitmap centre. */
+  static native boolean cursor(Bitmap target);
+
   static native void wire(Bitmap target, int selectionIndex);
 
   static native void cargoWire(Bitmap target, int passengerIndex);

@@ -65,9 +65,11 @@ final class NativeSaves {
     Loaded(JSONObject i,byte[] s,File m){info=i;state=s;map=m;}
     public void close(){map.delete();}
   }
-  Loaded read(int n,File cache) throws Exception {
+  Loaded read(int n,File cache) throws Exception {return readFile(recover(n), cache);}
+
+  private static Loaded readFile(File file, File cache) throws Exception {
     File map=null;
-    try(ZipFile zip=new ZipFile(recover(n))) {
+    try(ZipFile zip=new ZipFile(file)) {
       JSONObject m=metadata(zip);byte[] state=read(zip,"state.bin",STATE_LIMIT);
       if(!digest(state).equals(m.getString("stateSha256")))throw new IOException("Saved game is damaged");
       boolean sparse=m.getInt("format")==2;
@@ -86,6 +88,94 @@ final class NativeSaves {
       return new Loaded(m,state,map);
     } catch(Exception e) {if(map!=null)map.delete();throw e;}
   }
+  static final String PC_SAVE_MESSAGE = "Original StarCraft PC saves (.sng/.snx/.sav) are not compatible with StarDroid. Import a StarDroid .obwsave file instead.";
+  private static final long IMPORT_LIMIT = (long)STATE_LIMIT + MAP_LIMIT + 4L * 1024 * 1024;
+
+  private static long u64(byte[] data, int offset) {
+    long value=0;for(int i=0;i<8;i++)value|=(data[offset+i]&255L)<<(8*i);return value;
+  }
+  private static void validatePortableState(byte[] state, JSONObject info) throws Exception {
+    if(state.length<40 || u64(state,0)!=0x3156415357424fL || u64(state,8)<1 || u64(state,8)>4)
+      throw new IOException("Unsupported StarDroid saved game version");
+    if(u64(state,24)!=(info.getInt("missionCode")>0?1:0))
+      throw new IOException("Saved game and mission details do not match");
+    long hash=0xcbf29ce484222325L;
+    for(int i=0;i<state.length-8;i++){hash^=state[i]&255L;hash*=0x100000001b3L;}
+    if(hash!=u64(state,state.length-8))throw new IOException("Saved game is damaged");
+  }
+
+  /** Validate before committing; the existing slot survives every rejected input. */
+  JSONObject importSave(InputStream input, String name, File cache, int n) throws Exception {
+    AtomicFile target=slot(n);
+    if(!cache.isDirectory()&&!cache.mkdirs())throw new IOException("Save import cache is unavailable");
+    File stage=File.createTempFile("save-import-", ".obwsave", cache);
+    try {
+      try(InputStream in=input;FileOutputStream out=new FileOutputStream(stage)) {
+        byte[] b=new byte[65536];long count=0;int got;
+        while((got=in.read(b))!=-1){count+=got;if(count>IMPORT_LIMIT)throw new IOException("Saved game exceeds the import limit");out.write(b,0,got);}
+        out.getFD().sync();
+      }
+      try(RandomAccessFile in=new RandomAccessFile(stage,"r")) {
+        if(in.length()<4 || in.readInt()!=0x504b0304) {
+          String lower=name==null?"":name.toLowerCase(java.util.Locale.ROOT);
+          if(lower.endsWith(".sng")||lower.endsWith(".snx")||lower.endsWith(".sav"))throw new IOException(PC_SAVE_MESSAGE);
+          throw new IOException("Choose a StarDroid .obwsave file");
+        }
+      }
+      try(ZipFile zip=new ZipFile(stage)) {
+        java.util.HashSet<String> seen=new java.util.HashSet<String>();
+        java.util.Enumeration<? extends ZipEntry> entries=zip.entries();
+        while(entries.hasMoreElements()) {
+          ZipEntry entry=entries.nextElement();String path=entry.getName();
+          if(entry.isDirectory()||!seen.add(path)||!(path.equals("manifest.json")||path.equals("state.bin")||path.equals("map.mpq")||path.equals("map.sparse")))
+            throw new IOException("Unsupported saved game archive");
+        }
+        if(seen.size()!=3)throw new IOException("Saved game is incomplete");
+      }
+      JSONObject details;
+      try(Loaded loaded=readFile(stage,cache)) {
+        details=loaded.info;
+        if(details.optBoolean("multiplayer"))throw new IOException("Import a single-player StarDroid save");
+        validatePortableState(loaded.state,details);
+        // Hashes verify bytes, but a renamed arbitrary file is still not a map.
+        // Payload bounds were enforced above; inspect adds classic MPQ structure checks.
+        NativeMapArchive.inspect(loaded.map,Integer.MAX_VALUE);
+      }
+      FileOutputStream stream=null;
+      try {
+        stream=target.startWrite();
+        try(InputStream in=new FileInputStream(stage)) {
+          byte[] b=new byte[65536];int got;while((got=in.read(b))!=-1)stream.write(b,0,got);
+        }
+        stream.getFD().sync();target.finishWrite(stream);stream=null;
+      } catch(Exception error) {if(stream!=null)target.failWrite(stream);throw error;}
+      return details;
+    } finally {stage.delete();}
+  }
+
+  /** Portable backup; the document picker owns and closes the destination stream. */
+  void exportSave(int n, OutputStream destination) throws Exception {
+    File source=recover(n);
+    try(ZipFile zip=new ZipFile(source)) {
+      JSONObject m=metadata(zip);byte[] state=read(zip,"state.bin",STATE_LIMIT);
+      if(!digest(state).equals(m.getString("stateSha256")))throw new IOException("Saved game is damaged");
+      if(!m.optBoolean("multiplayer"))validatePortableState(state,m);
+      ZipEntry map=zip.getEntry(m.getInt("format")==2?"map.sparse":"map.mpq");
+      if(map==null||map.getSize()<32||map.getSize()>MAP_LIMIT||map.getSize()!=m.getLong("mapBytes"))
+        throw new IOException("Saved map is damaged");
+      MessageDigest hash=sha();long count=0;
+      try(InputStream in=zip.getInputStream(map)) {
+        byte[] b=new byte[65536];int got;
+        while((got=in.read(b))!=-1){count+=got;if(count>MAP_LIMIT)throw new IOException("Saved map is too large");hash.update(b,0,got);}
+      }
+      if(count!=map.getSize()||!hex(hash.digest()).equals(m.getString("mapSha256")))throw new IOException("Saved map is damaged");
+    }
+    try(InputStream in=new FileInputStream(source)) {
+      byte[] b=new byte[65536];int got;while((got=in.read(b))!=-1)destination.write(b,0,got);
+    }
+    destination.flush();
+  }
+
   private static byte[] read(ZipFile zip,String name,int limit) throws IOException {
     ZipEntry e=zip.getEntry(name);if(e==null||e.getSize()<0||e.getSize()>limit)throw new IOException("Missing or invalid "+name);
     try(InputStream in=zip.getInputStream(e)){return NativeData.read(in,limit);}

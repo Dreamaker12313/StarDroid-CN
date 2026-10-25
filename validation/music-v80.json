@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "originalArchivesTested": false,
+  "checks": [
+    "PASS Next Track: four theme stops for every race; natural playback/manual selection preserved; unknown, missing, silent, malformed and unsupported variants never guessed\nPASS production music selection: all races, original/Brood War loops, source fallback, missing assets, manual track and phase isolation"
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "fd4fc7b59184ed0be03681587d6571134bfe8356c56661dbc534082f005089c1",
+    "app/src/main/java/org/openbw/androidtest/MusicData.java": "bd192578dccc51adfab7df8a1b6746ea1f8d1ce4f21af70011a96afdcfe1a421",
+    "app/src/main/java/org/openbw/androidtest/MusicThemes.java": "94730541abde3a431433f8680d32bfb3dee7a5b1799be8192001730dc953477c",
+    "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "c55926c62c6b67c41c17653d6ffe291555546ddf83c4980513e2b3475a19de89",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "88f07e13cf83fccc0061fab68597d763bd3cacff2019720e8cb1b75fffdbae53",
+    "native/audio.h": "000f98ed0b3866a3c09f9c73c26e9f1b8a5f3f67765519d7c3921236f7483fa0",
+    "tests/run_music79.py": "354e444c26b7470668d27ea5fc47be40dbab22c5b905ceb910d700c0c968d3be",
+    "tests/native_music79.cpp": "3bf6cf52e9988c9744b1f721ee51a430b47ef3f77578e5bff2d146a2adb3bfba",
+    "tests/MusicThemesTest.java": "98b2289bae4cbaf03632c03b61f6e2abc191e72be3a2796e3bab998cf3d87261"
+  }
+}

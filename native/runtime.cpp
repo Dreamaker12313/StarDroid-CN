@@ -62,6 +62,7 @@ static std::vector<uint8_t> save_game() {
 static void restore_game(std::vector<uint8_t>& bytes) {
  native_save::check(g_ui!=nullptr,"No game is running");native_save::check(!net_active,"Save/load is unavailable during nearby multiplayer");
  auto host=native_save::restore(*g_ui,g_campaign,bytes);
+ g_ui->set_test_invincible(false);
  custom_bot_slot=host.bot_slot;
  // One-shot effects from the discarded world must not bleed into a loaded save.
  for(int ch=0;ch<57;ch++)naudio::stop(ch);
@@ -95,9 +96,9 @@ static bwgame::a_vector<uint8_t> read_asset(int index,const std::string& filenam
 }
 static const char* text_query(int id){switch(id){
  case 0:return openbw_card();case 1:return openbw_resources();case 2:return openbw_status();case 3:return openbw_wires();case 4:return openbw_unit_details();case 5:return openbw_campaign_events();case 6:return openbw_campaign_status();case 7:return openbw_campaign_timer();case 8:return openbw_error();case 9:return openbw_stats();case 10:return openbw_debug_units();case 11:return openbw_campaign_ai_error();case 12:return openbw_messages();case 13:return openbw_debug_dump();case 14:return g_ui?g_ui->cargo_status():"";default:return "";}}
-static int value_query(int id,int n){switch(id){case 0:return openbw_cursor();case 1:return openbw_selected_type();case 2:return openbw_production_icon();case 3:return openbw_production_kind();case 4:return openbw_production_queue_type(n);case 5:return openbw_selected_race();case 6:return openbw_wire_box();case 7:return openbw_outcome();case 8:return openbw_frame();case 9:return openbw_map_w();case 10:return openbw_map_h();case 11:return openbw_portrait_for_type(n);case 12:return openbw_portrait_talking();case 13:return openbw_map_tileset();case 14:return openbw_minimap_terrain();case 16:return openbw_placement_valid((n>>16)&65535,n&65535);case 17:return openbw_touch_action((n>>16)&65535,n&65535);case 18:return g_ui&&g_ui->show_order_lines;case 19:return int(naudio::position_ms(n));case 20:return nearby_defenders;case 21:return g_ui?g_ui->group_count(n):0;default:return 0;}}
+static int value_query(int id,int n){switch(id){case 0:return openbw_cursor();case 1:return openbw_selected_type();case 2:return openbw_production_icon();case 3:return openbw_production_kind();case 4:return openbw_production_queue_type(n);case 5:return openbw_selected_race();case 6:return openbw_wire_box();case 7:return openbw_outcome();case 8:return openbw_frame();case 9:return openbw_map_w();case 10:return openbw_map_h();case 11:return openbw_portrait_for_type(n);case 12:return openbw_portrait_talking();case 13:return openbw_map_tileset();case 14:return openbw_minimap_terrain();case 16:return openbw_placement_valid((n>>16)&65535,n&65535);case 17:return openbw_touch_action((n>>16)&65535,n&65535);case 18:return g_ui&&g_ui->show_order_lines;case 19:return int(naudio::position_ms(n));case 20:return nearby_defenders;case 21:return g_ui?g_ui->group_count(n):0;case 22:return g_ui&&g_ui->test_invincible;case 23:return openbw_cursor_box();default:return 0;}}
 static void command(int op,int a,int b,int c,int d){
- if(net_active && ((op>=9&&op<=18&&op!=12)||op==20||op==23))return;
+ if(net_active && ((op>=9&&op<=18&&op!=12)||op==20||op==23||op==29))return;
  switch(op){
  case 0:openbw_mouse_move(a,b);break;case 1:openbw_mouse_button(a,b,c,d,1);break;case 2:openbw_key(1,a,b);openbw_key(0,a,b);break;case 3:openbw_pan(a,b);break;
  case 4:{
@@ -120,6 +121,7 @@ static void command(int op,int a,int b,int c,int d){
  case 26:if(g_ui)g_ui->host_controls_edge_scroll=a!=0;break;
  case 27:if(g_ui)g_ui->original_larvae_selection=a!=0;break;
  case 28:if(g_ui)g_ui->single_larva_morph=a!=0;break;
+ case 29:if(g_ui)g_ui->set_test_invincible(a!=0);break;
  case 25:if(g_ui && !g_ui->paused && !g_ui->campaign_control_lock && a>=0 && a<10){g_ui->clear_pending();if(b)g_ui->assign_group(a);else g_ui->recall_group(a);}break;
  case 24:if(g_ui){g_ui->sync_selection();g_ui->cmds.unload(uint16_t(a));}break;
  case 5:openbw_touch_cancel();break;case 6:openbw_set_paused(a);break;case 7:openbw_cancel(a);break;case 8:openbw_set_minimap_terrain(a);break;case 9:openbw_test_money();break;case 10:openbw_test_instant(a);break;case 11:openbw_reveal_map();break;case 12:openbw_resign();break;case 13:openbw_debug_outcome(a);break;case 14:openbw_debug_select(a,b);break;case 15:openbw_debug_set_life(a,b,c);break;case 16:openbw_debug_kill(a);break;case 17:openbw_debug_resources(a,b);break;case 18:openbw_debug_warp(a,b,c);break;case 19:openbw_set_order_lines(a);break;case 21:if(g_ui){g_ui->hud_bottom_inset=std::max(0,a);g_ui->clamp_viewport();}break;case 20:custom_bot_slot=std::max(-1,std::min(7,a));custom_ai_race=std::max(0,std::min(2,b));g_terran_ai_level=std::max(0,std::min(2,c));g_skirmish_expansion=d!=1;break;
@@ -237,6 +239,7 @@ JNI(audio) void JNICALL Java_org_openbw_androidtest_NativeBridge_audio(JNIEnv*,j
 JNI(playing) jboolean JNICALL Java_org_openbw_androidtest_NativeBridge_playing(JNIEnv*,jclass,jint ch){return naudio::playing(ch);}
 JNI(wire) void JNICALL Java_org_openbw_androidtest_NativeBridge_wire(JNIEnv* e,jclass,jobject b,jint n){try{const uint8_t* p=openbw_wire_rgba(n);int box=openbw_wire_box();bitmap(e,b,p,box,box);}catch(const std::exception& x){fail(e,x);}}
 JNI(cargoWire) void JNICALL Java_org_openbw_androidtest_NativeBridge_cargoWire(JNIEnv* e,jclass,jobject b,jint n){try{const uint8_t* p=g_ui?g_ui->render_cargo_wireframe(size_t(n)):nullptr;bitmap(e,b,p,64,64);}catch(const std::exception& x){fail(e,x);}}
+JNI(cursor) jboolean JNICALL Java_org_openbw_androidtest_NativeBridge_cursor(JNIEnv* e,jclass,jobject b){try{const uint8_t* p=openbw_cursor_rgba();if(!p)return false;int box=openbw_cursor_box();bitmap(e,b,p,box,box);return true;}catch(const std::exception& x){fail(e,x);return false;}}
 JNI(movieOpenAsset) jintArray JNICALL Java_org_openbw_androidtest_NativeBridge_movieOpenAsset(JNIEnv* e,jclass,jint slot,jstring path,jboolean audio){try{auto b=read_asset(slot,utf(e,path));int id=open_movie(b.data(),b.size(),audio);auto& m=*movies[id];int values[]={id,int(m.width),int(m.height),int(m.frames),int(m.us/1000)};jintArray v=e->NewIntArray(5);e->SetIntArrayRegion(v,0,5,values);return v;}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(movieOpen) jintArray JNICALL Java_org_openbw_androidtest_NativeBridge_movieOpen(JNIEnv* e,jclass,jbyteArray a,jboolean audio){try{std::vector<uint8_t> b(e->GetArrayLength(a));e->GetByteArrayRegion(a,0,b.size(),(jbyte*)b.data());int id=open_movie(b.data(),b.size(),audio);auto& m=*movies[id];int values[]={id,int(m.width),int(m.height),int(m.frames),int(m.us/1000)};jintArray v=e->NewIntArray(5);e->SetIntArrayRegion(v,0,5,values);return v;}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(endGame) void JNICALL Java_org_openbw_androidtest_NativeBridge_endGame(JNIEnv*,jclass){close_game();}

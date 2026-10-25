@@ -1,0 +1,91 @@
+{
+  "version": 80,
+  "topic": "AI Carrier production and fighter ammunition",
+  "passed": true,
+  "generatedUtc": "2026-10-25T21:27:47.964513+00:00",
+  "scope": "Isolated release 1.0.9 native source plus native-ai-production80.patch; actual original-data host simulation, not Android-device testing or a campaign playthrough.",
+  "baselineCommit": "8c2328dc55b732133751a1b86f0491bfbccc93a4",
+  "sourceHashes": {
+    "patches/native-ai-production80.patch": "313bb25f84ef1f643fa12b1664e4bd38804d37aace704571a25d30a439739259",
+    "tests/native_production80.cpp": "e8afd0a8685ddd0df317bb298ab3c33760be71032cc851c373170432016f4793",
+    "tests/native_abilities79.cpp": "a9a7663edfaf7e51b86dcb5bb827ff741876374ea6e46dffd765532c5e140c02"
+  },
+  "stagedSourceHashes": {
+    "web/campaign_ai.h": "c3b73bbb4579c3902e07c7ef1c2943a43139315bb8d93635021acd0e856cacf7",
+    "native/runtime.cpp": "31fd8a2ceb37ef26ab656b33e78c253f550a63f06bef2213e68e7340d771f369",
+    "native/generated/wasm_main.cpp": "809eb880c0eb0888d871c2c45f7cf71b40d901ecb67ed5acc492ceb6c7d1f9ab"
+  },
+  "baselineBehavior": [
+    "openbw_init: map 'Untitled Scenario' 4096x4096, slot 3 of 1, units=1, fog_player=3",
+    "REPRODUCED v79 campaign Carrier/Reaver empty after 1000 scheduled frames with sufficient minerals",
+    "REPRODUCED v79 campaign Carrier request blocked at 4 spare supply, no Pylon/Carrier after 1000 frames"
+  ],
+  "controlledRegressions": [
+    "openbw_init: map 'Untitled Scenario' 4096x4096, slot 3 of 1, units=1, fog_player=3",
+    "PASS campaign type=72 capacity=4 paid fill, replacement and preserved order without active town",
+    "PASS campaign type=83 capacity=5 paid fill, replacement and preserved order without active town",
+    "PASS campaign type=82 capacity=8 paid fill, replacement and preserved order without active town",
+    "PASS campaign type=81 capacity=10 paid fill, replacement and preserved order without active town",
+    "PASS custom type=72 capacity=4 paid fill, replacement and preserved order without active town",
+    "PASS custom type=83 capacity=5 paid fill, replacement and preserved order without active town",
+    "PASS custom type=82 capacity=8 paid fill, replacement and preserved order without active town",
+    "PASS custom type=81 capacity=10 paid fill, replacement and preserved order without active town",
+    "PASS Carrier and Reaver capacity upgrades",
+    "PASS map restrictions, costs, scene locks, human exclusion, hallucination/disabled gates, mixed-race Carrier, deterministic saves",
+    "PASS campaign Carrier request at 4 spare supply builds Pylon, completes Carrier and trains Interceptors",
+    "PASS custom Carrier request at 4 spare supply builds Pylon, completes Carrier and trains Interceptors",
+    "PASS Carrier prerequisite and map-permission restrictions"
+  ],
+  "naturalMelee": [
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "MELEE frame=0 1\t2\t0\t0\t0\t50\t0\t50\t0",
+    "MELEE frame=6000 1\t409\t15\t18\t0\t2554\t592\t554\t492",
+    "MELEE frame=12000 1\t756\t40\t46\t5\t6594\t2096\t69\t446",
+    "MELEE frame=18000 1\t1479\t43\t52\t7\t12458\t4624\t4933\t2474",
+    "MELEE frame=24000 1\t2229\t49\t57\t8\t17134\t7168\t8109\t3768",
+    "MELEE frame=30000 1\t2979\t66\t78\t9\t21574\t9534\t7024\t2834",
+    "MELEE first completed type=72 frame=29124",
+    "MELEE first completed type=73 frame=29436",
+    "MELEE first completed type=83 frame=31554",
+    "MELEE first completed type=85 frame=31665",
+    "PASS natural hard Protoss melee economy builds Carrier/Interceptors and Reaver/Scarabs without resource boosts"
+  ],
+  "naturalMeleeSetup": {
+    "map": "Weave v1",
+    "mapSha256": "1956cdf864ca30a5f5e6c438857ba715d07bfb80988077cbefae8431c63e0a94",
+    "difficulty": "Hard",
+    "startingMinerals": 50,
+    "startingGas": 0,
+    "resourceBoost": false,
+    "opponentKeptAlive": true,
+    "firstCompletedFrame": {
+      "Carrier": 29124,
+      "Interceptor": 29436,
+      "Reaver": 31554,
+      "Scarab": 31665
+    }
+  },
+  "limitations": [
+    "Controlled campaign fixtures use Reign of Fire terrain with triggers and original units removed.",
+    "Only one natural economy skirmish map/difficulty sampled.",
+    "No frame-perfect comparison with the original executable."
+  ],
+  "data": {
+    "StarDat.mpq": {
+      "bytes": 66938872,
+      "sha256": "dede48dd9b313817b118a4c117101c9a70cf19264756e9db4e9be1af7f852e9a"
+    },
+    "BrooDat.mpq": {
+      "bytes": 25494976,
+      "sha256": "5315b4f166bd4cbb125e5009883e52975cac9a669860abc92ab718341c569a35"
+    },
+    "patch_rt.mpq": {
+      "bytes": 1085206,
+      "sha256": "58bd856aac2328b42af4b9538c248367150c876e57ec596a9f30e3e81d8ddf11"
+    },
+    "BroodWar.mpq": {
+      "bytes": 495683706,
+      "sha256": "c263520dff883bd217ee9028f2b62244d6bb6d1b71521d8a6b6f196ffcc4d183"
+    }
+  }
+}

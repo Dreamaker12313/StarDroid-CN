@@ -627,3 +627,49 @@ Reading map pack…	Чтение набора карт…	Kartenpaket wird geles
 Import up to 10000 maps at once.	Можно импортировать до 10000 карт за раз.	Bis zu 10000 Karten gleichzeitig importieren.	Importa hasta 10000 mapas a la vez.	Importez jusqu’à 10000 cartes à la fois.
 Map pack exceeds 8 GiB.	Набор карт превышает 8 ГиБ.	Kartenpaket übersteigt 8 GiB.	El paquete de mapas supera los 8 GiB.	Le pack de cartes dépasse 8 Gio.
 Not enough storage to import maps.	Недостаточно места для импорта карт.	Nicht genug Speicher für den Kartenimport.	No hay espacio para importar mapas.	Espace insuffisant pour importer les cartes.
+Invincibility	Неуязвимость	Unverwundbarkeit	Invencibilidad	Invincibilité
+Gamepad controls	Управление геймпадом	Gamepad-Steuerung	Controles del mando	Commandes de la manette
+Enable gamepad	Включить геймпад	Gamepad aktivieren	Activar mando	Activer la manette
+Swap pointer and camera sticks	Поменять стики указателя и камеры	Sticks für Zeiger und Kamera tauschen	Intercambiar sticks de puntero y cámara	Inverser les sticks du pointeur et de la caméra
+Pointer speed	Скорость указателя	Zeigergeschwindigkeit	Velocidad del puntero	Vitesse du pointeur
+Camera speed	Скорость камеры	Kamerageschwindigkeit	Velocidad de la cámara	Vitesse de la caméra
+Stick dead zone	Мёртвая зона стиков	Stick-Totzone	Zona muerta del stick	Zone morte des sticks
+Button assignments	Назначение кнопок	Tastenbelegung	Asignación de botones	Affectation des boutons
+Reset to defaults	Сбросить настройки	Standardwerte wiederherstellen	Restablecer valores predeterminados	Rétablir les paramètres par défaut
+Left stick moves the pointer; right stick moves the camera. Hold Select / click and move the pointer to drag a selection. Touch controls remain available.	Левый стик двигает указатель, правый — камеру. Удерживайте «Выбрать / щёлкнуть» и двигайте указатель, чтобы выделить область. Сенсорное управление также доступно.	Der linke Stick bewegt den Zeiger, der rechte die Kamera. Halte „Auswählen / Klicken“ und bewege den Zeiger, um einen Auswahlrahmen zu ziehen. Die Touch-Steuerung bleibt verfügbar.	El stick izquierdo mueve el puntero; el derecho mueve la cámara. Mantén Seleccionar / clic y mueve el puntero para arrastrar una selección. Los controles táctiles siguen disponibles.	Le stick gauche déplace le pointeur ; le droit déplace la caméra. Maintenez Sélectionner / clic et déplacez le pointeur pour tracer une sélection. Les commandes tactiles restent disponibles.
+Select / click	Выбрать / щёлкнуть	Auswählen / Klicken	Seleccionar / clic	Sélectionner / clic
+Move / interact	Двигаться / взаимодействовать	Bewegen / Interagieren	Mover / interactuar	Déplacer / interagir
+Cancel / back	Отмена / назад	Abbrechen / Zurück	Cancelar / volver	Annuler / retour
+Hold position	Удерживать позицию	Position halten	Mantener posición	Tenir la position
+Select larvae	Выбрать личинок	Larven auswählen	Seleccionar larvas	Sélectionner les larves
+Previous group	Предыдущая группа	Vorherige Gruppe	Grupo anterior	Groupe précédent
+Next group	Следующая группа	Nächste Gruppe	Grupo siguiente	Groupe suivant
+Recall group	Выбрать группу	Gruppe auswählen	Seleccionar grupo	Sélectionner le groupe
+Assign group	Назначить группу	Gruppe zuweisen	Asignar grupo	Affecter le groupe
+Game menu	Меню игры	Spielmenü	Menú del juego	Menu du jeu
+Zoom in	Приблизить	Heranzoomen	Acercar	Zoom avant
+Zoom out	Отдалить	Herauszoomen	Alejar	Zoom arrière
+Precision pointer	Точный указатель	Präziser Zeiger	Puntero preciso	Pointeur précis
+Saved games	Сохранённые игры	Gespeicherte Spiele	Partidas guardadas	Parties sauvegardées
+Import StarDroid save	Импорт сохранения StarDroid	StarDroid-Spielstand importieren	Importar partida de StarDroid	Importer une sauvegarde StarDroid
+Export StarDroid save	Экспорт сохранения StarDroid	StarDroid-Spielstand exportieren	Exportar partida de StarDroid	Exporter une sauvegarde StarDroid
+Transfer StarDroid .obwsave files between devices or a PC. Original StarCraft .sng/.snx saves are not compatible yet.	Переносите файлы StarDroid .obwsave между устройствами и ПК. Оригинальные сохранения StarCraft .sng/.snx пока несовместимы.	Übertrage StarDroid-Dateien (.obwsave) zwischen Geräten oder einem PC. Originale StarCraft-Spielstände (.sng/.snx) sind noch nicht kompatibel.	Transfiere archivos .obwsave de StarDroid entre dispositivos o un PC. Las partidas originales de StarCraft .sng/.snx aún no son compatibles.	Transférez les fichiers .obwsave de StarDroid entre appareils ou un PC. Les sauvegardes StarCraft originales .sng/.snx ne sont pas encore compatibles.
+Import into slot	Импортировать в ячейку	In Speicherplatz importieren	Importar a ranura	Importer dans un emplacement
+Export saved game	Экспортировать сохранение	Spielstand exportieren	Exportar partida guardada	Exporter la sauvegarde
+Replace saved game?	Заменить сохранение?	Spielstand ersetzen?	¿Reemplazar partida guardada?	Remplacer la sauvegarde ?
+Replace	Заменить	Ersetzen	Reemplazar	Remplacer
+This slot is empty.	Эта ячейка пуста.	Dieser Speicherplatz ist leer.	Esta ranura está vacía.	Cet emplacement est vide.
+Importing saved game…	Импорт сохранения…	Spielstand wird importiert…	Importando partida guardada…	Importation de la sauvegarde…
+Saved game exported.	Сохранение экспортировано.	Spielstand exportiert.	Partida guardada exportada.	Sauvegarde exportée.
+Saved game imported. Use Load Saved to continue.	Сохранение импортировано. Выберите «Загрузить игру», чтобы продолжить.	Spielstand importiert. Wähle „Spiel laden“, um fortzufahren.	Partida importada. Usa Cargar partida para continuar.	Sauvegarde importée. Choisissez Charger une partie pour continuer.
+Save import failed	Не удалось импортировать сохранение	Spielstandimport fehlgeschlagen	Error al importar partida	Échec de l’importation de la sauvegarde
+Save export failed	Не удалось экспортировать сохранение	Spielstandexport fehlgeschlagen	Error al exportar partida	Échec de l’exportation de la sauvegarde
+Cannot read the selected save.	Не удалось прочитать выбранное сохранение.	Der ausgewählte Spielstand kann nicht gelesen werden.	No se puede leer la partida seleccionada.	Impossible de lire la sauvegarde sélectionnée.
+Cannot open the save destination.	Не удалось открыть место назначения сохранения.	Das Ziel für den Spielstand kann nicht geöffnet werden.	No se puede abrir el destino de la partida.	Impossible d’ouvrir la destination de la sauvegarde.
+Left shoulder	Левый бампер	Linke Schultertaste	Botón superior izquierdo	Bouton supérieur gauche
+Right shoulder	Правый бампер	Rechte Schultertaste	Botón superior derecho	Bouton supérieur droit
+Left trigger	Левый курок	Linker Trigger	Gatillo izquierdo	Gâchette gauche
+Right trigger	Правый курок	Rechter Trigger	Gatillo derecho	Gâchette droite
+Left stick press	Нажатие левого стика	Linken Stick drücken	Pulsar stick izquierdo	Appui sur le stick gauche
+Right stick press	Нажатие правого стика	Rechten Stick drücken	Pulsar stick derecho	Appui sur le stick droit
+Original StarCraft PC saves (.sng/.snx/.sav) are not compatible with StarDroid. Import a StarDroid .obwsave file instead.	Оригинальные сохранения StarCraft для ПК (.sng/.snx/.sav) несовместимы со StarDroid. Выберите файл StarDroid .obwsave.	Originale StarCraft-PC-Spielstände (.sng/.snx/.sav) sind nicht mit StarDroid kompatibel. Importiere eine StarDroid-Datei (.obwsave).	Las partidas de StarCraft para PC (.sng/.snx/.sav) no son compatibles con StarDroid. Importa un archivo .obwsave de StarDroid.	Les sauvegardes StarCraft pour PC (.sng/.snx/.sav) ne sont pas compatibles avec StarDroid. Importez un fichier StarDroid .obwsave.
