@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT shim using original NativeArt/NativeGlue and production NativeSurface map browser/touch methods",
+  "result": "PASS 122 map scrollbar checks: original bright arrows/circular thumb, 0\u201310000 maps, single-row arrows, jump/drag with stable grip through redraw, endpoints, last-map selection, swipe/inertia, cancel and no accidental actions",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "d4111453f93688a93933d97f2de48cf70a24b8142325badf0aae714c1e1994d3",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "4da0a75450af0f8bc5508eae90418e0e3f7abd542862c68d968eb580697113a7",
+    "tests/run_map_scroll79.py": "c52823b4bc96af591c3da7815ad7d8c290739be79a2b9dbadc4c7ec07ae024fe"
+  }
+}

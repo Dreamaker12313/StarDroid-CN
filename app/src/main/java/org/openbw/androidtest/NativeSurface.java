@@ -101,6 +101,8 @@ final class NativeSurface extends SurfaceView
   private String commandError = "";
   private double commandErrorUntil;
   private String musicPhase = "", currentMusicPath = "";
+  private int musicThemeBoundary;
+  private final HashMap<String, Integer> musicThemeStarts = new HashMap<String, Integer>();
   private float speechMusicGain = 1;
   private final ArrayList<Button> buttons = new ArrayList<Button>();
   private final ArrayList<JSONObject> visibleMissions = new ArrayList<JSONObject>();
@@ -599,6 +601,9 @@ final class NativeSurface extends SurfaceView
   private void music(String phase) {
     if (!musicPhase.equals(phase)) musicIndex = 0;
     musicPhase = phase;
+    // Classic BroodWar.mpq stores the expansion theme followed by the original
+    // first theme in race1.wav. Play the whole file before race2/race3; appending
+    // StarCraft's race1.wav would play that original theme twice per cycle.
     String race = new String[] {"zerg", "terran", "protoss"}[missionRace],
         prefix = new String[] {"z", "t", "p"}[missionRace];
     String name =
@@ -614,14 +619,36 @@ final class NativeSurface extends SurfaceView
     if (phase.equals("game") && !musicTrack.equals("auto")) name = "music/" + musicTrack + ".wav";
     if (name.equals(currentMusicPath) && NativeBridge.playing(63)) return;
     currentMusicPath = name;
+    musicThemeBoundary = 0;
     try {
       byte[] b = expansion ? NativeBridge.asset(6, name) : null;
+      if (b != null && phase.equals("game") && name.matches("music/(terran|zerg|protoss)1\\.wav")) {
+        Integer boundary = musicThemeStarts.get(name);
+        if (boundary == null) {
+          try { boundary = MusicThemes.appendedThemeMs(b, NativeBridge.asset(5, name)); }
+          catch (Exception ignored) { boundary = 0; } // Optional reference must not block valid music.
+          musicThemeStarts.put(name, boundary);
+        }
+        musicThemeBoundary = boundary;
+      }
       if (b == null) b = NativeBridge.asset(5, name);
       if (b != null) NativeBridge.sound(b, 63, !phase.equals("game") && !phase.equals("victory") && !phase.equals("defeat"));
       else NativeBridge.sound(null, 63, false);
     } catch (Exception e) {
       failure = "Music: " + e.getMessage();
     }
+  }
+
+  private void nextMusicTrack() {
+    // The first Brood War file contains two themes. Expose its verified second
+    // theme to Next Track without duplicating it in the natural playback loop.
+    boolean embedded = musicTrack.equals("auto") && musicPhase.equals("game")
+        && musicThemeBoundary > 0 && NativeBridge.playing(63)
+        && NativeBridge.soundPosition(63) < musicThemeBoundary;
+    musicTrack = "auto";
+    if (embedded) NativeBridge.seekSound(63, musicThemeBoundary);
+    else { musicIndex++; music("game"); }
+    saveSettings();
   }
 
   private void tick(double dt) {
@@ -1404,9 +1431,21 @@ final class NativeSurface extends SurfaceView
     }
     c.restore();
     glue.scrollbar(c,332,130,110,mapMaxOffset()==0?0:mapOffset/mapMaxOffset());
-    add(new RectF(328,126,352,147),()->mapOffset=Math.max(0,mapOffset-22),mapOffset>0);
-    add(new RectF(328,223,352,244),()->mapOffset=Math.min(mapMaxOffset(),mapOffset+22),mapOffset<mapMaxOffset());
-    Button bar=new Button(new RectF(328,147,352,223),()->{},mapMaxOffset()>0);bar.vertical=true;bar.slider=v->mapOffset=v*mapMaxOffset();buttons.add(bar);
+    add(new RectF(328,126,352,146),()->mapOffset=Math.max(0,mapOffset-22),mapOffset>0);
+    add(new RectF(328,224,352,244),()->mapOffset=Math.min(mapMaxOffset(),mapOffset+22),mapOffset<mapMaxOffset());
+    Button bar=new Button(new RectF(328,146,352,224),()->{},mapMaxOffset()>0);bar.vertical=true;
+    final long[] dragStarted={Long.MIN_VALUE};final float[] grip={0};
+    bar.slider=v->{
+      float maximum=mapMaxOffset(),position=v*bar.rect.height()-7,travel=bar.rect.height()-14;
+      if(dragStarted[0]!=downAt){
+        dragStarted[0]=downAt;float thumb=maximum>0?mapOffset/maximum*travel:0;
+        grip[0]=Math.abs(position-thumb)<=9?position-thumb:0;
+      }
+      // Preserve where the finger grabbed the circle. Track taps jump directly;
+      // dragging reaches both ends without changing the selected map.
+      mapOffset=(v<=0?0:v>=1?1:Math.max(0,Math.min(1,(position-grip[0])/travel)))*maximum;
+    };
+    buttons.add(bar);
     redButton(c,"Import maps/ZIP",206,98,146,26,()->activity.runOnUiThread(activity::pickNativeMap),!importingMaps);
   }
   private void drawCustom(Canvas c) {
@@ -1943,7 +1982,7 @@ final class NativeSurface extends SurfaceView
       slider(c, "Effects", effects, x + 26, y + 120, v -> {effects = v; saveSettings();});
       slider(c, "Music", music, x + 26, y + 160, v -> {music = v; saveSettings();});
       option(c, trackLabel(musicTrack), x + 26, y + 204, 320, () -> modal = "tracks");
-      option(c, "Next track", x + 26, y + 243, 150, () -> {musicTrack = "auto"; musicIndex++; music("game"); saveSettings();});
+      option(c, "Next track", x + 26, y + 243, 150, this::nextMusicTrack);
       option(c, "Preview sound", x + 196, y + 243, 150, () -> {syncAudio(); sfx("button");});
     } else if (modal.equals("tracks")) {
       for (int i = 0; i < MUSIC_TRACKS.length; i++) {

@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "generatedAt": "2026-10-25T20:25:12.531249+00:00",
+  "scope": "Original imported campaign identities and portrait movies. Host tests; not an Android-device render test.",
+  "command": "build-native/host/native-campaign79 CORE_DIR BROODWAR_MPQ STARCRAFT_MPQ heroes",
+  "checks": [
+    "PASS all 16 custom unit names found in the 64 original campaign maps (11 missions)",
+    "PASS Aldaris / Legacy of the Xel'Naga imported idle/talking portrait movie variants and full decode",
+    "PASS Aldaris / The Insurgent imported idle/talking portrait movie variants and full decode",
+    "PASS DuGalle / To Chain the Beast imported idle/talking portrait movie variants and full decode",
+    "PASS Raszagal / To Slay the Beast imported idle/talking portrait movie variants and full decode",
+    "PASS Raszagal / The Reckoning imported idle/talking portrait movie variants and full decode",
+    "PASS campaign portrait routes, dedicated transmissions, localized names, save/load, custom-map guards and unchanged simulation",
+    "PASS Aldaris card/save identity and original objective shared vision",
+    "PASS default/invalid/empty map-name fallback and localized byte preservation",
+    "PASS Stukov / Patriot's Blood imported idle/talking portrait movie variants and full decode",
+    "PASS dedicated Stukov identity/portrait and no cross-mission rename leakage"
+  ],
+  "portraitCorrections": [
+    {
+      "missions": [
+        303,
+        307
+      ],
+      "unitType": 79,
+      "characterUnitType": 87,
+      "basePortrait": 53,
+      "characterPortrait": 59,
+      "character": "Aldaris",
+      "idlePrefix": "PAdvisor/PAdFid0",
+      "talkingPrefix": "PAdvisor/PAdTlk0"
+    },
+    {
+      "missions": [
+        408
+      ],
+      "unitType": 29,
+      "characterUnitType": 102,
+      "basePortrait": 14,
+      "characterPortrait": 92,
+      "character": "Gerard DuGalle",
+      "idlePrefix": "TDugal/UdgFid0",
+      "talkingPrefix": "TDugal/UdgTlk0"
+    },
+    {
+      "missions": [
+        508,
+        509
+      ],
+      "unitType": 74,
+      "characterUnitType": 98,
+      "basePortrait": 49,
+      "characterPortrait": 96,
+      "character": "Raszagal",
+      "idlePrefix": "PRaz/PRzFid0",
+      "talkingPrefix": "PRaz/PRzTlk0"
+    }
+  ],
+  "unchangedDedicatedPortrait": {
+    "character": "Alexei Stukov",
+    "mission": 407,
+    "unitType": 100,
+    "portrait": 93,
+    "idlePrefix": "Talex/TaxFid0",
+    "talkingPrefix": "Talex/TaxTlk0"
+  },
+  "movieChecks": "Four idle choices and three talking choices per tested mission, with the production lower-variant fallback; each selected SMK decoded through its last frame. First idle frames also inspected visually.",
+  "evidence": "Character identities and dedicated transmission types from the supplied original CHK files; portrait indices and movie names from imported units.dat and portdata.dat/tbl. No comparison against an original StarCraft executable was performed.",
+  "limits": [
+    "Presentation routes are deliberately scoped to catalog missions with valid map renames, not inferred from arbitrary translated/custom-map text.",
+    "Imported game data is not included in this report or source changes."
+  ],
+  "sourceSha256": {
+    "patches/native-unit-names79.patch": "b09b2ffcc193de2b2ab28b34aef78ab0f1fbfec99c85d64394316e559fd336f0",
+    "patches/native-campaign79.patch": "66af31869a0ef4d9a7c6e7cf9f3880eb6d0edc37e777444405b7a314b49f60cb",
+    "native/generated/wasm_main.cpp": "809eb880c0eb0888d871c2c45f7cf71b40d901ecb67ed5acc492ceb6c7d1f9ab",
+    "tests/native_heroes79_cases.h": "8fafdc9a0904b2a817b8f9f5350e52a7cf1934aba72293c025d21d8c758301f0",
+    "tests/native_campaign79.cpp": "b73cbe5fdeff0260a55e76f2bc707f95409d828014acdb7d6ae50ff78a7b74de",
+    "app/src/main/java/org/openbw/androidtest/NativePortrait.java": "bc7ee2745746de7bfedab97eb5d7d41e80352135a381ec000af0bf35727db38e",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "f5ef02ea04d3813545d5e69beaf75753db0201e704714eddbc458b7900732784",
+    "native/runtime.cpp": "31fd8a2ceb37ef26ab656b33e78c253f550a63f06bef2213e68e7340d771f369"
+  },
+  "testBinarySha256": "3b8c4625dba4694fc95c8b42ea5c4ecdb1856d6060f7e9ee704c2e80a5f292c0",
+  "testLogSha256": "c31e86f43569a6e5ccf23ba8d74bf81d7bb514171189edce56f07f055a08749c"
+}

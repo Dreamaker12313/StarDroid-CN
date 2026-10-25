@@ -1,0 +1,36 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -687,7 +687,22 @@
+ 		}
+ 		return (i >= 0 && i < (int)stat_txt_names.size()) ? stat_txt_names[i].c_str() : "?";
+ 	}
+-	const char* unit_name(UnitTypes id) { return stat_name((int)id); }
++    virtual int unit_portrait(UnitTypes id) const {
++        return get_unit_type(id)->portrait;
++    }
++	const char* unit_name(UnitTypes id) {
++        // Campaigns and Use Map Settings maps can rename a unit in UNIS/UNIx.
++        // Aldaris is deliberately a renamed Tassadar, for example. Preserve the
++        // imported map's spelling/encoding; never replace the underlying type.
++        if (size_t(id) < game_st.unit_types.vec.size()) {
++            size_t index = get_unit_type(id)->unit_map_string_index;
++            if (index && index <= game_st.map_strings.size()) {
++                const auto& name = game_st.map_strings[index - 1];
++                if (!name.empty()) return name.c_str();
++            }
++        }
++        return stat_name((int)id);
++    }
+ 	// upgrade/tech .label is a 1-based stat_txt index (0 = none), unlike the unit id.
+ 	const char* upgrade_name(const upgrade_type_t* up) { return stat_name(up->label - 1); }
+ 	const char* tech_name(const tech_type_t* te) { return stat_name(te->label - 1); }
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -474,7 +474,7 @@
+ }
+ OPENBW_EXPORT(openbw_portrait_for_type) int openbw_portrait_for_type(int type) {
+-    return g_ui && type >= 0 && type < 228 ? g_ui->get_unit_type((UnitTypes)type)->portrait : -1;
++    return g_ui && type >= 0 && type < 228 ? g_ui->unit_portrait((UnitTypes)type) : -1;
+ }
+ OPENBW_EXPORT(openbw_portrait_talking) int openbw_portrait_talking() {
+     if (!g_ui) return 0;

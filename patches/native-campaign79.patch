@@ -1,0 +1,121 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -22027,6 +22027,8 @@
+ 		tag_funcs["UNIT"] = [&](data_reader_le r) {
+             a_unordered_map<int, unit_t*> initial_units;
+             a_vector<std::pair<int, int>> initial_links;
++            a_vector<std::pair<int, int>> initial_nydus_links;
++            a_unordered_set<int> ambiguous_initial_ids;
+ 			while (r.left()) {
+ 
+ 				int id = r.get<uint32_t>();
+@@ -22097,8 +22099,10 @@
+ 				unit_t* u = create_initial_unit(unit_type, {x, y}, owner);
+ 
+                 if (!u) continue;
++                if (initial_units.count(id)) ambiguous_initial_ids.insert(id);
+                 initial_units[id] = u;
+                 if ((link & 0x200) && related_unit_id) initial_links.emplace_back(id, related_unit_id);
++                if ((link & 0x400) && related_unit_id) initial_nydus_links.emplace_back(id, related_unit_id);
+ 
+ 				if (valid_properties & 0x2) {
+ 					using tmp_t = fixed_point<32, 8, true>;
+@@ -22132,6 +22136,29 @@
+                     + addon->unit_type->addon_position + addon->unit_type->placement_size / 2;
+                 if (expected != addon->sprite->position) continue;
+                 connect_addon(parent, addon);
++            }
++            // CHK UNIT bit 0x400 links Nydus endpoints by their map serial IDs,
++            // independently of the 0x200 Terran addon links. Resolve only after
++            // every placed unit exists, never by proximity or record order.
++            for (auto ids : initial_nydus_links) {
++                if (ambiguous_initial_ids.count(ids.first) || ambiguous_initial_ids.count(ids.second)) continue;
++                auto a = initial_units.find(ids.first), b = initial_units.find(ids.second);
++                if (a == initial_units.end() || b == initial_units.end()) continue;
++                auto* entrance = a->second; auto* exit = b->second;
++                if (entrance == exit || !unit_is_nydus(entrance) || !unit_is_nydus(exit)
++                    || entrance->owner != exit->owner || entrance->building.nydus.exit
++                    || exit->building.nydus.exit) continue;
++                // Reject conflicting declarations instead of joining chains.
++                bool conflict = false;
++                for (auto other : initial_nydus_links) {
++                    if ((other.first == ids.first && other.second != ids.second)
++                        || (other.first == ids.second && other.second != ids.first)
++                        || (other.second == ids.first && other.first != ids.second)
++                        || (other.second == ids.second && other.first != ids.first)) conflict = true;
++                }
++                if (conflict) continue;
++                entrance->building.nydus.exit = exit;
++                exit->building.nydus.exit = entrance;
+             }
+             // Older maps can omit serial links but still place owned addons at
+             // the canonical socket. Do not attach arbitrary neutral neighbors.
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -1,5 +1,5 @@
+-// Campaign presentation and audio for the browser host. Original CHK triggers
+-// drive the objectives; this class only presents their actions.
++// Campaign presentation and narrowly scoped compatibility fixes. Imported CHK
++// triggers drive objectives; presentation and known mission corrections live here.
+ #ifndef OPENBW_WEB_CAMPAIGN_H
+ #define OPENBW_WEB_CAMPAIGN_H
+ #include "campaign_ai.h"
+@@ -12,6 +12,48 @@
+ 		if(melee_ai){play_ui::on_victory_state(owner,state);return;}
+ 		if (owner == my_player && state && !outcome) outcome = state >= 3 ? 1 : 2;
+ 	}
++    int presentation_mission = 0;
++    int unit_portrait(UnitTypes id) const override {
++        // These original missions reuse a combat unit for another character.
++        // Route only its portrait to the character's imported DAT/SMK entry;
++        // retain the map's unit type, statistics, orders and localized name.
++        // Mission identity, not English text, keeps translated archives working
++        // and avoids guessing at arbitrary custom-map character names.
++        UnitTypes character = id;
++        if ((presentation_mission == 303 || presentation_mission == 307) && id == UnitTypes::Hero_Tassadar)
++            character = UnitTypes::Hero_Aldaris;
++        else if ((presentation_mission == 508 || presentation_mission == 509) && id == UnitTypes::Hero_Dark_Templar)
++            character = UnitTypes::Hero_Raszagal;
++        else if (presentation_mission == 408 && id == UnitTypes::Hero_Norad_II)
++            character = UnitTypes::Hero_Gerard_DuGalle;
++        size_t name = get_unit_type(id)->unit_map_string_index;
++        if (character != id && name && name <= game_st.map_strings.size() && !game_st.map_strings[name - 1].empty())
++            return get_unit_type(character)->portrait;
++        return play_ui::unit_portrait(id);
++    }
++    void apply_campaign_compatibility(int mission) {
++        presentation_mission = mission;
++        if (mission != 502) return;
++        // Reign of Fire's original loss trigger tests Exactly 0 buildings and
++        // Exactly 0 Drones after their rescue. Exactly counts completed units,
++        // so spending both starting Drones on construction falsely ends play.
++        // Change only this recognized mission condition to At Most 0, which
++        // includes unfinished structures. Preserve ordinary CHK semantics and
++        // every other mission/custom-game condition, including real defeat.
++        game_load_functions rules(player.st());
++        for (auto& t : rules.game_st.triggers) {
++            auto& guard = t.conditions[0];
++            auto& buildings = t.conditions[1];
++            auto& drones = t.conditions[2];
++            if (guard.type != 11 || guard.extra_n != 20 || guard.num_n != 2 || (guard.flags & 2)
++                || buildings.type != 2 || buildings.group != 13 || buildings.unit_id != 231
++                || buildings.num_n != 10 || buildings.count_n != 0 || (buildings.flags & 2)
++                || drones.type != 2 || drones.group != 13 || drones.unit_id != int(UnitTypes::Zerg_Drone)
++                || drones.num_n != 10 || drones.count_n != 0 || (drones.flags & 2)
++                || t.conditions[3].type || t.actions[0].type != 2 || (t.actions[0].flags & 2)) continue;
++            buildings.num_n = 1;
++        }
++    }
+ 	bool units_paused = false;
+ 	int objectives = 0;
+ 	int countdown_ms = 0;
+--- a/web/wasm_main.cpp
++++ b/web/wasm_main.cpp
+@@ -260,6 +260,7 @@
+         g_campaign_expansion = entry.expansion;
+         mp_slot slot{entry.player,race_t(entry.race)};
+         init_game(width,height,entry.player,&slot,1,true);
++        g_campaign->apply_campaign_compatibility(mission);
+         return;
+     }
+     error("Unknown campaign mission");

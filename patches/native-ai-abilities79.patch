@@ -1,0 +1,268 @@
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -270,11 +270,11 @@
+         for(auto* u:ptr(st.player_units[owner])) {
+             int type=int(u->unit_type->id);
+             if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||u_loaded(u)||us_hidden(u)||unit_is_fighter(u)||type>=228||ai_attacking(a,u))continue;
+-            if (!u->unit_type->ground_weapon && !u->unit_type->air_weapon && !unit_is_carrier(u) && !unit_is_reaver(u)) continue;
++            if (!u->unit_type->ground_weapon && !u->unit_type->air_weapon && !unit_is_carrier(u) && !unit_is_reaver(u) && !ut_has_energy(u)) continue;
+             if(!all && need[type]<=0)continue;
+             if(all&&melee_ai&&ai_count(owner,type,true,true)<=a.defence[type])continue;
+-            if(u_order_not_interruptible(u) || u->status_flags&unit_t::status_flag_iscript_nobrk)continue;
+-            issue_order(u,false,get_order_type(is_reachable(u,target)?Orders::AttackMove:Orders::Stop),{target,nullptr});
++            if(u_order_not_interruptible(u) || u->status_flags&unit_t::status_flag_iscript_nobrk || ai_casting(u))continue;
++            issue_order(u,false,get_order_type(is_reachable(u,target)?(unit_is(u,UnitTypes::Terran_Medic)?Orders::HealMove:Orders::AttackMove):Orders::Stop),{target,nullptr});
+             a.attackers.push_back(get_unit_id(u)); --need[type]; ++sent;
+         }
+         if(sent){++a.attacks;ai_trace=format("P%d wave %d: %d units at frame %d",owner+1,a.attacks,sent,st.current_frame);}
+@@ -625,6 +625,7 @@
+         if(melee_ai&&(type==68||type==63)) {
+             unit_t* first=nullptr;
+             for(auto* u:ptr(st.player_units[owner]))if(unit_is(u,UnitTypes(type==68?67:61))&&!unit_dying(u)&&u_completed(u)&&!u_order_not_interruptible(u)&&!u_iscript_nobrk(u)&&!ai_attacking(a,u)) {
++                if(ai_casting(u))continue;
+                 if(!first){first=u;continue;}unit_t* pair[]={first,u};af.action_select(owner,pair);
+                 return type==68?af.action_morph_archon(owner):af.action_morph_dark_archon(owner);
+             }
+@@ -785,6 +786,179 @@
+         }
+         if(gas)ai_request(req,157,1,94);
+     }
++    bool ai_casting(const unit_t* u) const {
++        return u->order_type->tech_type != TechTypes::None
++            || u->order_type->id == Orders::MoveToFireYamatoGun
++            || u->order_type->id == Orders::NukePaint || u->order_type->id == Orders::NukeUnit;
++    }
++    bool ai_spell_enemy(unit_t* caster,unit_t* target) {
++        return target && !unit_dying(target) && !ut_turret(target) && !us_hidden(target)
++            && !u_invincible(target) && !target->stasis_timer && !u_hallucination(target)
++            && unit_target_is_enemy(caster,target) && unit_can_see_target(caster,target);
++    }
++    bool ai_spell_ready(unit_t* caster,Orders order) {
++        auto* o=get_order_type(order);
++        return o->tech_type!=TechTypes::None && unit_can_use_tech(caster,get_tech_type(o->tech_type))
++            && caster->energy>=fp8::integer(get_tech_type(o->tech_type)->energy_cost);
++    }
++    bool ai_spell_reserved(unit_t* caster,Orders order,unit_t* target,xy pos,int radius=64) {
++        // Pending orders are already serialized. Avoid a separate cooldown table
++        // and several casters spending energy on the same not-yet-resolved spell.
++        for(auto* other:ptr(st.player_units[caster->owner]))if(other!=caster&&!unit_dying(other)
++            &&other->order_type->id==order) {
++            if(target ? other->order_target.unit==target : xy_length(other->order_target.pos-pos)<=radius)return true;
++        }
++        return false;
++    }
++    int ai_area_value(unit_t* u,Orders order) {
++        if(unit_dying(u)||ut_turret(u)||us_hidden(u)||u_invincible(u)||u_hallucination(u)||u->stasis_timer)return 0;
++        switch(order) {
++        case Orders::CastEMPShockwave:return (u->shield_points.integer_part()+u->energy.integer_part())/60;
++        case Orders::CastPlague:return !u->plague_timer&&u->hp>=fp8::integer(40)?1:0;
++        case Orders::CastEnsnare:return !ut_building(u)&&!u->ensnare_timer?1:0;
++        case Orders::CastPsionicStorm:return !ut_building(u)&&!u->storm_timer?1:0;
++        case Orders::CastStasisField:return !ut_building(u)?1:0;
++        case Orders::CastMaelstrom:return !ut_building(u)&&ut_organic(u)&&!u->maelstrom_timer?1:0;
++        case Orders::CastDisruptionWeb:return !u_flying(u)&&!u_cannot_attack(u)&&(u->unit_type->ground_weapon||u->unit_type->air_weapon)?(ut_building(u)?2:1):0;
++        default:return 0;
++        }
++    }
++    bool ai_area_spell(unit_t* caster,Orders order) {
++        if(!ai_spell_ready(caster,order))return false;
++        unit_t* target=nullptr;int best=1;
++        for(auto* candidate:find_units(square_at(caster->position,288))) {
++            if(!ai_spell_enemy(caster,candidate)||!ai_area_value(candidate,order)
++                ||ai_spell_reserved(caster,order,nullptr,candidate->position))continue;
++            int score=0;
++            for(auto* near:find_units(square_at(candidate->position,64))) {
++                int value=ai_area_value(near,order);if(!value)continue;
++                if(unit_target_is_enemy(caster,near)) {
++                    if(unit_can_see_target(caster,near))score+=value;
++                } else score-=value*3;
++            }
++            if(score>best){best=score;target=candidate;}
++        }
++        if(!target)return false;
++        action_functions af(st,ai_actions);af.action_select(caster->owner,caster);
++        return af.action_order(caster->owner,get_order_type(order),target->position,nullptr,nullptr,false);
++    }
++    bool ai_unit_spell(unit_t* caster,Orders order) {
++        if(!ai_spell_ready(caster,order))return false;
++        auto* o=get_order_type(order);unit_t* target=nullptr;int best=0;
++        for(auto* other:find_units(square_at(caster->position,320))) {
++            if(!ai_spell_enemy(caster,other)||ai_spell_reserved(caster,order,other,other->position))continue;
++            bool valid=o->targets_enemies && o->weapon!=WeaponTypes::None
++                ?weapon_can_target_unit(get_weapon_type(o->weapon),other,caster)
++                :unit_tech_target_valid(caster,get_tech_type(o->tech_type),other);
++            if(!valid)continue;
++            int value=other->unit_type->mineral_cost+2*other->unit_type->gas_cost;
++            switch(order) {
++            case Orders::CastFeedback:if(other->energy<fp8::integer(50))continue;value=other->energy.integer_part();break;
++            case Orders::CastLockdown:if(other->lockdown_timer||!ut_mechanical(other)||ut_building(other))continue;break;
++            case Orders::CastIrradiate:
++                if(other->irradiate_timer||!ut_organic(other))continue;
++                // Irradiation follows its target; don't choose an enemy already
++                // mixed with our own biological army.
++                for(auto* near:find_units(square_at(other->position,64)))
++                    if(!unit_target_is_enemy(caster,near)&&ut_organic(near)&&!unit_dying(near))valid=false;
++                if(!valid)continue;break;
++            case Orders::FireYamatoGun:if(other->hp+other->shield_points<fp8::integer(100))continue;value=other->hp.integer_part();break;
++            case Orders::CastSpawnBroodlings:if(value<100)continue;break;
++            case Orders::CastMindControl:if(value<200)continue;break;
++            case Orders::CastParasite:if(other->parasite_flags&(1<<caster->owner)||value<100)continue;break;
++            case Orders::CastOpticalFlare:if(other->blinded_by||(!ut_detector(other)&&value<200))continue;break;
++            default:continue;
++            }
++            if(value>best){best=value;target=other;}
++        }
++        if(!target)return false;
++        action_functions af(st,ai_actions);af.action_select(caster->owner,caster);
++        return af.action_order(caster->owner,o,target->position,target,nullptr,false);
++    }
++    bool ai_support_spell(unit_t* caster) {
++        for(Orders order:{Orders::CastRestoration,Orders::CastDefensiveMatrix,Orders::CastDarkSwarm}) {
++            if(!ai_spell_ready(caster,order))continue;
++            for(auto* ally:find_units(square_at(caster->position,256))) {
++                if(unit_dying(ally)||ut_building(ally)||ut_turret(ally)||u_invincible(ally)||us_hidden(ally)
++                    ||u_hallucination(ally)||ally->owner!=caster->owner||ally->stasis_timer
++                    ||ai_spell_reserved(caster,order,order==Orders::CastDarkSwarm?nullptr:ally,ally->position))continue;
++                bool wanted=false;
++                if(order==Orders::CastRestoration)
++                    wanted=ally->lockdown_timer||ally->irradiate_timer||ally->ensnare_timer||ally->plague_timer||ally->maelstrom_timer||ally->blinded_by||ally->parasite_flags;
++                else {
++                    bool enemy=false,covered=false;
++                    for(auto* near:find_units(square_at(ally->position,160))) {
++                        if(ai_spell_enemy(caster,near)&&(near->unit_type->ground_weapon||near->unit_type->air_weapon))enemy=true;
++                        if(unit_is(near,UnitTypes::Spell_Dark_Swarm)&&xy_length(near->position-ally->position)<96)covered=true;
++                    }
++                    if(order==Orders::CastDefensiveMatrix)wanted=enemy&&!ally->defensive_matrix_timer&&ally->hp<ally->unit_type->hitpoints&&!ut_worker(ally);
++                    else wanted=enemy&&!covered&&!u_flying(ally)&&(unit_is(ally,UnitTypes::Zerg_Zergling)||unit_is_ultralisk(ally)||unit_is(ally,UnitTypes::Zerg_Lurker));
++                }
++                if(!wanted)continue;
++                action_functions af(st,ai_actions);af.action_select(caster->owner,caster);
++                if(af.action_order(caster->owner,get_order_type(order),ally->position,order==Orders::CastDarkSwarm?nullptr:ally,nullptr,false))return true;
++            }
++        }
++        // Consume only an ordinary nearby Zergling. Never sacrifice workers,
++        // heroes, allied players' units, or units outside its attack wave.
++        if(caster->energy<fp8::integer(100)&&ai_spell_ready(caster,Orders::CastConsume))
++            for(auto* ally:find_units(square_at(caster->position,64)))
++                if(unit_is(ally,UnitTypes::Zerg_Zergling)&&ally->owner==caster->owner&&!unit_dying(ally)
++                    &&u_completed(ally)&&!u_invincible(ally)&&!us_hidden(ally)&&!u_loaded(ally)&&!u_burrowed(ally)
++                    &&ai_attacking(towns[caster->owner],ally)&&!ai_spell_reserved(caster,Orders::CastConsume,ally,ally->position)) {
++                    action_functions af(st,ai_actions);af.action_select(caster->owner,caster);
++                    if(af.action_order(caster->owner,get_order_type(Orders::CastConsume),ally->position,ally,nullptr,false))return true;
++                }
++        return false;
++    }
++    void ai_combat_abilities(int owner) {
++        if(campaign_control_lock||scenario_units_paused()||owner<0||owner>=8||owner==my_player||st.players[owner].controller!=player_t::controller_computer_game)return;
++        for(auto* u:ptr(st.player_units[owner])) {
++            if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_turret(u)||u_hallucination(u)||us_hidden(u)
++                ||u_loaded(u)||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)||u_burrowed(u)
++                ||ai_lifting(owner,u)||ai_casting(u))continue;
++            if(!ut_has_energy(u)&&!unit_is_marine(u)&&!unit_is_firebat(u))continue;
++            auto order=u->order_type->id;
++            // Story Move/Follow paths, transports, construction and other
++            // explicit scripted actions remain authoritative. Combat guards,
++            // attack waves and support escorts may react to nearby visible foes.
++            if(!ai_idle(u)&&order!=Orders::AttackMove&&order!=Orders::AttackUnit&&order!=Orders::AttackFixedRange
++                &&order!=Orders::MoveToAttack&&order!=Orders::HoldPosition&&order!=Orders::HealMove
++                &&!(order==Orders::Follow&&(ai_attacking(towns[owner],u)
++                    ||(u->order_target.unit&&u->order_target.unit->owner==owner&&ai_attacking(towns[owner],u->order_target.unit)))))continue;
++            if(ut_has_energy(u)) {
++                if(ai_support_spell(u))continue;
++                bool cast=false;
++                for(Orders spell:{Orders::CastPsionicStorm,Orders::CastEMPShockwave,Orders::CastPlague,
++                    Orders::CastStasisField,Orders::CastMaelstrom,Orders::CastEnsnare,Orders::CastDisruptionWeb})
++                    if(ai_area_spell(u,spell)){cast=true;break;}
++                if(cast)continue;
++                for(Orders spell:{Orders::CastFeedback,Orders::CastLockdown,Orders::CastIrradiate,
++                    Orders::FireYamatoGun,Orders::CastSpawnBroodlings,Orders::CastMindControl,
++                    Orders::CastParasite,Orders::CastOpticalFlare})if(ai_unit_spell(u,spell)){cast=true;break;}
++                if(cast)continue;
++            }
++            unit_t* enemy=nullptr;
++            for(auto* near:find_units(square_at(u->position,192)))if(ai_spell_enemy(u,near)){enemy=near;break;}
++            if(!enemy)continue;
++            action_functions af(st,ai_actions);af.action_select(owner,u);
++            if(!u->stim_timer&&u->hp>fp8::integer(30)&&(unit_is_marine(u)||unit_is_firebat(u)))af.action_stim_pack(owner);
++            if((unit_is_wraith(u)||unit_is_ghost(u)||unit_is(u,UnitTypes::Hero_Infested_Kerrigan))
++                &&!u_requires_detector(u)&&u->secondary_order_type->id!=Orders::Cloak&&u->energy>=fp8::integer(75))af.action_cloak(owner);
++        }
++    }
++    void ai_spell_research(int owner) {
++        if(!melee_ai)return; // Campaign scripts decide their own technology.
++        for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&u_completed(u)&&!ut_hero(u))
++            for(auto tech:{TechTypes::Psionic_Storm,TechTypes::Lockdown,TechTypes::EMP_Shockwave,
++                TechTypes::Irradiate,TechTypes::Yamato_Gun,TechTypes::Plague,TechTypes::Consume,
++                TechTypes::Ensnare,TechTypes::Spawn_Broodlings,TechTypes::Stasis_Field,
++                TechTypes::Disruption_Web,TechTypes::Mind_Control,TechTypes::Maelstrom,
++                TechTypes::Stim_Packs,TechTypes::Cloaking_Field,TechTypes::Personnel_Cloaking,
++                TechTypes::Restoration,TechTypes::Optical_Flare})
++                if(!player_has_researched(owner,tech)&&unit_tech_available(u,get_tech_type(tech),true))
++                    ai_request(towns[owner].techs,int(tech),1,85);
++    }
+     void ai_protoss_support(int owner) {
+         action_functions af(st,ai_actions);
+         for(auto* u:ptr(st.player_units[owner])) {
+@@ -792,15 +966,6 @@
+             // Carrier and Reaver ammunition is purchased through normal actions.
+             if(unit_is_carrier(u)||unit_is_reaver(u)) {af.action_select(owner,u);af.action_train_fighter(owner);continue;}
+             if(!unit_is(u,UnitTypes::Protoss_Observer)&&!unit_is(u,UnitTypes::Protoss_High_Templar)&&!unit_is(u,UnitTypes::Protoss_Dark_Archon))continue;
+-            if(unit_is(u,UnitTypes::Protoss_High_Templar)&&u->energy>=75_fp8&&player_has_researched(owner,TechTypes::Psionic_Storm)) {
+-                unit_t* target=nullptr;int score=0;
+-                for(auto* other:find_units(square_at(u->position,288))) {
+-                    if(unit_dying(other)||ut_building(other)||ut_turret(other)||u_invincible(other)||!unit_target_is_enemy(u,other)||!unit_can_see_target(u,other)||other->storm_timer)continue;
+-                    int count=0;for(auto* near:find_units(square_at(other->position,48)))if(!unit_dying(near)&&!ut_building(near)&&!ut_turret(near))count+=unit_target_is_enemy(u,near)?1:-2;
+-                    if(count>score){score=count;target=other;}
+-                }
+-                if(target&&score>=2){af.action_select(owner,u);if(af.action_order(owner,get_order_type(Orders::CastPsionicStorm),target->position,nullptr,nullptr,false))continue;}
+-            }
+             if(!ai_idle(u))continue;
+             unit_t* escort=nullptr;int distance=0x7fffffff;
+             for(auto id:towns[owner].attackers)if(auto* other=get_unit(id))if(!unit_dying(other)&&!ut_worker(other)) {
+@@ -864,28 +1029,6 @@
+             if(!overlord&&!queen&&!defiler)continue;
+             // Keep most supply providers at home; send two detectors with the army.
+             if(overlord&&++detectors>2)continue;
+-            if(queen&&u->energy>=fp8::integer(75)&&player_has_researched(owner,TechTypes::Ensnare)&&u->order_type->id!=Orders::CastEnsnare) {
+-                unit_t* target=nullptr;int score=1;
+-                for(auto* other:find_units(square_at(u->position,288))) {
+-                    if(unit_dying(other)||ut_building(other)||ut_turret(other)||u_invincible(other)||other->ensnare_timer||!unit_target_is_enemy(u,other)||!unit_can_see_target(u,other))continue;
+-                    int count=0;for(auto* near:find_units(square_at(other->position,64)))if(!unit_dying(near)&&!ut_building(near)&&!ut_turret(near))count+=unit_target_is_enemy(u,near)?1:-2;
+-                    if(count>score){score=count;target=other;}
+-                }
+-                if(target){af.action_select(owner,u);if(af.action_order(owner,get_order_type(Orders::CastEnsnare),target->position,nullptr,nullptr,false))continue;}
+-            }
+-            if(defiler&&u->energy>=fp8::integer(100)&&u->order_type->id!=Orders::CastDarkSwarm) {
+-                unit_t* ally=nullptr;
+-                for(auto id:towns[owner].attackers)if(auto* other=get_unit(id)) {
+-                    if(unit_dying(other)||u_flying(other)||units_distance(u,other)>256||(!unit_is(other,UnitTypes::Zerg_Zergling)&&!unit_is(other,UnitTypes::Zerg_Ultralisk)&&!unit_is(other,UnitTypes::Zerg_Lurker)))continue;
+-                    bool enemy=false,covered=false;
+-                    for(auto* near:find_units(square_at(other->position,96))) {
+-                        if(unit_is(near,UnitTypes::Spell_Dark_Swarm))covered=true;
+-                        else if(!unit_dying(near)&&!ut_turret(near)&&unit_target_is_enemy(u,near)&&unit_can_see_target(u,near))enemy=true;
+-                    }
+-                    if(enemy&&!covered){ally=other;break;}
+-                }
+-                if(ally){af.action_select(owner,u);if(af.action_order(owner,get_order_type(Orders::CastDarkSwarm),ally->position,nullptr,nullptr,false))continue;}
+-            }
+             if(!ai_idle(u))continue;
+             unit_t* escort=nullptr;int distance=0x7fffffff;
+             for(auto id:towns[owner].attackers)if(auto* other=get_unit(id))if(!unit_dying(other)&&!ut_worker(other)) {
+@@ -982,7 +1125,7 @@
+         // Reissue only idle attackers, allowing normal targeting/pathfinding to run.
+         for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&!u_loaded(u)&&!ai_lifting(owner,u)&&ai_idle(u)&&!u_burrowed(u)&&is_reachable(u,ai_target(owner,u->position)))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+         bool reserveExpansion=false;
+-        ai_hero_requests(owner,req);
++        ai_hero_requests(owner,req);ai_spell_research(owner);
+         auto allowed_requests=[&](){req.erase(std::remove_if(req.begin(),req.end(),[&](const request& r){return !game_st.unit_type_allowed[owner][UnitTypes(r.type)];}),req.end());};
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+         if(melee_ai && st.players[owner].race==race_t::terran) {
+@@ -1226,7 +1369,7 @@
+         for(auto& t:threads)if(!t.done&&t.wake<=ai_clock)ai_run(t);
+         if(!spawned.empty()){threads.insert(threads.end(),spawned.begin(),spawned.end());spawned.clear();}
+         if(ai_clock%12==0)for(int p=0;p<8;++p)
+-            if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_lurkers(p);ai_tanks(p);}
++            if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_lurkers(p);ai_tanks(p);if(ai_clock%24==0)ai_combat_abilities(p);}
+         if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_defend(p);ai_manage(p);}
+     }
+     a_string ai_status() {

@@ -260,6 +260,7 @@ OPENBW_EXPORT(openbw_init_campaign) void openbw_init_campaign(int width, int hei
         g_campaign_expansion = entry.expansion;
         mp_slot slot{entry.player,race_t(entry.race)};
         init_game(width,height,entry.player,&slot,1,true);
+        g_campaign->apply_campaign_compatibility(mission);
         return;
     }
     error("Unknown campaign mission");
@@ -473,7 +474,7 @@ OPENBW_EXPORT(openbw_touch_cancel) void openbw_touch_cancel() {
     g_ui->is_moving_minimap = false;
 }
 OPENBW_EXPORT(openbw_portrait_for_type) int openbw_portrait_for_type(int type) {
-    return g_ui && type >= 0 && type < 228 ? g_ui->get_unit_type((UnitTypes)type)->portrait : -1;
+    return g_ui && type >= 0 && type < 228 ? g_ui->unit_portrait((UnitTypes)type) : -1;
 }
 OPENBW_EXPORT(openbw_portrait_talking) int openbw_portrait_talking() {
     if (!g_ui) return 0;

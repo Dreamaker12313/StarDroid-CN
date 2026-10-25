@@ -52,7 +52,7 @@ public final class NearbyProtocolTest {
     live.a.engine.state++;live.drain();live.tick(60);live.drain();check(live.a.match.closed&&live.b.match.closed,"desync stops both games");
     Pair assets=new Pair();assets.b.engine.assets++;assets.connect();check(assets.a.match.closed&&!assets.a.match.playing,"different core data rejected");
     Pair initial=new Pair();initial.b.engine.state++;initial.connect();check(initial.a.match.closed,"different initial state rejected");
-    Pair version=new Pair();version.a.match.connected();version.b.match.connected();version.a.match.receive(NearbyProtocol.pack(1,0,0,"{\"build\":49,\"race\":2,\"name\":\"Guest\"}".getBytes("UTF-8")));check(version.a.match.closed,"different app build rejected");
+    Pair version=new Pair();version.a.match.connected();version.b.match.connected();version.a.match.receive(NearbyProtocol.pack(1,0,0,"{\"build\":78,\"race\":2,\"name\":\"Guest\"}".getBytes("UTF-8")));check(version.a.match.closed,"different app build rejected");
     Pair tamper=new Pair();tamper.a.match.connected();tamper.b.match.connected();boolean changed=false;
     for(int i=0;i<200;i++) {
       if(!tamper.a.outgoing.isEmpty()&&!changed){byte[] next=tamper.a.outgoing.peek();if(NearbyProtocol.parse(next).type==3){next[next.length-1]^=1;changed=true;}}
