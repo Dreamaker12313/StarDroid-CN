@@ -3,8 +3,20 @@ package org.openbw.androidtest;
 /** Readable touch feedback shared by free actions, construction and abilities. */
 final class CommandHint {
   static String describe(String[] fields, String requirement) {
+    return describe(fields, requirement, originalHotkey(fields));
+  }
+
+  static String originalHotkey(String[] fields) {
+    if (fields == null || fields.length == 0 || fields[0] == null || fields[0].length() != 1) return "";
+    char key = fields[0].charAt(0);
+    if (key == 27) return "Esc";
+    return key >= 33 && key <= 126 ? Character.toString(Character.toUpperCase(key)) : "";
+  }
+
+  static String describe(String[] fields, String requirement, String hotkey) {
     if (fields == null || fields.length < 3) return "";
     String label = fields[1];
+    if (hotkey != null && !hotkey.isEmpty()) label += " [\u0003" + hotkey + "\u0002]";
     StringBuilder cost = new StringBuilder();
     add(cost, number(fields, 4), "minerals");
     add(cost, number(fields, 5), "Vespene Gas");

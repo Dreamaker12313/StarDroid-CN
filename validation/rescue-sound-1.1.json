@@ -1,0 +1,854 @@
+{
+  "passed": true,
+  "version": "1.1",
+  "productionChangeRequired": false,
+  "originalMissionBehaviorPreserved": true,
+  "physicalAndroid": false,
+  "fullPlaythrough": false,
+  "nativeResults": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS rescue type=37 localPlayerRace=Terran cue=32 filename=Misc\\ZRescue.wav\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS rescue type=41 localPlayerRace=Terran cue=32 filename=Misc\\ZRescue.wav\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS rescue type=53 localPlayerRace=Terran cue=32 filename=Misc\\ZRescue.wav\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS rescue type=65 localPlayerRace=Terran cue=34 filename=Misc\\PRescue.wav\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS rescue type=77 localPlayerRace=Terran cue=34 filename=Misc\\PRescue.wav\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS rescue type=0 localPlayerRace=Terran cue=33 filename=Misc\\TRescue.wav\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Untitled Scenario' 4096x4096, slot 3 of 1, units=1, fog_player=3\nPASS 63 original-data rescue audio checks; original Reign WAV preserved byte-for-byte; scripted transfers add no duplicate cue; other-owner/spectator suppressed",
+  "reignOfFire": {
+    "mission": "expzerg02",
+    "race": 0,
+    "chkSha256": "32985e8804ca7e667c26a95b44f8c0f171586a899cd1acf0b6abb06a666309c3",
+    "scriptedRescueCues": [
+      {
+        "trigger": 67,
+        "action": 8,
+        "stringIndex": 229,
+        "wav": "staredit\\wav\\TRescue.wav",
+        "giveUnitTypes": [
+          41
+        ]
+      },
+      {
+        "trigger": 68,
+        "action": 8,
+        "stringIndex": 229,
+        "wav": "staredit\\wav\\TRescue.wav",
+        "giveUnitTypes": [
+          37
+        ]
+      }
+    ]
+  },
+  "wavComparison": {
+    "pcmFrames": 41814,
+    "terranPcmCorrelation": 0.9999997954171491,
+    "maxSampleDifference": 14,
+    "authoredSha256": "f0d5d28b4750796e8d373965c8197da5ccc6a9d66f9c48c034c2800e682d0b6c",
+    "coreSha256": {
+      "Z": "a6ade8fb105a34136859fc0bb6c63488cfa6f472a0dcf352a96ee159178f2597",
+      "T": "68af9940059b91fd4e12448364279ed5791a37ae5efb981e56360f2bf0c521c7",
+      "P": "1279e05ea935775ecf239d97e626cef263cf6fef7f62c4a072878e496a80c10e"
+    }
+  },
+  "campaignInventory": [
+    {
+      "mission": "terrantutorial",
+      "race": 1,
+      "chkSha256": "4aafcfe93cc42cb642fde912a459a6c89b0cd6a1f8160c93cac3c34dd0b13af1",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran01",
+      "race": 1,
+      "chkSha256": "4b0e5009c4ae80cfb4cb13ede30842db0aa05bb3be2eedad695fb093fa5786f6",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran02",
+      "race": 1,
+      "chkSha256": "d8a7f6b70422ff32e4fd3f6293de4013f883e0761814d4496ffd18b7eb13dfce",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran03",
+      "race": 1,
+      "chkSha256": "9d83a8bde18c38ee12f54f4c5253bed5466027fc612141e9a7415c94d3346737",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran04",
+      "race": 1,
+      "chkSha256": "a48e1d1682f0a6e68eeec4ef0fc82efc48e70a11b4315de8c091079c68e10601",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran05",
+      "race": 1,
+      "chkSha256": "35cd98bc0590c0f36e5d8f75e41a29b254db2d6cf8dec5480e6ffd7602609829",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran06",
+      "race": 1,
+      "chkSha256": "80dd42e4d4540d0340113b92aae02120b9919a5dac359b010607ec7c26e72ead",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran08",
+      "race": 1,
+      "chkSha256": "dab280d946f059845ba3084da11f159091bfbc24c4cd54eb2a352ff1a165f515",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran09",
+      "race": 1,
+      "chkSha256": "083be62ec869ddf049f816eaf873355c57381b869581717234f3499b39ab23c7",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran11",
+      "race": 1,
+      "chkSha256": "1b55e907af8c4c5c6c5e0adcc775b8fe82e263d7afb9eba70ded40d11d5e412c",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "terran12",
+      "race": 1,
+      "chkSha256": "2a3efca711b5a75ffd0ea569802fe0bd4dbfcfbfa0b0f308d897c0dca698fd7d",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg01",
+      "race": 0,
+      "chkSha256": "f4794b4f8fc90f6ea9c4a585faa2c0a1de25450311256c7329a288d4dcd826ad",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg02",
+      "race": 0,
+      "chkSha256": "5819629c7bf99c941ab64225de24e4aa60c5164ad5c00345258aa62fe6a0eadf",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg03",
+      "race": 0,
+      "chkSha256": "a62ddf17410b37aa406aaf6a0024edb1aae9f69521e5abeab7a537baf638f7d7",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg04",
+      "race": 0,
+      "chkSha256": "535c6d75f4225224abf36965627d7e7889c3e3b245a97d95843933d5cfb9de2a",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg05",
+      "race": 0,
+      "chkSha256": "d758f917aebef2775b76bf90a5637fc7308ef4540334b05567e3c0caa6666e45",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg06",
+      "race": 0,
+      "chkSha256": "f441dcbdc4878d16a0e71790464d9ef8d677aad0c85e2463d0fa4ff2616af1f1",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg07",
+      "race": 0,
+      "chkSha256": "2c39850f5a902c369130da3ebfce6d32d087e1d1d8fca1204ef6ef2f9a1b5e9d",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg08",
+      "race": 0,
+      "chkSha256": "ea8af2d5458e5c27ad53419a80420f32619c60a7830eefd4742b767f3dc0cac2",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg09",
+      "race": 0,
+      "chkSha256": "fd99e4670f57110dd7720777a188d6447c7e23a02334c691f90790c5752f8205",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "zerg10",
+      "race": 0,
+      "chkSha256": "7d9befb178c53014bc7c7efdcb6ed208a0aa7c97b4a37141cbca5345fd6d15fb",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss01",
+      "race": 2,
+      "chkSha256": "374a08c6d15bbd32280091e54164047b12c6ffc526d12d0663a0c7df18784188",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss02",
+      "race": 2,
+      "chkSha256": "c2a1faa77faaa8f85d178da8d5502a9235749240244b7403d240bff9b220fe24",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss03",
+      "race": 2,
+      "chkSha256": "6e73084830bd7c49da9dfeeb11e11b9e589b066b3e4290836cd2baf4415762e6",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss04",
+      "race": 2,
+      "chkSha256": "9cf4f218e0b29b7e61743fd6383dab6c3aec4a5e12c6fade0b0fc37ae44c67b3",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss05",
+      "race": 2,
+      "chkSha256": "0911c2cf8b484c266e26ed3c439cd917e0dc0cd9a7cb62985bc4800f7b64afe5",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss06",
+      "race": 2,
+      "chkSha256": "30f0a374867c7b57cf51e5c445041020eebbe4a1fcbc074359a581a5bc5f5eee",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss07",
+      "race": 2,
+      "chkSha256": "a813922890e6eafe4feda27b591715c465e98e8ee40e3717b5c2b0735e403a83",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss08",
+      "race": 2,
+      "chkSha256": "4ee5b213ce8e46b5a3b1ab3e815767a91b0b1f720d503cb203548730ce0efc37",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss09",
+      "race": 2,
+      "chkSha256": "5af7dd1b80328ee75501b18e54c5f8849c320ca247e3380e1aae1349d4a8a15c",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "protoss10",
+      "race": 2,
+      "chkSha256": "e8bc84347cd8810d423e76c8e739612de777f579dd287eca2ef5bc620ff4ebdd",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expprotoss01",
+      "race": 2,
+      "chkSha256": "ef8153dbfc7d9216207aaac7cda7a2950980cdb35a9c72612a67dc7b76a09e67",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expprotoss02",
+      "race": 2,
+      "chkSha256": "07725cd6a26052101ecfef735105c204309a40518de1a232736aefb268f01011",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expprotoss03",
+      "race": 2,
+      "chkSha256": "d4d49e69460b587bc55af2852409366ccff1ed433a101535ac391b288f74bbf8",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expprotoss04",
+      "race": 2,
+      "chkSha256": "f495e751fb3975fa7a701f5a250d554dadee5776a7a2d35c038980883293c863",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expprotoss05",
+      "race": 2,
+      "chkSha256": "b32673a2c6b5aa4479202df8ddc408c2cca29cca094b77e357fb1f930103b963",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expprotoss06",
+      "race": 2,
+      "chkSha256": "4eb75410295fe4ac68a4c45e0179a91afb72d0078bf98a808461a7c54a62f611",
+      "scriptedRescueCues": [
+        {
+          "trigger": 1,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\PRescue.wav",
+          "giveUnitTypes": [
+            229
+          ]
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss07",
+      "race": 2,
+      "chkSha256": "44b57433f843a111d02e565fb8976a2396a228bf08ef058c5c0a1a9c6d5ef274",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expprotoss08",
+      "race": 2,
+      "chkSha256": "600dbf632ff6a1b2987e482912312f29189cde3a3c3a599b13c2c6d4b56e5acb",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expterran01",
+      "race": 1,
+      "chkSha256": "48b3dee553ae2e0b2747b9cd4b85f5a4dfc982dc89bb523fad015acdc4c7b5ab",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expterran02",
+      "race": 1,
+      "chkSha256": "dda5b662bd21a7335f076a56a65690b35e441a1a0fe6aebc84676f0951934108",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expterran03",
+      "race": 1,
+      "chkSha256": "76516a763fe806b2a4e2c6814c4fcd3e05f51a21c8aa8817837a74b4fcf9ff38",
+      "scriptedRescueCues": [
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 75,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231,
+            7,
+            34,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "mission": "expterran04",
+      "race": 1,
+      "chkSha256": "988d5c2c1692a63038a3e7a895dd0d35fe9cf3696523e37858f4b5f69f9a8401",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expterran05a",
+      "race": 1,
+      "chkSha256": "c957cb9946b7e756be3fbbbcee27438891695522612bc3f9e7ced880ae7e07ef",
+      "scriptedRescueCues": [
+        {
+          "trigger": 27,
+          "action": 8,
+          "stringIndex": 142,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": []
+        },
+        {
+          "trigger": 43,
+          "action": 8,
+          "stringIndex": 142,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": []
+        }
+      ]
+    },
+    {
+      "mission": "expterran05b",
+      "race": 1,
+      "chkSha256": "ef5270cc733291603cc1646dff1ce03f40dc310a6025d4ea99ebe53ff88d5a20",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expterran06",
+      "race": 1,
+      "chkSha256": "54d0997fa091fc6ffb6e16491fda29281ed89d2e5b3d0e0be3f2b2d7c14c4e17",
+      "scriptedRescueCues": [
+        {
+          "trigger": 22,
+          "action": 8,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58,
+            5,
+            30
+          ]
+        },
+        {
+          "trigger": 41,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231
+          ]
+        },
+        {
+          "trigger": 41,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231
+          ]
+        },
+        {
+          "trigger": 41,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231
+          ]
+        },
+        {
+          "trigger": 41,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231
+          ]
+        },
+        {
+          "trigger": 41,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            231
+          ]
+        },
+        {
+          "trigger": 44,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58
+          ]
+        },
+        {
+          "trigger": 45,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58
+          ]
+        },
+        {
+          "trigger": 46,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58
+          ]
+        },
+        {
+          "trigger": 47,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58
+          ]
+        },
+        {
+          "trigger": 48,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58
+          ]
+        },
+        {
+          "trigger": 49,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58
+          ]
+        },
+        {
+          "trigger": 50,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            58
+          ]
+        },
+        {
+          "trigger": 56,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            11,
+            11,
+            9
+          ]
+        },
+        {
+          "trigger": 56,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            11,
+            11,
+            9
+          ]
+        },
+        {
+          "trigger": 56,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            11,
+            11,
+            9
+          ]
+        },
+        {
+          "trigger": 56,
+          "action": 7,
+          "stringIndex": 115,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            11,
+            11,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "mission": "expterran07",
+      "race": 1,
+      "chkSha256": "c6835b14e8362a4edd66305b3821788386fa8b1deeffb39867d56a55884c508d",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expterran08",
+      "race": 1,
+      "chkSha256": "b1d19c2323564ba64c252c1d5ba4705ffd6fbc69f8ed3cf36936ecb0da8d4197",
+      "scriptedRescueCues": [
+        {
+          "trigger": 30,
+          "action": 7,
+          "stringIndex": 87,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            194
+          ]
+        },
+        {
+          "trigger": 31,
+          "action": 7,
+          "stringIndex": 87,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            194
+          ]
+        },
+        {
+          "trigger": 32,
+          "action": 7,
+          "stringIndex": 87,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            194
+          ]
+        },
+        {
+          "trigger": 33,
+          "action": 7,
+          "stringIndex": 87,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            194
+          ]
+        }
+      ]
+    },
+    {
+      "mission": "expzerg01",
+      "race": 0,
+      "chkSha256": "9f308010673e284524a98138aef2a21a96fa135cd2a5360b5a4d04914985fe55",
+      "scriptedRescueCues": [
+        {
+          "trigger": 6,
+          "action": 7,
+          "stringIndex": 143,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229
+          ]
+        },
+        {
+          "trigger": 13,
+          "action": 7,
+          "stringIndex": 143,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229
+          ]
+        },
+        {
+          "trigger": 20,
+          "action": 7,
+          "stringIndex": 143,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229,
+            229
+          ]
+        },
+        {
+          "trigger": 27,
+          "action": 7,
+          "stringIndex": 143,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229
+          ]
+        },
+        {
+          "trigger": 37,
+          "action": 7,
+          "stringIndex": 143,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229
+          ]
+        },
+        {
+          "trigger": 47,
+          "action": 7,
+          "stringIndex": 143,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229
+          ]
+        },
+        {
+          "trigger": 52,
+          "action": 7,
+          "stringIndex": 143,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229,
+            229
+          ]
+        }
+      ]
+    },
+    {
+      "mission": "expzerg02",
+      "race": 0,
+      "chkSha256": "32985e8804ca7e667c26a95b44f8c0f171586a899cd1acf0b6abb06a666309c3",
+      "scriptedRescueCues": [
+        {
+          "trigger": 67,
+          "action": 8,
+          "stringIndex": 229,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            41
+          ]
+        },
+        {
+          "trigger": 68,
+          "action": 8,
+          "stringIndex": 229,
+          "wav": "staredit\\wav\\TRescue.wav",
+          "giveUnitTypes": [
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "mission": "expzerg03",
+      "race": 0,
+      "chkSha256": "3d4db669c12a60a60ee7edcebcaf77ebc79fd2e30e2418dc37dcb2701efa8eb2",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg04a",
+      "race": 0,
+      "chkSha256": "9fa70aa9def47962d6fe6a2e597a021a90bea81f2fefeae58297df285d2a66f6",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg04b",
+      "race": 0,
+      "chkSha256": "57ed718ac4cf2f60460411f91b2a6e7c29d865f956a740fd3e9a4cb1d76693b8",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg04c",
+      "race": 0,
+      "chkSha256": "e18eb7d59029b5f62895a13da98f592252f1512eb9913bf63acf04c7b43b3f94",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg04d",
+      "race": 0,
+      "chkSha256": "70f52da6ec0ca0dc48d6d60f829f0099c85ce12e55187ff318846eb70e44fd94",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg04e",
+      "race": 0,
+      "chkSha256": "c27d7cd80d28cf6b9d8151a765001e7883827809675a37d8005c775fc9eed1dd",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg04f",
+      "race": 0,
+      "chkSha256": "50f61e57b89027c7c72bef0d6ccb6a15b9886f119cf77587cf4715f4e7e9dc93",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg05",
+      "race": 0,
+      "chkSha256": "cd85a53ed3c9345dd4f8987421b5709d8bf87faa7d038fe149790151c70ac6b9",
+      "scriptedRescueCues": [
+        {
+          "trigger": 2,
+          "action": 7,
+          "stringIndex": 120,
+          "wav": "staredit\\wav\\ZRescue.wav",
+          "giveUnitTypes": [
+            229,
+            229
+          ]
+        }
+      ]
+    },
+    {
+      "mission": "expzerg06",
+      "race": 0,
+      "chkSha256": "dc0529f66c56a650cf3c5d1eb5a9addaf00e6d97c9473d91ba9fc31422c9af14",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg07",
+      "race": 0,
+      "chkSha256": "2541f8af8528b0db42520ec3e1e138e1cb9f67b2be12a4e60d06edc3fa2ccfdb",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg08",
+      "race": 0,
+      "chkSha256": "22ac125001ebb5835a697f3186160d3bdfd2de8913e24ff9eb3adb25ba41423a",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg09",
+      "race": 0,
+      "chkSha256": "f7987c26f0b990d5b13e3e5dbd0f3788d11cf8bbe67c73aa5904bdbfc591b9a9",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expzerg10",
+      "race": 0,
+      "chkSha256": "856026e96c23b5080bfb11a185fb86bdb8accf4f46c4113bfd3588192d97fbc4",
+      "scriptedRescueCues": []
+    },
+    {
+      "mission": "expbonus",
+      "race": 2,
+      "chkSha256": "6dd16b341f1dd2fabbbc28ed8a06d1b22df6e5f225e0b2baa9597da3c24a3c99",
+      "scriptedRescueCues": []
+    }
+  ],
+  "sourceSha256": {
+    "tests/native_rescue_sound11.cpp": "bb404f0e57375f8e55d698e6c28e2a23c495fb3f26f46c0c6b33ed581fa1348f",
+    "tests/run_rescue_sound11.py": "491421c375e09da2b6280890c99796c31219549995458e70ef30174c4f739592"
+  }
+}

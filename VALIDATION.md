@@ -1,3 +1,123 @@
+# StarDroid 1.1 briefing Replay shortcut and uninterrupted menu music
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Briefing Replay is an explicit exception to navigation-only menu shortcuts. It retains the imported original highlighted letter (R in English); actual production keyboard, mouse and touch callbacks replay the briefing and reset its text. All three race briefing layouts preserve their authored glyphs, with the existing menu transition guards intact. [Input checks](validation/desktop-input11.json), [original menu fonts](validation/menu-hotkeys11.json).
+- Changing between StarCraft and Brood War no longer reloads an already-playing title track. Its current position is retained, including when muted or at zero music volume. Missing/stopped title audio can still recover; entering a briefing or game still loads the correct expansion soundtrack. Production selection tests verify both change directions, repeated calls, missing-audio fallback and all three race phase/source changes. Existing Next track and volume/mute cases pass. [Music callbacks](validation/music-settings-navigation11.json).
+- Production input validation passes 9,229 checks. Original menu/font validation passes 1,443 checks, including Replay in all three briefing rooms and all five UI languages. Full Android SDK35 compilation passes.
+- Final APK uses the original signing identity, unchanged assets and verified unchanged native libraries. Version, permissions, 47 JNI methods, both ABIs, 16 KiB alignment and Android lint are checked by the [package proof](validation/package-menu-polish11.json).
+
+These are host input/rendering, music-selection and Android build checks. Physical Android sound and input were not tested. Earlier sections refer to their recorded source revisions.
+
+# StarDroid 1.1 navigation-only menu hotkeys
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Menu shortcuts are now limited to navigation: opening a menu, returning/back, switching a results tab, confirming/closing a dialog or launching a game/replay. In-place controls do not reserve keys, dispatch letter shortcuts or highlight a letter. This covers custom/Nearby match values, slots/races/teams, speed choices, import/export/save actions, replay pause/rate/view choices, Next track, briefing replay, tip cycling and keyboard mode choices. Touch and mouse activation remain intact.
+- Exact resolved captions bypass the original BIN mnemonic remapping when drawn. This prevents the briefing Replay highlight from reappearing after it is intentionally removed. Normal original navigation captions retain their authored colors and hotkeys. [Original artwork/font checks](validation/menu-hotkeys11.json).
+- Production input checks cover the pictured custom-game controls in all five UI languages, no hidden dispatch, preserved touch/mouse actions, score Save Replay exclusion and navigation keys. Production settings renders cover speed choices with only Previous marked, and keyboard mode choices without shortcut letters. [Input routing](validation/desktop-input11.json), [settings rendering](validation/desktop-guide11.json).
+- Existing gamepad, command-grid hotkeys and race-colored hover help remain passing. The Next track callback still advances music for each race and the sound settings retain their volume/mute behavior. [Gamepad](validation/gamepad-v81.json), [command tooltips](validation/hotkey-tooltips11.json), [hover help](validation/hover-errors11.json), [music settings callbacks](validation/music-settings-navigation11.json).
+- Final signed APK reuses the verified native libraries, with every bundled asset unchanged. Version, original signing identity, permissions, 47 JNI methods, both ABIs and 16 KiB alignment pass; Android lint reports zero errors and 13 warnings. [Package proof](validation/package-menu-polish11.json).
+
+These are host rendering/input, Android build and lint checks. Physical Android peripherals and touch remain unverified. Earlier sections describe their recorded revisions.
+
+# StarDroid 1.1 menu button shortcuts and race tooltip borders
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Text buttons across the original menus, in-game menus/settings, replay controls, match setup and score screens display unique keyboard shortcuts. Original keys have priority; disabled buttons reserve their keys, and changing option values keeps the same shortcut. Captions without a suitable letter show a compact bracketed key. Native App Options and the live HUD Menu button are unchanged. Checkbox/slider labels and list entries are not treated as command buttons. Background captions render before modal overlays; replay captions render before tooltips.
+- Paint-only contrast uses yellow keys on pale game-font text and white keys on yellow text. Original front-end palettes and replay green styling remain intact. Existing guide renders verify glyph colors and complete translated captions in all five UI languages. [Menu glyphs](validation/menu-hotkeys11.json), [settings layout](validation/desktop-guide11.json).
+- Physical input tests pass 1,467 checks, including original-key priority, collisions, disabled reservation, changing labels, fitting, replay controls, Tab/Space/Escape replay inspection, terrain-button click/hold behavior and click sounds. The 4,173 gamepad checks remain passing. [Desktop routing](validation/desktop-input11.json), [gamepad regression](validation/gamepad-v81.json).
+- The minimap terrain toggle now has mouse-hover and touch-hold help with the current Show/Hide action and Tab shortcut. Tooltip borders are blue for Terran, red for Zerg and yellow for Protoss. Pressed artwork, quick taps/clicks, tooltip preferences and simultaneous errors remain supported. Renderer checks pass 16,364 assertions across 1,470 renders; existing command tooltip checks also pass. [Hover/terrain/borders](validation/hover-errors11.json), [command tooltips](validation/hotkey-tooltips11.json).
+- Packaging reuses the verified native libraries unchanged and permits only the intended translation asset changes. Signature, version, permissions, both ABIs, 47 JNI methods, 16 KiB alignment and Android lint are verified. [Package proof](validation/package-menu-polish11.json).
+
+These are host-rendering/input and Android build checks; physical Android peripherals and touch remain unverified. Earlier reports below refer to their recorded source revisions.
+
+# StarDroid 1.1 original menu hotkeys and help formatting
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Main-menu and dialog labels retain the imported BIN's original highlighted letters, color resets and secondary-line colors. Replacement captions and translations preserve a mnemonic only when that letter survives; explicit replacement hotkeys take precedence. Disabled captions stay disabled, and clipped-away keys are not moved to a different letter. Original-font checks cover 225 actual BIN captions across nine menus and five languages: 1,181 checks and 900 renders. [Menu highlights](validation/menu-hotkeys11.json).
+- Visible, enabled menu buttons accept their highlighted keyboard key. Typing, modifiers, held repeats, transitions, disabled buttons, ambiguous matches and stale page/dialog bindings are guarded. Command-grid modes remain separate from menu shortcuts. All 1,377 production Java routing checks pass. [Input routing](validation/desktop-input11.json).
+- Combined help uses bold bitmap **Mouse:** and **Keyboard:** headings with a blank line between sections. All five translations fit: 266 text checks, 4,800 panel checks, 10 text renders and 90 complete settings renders. [Guide layout](validation/desktop-guide11.json).
+- Packaging reuses the verified, unchanged native libraries. Signed-APK checks cover the original update identity, unchanged assets/permissions, both ABIs, 47 JNI methods and 16 KiB alignment. [Package proof](validation/package-guide-format11.json).
+
+These are host-rendering/input and Android build checks. Physical Android hardware remains untested. Earlier reports below refer to their recorded source revisions.
+
+# StarDroid 1.1 hotkey settings and highlighted command keys
+
+Public version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Original and QWE/ASD/ZXC grid bindings use the live displayed command layout. Grid input dispatches the exact command identity and validates it again natively, preserving Shift queues and rejecting stale/invalid commands; it never falls through to an unrelated original letter. A zero-step input flush handles rapid submenu changes. Original Shield Battery Recharge Shields is corrected from B to R after checking imported command text. Native validation passes 4,249 checks across 230 command cards and 1,074 identities, plus 125 desktop/replay regression checks. [Native command checks](validation/hotkeys-native11.json).
+- Production Java routing, settings defaults/persistence and camera options pass 1,017 checks, including caps/foreign layouts, held keys, text entry, all grid positions, immediate menu-close input, fresh command lookup, replay guards and in-game-only settings access. Existing gamepad checks pass 4,173 cases. [Java input/settings](validation/desktop-input11.json), [gamepad regression](validation/gamepad-v81.json).
+- Command headings append the active key in normal brackets with a yellow letter. Checks cover original and grid modes, all races, five UI languages, disabled/synthetic Cancel/More commands, original and fallback fonts, and unchanged resource icons. Hotkey validation passes 13,874 checks with 130 original/fallback-font renders. Hover and command errors still coexist, with 12,974 regression checks. [Hotkey rendering](validation/hotkey-tooltips11.json), [error/hover regression](validation/hover-errors11.json).
+- One Mouse & keyboard settings panel contains both help sections, hotkey choice, four camera/zoom toggles and a camera-speed slider. Arrow keys appear only in Keyboard help. Mouse/keyboard and gamepad settings are available only through the in-game Controls menu. Actual panel/button/body callbacks pass 4,680 checks across 90 renders; 266 text checks verify all five languages fit. [Settings layout](validation/desktop-guide11.json).
+- Both Android ABIs are rebuilt, with separate signed-package checks for version, original update certificate, JNI exports, 16 KiB alignment, permissions and asset contents. [Native build](validation/native-build-hotkeys11.json), [signed APK](validation/package-hotkeys11.json).
+
+These are host/native simulation, rendering, Android API/build and lint checks. Physical Android USB/Bluetooth input and phone installation remain unverified. Earlier reports below refer to their own source revisions.
+
+# StarDroid 1.1 mouse and keyboard controls
+
+Public version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Physical mouse input has independent left-selection/box-drag, double-click and Ctrl-click selection, context-sensitive right orders, Shift queues, minimap interaction, wheel zoom/list scrolling and middle/edge camera movement. Hardware keyboard input uses physical command keys, held modifiers, arrow-camera movement and assign/append/recall control groups. [Input policy](validation/desktop-policy11.json) covers 260 assertions and actual Android SDK35 compilation.
+- Production Android event-routing tests cover 273 assertions, including duplicate Android mouse edges, held releases, foreign-layout hotkeys, HUD/menu isolation, text-dialog mouse buttons, focus/device cleanup, transitions, widescreen/zoom/letterbox transforms, and the Activity handoff. Existing touch/gamepad checks remain passing. [Routing](validation/desktop-input11.json), [gamepad/settings regression](validation/gamepad-v81.json).
+- Native engine tests cover 125 assertions, including same-frame modifier snapshots, queued commands, group assignment/append/recall, selection and cancellation, multiplayer input validation, and a deterministic replay roundtrip. Paused replays permit inspection without accepting gameplay commands; checkpoint rewind retains that behavior. Ordinary paused games stay blocked. [Native input](validation/desktop-native-1.1.json).
+- The original-style Controls/App Options guide is translated into all five UI languages. Guide checks explicitly load the original font metadata: 265 body checks and 2,270 complete-panel checks cover 110 settings renders. [Guide layout](validation/desktop-guide11.json).
+- Both Android ABIs are rebuilt from the changed native sources. Signed APK checks verify the original update identity, 47 JNI exports, 16 KiB alignment, unchanged permissions and intended assets only. Lint reports zero errors and 13 warnings. [Native build](validation/native-build-desktop11.json), [package](validation/package-desktop11.json).
+
+These are host event/simulation/rendering checks and Android SDK/build checks. Physical USB/Bluetooth peripherals, phone installation and Android OS event delivery have not been tested. Historical reports below remain tied to their recorded sources; some older artwork fixtures omitted font.gid and therefore exercised the styled fallback font. The new guide fixture verifies original-font loading explicitly.
+
+# StarDroid 1.1 sound controls and simultaneous feedback
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- The redundant music-enable toggle is removed. Production preference tests cover fresh defaults, old on/off settings, persistent one-time migration, reopening, actual slider changes, mute/gains/ducking/focus and end-of-track recovery from volume 0. Next track and all-race soundtrack/seek coverage remain intact. [Music volume](validation/music-volume11.json).
+- Production hover/held-hint dispatch and HUD rendering show descriptions together with command errors or target prompts. Tests cover race palettes, 640/960 layouts, enlarged description/command sizes, five UI languages, multiline messages, expiry, disabled tooltips and modal guards. Status pixels remain intact and normal tooltip placement is unchanged when no status is present. [Hover/error rendering](validation/hover-errors11.json).
+- Signed APK checks reuse the exact verified native libraries from the prior score revision because native sources are unchanged. Signature, JNI exports, 16 KiB alignment, permissions, assets and Android lint are checked again. [Package proof](validation/package-sound-hover11.json).
+
+These are host/rendering/audio and Android build checks; physical-phone installation, touch and listening were not tested. Earlier reports below refer to their own recorded source versions.
+
+# StarDroid 1.1 score, replay-menu and music revision
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- All 64 original campaign maps were audited independently: 208 participant slots and 99 neutral/rescue helpers. Native score queries match the original human/computer roster, retain zero-score and defeated/left participants, omit helpers after controller changes, preserve distinct same-faction opponents and survive save/load. Queries leave simulation state/RNG unchanged. [Map audit](validation/score-roster-audit11.json), [native roster checks](validation/score-slots11.json).
+- Score names use complete original faction strings and adaptive bitmap font sizes within the name column. Pixel/layout checks cover all campaign force names, the five reported mission rosters, all race/victory backgrounds, tabs, supported UI languages, localized data and eight-player rows. [Score layout](validation/score-layout11.json).
+- Replay buttons use transparent interiors and original menu font/color/size. Original OK/Cancel rendering is retained; Delete is title case and centered at the bottom. Pixel/input checks cover both menu layouts, five languages, enabled/disabled/hover states, list/thumbnail/scrollbar, confirmations and replay controls. [Replay menu](validation/replay-buttons11-ui.json).
+- Next track invokes the actual settings-button callback and skips each of the four Brood War themes. A reproduced 32-bit overflow in native music seeking is fixed before multiplication. Exact JNI seek/position functions and PCM samples are checked at all three real embedded-theme boundaries. Automatic EOF, rapid presses, missing assets, phase/mute guards, all 18 music imports/decodes and SDK compilation also pass. [Music checks](validation/music-next11.json).
+- Both Android ABIs and the signed update APK have separate source-bound proofs: [native build](validation/native-build-score-polish11.json), [package](validation/package-score-polish11.json).
+
+These checks use original data, host simulation/rendering/audio and Android build tools. Physical-device listening/touch and original-executable score-screen parity were not tested. Historical reports below remain tied to their recorded sources.
+
+# StarDroid 1.1 sound and replay-message revision
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Hero Mode audio: actual training and rebuilding of all 18 heroes, hero Archon completion, Duke siege transitions and saved announcement state, unchanged selection/order/campaign voices, and no simulation checksum or RNG changes. [Hero sound report](validation/hero-rescue-1.1.json).
+- Brood War music: all 18 supplied race WAVs survive production import byte-for-byte and decode/play to their ends. Each expansion first track includes the matching original theme, verified for all three races. Automatic selection and game-entry routing cover campaign, custom, nearby, replay and saved games. Manual controls/overrides are removed, and Android SDK compilation passes. [Music report](validation/music11.json).
+- Replay mismatch errors use the requested wording for both older and future rule versions while retaining current-format acceptance and safe rejection. [Native guard report](validation/hero-rescue11-compat-native.json), [nearby guard report](validation/hero-rescue11-compat-nearby.json).
+- Both ABI rebuilds and signed APK packaging are recorded separately: [native proof](validation/native-build-hero-rescue11.json), [package proof](validation/package-hero-rescue11.json).
+
+These are host/data and build checks; physical-device listening and touch testing were not performed. Older reports below remain tied to their recorded sources.
+
+# StarDroid 1.1 campaign, storage and wireframe revision
+
+Public version remains 1.1 / Android code 83; simulation compatibility is 84.
+
+- Original-data resource and crystal tests cover map/trigger initialization, real attacks, mutalisk bounce, splash, explicit protection toggles and mining by every worker race: [report](validation/map-invincibility11.json).
+- Original Dylarian Shipyards garrisons change from zero occupants to 45 troops across 12 bunkers. Region, capacity, replacement, attack-wave, transport and save-continuation checks: [report](validation/bunker-ai11.json).
+- Nuclear production, silo readiness, original reward triggers, ownership transfer and Ghost firing are covered in [nuclear checks](validation/nukes11.json). The test respects original costs, supply and training time; it is not a full mission playthrough.
+- Beacon input covers all six types, three owners, workers/combat units/civilians, explicit selection/targeting, queues, fog and replay guards: [report](validation/beacon-1.1.json).
+- Wireframe tests inspect all 228 single, 131 group and 106 transport frames, compare pixels against imported GRP/remap data, and exercise live selection and damage redraws: [report](validation/wireframes11.json). Host contact sheets were inspected; exact original damage thresholds remain an approximation.
+- All 64 campaign force-name mappings and rescue-sound references were inspected. Native/Java score-name and rescue tests use the original archives: [score names](validation/score-names11.json), [rescue sounds](validation/rescue-sound-1.1.json).
+- SD migration tests cover verified copies, internal-only personal files, failure/retry paths, process-wide operation ownership and preserved resume behavior: [report](validation/data-storage11.json). They use real host files and Android API compilation, not physical removable media.
+- Replay and nearby compatibility guards reject different simulation rules without replacing the current world: [native](validation/compat11-native.json), [nearby](validation/compat11-nearby.json). Combined linear/seek parity is recorded separately in [replay regression](validation/replay-campaign11.json).
+
+- Both Android ABIs were rebuilt from the frozen patch stack. Signed APK checks verify the original update certificate, all 47 JNI exports, unchanged permissions, 16 KiB alignment and only the intended translation-asset changes. Lint reports zero errors and 13 warnings. See [native build](validation/native-build-campaign11.json) and [package proof](validation/package-campaign11.json).
+
+Physical Android installation, removable-card interruption/remount, touch/controller use and radio interoperability remain unverified. Earlier validation records below remain historical and refer to their own recorded sources.
+
 # StarDroid 1.0.8 validation (build 78)
 
 Current reports: [map imports](validation/maps-v78.json), [native AI and larva input](validation/native-v78.json), [languages](validation/languages-v78.json), [speech/preferences](validation/presentation-v78.json), [saves](validation/saves-v78.json), [protocol](validation/protocol-v78.json) and [APK](validation/package-v78.json).

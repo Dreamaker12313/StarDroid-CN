@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "version": "1.1",
+  "simulation": 84,
+  "physicalAndroid": false,
+  "nativeResults": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS 230 actual all-race unit/build/research/morph/hero cards; 1074 exact command identities\nPASS original archive hotkeys: 37 train/morph, 50 build, 50 upgrade, 24 research, Shield Battery R\nPASS native exact-command routing: stale identities, all-race training, submenu placement, research/upgrades, disabled/resources, Shift, locks, replay, multiplayer and cleanup\nPASS 4249 native hotkey checks",
+  "errors": "",
+  "sourceSha256": {
+    "native/runtime.cpp": "3738ced9a8a65b4947d47408c9797be17e2cac47eaaa052de4133bf20e4a9824",
+    "native/generated/wasm_backend.cpp": "9c747d48a7d5860a94a8cf09d9ce83ae2f368e4757ac93b2b41ce78dfe682f4a",
+    "patches/native-hotkeys11.patch": "55a71e9908dffe77d5aa24508c140efeced2302a10f5d035cfd4c129dabdeeed",
+    "scripts/prepare_native.py": "71726aea4234faec558244df7132c9aa98aef1578ceb2f0e45e1842462156e2d",
+    "tests/native_hotkeys11.cpp": "37e0412a325bcbfc0b276d2d53f383e624a37d465ac1786a79823ecc37116019",
+    "tests/run_hotkeys_native11.py": "ade5e1618ef4ebe198736ed3b07cc1bc8dcd0e224c17f38a7f92ae7848f24f5f"
+  }
+}

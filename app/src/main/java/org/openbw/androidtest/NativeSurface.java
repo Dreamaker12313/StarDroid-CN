@@ -13,10 +13,11 @@ import org.json.*;
 final class NativeSurface extends SurfaceView
     implements SurfaceHolder.Callback, Choreographer.FrameCallback {
   private final MainActivity activity;
-  private final File files, cache;
+  private final File files, gameFiles, cache;
   private final SharedPreferences prefs;
   private final ControlSettings controls = new ControlSettings();
   private final GamepadControls gamepad = new GamepadControls();
+  private final DesktopSettings desktopSettings = new DesktopSettings();
   private final HashMap<Integer,Integer> gamepadHeld = new HashMap<Integer,Integer>();
   private float padX=320,padY=200,padPointerX,padPointerY,padCameraX,padCameraY,padHatX,padHatY;
   private boolean padActive,padPrecision,padNativeDrag,padTouchDrag;
@@ -27,6 +28,8 @@ final class NativeSurface extends SurfaceView
   private int[] padArrowX,padArrowY;
   private boolean padArrowChecked;
   private String padDragPage="",padDragModal="";
+  private String gamepadReturnModal="";
+  private int gamepadBinding;
   private final Object gate = new Object();
   private final Object surfaceGate = new Object();
   private final ConcurrentLinkedQueue<Runnable> tasks = new ConcurrentLinkedQueue<Runnable>();
@@ -50,9 +53,28 @@ final class NativeSurface extends SurfaceView
       instant = false,
       activeGame = false;
   private float zoom = 1, effects = 1, music = .65f;
-  private boolean muted, musicEnabled = true, orderLines, oneShotSelect, nearbyDefenders = true;
-  private String musicTrack = "auto", selectedProfile = "Player";
+  private boolean muted, orderLines, oneShotSelect, nearbyDefenders = true;
+  private String selectedProfile = "Player";
   private final ArrayList<String> profiles = new ArrayList<String>();
+  private final CampaignProgress campaignProgress;
+  private String campaignProfile = "";
+  private final NativeReplays replays;
+  private List<File> replayFiles=Collections.emptyList();
+  private final List<Integer> replayPlayers=new ArrayList<Integer>();
+  private final List<Integer> replayRaces=new ArrayList<Integer>();
+  private File selectedReplay,playingReplay;
+  private Bitmap replayThumbnail;
+  private boolean replayPreviewUnavailable;
+  private String replayDetails="",replayNotice="";
+  private float replayOffset;
+  private boolean replayGame,replayPaused,replayExpansion,replayReturnExpansion,replayValid;
+  private int replayRate=1;
+  private boolean replaySeeking;
+  private long replaySaveRequest;
+  private NativeResults replaySaveScreen;
+  private long replayBrowserGeneration;
+  private Runnable replayAcknowledgement;
+  private NativeArt.Font replayLargeSource,replaySmallSource,replayLargeGreen,replaySmallGreen;
   private double speed = 42;
   private Runnable pendingScreen;
   private boolean slideLocked;
@@ -112,6 +134,7 @@ final class NativeSurface extends SurfaceView
   private String commandError = "";
   private double commandErrorUntil;
   private String musicPhase = "", currentMusicPath = "";
+  private boolean currentMusicExpansion;
   private int musicThemeBoundary;
   private final HashMap<String, Integer> musicThemeStarts = new HashMap<String, Integer>();
   private float speechMusicGain = 1;
@@ -134,11 +157,27 @@ final class NativeSurface extends SurfaceView
   private long diagnosticsAt,diagnosticsFrames;
   private double drawWindowMs,frameWindowMs,displayFps,drawMs,frameMs;
   private volatile String diagnostics = "Native renderer starting";
+  private final MenuHotkeys menuHotkeys=new MenuHotkeys();
+  private final MenuHotkeys backgroundMenuHotkeys=new MenuHotkeys();
+  private final ArrayList<MenuCaption> menuCaptions=new ArrayList<>();
+  private boolean menuBehindModal;
+
+  private static final class MenuCaption {
+    final Button button;
+    final MenuHotkeys.Entry entry;
+    final java.util.function.Consumer<String> draw;
+    final boolean highlight, navigation;
+    MenuCaption(Button button,MenuHotkeys.Entry entry,boolean highlight,boolean navigation,java.util.function.Consumer<String> draw){
+      this.button=button;this.entry=entry;this.highlight=highlight;this.navigation=navigation;this.draw=draw;
+    }
+  }
 
   private static final class Button {
     RectF rect;
     Runnable action, longAction;
     boolean enabled,vertical,placementButton,controlGroup;
+    int key;
+    String page, modal;
     java.util.function.Consumer<Float> slider;
 
     Button(RectF r, Runnable a, boolean e) {
@@ -161,22 +200,23 @@ final class NativeSurface extends SurfaceView
     super(a);
     activity = a;
     files = a.getFilesDir();
+    gameFiles = a.gameDataDir();
+    replays = new NativeReplays(files);
     cache = new File(a.getCacheDir(), "native-mpq");
     prefs = a.getSharedPreferences("native-settings", 0);
     controls.load(prefs);
     gamepad.load(prefs);
+    desktopSettings.load(prefs);
     fps = prefs.getInt("fps", 60);
     resourcePercent = ControlSettings.clamp(prefs.getInt("resource-percent", 100), 100, 150);
     commandPercent = ControlSettings.clamp(prefs.getInt("command-percent", 100), 100, 120);
     descriptionPercent = ControlSettings.clamp(prefs.getInt("description-percent", 100), 100, 150);
     touchPercent = ControlSettings.clamp(prefs.getInt("touch-percent", 100), 100, 150);
     speed = prefs.getFloat("frame-ms", prefs.getInt("speed", 42));
-    muted = prefs.getBoolean("muted", false);
-    musicEnabled = prefs.getBoolean("music-enabled", true);
+    loadAudioSettings();
     orderLines = prefs.getBoolean("order-lines", false);
     nearbyDefenders = prefs.getBoolean("nearby-defenders", true);
     networkStats = prefs.getBoolean("network-stats", false);
-    musicTrack = prefs.getString("music-track", "auto");
     expansion = prefs.getBoolean("expansion", false);
     selectedProfile = prefs.getString("profile", "Player");
     try {
@@ -184,12 +224,12 @@ final class NativeSurface extends SurfaceView
       for (int i = 0; i < Math.min(32, saved.length()); i++) profiles.add(saved.getString(i));
     } catch (Exception ignored) { profiles.add("Player"); }
     if (!profiles.contains(selectedProfile)) selectedProfile = profiles.isEmpty() ? "" : profiles.get(0);
+    campaignProgress = new CampaignProgress(prefs.getString(CampaignProgress.KEY, ""), profiles);
+    saveCampaignProgress();
     wide = prefs.getBoolean("wide", false);
     overCamera = prefs.getBoolean("wide-over-camera", false);
     zoomOut = prefs.getBoolean("zoom-out", true);
     zoom = prefs.getFloat("zoom", 1);
-    effects = prefs.getFloat("effects", 1);
-    music = prefs.getFloat("music", .65f);
     getHolder().addCallback(this);
     setFocusableInTouchMode(true);
     setKeepScreenOn(true);
@@ -226,11 +266,29 @@ final class NativeSurface extends SurfaceView
         });
   }
 
+  // A remounted card invalidates old mmap-backed archive handles. Reopen data
+  // on the engine worker without ending or rebuilding the live simulation.
+  void reopenStorage(Runnable ready,java.util.function.Consumer<String> failed) {
+    enqueue(()->{
+      try {
+        if(!GameDataStorage.available(activity,gameFiles))throw new IOException("Game data storage is unavailable.");
+        loadArchives();
+        if(activeMapSource!=null)NativeBridge.open(3,activeMapSource.getPath());
+        lastTime=0;accumulator=0;
+        activity.runOnUiThread(ready);
+      }catch(Exception e){
+        AppDiagnostics.recordFailure("Reopen game data after storage removal",e);
+        activity.runOnUiThread(()->failed.accept(e.getMessage()));
+      }
+    });
+  }
+
   void suspend() {
     foreground = false;
     enqueue(
         () -> {
           accumulator = 0;
+          resetDesktop(true);
           resetGamepad();
           cancelGesture();
           if (audio != null) audio.foreground(false);
@@ -262,6 +320,17 @@ final class NativeSurface extends SurfaceView
     }
   }
 
+  void checkDataMove(java.util.function.Consumer<Boolean> callback) {
+    if(worker==null||!worker.isAlive()){callback.accept(true);return;}
+    enqueue(()->{boolean allowed=!activeGame && nearby==null && nearbyRadio==null && pendingScreen==null && !page.equals("loading") && !page.equals("briefing") && !page.equals("story") && !page.equals("cinematic");
+      activity.runOnUiThread(()->callback.accept(allowed));});
+  }
+
+  void awaitShutdown() throws java.io.IOException {
+    try {if(worker!=null)worker.join();}
+    catch(InterruptedException e){Thread.currentThread().interrupt();throw new java.io.IOException("Game shutdown interrupted.",e);}
+  }
+
   String diagnostics() {
     return diagnostics+"\n"+lastNetworkDiagnostics;
   }
@@ -288,6 +357,7 @@ final class NativeSurface extends SurfaceView
 
   @Override
   public void surfaceDestroyed(SurfaceHolder h) {
+    resetDesktopInput();resetGamepadInput();
     // Wait for any outstanding Canvas post before Android destroys the surface.
     synchronized (surfaceGate) {
       surface = false;
@@ -421,9 +491,10 @@ final class NativeSurface extends SurfaceView
   }
 
   private void loadArchives() throws Exception {
+    musicThemeStarts.clear();
     String[] core = {"STARDAT.MPQ", "BROODAT.MPQ", "patch_rt.mpq"};
     for (int i = 0; i < 3; i++)
-      NativeBridge.open(i, new File(new File(files, "mpq"), core[i]).getPath());
+      NativeBridge.open(i, new File(new File(gameFiles, "mpq"), core[i]).getPath());
     GameLanguage.russianData = GameLanguage.isRussian(NativeBridge.asset(-1, "rez/stat_txt.tbl"));
     prefs.edit().putBoolean("russian-data", GameLanguage.russianData).apply();
     String[] bundle = {
@@ -437,7 +508,7 @@ final class NativeSurface extends SurfaceView
     };
     availableMovies.clear();
     for (int i = 0; i < bundle.length; i++) {
-      File source = ProjectFiles.existing(files, bundle[i]);
+      File source = ProjectFiles.existing(gameFiles, bundle[i]);
       if (i < 5) {
         File p = NativeData.prepare(source, cache, "content" + i);
         NativeBridge.open(4 + i, p == null ? "" : p.getPath());
@@ -487,7 +558,7 @@ final class NativeSurface extends SurfaceView
       NativeBridge.sound(null, 63, false);
       int movieSlot = broodwar ? 10 : 9;
       try {
-        File source = ProjectFiles.existing(files, broodwar ? StoryData.EXP_MOVIES : StoryData.MOVIES);
+        File source = ProjectFiles.existing(gameFiles, broodwar ? StoryData.EXP_MOVIES : StoryData.MOVIES);
         File movie = NativeData.prepareEntry(source, cache, "cinematic", path);
         if (movie == null) throw new IOException("Imported cinematic is unavailable");
         NativeBridge.open(movieSlot, movie.getPath());
@@ -520,6 +591,8 @@ final class NativeSurface extends SurfaceView
   }
 
   private void closeGlue() {
+    if(replayThumbnail!=null){replayThumbnail.recycle();replayThumbnail=null;}
+    replayPreviewUnavailable=false;
     hoverButton = -1;
     commandHover.cancel();
     if (glue != null) {
@@ -569,6 +642,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void showMain() {
+    if(replayGame)expansion=replayReturnExpansion;replayGame=false;
     multiplayerSaves=false;multiplayerGame=false;
     closeNearby();
     results = null;
@@ -590,7 +664,276 @@ final class NativeSurface extends SurfaceView
     music("title");
   }
 
+  private void showReplays() {
+    replayBrowserGeneration++;
+    if(replayGame)expansion=replayReturnExpansion;
+    replayGame=false;activeGame=false;campaign=null;currentMission=null;lastOutcome=0;
+    closeNearby();NativeBridge.endGame();closeBriefMovies();
+    if(hud!=null){hud.close();hud=null;}
+    results=null;multiplayerGame=false;multiplayerSaves=false;
+    screen("replays","gluload","palnl",true);
+    if(glue==null)screen("replays","glucustm","palnl",true);
+    if(glue!=null)sfx("swishin");
+    music("title");refreshReplays();
+  }
+
+  private void refreshReplays() {
+    try {
+      replayFiles=replays.list();
+      if(selectedReplay==null||!replayFiles.contains(selectedReplay))selectedReplay=replayFiles.isEmpty()?null:replayFiles.get(0);
+      replayOffset=Math.min(replayOffset,replayMaxOffset());selectReplay(selectedReplay);
+    } catch(Exception e){replayFiles=Collections.emptyList();selectReplay(null);replayMessage(e.getMessage());}
+  }
+
+  private RectF replayListBounds() {
+    NativeArt.Widget box=glue==null?null:glue.layout.get(glue.name.equals("gluload")?6:5);
+    return box==null?new RectF(60,130,348,248):box.rect();
+  }
+  private float replayMaxOffset(){return Math.max(0,replayFiles.size()*22-replayListBounds().height());}
+  private void selectReplay(File file) {
+    if(replayThumbnail!=null)replayThumbnail.recycle();replayThumbnail=null;replayPreviewUnavailable=false;
+    selectedReplay=file;replayDetails="";replayValid=false;replayPlayers.clear();replayRaces.clear();replayNotice="";
+    if(file==null)return;
+    try {
+      byte[] data=replays.read(file);
+      String[] rows=GameLanguage.decode(NativeBridge.replayInfo(data)).split("\n");
+      String[] info=rows[0].split("\t",-1);replayExpansion=info[1].equals("1");
+      replayDetails=info[3]+"\n"+(replayExpansion?"Brood War":"StarCraft")+"\n"+replayTime(Integer.parseInt(info[0]));
+      for(int i=1;i<rows.length;i++){String[] player=rows[i].split("\t",-1);replayPlayers.add(Integer.parseInt(player[0]));replayRaces.add(Integer.parseInt(player[1]));replayDetails+="\n"+player[2]+" · "+MatchSetup.RACES[Integer.parseInt(player[1])%3];}
+      replayValid=true;
+      try {replayThumbnail=mapPreviews.create(NativeBridge.replayScenario(data));}
+      catch(Exception unavailable){replayPreviewUnavailable=true;}
+    }catch(Exception e){replayMessage(e.getMessage());}
+  }
+
+  private static String replayTime(int frames){int seconds=Math.max(0,frames)/24;return String.format(Locale.ROOT,"%d:%02d",seconds/60,seconds%60);}
+
+  private void drawReplayBrowser(Canvas c) {
+    if(glue==null){drawMenuUnavailable(c,this::showCampaign);return;}
+    if(glue.exiting||glue.elapsed<NativeGlue.ENTER_MS)return;
+    uiLine(c,"Load Replay",glue.large,40,66,290,22,0,2);
+    // The legacy custom-game list is much shorter and lower than gluload's list.
+    // Use the imported BIN's list rectangle for both clipping and touch targets.
+    RectF box=replayListBounds();float right=box.right-20;
+    replayOffset=Math.max(0,Math.min(replayOffset,replayMaxOffset()));
+    c.save();c.clipRect(box.left,box.top,right,box.bottom);
+    if(replayFiles.isEmpty())glue.small.draw(c,"No saved replays",box.left+4,box.top+8,(int)(right-box.left-8),0,2,0);
+    for(int i=Math.max(0,(int)(replayOffset/22));i<replayFiles.size()&&i*22-replayOffset<box.height();i++){
+      final File file=replayFiles.get(i);float y=box.top+i*22-replayOffset;
+      uiLine(c,NativeReplays.label(file),glue.small,box.left+4,y,(int)(right-box.left-8),22,0,file.equals(selectedReplay)?4:2);
+      add(new RectF(box.left,Math.max(box.top,y),right,Math.min(box.bottom,y+22)),()->selectReplay(file),true);
+    }
+    c.restore();
+    drawReplayScrollbar(c,box);
+    if(glue.name.equals("gluload")){
+      try {c.drawBitmap(art.pcx("glue/load/pinfo.pcx",true,-1).image,388,55,NativeArt.PIXELS);}
+      catch(Exception missing){replayPanel(c,390,104,218,250);}
+      drawReplayDetails(c,404,112,190,224);
+    }else{
+      // glucustm already supplies the right-hand original pInfo background.
+      // Never cover it with the unrelated generic blue dialog panel.
+      drawReplayDetails(c,410,58,190,244);
+    }
+    replayActionButton(c,"Import Replay",44,332,164,22,()->activity.runOnUiThread(activity::pickReplay),true);
+    replayActionButton(c,"Export",218,332,136,22,()->{
+      try{byte[] data=replays.read(selectedReplay);final long request=replayBrowserGeneration;activity.runOnUiThread(()->activity.saveReplay(data,this,request));}
+      catch(Exception e){replayMessage("Replay could not be saved: "+e.getMessage());}
+    },selectedReplay!=null);
+    replayButton(c,"Delete",98,419,164,22,()->modal="replay-delete",selectedReplay!=null);
+    replayMenuAction(c,glue.name.equals("gluload")?4:12,"OK",this::openSelectedReplay,replayValid);
+    replayMenuAction(c,glue.name.equals("gluload")?5:13,"Cancel",()->navigate(this::showCampaign),true);
+  }
+
+  private void openSelectedReplay() {
+    if(!replayValid||selectedReplay==null)return;
+    final File file=selectedReplay;
+    navigate(()->startReplay(file));
+  }
+
+  private void drawReplayDetails(Canvas c,int x,int y,int width,int height) {
+    c.save();c.clipRect(x,y,x+width,y+height);
+    if(replayValid) {
+      final int thumbnailHeight=96;
+      paint.setColor(0xff05080c);c.drawRect(x+(width-96)/2f,y,x+(width+96)/2f,y+thumbnailHeight,paint);
+      if(replayThumbnail!=null) {
+        float scale=Math.min(96f/replayThumbnail.getWidth(),96f/replayThumbnail.getHeight());
+        float w=replayThumbnail.getWidth()*scale,h=replayThumbnail.getHeight()*scale;
+        c.drawBitmap(replayThumbnail,null,new RectF(x+(width-w)/2f,y+(thumbnailHeight-h)/2f,x+(width+w)/2f,y+(thumbnailHeight+h)/2f),NativeArt.PIXELS);
+      }else if(replayPreviewUnavailable)uiLine(c,"Preview unavailable",glue.small,x,y+38,width,20,1,2);
+      y+=104;height-=104;
+    }
+    String[] rows=replayDetails.split("\n");NativeArt.Font font=glue.small;int lineHeight=14;
+    if(rows.length*lineHeight>height){font=glue.tiny;lineHeight=Math.max(font.height,Math.min(12,height/Math.max(1,rows.length)));}
+    // A single fitted row per player keeps all eight players below the preview.
+    for(int i=0;i<rows.length&&i*lineHeight<height;i++)uiLine(c,rows[i],font,x,y+i*lineHeight,width,lineHeight,0,2);
+    c.restore();
+  }
+
+  private void drawReplayScrollbar(Canvas c,RectF box) {
+    float x=box.right-18,y=box.top,max=replayMaxOffset();int height=Math.round(box.height());
+    glue.scrollbar(c,x,y,height,max==0?0:replayOffset/max);
+    add(new RectF(x-2,y,box.right,y+16),()->replayOffset=Math.max(0,replayOffset-22),max>0);
+    add(new RectF(x-2,box.bottom-16,box.right,box.bottom),()->replayOffset=Math.min(replayMaxOffset(),replayOffset+22),max>0);
+    Button bar=new Button(new RectF(x-2,y+16,box.right,box.bottom-16),()->{},max>0);bar.vertical=true;
+    final float travel=height-46;final long[] dragStarted={Long.MIN_VALUE};final float[] grip={0};
+    bar.slider=v->{
+      float maximum=replayMaxOffset(),position=v*bar.rect.height()-7;
+      if(dragStarted[0]!=downAt){dragStarted[0]=downAt;float thumb=maximum>0?replayOffset/maximum*travel:0;grip[0]=Math.abs(position-thumb)<=7?position-thumb:0;}
+      replayOffset=Math.max(0,Math.min(maximum,(position-grip[0])/travel*maximum));
+    };
+    buttons.add(bar);
+  }
+
+  private NativeArt.Font replayFont(boolean large) {
+    NativeArt.Font source=page.equals("results")&&results!=null?(large?results.large:results.small)
+        :hud!=null?(large?hud.large:hud.small):glue==null?null:(large?glue.large:glue.small);
+    if(source==null)return null;
+    if(large){if(replayLargeSource!=source){replayLargeSource=source;replayLargeGreen=source.withShadedColor(0xff76b948);}return replayLargeGreen;}
+    if(replaySmallSource!=source){replaySmallSource=source;replaySmallGreen=source.withShadedColor(0xff76b948);}return replaySmallGreen;
+  }
+
+  private void replayPanel(Canvas c,float x,float y,int width,int height) {
+    paint.setColor(Color.BLACK);c.drawRect(x,y,x+width,y+height,paint);
+    redBorder(c,x,y,width,height,false);redBorder(c,x+3,y+3,width-6,height-6,false);
+  }
+
+  private void replayMessage(String message) {replayNotice=message==null?"":message;modal="replay-notice";cancelGesture();}
+
+  private boolean drawReplayDialog(Canvas c) {
+    if(!modal.equals("replay-delete")&&!modal.equals("replay-notice"))return false;
+    boolean deleting=modal.equals("replay-delete");float x=(logicalWidth-416)/2f;
+    paint.setColor(0x98000000);c.drawRect(0,0,logicalWidth,480,paint);replayPanel(c,x,126,416,222);
+    NativeArt.Font heading=replayFont(true),small=replayFont(false);
+    if(deleting&&heading!=null)uiLine(c,"Delete replay?",heading,x+16,142,384,26,1,2);
+    String message=deleting?(selectedReplay==null?"":NativeReplays.label(selectedReplay)):replayNotice;
+    c.save();c.clipRect(x+28,178,x+388,262);
+    NativeArt.Font messageFont=deleting?small:heading;
+    if(messageFont!=null&&messageFont.lines(message,360).size()>4)messageFont=small;
+    if(messageFont!=null)messageFont.draw(c,message,x+28,178,360,deleting?0:1,2,20);else fallback(c,message,x+28,178,14,0xffc5cce3);
+    c.restore();
+    if(deleting){
+      replayButton(c,"Delete",x+28,282,160,28,()->{try{replays.delete(selectedReplay);modal="";refreshReplays();}catch(Exception e){replayMessage(e.getMessage());}},selectedReplay!=null);
+      replayButton(c,"Cancel",x+228,282,160,28,()->modal="",true);
+    }else replayButton(c,"OK",x+128,282,160,28,()->modal="",true);
+    return true;
+  }
+
+  void replayImported(String issue){enqueue(()->{if(page.equals("replays")){refreshReplays();if(issue!=null)replayMessage(issue);}});}
+
+  private void saveCurrentReplay() {
+    try{
+      byte[] bytes=NativeBridge.replay();replaySaveScreen=results;final long request=++replaySaveRequest;
+      activity.runOnUiThread(()->activity.recordReplay(bytes,this,request));
+    }catch(Exception e){replayMessage("Replay could not be saved: "+e.getMessage());}
+  }
+
+  void replayRecorded(long request,String message) {
+    enqueue(()->{if(request==replaySaveRequest&&page.equals("results")&&results==replaySaveScreen){
+      final NativeResults savedScreen=replaySaveScreen;
+      replayAcknowledgement=()->{if(page.equals("results")&&results==savedScreen)replayMessage(message);};
+    }});
+  }
+
+  void replayExported(long request,String message) {
+    enqueue(()->{replayAcknowledgement=()->{if(page.equals("replays")&&request==replayBrowserGeneration)replayMessage(message);};});
+  }
+
+  private void presentReplayAcknowledgement() {
+    if(replayAcknowledgement!=null&&modal.isEmpty()){Runnable notice=replayAcknowledgement;replayAcknowledgement=null;notice.run();}
+  }
+
+  private void startReplay(File file) {
+    if(file==null)return;
+    try {
+      byte[] bytes=replays.read(file);selectReplay(file);if(!replayValid)return;
+      if(!replayGame)replayReturnExpansion=expansion;
+      closeGlue();closeNearby();closeBriefMovies();if(hud!=null){hud.close();hud=null;}
+      NativeBridge.replayOpen(bytes);replayGame=true;activeGame=true;replayPaused=false;replayRate=1;replaySeeking=false;
+      playingReplay=file;expansion=replayExpansion;campaign=null;currentMission=null;missionCode=0;
+      missionRace=replayRaces.isEmpty()?1:replayRaces.get(0);multiplayerGame=false;multiplayerSaves=false;lastOutcome=0;errorSeq=-1;commandError="";
+      releaseSavedMap();activeMapSource=null;
+      hud=new NativeHud(art,missionRace,commandMaps);page="game";modal="";startupTips=false;instant=false;
+      resizeWorld();syncControls();NativeBridge.frame(world,0,clock);NativeBridge.sound(null,62,false);
+      music("game");accumulator=0;lastTime=0;cancelGesture();
+    }catch(Exception e){showReplays();replayMessage(e.getMessage());}
+  }
+
+  private void replayMenuAction(Canvas c,int id,String label,Runnable action,boolean enabled) {
+    NativeArt.Widget widget=glue.layout.get(id);
+    if(widget==null||!glue.labelVisible(id))return;
+    // Keep the original OK/Cancel artwork, hit box and font metrics intact.
+    boolean available=enabled&&action!=null&&pendingScreen==null;
+    queueMenuButtonVisual(widget.hit(),action,available,enabled&&action!=null,MenuLabels.forWidget(glue.name,id,widget,label),
+        shown->glue.labelCaption(c,id,shown,enabled&&action!=null));
+  }
+
+  private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
+    replayButton(c,label,x,y,width,height,action,enabled,true);
+  }
+
+  private void replayActionButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
+    replayButton(c,label,x,y,width,height,action,enabled,false);
+  }
+
+  private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled,boolean navigation) {
+    if(page.equals("replays")&&glue!=null){
+      // Transparent menu controls use the original wide button font. Long
+      // translations fit exactly as native menu labels do, without smaller fonts.
+      redBorder(c,x,y,width,height,false);
+      NativeArt.Font font=glue.button;
+      queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,navigation,shown->{
+        int layoutWidth=NativeGlue.labelWidth(font,shown,width-8,height);
+        int textHeight=font.lines(shown,layoutWidth).size()*font.height;
+        c.save();c.clipRect(x+4,y,x+width-4,y+height);
+        c.translate(x+4,y+(height-textHeight)/2f);c.scale((width-8)/(float)layoutWidth,1);
+        font.draw(c,shown,0,0,layoutWidth,1,menuColor(x,y,width,height,enabled),0);c.restore();
+      });return;
+    }
+    paint.setColor(Color.BLACK);c.drawRect(x,y,x+width,y+height,paint);
+    boolean hot=pressed!=null&&pressed.rect.contains(x+width/2f,y+height/2f);
+    redBorder(c,x,y,width,height,hot&&enabled);
+    NativeArt.Font large=replayFont(true),small=replayFont(false);
+    final NativeArt.Font font=large!=null&&large.measure(label)>width-8?small:large;
+    queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,navigation,
+        shown->{if(font!=null)uiLine(c,shown,font,x+4,y,width-8,height,1,enabled?hot?4:3:5);
+          else fallbackMenu(c,shown,x+4,y,width-8,height,enabled?3:5);});
+  }
+
+  private void seekReplay(float value) {
+    if(!replayGame)return;
+    NativeBridge.replaySeek(Math.round(Math.max(0,Math.min(1,value))*NativeBridge.value(26,0)));
+    replaySeeking=NativeBridge.value(28,0)!=0;accumulator=0;
+  }
+
+  private void drawReplayControls(Canvas c) {
+    float x=logicalWidth-156;int frame=NativeBridge.value(8,0),end=NativeBridge.value(26,0);
+    boolean seeking=NativeBridge.value(28,0)!=0;int target=seeking?NativeBridge.value(29,0):frame;
+    replayPanel(c,x,348,154,130);
+    uiLine(c,seeking?PortText.text("Seeking…")+" "+replayTime(frame)+" / "+replayTime(target):replayTime(frame)+" / "+replayTime(end),replayFont(false),x+6,352,142,18,1,2);
+    // Pixel rail and hollow grip; its endpoints are identical to the touch scale.
+    float left=x+13,right=x+141,center=left+(end>0?target/(float)end:0)*(right-left);
+    paint.setColor(0xff861414);c.drawRect(left,377,right,378,paint);c.drawRect(left,382,right,383,paint);
+    c.drawRect(left,377,left+1,383,paint);c.drawRect(right-1,377,right,383,paint);
+    paint.setColor(0xffd92b24);c.drawRect(left,379,left+(end>0?frame/(float)end:0)*(right-left),381,paint);
+    paint.setColor(Color.BLACK);c.drawRect(center-5,375,center+6,385,paint);
+    int cx=Math.round(center);paint.setColor(0xffd92b24);
+    c.drawRect(cx-3,373,cx+4,374,paint);c.drawRect(cx-3,386,cx+4,387,paint);
+    for(int row=-6;row<=5;row++){int inset=Math.abs(row)>=5?2:Math.abs(row)>=3?1:0;
+      c.drawRect(cx-6+inset,380+row,cx-5+inset,381+row,paint);c.drawRect(cx+6-inset,380+row,cx+7-inset,381+row,paint);}
+    Button seek=new Button(new RectF(left,370,right,390),()->{},end>0);seek.slider=this::seekReplay;buttons.add(seek);
+    replayActionButton(c,replayPaused?"Play":"Pause",x+6,398,104,21,()->{if(NativeBridge.value(8,0)<NativeBridge.value(26,0)||NativeBridge.value(28,0)!=0)replayPaused=!replayPaused;},true);
+    replayActionButton(c,replayRate+"x",x+116,398,32,21,()->{replayRate=replayRate==8?1:replayRate*2;accumulator=0;},true);
+    int owner=NativeBridge.value(27,0);
+    replayActionButton(c,owner<0?"Everyone":"Player "+(owner+1),x+6,425,142,21,()->{
+      int at=replayPlayers.indexOf(NativeBridge.value(27,0))+1;
+      NativeBridge.command(31,at>=replayPlayers.size()?-1:replayPlayers.get(at),0,0,0);
+      if(at<replayRaces.size()&&missionRace!=replayRaces.get(at)){missionRace=replayRaces.get(at);hud.close();hud=new NativeHud(art,missionRace,commandMaps);music("game");}
+    },true);
+    replayButton(c,"Restart",x+6,452,142,21,()->startReplay(playingReplay),true);
+  }
+
   private void showCampaign() {
+    if(replayGame)expansion=replayReturnExpansion;replayGame=false;
     multiplayerSaves=false;multiplayerGame=false;
     closeNearby();
     NativeBridge.endGame();
@@ -634,8 +977,9 @@ final class NativeSurface extends SurfaceView
     if (!musicPhase.equals(phase)) musicIndex = 0;
     musicPhase = phase;
     // Classic BroodWar.mpq stores the expansion theme followed by the original
-    // first theme in race1.wav. Play the whole file before race2/race3; appending
-    // StarCraft's race1.wav would play that original theme twice per cycle.
+    // first theme in race1.wav for ALL three races. Playing each complete file
+    // before race2/race3 gives four themes per loop in campaigns, custom games
+    // and Nearby matches; adding StarCraft race1 again would duplicate it.
     String race = new String[] {"zerg", "terran", "protoss"}[missionRace],
         prefix = new String[] {"z", "t", "p"}[missionRace];
     String name =
@@ -648,9 +992,12 @@ final class NativeSurface extends SurfaceView
                         ? prefix + "vict"
                         : phase.equals("defeat") ? prefix + "defeat" : race + (musicIndex % 3 + 1))
             + ".wav";
-    if (phase.equals("game") && !musicTrack.equals("auto")) name = "music/" + musicTrack + ".wav";
-    if (name.equals(currentMusicPath) && NativeBridge.playing(63)) return;
+    // The title track continues across front-end expansion changes. Other
+    // phases still reload the matching game's archive, even for the same path.
+    if (name.equals(currentMusicPath) && (phase.equals("title") || expansion == currentMusicExpansion)
+        && NativeBridge.playing(63)) return;
     currentMusicPath = name;
+    currentMusicExpansion = expansion;
     musicThemeBoundary = 0;
     try {
       byte[] b = expansion ? NativeBridge.asset(6, name) : null;
@@ -658,7 +1005,7 @@ final class NativeSurface extends SurfaceView
         Integer boundary = musicThemeStarts.get(name);
         if (boundary == null) {
           try { boundary = MusicThemes.appendedThemeMs(b, NativeBridge.asset(5, name)); }
-          catch (Exception ignored) { boundary = 0; } // Optional reference must not block valid music.
+          catch (Exception ignored) { boundary = 0; } // A reference file must not block valid music.
           musicThemeStarts.put(name, boundary);
         }
         musicThemeBoundary = boundary;
@@ -671,16 +1018,33 @@ final class NativeSurface extends SurfaceView
     }
   }
 
+  private void advanceMusic() {
+    if (musicPhase.equals("game") && music > 0 && !NativeBridge.playing(63)) {
+      musicIndex++;
+      music("game");
+    }
+  }
+
+  private boolean canNextMusicTrack() {
+    return musicPhase.equals("game") && !muted && music > 0
+        && NativeBridge.playing(63);
+  }
+
   private void nextMusicTrack() {
-    // The first Brood War file contains two themes. Expose its verified second
-    // theme to Next Track without duplicating it in the natural playback loop.
-    boolean embedded = musicTrack.equals("auto") && musicPhase.equals("game")
-        && musicThemeBoundary > 0 && NativeBridge.playing(63)
-        && NativeBridge.soundPosition(63) < musicThemeBoundary;
-    musicTrack = "auto";
-    if (embedded) NativeBridge.seekSound(63, musicThemeBoundary);
+    if (!canNextMusicTrack()) return;
+    // Brood War's first WAV contains two complete themes. Skip to the verified
+    // second theme before moving to race2/race3; natural playback stays intact.
+    double position = NativeBridge.soundPosition(63);
+    if (musicThemeBoundary > 0 && position >= 0 && position < musicThemeBoundary)
+      NativeBridge.seekSound(63, musicThemeBoundary);
     else { musicIndex++; music("game"); }
-    saveSettings();
+  }
+
+  private void drawSoundSettings(Canvas c, float x, float y) {
+    toggle(c, "Mute all sound", muted, x + 26, y + 60, () -> {muted = !muted; saveSettings();});
+    slider(c, "Effects", effects, x + 26, y + 120, v -> {effects = v; saveSettings();});
+    slider(c, "Music", music, x + 26, y + 180, v -> {music = v; saveSettings();});
+    menuActionButton(c, "Next track", x + 26, y + 240, 320, 28, this::nextMusicTrack, canNextMusicTrack());
   }
 
   private void tick(double dt) {
@@ -689,6 +1053,11 @@ final class NativeSurface extends SurfaceView
     syncAudio();
     advanceLists(dt);
     advanceGamepad(dt);
+    advanceDesktop(dt);
+    if ((modal.startsWith("gamepad") || modal.equals("control-desktop")) && !page.equals("game")) {
+      if (page.equals("movie")) cinematicStart += dt;
+      return;
+    }
     if (page.equals("movie")
         && cinematic != null
         && clock - cinematicStart >= cinematic.frames * (double) cinematic.interval) {
@@ -722,18 +1091,20 @@ final class NativeSurface extends SurfaceView
     }
     if(nearby!=null&&nearby.playing&&!page.equals("game"))nearby.tick(dt);
     if (activeGame && page.equals("game")) {
-      boolean paused = !modal.isEmpty();
+      boolean paused = !modal.isEmpty() || replayGame && replayPaused;
       NativeBridge.command(6, paused ? 1 : 0, 0, 0, 0);
       int steps = 0;
       if (nearby!=null) {nearby.tick(dt);} else if (!paused) {
         accumulator += dt;
-        while (accumulator >= speed && steps < 32) {
-          accumulator -= speed;
+        double interval=replayGame?42.0/replayRate:speed;
+        while (accumulator >= interval && steps < 32) {
+          accumulator -= interval;
           steps++;
         }
       } else accumulator = 0;
       advanceCamera(dt);
-      NativeBridge.frame(world, steps, clock);
+      try {NativeBridge.frame(world, steps, clock);}
+      catch(RuntimeException playbackFailure){if(!replayGame)throw playbackFailure;showReplays();replayMessage("Replay could not be played: "+playbackFailure.getMessage());return;}
       if (campaign != null && !paused) campaign.poll();
       String[] error = NativeBridge.text(8).split("\t", 2);
       if (error.length > 1) {
@@ -745,9 +1116,12 @@ final class NativeSurface extends SurfaceView
           hint = ""; hintUntil = 0;
         }
       }
-      int outcome = NativeBridge.value(7, 0);
+      if(replayGame){boolean seeking=NativeBridge.value(28,0)!=0;if(replaySeeking&&!seeking)accumulator=0;replaySeeking=seeking;
+        if(!seeking&&NativeBridge.value(8,0)>=NativeBridge.value(26,0))replayPaused=true;}
+      int outcome = replayGame?0:NativeBridge.value(7, 0);
       if (outcome != 0 && lastOutcome == 0) {
         lastOutcome = outcome;
+        recordCampaignCompletion(outcome);
         if(nearby!=null)nearby.finish();
         modal = "outcome";
         NativeBridge.sound(null, 63, false);
@@ -755,10 +1129,28 @@ final class NativeSurface extends SurfaceView
         sfx(outcome == 1 ? "youwin" : "youlose");
         cancelGesture();
       }
-      if (musicPhase.equals("game") && musicEnabled && !NativeBridge.playing(63)) {
-        musicIndex++;
-        music("game");
-      }
+      advanceMusic();
+    }
+  }
+
+  private void drawCommandFeedback(Canvas c) {
+    if (!modal.isEmpty()) return;
+    NativeHud.Hit hover = commandHover.tooltip(hud.hits, android.os.SystemClock.uptimeMillis());
+    int targeting = NativeBridge.value(0, 0);
+    String status = !commandError.isEmpty() && clock < commandErrorUntil ? commandError
+        : targeting == 1 || targeting == 4 ? "Select target" : "";
+    float tooltipBottom = Float.POSITIVE_INFINITY;
+    if (!status.isEmpty()) {
+      hud.commandError(c, status, logicalWidth);
+      // Keep both messages visible: the status keeps its normal position and
+      // inspection moves above it instead of replacing or covering it.
+      tooltipBottom = hud.commandErrorTop(status, logicalWidth) - 8;
+    }
+    if (hover != null) {
+      hud.tooltip(c, hud.hint(hover), logicalWidth,
+          hover.fields == null ? hud.race : NativeHud.number(hover.fields, 15, hud.race), tooltipBottom);
+    } else if (!hint.isEmpty() && clock < hintUntil) {
+      hud.tooltip(c, hint, logicalWidth, hintSupplyRace < 0 ? hud.race : hintSupplyRace, tooltipBottom);
     }
   }
 
@@ -770,40 +1162,43 @@ final class NativeSurface extends SurfaceView
     c.scale(scale,scale);
     c.clipRect(0,0,logicalWidth,480);
     buttons.clear();
-    try {draw(c,dt);drawGamepadCursor(c);} finally {c.restoreToCount(save);}
+    menuCaptions.clear();
+    menuBehindModal=!modal.isEmpty();
+    try {draw(c,dt);flushMenuButtons();drawGamepadCursor(c);if(desktopMouseActive&&desktopInside)drawPointer(c,desktopX,desktopY,desktopPrimary.equals("world")||gamepadWorld(desktopX,desktopY));} finally {c.restoreToCount(save);}
   }
 
   private void draw(Canvas c, double dt) {
+    presentReplayAcknowledgement();
+    menuBehindModal=!modal.isEmpty();
     placementButtonRow = null;
     if (page.equals("results") && results != null) {
       results.canSave = NativeBridge.value(15, 0) != 0;
       results.hot = hoverButton;
-      results.draw(c, dt);
+      results.draw(c, !modal.isEmpty() ? 0 : dt);
+      if (modal.startsWith("gamepad")||modal.equals("control-desktop")) {buttons.clear();menuBehindModal=false; drawGamepadSettings(c); return;}
+      if(modal.startsWith("replay-")){buttons.clear();menuBehindModal=false;drawReplayDialog(c);return;}
       if (!results.ready() || pendingScreen != null) return;
       NativeArt.Widget save = results.layout.get(61);
       if (save != null)
-        add(
+        addMenuButton(
             save.hit(),
-            () -> {
-              byte[] bytes = NativeBridge.replay();
-              activity.runOnUiThread(() -> activity.saveReplay(bytes));
-            },
-            results.canSave);
+            this::saveCurrentReplay,
+            results.canSave,results.buttonCaption(61));
       for (int i = 0; i < 4; i++) {
         final int tab = i;
         NativeArt.Widget w = results.layout.get(i + 3);
         if (w != null)
-          add(
+          addMenuButton(
               w.hit(),
               () -> {
                 results.tab = tab;
                 results.progress = 0;
                 startScoreCount();
               },
-              true);
+              true,results.buttonCaption(i+3));
       }
       NativeArt.Widget ok = results.layout.get(7);
-      if (ok != null) add(ok.hit(), () -> navigate(this::nextMission), true);
+      if (ok != null) addMenuButton(ok.hit(), () -> navigate(this::nextMission), true,results.buttonCaption(7));
       return;
     }
     if (page.equals("game")) {
@@ -815,18 +1210,16 @@ final class NativeSurface extends SurfaceView
           campaign != null && campaign.talking >= 0 ? campaign.portraits[campaign.talking] : -1;
       hud.transmissionTalk = NativeBridge.playing(62);
       hud.paused = !modal.isEmpty();
-      hud.pressedCommand = commandHover.pressed == null ? null : commandHover.pressed.rect;
+      hud.pressedCommand = commandHover.pressed != null ? commandHover.pressed.rect
+          : desktopHudHit != null ? desktopHudHit.rect : null;
       hud.pressedButton = pressed == null ? null : pressed.rect;
       hud.resourceScale = resourcePercent / 100f;
       hud.commandScale = commandPercent / 100f;
       hud.descriptionScale = descriptionPercent / 100f;
+      hud.gridHotkeys = desktopSettings.gridHotkeys;
       hud.draw(c, world, logicalWidth, zoom, clock);
-      if (modal.isEmpty()) { drawSelectionButton(c); drawCommandModeButton(c); drawControlGroups(c); }
+      if (modal.isEmpty()) {if(replayGame){drawReplayControls(c);flushMenuButtons();}else{drawSelectionButton(c);drawCommandModeButton(c);drawControlGroups(c);}}
       add(new RectF(logicalWidth - 230, 387, logicalWidth - 164, 408), this::openMenu, true);
-      add(
-          new RectF(6, 322, 67, 344),
-          () -> NativeBridge.command(8, NativeBridge.value(14, 0) == 0 ? 1 : 0, 0, 0, 0),
-          true);
       if (campaign != null) {
         if (!campaign.message.isEmpty()) {
           float scale = descriptionPercent / 100f;
@@ -841,21 +1234,10 @@ final class NativeSurface extends SurfaceView
         String timer = NativeBridge.text(7);
         if (!timer.equals("0:00") || missionCode == 3)
           hud.large.draw(c, timer, (logicalWidth - 128) / 2f,
-              controls.controlGroups ? Math.round(6+(controlGroupRows()*32-2)*commandPercent/100f) : resourcePercent > 125 ? 36 : 3, 128, 1, 2, 0);
+              controls.controlGroups ? Math.round(6+(controlGroupRows()*32-2)*controlGroupScale()) : resourcePercent > 125 ? 36 : 3, 128, 1, 2, 0);
       }
       if (placement && NativeBridge.value(0, 0) != 2) placement = false;
-      if (modal.isEmpty()) {
-        NativeHud.Hit hover = commandHover.tooltip(hud.hits, android.os.SystemClock.uptimeMillis());
-        if (!commandError.isEmpty() && clock < commandErrorUntil) {
-          hud.commandError(c, commandError, logicalWidth);
-        } else if (NativeBridge.value(0, 0) == 1 || NativeBridge.value(0, 0) == 4) {
-          hud.commandError(c, "Select target", logicalWidth);
-        } else if (hover != null) {
-          hud.tooltip(c, hud.hint(hover), logicalWidth,
-              hover.fields == null ? hud.race : NativeHud.number(hover.fields, 15, hud.race));
-        } else if (!hint.isEmpty() && clock < hintUntil)
-          hud.tooltip(c, hint, logicalWidth, hintSupplyRace < 0 ? hud.race : hintSupplyRace);
-      }
+      drawCommandFeedback(c);
     } else if (page.equals("movie")) {
       cinematic.draw(
           c,
@@ -891,6 +1273,7 @@ final class NativeSurface extends SurfaceView
       }
       if (page.equals("registry")) drawRegistry(c);
       if (page.equals("custom")) drawCustom(c);
+      if (page.equals("replays")) drawReplayBrowser(c);
       if (page.equals("nearby")) drawNearby(c);
       if (page.equals("campaign")) {
         glueButton(c, 6, null, () -> missionList(2));
@@ -898,7 +1281,7 @@ final class NativeSurface extends SurfaceView
         glueButton(c, 8, null, () -> missionList(0));
         glueButton(c, 9, null, () -> navigate(this::showRegistry));
         glueButton(c, 5, null, () -> openSaves(false));
-        glueButton(c, 11, null, () -> message("Replay loading is not implemented yet."));
+        glueButton(c, 11, null, () -> navigate(this::showReplays));
         glueButton(c, 10, null, () -> navigate(()->{multiplayerSetup=false;multiplayerSaves=false;showCustom();}));
 
       }
@@ -911,14 +1294,16 @@ final class NativeSurface extends SurfaceView
     if(page.equals("game") && nearby!=null && !nearby.status.equals("Connected") && lastOutcome==0)
       hud.small.draw(c,nearby.status,logicalWidth/2f-180,52,360,1,2,0);
     if(page.equals("game") && nearby!=null && networkStats && lastOutcome==0) {
-      float networkY=controls.controlGroups&&controlGroupRows()>1?86:70;
+      float networkY=controls.controlGroups?Math.max(70,6+(controlGroupRows()*32-2)*controlGroupScale()):70;
       paint.setColor(0xb0000000);c.drawRect(12,networkY,logicalWidth-12,networkY+36,paint);
       hud.small.draw(c,nearby.summary(),20,networkY+3,logicalWidth-40,0,2,0);
       hud.small.draw(c,String.format(Locale.ROOT,"Display %.0f FPS | Draw %.1f ms/frame",displayFps,drawMs),20,networkY+19,logicalWidth-40,0,2,0);
     }
     if (page.equals("game") && placement && modal.isEmpty()) drawPlacementButtons(c);
     if (!modal.isEmpty()) {
+      flushMenuButtons();
       buttons.clear();
+      menuBehindModal=false;
       drawModal(c);
     }
   }
@@ -931,6 +1316,20 @@ final class NativeSurface extends SurfaceView
       c.drawText(l, x, y + size, paint);
       y += size + 5;
     }
+  }
+
+  private void fallbackMenu(Canvas c,String label,float x,float y,int width,int height,int color){
+    paint.setTextSize(16);paint.setTypeface(Typeface.SANS_SERIF);
+    String shown=PortText.text(label),plain=NativeArt.clean(shown).replace('\n',' ');
+    float measured=paint.measureText(plain),scale=Math.min(1,width/Math.max(1,measured));
+    int normal=color==3?0xffe1cf47:color==5?0xff73798b:0xffc5cce3;
+    c.save();c.clipRect(x,y,x+width,y+height);c.translate(x+(width-measured*scale)/2,y+(height-18)/2f);c.scale(scale,1);
+    float left=0;int tint=normal;
+    for(int i=0;i<shown.length();i++){
+      char ch=shown.charAt(i);if(ch<32){if(ch==4)tint=color==3?0xfff0f4ff:0xffffec73;else if(ch==1)tint=normal;continue;}
+      String glyph=String.valueOf(ch);paint.setColor(tint);c.drawText(glyph,left,16,paint);left+=paint.measureText(glyph);
+    }
+    c.restore();
   }
 
   private NativeArt.Font font() {
@@ -972,33 +1371,93 @@ final class NativeSurface extends SurfaceView
       float h,
       Runnable action,
       boolean enabled) {
+    button(c,label,x,y,w,h,action,enabled,true);
+  }
+
+  private void button(Canvas c,String label,float x,float y,float w,float h,
+      Runnable action,boolean enabled,boolean navigation) {
     if (page.equals("game") && hud != null)
       c.drawBitmap(hud.panel(Math.round(w), Math.round(h), true, enabled), x, y, NativeArt.PIXELS);
     else if (glue != null) c.drawBitmap(glue.panel(Math.round(w), Math.round(h), true), x, y, NativeArt.PIXELS);
     else panel(c, x, y, w, h);
     NativeArt.Font f = font();
-    float fy = y + (h - (f == null ? 18 : f.height)) / 2;
-    text(c, label, x + 3, fy, (int) w - 6, 1, enabled ? 3 : 5);
-    add(new RectF(x, y, x + w, y + h), action, enabled);
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,navigation,
+        shown->{if(f!=null)uiLine(c,shown,f,x+3,y,(int)w-6,(int)h,1,enabled?3:5);
+          else fallbackMenu(c,shown,x+3,y,(int)w-6,(int)h,enabled?3:5);});
   }
 
   private void add(RectF rect, Runnable run, boolean enabled) {
     buttons.add(new Button(rect, run, enabled));
   }
 
+  private void addMenuButton(RectF rect, Runnable run, boolean enabled, String shown) {
+    Button button=new Button(rect,run,enabled&&run!=null);
+    button.key=button.enabled?MenuLabels.mnemonic(shown):0;
+    button.page=page;button.modal=modal;
+    buttons.add(button);
+  }
+
+  private void queueMenuButton(RectF rect,Runnable run,boolean enabled,String label,
+      java.util.function.Consumer<String> drawCaption) {
+    queueMenuButton(rect,run,enabled,label,true,drawCaption);
+  }
+
+  private void queueMenuButton(RectF rect,Runnable run,boolean enabled,String label,
+      boolean navigation,java.util.function.Consumer<String> drawCaption) {
+    queueMenuButtonVisual(rect,run,enabled,enabled,label,navigation,drawCaption);
+  }
+
+  private void queueMenuButtonVisual(RectF rect,Runnable run,boolean enabled,boolean highlight,String label,
+      java.util.function.Consumer<String> drawCaption) {
+    queueMenuButtonVisual(rect,run,enabled,highlight,label,true,drawCaption);
+  }
+
+  private void queueMenuButtonVisual(RectF rect,Runnable run,boolean enabled,boolean highlight,String label,
+      boolean navigation,java.util.function.Consumer<String> drawCaption) {
+    if(run==null){drawCaption.accept(NativeArt.clean(PortText.text(label)));return;}
+    if(page.equals("game")&&modal.isEmpty()&&!replayGame){
+      drawCaption.accept(NativeArt.clean(PortText.text(label)));
+      add(rect,run,enabled);return;
+    }
+    Button button=new Button(rect,run,enabled);button.page=page;button.modal=modal;
+    buttons.add(button);
+    String id=Math.round(rect.left)+":"+Math.round(rect.top)+":"+Math.round(rect.width())+":"+Math.round(rect.height());
+    menuCaptions.add(new MenuCaption(button,new MenuHotkeys.Entry(id,label),highlight,navigation,drawCaption));
+  }
+
+  private void flushMenuButtons() {
+    if(menuCaptions.isEmpty())return;
+    ArrayList<MenuHotkeys.Entry> entries=new ArrayList<>();
+    // Only navigation participates in mnemonic allocation. In-place settings and
+    // actions keep normal text and must not reserve or respond to letter keys.
+    for(MenuCaption caption:menuCaptions)if(caption.navigation&&buttons.contains(caption.button))entries.add(caption.entry);
+    (menuBehindModal?backgroundMenuHotkeys:menuHotkeys).assign(page+"|"+(menuBehindModal?"":modal),entries);
+    for(MenuCaption caption:menuCaptions)if(buttons.contains(caption.button)){
+      caption.button.key=caption.navigation&&caption.button.enabled?caption.entry.key:0;
+      String shown=caption.navigation?caption.entry.shown:MenuHotkeys.decorate(caption.entry.label,0);
+      caption.draw.accept(caption.highlight?shown:NativeArt.clean(shown));
+    }
+    menuCaptions.clear();
+  }
+
   private void glueButton(Canvas c, int id, String label, Runnable run) {
+    glueButton(c,id,label,run,true);
+  }
+
+  private void glueButton(Canvas c, int id, String label, Runnable run, boolean navigation) {
     if (glue == null) {
       int n = buttons.size();
       button(c, label == null ? MenuLabels.forButton(page, id) : label,
-          205, 120 + n * 42, 230, 32, run, true);
+          205, 120 + n * 42, 230, 32, run, true,navigation);
       return;
     }
     NativeArt.Widget w = glue.layout.get(id);
-    if (w == null) return;
-    glue.label(c, id, label, true);
+    if (w == null || !glue.labelVisible(id)) return;
+    boolean enabled=run!=null&&pendingScreen==null&&(glue.elapsed>=NativeGlue.ENTER_MS||!glue.slide);
     RectF r = w.hit();
     r.offset(glue.shift(w), 0);
-    add(r, run, pendingScreen == null && (glue.elapsed >= NativeGlue.ENTER_MS || !glue.slide));
+    queueMenuButtonVisual(r,run,enabled,run!=null,MenuLabels.forWidget(glue.name,id,w,label),navigation,
+        shown->glue.labelCaption(c,id,shown,run!=null));
   }
 
   private void message(String text) {
@@ -1038,8 +1497,35 @@ final class NativeSurface extends SurfaceView
   }
 
   private void saveProfiles() {
+    campaignProgress.synchronize(profiles);
     prefs.edit().putString("profiles", new JSONArray(profiles).toString())
-        .putString("profile", selectedProfile).apply();
+        .putString("profile", selectedProfile)
+        .putString(CampaignProgress.KEY, campaignProgress.serialize()).apply();
+  }
+
+  private void saveCampaignProgress() {
+    prefs.edit().putString(CampaignProgress.KEY, campaignProgress.serialize()).apply();
+  }
+
+  private void recordCampaignCompletion(int outcome) {
+    String id=currentMission==null||currentMission.has("cinematic")?"":currentMission.optString("id");
+    if(campaignProgress.record(campaignProfile,id,outcome,campaign!=null,replayGame,multiplayerGame))
+      saveCampaignProgress();
+  }
+
+  private boolean missionCompleted(JSONObject mission) {
+    return !mission.has("cinematic")&&campaignProgress.completed(selectedProfile,mission.optString("id"));
+  }
+
+  private void drawMissionCheck(Canvas c,float x,float y) {
+    // A plain bitmap-style tick matches the menu fonts without introducing
+    // an antialiased circle or changing completion's per-mission-ID state.
+    Paint pixel=new Paint();pixel.setColor(0xff7cdb58);
+    int left=Math.round(x),top=Math.round(y);
+    for(int column=-5;column<=4;column++) {
+      int row=column<-2?column+4:-column;
+      c.drawRect(left+column,top+row,left+column+1,top+row+3,pixel);
+    }
   }
 
   private void newProfile() {
@@ -1087,8 +1573,8 @@ final class NativeSurface extends SurfaceView
       add(new RectF(x+24,y+65,x+356,y+97),()->{profileEditing=true;activity.runOnUiThread(()->showTextKeyboard(profileInput));},true);
       uiLine(c,profiles.size()>=32?"32 IDs saved. Delete one to add another.":"Enter a name (up to 24 characters).",glue.small,x+24,y+102,332,22,0,2);
     }else body(c,"Delete "+profileDelete+"?",x+24,y+65,332,54);
-    redButton(c,create?"OK":"Delete",x+24,y+142,154,30,this::confirmProfileDialog,!create||!profileDraft.trim().isEmpty()&&(profiles.size()<32||profiles.contains(profileDraft.trim())));
-    redButton(c,"Cancel",x+202,y+142,154,30,this::cancelProfileDialog,true);
+    redNavigationButton(c,create?"OK":"Delete",x+24,y+142,154,30,this::confirmProfileDialog,!create||!profileDraft.trim().isEmpty()&&(profiles.size()<32||profiles.contains(profileDraft.trim())));
+    redNavigationButton(c,"Cancel",x+202,y+142,154,30,this::cancelProfileDialog,true);
   }
 
   private void drawRegistry(Canvas c) {
@@ -1096,11 +1582,12 @@ final class NativeSurface extends SurfaceView
       int first = Math.min(profileScroll, Math.max(0, profiles.size()-6));
       for (int i=first; i<Math.min(profiles.size(), first+6); i++) {
         final String name = profiles.get(i);
-        button(c, (name.equals(selectedProfile) ? "> " : "") + name, 120, 112+(i-first)*34,
-            400, 28, () -> {selectedProfile=name;saveProfiles();}, true);
+        float rowY=112+(i-first)*34;panel(c,120,rowY,400,28);
+        fallbackMenu(c,NativeArt.clean((name.equals(selectedProfile)?"> ":"")+name),123,rowY,394,28,3);
+        add(new RectF(120,rowY,520,rowY+28),()->{selectedProfile=name;saveProfiles();},true);
       }
-      button(c, "Up", 120, 320, 94, 28, () -> profileScroll=Math.max(0,first-6), first>0);
-      button(c, "Down", 226, 320, 94, 28, () -> profileScroll=first+6, first+6<profiles.size());
+      button(c, "Up", 120, 320, 94, 28, () -> profileScroll=Math.max(0,first-6), first>0,false);
+      button(c, "Down", 226, 320, 94, 28, () -> profileScroll=first+6, first+6<profiles.size(),false);
       button(c, "New ID", 120, 360, 190, 32, this::newProfile, profiles.size()<32);
       button(c, "Delete ID", 330, 360, 190, 32, this::deleteProfile, profiles.contains(selectedProfile));
       button(c, "OK", 120, 402, 190, 32, () -> {
@@ -1145,43 +1632,62 @@ final class NativeSurface extends SurfaceView
       c.drawBitmap(background.image, x, y, NativeArt.PIXELS);
       NativeArt.Dialog history = dialog("gluhist");
       NativeArt.Widget heading = history.get(65535), box = history.get(6);
-      missionViewport.set(x + box.x, y + box.y, x + box.x + box.w - 20, y + box.y + box.h);
+      // Reserve a wider independent rail so labels never sit under its targets.
+      missionViewport.set(x + box.x, y + box.y, x + box.x + box.w - 36, y + box.y + box.h);
       missionOffset = Math.min(missionOffset, missionMaxOffset());
       listScroll = (int)(missionOffset / 19);
       glue.small.draw(c, heading.text, x + heading.x, y + heading.y, heading.w, 1, 2, 0);
-      c.save(); c.clipRect(x + box.x, y + box.y, x + box.x + box.w, y + box.y + box.h);
+      c.save(); c.clipRect(missionViewport);
       for (int i = listScroll; i < Math.min(visibleMissions.size(), listScroll + 9); i++) {
         final int index = i;
         JSONObject m = visibleMissions.get(i);
         String label = historyLabel(m);
         float row = y + box.y + i * 19 - missionOffset;
-        glue.large.draw(c, label, x + box.x + 4, row + 2, box.w - 18, 0,
-            !installed(m) ? 5 : i == chosenMission ? 4 : 3, 0);
-        RectF hit = new RectF(x + box.x, row, x + box.x + box.w - 20, row + 19);
+        if(missionCompleted(m))drawMissionCheck(c,x+box.x+10,row+9.5f);
+        uiLine(c,label,glue.large,x+box.x+22,row,(int)missionViewport.width()-26,19,0,
+            !installed(m) ? 5 : i == chosenMission ? 4 : 3);
+        RectF hit = new RectF(missionViewport.left, row, missionViewport.right, row + 19);
         if (hit.intersect(missionViewport)) add(hit, () -> chosenMission = index, installed(m));
       }
       c.restore();
-      // Drag scroll plus large arrow targets are usable without a mouse wheel.
+      // Original arrows and circular grip, widened together with their targets.
       if (visibleMissions.size() > 8) {
-        glue.small.draw(c, "^", x + box.x + box.w - 12, y + box.y, 12, 1, 4, 0);
-        glue.small.draw(c, "v", x + box.x + box.w - 12, y + box.y + box.h - 14, 12, 1, 4, 0);
-        add(new RectF(x + box.x + box.w - 20, y + box.y, x + box.x + box.w, y + box.y + 40),
-            () -> {missionOffset = Math.max(0, missionOffset - 95); listVelocity = 0;}, missionOffset > 0);
-        add(new RectF(x + box.x + box.w - 20, y + box.y + box.h - 40, x + box.x + box.w, y + box.y + box.h),
-            () -> {missionOffset = Math.min(missionMaxOffset(), missionOffset + 95); listVelocity = 0;}, missionOffset < missionMaxOffset());
-        paint.setColor(0xff52677e);
-        float trackY = y + box.y + 20, trackH = Math.max(1, box.h - 40);
-        float thumb = Math.max(12, trackH * 8 / visibleMissions.size());
-        float top = trackY + (trackH - thumb) * missionOffset / (missionMaxOffset());
-        c.drawRect(x + box.x + box.w - 9, top, x + box.x + box.w - 5, top + thumb, paint);
+        drawMissionScrollbar(c,new RectF(missionViewport.right,missionViewport.top,x+box.x+box.w,missionViewport.bottom));
       }
       NativeArt.Widget ok = history.get(1), cancel = history.get(3);
-      button(c, "OK", x + ok.x, y + ok.y, ok.w, ok.h, () -> {
+      // phist.pcx contains the old narrow button outlines. Clear that interior
+      // strip before drawing the wider controls so neither outline remains.
+      paint.setColor(Color.BLACK);c.drawRect(x+12,y+202,x+368,y+246,paint);
+      button(c, "OK", x + 20, y + ok.y, 164, 34, () -> {
         if (chosenMission >= 0) {JSONObject m = visibleMissions.get(chosenMission); navigate(() -> chooseMission(m));}
       }, chosenMission >= 0 && installed(visibleMissions.get(chosenMission)));
-      button(c, "Cancel", x + cancel.x, y + cancel.y, cancel.w, cancel.h, () -> modal = "", true);
+      button(c, "Cancel", x + 196, y + cancel.y, 164, 34, () -> modal = "", true);
       return true;
     } catch (Exception e) {return false;}
+  }
+
+  private void drawMissionScrollbar(Canvas c,RectF rail) {
+    int originalHeight=Math.round(rail.height()/1.75f);
+    float scale=rail.height()/originalHeight;
+    c.save();c.translate(rail.left+(rail.width()-16*scale)/2,rail.top);c.scale(scale,scale);
+    glue.scrollbar(c,0,0,originalHeight,missionMaxOffset()==0?0:missionOffset/missionMaxOffset());c.restore();
+    add(new RectF(rail.left,rail.top,rail.right,rail.top+32),
+        ()->{missionOffset=Math.max(0,missionOffset-19);listVelocity=0;},missionOffset>0);
+    add(new RectF(rail.left,rail.bottom-32,rail.right,rail.bottom),
+        ()->{missionOffset=Math.min(missionMaxOffset(),missionOffset+19);listVelocity=0;},missionOffset<missionMaxOffset());
+    Button bar=new Button(new RectF(rail.left,rail.top+32,rail.right,rail.bottom-32),()->{},missionMaxOffset()>0);
+    bar.vertical=true;
+    final float inset=23*scale-32, travel=(originalHeight-46)*scale;
+    final long[] dragStarted={Long.MIN_VALUE};final float[] grip={0};
+    bar.slider=v->{
+      float maximum=missionMaxOffset(),position=v*bar.rect.height()-inset;
+      if(dragStarted[0]!=downAt) {
+        dragStarted[0]=downAt;float thumb=maximum>0?missionOffset/maximum*travel:0;
+        grip[0]=Math.abs(position-thumb)<=9*scale?position-thumb:0;
+      }
+      missionOffset=Math.max(0,Math.min(maximum,(position-grip[0])/travel*maximum));listVelocity=0;
+    };
+    buttons.add(bar);
   }
 
   private void inspectMap(File map) throws Exception {
@@ -1228,7 +1734,7 @@ final class NativeSurface extends SurfaceView
   private void showNearby() {
     closeNearby();nearbyResume=null;nearbyResuming=false;multiplayerSetup=false;multiplayerSaves=true;
     NativeBridge.endGame();activeGame=false;multiplayerGame=false;campaign=null;currentMission=null;lastOutcome=0;
-    nearbySetup=new MatchSetup(true);customMaps=NativeMaps.list(files);if(customRace<0)customRace=1;
+    nearbySetup=new MatchSetup(true);customMaps=NativeMaps.list(gameFiles);if(customRace<0)customRace=1;
     nearbyStage="connection";screen("nearby","gluconn","palnl",true);sfx("swishin");
     nearbyStatus="Choose a connection, then host or join a game.";
   }
@@ -1330,8 +1836,8 @@ final class NativeSurface extends SurfaceView
       uiLine(c,nearbyWifi?"Bluetooth + Wi-Fi Direct":"Bluetooth",glue.dialogue,380,90,224,36,1,4);
       body(c,nearbyWifi?"Find nearby devices over Bluetooth. Each connection switches to Wi-Fi Direct when available.":"Connect nearby devices directly over Bluetooth.",380,140,222,110);
       customLabel(c,14,"Multiplayer",glue.large,0);
-      redButton(c,"Host Game",58,284,262,30,()->navigate(this::hostCustom),true);
-      redButton(c,"Join Game",58,322,262,30,()->navigate(this::joinNearby),true);
+      redNavigationButton(c,"Host Game",58,284,262,30,()->navigate(this::hostCustom),true);
+      redNavigationButton(c,"Join Game",58,322,262,30,()->navigate(this::joinNearby),true);
       glueButton(c,9,"Load Saved",()->{multiplayerSaves=true;openSaves(false);});
       glueButton(c,10,null,()->navigate(this::showMain));return;
     }
@@ -1340,7 +1846,9 @@ final class NativeSurface extends SurfaceView
       int row=0,index=0;nearbyPage=Math.min(nearbyPage,Math.max(0,(nearbyGames.size()-1)/7));
       for(Map.Entry<String,String> entry:nearbyGames.entrySet()) {
         if(index++<nearbyPage*7)continue;if(row>=7)break;final String id=entry.getKey();
-        redButton(c,entry.getValue(),64,94+row++*30,270,26,()->selectedNearby=id,true);
+        float rowY=94+row++*30;redBorder(c,64,rowY,270,26,false);
+        uiLine(c,entry.getValue(),glue.dialogue,68,rowY,262,26,1,menuColor(64,rowY,270,26,true));
+        add(new RectF(64,rowY,334,rowY+26),()->selectedNearby=id,true);
       }
       body(c,nearby==null?nearbyStatus:nearby.status,410,95,190,108);
       uiLine(c,nearbyGames.getOrDefault(selectedNearby,"Select a host"),glue.dialogue,410,210,190,32,1,4);
@@ -1356,12 +1864,13 @@ final class NativeSurface extends SurfaceView
       String player=setup.controllers[i]==0?"Closed":setup.controllers[i]==2?"Computer":nearby!=null&&nearby.occupants[i]>=0?nearby.names[i]:"Player (Open)";
       uiLine(c,Integer.toString(i+1),glue.dialogue,29,y,21,24,0,2);
       redBorder(c,52,y,setup.teamGame?141:184,24,movingSlot==i);
-      uiLine(c,player,glue.dialogue,57,y,setup.teamGame?131:174,24,0,editable&&host?menuColor(52,y,setup.teamGame?141:184,24,true):2);
+      queueMenuButton(new RectF(52,y,setup.teamGame?193:236,y+24),()->lobbySlot(slot),editable&&host,player,false,
+          shown->uiLine(c,shown,glue.dialogue,57,y,setup.teamGame?131:174,24,0,editable&&host?menuColor(52,y,setup.teamGame?141:184,24,true):2));
       float raceX=setup.teamGame?201:244;int raceW=setup.teamGame?85:112;
       redBorder(c,raceX,y,raceW,24,false);
-      uiLine(c,setup.controllers[i]==0?"":MatchSetup.RACES[setup.races[i]],glue.dialogue,raceX+5,y,raceW-10,24,0,menuColor(raceX,y,raceW,24,editable&&!nearby.resuming&&setup.controllers[i]!=0&&(host||i==nearby.localSlot)));
-      add(new RectF(52,y,setup.teamGame?193:236,y+24),()->lobbySlot(slot),editable&&host);
-      add(new RectF(raceX,y,raceX+raceW,y+24),()->{try{nearby.changeRace(slot);}catch(Exception e){nearby.fail(e.getMessage());}},editable&&!nearby.resuming&&setup.controllers[i]!=0&&(host||i==nearby.localSlot));
+      boolean raceEnabled=editable&&!nearby.resuming&&setup.controllers[i]!=0&&(host||i==nearby.localSlot);
+      queueMenuButton(new RectF(raceX,y,raceX+raceW,y+24),()->{try{nearby.changeRace(slot);}catch(Exception e){nearby.fail(e.getMessage());}},raceEnabled,
+          setup.controllers[i]==0?"":MatchSetup.RACES[setup.races[i]],false,shown->uiLine(c,shown,glue.dialogue,raceX+5,y,raceW-10,24,0,menuColor(raceX,y,raceW,24,raceEnabled)));
       if(setup.teamGame)redButton(c,"T"+setup.teams[i],294,y,62,24,()->{try{nearby.setup.teams[slot]=nearby.setup.teams[slot]%8+1;nearby.settingsChanged();}catch(Exception e){nearby.fail(e.getMessage());}},editable&&host&&!nearby.resuming&&setup.controllers[i]!=0);
     }
     redButton(c,"Hero Mode: "+(setup.heroMode?"On":"Off"),410,57,190,20,()->changeLobbySetting(3),editable&&host&&!nearby.resuming);
@@ -1383,8 +1892,8 @@ final class NativeSurface extends SurfaceView
     add(new RectF(30,455,307,473),this::openChat,nearby!=null&&!nearby.closed);
     redButton(c,"Send",313,455,45,18,this::sendChat,nearby!=null&&!nearby.closed&&!chatDraft.trim().isEmpty());
     if(host) {
-      NativeArt.Widget w=glue.layout.get(7);glue.label(c,7,"Start Game",nearby!=null&&nearby.ready&&nearby.countdown==0&&!nearby.closed);
-      add(w.hit(),()->nearby.start(),nearby!=null&&nearby.ready&&nearby.countdown==0&&!nearby.closed);
+      NativeArt.Widget w=glue.layout.get(7);boolean enabled=nearby!=null&&nearby.ready&&nearby.countdown==0&&!nearby.closed;
+      if(w!=null)queueMenuButton(w.hit(),()->nearby.start(),enabled,MenuLabels.forWidget(glue.name,7,w,"Start Game"),caption->glue.labelCaption(c,7,caption,enabled));
     }else customLabel(c,7,"Waiting for host",glue.dialogue,1);
     glueButton(c,8,null,()->navigate(this::showNearby));
   }
@@ -1402,7 +1911,7 @@ final class NativeSurface extends SurfaceView
     catch(Exception e){nearby.fail(e.getMessage());}
   }
   private void uiLine(Canvas c,String label,NativeArt.Font font,float x,float y,int width,int height,int align,int color){
-    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,NativeResults.fit(font,label,width),x,y+Math.max(0,(height-font.height)/2f),width,align,color,0);c.restore();
+    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,MenuHotkeys.paintCaption(font,MenuHotkeys.fit(font,label,width),color),x,y+Math.max(0,(height-font.height)/2f),width,align,color,0);c.restore();
   }
   private boolean menuHot(float x,float y,float w,float h){return pendingScreen==null && (modal.isEmpty()||modal.startsWith("profile-")) && menuHoverX>=x && menuHoverX<x+w && menuHoverY>=y && menuHoverY<y+h;}
   private int menuColor(float x,float y,float w,float h,boolean enabled){return !enabled?5:menuHot(x,y,w,h)?4:3;}
@@ -1414,14 +1923,25 @@ final class NativeSurface extends SurfaceView
     for(int i=1;i<3;i++){c.drawRect(x+3-i,y+i,x+4-i,y+i+1,paint);c.drawRect(x+w-4+i,y+i,x+w-3+i,y+i+1,paint);c.drawRect(x+3-i,y+h-i-1,x+4-i,y+h-i,paint);c.drawRect(x+w-4+i,y+h-i-1,x+w-3+i,y+h-i,paint);}
   }
   private void redButton(Canvas c,String label,float x,float y,int w,int h,Runnable action,boolean enabled){
-    NativeArt.Font font=h<28?glue.dialogue:glue.large;if(font.measure(label)>w-8)font=glue.small;
-    redBorder(c,x,y,w,h,false);uiLine(c,label,font,x+4,y,w-8,h,1,menuColor(x,y,w,h,enabled));if(action!=null)add(new RectF(x,y,x+w,y+h),action,enabled);
+    redButton(c,label,x,y,w,h,action,enabled,false);
+  }
+
+  private void redNavigationButton(Canvas c,String label,float x,float y,int w,int h,Runnable action,boolean enabled){
+    redButton(c,label,x,y,w,h,action,enabled,true);
+  }
+
+  private void redButton(Canvas c,String label,float x,float y,int w,int h,Runnable action,boolean enabled,boolean navigation){
+    NativeArt.Font preferred=h<28?glue.dialogue:glue.large;
+    final NativeArt.Font font=preferred.measure(label)>w-8?glue.small:preferred;
+    redBorder(c,x,y,w,h,false);
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,navigation,
+        shown->uiLine(c,shown,font,x+4,y,w-8,h,1,menuColor(x,y,w,h,enabled)));
   }
 
   private void showCustom() {
     screen("custom", "glucustm", "palnl", true);
     sfx("swishin");
-    customMaps = NativeMaps.list(files); mapOffset = 0; mapImportStatus = "";
+    customMaps = NativeMaps.list(gameFiles); mapOffset = 0; mapImportStatus = "";
     customBotSlot = 1;
     if(multiplayerSetup)nearbySetup=new MatchSetup(true);else customSetup=new MatchSetup(false);
     String last = prefs.getString("custom-map", "");
@@ -1529,13 +2049,13 @@ final class NativeSurface extends SurfaceView
     NativeArt.Widget w = glue.layout.get(id);
     if (w == null) return;
     redBorder(c,w.x,w.y,w.w,w.h,false);
-    uiLine(c,label,glue.dialogue,w.x+3,w.y,w.w-6,w.h,0,action==null?2:menuColor(w.x,w.y,w.w,w.h,true));
-    if (action != null) add(w.rect(), action, true);
+    queueMenuButton(w.rect(),action,true,label,false,
+        shown->uiLine(c,shown,glue.dialogue,w.x+3,w.y,w.w-6,w.h,0,action==null?2:menuColor(w.x,w.y,w.w,w.h,true)));
   }
 
   private boolean installed(JSONObject m) {
     if (m.has("cinematic")) return availableMovies.contains(m.optString("cinematic"));
-    return ProjectFiles.existing(files, CampaignData.filename(m.optString("id"))).isFile();
+    return ProjectFiles.existing(gameFiles, CampaignData.filename(m.optString("id"))).isFile();
   }
 
   private void chooseGame(int option) {
@@ -1570,12 +2090,9 @@ final class NativeSurface extends SurfaceView
         RectF rect = w.hit();
         rect.offset(left, top);
         // Original/Expansion are bottom-aligned labels below the two logos.
-        text(c, labels[i], left + w.x,
-            top + w.y + (i < 2 ? w.h - font().height : (w.h - font().height) / 2f), w.w, 1, 3);
-        add(
-            rect,
-            () -> chooseGame(option),
-            true);
+        float labelY=top+w.y+(i<2?w.h-font().height:(w.h-font().height)/2f);
+        queueMenuButton(rect,()->chooseGame(option),true,MenuLabels.forWidget("glugamemode",ids[i],w,labels[i]),
+            shown->text(c,shown,left+w.x,labelY,w.w,1,3));
       }
       return true;
     } catch (Exception e) {
@@ -1584,6 +2101,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void drawModal(Canvas c) {
+    menuBehindModal=false;
     if(modal.equals("nearby-error")) {
       float x=(logicalWidth-440)/2f;panel(c,x,100,440,280);
       text(c,"Nearby Multiplayer",x+20,120,400,1,2);body(c,nearbyStatus,x+24,166,392,138);
@@ -1593,6 +2111,8 @@ final class NativeSurface extends SurfaceView
     if(modal.startsWith("profile-")){drawProfileDialog(c);return;}
     if ((modal.equals("choose") || modal.equals("intro-choose") || modal.equals("multiplayer-choose")) && drawGameChooser(c)) return;
     if (modal.equals("missions") && drawHistory(c)) return;
+    if (drawGamepadSettings(c)) return;
+    if (drawReplayDialog(c)) return;
     if (drawSaves(c)) return;
     if (drawClassicMenu(c)) return;
     paint.setColor(0x60000000);
@@ -1640,13 +2160,17 @@ final class NativeSurface extends SurfaceView
               (m.optInt("number") == 0 ? "" : m.optInt("number") + ". ") + m.optString("title");
           button(
               c,
-              title,
+              "",
               x + 20,
               109 + (i - listScroll) * 34,
               328,
               30,
               () -> chooseMission(m),
               installed(m));
+          float row=109+(i-listScroll)*34;
+          if(missionCompleted(m))drawMissionCheck(c,x+31,row+15);
+          c.save();c.clipRect(x+44,row+2,x+344,row+29);
+          text(c,title,x+44,row+6,296,0,installed(m)?3:5);c.restore();
         }
         button(
             c,
@@ -1656,7 +2180,7 @@ final class NativeSurface extends SurfaceView
             45,
             30,
             () -> listScroll = Math.max(0, listScroll - 5),
-            listScroll > 0);
+            listScroll > 0,false);
         button(
             c,
             "Down",
@@ -1665,7 +2189,7 @@ final class NativeSurface extends SurfaceView
             45,
             30,
             () -> listScroll = Math.min(Math.max(0, visibleMissions.size() - 7), listScroll + 5),
-            end < visibleMissions.size());
+            end < visibleMissions.size(),false);
         button(c, "Back", x + 212, 353, 136, 30, () -> modal = "", true);
         break;
       case "skirmish":
@@ -1681,7 +2205,7 @@ final class NativeSurface extends SurfaceView
             298,
             32,
             () -> activity.runOnUiThread(activity::pickNativeMap),
-            true);
+            true,false);
         button(c, "Back", x + 80, 365, 208, 30, () -> modal = "", true);
         break;
       default:
@@ -1761,8 +2285,10 @@ final class NativeSurface extends SurfaceView
   }
 
   private void syncAudio() {
-    NativeBridge.audio(!foreground || (audio != null && !audio.canPlay()), muted ? 0 : effects,
-        muted || !musicEnabled ? 0 : music * speechMusicGain);
+    boolean settingsPause = (modal.startsWith("gamepad") || modal.equals("control-desktop"))
+        && Arrays.asList("movie", "story", "briefing", "results").contains(page);
+    NativeBridge.audio(!foreground || settingsPause || (audio != null && !audio.canPlay()), muted ? 0 : effects,
+        muted ? 0 : music * speechMusicGain);
   }
 
   private void navigate(Runnable next) {
@@ -1796,13 +2322,15 @@ final class NativeSurface extends SurfaceView
     padGroup=group;
   }
 
+  private float controlGroupScale() { return 1.2f * commandPercent / 100f; }
+
   private int controlGroupRows() {
-    return 8+316*commandPercent/100f > logicalWidth-204*resourcePercent/100f-8 ? 2 : 1;
+    return 8+316*controlGroupScale() > logicalWidth-204*resourcePercent/100f-8 ? 2 : 1;
   }
 
   private void drawControlGroups(Canvas c) {
     if (!controls.controlGroups) return;
-    float scale=commandPercent/100f;
+    float scale=controlGroupScale();
     int columns=controlGroupRows()==1?10:5;
     for (int i = 0; i < 10; i++) {
       final int group = (i + 1) % 10;
@@ -1874,27 +2402,43 @@ final class NativeSurface extends SurfaceView
 
   private void menuButton(Canvas c, String label, float x, float y, float w, float h,
       Runnable action, boolean enabled) {
+    menuButton(c,label,x,y,w,h,action,enabled,true);
+  }
+
+  private void menuActionButton(Canvas c, String label, float x, float y, float w, float h,
+      Runnable action, boolean enabled) {
+    menuButton(c,label,x,y,w,h,action,enabled,false);
+  }
+
+  private void menuButton(Canvas c, String label, float x, float y, float w, float h,
+      Runnable action, boolean enabled, boolean navigation) {
     c.drawBitmap(hud.panel(Math.round(w), Math.round(h), true, enabled), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + w / 2, y + h / 2);
-    uiLine(c, enabled ? label : NativeArt.clean(label), hud.large, x+4, y, (int)w-8, (int)h, 1,
-        enabled ? hot ? 2 : 3 : 5);
-    add(new RectF(x, y, x + w, y + h), action, enabled);
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,navigation,
+        shown->uiLine(c,shown,hud.large,x+4,y,(int)w-8,(int)h,1,enabled?hot?2:3:5));
   }
 
   private void originalMenuButton(Canvas c, String layout, int id, String label,
       float x, float y, Runnable action, boolean enabled) {
     NativeArt.Widget w = dialog(layout).get(id);
-    if (w != null) menuButton(c, label == null ? MenuLabels.forDialog(layout, id, NativeArt.clean(w.text)) : label,
+    if (w != null) menuButton(c, MenuLabels.forWidget(layout,id,w,label),
         x + w.x, y + w.y, w.w, w.h, action, enabled);
   }
 
   private void option(Canvas c, String label, float x, float y, float width, Runnable action) {
+    option(c,label,x,y,width,action,false);
+  }
+
+  private void navigationOption(Canvas c, String label, float x, float y, float width, Runnable action) {
+    option(c,label,x,y,width,action,true);
+  }
+
+  private void option(Canvas c, String label, float x, float y, float width, Runnable action, boolean navigation) {
     c.drawBitmap(hud.panel(Math.round(width), 28, true, true), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + width / 2, y + 14);
     boolean selected = label.startsWith("> ");
-    uiLine(c, selected ? label.substring(2) : label, hud.small, x + 8, y, (int)width-16, 28, 1,
-        hot ? 4 : selected ? 7 : 2);
-    add(new RectF(x, y, x + width, y + 28), action, true);
+    queueMenuButton(new RectF(x,y,x+width,y+28),action,true,selected?label.substring(2):label,navigation,
+        shown->uiLine(c,shown,hud.small,x+8,y,(int)width-16,28,1,hot?4:selected?7:2));
   }
 
   private void setWideMode(int mode) {
@@ -1955,20 +2499,6 @@ final class NativeSurface extends SurfaceView
     buttons.add(b);
   }
 
-  private static final String[] MUSIC_TRACKS = {"auto", "terran1", "terran2", "terran3",
-      "zerg1", "zerg2", "zerg3", "protoss1", "protoss2", "protoss3", "title",
-      "trdyroom", "zrdyroom", "prdyroom", "tvict", "zvict", "pvict", "tdefeat", "zdefeat", "pdefeat"};
-
-  private String trackLabel(String track) {
-    if (track.equals("auto")) return "Automatic (your race)";
-    String name = track.replace("rdyroom", " briefing").replace("vict", " victory")
-        .replace("defeat", " defeat").replaceAll("([a-z])([123])", "$1 $2");
-    if (name.startsWith("t ")) name = "Terran" + name.substring(1);
-    if (name.startsWith("z ")) name = "Zerg" + name.substring(1);
-    if (name.startsWith("p ")) name = "Protoss" + name.substring(1);
-    return Character.toUpperCase(name.charAt(0)) + name.substring(1);
-  }
-
   private boolean drawClassicMenu(Canvas c) {
     if (!page.equals("game") || hud == null) return false;
     if (modal.equals("tips") || modal.equals("objectives")) {
@@ -1983,12 +2513,12 @@ final class NativeSurface extends SurfaceView
         toggle(c, "Show Tips at Startup", prefs.getBoolean("show-tips", true), x + 20, y + 192,
             () -> prefs.edit().putBoolean("show-tips", !prefs.getBoolean("show-tips", true)).apply());
         menuButton(c, "OK", x + 20, y + 216, 104, 28, () -> {modal = startupTips ? "" : "menu"; startupTips = false;}, true);
-        menuButton(c, "Previous Tip", x + 140, y + 216, 104, 28, () -> tipIndex = (tipIndex + tips.length - 1) % tips.length, tips.length > 0);
-        menuButton(c, "Next Tip", x + 260, y + 216, 104, 28, () -> tipIndex = (tipIndex + 1) % tips.length, tips.length > 0);
+        menuActionButton(c, "Previous Tip", x + 140, y + 216, 104, 28, () -> tipIndex = (tipIndex + tips.length - 1) % tips.length, tips.length > 0);
+        menuActionButton(c, "Next Tip", x + 260, y + 216, 104, 28, () -> tipIndex = (tipIndex + 1) % tips.length, tips.length > 0);
       } else menuButton(c, "Previous (Esc)", x + 80, y + 216, 224, 28, this::modalBack, true);
       return true;
     }
-    boolean sheet = Arrays.asList("sound", "speed", "video", "ui-sizes", "network", "misc", "testing", "controls", "control-select", "control-timing", "control-camera", "control-orders", "control-help", "objectives", "tracks").contains(modal);
+    boolean sheet = Arrays.asList("sound", "speed", "video", "ui-sizes", "network", "misc", "testing", "controls", "control-select", "control-timing", "control-camera", "control-orders", "control-help", "objectives").contains(modal);
     if (!sheet && !Arrays.asList("menu", "options", "end", "quit", "restart", "exit", "outcome").contains(modal)) return false;
     float x = (logicalWidth - (sheet ? 368 : 264)) / 2f - (sheet ? 0 : 4), y = 32;
     if (modal.equals("outcome")) {
@@ -2003,11 +2533,16 @@ final class NativeSurface extends SurfaceView
         : modal.equals("sound") ? "Sound & Music" : modal.equals("speed") ? "Game Speed"
         : modal.equals("ui-sizes") ? "Interface Sizes" : modal.equals("network") ? "Network Diagnostics" : modal.equals("video") ? "Video Options" : modal.equals("misc") ? "Miscellaneous" : modal.equals("testing") ? "Cheats"
         : modal.equals("control-select") ? "Selection Settings" : modal.equals("control-timing") ? "Timing & accuracy" : modal.equals("control-camera") ? "Camera Settings"
-        : modal.equals("control-orders") ? "Command Settings" : modal.startsWith("control") ? "Touch Controls" : modal.equals("objectives") ? "Mission Objectives"
-        : modal.equals("tracks") ? "Music Track" : modal.equals("restart") ? "Restart Mission" : "End Mission";
+        : modal.equals("control-orders") ? "Command Settings" : modal.startsWith("control") ? "Controls" : modal.equals("objectives") ? "Mission Objectives"
+        : modal.equals("restart") ? "Restart Mission" : "End Mission";
     text(c, title, x, y + 8, sheet ? 368 : 264, 1, 2);
     final float left = x;
-    if (modal.equals("menu")) {
+    if (modal.equals("menu") && replayGame) {
+      menuButton(c,"Resume Replay",x+20,y+48,224,28,()->modal="",true);
+      menuButton(c,"Restart",x+20,y+90,224,28,()->startReplay(playingReplay),true);
+      menuButton(c,"Game Options",x+20,y+132,224,28,()->modal="options",true);
+      menuButton(c,"Exit Replay",x+20,y+216,224,28,this::showReplays,true);
+    } else if (modal.equals("menu")) {
       originalMenuButton(c, "gamemenu", 1, null, x, y, () -> openSaves(true), lastOutcome == 0 && (!multiplayerGame||nearby!=null&&nearby.host&&!nearby.closed));
       originalMenuButton(c, "gamemenu", 2, null, x, y, () -> openSaves(false), !multiplayerGame||nearby!=null&&nearby.host&&!nearby.closed);
       originalMenuButton(c, "gamemenu", 3, null, x, y, () -> modal = "options", true);
@@ -2016,36 +2551,18 @@ final class NativeSurface extends SurfaceView
       originalMenuButton(c, "gamemenu", 6, null, x, y, () -> modal = "end", true);
       originalMenuButton(c, "gamemenu", 65533, null, x, y, () -> modal = "", true);
     } else if (modal.equals("options")) {
-      originalMenuButton(c, "options", 1, null, x, y, () -> modal = "speed", nearby==null);
+      originalMenuButton(c, "options", 1, null, x, y, () -> modal = "speed", nearby==null&&!replayGame);
       originalMenuButton(c, "options", 2, null, x, y, () -> modal = "sound", true);
       originalMenuButton(c, "options", 3, null, x, y, () -> modal = "video", true);
-      originalMenuButton(c, "options", 4, "Touch Controls", x, y, () -> modal = "controls", true);
-      menuButton(c, nearby==null?"Miscellaneous":"Network", x + 20, y + 172, 224, 28, () -> modal = nearby==null?"misc":"network", true);
+      originalMenuButton(c, "options", 4, "Controls", x, y, () -> modal = "controls", true);
+      menuButton(c, nearby==null?"Miscellaneous":"Network", x + 20, y + 172, 224, 28, () -> modal = nearby==null?"misc":"network", !replayGame);
       hud.small.draw(c, "Sound, speed and display preferences", x + 20, y + 215, 224, 1, 2, 0);
     } else if (modal.equals("end")) {
       originalMenuButton(c, "abrtmenu", 1, null, x, y, () -> modal = "restart", currentMission != null);
       originalMenuButton(c, "abrtmenu", 2, null, x, y, () -> modal = "quit", true);
       originalMenuButton(c, "abrtmenu", 3, null, x, y, () -> modal = "exit", true);
     } else if (modal.equals("sound")) {
-      toggle(c, "Mute all sound", muted, x + 26, y + 48, () -> {muted = !muted; saveSettings();});
-      toggle(c, "Play original music", musicEnabled, x + 26, y + 80, () -> {musicEnabled = !musicEnabled; saveSettings();});
-      slider(c, "Effects", effects, x + 26, y + 120, v -> {effects = v; saveSettings();});
-      slider(c, "Music", music, x + 26, y + 160, v -> {music = v; saveSettings();});
-      option(c, trackLabel(musicTrack), x + 26, y + 204, 320, () -> modal = "tracks");
-      option(c, "Next track", x + 26, y + 243, 150, this::nextMusicTrack);
-      option(c, "Preview sound", x + 196, y + 243, 150, () -> {syncAudio(); sfx("button");});
-    } else if (modal.equals("tracks")) {
-      for (int i = 0; i < MUSIC_TRACKS.length; i++) {
-        final String track = MUSIC_TRACKS[i];
-        float bx = x + 20 + (i % 2) * 165, by = y + 38 + (i / 2) * 24;
-        boolean hot = pressed != null && pressed.rect.contains(bx + 80, by + 10);
-        if (track.equals(musicTrack) || hot) {
-          paint.setColor(hot ? 0xff223b69 : 0xff15274f);
-          c.drawRect(bx, by, bx + 160, by + 23, paint);
-        }
-        hud.small.draw(c, trackLabel(track), bx + 3, by + 5, 155, 0, track.equals(musicTrack) ? 7 : 2, 0);
-        add(new RectF(bx, by, bx + 160, by + 23), () -> {musicTrack = track; music(musicPhase); saveSettings(); modal = "sound";}, true);
-      }
+      drawSoundSettings(c, x, y);
     } else if (modal.equals("speed")) {
       double[] values = {167, 111, 83, 67, 56, 48, 42, 21, 10.5, 5.25, 2.625};
       String[] labels = {"Slowest", "Slower", "Slow", "Normal", "Fast", "Faster", "Fastest (1x)", "2x Fastest", "4x Fastest", "8x Fastest", "16x Fastest"};
@@ -2068,11 +2585,11 @@ final class NativeSurface extends SurfaceView
         zoom = next; resizeWorld(); saveSettings();
       });
       option(c, "Frame rate: " + fps, x + 26, y + 214, 320, () -> {fps = fps == 30 ? 60 : fps == 60 ? 90 : fps == 90 ? 120 : 30; saveSettings();});
-      option(c, "Interface sizes", x + 26, y + 253, 320, () -> modal = "ui-sizes");
+      navigationOption(c, "Interface sizes", x + 26, y + 253, 320, () -> modal = "ui-sizes");
     } else if (modal.equals("network")) {
       toggle(c,"Show network overlay",networkStats,x+26,y+48,()->{networkStats=!networkStats;saveSettings();});
       body(c,(nearby==null?"No active match":nearby.summary())+"\n"+String.format(Locale.ROOT,"Display: %.1f FPS\nDrawing: %.2f ms/frame\nTotal frame work: %.2f ms/frame",displayFps,drawMs,frameMs)+"\nInput buffer: "+(nearby==null?168:nearby.setup.frameMs()*4)+" ms.\nWait: blocked on other devices.\nValues retain the last active sample.",x+26,y+88,320,142);
-      option(c,"View / copy diagnostics",x+26,y+240,320,()->activity.runOnUiThread(activity::requestDiagnostics));
+      navigationOption(c,"View / copy diagnostics",x+26,y+240,320,()->activity.runOnUiThread(activity::requestDiagnostics));
     } else if (modal.equals("ui-sizes")) {
       option(c, "Resources: " + resourcePercent + "%", x + 26, y + 48, 320, () -> {resourcePercent = resourcePercent >= 150 ? 100 : resourcePercent + 25; saveSettings();});
       option(c, "Commands & control groups: " + commandPercent + "%", x + 26, y + 92, 320, () -> {commandPercent = commandPercent >= 120 ? 100 : commandPercent + 10; saveSettings();});
@@ -2084,14 +2601,16 @@ final class NativeSurface extends SurfaceView
         nearbyDefenders = !nearbyDefenders; syncControls(); saveSettings();
       });
       body(c, "When enabled, attacked bases call nearby idle combat units to help.\n\nScripted mission attacks still run.", x + 22, y + 93, 324, 100);
-      option(c, "Cheats", x + 22, y + 207, 324, () -> modal = "testing");
+      navigationOption(c, "Cheats", x + 22, y + 207, 324, () -> modal = "testing");
     } else if (modal.equals("testing")) {
       option(c, "+10,000 minerals and gas", x + 26, y + 46, 320, () -> NativeBridge.command(9, 0, 0, 0, 0));
       toggle(c, "Instant production", instant, x + 26, y + 84, () -> {instant = !instant; NativeBridge.command(10, instant ? 1 : 0, 0, 0, 0);});
       option(c, "Reveal map", x + 26, y + 116, 320, () -> NativeBridge.command(11, 0, 0, 0, 0));
-      option(c, "Force victory (end match)", x + 26, y + 158, 320, () -> {NativeBridge.command(13, 1, 0, 0, 0); modal = "";});
+      navigationOption(c, "Force victory (end match)", x + 26, y + 158, 320, () -> {NativeBridge.command(13, 1, 0, 0, 0); modal = "";});
       toggle(c,"Invincibility",NativeBridge.value(22,0)!=0,x+26,y+200,
           ()->NativeBridge.command(29,NativeBridge.value(22,0)==0?1:0,0,0,0));
+      toggle(c,"Unlimited supply (200)",NativeBridge.value(24,0)!=0,x+26,y+238,
+          ()->NativeBridge.command(30,NativeBridge.value(24,0)==0?1:0,0,0,0));
     } else if (modal.equals("control-help")) {
       body(c, "Tap a friendly unit to select it.\n"
           + (controls.doubleTap ? "Double tap to select its type.\n" : "Double tap selection is off.\n")
@@ -2124,13 +2643,15 @@ final class NativeSurface extends SurfaceView
   }
 
   private void modalBack() {
+    if(modal.equals("control-desktop")){desktopSettingsBack();return;}
+    if (modal.equals("replay-delete")||modal.equals("replay-notice")) {modal="";return;}
+    if (modal.startsWith("gamepad")) { gamepadSettingsBack(); return; }
     if (modal.equals("control-timing")) { modal = "control-select"; return; }
     if(modal.equals("nearby-error")){showMain();return;}
     if (modal.equals("save") || modal.equals("load")) {modal=activeGame&&page.equals("game")?"menu":"";return;}
     if (modal.startsWith("save-")) {modal=saveMode;return;}
     if (modal.equals("outcome")) {showResults(); return;}
     if (modal.equals("tips")) {modal = startupTips ? "" : "menu"; startupTips = false;}
-    else if (modal.equals("tracks")) modal = "sound";
     else if (modal.startsWith("control-")) modal = "controls";
     else if (modal.equals("ui-sizes")) modal = "video";
     else if (modal.equals("testing")) modal = "misc";
@@ -2142,6 +2663,162 @@ final class NativeSurface extends SurfaceView
 
   private void changeControls(Runnable update) {
     update.run(); controls.preset = "Custom"; applyControls();
+  }
+
+  /** Controller settings are available only through the in-game Controls menu. */
+  void openGamepadSettings() {
+    enqueue(() -> {
+      if (!activeGame || !page.equals("game") || modal.startsWith("gamepad")) return;
+      resetGamepad();
+      cancelGesture();
+      gamepad.load(prefs);
+      gamepadReturnModal = modal;
+      modal = "gamepad";
+    });
+  }
+
+  private void gamepadSettingsBack() {
+    resetGamepad();
+    if (modal.equals("gamepad-action")) modal = "gamepad-bindings";
+    else if (!modal.equals("gamepad")) modal = "gamepad";
+    else {
+      modal = gamepadReturnModal;
+      gamepadReturnModal = "";
+    }
+  }
+
+  private void changeGamepad(Runnable update) {
+    // Cancel any held controller input before a binding or enable state changes.
+    resetGamepad();
+    update.run();
+    gamepad.save(prefs);
+  }
+
+  private void gamepadLine(Canvas c, String label, float x, float y, int width,
+      int height, int align, int color) {
+    NativeArt.Font f = hud != null && page.equals("game") ? hud.small
+        : glue != null ? glue.small : null;
+    if (f != null) uiLine(c, label, f, x, y, width, height, align, color);
+    else {
+      c.save(); c.clipRect(x, y, x + width, y + height);
+      fallbackMenu(c,label,x,y,width,height,color);
+      c.restore();
+    }
+  }
+
+  private void gamepadOption(Canvas c, String label, String detail, float x, float y,
+      int width, int height, boolean selected, Runnable action) {
+    gamepadOption(c,label,detail,x,y,width,height,selected,action,true);
+  }
+
+  private void gamepadChoice(Canvas c, String label, String detail, float x, float y,
+      int width, int height, boolean selected, Runnable action) {
+    gamepadOption(c,label,detail,x,y,width,height,selected,action,false);
+  }
+
+  private void gamepadOption(Canvas c, String label, String detail, float x, float y,
+      int width, int height, boolean selected, Runnable action, boolean navigation) {
+    if (page.equals("game") && hud != null)
+      c.drawBitmap(hud.panel(width, height, true, true), x, y, NativeArt.PIXELS);
+    else if (glue != null) c.drawBitmap(glue.panel(width, height, true), x, y, NativeArt.PIXELS);
+    else panel(c, x, y, width, height);
+    boolean hot = pressed != null && pressed.rect.contains(x + width / 2f, y + height / 2f);
+    int color = hot ? 4 : selected ? 7 : 2;
+    if (detail != null) {
+      gamepadLine(c, detail, x + 8, y + 20, width - 16, height - 22, 1, color);
+    }
+    queueMenuButton(new RectF(x,y,x+width,y+height),action,true,label,navigation,
+        shown->gamepadLine(c,shown,x+8,detail==null?y:y+2,width-16,detail==null?height:18,1,detail==null?color:2));
+  }
+
+  private void gamepadToggle(Canvas c, String label, boolean on, float x, float y,
+      Runnable action) {
+    paint.setColor(0xff040e26); c.drawRect(x, y + 5, x + 14, y + 19, paint);
+    paint.setStyle(Paint.Style.STROKE);
+    paint.setColor(on ? 0xffd1be56 : 0xff6282bc);
+    c.drawRect(x, y + 5, x + 14, y + 19, paint);
+    if (on) {
+      paint.setStrokeWidth(2);
+      c.drawLine(x + 2, y + 12, x + 6, y + 16, paint);
+      c.drawLine(x + 6, y + 16, x + 12, y + 8, paint);
+      paint.setStrokeWidth(1);
+    }
+    paint.setStyle(Paint.Style.FILL);
+    gamepadLine(c, label, x + 24, y, 368, 26, 0, 2);
+    add(new RectF(x - 4, y - 3, x + 396, y + 29), action, true);
+  }
+
+  private void gamepadSlider(Canvas c, String label, int value, int min, int max,
+      float x, float y, java.util.function.Consumer<Integer> setter) {
+    gamepadLine(c, PortText.text(label) + ": " + value + "%", x, y, 198, 28, 0, 2);
+    float left = x + 208, width = 184, fraction = (value - min) / (float)(max - min);
+    paint.setColor(0xff52698d); c.drawRect(left - 1, y + 10, left + width + 1, y + 17, paint);
+    paint.setColor(0xff040e26); c.drawRect(left, y + 11, left + width, y + 16, paint);
+    paint.setColor(0xff91aedc); c.drawRect(left, y + 11, left + width * fraction, y + 16, paint);
+    float knob = left + width * fraction;
+    paint.setColor(0xffd1be56); c.drawRect(knob - 5, y + 6, knob + 5, y + 22, paint);
+    paint.setColor(0xff182749); c.drawRect(knob - 2, y + 8, knob + 2, y + 20, paint);
+    Button b = new Button(new RectF(left, y - 4, left + width, y + 32), () -> {}, true);
+    b.slider = v -> setter.accept(GamepadSettings.sliderPercent(v, min, max));
+    buttons.add(b);
+  }
+
+  private boolean drawGamepadSettings(Canvas c) {
+    if(drawDesktopSettings(c))return true;
+    if (!modal.startsWith("gamepad")) return false;
+    float x = (logicalWidth - 440) / 2f, y = 40;
+    paint.setColor(0x80000000); c.drawRect(0, 0, logicalWidth, 480, paint);
+    panel(c, x, y, 440, 400);
+    String title = modal.equals("gamepad-bindings") ? "Button assignments"
+        : modal.equals("gamepad-action") ? GamepadControls.BUTTON_LABELS[gamepadBinding]
+        : modal.equals("gamepad-reset") ? "Reset to defaults" : "Gamepad controls";
+    text(c, title, x + 12, y + 12, 416, 1, 2);
+    if (modal.equals("gamepad")) {
+      gamepadToggle(c, "Enable gamepad", gamepad.enabled, x + 24, y + 52,
+          () -> changeGamepad(() -> gamepad.enabled = !gamepad.enabled));
+      gamepadToggle(c, "Swap pointer and camera sticks", gamepad.swapSticks, x + 24, y + 86,
+          () -> changeGamepad(() -> gamepad.swapSticks = !gamepad.swapSticks));
+      gamepadSlider(c, "Pointer speed", Math.round(gamepad.pointerSpeed * 100), 25, 300, x + 24, y + 120,
+          value -> { gamepad.pointerSpeed = value / 100f; gamepad.save(prefs); });
+      gamepadSlider(c, "Camera speed", Math.round(gamepad.cameraSpeed * 100), 25, 300, x + 24, y + 158,
+          value -> { gamepad.cameraSpeed = value / 100f; gamepad.save(prefs); });
+      gamepadSlider(c, "Stick dead zone", Math.round(gamepad.deadZone * 100), 5, 50, x + 24, y + 196,
+          value -> { gamepad.deadZone = value / 100f; gamepad.save(prefs); });
+      gamepadOption(c, "Button assignments", null, x + 24, y + 238, 192, 32, false,
+          () -> modal = "gamepad-bindings");
+      gamepadOption(c, "Reset to defaults", null, x + 224, y + 238, 192, 32, false,
+          () -> modal = "gamepad-reset");
+      gamepadOption(c, "Controller guide", null, x + 24, y + 276, 392, 32, false,
+          () -> modal = "gamepad-help");
+    } else if (modal.equals("gamepad-bindings")) {
+      for (int i = 0; i < GamepadControls.BUTTONS.length; i++) {
+        final int binding = i;
+        gamepadOption(c, GamepadControls.BUTTON_LABELS[i], GamepadControls.ACTION_LABELS[gamepad.bindings[i]],
+            x + 24 + (i % 2) * 200, y + 46 + (i / 2) * 46, 192, 42, false,
+            () -> { gamepadBinding = binding; modal = "gamepad-action"; });
+      }
+    } else if (modal.equals("gamepad-action")) {
+      for (int i = 0; i < GamepadControls.ACTION_LABELS.length; i++) {
+        final int action = i;
+        gamepadChoice(c, GamepadControls.ACTION_LABELS[i], null,
+            x + 24 + (i % 2) * 200, y + 46 + (i / 2) * 35, 192, 32,
+            gamepad.bindings[gamepadBinding] == action,
+            () -> { changeGamepad(() -> gamepad.bindings[gamepadBinding] = action); modal = "gamepad-bindings"; });
+      }
+    } else if (modal.equals("gamepad-reset")) {
+      body(c, "Reset all gamepad controls to their defaults?", x + 24, y + 75, 392, 120);
+      gamepadOption(c, "Reset to defaults", null, x + 24, y + 238, 192, 32, false,
+          () -> { changeGamepad(gamepad::reset); modal = "gamepad"; });
+      gamepadOption(c, "Cancel", null, x + 224, y + 238, 192, 32, false, this::gamepadSettingsBack);
+      return true;
+    } else {
+      body(c, GamepadSettings.POINTER_GUIDE,
+          x + 24, y + 55, 392, 140);
+      body(c, GamepadSettings.MENU_GUIDE,
+          x + 24, y + 205, 392, 120);
+    }
+    gamepadOption(c, "Previous", null, x + 112, y + 350, 216, 32, false, this::gamepadSettingsBack);
+    return true;
   }
 
   private void applyControls() {
@@ -2166,11 +2843,12 @@ final class NativeSurface extends SurfaceView
 
   private void drawControls(Canvas c, float x, float y) {
     if (modal.equals("controls")) {
-      option(c, "Selection settings", x + 22, y + 55, 324, () -> modal = "control-select");
-      option(c, "Camera settings", x + 22, y + 103, 324, () -> modal = "control-camera");
-      option(c, "Command settings", x + 22, y + 151, 324, () -> modal = "control-orders");
-      option(c, "Gesture guide", x + 22, y + 199, 324, () -> modal = "control-help");
-      option(c,"Gamepad controls",x+22,y+247,324,()->activity.runOnUiThread(activity::requestGamepadSettings));
+      navigationOption(c, "Selection settings", x + 22, y + 48, 324, () -> modal = "control-select");
+      navigationOption(c, "Camera settings", x + 22, y + 88, 324, () -> modal = "control-camera");
+      navigationOption(c, "Command settings", x + 22, y + 128, 324, () -> modal = "control-orders");
+      navigationOption(c, "Gesture guide", x + 22, y + 168, 324, () -> modal = "control-help");
+      navigationOption(c,"Gamepad controls",x+22,y+208,324,this::openGamepadSettings);
+      navigationOption(c,"Mouse & keyboard",x+22,y+248,324,this::openDesktopSettings);
     } else if (modal.equals("control-select")) {
       toggle(c, "Original larvae selection", controls.originalLarvae, x + 22, y + 44, () -> changeControls(() -> controls.originalLarvae = !controls.originalLarvae));
       toggle(c, "One larva morph per press", controls.singleLarvaMorph, x + 22, y + 78, () -> changeControls(() -> controls.singleLarvaMorph = !controls.singleLarvaMorph));
@@ -2178,7 +2856,7 @@ final class NativeSurface extends SurfaceView
       toggle(c, "Double tap selects same type", controls.doubleTap, x + 22, y + 146, () -> changeControls(() -> controls.doubleTap = !controls.doubleTap));
       controlOption(c, "Selection button: " + new String[]{"Off", "Left", "Right"}[controls.selectionButton], x, y + 180, () -> controls.selectionButton = (controls.selectionButton + 1) % 3);
       toggle(c, "Show control group buttons", controls.controlGroups, x + 22, y + 214, () -> changeControls(() -> controls.controlGroups = !controls.controlGroups));
-      option(c, "Timing & accuracy", x + 22, y + 248, 324, () -> modal = "control-timing");
+      navigationOption(c, "Timing & accuracy", x + 22, y + 248, 324, () -> modal = "control-timing");
     } else if (modal.equals("control-timing")) {
       controlOption(c, "Drag: " + (controls.dragMode == 0 ? "Pan / hold to select" : "Select / two fingers pan"), x, y + 45, () -> controls.dragMode = 1 - controls.dragMode);
       controlOption(c, "Selection hold: " + controls.holdMs + " ms", x, y + 76, () -> controls.holdMs = controls.holdMs >= 500 ? 100 : controls.holdMs + 50);
@@ -2218,6 +2896,18 @@ final class NativeSurface extends SurfaceView
     return Math.max(0, height - box.h);
   }
 
+  private void loadAudioSettings() {
+    muted = prefs.getBoolean("muted", false);
+    effects = prefs.getFloat("effects", 1);
+    music = prefs.getFloat("music", .65f);
+    // Preserve the old off setting as zero volume once. After migration, raising
+    // the slider must work without an invisible switch turning music off again.
+    if (prefs.contains("music-enabled")) {
+      if (!prefs.getBoolean("music-enabled", true)) music = 0;
+      prefs.edit().putFloat("music", music).remove("music-enabled").apply();
+    }
+  }
+
   private void saveSettings() {
     syncAudio();
     prefs
@@ -2229,11 +2919,11 @@ final class NativeSurface extends SurfaceView
         .putInt("touch-percent", touchPercent)
         .putFloat("frame-ms", (float) speed)
         .putBoolean("muted", muted)
-        .putBoolean("music-enabled", musicEnabled)
+        .remove("music-enabled")
         .putBoolean("order-lines", orderLines)
         .putBoolean("nearby-defenders", nearbyDefenders)
         .putBoolean("network-stats", networkStats)
-        .putString("music-track", musicTrack)
+        .remove("music-track")
         .putFloat("music", music)
         .putFloat("effects", effects)
         .putFloat("zoom", zoom)
@@ -2268,12 +2958,13 @@ final class NativeSurface extends SurfaceView
       }
       closeGlue();
       currentMission = mission;
+      campaignProfile = campaignProgress.playerId(selectedProfile);
       missionCode = mission.getInt("code");
       missionRace = mission.getInt("race");
       expansion = mission.optString("game").equals("broodwar");
       File mpq =
           NativeData.prepare(
-              ProjectFiles.existing(files, CampaignData.filename(mission.getString("id"))), cache, "mission");
+              ProjectFiles.existing(gameFiles, CampaignData.filename(mission.getString("id"))), cache, "mission");
       NativeBridge.open(3, mpq.getPath());
       releaseSavedMap(); activeMapSource = mpq;
       NativeBridge.init(640, 480, missionCode, missionRace);
@@ -2482,6 +3173,7 @@ final class NativeSurface extends SurfaceView
       closeGlue(); closeBriefMovies();
       results = new NativeResults(art, missionRace, lastOutcome == 1, NativeBridge.text(9));
       results.playerName = selectedProfile;
+      if(nearby!=null)for(int i=0;i<8;i++)if(nearby.occupants[i]>=0)results.slotNames[i]=nearby.names[i];
       music(lastOutcome == 1 ? "victory" : "defeat");
       page = "results";
       modal = "";
@@ -2558,6 +3250,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void openSaves(boolean writing) {
+    if(replayGame)return;
     if(nearby!=null&&!nearby.host)return;
     if(page.equals("game"))multiplayerSaves=nearby!=null;
     cancelGesture();saveMode=writing?"save":"load";saveMessage="";
@@ -2624,6 +3317,7 @@ final class NativeSurface extends SurfaceView
       JSONObject info=new JSONObject();info.put("name",currentMission!=null?currentMission.optString("title","Campaign"):customName);
       info.put("missionCode",missionCode);info.put("race",missionRace);info.put("frame",NativeBridge.value(8,0));
       info.put("expansion",expansion);info.put("skirmishExpansion",expansion);info.put("botSlot",customBotSlot);info.put("opponentRace",opponentRace);info.put("originalTerranAi",opponentRace==1);info.put("terranAiLevel",terranAiLevel);info.put("profile",selectedProfile);
+      if(currentMission!=null)info.put("campaignProfile",campaignProfile);
       info.put("speed",speed);info.put("zoom",zoom);info.put("instant",instant);
       if(missionCode==0)info.put("setup",customSetup.json());
       if(currentMission!=null)info.put("mission",currentMission);
@@ -2665,6 +3359,7 @@ final class NativeSurface extends SurfaceView
         NativeBridge.command(20,customBotSlot,opponentRace,terranAiLevel,expansion?2:1);NativeBridge.init(640,480,missionCode,missionRace);
       }
       NativeBridge.restoreState(saved.state);
+      campaignProfile=campaignProgress.savedOwner(info);
       releaseSavedMap();activeMapSource=saved.map;
       campaign=missionCode>0?new NativeCampaign(NativeBridge.chk(),currentMission.getInt("player")):null;
       if(campaign!=null)campaign.restore(info.getJSONObject("dialogue"));
@@ -2674,6 +3369,11 @@ final class NativeSurface extends SurfaceView
       lastOutcome=NativeBridge.value(7,0);nextScenario="";errorSeq=-1;pendingScreen=null;hint="Game loaded";hintUntil=clock+4000;
       resizeWorld();NativeBridge.command(6,1,0,0,0);NativeBridge.command(19,orderLines?1:0,0,0,0);
       NativeBridge.frame(world,0,clock);music("game");accumulator=0;lastTime=0;
+      if(campaign!=null) {
+        String owner=campaignProgress.playerName(campaignProfile);
+        if(!owner.isEmpty()&&!owner.equals(selectedProfile)){selectedProfile=owner;saveProfiles();}
+      }
+      recordCampaignCompletion(lastOutcome);
     } catch(Exception e) {
       if(saved!=null)saved.close();
       if(replaced){NativeBridge.endGame();activeGame=false;page="main";logicalWidth=640;campaign=null;releaseSavedMap();}
@@ -2682,6 +3382,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void startSkirmish(int race, File map) {
+    replayGame=false;
     try {
       if (map == null) {
         map = new File(cache, "weave.scx");
@@ -2745,11 +3446,12 @@ final class NativeSurface extends SurfaceView
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
+    if(handleDesktopMotion(event))return true;
     MotionEvent copy = MotionEvent.obtain(event);
     enqueue(
         () -> {
           try {
-            if(copy.getActionMasked()==MotionEvent.ACTION_DOWN)resetGamepad();
+            if(copy.getActionMasked()==MotionEvent.ACTION_DOWN){resetDesktop(true);resetGamepad();}
             touch(copy);
           } finally {
             copy.recycle();
@@ -2763,6 +3465,7 @@ final class NativeSurface extends SurfaceView
 
   @Override
   public boolean onHoverEvent(MotionEvent event) {
+    if(handleDesktopMotion(event))return true;
     final float x = event.getX(), y = event.getY();
     final boolean leave = event.getActionMasked() == MotionEvent.ACTION_HOVER_EXIT;
     enqueue(() -> updateHover(lx(x), ly(y), leave));
@@ -2982,6 +3685,7 @@ final class NativeSurface extends SurfaceView
       if (mode.equals("command")) {
         NativeHud.Hit h = commandHover.release(hud.hits, x, y, time);
         if (h != null && h.rect.contains(x, y)) {
+          if (h.terrainToggle) { sfx("button"); NativeBridge.command(8, NativeBridge.value(14, 0) == 0 ? 1 : 0, 0, 0, 0); return; }
           if (h.unload >= 0) { NativeBridge.command(24, h.unload, 0, 0, 0); return; }
           if (h.more) {
             hud.page++;
@@ -3000,8 +3704,8 @@ final class NativeSurface extends SurfaceView
           if (h.cancel >= 0) NativeBridge.command(7, h.cancel, 0, 0, 0);
           else if (h.fields != null) {
             String[] f = h.fields;
-            String requirement = hud.requirement(f);
-            hint = f[2].equals("0") ? CommandHint.describe(f, requirement) : "";
+            hud.gridHotkeys = desktopSettings.gridHotkeys;
+            hint = f[2].equals("0") ? hud.hint(h) : "";
             hintSupplyRace = NativeHud.number(f, 15, hud.race);
             hintUntil = clock + 2400;
             { // Let the engine explain blocked commands, including energy/resources.
@@ -3182,6 +3886,7 @@ final class NativeSurface extends SurfaceView
           else if (page.equals("title")) showMain();
           else if (page.equals("campaign")) navigate(this::showRegistry);
           else if (page.equals("registry")) navigate(this::showMain);
+          else if (page.equals("replays")) navigate(this::showCampaign);
           else if (page.equals("custom")) navigate(multiplayerSetup?this::showNearby:this::showCampaign);
           else if (page.equals("nearby")) navigate(this::showMain);
           else activity.runOnUiThread(activity::requestAppOptions);
@@ -3216,6 +3921,337 @@ final class NativeSurface extends SurfaceView
   }
 
   void resetGamepadInput() { enqueue(this::resetGamepad); }
+
+  // Physical mouse and keyboard events use held native input, never touch tap-to-order.
+  private final DesktopControls desktop = new DesktopControls();
+  private int desktopMouseDevice=-1,desktopKeyboardDevice=-1,desktopNativeButtons,desktopClicks=1;
+  private boolean desktopMouseActive,desktopInside,desktopShift,desktopCtrl,desktopTextEditing;
+  private float desktopX,desktopY,desktopLastClickX,desktopLastClickY;
+  private long desktopDownAt,desktopLastClickAt;
+  private String desktopPrimary="",desktopPage="",desktopModal="";
+  private NativeHud.Hit desktopHudHit;
+  private String desktopReturnModal="";
+
+  void resetDesktopInput(){enqueue(()->resetDesktop(true));}
+
+  private void resetDesktop(boolean hidePointer){
+    boolean hadDesktop=desktopMouseActive||desktopKeyboardDevice!=-1;
+    boolean hadInput=desktop.releaseKeys().length>0||desktop.buttons!=0||desktopNativeButtons!=0||desktopShift||desktopCtrl;
+    desktop.releaseButtons();
+    if(desktopPrimary.equals("ui")){pressed=null;gesture="";scrollingList="";listVelocity=0;}
+    desktopPrimary="";desktopHudHit=null;desktopNativeButtons=0;desktopShift=desktopCtrl=false;
+    desktopKeyboardDevice=-1;desktopLastClickAt=0;
+    if((hadInput||hidePointer&&hadDesktop)&&activeGame)NativeBridge.command(34,0,0,0,0);
+    if(hidePointer){desktopMouseActive=desktopInside=false;desktopMouseDevice=-1;updateHover(0,0,true);}
+    desktopPage=page;desktopModal=modal;desktopTextEditing=profileEditing||chatEditing;
+  }
+
+  private void syncDesktopModifiers(boolean shift,boolean ctrl){
+    if(!activeGame||!page.equals("game")||!modal.isEmpty())return;
+    if(desktopShift!=shift){NativeBridge.command(32,shift?1:0,0,225,0);desktopShift=shift;}
+    if(desktopCtrl!=ctrl){NativeBridge.command(32,ctrl?1:0,0,224,0);desktopCtrl=ctrl;}
+  }
+
+  boolean handleDesktopMotion(MotionEvent event){
+    if(!DesktopControls.mouseSource(event.getSource())||event.getToolType(0)==MotionEvent.TOOL_TYPE_STYLUS)return false;
+    int action=event.getActionMasked();
+    if(action!=MotionEvent.ACTION_DOWN&&action!=MotionEvent.ACTION_UP&&action!=MotionEvent.ACTION_MOVE
+        &&action!=MotionEvent.ACTION_HOVER_MOVE&&action!=MotionEvent.ACTION_HOVER_ENTER&&action!=MotionEvent.ACTION_HOVER_EXIT
+        &&action!=MotionEvent.ACTION_BUTTON_PRESS&&action!=MotionEvent.ACTION_BUTTON_RELEASE
+        &&action!=MotionEvent.ACTION_SCROLL&&action!=MotionEvent.ACTION_CANCEL)return false;
+    MotionEvent copy=MotionEvent.obtain(event);
+    enqueue(()->{try{desktopMotion(copy);}finally{copy.recycle();}});return true;
+  }
+
+  private void desktopMotion(MotionEvent event){
+    if(padActive)resetGamepad();
+    if(desktopMouseDevice!=-1&&desktopMouseDevice!=event.getDeviceId())resetDesktop(true);
+    if(!desktopPage.equals(page)||!desktopModal.equals(modal)||desktopTextEditing!=(profileEditing||chatEditing))resetDesktop(false);
+    desktopMouseDevice=event.getDeviceId();desktopMouseActive=true;
+    int action=event.getActionMasked();
+    float oldX=desktopX,oldY=desktopY;
+    desktopX=lx(event.getX());desktopY=ly(event.getY());
+    desktopInside=desktopX>=0&&desktopX<logicalWidth&&desktopY>=0&&desktopY<480&&action!=MotionEvent.ACTION_HOVER_EXIT;
+    if(action==MotionEvent.ACTION_CANCEL){resetDesktop(true);return;}
+    updateHover(desktopX,desktopY,!desktopInside);
+    if(action==MotionEvent.ACTION_HOVER_EXIT)return; // Also sent just before a mouse press.
+    if(!profileEditing&&!chatEditing)syncDesktopModifiers(desktop.shift()||(event.getMetaState()&KeyEvent.META_SHIFT_ON)!=0,desktop.ctrl()||(event.getMetaState()&KeyEvent.META_CTRL_ON)!=0);
+    if(action==MotionEvent.ACTION_SCROLL){desktopWheel(event.getAxisValue(MotionEvent.AXIS_VSCROLL));return;}
+    int changed=desktop.updateButtons(action,event.getButtonState(),event.getActionButton());
+    int released=changed&~desktop.buttons,pressedButtons=changed&desktop.buttons;
+    desktopCursor();
+    if((released&MotionEvent.BUTTON_PRIMARY)!=0)desktopPrimary(false,event.getEventTime());
+    if((released&MotionEvent.BUTTON_SECONDARY)!=0&& (desktopNativeButtons&MotionEvent.BUTTON_SECONDARY)!=0){
+      NativeBridge.command(33,0,3,1,0);desktopNativeButtons&=~MotionEvent.BUTTON_SECONDARY;
+    }
+    if((pressedButtons&MotionEvent.BUTTON_PRIMARY)!=0)desktopPrimary(true,event.getEventTime());
+    if((pressedButtons&MotionEvent.BUTTON_SECONDARY)!=0)desktopSecondary();
+    if(action==MotionEvent.ACTION_MOVE||action==MotionEvent.ACTION_HOVER_MOVE){
+      if(desktopPrimary.equals("world")&&Math.hypot(desktopX-desktopLastClickX,desktopY-desktopLastClickY)>6)desktopLastClickAt=0;
+      if(desktopPrimary.equals("ui"))desktopTouch(MotionEvent.ACTION_MOVE,event.getEventTime());
+      else if(desktopPrimary.equals("mini"))mini(desktopX,desktopY,false);
+      if(desktopSettings.middlePan&&(desktop.buttons&MotionEvent.BUTTON_TERTIARY)!=0&&!profileEditing&&!chatEditing&&activeGame&&page.equals("game")&&modal.isEmpty()&&pendingScreen==null)
+        panCamera((oldX-desktopX)*desktopSettings.cameraSpeed/zoom,(oldY-desktopY)*desktopSettings.cameraSpeed/zoom);
+    }
+  }
+
+  private void desktopCursor(){
+    if(!activeGame||!page.equals("game")||!modal.isEmpty())return;
+    if(!profileEditing&&!chatEditing&&(desktopPrimary.equals("world")||desktopInside&&gamepadWorld(desktopX,desktopY))){
+      float x=Math.max(0,Math.min(logicalWidth-1,desktopX));
+      float y=Math.max(0,Math.min(cameraBottom(x)-1,desktopY));
+      NativeBridge.command(0,(int)(x/zoom),(int)(y/zoom),0,0);
+    }else NativeBridge.command(0,-100,-100,0,0);
+  }
+
+  private void desktopPrimary(boolean down,long now){
+    if(down){
+      if(!desktopInside||pendingScreen!=null)return;
+      desktopDownAt=now;desktopPage=page;desktopModal=modal;
+      if(!profileEditing&&!chatEditing&&gamepadWorld(desktopX,desktopY)){
+        desktopPrimary="world";
+        int clicks=desktopLastClickAt>0&&now-desktopLastClickAt<=300&&Math.hypot(desktopX-desktopLastClickX,desktopY-desktopLastClickY)<=6?2:1;
+        desktopLastClickAt=clicks==2?0:now;desktopLastClickX=desktopX;desktopLastClickY=desktopY;
+        desktopClicks=clicks;NativeBridge.command(33,1,1,clicks,0);desktopNativeButtons|=MotionEvent.BUTTON_PRIMARY;
+      }else{
+        desktopLastClickAt=0;
+        boolean ui=false;for(Button button:buttons)if(button.rect.contains(desktopX,desktopY)){ui=true;break;}
+        if(!ui&&(profileEditing||chatEditing)){desktopPrimary="";return;}
+        if(!ui&&activeGame&&page.equals("game")&&modal.isEmpty()&&hud!=null){
+          if(hud.minimap.contains(desktopX,desktopY)){desktopPrimary="mini";mini(desktopX,desktopY,false);return;}
+          desktopHudHit=hud.hit(desktopX,desktopY);
+          if(desktopHudHit!=null){desktopPrimary="hud";return;}
+          // Blank console area cannot issue battlefield orders.
+          desktopPrimary="";return;
+        }
+        desktopPrimary="ui";desktopTouch(MotionEvent.ACTION_DOWN,now);
+      }
+    }else{
+      if(desktopPrimary.equals("world")&&(desktopNativeButtons&MotionEvent.BUTTON_PRIMARY)!=0){
+        NativeBridge.command(33,0,1,desktopClicks,0);desktopNativeButtons&=~MotionEvent.BUTTON_PRIMARY;
+      }else if(desktopPrimary.equals("ui"))desktopTouch(MotionEvent.ACTION_UP,now);
+      else if(desktopPrimary.equals("hud")&&desktopHudHit!=null&&desktopHudHit.rect.contains(desktopX,desktopY))activateDesktopHud(desktopHudHit);
+      desktopPrimary="";desktopHudHit=null;
+    }
+  }
+
+  private void desktopSecondary(){
+    if(profileEditing||chatEditing||!desktopInside||!activeGame||!page.equals("game")||!modal.isEmpty()||pendingScreen!=null)return;
+    String card=NativeBridge.text(0);
+    if(NativeBridge.value(0,0)>0||card.startsWith("Build\t")||card.startsWith("Advanced Build\t")||placement){
+      NativeBridge.command(2,27,41,0,0);placement=false;commandHover.cancel();return;
+    }
+    if(hud!=null&&hud.minimap.contains(desktopX,desktopY)){mini(desktopX,desktopY,true);return;}
+    if(gamepadWorld(desktopX,desktopY)){
+      NativeBridge.command(33,1,3,1,0);desktopNativeButtons|=MotionEvent.BUTTON_SECONDARY;
+    }
+  }
+
+  private void activateDesktopHud(NativeHud.Hit hit){
+    if(hit.terrainToggle){sfx("button");NativeBridge.command(8,NativeBridge.value(14,0)==0?1:0,0,0,0);return;}
+    if(hit.unload>=0){NativeBridge.command(24,hit.unload,0,0,0);return;}
+    if(hit.more){hud.page++;return;}
+    if(hit.help!=null){hint=hit.help;hintUntil=clock+3600;return;}
+    if(hit.selectUnit>=0){NativeBridge.command(14,hit.selectUnit,0,0,0);return;}
+    sfx("button");
+    if(hit.cancel>=0)NativeBridge.command(7,hit.cancel,0,0,0);
+    else if(hit.fields!=null){
+      String[] f=hit.fields;
+      hud.gridHotkeys=desktopSettings.gridHotkeys;
+      hint=f[2].equals("0")?hud.hint(hit):"";
+      hintSupplyRace=NativeHud.number(f,15,hud.race);hintUntil=clock+2400;
+      int key=f[0].charAt(0);NativeBridge.command(2,key,key==27?41:0,0,0);NativeBridge.frame(world,0,clock);
+    }
+  }
+
+  private void desktopTouch(int action,long now){
+    float scale=physicalScale();
+    MotionEvent event=MotionEvent.obtain(desktopDownAt,now,action,
+        desktopX*scale+(physicalWidth-logicalWidth*scale)/2,desktopY*scale+(physicalHeight-480*scale)/2,0);
+    try{touch(event);}finally{event.recycle();}
+  }
+
+  private void desktopWheel(float amount){
+    if(!desktopInside||pendingScreen!=null||amount==0)return;
+    listVelocity=0;
+    if(modal.equals("missions")&&missionViewport.contains(desktopX,desktopY))missionOffset=Math.max(0,Math.min(missionMaxOffset(),missionOffset-amount*57));
+    else if(modal.isEmpty()&&page.equals("custom")&&mapViewport.contains(desktopX,desktopY))mapOffset=Math.max(0,Math.min(mapMaxOffset(),mapOffset-amount*66));
+    else if(modal.isEmpty()&&page.equals("replays")&&replayListBounds().contains(desktopX,desktopY))replayOffset=Math.max(0,Math.min(replayMaxOffset(),replayOffset-amount*66));
+    else if(modal.isEmpty()&&page.equals("registry")&&profileViewport.contains(desktopX,desktopY))profileOffset=Math.max(0,Math.min(Math.max(0,profiles.size()-9)*23,profileOffset-amount*69));
+    else if(modal.isEmpty()&&page.equals("briefing")&&glue!=null){
+      NativeArt.Widget box=glue.layout.get(65526);
+      if(box!=null&&box.rect().contains(desktopX,desktopY)){briefManual=Math.max(0,Math.min(briefScrollLimit(box),briefScroll-amount*57));briefScroll=briefManual;briefManualUntil=clock+2500;}
+    }else if(desktopSettings.wheelZoom&&!profileEditing&&!chatEditing&&gamepadWorld(desktopX,desktopY)&&desktop.buttons==0){
+      float next=Math.max(zoomOut?.5f:1f,Math.min(3,zoom+amount*.1f));
+      if(next!=zoom){zoom=next;resizeWorld();saveSettings();desktopCursor();}
+    }
+  }
+
+  boolean handleDesktopKey(KeyEvent event){
+    if(DesktopControls.mouseBack(event))return true;
+    if(!DesktopControls.keyboard(event)||profileEditing||chatEditing)return false;
+    int key=event.getKeyCode(),symbol=DesktopControls.symbol(key,event.getUnicodeChar());
+    if(event.getAction()!=KeyEvent.ACTION_DOWN&&event.getAction()!=KeyEvent.ACTION_UP)return false;
+    if(symbol==0&&!DesktopControls.modifierKey(key)&&!DesktopControls.cameraKey(key)&&key!=KeyEvent.KEYCODE_F10)return false;
+    final boolean down=event.getAction()==KeyEvent.ACTION_DOWN,shift=event.isShiftPressed(),ctrl=event.isCtrlPressed();
+    final int repeat=event.getRepeatCount(),device=event.getDeviceId();
+    enqueue(()->desktopKey(key,symbol,down,repeat,device,shift,ctrl));return true;
+  }
+
+  private void desktopKey(int key,int symbol,boolean down,int repeat,int device,boolean shift,boolean ctrl){
+    if(pendingScreen!=null){resetDesktop(false);return;}
+    if(profileEditing||chatEditing){resetDesktop(false);return;}
+    if(!desktopPage.equals(page)||!desktopModal.equals(modal)||desktopTextEditing!=(profileEditing||chatEditing))resetDesktop(false);
+    if(desktopKeyboardDevice!=-1&&desktopKeyboardDevice!=device)resetDesktop(false);
+    desktopKeyboardDevice=device;
+    if(!desktop.key(key,down,repeat))return;
+    // Canonical modifier state also accepts mouse/key metadata when Android omitted a modifier edge.
+    boolean modifier=DesktopControls.modifierKey(key);
+    syncDesktopModifiers(desktop.shift()||(!modifier&&shift),desktop.ctrl()||(!modifier&&ctrl));
+    if(modifier||DesktopControls.cameraKey(key))return;
+    if(key==KeyEvent.KEYCODE_F10){if(down&&activeGame&&page.equals("game")){resetDesktop(false);if(modal.isEmpty())openMenu();else modalBack();}return;}
+    if(key==KeyEvent.KEYCODE_ESCAPE&&(!activeGame||!page.equals("game")||!modal.isEmpty())){if(down){resetDesktop(false);back();}return;}
+    if(symbol==13){if(down&&activeGame&&page.equals("game")&&modal.isEmpty()){resetDesktop(false);openChat();}return;}
+    if(!activeGame||!page.equals("game")||!modal.isEmpty()){
+      if(down&&!ctrl&&!desktop.ctrl())desktopMenuCommand(symbol);
+      return;
+    }
+    if(replayGame){
+      // Replay inspection keeps its native terrain/alert/cancel keys. Only the
+      // visible playback buttons consume letter shortcuts; grid orders stay off.
+      if(symbol==9||symbol==32||symbol==27)NativeBridge.command(32,down?1:0,symbol,DesktopControls.scanCode(key),0);
+      else if(down&&!ctrl&&!desktop.ctrl())desktopMenuCommand(symbol);
+      return;
+    }
+    if(activeGame&&page.equals("game")&&modal.isEmpty()){
+      if(desktopSettings.gridHotkeys&&symbol>='a'&&symbol<='z'){
+        if(down)desktopGridCommand(symbol);
+        return; // Never fall back to an original letter, including on key-up.
+      }
+      NativeBridge.command(32,down?1:0,symbol,DesktopControls.scanCode(key),0);
+    }
+  }
+
+  private void desktopMenuCommand(int symbol){
+    if(pendingScreen!=null||profileEditing||chatEditing||activeGame&&page.equals("game")&&modal.isEmpty()&&!replayGame)return;
+    Button match=null;
+    for(Button button:buttons){
+      if(!button.enabled||button.action==null||button.key==0||button.key!=symbol
+          ||!page.equals(button.page)||!modal.equals(button.modal))continue;
+      if(match!=null)return; // An ambiguous caption must never invoke the wrong action.
+      match=button;
+    }
+    if(match==null)return;
+    // Actions can change the page or dialog before another render. No previous
+    // screen's key binding remains active in that interval, even after returning.
+    buttons.clear();pressed=null;
+    sfx("button");match.action.run();
+  }
+
+  private void advanceDesktop(double milliseconds){
+    if(!desktopPage.equals(page)||!desktopModal.equals(modal)||desktopTextEditing!=(profileEditing||chatEditing)){resetDesktop(false);return;}
+    if(profileEditing||chatEditing)return;
+    if(desktopMouseDevice>=0&&InputDevice.getDevice(desktopMouseDevice)==null
+        ||desktopKeyboardDevice>=0&&InputDevice.getDevice(desktopKeyboardDevice)==null){resetDesktop(true);return;}
+    if(!activeGame||!page.equals("game")||!modal.isEmpty()||pendingScreen!=null)return;
+    double dt=Math.max(0,Math.min(100,milliseconds))/1000.;
+    int x=desktopSettings.arrowPan?desktop.cameraX():0,y=desktopSettings.arrowPan?desktop.cameraY():0;
+    if(desktopSettings.edgeScroll&&desktopMouseActive&&desktopInside&&!desktopPrimary.equals("ui")&&!desktopPrimary.equals("mini")&&!desktopPrimary.equals("hud")&&(desktop.buttons&MotionEvent.BUTTON_TERTIARY)==0){
+      if(desktopX<6)x--;else if(desktopX>=logicalWidth-6)x++;
+      if(desktopY<6)y--;else if(desktopY>=474)y++;
+    }
+    if(x!=0||y!=0)panCamera(Math.max(-1,Math.min(1,x))*480*desktopSettings.cameraSpeed*dt/zoom,Math.max(-1,Math.min(1,y))*480*desktopSettings.cameraSpeed*dt/zoom);
+    if(desktopMouseActive)desktopCursor();
+  }
+
+  @Override public PointerIcon onResolvePointerIcon(MotionEvent event,int pointerIndex){
+    if(DesktopControls.mouseSource(event.getSource()))return PointerIcon.getSystemIcon(getContext(),PointerIcon.TYPE_NULL);
+    return super.onResolvePointerIcon(event,pointerIndex);
+  }
+
+  @Override public boolean onKeyUp(int key,KeyEvent event){return handleDesktopKey(event)||super.onKeyUp(key,event);}
+
+  private void desktopGridCommand(int symbol){
+    int slot=DesktopSettings.gridSlot(symbol);
+    if(slot<0||hud==null||replayGame||!activeGame||!page.equals("game")||!modal.isEmpty()||pendingScreen!=null)return;
+    // The menu may have just closed before the next tick updates native pause state.
+    NativeBridge.command(6,0,0,0,0);
+    // Apply earlier selection/submenu events before resolving the currently displayed slot.
+    NativeBridge.frame(world,0,clock);
+    hud.gridHotkeys=true;
+    NativeHud.Hit hit=hud.commandHitForSlot(slot,NativeBridge.text(0),NativeBridge.value(1,0));
+    if(hit==null)return;
+    if(hit.more){hud.page++;return;}
+    String[] fields=hit.fields;
+    if(fields==null||fields.length<3)return;
+    if(fields.length>=18){
+      try{NativeBridge.command(35,Integer.parseInt(fields[16]),Integer.parseInt(fields[17]),0,0);}
+      catch(NumberFormatException ignored){} // An invalid/stale command never invokes a different hotkey.
+    }else if(fields[0].equals("\u001b"))NativeBridge.command(2,27,41,0,0);
+  }
+
+  void openDesktopSettings(){
+    enqueue(()->{
+      if(!activeGame||!page.equals("game")||modal.equals("control-desktop"))return;
+      resetDesktop(false);resetGamepad();cancelGesture();
+      desktopReturnModal=modal;modal="control-desktop";
+    });
+  }
+
+  private void desktopSettingsBack(){
+    resetDesktop(false);modal=desktopReturnModal;desktopReturnModal="";
+  }
+
+  private void changeDesktop(Runnable update){
+    resetDesktop(false);update.run();desktopSettings.save(prefs);
+    if(hud!=null)hud.gridHotkeys=desktopSettings.gridHotkeys;
+    hint="";hintUntil=0;
+  }
+
+  private void desktopToggle(Canvas c,String label,boolean on,float x,float y,Runnable action){
+    paint.setColor(0xff040e26);c.drawRect(x,y+4,x+14,y+18,paint);
+    paint.setColor(on?0xffd1be56:0xff6282bc);paint.setStyle(Paint.Style.STROKE);
+    c.drawRect(x,y+4,x+14,y+18,paint);
+    if(on){paint.setStrokeWidth(2);c.drawLine(x+3,y+11,x+6,y+15,paint);c.drawLine(x+6,y+15,x+12,y+7,paint);paint.setStrokeWidth(1);}
+    paint.setStyle(Paint.Style.FILL);
+    gamepadLine(c,label,x+22,y,242,25,0,2);
+    add(new RectF(x-4,y-2,x+266,y+28),()->changeDesktop(action),true);
+  }
+
+  private boolean drawDesktopSettings(Canvas c){
+    if(!modal.equals("control-desktop"))return false;
+    float x=(logicalWidth-604)/2f,y=8;
+    paint.setColor(0x80000000);c.drawRect(0,0,logicalWidth,480,paint);panel(c,x,y,604,464);
+    text(c,"Mouse & keyboard",x+12,y+10,580,1,2);
+    gamepadLine(c,"Command hotkeys",x+22,y+44,160,28,0,2);
+    gamepadChoice(c,"Original",null,x+190,y+43,120,28,!desktopSettings.gridHotkeys,
+        ()->changeDesktop(()->desktopSettings.gridHotkeys=false));
+    gamepadChoice(c,"Grid (QWE/ASD/ZXC)",null,x+318,y+43,264,28,desktopSettings.gridHotkeys,
+        ()->changeDesktop(()->desktopSettings.gridHotkeys=true));
+    desktopToggle(c,"Mouse edge scrolling",desktopSettings.edgeScroll,x+22,y+80,()->desktopSettings.edgeScroll=!desktopSettings.edgeScroll);
+    desktopToggle(c,"Mouse wheel zoom",desktopSettings.wheelZoom,x+318,y+80,()->desktopSettings.wheelZoom=!desktopSettings.wheelZoom);
+    desktopToggle(c,"Middle-button camera drag",desktopSettings.middlePan,x+22,y+112,()->desktopSettings.middlePan=!desktopSettings.middlePan);
+    desktopToggle(c,"Arrow-key camera",desktopSettings.arrowPan,x+318,y+112,()->desktopSettings.arrowPan=!desktopSettings.arrowPan);
+    gamepadSlider(c,"Camera speed",Math.round(desktopSettings.cameraSpeed*100),25,250,x+22,y+144,
+        value->{desktopSettings.cameraSpeed=value/100f;desktopSettings.save(prefs);});
+    drawDesktopGuide(c,x+22,y+184);
+    gamepadOption(c,"Previous",null,x+194,y+428,216,28,false,this::desktopSettingsBack);return true;
+  }
+
+  private void desktopGuideHeading(Canvas c,String title,float x,float y){
+    String label=PortText.text(title)+":";
+    // Thicken the original bitmap glyphs by one pixel, keeping their native style.
+    body(c,label,x,y,559,16);
+    body(c,label,x+1,y,559,16);
+  }
+
+  private void drawDesktopGuide(Canvas c,float x,float y){
+    desktopGuideHeading(c,"Mouse",x,y);
+    body(c,DesktopGuide.MOUSE_GUIDE,x,y+16,560,80);
+    // One full text line separates the two sections.
+    desktopGuideHeading(c,"Keyboard",x,y+112);
+    body(c,DesktopGuide.KEYBOARD_GUIDE,x,y+128,560,96);
+  }
 
   void reloadGamepadSettings() { enqueue(()->{resetGamepad();gamepad.load(prefs);}); }
 
@@ -3254,7 +4290,7 @@ final class NativeSurface extends SurfaceView
   }
 
   @Override public boolean onGenericMotionEvent(MotionEvent event) {
-    return handleGamepadMotion(event)||super.onGenericMotionEvent(event);
+    return handleDesktopMotion(event)||handleGamepadMotion(event)||super.onGenericMotionEvent(event);
   }
 
   private static boolean gamepadDirection(int key) {
@@ -3263,6 +4299,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void activateGamepad(int device) {
+    resetDesktop(true);
     if(padDevice!=device)resetGamepad();
     padDevice=device;padActive=true;
     padX=GamepadControls.limit(padX,logicalWidth);padY=GamepadControls.limit(padY,480);
@@ -3285,8 +4322,8 @@ final class NativeSurface extends SurfaceView
     if(!down||before!=0||after==0)return;
     if(action==GamepadControls.CANCEL){back();return;}
     if(action==GamepadControls.MENU){
-      resetGamepadDrag();if(page.equals("game")){if(modal.isEmpty())openMenu();else modal="";}
-      else activity.runOnUiThread(activity::requestGamepadSettings);
+      resetGamepadDrag();if(modal.startsWith("gamepad")){gamepadSettingsBack();return;}
+      if(page.equals("game")){if(modal.isEmpty())openMenu();else modal="";}
       return;
     }
     if(!activeGame||!page.equals("game")||!modal.isEmpty()||pendingScreen!=null)return;
@@ -3381,12 +4418,16 @@ final class NativeSurface extends SurfaceView
 
   private void drawGamepadCursor(Canvas canvas) {
     if(!padActive||!gamepad.enabled)return;
-    if(activeGame&&page.equals("game")&&modal.isEmpty()&&(padNativeDrag||gamepadWorld(padX,padY))){
+    drawPointer(canvas,padX,padY,padNativeDrag||gamepadWorld(padX,padY));
+  }
+
+  private void drawPointer(Canvas canvas,float x,float y,boolean nativeWorld){
+    if(activeGame&&page.equals("game")&&modal.isEmpty()&&nativeWorld){
       try{
         int box=NativeBridge.value(23,0);
         if(box>0&&box<=256){
           if(padCursor==null||padCursor.getWidth()!=box){if(padCursor!=null)padCursor.recycle();padCursor=Bitmap.createBitmap(box,box,Bitmap.Config.ARGB_8888);}
-          if(NativeBridge.cursor(padCursor)){canvas.drawBitmap(padCursor,padX-box/2f,padY-box/2f,NativeArt.PIXELS);return;}
+          if(NativeBridge.cursor(padCursor)){canvas.drawBitmap(padCursor,x-box/2f,y-box/2f,NativeArt.PIXELS);return;}
         }
       }catch(Exception ignored){} // Missing cursor artwork must not disable the controller.
     }
@@ -3409,10 +4450,10 @@ final class NativeSurface extends SurfaceView
     }
     if(padArrows!=null&&padArrows.length>0){
       int frame=(int)(clock/100)%padArrows.length;
-      if(padArrows[frame]!=null){canvas.drawBitmap(padArrows[frame],padX+padArrowX[frame],padY+padArrowY[frame],NativeArt.PIXELS);return;}
+      if(padArrows[frame]!=null){canvas.drawBitmap(padArrows[frame],x+padArrowX[frame],y+padArrowY[frame],NativeArt.PIXELS);return;}
     }
     // A small high-contrast arrow remains usable with incomplete data imports.
-    Path arrow=new Path();arrow.moveTo(padX,padY);arrow.lineTo(padX+1,padY+18);arrow.lineTo(padX+6,padY+13);arrow.lineTo(padX+13,padY+13);arrow.close();
+    Path arrow=new Path();arrow.moveTo(x,y);arrow.lineTo(x+1,y+18);arrow.lineTo(x+6,y+13);arrow.lineTo(x+13,y+13);arrow.close();
     Paint pointer=new Paint(Paint.ANTI_ALIAS_FLAG);pointer.setColor(Color.BLACK);pointer.setStyle(Paint.Style.STROKE);pointer.setStrokeWidth(3);canvas.drawPath(arrow,pointer);
     pointer.setStyle(Paint.Style.FILL);pointer.setColor(0xff8fdb55);canvas.drawPath(arrow,pointer);
   }
@@ -3436,22 +4477,7 @@ final class NativeSurface extends SurfaceView
       back();
       return true;
     }
-    if (key == android.view.KeyEvent.KEYCODE_ESCAPE) {back(); return true;}
-    if (key == android.view.KeyEvent.KEYCODE_F10) {
-      enqueue(() -> {if (page.equals("game")) {if (modal.isEmpty()) openMenu(); else modal = "";}});
-      return true;
-    }
-    if (!modal.isEmpty() || !page.equals("game")) return super.onKeyDown(key, event);
-    if(key>=KeyEvent.KEYCODE_0&&key<=KeyEvent.KEYCODE_9){
-      final int group=key-KeyEvent.KEYCODE_0;final boolean assign=event.isCtrlPressed();
-      if(event.getRepeatCount()==0)enqueue(()->{cancelGesture();NativeBridge.command(25,group,assign?1:0,0,0);});
-      return true;
-    }
-    int chr = event.getUnicodeChar();
-    if (chr > 0) {
-      enqueue(() -> NativeBridge.command(2, chr, 0, 0, 0));
-      return true;
-    }
+    if(handleDesktopKey(event))return true;
     return super.onKeyDown(key, event);
   }
 }

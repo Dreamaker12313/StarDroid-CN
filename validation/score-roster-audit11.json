@@ -1,0 +1,5202 @@
+{
+  "passed": true,
+  "scope": "Independent original CHK OWNR/SIDE/FORC/STR/UNIT inventory; presentation only",
+  "mapCount": 64,
+  "participantSlotCount": 208,
+  "helperSlotCount": 99,
+  "reportedScreenshots": {
+    "terran01": [
+      2
+    ],
+    "terran02": [
+      2,
+      3
+    ],
+    "protoss05": [
+      2
+    ],
+    "expzerg10": [
+      2
+    ],
+    "expzerg01": [
+      0,
+      1
+    ]
+  },
+  "participantFactionNames": [
+    "----",
+    "Clandestine Mercenaries",
+    "Colonial Militia",
+    "Confederacy",
+    "Dominion Planetary Defense",
+    "Dylarian Orbital Defense",
+    "Expeditionary Force",
+    "Fleet of the Executor",
+    "Fleet of the Matriarch",
+    "Former Colonial Militia",
+    "Kel-Morian Combine",
+    "Khalai Insurgents",
+    "Khalai Survivors",
+    "Protoss Expeditionary Force",
+    "Protoss Reconnaissance Force",
+    "Protoss Refugees",
+    "Protoss Warband",
+    "Raynor's Raiders",
+    "Remnants of the Confederacy",
+    "Renegade Zerg",
+    "Sons of Korhal",
+    "Stukov's Elite Guard",
+    "Telemantros Defenders",
+    "Terran Dominion",
+    "UED Battle Fleet",
+    "UED Blockade",
+    "UED Command Fleet",
+    "UED Commando Force",
+    "UED Defense Garrison",
+    "UED Planetary Garrison",
+    "UED Remnants",
+    "UED Science Corps",
+    "UED Slave Brood",
+    "UED Strike Force",
+    "UED Strike Team",
+    "Unidentified Creatures",
+    "Vanguard of Aiur",
+    "Zerg Swarm"
+  ],
+  "longestParticipantFactionName": "Protoss Reconnaissance Force",
+  "originalDataAnomalies": [
+    {
+      "mission": "zerg07",
+      "slot": 4,
+      "forceName": "----",
+      "note": "Original computer faction is an authored placeholder, not a corrupt string lookup."
+    }
+  ],
+  "limits": [
+    "This audits the original map metadata, not an original executable score-screen capture.",
+    "Equal faction names can belong to distinct real computer players; do not merge their scores.",
+    "Zero score or no surviving units is not evidence that a real participant should be hidden.",
+    "Neutral/rescue controller changes during play require initial-participant metadata for stable presentation."
+  ],
+  "maps": [
+    {
+      "mission": "terrantutorial",
+      "title": "Boot Camp",
+      "code": 50,
+      "localPlayer": 1,
+      "chkSha256": "4aafcfe93cc42cb642fde912a459a6c89b0cd6a1f8160c93cac3c34dd0b13af1",
+      "participantSlots": [
+        1,
+        3
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 20,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Unidentified Creatures",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 17,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran01",
+      "title": "Wasteland",
+      "code": 1,
+      "localPlayer": 1,
+      "chkSha256": "4b0e5009c4ae80cfb4cb13ede30842db0aa05bb3be2eedad695fb093fa5786f6",
+      "participantSlots": [
+        1,
+        4
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 13,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 1,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Unidentified Creatures",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 24,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran02",
+      "title": "Backwater Station",
+      "code": 2,
+      "localPlayer": 1,
+      "chkSha256": "d8a7f6b70422ff32e4fd3f6293de4013f883e0761814d4496ffd18b7eb13dfce",
+      "participantSlots": [
+        1,
+        4
+      ],
+      "helperSlots": [
+        2,
+        3
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 11,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 8,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 62,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran03",
+      "title": "Desperate Alliance",
+      "code": 3,
+      "localPlayer": 1,
+      "chkSha256": "9d83a8bde18c38ee12f54f4c5253bed5466027fc612141e9a7415c94d3346737",
+      "participantSlots": [
+        1,
+        4
+      ],
+      "helperSlots": [
+        0
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 2,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 35,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 136,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran04",
+      "title": "The Jacobs Installation",
+      "code": 4,
+      "localPlayer": 0,
+      "chkSha256": "a48e1d1682f0a6e68eeec4ef0fc82efc48e70a11b4315de8c091079c68e10601",
+      "participantSlots": [
+        0,
+        3,
+        6
+      ],
+      "helperSlots": [
+        1,
+        2,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 12,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "Neutrals",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "Neutrals",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 6,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 3,
+          "forceName": "Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 69,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "Neutrals",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "terran05",
+      "title": "Revolution",
+      "code": 5,
+      "localPlayer": 0,
+      "chkSha256": "35cd98bc0590c0f36e5d8f75e41a29b254db2d6cf8dec5480e6ffd7602609829",
+      "participantSlots": [
+        0,
+        6
+      ],
+      "helperSlots": [
+        2,
+        3
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 9,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 2,
+          "forceName": "Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 40,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 79,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran06",
+      "title": "Norad II",
+      "code": 6,
+      "localPlayer": 0,
+      "chkSha256": "80dd42e4d4540d0340113b92aae02120b9919a5dac359b010607ec7c26e72ead",
+      "participantSlots": [
+        0,
+        1,
+        4
+      ],
+      "helperSlots": [
+        2,
+        6
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 8,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 82,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 1,
+          "forceName": "Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 58,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 1,
+          "forceName": "Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 32,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "terran08",
+      "title": "The Trump Card",
+      "code": 8,
+      "localPlayer": 0,
+      "chkSha256": "dab280d946f059845ba3084da11f159091bfbc24c4cd54eb2a352ff1a165f515",
+      "participantSlots": [
+        0,
+        4
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 39,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 147,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran09",
+      "title": "The Big Push",
+      "code": 9,
+      "localPlayer": 0,
+      "chkSha256": "083be62ec869ddf049f816eaf873355c57381b869581717234f3499b39ab23c7",
+      "participantSlots": [
+        0,
+        4,
+        5
+      ],
+      "helperSlots": [
+        2,
+        3
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 22,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 1,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 1,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 2,
+          "forceName": "Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 89,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 3,
+          "forceName": "Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 84,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran11",
+      "title": "New Gettysburg",
+      "code": 11,
+      "localPlayer": 0,
+      "chkSha256": "1b55e907af8c4c5c6c5e0adcc775b8fe82e263d7afb9eba70ded40d11d5e412c",
+      "participantSlots": [
+        0,
+        1,
+        3
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 18,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Expeditionary Force",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 103,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 3,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 70,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "terran12",
+      "title": "The Hammer Falls",
+      "code": 12,
+      "localPlayer": 1,
+      "chkSha256": "2a3efca711b5a75ffd0ea569802fe0bd4dbfcfbfa0b0f308d897c0dca698fd7d",
+      "participantSlots": [
+        0,
+        1,
+        6
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 116,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "Former Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 30,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 3,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 2,
+          "forceName": "Sons of Korhal",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 124,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg01",
+      "title": "Among the Ruins",
+      "code": 101,
+      "localPlayer": 3,
+      "chkSha256": "f4794b4f8fc90f6ea9c4a585faa2c0a1de25450311256c7329a288d4dcd826ad",
+      "participantSlots": [
+        3,
+        5
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 19,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Remnants of the Confederacy",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 54,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg02",
+      "title": "Egression",
+      "code": 102,
+      "localPlayer": 3,
+      "chkSha256": "5819629c7bf99c941ab64225de24e4aa60c5164ad5c00345258aa62fe6a0eadf",
+      "participantSlots": [
+        1,
+        3
+      ],
+      "helperSlots": [
+        0
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 8,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Expeditionary Force",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 90,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 16,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg03",
+      "title": "The Swarm",
+      "code": 103,
+      "localPlayer": 3,
+      "chkSha256": "a62ddf17410b37aa406aaf6a0024edb1aae9f69521e5abeab7a537baf638f7d7",
+      "participantSlots": [
+        3,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 21,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 72,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg04",
+      "title": "Agent of the Swarm",
+      "code": 104,
+      "localPlayer": 3,
+      "chkSha256": "535c6d75f4225224abf36965627d7e7889c3e3b245a97d95843933d5cfb9de2a",
+      "participantSlots": [
+        1,
+        2,
+        3
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Former Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 109,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 2,
+          "forceName": "Former Colonial Militia",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 6,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 28,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg05",
+      "title": "The Amerigo",
+      "code": 105,
+      "localPlayer": 3,
+      "chkSha256": "d758f917aebef2775b76bf90a5637fc7308ef4540334b05567e3c0caa6666e45",
+      "participantSlots": [
+        3,
+        6
+      ],
+      "helperSlots": [
+        0,
+        1,
+        2,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Scientists",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 8,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 113,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "zerg06",
+      "title": "The Dark Templar",
+      "code": 106,
+      "localPlayer": 3,
+      "chkSha256": "f441dcbdc4878d16a0e71790464d9ef8d677aad0c85e2463d0fa4ff2616af1f1",
+      "participantSlots": [
+        1,
+        2,
+        3
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 101,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 23,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg07",
+      "title": "The Culling",
+      "code": 107,
+      "localPlayer": 3,
+      "chkSha256": "2c39850f5a902c369130da3ebfce6d32d087e1d1d8fca1204ef6ef2f9a1b5e9d",
+      "participantSlots": [
+        3,
+        4
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 21,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "----",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 151,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg08",
+      "title": "Eye for an Eye",
+      "code": 108,
+      "localPlayer": 3,
+      "chkSha256": "ea8af2d5458e5c27ad53419a80420f32619c60a7830eefd4742b767f3dc0cac2",
+      "participantSlots": [
+        1,
+        2,
+        3
+      ],
+      "helperSlots": [
+        5
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Expeditionary Force",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 44,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Expeditionary Force",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 60,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 34,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 4,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "zerg09",
+      "title": "The Invasion of Aiur",
+      "code": 109,
+      "localPlayer": 3,
+      "chkSha256": "fd99e4670f57110dd7720777a188d6447c7e23a02334c691f90790c5752f8205",
+      "participantSlots": [
+        2,
+        3,
+        4,
+        7
+      ],
+      "helperSlots": [
+        0,
+        6
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 3,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 3,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 65,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 21,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 100,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 7,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 101,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "zerg10",
+      "title": "Full Circle",
+      "code": 110,
+      "localPlayer": 3,
+      "chkSha256": "7d9befb178c53014bc7c7efdcb6ed208a0aa7c97b4a37141cbca5345fd6d15fb",
+      "participantSlots": [
+        0,
+        2,
+        3,
+        7
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 111,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 70,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 21,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 3,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 121,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss01",
+      "title": "First Strike",
+      "code": 201,
+      "localPlayer": 7,
+      "chkSha256": "374a08c6d15bbd32280091e54164047b12c6ffc526d12d0663a0c7df18784188",
+      "participantSlots": [
+        0,
+        7
+      ],
+      "helperSlots": [
+        1,
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 74,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 10,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 9,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss02",
+      "title": "Into the Flames",
+      "code": 202,
+      "localPlayer": 7,
+      "chkSha256": "c2a1faa77faaa8f85d178da8d5502a9235749240244b7403d240bff9b220fe24",
+      "participantSlots": [
+        6,
+        7
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 101,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 13,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss03",
+      "title": "Higher Ground",
+      "code": 203,
+      "localPlayer": 7,
+      "chkSha256": "6e73084830bd7c49da9dfeeb11e11b9e589b066b3e4290836cd2baf4415762e6",
+      "participantSlots": [
+        0,
+        6,
+        7
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 66,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 56,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 19,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss04",
+      "title": "The Hunt for Tassadar",
+      "code": 204,
+      "localPlayer": 7,
+      "chkSha256": "9cf4f218e0b29b7e61743fd6383dab6c3aec4a5e12c6fade0b0fc37ae44c67b3",
+      "participantSlots": [
+        0,
+        3,
+        7
+      ],
+      "helperSlots": [
+        1,
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 69,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Followers of Tassadar",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 18,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Followers of Tassadar",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 75,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 11,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss05",
+      "title": "Choosing Sides",
+      "code": 205,
+      "localPlayer": 7,
+      "chkSha256": "0911c2cf8b484c266e26ed3c439cd917e0dc0cd9a7cb62985bc4800f7b64afe5",
+      "participantSlots": [
+        3,
+        4,
+        6,
+        7
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 64,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 79,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 20,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 18,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss06",
+      "title": "Into the Darkness",
+      "code": 206,
+      "localPlayer": 7,
+      "chkSha256": "30f0a374867c7b57cf51e5c445041020eebbe4a1fcbc074359a581a5bc5f5eee",
+      "participantSlots": [
+        3,
+        6,
+        7
+      ],
+      "helperSlots": [
+        1,
+        2,
+        5
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 2,
+          "forceName": "Terran Survivors",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 31,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 62,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 2,
+          "forceName": "Terran Survivors",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 11,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 100,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss07",
+      "title": "Homeland",
+      "code": 207,
+      "localPlayer": 7,
+      "chkSha256": "a813922890e6eafe4feda27b591715c465e98e8ee40e3717b5c2b0735e403a83",
+      "participantSlots": [
+        0,
+        4,
+        7
+      ],
+      "helperSlots": [
+        1,
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 144,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 5,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 4,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 106,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 38,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss08",
+      "title": "The Trial of Tassadar",
+      "code": 208,
+      "localPlayer": 7,
+      "chkSha256": "4ee5b213ce8e46b5a3b1ab3e815767a91b0b1f720d503cb203548730ce0efc37",
+      "participantSlots": [
+        0,
+        3,
+        7
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 114,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 3,
+          "forceName": "unused",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Vanguard of Aiur",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 73,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 19,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss09",
+      "title": "Shadow Hunters",
+      "code": 209,
+      "localPlayer": 7,
+      "chkSha256": "5af7dd1b80328ee75501b18e54c5f8849c320ca247e3380e1aae1349d4a8a15c",
+      "participantSlots": [
+        0,
+        5,
+        6,
+        7
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 121,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 74,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 69,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 14,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "protoss10",
+      "title": "Eye of the Storm",
+      "code": 210,
+      "localPlayer": 1,
+      "chkSha256": "e8bc84347cd8810d423e76c8e739612de777f579dd287eca2ef5bc620ff4ebdd",
+      "participantSlots": [
+        0,
+        1,
+        3
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 100,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 15,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Not Used",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 87,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss01",
+      "title": "Escape from Aiur",
+      "code": 301,
+      "localPlayer": 2,
+      "chkSha256": "ef8153dbfc7d9216207aaac7cda7a2950980cdb35a9c72612a67dc7b76a09e67",
+      "participantSlots": [
+        2,
+        3,
+        4
+      ],
+      "helperSlots": [
+        0,
+        1,
+        5,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Khalai Survivors",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Khalai Survivors",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Khalai Survivors",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm ",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 86,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm ",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 89,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Khalai Survivors",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 45,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Khalai Survivors",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 56,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss02",
+      "title": "Dunes of Shakuras",
+      "code": 302,
+      "localPlayer": 5,
+      "chkSha256": "07725cd6a26052101ecfef735105c204309a40518de1a232736aefb268f01011",
+      "participantSlots": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "helperSlots": [
+        6
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 5,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 9,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 101,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Protoss Refugees",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 9,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Comments",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss03",
+      "title": "Legacy of the Xel'Naga",
+      "code": 303,
+      "localPlayer": 1,
+      "chkSha256": "d4d49e69460b587bc55af2852409366ccff1ed433a101535ac391b288f74bbf8",
+      "participantSlots": [
+        1,
+        3,
+        4
+      ],
+      "helperSlots": [
+        2,
+        5,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Matriarch",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 14,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 63,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 58,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss04",
+      "title": "The Quest for Uraj",
+      "code": 304,
+      "localPlayer": 1,
+      "chkSha256": "f495e751fb3975fa7a701f5a250d554dadee5776a7a2d35c038980883293c863",
+      "participantSlots": [
+        0,
+        1,
+        5
+      ],
+      "helperSlots": [
+        2,
+        3,
+        6
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Dominion Planetary Defense",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 178,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Protoss Expeditionary Force",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 4,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 2,
+          "forceName": "Force 3",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Dominion Planetary Defense",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 33,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 1,
+          "forceName": "Dominion Planetary Defense",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss05",
+      "title": "The Battle of Braxis",
+      "code": 305,
+      "localPlayer": 1,
+      "chkSha256": "b32673a2c6b5aa4479202df8ddc408c2cca29cca094b77e357fb1f930103b963",
+      "participantSlots": [
+        1,
+        6,
+        7
+      ],
+      "helperSlots": [
+        2,
+        3
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Protoss Reconnaissance Force",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 15,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 2,
+          "forceName": "Force 3",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 2,
+          "forceName": "Force 3",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Blockade",
+          "forceFlags": 6,
+          "placedUnitsIncludingStartLocations": 381,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Blockade",
+          "forceFlags": 6,
+          "placedUnitsIncludingStartLocations": 6,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss06",
+      "title": "Return to Char",
+      "code": 306,
+      "localPlayer": 1,
+      "chkSha256": "4eb75410295fe4ac68a4c45e0179a91afb72d0078bf98a808461a7c54a62f611",
+      "participantSlots": [
+        1,
+        4,
+        5
+      ],
+      "helperSlots": [
+        0,
+        2,
+        3
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Matriarch",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 26,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 2,
+          "forceName": "Force 3",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 18,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 171,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 322,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss07",
+      "title": "The Insurgent",
+      "code": 307,
+      "localPlayer": 1,
+      "chkSha256": "44b57433f843a111d02e565fb8976a2396a228bf08ef058c5c0a1a9c6d5ef274",
+      "participantSlots": [
+        1,
+        3,
+        5
+      ],
+      "helperSlots": [
+        2,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Matriarch",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 40,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 2,
+          "forceName": "Force 3",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Khalai Insurgents",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 212,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 2,
+          "forceName": "Force 3",
+          "forceFlags": 8,
+          "placedUnitsIncludingStartLocations": 4,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss08",
+      "title": "Countdown",
+      "code": 308,
+      "localPlayer": 1,
+      "chkSha256": "600dbf632ff6a1b2987e482912312f29189cde3a3c3a599b13c2c6d4b56e5acb",
+      "participantSlots": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "helperSlots": [
+        2,
+        6
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 159,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Fleet of the Matriarch",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 37,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 190,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 231,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expterran01",
+      "title": "First Strike",
+      "code": 401,
+      "localPlayer": 5,
+      "chkSha256": "48b3dee553ae2e0b2747b9cd4b85f5a4dfc982dc89bb523fad015acdc4c7b5ab",
+      "participantSlots": [
+        0,
+        5
+      ],
+      "helperSlots": [
+        1,
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 234,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 12,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 5,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Team",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 16,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expterran02",
+      "title": "The Dylarian Shipyards",
+      "code": 402,
+      "localPlayer": 6,
+      "chkSha256": "dda5b662bd21a7335f076a56a65690b35e441a1a0fe6aebc84676f0951934108",
+      "participantSlots": [
+        0,
+        6
+      ],
+      "helperSlots": [
+        1,
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Dylarian Orbital Defense",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 117,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 2,
+          "forceName": "General Duke's Battle Fleet",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Comments",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 4,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Team",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expterran03",
+      "title": "Ruins of Tarsonis",
+      "code": 403,
+      "localPlayer": 6,
+      "chkSha256": "76516a763fe806b2a4e2c6814c4fcd3e05f51a21c8aa8817837a74b4fcf9ff38",
+      "participantSlots": [
+        0,
+        3,
+        4,
+        5,
+        6
+      ],
+      "helperSlots": [
+        1,
+        2,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 82,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 27,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 1,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 71,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 54,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 64,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Team",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expterran04",
+      "title": "Assault on Korhal",
+      "code": 404,
+      "localPlayer": 6,
+      "chkSha256": "988d5c2c1692a63038a3e7a895dd0d35fe9cf3696523e37858f4b5f69f9a8401",
+      "participantSlots": [
+        0,
+        1,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 170,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 189,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Team",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 21,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expterran05a",
+      "title": "Emperor's Fall (Ground Zero)",
+      "code": 405,
+      "localPlayer": 6,
+      "chkSha256": "c957cb9946b7e756be3fbbbcee27438891695522612bc3f9e7ced880ae7e07ef",
+      "participantSlots": [
+        0,
+        1,
+        6
+      ],
+      "helperSlots": [
+        2,
+        4,
+        5,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 188,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 170,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 2,
+          "forceName": "Transports",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "Comments",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 169,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 5,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Comments",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Force",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 45,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Comments",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 12,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expterran05b",
+      "title": "Emperor's Fall (Birds of War)",
+      "code": 415,
+      "localPlayer": 6,
+      "chkSha256": "ef5270cc733291603cc1646dff1ce03f40dc310a6025d4ea99ebe53ff88d5a20",
+      "participantSlots": [
+        0,
+        1,
+        6
+      ],
+      "helperSlots": [
+        2,
+        5,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 169,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 177,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Comments",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 5,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 2,
+          "forceName": "Raynor's Raiders",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Force",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 23,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Comments",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expterran06",
+      "title": "Emperor's Flight",
+      "code": 406,
+      "localPlayer": 6,
+      "chkSha256": "54d0997fa091fc6ffb6e16491fda29281ed89d2e5b3d0e0be3f2b2d7c14c4e17",
+      "participantSlots": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "helperSlots": [
+        3,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 39,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Protoss Refugees",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 150,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 3,
+          "forceName": "UED Strike Team",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 8,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 112,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 104,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Team",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 1,
+          "forceName": "Protoss Refugees",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 6,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expterran07",
+      "title": "Patriot's Blood",
+      "code": 407,
+      "localPlayer": 2,
+      "chkSha256": "c6835b14e8362a4edd66305b3821788386fa8b1deeffb39867d56a55884c508d",
+      "participantSlots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "helperSlots": [
+        7
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Stukov's Elite Guard",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 100,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 2,
+          "forceName": "UED Commando Force",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 77,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 81,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Stukov's Elite Guard",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 8,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Commando Force ",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 10,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expterran08",
+      "title": "To Chain the Beast",
+      "code": 408,
+      "localPlayer": 6,
+      "chkSha256": "b1d19c2323564ba64c252c1d5ba4705ffd6fbc69f8ed3cf36936ecb0da8d4197",
+      "participantSlots": [
+        0,
+        4,
+        5,
+        6
+      ],
+      "helperSlots": [
+        2,
+        3,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 145,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 212,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 175,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 1,
+          "force": 0,
+          "forceName": "UED Strike Force",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 38,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 6,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expzerg01",
+      "title": "Vile Disruption",
+      "code": 501,
+      "localPlayer": 3,
+      "chkSha256": "9f308010673e284524a98138aef2a21a96fa135cd2a5360b5a4d04914985fe55",
+      "participantSlots": [
+        3,
+        4,
+        5
+      ],
+      "helperSlots": [
+        0,
+        1
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 2,
+          "forceName": "Force 3",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 7,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "Neutral Hive Clusters",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 96,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 81,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 1,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 47,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg02",
+      "title": "Reign of Fire",
+      "code": 502,
+      "localPlayer": 3,
+      "chkSha256": "32985e8804ca7e667c26a95b44f8c0f171586a899cd1acf0b6abb06a666309c3",
+      "participantSlots": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "helperSlots": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 2,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 3,
+          "forceName": "Raynor's Raiders",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 9,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 2,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 2,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 21,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 2,
+          "forceName": "Renegade Zerg",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 7,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Defense Garrison",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 186,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg03",
+      "title": "The Kel-Morian Combine",
+      "code": 503,
+      "localPlayer": 3,
+      "chkSha256": "3d4db669c12a60a60ee7edcebcaf77ebc79fd2e30e2418dc37dcb2701efa8eb2",
+      "participantSlots": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Kel-Morian Combine",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 79,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Kel-Morian Combine",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 90,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 28,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Kel-Morian Combine",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 46,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Kel-Morian Combine",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 57,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Kel-Morian Combine",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 87,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Kel-Morian Combine",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 16,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04a",
+      "title": "The Liberation of Korhal",
+      "code": 504,
+      "localPlayer": 3,
+      "chkSha256": "9fa70aa9def47962d6fe6a2e597a021a90bea81f2fefeae58297df285d2a66f6",
+      "participantSlots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 173,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 25,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 135,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 115,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04b",
+      "title": "The Liberation of Korhal",
+      "code": 514,
+      "localPlayer": 3,
+      "chkSha256": "57ed718ac4cf2f60460411f91b2a6e7c29d865f956a740fd3e9a4cb1d76693b8",
+      "participantSlots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 173,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 27,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 135,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 115,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04c",
+      "title": "The Liberation of Korhal",
+      "code": 524,
+      "localPlayer": 3,
+      "chkSha256": "e18eb7d59029b5f62895a13da98f592252f1512eb9913bf63acf04c7b43b3f94",
+      "participantSlots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 173,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 29,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 135,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 115,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04d",
+      "title": "The Liberation of Korhal",
+      "code": 534,
+      "localPlayer": 3,
+      "chkSha256": "70f52da6ec0ca0dc48d6d60f829f0099c85ce12e55187ff318846eb70e44fd94",
+      "participantSlots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 173,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 31,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 135,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 115,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04e",
+      "title": "The Liberation of Korhal",
+      "code": 544,
+      "localPlayer": 3,
+      "chkSha256": "c27d7cd80d28cf6b9d8151a765001e7883827809675a37d8005c775fc9eed1dd",
+      "participantSlots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 173,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 33,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 135,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 115,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04f",
+      "title": "The Liberation of Korhal",
+      "code": 554,
+      "localPlayer": 3,
+      "chkSha256": "50f61e57b89027c7c72bef0d6ccb6a15b9886f119cf77587cf4715f4e7e9dc93",
+      "participantSlots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "helperSlots": [],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 173,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 35,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 135,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Planetary Garrison",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 115,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg05",
+      "title": "True Colors",
+      "code": 505,
+      "localPlayer": 3,
+      "chkSha256": "cd85a53ed3c9345dd4f8987421b5709d8bf87faa7d038fe149790151c70ac6b9",
+      "participantSlots": [
+        0,
+        1,
+        3,
+        4
+      ],
+      "helperSlots": [
+        2,
+        5
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 232,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Raynor's Raiders",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 151,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 3,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 4,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 35,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expzerg06",
+      "title": "Fury of the Swarm",
+      "code": 506,
+      "localPlayer": 3,
+      "chkSha256": "dc0529f66c56a650cf3c5d1eb5a9addaf00e6d97c9473d91ba9fc31422c9af14",
+      "participantSlots": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "helperSlots": [
+        0
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 18,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 64,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 99,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 94,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Science Corps",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 101,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg07",
+      "title": "Drawing of the Web",
+      "code": 507,
+      "localPlayer": 3,
+      "chkSha256": "2541f8af8528b0db42520ec3e1e138e1cb9f67b2be12a4e60d06edc3fa2ccfdb",
+      "participantSlots": [
+        1,
+        3,
+        5
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Telemantros Defenders",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 103,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 3,
+          "forceName": "Force 4",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 28,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Telemantros Defenders",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 149,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expzerg08",
+      "title": "To Slay the Beast",
+      "code": 508,
+      "localPlayer": 3,
+      "chkSha256": "22ac125001ebb5835a697f3186160d3bdfd2de8913e24ff9eb3adb25ba41423a",
+      "participantSlots": [
+        3,
+        4,
+        6
+      ],
+      "helperSlots": [
+        0,
+        1,
+        2,
+        5,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 2,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 8,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 2,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 31,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 4,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 0,
+          "force": 2,
+          "forceName": "UED Slave Brood",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 101,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 70,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "UED Command Fleet",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 140,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 79,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expzerg09",
+      "title": "The Reckoning",
+      "code": 509,
+      "localPlayer": 3,
+      "chkSha256": "f7987c26f0b990d5b13e3e5dbd0f3788d11cf8bbe67c73aa5904bdbfc591b9a9",
+      "participantSlots": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "helperSlots": [
+        0,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 0,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 1,
+          "forceName": "Protoss Warband",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 77,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 52,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 2,
+          "forceName": "UED Remnants",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 112,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Protoss Warband",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    },
+    {
+      "mission": "expzerg10",
+      "title": "Omega",
+      "code": 510,
+      "localPlayer": 3,
+      "chkSha256": "856026e96c23b5080bfb11a185fb86bdb8accf4f46c4113bfd3588192d97fbc4",
+      "participantSlots": [
+        0,
+        1,
+        3,
+        6
+      ],
+      "helperSlots": [
+        2
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Terran Dominion",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 173,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Fleet of the Executor",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 144,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 3,
+          "controllerName": "rescue passive",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 3,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 0,
+          "force": 0,
+          "forceName": "Zerg Swarm",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 40,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 3,
+          "forceName": "UED Battle Fleet",
+          "forceFlags": 14,
+          "placedUnitsIncludingStartLocations": 199,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        }
+      ]
+    },
+    {
+      "mission": "expbonus",
+      "title": "Dark Origin",
+      "code": 599,
+      "localPlayer": 1,
+      "chkSha256": "6dd16b341f1dd2fabbbc28ed8a06d1b22df6e5f225e0b2baa9597da3c24a3c99",
+      "participantSlots": [
+        0,
+        1,
+        2,
+        5
+      ],
+      "helperSlots": [
+        6,
+        7
+      ],
+      "slots": [
+        {
+          "slot": 0,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 1,
+          "force": 1,
+          "forceName": "Clandestine Mercenaries",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 125,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 1,
+          "controller": 6,
+          "controllerName": "human slot",
+          "race": 2,
+          "force": 0,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 2,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 2,
+          "forceName": "Protoss Warband",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 2,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 5,
+          "controller": 5,
+          "controllerName": "computer slot",
+          "race": 2,
+          "force": 3,
+          "forceName": "Clandestine Mercenaries",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 9,
+          "startLocations": 1,
+          "participant": true,
+          "helper": false
+        },
+        {
+          "slot": 6,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 2,
+          "force": 3,
+          "forceName": "Clandestine Mercenaries",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 31,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        },
+        {
+          "slot": 7,
+          "controller": 7,
+          "controllerName": "neutral",
+          "race": 1,
+          "force": 1,
+          "forceName": "Clandestine Mercenaries",
+          "forceFlags": 0,
+          "placedUnitsIncludingStartLocations": 1,
+          "startLocations": 1,
+          "participant": false,
+          "helper": true
+        }
+      ]
+    }
+  ],
+  "sourceSha256": {
+    "tests/audit_score_roster11.py": "b0a2d3dc13d87c35aa0e8b7f6ba7392868a6909d093e8357b96484dd86cf8038",
+    "app/src/main/assets/native/missions.json": "96b8a781ef517e72afda0bb09a311b30d681686862c4370bd04ce0c9d17ccb57"
+  }
+}

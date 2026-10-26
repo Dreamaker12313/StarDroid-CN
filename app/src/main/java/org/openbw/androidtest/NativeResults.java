@@ -7,18 +7,22 @@ import java.util.*;
 final class NativeResults {
   final NativeArt.Dialog layout;
   final NativeArt.PCX background, main, inset, scorebox, tabArt;
-  final NativeArt.Font tiny, small, large, title;
+  final NativeArt.Font tiny, small, medium, large, title;
   final boolean won;
   boolean canSave, exiting, counting, audioCounting;
   static final int COUNT_MS=2200;
   double countElapsed;
   final Bitmap[][] barParts=new Bitmap[12][6];
   String playerName = "Player";
+  final String[] slotNames = new String[8];
+  final List<String> factionNames = new ArrayList<String>();
   final List<int[]> rows = new ArrayList<int[]>();
   final int elapsed;
   int tab = 0, hot = -1;
   double progress = 0, animationElapsed = 0;
   final Paint paint = new Paint();
+  final MenuHotkeys menuHotkeys=new MenuHotkeys();
+  final Map<Integer,String> buttonCaptions=new HashMap<>();
 
   NativeResults(NativeArt art, int race, boolean victory, String raw) {
     won = victory;
@@ -36,18 +40,27 @@ final class NativeResults {
     // Match the glue menus' inter-glyph spacing, including the fallback font.
     tiny = art.font("8", tint, background.palette, 1);
     small = art.font("10", tint, background.palette, 1);
+    medium = art.font("14", tint, background.palette, 1);
     large = art.font("16", tint, background.palette, 1);
     title = art.font("16x", tint, background.palette, 1);
     layout = new NativeArt.Dialog(art.read("rez/gluscore.bin"));
     String[] lines = raw.split("\n");
     elapsed = Math.max(0, NativeHud.number(lines[0].split("\t"), 1, 0) / 24);
     for (int i = 1; i < lines.length && rows.size() < 8; i++) {
-      String[] fields = lines[i].split("\t");
+      String[] fields = lines[i].split("\t", -1);
       if (fields.length < 16) continue;
       int[] row = new int[19];
       for (int j = 0; j < row.length; j++) row[j] = NativeHud.number(fields, j, 0);
       rows.add(row);
+      factionNames.add(fields.length > 19 ? NativeArt.clean(fields[19]).trim() : "");
     }
+  }
+
+  String rowName(int index) {
+    int[] row=rows.get(index);if(row[0]!=0)return playerName;
+    String faction=factionNames.get(index);if(!faction.isEmpty())return faction;
+    int slot=row[16];String participant=slot>=0&&slot<slotNames.length?slotNames[slot]:null;
+    return participant!=null&&!participant.trim().isEmpty()?participant:"Computer";
   }
 
   boolean ready() {return !exiting && animationElapsed >= NativeGlue.ENTER_MS;}
@@ -75,6 +88,29 @@ final class NativeResults {
     c.restore();
   }
 
+  NativeArt.Font nameFont(String text, int width) {
+    for (NativeArt.Font font : new NativeArt.Font[] {large, medium, small})
+      if (font.measure(text) <= width) return font;
+    return tiny;
+  }
+
+  // Campaign factions and player IDs must remain complete. Use the largest
+  // original bitmap font that fits, rather than hiding the end with an ellipsis.
+  // Exceptionally long custom/localized names can still fit without crossing
+  // the score columns; ordinary campaign names need no bitmap scaling.
+  void nameLine(Canvas c, String text, NativeArt.Font font, int color,
+      float x, float y, int width, int height) {
+    text = NativeArt.clean(PortText.text(text)).replace('\n', ' ').trim();
+    int measured = font.measure(text);
+    float scale = Math.min(1f, width / (float)Math.max(1, measured));
+    c.save(); c.clipRect(x, y, x + width, y + height);
+    c.translate(x, y + Math.max(0, (height-font.height*scale)/2));
+    c.scale(scale, scale);
+    // Width zero keeps a name on one line; the outer transform owns its fit.
+    font.draw(c, text, 0, 0, 0, 0, color, 0);
+    c.restore();
+  }
+
   void label(Canvas c, int id, String text, NativeArt.Font font, int color, int align) {
     NativeArt.Widget w = layout.get(id);
     if (w != null) line(c, text, font, color, align, w.x, w.y, w.w, w.h);
@@ -82,6 +118,26 @@ final class NativeResults {
 
   void image(Canvas c, NativeArt.PCX pcx, NativeArt.Widget w) {
     if (w != null) c.drawBitmap(pcx.image, null, w.rect(), NativeArt.PIXELS);
+  }
+
+  void prepareButtonCaptions(){
+    String[] labels={"Overview","Units","Structures","Resources","OK"};
+    int[] ids={3,4,5,6,7};ArrayList<MenuHotkeys.Entry> entries=new ArrayList<>();
+    for(int i=0;i<ids.length;i++)entries.add(new MenuHotkeys.Entry(Integer.toString(ids[i]),
+        MenuLabels.forWidget("gluscore",ids[i],layout.get(ids[i]),labels[i])));
+    menuHotkeys.assign("score",entries);buttonCaptions.clear();
+    for(int i=0;i<ids.length;i++)buttonCaptions.put(ids[i],entries.get(i).shown);
+    // Saving is an in-place file action, not a menu-navigation shortcut.
+    buttonCaptions.put(61,NativeArt.clean(PortText.text("Save Replay")));
+  }
+
+  String buttonCaption(int id){return buttonCaptions.getOrDefault(id,"");}
+
+  void buttonLabel(Canvas c,int id,NativeArt.Font font,int color,boolean enabled){
+    NativeArt.Widget w=layout.get(id);if(w==null)return;
+    String label=buttonCaption(id);if(!enabled)label=NativeArt.clean(label);
+    c.save();c.clipRect(w.x,w.y,w.x+w.w,w.y+w.h);
+    font.draw(c,MenuHotkeys.fit(font,label,w.w),w.x,w.y+Math.max(0,(w.h-font.height)/2),w.w,1,color,0);c.restore();
   }
 
   void panels(Canvas c) {
@@ -111,6 +167,7 @@ final class NativeResults {
   }
 
   void draw(Canvas c, double dt) {
+    prepareButtonCaptions();
     animationElapsed += Math.max(0, dt);
     double p = Math.min(1, animationElapsed / (exiting ? NativeGlue.EXIT_MS : NativeGlue.ENTER_MS));
     float distance = 640 * (float)(exiting ? 1-Math.pow(1-p,3) : Math.pow(1-p,3));
@@ -119,8 +176,7 @@ final class NativeResults {
     if(counting && !audioCounting && !exiting){countElapsed+=Math.max(0,dt);progress=Math.min(1,countElapsed/COUNT_MS);}
     panels(c);
     label(c, 2, won ? "Victory!" : "Defeat", title, won ? 4 : 2, 1);
-    String[] tabs = {"Overview", "Units", "Structures", "Resources"};
-    for (int i = 0; i < 4; i++) label(c, 3+i, tabs[i], small, i == tab || hot == 3+i ? 4 : 2, 1);
+    for (int i = 0; i < 4; i++) buttonLabel(c,3+i,small,i == tab || hot == 3+i ? 4 : 2,true);
     String[][] headings = {{"Units", "Structures", "Resources"}, {"Produced", "Killed", "Lost"},
         {"Constructed", "Razed", "Lost"}, {"Minerals", "Vespene Gas", "Spent"}};
     for (int i = 0; i < 3; i++) label(c, 10+i, headings[tab][i], small, 2, 1);
@@ -132,8 +188,15 @@ final class NativeResults {
       NativeArt.Widget name = layout.get(base+1);
       if (name != null) {
         // The BIN name widget extends under score columns; its content must not.
-        line(c, r[0] != 0 ? playerName : "Computer", large, r[0] != 0 ? 4 : 2, 0, name.x, name.y, 144, 19);
-        line(c, new String[]{"Zerg","Terran","Protoss"}[Math.max(0,Math.min(2,r[1]))], tiny, 2, 0, name.x, name.y+19, 144, 14);
+        NativeArt.Widget firstScore = layout.get(base+2);
+        int width = Math.max(1, Math.min(name.w,
+            firstScore != null ? firstScore.x-name.x-8 : 144));
+        String player = rowName(i);
+        nameLine(c, player, nameFont(player, width), r[0] != 0 ? 4 : 2,
+            name.x, name.y, width, 19);
+        String subtitle=r[0]!=0&&!factionNames.get(i).isEmpty()?factionNames.get(i)
+            :new String[]{"Zerg","Terran","Protoss"}[Math.max(0,Math.min(2,r[1]))];
+        nameLine(c, subtitle, tiny, 2, name.x, name.y+19, width, 14);
       }
       int[] v = values(r);
       for (int j = 0; j < 3; j++) {
@@ -149,8 +212,8 @@ final class NativeResults {
     NativeArt.Widget time = layout.get(9);
     if (time != null) line(c, "Elapsed Time: " + elapsed/60 + ":" + String.format(Locale.ROOT,"%02d",elapsed%60),
         large,2,0,time.x,time.y,218,time.h);
-    label(c,7,"OK",title,hot == 7 ? 4 : 3,1);
-    label(c,61,"Save Replay",title,canSave ? hot == 61 ? 4 : 3 : 5,1);
+    buttonLabel(c,7,title,hot == 7 ? 4 : 3,true);
+    buttonLabel(c,61,title,canSave ? hot == 61 ? 4 : 3 : 5,canSave);
     c.restore();
   }
 }

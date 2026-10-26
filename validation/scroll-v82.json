@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT shim; production NativeGlue and extracted NativeSurface map input methods",
+  "result": "PASS 5921 map scrollbar checks: red outlined pixel arrows/rail and hollow circle (15 geometry captures), 0\u201310000 maps, single-row arrows, jump/drag with stable grip through redraw, endpoints, last-map selection, swipe/inertia, cancel and no accidental actions",
+  "screenshots": [
+    "build-native/scroll82/map-list-0.png",
+    "build-native/scroll82/map-list-100.png",
+    "build-native/scroll82/map-list-50.png",
+    "build-native/scroll82/pixel-scrollbar-detail.png",
+    "build-native/scroll82/scrollbar-110-0.png",
+    "build-native/scroll82/scrollbar-110-100.png",
+    "build-native/scroll82/scrollbar-110-25.png",
+    "build-native/scroll82/scrollbar-110-50.png",
+    "build-native/scroll82/scrollbar-110-75.png",
+    "build-native/scroll82/scrollbar-218-0.png",
+    "build-native/scroll82/scrollbar-218-100.png",
+    "build-native/scroll82/scrollbar-218-25.png",
+    "build-native/scroll82/scrollbar-218-50.png",
+    "build-native/scroll82/scrollbar-218-75.png",
+    "build-native/scroll82/scrollbar-93-0.png",
+    "build-native/scroll82/scrollbar-93-100.png",
+    "build-native/scroll82/scrollbar-93-25.png",
+    "build-native/scroll82/scrollbar-93-50.png",
+    "build-native/scroll82/scrollbar-93-75.png"
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "13a58d4e2835b66425457d63ab9778a275a2369744188aa000f8931f7c1f0a8c",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "f6ce9344d38fdf9bf8e32a870a53bd0b8a442442e5349b220911ee14f4cf9d88",
+    "tests/run_scroll82.py": "95317141174e13d3aff238216425e736975e63d9afdec64a808204031bb61253"
+  }
+}

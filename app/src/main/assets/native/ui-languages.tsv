@@ -137,6 +137,7 @@ Frame rate	Частота кадров	Bildrate	Fotogramas por segundo	Images pa
 Interface Sizes	Размеры интерфейса	Oberflächengrößen	Tamaños de interfaz	Tailles de l’interface
 Interface sizes	Размеры интерфейса	Oberflächengrößen	Tamaños de interfaz	Tailles de l’interface
 Command buttons	Кнопки команд	Befehlsschaltflächen	Botones de órdenes	Boutons de commande
+Commands & control groups	Команды и группы	Befehle und Kontrollgruppen	Órdenes y grupos de control	Commandes et groupes
 Selection & move buttons	Кнопки выбора и движения	Auswahl- und Bewegungstasten	Botones de selección y movimiento	Boutons de sélection et déplacement
 Descriptions & messages	Описания и сообщения	Beschreibungen und Meldungen	Descripciones y mensajes	Descriptions et messages
 Reset interface sizes	Сбросить размеры	Größen zurücksetzen	Restablecer tamaños	Réinitialiser les tailles
@@ -148,7 +149,6 @@ Force victory (end match)	Победить (завершить игру)	Sieg er
 Nearby enemies defend their base	Враги рядом защищают базу	Nahe Feinde verteidigen Basis	Enemigos cercanos defienden la base	Ennemis proches défendent leur base
 When enabled, attacked bases call nearby idle combat units to help.	Атакованная база зовёт на помощь ближайшие свободные боевые единицы.	Angegriffene Basen rufen nahe, untätige Kampfeinheiten zu Hilfe.	Las bases atacadas piden ayuda a unidades de combate cercanas e inactivas.	Les bases attaquées appellent les unités de combat proches et inactives à l’aide.
 Scripted mission attacks still run.	Атаки по сценарию миссии продолжаются.	Geskriptete Missionsangriffe bleiben aktiv.	Los ataques programados de la misión siguen activos.	Les attaques prévues par la mission restent actives.
-Touch Controls	Сенсорное управление	Touch-Steuerung	Controles táctiles	Commandes tactiles
 Selection Settings	Настройки выбора	Auswahleinstellungen	Ajustes de selección	Réglages de sélection
 Selection settings	Настройки выбора	Auswahleinstellungen	Ajustes de selección	Réglages de sélection
 Camera Settings	Настройки камеры	Kameraeinstellungen	Ajustes de cámara	Réglages de caméra
@@ -419,8 +419,31 @@ Could not load	Не удалось загрузить	Laden fehlgeschlagen	No se
 Could not save	Не удалось сохранить	Speichern fehlgeschlagen	No se pudo guardar	Sauvegarde impossible
 Unable to continue	Невозможно продолжить	Fortsetzen nicht möglich	No se puede continuar	Impossible de continuer
 Replay saved	Повтор сохранён	Replay gespeichert	Repetición guardada	Replay enregistré
+Seeking…	Переход…	Spulen…	Buscando…	Recherche…
 Replay could not be saved	Не удалось сохранить повтор	Replay konnte nicht gespeichert werden	No se pudo guardar la repetición	Impossible d’enregistrer le replay
-Replay loading is not implemented yet.	Загрузка повторов пока не поддерживается.	Das Laden von Replays wird noch nicht unterstützt.	La carga de repeticiones aún no está disponible.	Le chargement des replays n’est pas encore disponible.
+No saved replays	Нет сохранённых повторов	Keine gespeicherten Replays	No hay repeticiones guardadas	Aucun replay enregistré
+Import Replay	Импорт повтора	Replay importieren	Importar repetición	Importer un replay
+Delete replay?	Удалить повтор?	Replay löschen?	¿Eliminar repetición?	Supprimer le replay ?
+DELETE	УДАЛИТЬ	LÖSCHEN	ELIMINAR	SUPPRIMER
+Export	Экспорт	Exportieren	Exportar	Exporter
+Play	Воспроизвести	Abspielen	Reproducir	Lecture
+Pause	Пауза	Pause	Pausa	Pause
+Everyone	Все игроки	Alle Spieler	Todos	Tous les joueurs
+Restart	Сначала	Neustart	Reiniciar	Recommencer
+Resume Replay	Продолжить повтор	Replay fortsetzen	Reanudar repetición	Reprendre le replay
+Exit Replay	Выйти из повтора	Replay verlassen	Salir de la repetición	Quitter le replay
+Unsupported replay format. Choose a classic .rep file.	Неподдерживаемый формат повтора. Выберите классический файл .rep.	Nicht unterstütztes Replay-Format. Wähle eine klassische .rep-Datei.	Formato de repetición no compatible. Elige un archivo .rep clásico.	Format de replay non pris en charge. Choisissez un fichier .rep classique.
+Only classic melee and free-for-all replays are supported.	Поддерживаются только классические повторы «Схватка» и «Каждый за себя».	Nur klassische Gefecht- und Jeder-gegen-jeden-Replays werden unterstützt.	Solo se admiten repeticiones clásicas de refriega y todos contra todos.	Seuls les replays classiques de mêlée et chacun pour soi sont pris en charge.
+The selected replay was recorded with a different version of the app.	Выбранный повтор был записан в другой версии приложения.	Das ausgewählte Replay wurde mit einer anderen Version der App aufgenommen.	La repetición seleccionada se grabó con una versión diferente de la aplicación.	Le replay sélectionné a été enregistré avec une autre version de l’application.
+Replay is damaged.	Повтор повреждён.	Das Replay ist beschädigt.	La repetición está dañada.	Le replay est endommagé.
+Replay needs the same game data used to record it.	Для повтора нужны те же игровые данные, с которыми он был записан.	Das Replay benötigt dieselben Spieldaten wie bei der Aufnahme.	La repetición necesita los mismos datos de juego usados al grabarla.	Le replay nécessite les mêmes données de jeu que lors de son enregistrement.
+Replay initial state does not match this build.	Начальное состояние повтора не соответствует этой сборке.	Der Anfangszustand des Replays passt nicht zu dieser Version.	El estado inicial de la repetición no coincide con esta versión.	L’état initial du replay ne correspond pas à cette version.
+This computer-player replay lacks StarDroid AI settings. Record a new replay.	В этом повторе нет настроек ИИ StarDroid. Запишите новый повтор.	Diesem Computer-Replay fehlen die StarDroid-KI-Einstellungen. Nimm ein neues Replay auf.	Esta repetición no contiene los ajustes de IA de StarDroid. Graba una nueva.	Ce replay ne contient pas les réglages d’IA de StarDroid. Enregistrez-en un nouveau.
+Unsupported replay extension or Remastered replay.	Неподдерживаемое расширение повтора или повтор Remastered.	Nicht unterstützte Replay-Erweiterung oder Remastered-Replay.	Extensión de repetición no compatible o repetición de Remastered.	Extension de replay non prise en charge ou replay de Remastered.
+Cannot delete replay	Не удалось удалить повтор	Replay kann nicht gelöscht werden	No se puede eliminar la repetición	Impossible de supprimer le replay
+Unable to open replay	Не удалось открыть повтор	Replay kann nicht geöffnet werden	No se puede abrir la repetición	Impossible d’ouvrir le replay
+Replay is unavailable	Повтор недоступен	Replay ist nicht verfügbar	La repetición no está disponible	Le replay est indisponible
+Replay exceeds 32 MiB	Размер повтора превышает 32 МиБ	Replay überschreitet 32 MiB	La repetición supera los 32 MiB	Le replay dépasse 32 Mio
 Unable to open replay destination	Не удалось открыть место сохранения повтора	Replay-Ziel konnte nicht geöffnet werden	No se pudo abrir el destino de la repetición	Impossible d’ouvrir la destination du replay
 Start a game before saving.	Сначала начните игру.	Vor dem Speichern ein Spiel starten.	Inicia una partida antes de guardar.	Lancez une partie avant de sauvegarder.
 Unreadable save	Сохранение не читается	Spielstand nicht lesbar	Partida ilegible	Sauvegarde illisible
@@ -656,3 +679,64 @@ Left trigger	Левый курок	Linker Trigger	Gatillo izquierdo	Gâchette ga
 Right trigger	Правый курок	Rechter Trigger	Gatillo derecho	Gâchette droite
 Left stick press	Нажатие левого стика	Linken Stick drücken	Pulsar stick izquierdo	Appui sur le stick gauche
 Right stick press	Нажатие правого стика	Rechten Stick drücken	Pulsar stick derecho	Appui sur le stick droit
+Unlimited supply (200)	Неограниченное снабжение (200)	Unbegrenzte Versorgung (200)	Suministro ilimitado (200)	Ravitaillement illimité (200)
+Controls	Управление	Steuerung	Controles	Commandes
+Controller guide	Помощь по геймпаду	Gamepad-Hilfe	Guía del mando	Guide de la manette
+Reset all gamepad controls to their defaults?	Сбросить все настройки геймпада?	Alle Gamepad-Einstellungen zurücksetzen?	¿Restablecer todos los controles del mando?	Rétablir tous les réglages de la manette ?
+Press the assigned Game menu button to open or close a menu. Use Cancel / back to return to the previous screen. Hold Precision pointer for slower aiming.	Назначенная кнопка «Меню игры» открывает и закрывает меню. «Отмена / назад» возвращает на предыдущий экран. Удерживайте «Точный указатель» для медленного прицеливания.	Die belegte Taste „Spielmenü“ öffnet oder schließt das Menü. „Abbrechen / Zurück“ kehrt zum vorherigen Bildschirm zurück. Halte „Präziser Zeiger“ für langsameres Zielen.	El botón asignado a Menú del juego abre o cierra el menú. Cancelar / atrás vuelve a la pantalla anterior. Mantén Puntero preciso para apuntar más despacio.	Le bouton attribué à Menu du jeu ouvre ou ferme le menu. Annuler / retour revient à l’écran précédent. Maintenez Pointeur précis pour viser plus lentement.
+None	Нет	Keine	Ninguno	Aucun
+Game data storage	Хранилище игровых данных	Speicher für Spieldaten	Almacenamiento de datos del juego	Stockage des données du jeu
+Internal storage	Внутренняя память	Interner Speicher	Almacenamiento interno	Stockage interne
+SD card	SD-карта	SD-Karte	Tarjeta SD	Carte SD
+Saves, replays and player settings stay in internal storage.	Сохранения, повторы и настройки игроков остаются во внутренней памяти.	Spielstände, Wiederholungen und Spielereinstellungen bleiben im internen Speicher.	Las partidas guardadas, las repeticiones y los ajustes del jugador permanecen en el almacenamiento interno.	Les sauvegardes, les replays et les réglages des joueurs restent dans le stockage interne.
+The selected SD card is unavailable. Reinsert it to play or move game data.	Выбранная SD-карта недоступна. Вставьте её снова, чтобы играть или переместить игровые данные.	Die gewählte SD-Karte ist nicht verfügbar. Setze sie wieder ein, um zu spielen oder Spieldaten zu verschieben.	La tarjeta SD seleccionada no está disponible. Vuelve a insertarla para jugar o mover los datos del juego.	La carte SD sélectionnée est indisponible. Réinsérez-la pour jouer ou déplacer les données du jeu.
+No writable SD card detected.	SD-карта, доступная для записи, не обнаружена.	Keine beschreibbare SD-Karte erkannt.	No se ha detectado ninguna tarjeta SD con permiso de escritura.	Aucune carte SD accessible en écriture détectée.
+Moving game data…	Перемещение игровых данных…	Spieldaten werden verschoben…	Moviendo datos del juego…	Déplacement des données du jeu…
+Change data storage	Изменить хранилище данных	Datenspeicher ändern	Cambiar almacenamiento de datos	Changer le stockage des données
+Move game data?	Переместить игровые данные?	Spieldaten verschieben?	¿Mover los datos del juego?	Déplacer les données du jeu ?
+Existing imported files will be moved and new imports will use this location. Saves and settings stay on this device. App-specific files are removed when the app is uninstalled.	Импортированные файлы будут перемещены, а новые импорты будут сохраняться здесь. Сохранения и настройки останутся на устройстве. При удалении приложения его файлы также удаляются.	Bereits importierte Dateien werden verschoben. Neue Importe werden hier gespeichert. Spielstände und Einstellungen bleiben auf diesem Gerät. App-eigene Dateien werden beim Deinstallieren der App gelöscht.	Los archivos importados se moverán y las nuevas importaciones usarán esta ubicación. Las partidas guardadas y los ajustes permanecerán en este dispositivo. Los archivos propios de la aplicación se eliminan al desinstalarla.	Les fichiers importés seront déplacés et les prochaines importations utiliseront cet emplacement. Les sauvegardes et les réglages resteront sur cet appareil. Les fichiers propres à l’application sont supprimés lors de sa désinstallation.
+Return to the main menu before moving game data.	Вернитесь в главное меню перед перемещением игровых данных.	Kehre vor dem Verschieben der Spieldaten zum Hauptmenü zurück.	Vuelve al menú principal antes de mover los datos del juego.	Revenez au menu principal avant de déplacer les données du jeu.
+Game data moved.	Игровые данные перемещены.	Spieldaten wurden verschoben.	Datos del juego movidos.	Données du jeu déplacées.
+Game data move failed	Не удалось переместить игровые данные	Spieldaten konnten nicht verschoben werden	No se pudieron mover los datos del juego	Échec du déplacement des données du jeu
+Game data storage is unavailable.	Хранилище игровых данных недоступно.	Der Speicher für Spieldaten ist nicht verfügbar.	El almacenamiento de datos del juego no está disponible.	Le stockage des données du jeu est indisponible.
+Cannot create game data folder.	Не удалось создать папку игровых данных.	Der Ordner für Spieldaten konnte nicht erstellt werden.	No se pudo crear la carpeta de datos del juego.	Impossible de créer le dossier des données du jeu.
+Cannot save data storage setting.	Не удалось сохранить настройку хранилища.	Die Speichereinstellung konnte nicht gespeichert werden.	No se pudo guardar el ajuste de almacenamiento.	Impossible d’enregistrer le réglage du stockage.
+Not enough free space to move game data.	Недостаточно свободного места для перемещения игровых данных.	Nicht genügend freier Speicher zum Verschieben der Spieldaten.	No hay suficiente espacio libre para mover los datos del juego.	Espace libre insuffisant pour déplacer les données du jeu.
+The destination contains different game files. Nothing was moved.	В выбранном хранилище находятся другие игровые файлы. Ничего не перемещено.	Das Ziel enthält andere Spieldateien. Es wurde nichts verschoben.	El destino contiene archivos del juego diferentes. No se movió ningún archivo.	La destination contient des fichiers de jeu différents. Aucun fichier n’a été déplacé.
+Game data verification failed. Original files were kept.	Проверка игровых данных не пройдена. Исходные файлы сохранены.	Die Prüfung der Spieldaten ist fehlgeschlagen. Die Originaldateien wurden behalten.	Falló la verificación de los datos del juego. Se conservaron los archivos originales.	La vérification des données du jeu a échoué. Les fichiers d’origine ont été conservés.
+Game data changed while moving. Original files were kept.	Игровые данные изменились при перемещении. Исходные файлы сохранены.	Die Spieldaten wurden während des Verschiebens geändert. Die Originaldateien wurden behalten.	Los datos del juego cambiaron durante el traslado. Se conservaron los archivos originales.	Les données du jeu ont changé pendant le déplacement. Les fichiers d’origine ont été conservés.
+Cannot finish game data move.	Не удалось завершить перемещение игровых данных.	Das Verschieben der Spieldaten konnte nicht abgeschlossen werden.	No se pudo completar el traslado de los datos del juego.	Impossible de terminer le déplacement des données du jeu.
+Cannot read game data.	Не удалось прочитать игровые данные.	Spieldaten konnten nicht gelesen werden.	No se pudieron leer los datos del juego.	Impossible de lire les données du jeu.
+Cannot prepare game data move.	Не удалось подготовить перемещение игровых данных.	Das Verschieben der Spieldaten konnte nicht vorbereitet werden.	No se pudo preparar el traslado de los datos del juego.	Impossible de préparer le déplacement des données du jeu.
+Move game data	Переместить игровые данные	Spieldaten verschieben	Mover datos del juego	Déplacer les données du jeu
+Unable to reopen game data	Не удалось снова открыть игровые данные	Spieldaten konnten nicht erneut geöffnet werden	No se pudieron volver a abrir los datos del juego	Impossible de rouvrir les données du jeu
+
+# Mouse and keyboard settings
+Mouse & keyboard	Мышь и клавиатура	Maus und Tastatur	Ratón y teclado	Souris et clavier
+Mouse	Мышь	Maus	Ratón	Souris
+Keyboard	Клавиатура	Tastatur	Teclado	Clavier
+Keyboard hotkeys	Горячие клавиши	Tastaturkürzel	Atajos de teclado	Raccourcis clavier
+Grid	Сетка	Raster	Cuadrícula	Grille
+Left click selects; drag a selection box.	Левая кнопка выбирает; выделите группу рамкой.	Linksklick wählt aus; Ziehen erstellt einen Auswahlrahmen.	Clic izquierdo para seleccionar; arrastra un recuadro.	Clic gauche pour sélectionner ; glissez un cadre de sélection.
+Right click orders. Shift adds or queues.	Правая кнопка отдаёт приказы. Shift добавляет или ставит в очередь.	Rechtsklick gibt Befehle. Umschalt ergänzt oder reiht ein.	Clic derecho da órdenes. Mayús añade o pone en cola.	Clic droit donne des ordres. Maj ajoute ou met en file.
+Double-click or Ctrl-click selects the same type.	Двойной щелчок или Ctrl+щелчок выбирает тот же тип.	Doppelklick oder Strg+Klick wählt Einheiten gleichen Typs.	Doble clic o Ctrl+clic selecciona unidades del mismo tipo.	Double-clic ou Ctrl+clic sélectionne les unités du même type.
+Screen edges or middle-drag move the camera.	Края экрана или перетаскивание средней кнопкой двигают камеру.	Bildschirmränder oder Ziehen mit der mittleren Maustaste bewegen die Kamera.	Los bordes o arrastrar con el botón central mueven la cámara.	Les bords ou le glissement avec le bouton central déplacent la caméra.
+Wheel zooms or scrolls lists.	Колесо меняет масштаб или прокручивает списки.	Das Mausrad zoomt oder scrollt Listen.	La rueda ajusta el zoom o desplaza listas.	La molette zoome ou fait défiler les listes.
+Arrow keys move the camera.	Клавиши со стрелками двигают камеру.	Pfeiltasten bewegen die Kamera.	Las flechas mueven la cámara.	Les touches fléchées déplacent la caméra.
+Original uses command letters; Grid uses QWE / ASD / ZXC.	Оригинал: буквы команд. Сетка: QWE / ASD / ZXC.	Original: Befehlsbuchstaben. Raster: QWE / ASD / ZXC.	Original: letras de las órdenes. Cuadrícula: QWE / ASD / ZXC.	Original : lettres des commandes. Grille : QWE / ASD / ZXC.
+Ctrl+0-9 assigns; Shift+0-9 adds; 0-9 recalls.	Ctrl+0-9 сохраняет; Shift+0-9 добавляет; 0-9 выбирает.	Strg+0-9 speichert; Umschalt+0-9 ergänzt; 0-9 wählt aus.	Ctrl+0-9 asigna; Mayús+0-9 añade; 0-9 selecciona.	Ctrl+0-9 affecte ; Maj+0-9 ajoute ; 0-9 sélectionne.
+Press a group number twice to center the camera.	Нажмите номер группы дважды, чтобы навести камеру.	Zweimal die Gruppennummer drücken, um die Kamera zu zentrieren.	Pulsa dos veces el número del grupo para centrar la cámara.	Appuyez deux fois sur le numéro du groupe pour centrer la caméra.
+Space: latest alert. Tab: terrain. Enter: chat.	Пробел: последнее событие. Tab: рельеф. Enter: чат.	Leertaste: letzter Alarm. Tab: Gelände. Enter: Chat.	Espacio: última alerta. Tab: terreno. Intro: chat.	Espace : dernière alerte. Tab : terrain. Entrée : chat.
+Escape cancels or goes back. F10 opens the game menu.	Escape отменяет или возвращает назад. F10 открывает меню.	Esc bricht ab oder geht zurück. F10 öffnet das Spielmenü.	Esc cancela o vuelve atrás. F10 abre el menú del juego.	Échap annule ou revient en arrière. F10 ouvre le menu du jeu.
+Command hotkeys	Клавиши команд	Befehlskürzel	Atajos de órdenes	Raccourcis
+Grid (QWE/ASD/ZXC)	Сетка (QWE/ASD/ZXC)	Raster (QWE/ASD/ZXC)	Cuadrícula (QWE/ASD/ZXC)	Grille (QWE/ASD/ZXC)
+Mouse edge scrolling	Прокрутка у края экрана	Scrollen am Bildschirmrand	Desplazamiento en los bordes	Défilement aux bords
+Mouse wheel zoom	Масштаб колёсиком	Zoom per Mausrad	Zoom con la rueda	Zoom à la molette
+Middle-button camera drag	Камера средней кнопкой	Ziehen mit mittlerer Maustaste	Arrastrar con el botón central	Glisser avec le bouton central
+Arrow-key camera	Камера клавишами стрелок	Kamera per Pfeiltasten	Cámara con las flechas	Caméra avec les flèches
+
+# Minimap terrain tooltip
+Hide minimap terrain	Скрыть рельеф миникарты	Minikartengelände ausblenden	Ocultar terreno del minimapa	Masquer le terrain de la minicarte
+Show minimap terrain	Показать рельеф миникарты	Minikartengelände einblenden	Mostrar terreno del minimapa	Afficher le terrain de la minicarte
+Hides terrain on the minimap. Unit markers remain visible.	Скрывает рельеф на миникарте. Метки юнитов остаются видимыми.	Blendet das Gelände auf der Minikarte aus. Einheitenmarkierungen bleiben sichtbar.	Oculta el terreno del minimapa. Las marcas de las unidades siguen visibles.	Masque le terrain de la minicarte. Les repères des unités restent visibles.
+Shows terrain on the minimap.	Показывает рельеф на миникарте.	Blendet das Gelände auf der Minikarte ein.	Muestra el terreno del minimapa.	Affiche le terrain de la minicarte.

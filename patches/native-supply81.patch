@@ -1,0 +1,78 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -2302,6 +2302,11 @@
+ 		move_unit(item,carrier->sprite->position);
+ 	}
+ 
++	// An effective limit can be overridden without altering tracked supply providers.
++	virtual fp1 available_supply(int owner, size_t race) const {
++		return st.supply_available[owner][race];
++	}
++
+ 	bool has_available_supply_for(int owner, const unit_type_t* unit_type, bool show_error = false) const {
+ 		if (ut_flag(unit_type, (unit_type_t::flags_t)0x1000000)) return true;
+ 		auto supply_required = unit_type->supply_required;
+@@ -2318,7 +2323,7 @@
+ 			(void)show_error;
+ 			return false;
+ 		}
+-		if (st.supply_used[owner][index] + supply_required > st.supply_available[owner][index]) {
++		if (st.supply_used[owner][index] + supply_required > available_supply(owner, index)) {
+ 			// todo: callback for error message/sound?
+ 			(void)show_error;
+ 			return false;
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -1725,7 +1725,7 @@
+ 			unit_max_energy(u).integer_part(),ut_building(u) ? 1 : 0,
+ 			ut_detector(u) && !u_hallucination(u) && !unit_unpowered(u) ? 1 : 0, supplied,
+ 			st.supply_used[u->owner][ri].raw_value / 2,
+-			std::min(200,st.supply_available[u->owner][ri].raw_value / 2),ri,cargo ? 1 : 0);
++			std::min<int>(200,available_supply(u->owner,ri).raw_value / 2),ri,cargo ? 1 : 0);
+ 		auto weapon = [&](const weapon_type_t* w, int hits) {
+ 			if (!w) return;
+ 			int level = player_upgrade_level(u->owner,w->damage_upgrade);
+@@ -1838,14 +1838,14 @@
+         if (spectator) if (auto* u=primary_selected();u&&u->owner<8) {p=u->owner;ri=int(unit_race(u));}
+         if(ri<0||ri>2)ri=int(my_race);
+         resources_text=format("%d\t%d\t%d\t%d",int(st.current_minerals[p]),int(st.current_gas[p]),
+-            st.supply_used[p][ri].raw_value/2,std::min<int>(200,st.supply_available[p][ri].raw_value/2));
++            st.supply_used[p][ri].raw_value/2,std::min<int>(200,available_supply(p,ri).raw_value/2));
+         int active=1<<ri;
+         for(auto* u:ptr(st.player_units[p]))if(!unit_dying(u)&&!ut_turret(u)) {
+             int race=int(unit_race(u));if(race>=0&&race<3)active|=1<<race;
+         }
+         resources_text+=format("\t%d",active);
+         for(int race=0;race<3;++race)resources_text+=format("\t%d\t%d",st.supply_used[p][race].raw_value/2,
+-            std::min<int>(200,st.supply_available[p][race].raw_value/2));
++            std::min<int>(200,available_supply(p,race).raw_value/2));
+         return resources_text.c_str();
+     }
+     const char* cargo_status() {
+@@ -2110,6 +2110,15 @@
+ 
+     bool test_instant = false;
+     bool test_invincible = false; // session-only; new games and loaded saves start disabled
++    bool test_unlimited_supply = false; // session-only, never changes map/save supply totals
++    fp1 available_supply(int owner, size_t race) const override {
++        return test_unlimited_supply && !spectator && owner == my_player
++            ? fp1::integer(200) : st.supply_available[owner][race];
++    }
++    void set_test_unlimited_supply(bool enabled) {
++        test_unlimited_supply = enabled;
++        if (enabled) rep_on = false; // local cheats cannot be reproduced by a normal replay
++    }
+     bool cheat_damage_immune(const unit_t* u) const override {
+         return test_invincible && !spectator && u && u->owner == my_player;
+     }
+--- a/actions.h
++++ b/actions.h
+@@ -905,7 +905,7 @@
+ 				if (!unit_can_build(u, unit_type)) continue;
+ 			} else continue;
+ 			if (u->order_type->id == Orders::ZergUnitMorph) continue;
+-			if(race!=race_t::none&&required>fp1::zero()&&st.supply_used[owner][(size_t)race]+reserved_supply+required>std::min(st.supply_available[owner][(size_t)race],fp1::integer(200))){shortage=supply_shortage=true;continue;}
++			if(race!=race_t::none&&required>fp1::zero()&&st.supply_used[owner][(size_t)race]+reserved_supply+required>std::min(available_supply(owner,(size_t)race),fp1::integer(200))){shortage=supply_shortage=true;continue;}
+             if (!build_queue_push(u, unit_type)) {shortage=true;continue;}
+             reserved_supply+=required;
+ 			set_unit_order(u, get_order_type(Orders::ZergUnitMorph));

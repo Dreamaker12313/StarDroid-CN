@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "scope": "Production CHK/terrain thumbnail renderer with synthetic original-format tileset tables; no Android device",
+  "result": "PASS 362561 embedded-map preview checks: eight tilesets, aspect ratios, bounded CHK, start/resource markers, cache and missing assets",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeMapPreview.java": "0e76c189436052b4715ee9106fab84b6a333ab141625dfb2f4461a5f10d7437c",
+    "tests/run_replay_thumbnail.py": "c3ff6fc693ca1d63bbebaa0f41a8705b9e0156eef4d17cadf7308ce8ed626c11"
+  }
+}

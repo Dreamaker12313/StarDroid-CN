@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "version": "1.1",
+  "originalDylarianUnmodified": true,
+  "originalBunkers": 12,
+  "originalGarrisonedTroops": 45,
+  "originalBaselineOccupants": 0,
+  "checks": [
+    "unchanged Dylarian trigger loads45 original troops into12 bunkers, including full-map Anywhere, and deterministic save continuation",
+    "rectangular trigger bounds, elevation exclusions, invalid locations and repeat-script reservation",
+    "four-seat capacity, existing inbound reservations, full/unfinished/disabled/dead/enemy bunkers and incompatible troops",
+    "campaign scheduled garrison, infantry creation/transfer and save continuation",
+    "custom scheduled garrison, infantry creation/transfer and save continuation",
+    "newly constructed and replacement bunker re-acquires eligible local guard",
+    "human/scene/scripted movement/combat/attack-wave/airlift/medic/hero protections and garrison versus wave accounting",
+    "ordinary Dropship inbound and loaded passenger orders/accounting unchanged"
+  ],
+  "sourceSha256": {
+    "tests/native_bunker11.cpp": "fc4854336bf8398b7da448ba02ae36386987a95401be4166d5b2897fa9b5d0d1",
+    "tests/native_abilities79.cpp": "a9a7663edfaf7e51b86dcb5bb827ff741876374ea6e46dffd765532c5e140c02",
+    "tests/run_bunker11.py": "cc110d122417f2a97176b297173604c7a621a1fd4a046804a76b8cd72d5fca5f",
+    "patches/native-bunker-ai11.patch": "3de0bdc55cb22426a2845651292aef28b18fca61612481805b3ce242b5a55101",
+    "native/runtime.cpp": "67c14be28d79fca7f7f6fdf706f754a1893c9bdf12714b07cee9825bbce6bbde",
+    "native/replay.h": "7894c2b7306867be55c39d444db410ffcd3046c249fa06511e91cd7114d64af3",
+    "native-engine/web/campaign_ai.h": "3053def4993a2096356dcca59e3d94b3b0c270dc48ca423e9ef7ed6017f792c3",
+    "native-engine/bwgame.h": "158035c0d621c23df0e93ad8f72a31113fe76859f007fef2190b6b185b83956a"
+  },
+  "binarySha256": "58d3e8b5721f34b04b7fb5c0c674ced562fc769000b7669e68490f1e8c187b1d",
+  "originalArchiveSha256": "c263520dff883bd217ee9028f2b62244d6bb6d1b71521d8a6b6f196ffcc4d183",
+  "limitations": [
+    "Host engine regression, not physical Android testing.",
+    "Original Dylarian startup and controlled shared-AI cases, not complete mission playthroughs.",
+    "Automatic maintenance is restricted to active computer towns and idle local combat infantry; authored movement, attack waves, transports and human orders remain protected."
+  ]
+}

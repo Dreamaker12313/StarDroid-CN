@@ -1,0 +1,723 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT shim using production score renderer and imported original artwork/fonts",
+  "result": "PASS 9337 score-layout checks; 56 original force names from 64 campaigns; 2068 full-string pixel checks; 376 race/victory/tab/language screens; font use 16/14/10/8=[754, 462, 792, 60]",
+  "campaignMapInventory": [
+    {
+      "mission": "terrantutorial",
+      "chkSha256": "4aafcfe93cc42cb642fde912a459a6c89b0cd6a1f8160c93cac3c34dd0b13af1",
+      "forceNames": [
+        "Colonial Militia",
+        "unused",
+        "Unidentified Creatures",
+        "unused"
+      ]
+    },
+    {
+      "mission": "terran01",
+      "chkSha256": "4b0e5009c4ae80cfb4cb13ede30842db0aa05bb3be2eedad695fb093fa5786f6",
+      "forceNames": [
+        "Colonial Militia",
+        "unused",
+        "Unidentified Creatures",
+        "unused"
+      ]
+    },
+    {
+      "mission": "terran02",
+      "chkSha256": "d8a7f6b70422ff32e4fd3f6293de4013f883e0761814d4496ffd18b7eb13dfce",
+      "forceNames": [
+        "Colonial Militia",
+        "Zerg Swarm",
+        "unused",
+        "unused"
+      ]
+    },
+    {
+      "mission": "terran03",
+      "chkSha256": "9d83a8bde18c38ee12f54f4c5253bed5466027fc612141e9a7415c94d3346737",
+      "forceNames": [
+        "Colonial Militia",
+        "Zerg Swarm",
+        "Sons of Korhal",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "terran04",
+      "chkSha256": "a48e1d1682f0a6e68eeec4ef0fc82efc48e70a11b4315de8c091079c68e10601",
+      "forceNames": [
+        "Sons of Korhal",
+        "Zerg Swarm",
+        "Neutrals",
+        "Confederacy"
+      ]
+    },
+    {
+      "mission": "terran05",
+      "chkSha256": "35cd98bc0590c0f36e5d8f75e41a29b254db2d6cf8dec5480e6ffd7602609829",
+      "forceNames": [
+        "Sons of Korhal",
+        "Confederacy",
+        "Colonial Militia",
+        "unused"
+      ]
+    },
+    {
+      "mission": "terran06",
+      "chkSha256": "80dd42e4d4540d0340113b92aae02120b9919a5dac359b010607ec7c26e72ead",
+      "forceNames": [
+        "Sons of Korhal",
+        "Confederacy",
+        "Zerg Swarm",
+        "Zerg Swarm"
+      ]
+    },
+    {
+      "mission": "terran08",
+      "chkSha256": "dab280d946f059845ba3084da11f159091bfbc24c4cd54eb2a352ff1a165f515",
+      "forceNames": [
+        "Sons of Korhal",
+        "Confederacy",
+        "unused",
+        "unused"
+      ]
+    },
+    {
+      "mission": "terran09",
+      "chkSha256": "083be62ec869ddf049f816eaf873355c57381b869581717234f3499b39ab23c7",
+      "forceNames": [
+        "Sons of Korhal",
+        "unused",
+        "Confederacy",
+        "Confederacy"
+      ]
+    },
+    {
+      "mission": "terran11",
+      "chkSha256": "1b55e907af8c4c5c6c5e0adcc775b8fe82e263d7afb9eba70ded40d11d5e412c",
+      "forceNames": [
+        "Sons of Korhal",
+        "Expeditionary Force",
+        "Zerg Swarm",
+        "unused"
+      ]
+    },
+    {
+      "mission": "terran12",
+      "chkSha256": "2a3efca711b5a75ffd0ea569802fe0bd4dbfcfbfa0b0f308d897c0dca698fd7d",
+      "forceNames": [
+        "Former Colonial Militia",
+        "Sons of Korhal",
+        "Sons of Korhal",
+        "unused"
+      ]
+    },
+    {
+      "mission": "zerg01",
+      "chkSha256": "f4794b4f8fc90f6ea9c4a585faa2c0a1de25450311256c7329a288d4dcd826ad",
+      "forceNames": [
+        "Zerg Swarm",
+        "Remnants of the Confederacy",
+        "Sir Not Appearing In This Film",
+        "Akilae Tribe"
+      ]
+    },
+    {
+      "mission": "zerg02",
+      "chkSha256": "5819629c7bf99c941ab64225de24e4aa60c5164ad5c00345258aa62fe6a0eadf",
+      "forceNames": [
+        "Zerg Swarm",
+        "Expeditionary Force",
+        "Zerg Swarm",
+        "unused"
+      ]
+    },
+    {
+      "mission": "zerg03",
+      "chkSha256": "a62ddf17410b37aa406aaf6a0024edb1aae9f69521e5abeab7a537baf638f7d7",
+      "forceNames": [
+        "Zerg Swarm",
+        "Terran Dominion",
+        "Not used at all",
+        "Not used"
+      ]
+    },
+    {
+      "mission": "zerg04",
+      "chkSha256": "535c6d75f4225224abf36965627d7e7889c3e3b245a97d95843933d5cfb9de2a",
+      "forceNames": [
+        "Zerg Swarm",
+        "Former Colonial Militia",
+        "Former Colonial Militia",
+        "unused"
+      ]
+    },
+    {
+      "mission": "zerg05",
+      "chkSha256": "d758f917aebef2775b76bf90a5637fc7308ef4540334b05567e3c0caa6666e45",
+      "forceNames": [
+        "Zerg Swarm",
+        "Terran Dominion",
+        "Zerg Swarm",
+        "Scientists"
+      ]
+    },
+    {
+      "mission": "zerg06",
+      "chkSha256": "f441dcbdc4878d16a0e71790464d9ef8d677aad0c85e2463d0fa4ff2616af1f1",
+      "forceNames": [
+        "Zerg Swarm",
+        "Fleet of the Executor",
+        "Yadda Yadda Tribe",
+        "unused"
+      ]
+    },
+    {
+      "mission": "zerg07",
+      "chkSha256": "2c39850f5a902c369130da3ebfce6d32d087e1d1d8fca1204ef6ef2f9a1b5e9d",
+      "forceNames": [
+        "Zerg Swarm",
+        "----",
+        "unused",
+        "unused"
+      ]
+    },
+    {
+      "mission": "zerg08",
+      "chkSha256": "ea8af2d5458e5c27ad53419a80420f32619c60a7830eefd4742b767f3dc0cac2",
+      "forceNames": [
+        "Zerg Swarm",
+        "Expeditionary Force",
+        "Expeditionary Force",
+        "unused"
+      ]
+    },
+    {
+      "mission": "zerg09",
+      "chkSha256": "fd99e4670f57110dd7720777a188d6447c7e23a02334c691f90790c5752f8205",
+      "forceNames": [
+        "Zerg Swarm",
+        "Vanguard of Aiur",
+        "Vanguard of Aiur",
+        "Vanguard of Aiur"
+      ]
+    },
+    {
+      "mission": "zerg10",
+      "chkSha256": "7d9befb178c53014bc7c7efdcb6ed208a0aa7c97b4a37141cbca5345fd6d15fb",
+      "forceNames": [
+        "Zerg Swarm",
+        "Vanguard of Aiur",
+        "Vanguard of Aiur",
+        "Vanguard of Aiur"
+      ]
+    },
+    {
+      "mission": "protoss01",
+      "chkSha256": "374a08c6d15bbd32280091e54164047b12c6ffc526d12d0663a0c7df18784188",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "Protoss Armada",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "protoss02",
+      "chkSha256": "c2a1faa77faaa8f85d178da8d5502a9235749240244b7403d240bff9b220fe24",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "unused",
+        "unused"
+      ]
+    },
+    {
+      "mission": "protoss03",
+      "chkSha256": "6e73084830bd7c49da9dfeeb11e11b9e589b066b3e4290836cd2baf4415762e6",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "unused"
+      ]
+    },
+    {
+      "mission": "protoss04",
+      "chkSha256": "9cf4f218e0b29b7e61743fd6383dab6c3aec4a5e12c6fade0b0fc37ae44c67b3",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Followers of Tassadar"
+      ]
+    },
+    {
+      "mission": "protoss05",
+      "chkSha256": "0911c2cf8b484c266e26ed3c439cd917e0dc0cd9a7cb62985bc4800f7b64afe5",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Terran Dominion",
+        "Zerg Swarm",
+        "Zerg Swarm"
+      ]
+    },
+    {
+      "mission": "protoss06",
+      "chkSha256": "30f0a374867c7b57cf51e5c445041020eebbe4a1fcbc074359a581a5bc5f5eee",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "Terran Survivors",
+        "Zerg Swarm"
+      ]
+    },
+    {
+      "mission": "protoss07",
+      "chkSha256": "a813922890e6eafe4feda27b591715c465e98e8ee40e3717b5c2b0735e403a83",
+      "forceNames": [
+        "Vanguard of Aiur",
+        "Vanguard of Aiur",
+        "Fleet of the Executor",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "protoss08",
+      "chkSha256": "4ee5b213ce8e46b5a3b1ab3e815767a91b0b1f720d503cb203548730ce0efc37",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Vanguard of Aiur",
+        "Vanguard of Aiur",
+        "unused"
+      ]
+    },
+    {
+      "mission": "protoss09",
+      "chkSha256": "5af7dd1b80328ee75501b18e54c5f8849c320ca247e3380e1aae1349d4a8a15c",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Zerg Swarm"
+      ]
+    },
+    {
+      "mission": "protoss10",
+      "chkSha256": "e8bc84347cd8810d423e76c8e739612de777f579dd287eca2ef5bc620ff4ebdd",
+      "forceNames": [
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Not Used"
+      ]
+    },
+    {
+      "mission": "expprotoss01",
+      "chkSha256": "ef8153dbfc7d9216207aaac7cda7a2950980cdb35a9c72612a67dc7b76a09e67",
+      "forceNames": [
+        "Khalai Survivors",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Khalai Survivors"
+      ]
+    },
+    {
+      "mission": "expprotoss02",
+      "chkSha256": "07725cd6a26052101ecfef735105c204309a40518de1a232736aefb268f01011",
+      "forceNames": [
+        "Protoss Refugees",
+        "Renegade Zerg",
+        "Protoss Warband",
+        "Comments"
+      ]
+    },
+    {
+      "mission": "expprotoss03",
+      "chkSha256": "d4d49e69460b587bc55af2852409366ccff1ed433a101535ac391b288f74bbf8",
+      "forceNames": [
+        "Fleet of the Matriarch",
+        "Zerg Swarm",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expprotoss04",
+      "chkSha256": "f495e751fb3975fa7a701f5a250d554dadee5776a7a2d35c038980883293c863",
+      "forceNames": [
+        "Protoss Expeditionary Force",
+        "Dominion Planetary Defense",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expprotoss05",
+      "chkSha256": "b32673a2c6b5aa4479202df8ddc408c2cca29cca094b77e357fb1f930103b963",
+      "forceNames": [
+        "Protoss Reconnaissance Force",
+        "UED Blockade",
+        "Force 3",
+        "Comments"
+      ]
+    },
+    {
+      "mission": "expprotoss06",
+      "chkSha256": "4eb75410295fe4ac68a4c45e0179a91afb72d0078bf98a808461a7c54a62f611",
+      "forceNames": [
+        "Fleet of the Matriarch",
+        "Renegade Zerg",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expprotoss07",
+      "chkSha256": "44b57433f843a111d02e565fb8976a2396a228bf08ef058c5c0a1a9c6d5ef274",
+      "forceNames": [
+        "Fleet of the Matriarch",
+        "Khalai Insurgents",
+        "Force 3",
+        "Zerg Swarm"
+      ]
+    },
+    {
+      "mission": "expprotoss08",
+      "chkSha256": "600dbf632ff6a1b2987e482912312f29189cde3a3c3a599b13c2c6d4b56e5acb",
+      "forceNames": [
+        "Fleet of the Matriarch",
+        "Renegade Zerg",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expterran01",
+      "chkSha256": "48b3dee553ae2e0b2747b9cd4b85f5a4dfc982dc89bb523fad015acdc4c7b5ab",
+      "forceNames": [
+        "UED Strike Team",
+        "Terran Dominion",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expterran02",
+      "chkSha256": "dda5b662bd21a7335f076a56a65690b35e441a1a0fe6aebc84676f0951934108",
+      "forceNames": [
+        "UED Strike Team",
+        "Dylarian Orbital Defense",
+        "General Duke's Battle Fleet",
+        "Comments"
+      ]
+    },
+    {
+      "mission": "expterran03",
+      "chkSha256": "76516a763fe806b2a4e2c6814c4fcd3e05f51a21c8aa8817837a74b4fcf9ff38",
+      "forceNames": [
+        "UED Strike Team",
+        "Renegade Zerg",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expterran04",
+      "chkSha256": "988d5c2c1692a63038a3e7a895dd0d35fe9cf3696523e37858f4b5f69f9a8401",
+      "forceNames": [
+        "UED Strike Team",
+        "Terran Dominion",
+        "Force 3",
+        "Comments"
+      ]
+    },
+    {
+      "mission": "expterran05a",
+      "chkSha256": "c957cb9946b7e756be3fbbbcee27438891695522612bc3f9e7ced880ae7e07ef",
+      "forceNames": [
+        "UED Strike Force",
+        "Terran Dominion",
+        "Transports",
+        "Comments"
+      ]
+    },
+    {
+      "mission": "expterran05b",
+      "chkSha256": "ef5270cc733291603cc1646dff1ce03f40dc310a6025d4ea99ebe53ff88d5a20",
+      "forceNames": [
+        "UED Strike Force",
+        "Terran Dominion",
+        "Raynor's Raiders",
+        "Comments"
+      ]
+    },
+    {
+      "mission": "expterran06",
+      "chkSha256": "54d0997fa091fc6ffb6e16491fda29281ed89d2e5b3d0e0be3f2b2d7c14c4e17",
+      "forceNames": [
+        "UED Strike Team",
+        "Protoss Refugees",
+        "Zerg Swarm",
+        "UED Strike Team"
+      ]
+    },
+    {
+      "mission": "expterran07",
+      "chkSha256": "c6835b14e8362a4edd66305b3821788386fa8b1deeffb39867d56a55884c508d",
+      "forceNames": [
+        "UED Commando Force",
+        "Stukov's Elite Guard",
+        "UED Commando Force",
+        "Zerg Swarm"
+      ]
+    },
+    {
+      "mission": "expterran08",
+      "chkSha256": "b1d19c2323564ba64c252c1d5ba4705ffd6fbc69f8ed3cf36936ecb0da8d4197",
+      "forceNames": [
+        "UED Strike Force",
+        "Renegade Zerg",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg01",
+      "chkSha256": "9f308010673e284524a98138aef2a21a96fa135cd2a5360b5a4d04914985fe55",
+      "forceNames": [
+        "Zerg Swarm",
+        "Renegade Zerg",
+        "Force 3",
+        "Neutral Hive Clusters"
+      ]
+    },
+    {
+      "mission": "expzerg02",
+      "chkSha256": "32985e8804ca7e667c26a95b44f8c0f171586a899cd1acf0b6abb06a666309c3",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Defense Garrison",
+        "Renegade Zerg",
+        "Raynor's Raiders"
+      ]
+    },
+    {
+      "mission": "expzerg03",
+      "chkSha256": "3d4db669c12a60a60ee7edcebcaf77ebc79fd2e30e2418dc37dcb2701efa8eb2",
+      "forceNames": [
+        "Zerg Swarm",
+        "Kel-Morian Combine",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg04a",
+      "chkSha256": "9fa70aa9def47962d6fe6a2e597a021a90bea81f2fefeae58297df285d2a66f6",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Planetary Garrison",
+        "UED Slave Brood",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg04b",
+      "chkSha256": "57ed718ac4cf2f60460411f91b2a6e7c29d865f956a740fd3e9a4cb1d76693b8",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Planetary Garrison",
+        "UED Slave Brood",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg04c",
+      "chkSha256": "e18eb7d59029b5f62895a13da98f592252f1512eb9913bf63acf04c7b43b3f94",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Planetary Garrison",
+        "UED Slave Brood",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg04d",
+      "chkSha256": "70f52da6ec0ca0dc48d6d60f829f0099c85ce12e55187ff318846eb70e44fd94",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Planetary Garrison",
+        "UED Slave Brood",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg04e",
+      "chkSha256": "c27d7cd80d28cf6b9d8151a765001e7883827809675a37d8005c775fc9eed1dd",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Planetary Garrison",
+        "UED Slave Brood",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg04f",
+      "chkSha256": "50f61e57b89027c7c72bef0d6ccb6a15b9886f119cf77587cf4715f4e7e9dc93",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Planetary Garrison",
+        "UED Slave Brood",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg05",
+      "chkSha256": "cd85a53ed3c9345dd4f8987421b5709d8bf87faa7d038fe149790151c70ac6b9",
+      "forceNames": [
+        "Zerg Swarm",
+        "Terran Dominion",
+        "Raynor's Raiders",
+        "Zerg Swarm"
+      ]
+    },
+    {
+      "mission": "expzerg06",
+      "chkSha256": "dc0529f66c56a650cf3c5d1eb5a9addaf00e6d97c9473d91ba9fc31422c9af14",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Science Corps",
+        "UED Slave Brood",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg07",
+      "chkSha256": "2541f8af8528b0db42520ec3e1e138e1cb9f67b2be12a4e60d06edc3fa2ccfdb",
+      "forceNames": [
+        "Zerg Swarm",
+        "Telemantros Defenders",
+        "Force 3",
+        "Force 4"
+      ]
+    },
+    {
+      "mission": "expzerg08",
+      "chkSha256": "22ac125001ebb5835a697f3186160d3bdfd2de8913e24ff9eb3adb25ba41423a",
+      "forceNames": [
+        "Zerg Swarm",
+        "UED Command Fleet",
+        "UED Slave Brood",
+        "Protoss Warband"
+      ]
+    },
+    {
+      "mission": "expzerg09",
+      "chkSha256": "f7987c26f0b990d5b13e3e5dbd0f3788d11cf8bbe67c73aa5904bdbfc591b9a9",
+      "forceNames": [
+        "Zerg Swarm",
+        "Protoss Warband",
+        "UED Remnants",
+        "Protoss Warband"
+      ]
+    },
+    {
+      "mission": "expzerg10",
+      "chkSha256": "856026e96c23b5080bfb11a185fb86bdb8accf4f46c4113bfd3588192d97fbc4",
+      "forceNames": [
+        "Zerg Swarm",
+        "Terran Dominion",
+        "Fleet of the Executor",
+        "UED Battle Fleet"
+      ]
+    },
+    {
+      "mission": "expbonus",
+      "chkSha256": "6dd16b341f1dd2fabbbc28ed8a06d1b22df6e5f225e0b2baa9597da3c24a3c99",
+      "forceNames": [
+        "Protoss Warband",
+        "Clandestine Mercenaries",
+        "Protoss Warband",
+        "Clandestine Mercenaries"
+      ]
+    }
+  ],
+  "nativeStatsFixtureSha256": {
+    "terrantutorial": "aabfff36d0c51068a145b0968611f9a92bbce46ffd10ba35a1c8a07b992e163b",
+    "terran01": "efdeefd2036c4f6f0a42c815033648f82ea96ffc6ad4826345de06422d3b3eaf",
+    "terran02": "58ddea315c0606c2d0fdd33548777cfb869c0ebfef526a2f6d988797dfef9e28",
+    "terran03": "5e22e9dcc0e49e69c248a2115bbd893f467ed29bcd26227cfdb1a788ddfe706e",
+    "terran04": "57ed6ffcc12f963b81d1712e6bbbcdb1e76b72eb6c9d4fc17aeb5f9085556b1c",
+    "terran05": "7f2a21d4a8be1855b70e334702adb901fda421a0e0837b75420b1e7c51997d82",
+    "terran06": "3b1060de9a70db4026c739dd2024c55cf0fabec0c443ef08c8c81ceee91ddb6d",
+    "terran08": "4660d6c9f170a9e0c02e2e889f205784e908696ef3302256b9280892d95436f1",
+    "terran09": "daefe3ee47edfc0484a9ad8d46dbd6aaaa7712c91b333b485ac08e4957173e07",
+    "terran11": "82754bec309e1058da04715bd0820d92a00be4237fd7047c19e1aa719e571031",
+    "terran12": "d9422dd98c54753d207b75b68f889b676365ddf42c61fb4e698fd5bb2e57a1ee",
+    "zerg01": "83d741c2f3d0e7c277cdb0418bd2c09fa7e9f57ed262d72949a067145fb573be",
+    "zerg02": "07beb4f715fed783eec5e3c36abba6cd29ee5c0022efc91d2d3d05347fe26104",
+    "zerg03": "181a4fdcb76852b48fc31b1e442f43d9209690d523d2385e2a6fed629c03bbd9",
+    "zerg04": "010456fbb46522f6c0f3610b4bdaba4351e512958f25bac3c8962649207893d0",
+    "zerg05": "638a078c259f09a78412b00900ce59674ab6289d7c362a1e039a7411784f1d87",
+    "zerg06": "2f8b5ab1ed34c047dc749df57cc81fc71f8547b0c4740caddad323eb2f85cb82",
+    "zerg07": "682167a2cfa104e784be479512de64903f529021b323141c9f204b86bad6703d",
+    "zerg08": "87899331eb1aa2a53350123058870b59767e21cee73186bd276a4fb4f8628e14",
+    "zerg09": "09c3d718b361279c76014cd4fddf4047508d703ba87c4dd10985afa38642b987",
+    "zerg10": "a82ccf5bbb3025cea5f628b5279388d143b9faa966b48621014c772b2f8d78c8",
+    "protoss01": "0c7f91863bf4abc4b611a834dac4b917ca767fb9d834fc05de9fb895990e9411",
+    "protoss02": "67e7bb9478f0f4a612025454c30c92f84020c8f0d80c5ad4013014721c05ade9",
+    "protoss03": "86a5e04ea9c8e02814d15ad26bfff88c265a1562a38d7bc552142f2b4530ec51",
+    "protoss04": "6098086dc853f9780c26af59180786a277718b461bedf9c505e71cf696d8c6e3",
+    "protoss05": "c7f1255e8b0c7c2cc6bef16e8f01a61507caf475394909ecfda69eda46515d9e",
+    "protoss06": "a1b7c3ae79605c17d9b9093f610aaf1d2736cfd48c16df5ce9b2d7b6b6662a83",
+    "protoss07": "55579240a285b31485e5c9c0b6c265f0e748d385893ba107143e060fe60eb37f",
+    "protoss08": "4a6f3fd07df0ce69b9dd24cad9bc6f0bbe09dcdd52465b87b5b0af7e99457f22",
+    "protoss09": "9b437bb71d3e8dab6916a8ca9f92844474f1a88e010b19d29a49aa601f362afc",
+    "protoss10": "53761a8e7e1fbaabe811959747aaac95998d2fdfc21794e3fe27b53513fe48cf",
+    "expprotoss01": "3407a3169a4ae9d7adb65938e951005db5aceb09470a687fd15f1e2607afb464",
+    "expprotoss02": "19ff8d841768731768881a11d10acd3c9ffe1fc6d5675b6f9362836bddfb15b1",
+    "expprotoss03": "7db2019620097f19d8fc88efe1ec602ad7889ab03af68fee5f68a4db05875d69",
+    "expprotoss04": "9e2401d9275ffe81b3e10bc70b419c8ff1c87a2609aefdda96208af7a6eea590",
+    "expprotoss05": "6b79bf86f9f7d1d4b7b7cb5f56c517bcc5e8c1e66ec35ec81dd0de3aabbf019c",
+    "expprotoss06": "1ab0cf98726a5d892d5e4b20532b846e4ee2b29342b3f3db3922fc84dfe3adc4",
+    "expprotoss07": "39830b2a6b380578bd638c1fa134cb75c16d1317196e1384792613669e434825",
+    "expprotoss08": "7973bd2ffe8c8ea1b105180346595df511ac639dfae224fb13833e8430282652",
+    "expterran01": "106eff14a7c4604f6913f5b3a593e074115fa8e8f165d1f110d951b18ea2170c",
+    "expterran02": "33a18643a563b7183e7e25a15ebccc0b322cc8e791bcdfbed0b0f804efea1796",
+    "expterran03": "05f78c3cef5ee38bba4b3b33cbb7d6c681f18fac4382ce32107948f9663860c7",
+    "expterran04": "40b4557790bf9458e0238b672ba6acfc814eda9e141246e9fb866cb216ee55e8",
+    "expterran05a": "1ef717f2db1a04712144235af1f4eb803fc6d7787f5ff721899d9f95d9c771d9",
+    "expterran05b": "19d7218d1006cefdf08eb844c3b487eb4919dcd5de1cbe1d32dfb4a726940c7e",
+    "expterran06": "359d094ab18b3a5aff5dd588fb2b2afc98ee544b0c5c54f5f997cbe120cf09ca",
+    "expterran07": "7186796ae3b0d52f30f4d6e56d82cc808eeefbf83d80b7603a2eb6d53be83f7d",
+    "expterran08": "cc9f8e6b7e294cd06dd6b1cf935c35f96b9995942f97f949cfd3af4b3c65bb1e",
+    "expzerg01": "7a5b17e7493cba990d01f6821acf7cdbef04e27e7060c4c31e848aa1dcf5f897",
+    "expzerg02": "dc9afb94706628dd683e38f378035a300f0b6f5cdc60a920a23deb50509618fd",
+    "expzerg03": "31c55a9a9460cd9c3637406361a6f87cba50944340b43d7e9d122264927faa0f",
+    "expzerg04a": "e1efc01abeed91b70c495006a742f5cfed247d6fa319e68c6fe1e84d8ac6e2f9",
+    "expzerg04b": "64431437966c072e943e58bd7ff6a602fb4333319d0f0dff54a44d6d174ffbb6",
+    "expzerg04c": "aca89be246a6cb17e9a12ead8c6df83731563d3c8c65c31869cb48d71f02cb87",
+    "expzerg04d": "14b142ad27b6ef903c6ea898e7563508d9dad02fd98d7646cfdc6bb91637b0ac",
+    "expzerg04e": "fb7dec71024ab53fa4e44200ee6cdbf38571bfa4c2375f95771fb038729e57bc",
+    "expzerg04f": "c635c9873d4760c584c537e1724a5d0099d012a52d7124b40d1b1187ec8a366e",
+    "expzerg05": "af2db381fddb29880b12128d7871a5d2a8254f474e114f77083796315f7d8c1c",
+    "expzerg06": "00d703d737eb765a90e8d2abcd1f32411a1577234fef3dadb099e95691cbf6e6",
+    "expzerg07": "76d7df0f6c716c6632263cbf6b2ac74e2092cb6f5eec90f4fd0f11608808838c",
+    "expzerg08": "e350daf2f55b216a6f3d3414704d70166a04f1a27008619fd0d5b2496725f3f3",
+    "expzerg09": "9dea4654fa692d55d0834b8d0dc5a4b64005f8d5c7568b53a49466cc92f376fb",
+    "expzerg10": "3e8beb2b10d241dcc4d3050df49fdd66d073b7197e28f38063db735139d0e31f",
+    "expbonus": "3039bf4c32c84cb16f69345c2b938ec5b36e9f27344b9d6a88e997f7863f69ca"
+  },
+  "nativeStatsProofSha256": "d95020b58c1b78d9c3274a3317b992645ca9b6fc3cd5361c3c958946fc882349",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "2264b0dcf69c0f36e04810cf722b4f0c9bd82d8d96c1f6f111d7d7e9b0046c48",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "9108b45139f4ec24664715e211fde61ee1d59fe82a8606b60563ac19f4cf63c6",
+    "app/src/main/assets/native/ui-languages.tsv": "7cf66f84816d6b6655e722404ecfe1069250bba74994d311076e6efbd3846f04",
+    "tests/run_score_layout11.py": "3a00cf3ebc8823ffe2073eaa1f0e95be16ac9e46413cae55105f9c6961596919"
+  }
+}

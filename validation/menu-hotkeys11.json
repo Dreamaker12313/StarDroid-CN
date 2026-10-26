@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT shim; production NativeGlue/NativeArt methods; actual imported BIN and FONT/font.gid assets; movie boundary stubbed",
+  "result": "PASS 1443 checks; 225 real BIN captions; 121 surviving mnemonics; 900 original-font renders; nine dialogs plus all three original briefing Replay buttons, five UI languages, exact resolved captions do not restore excluded shortcuts, enabled/disabled/hover, exact authored colors, overrides, fitting, bracket preservation and distinct green replay shortcut ramps",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "63576cee68570ca6ff8e4f8df79d383f4dc7dacad025fab879a9de1b05c7ab04",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "6524d413cc8d23c1d7ce4dfd94b344ef8d87d76173e7e55931e0d70b5befa1d9",
+    "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
+    "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "715d49b416621a93b488e553f53fb317ef378707795f2d927523e1fa89e2b971",
+    "app/src/main/assets/native/ui-languages.tsv": "ef08365128db72e311b9dea09f9ea99a44b3a635650f91bfde2d4143619cb284",
+    "tests/run_menu_hotkeys11.py": "67c45686dddc732a82a7b925e5f68e78c06152c93ca6d849be1fda2067f9f461"
+  }
+}

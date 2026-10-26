@@ -1,0 +1,62 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -2041,10 +2041,22 @@
+ 		int r = (int)my_race;   // 1 Terran, 2 Protoss, else Zerg
+ 		under_attack_sound = find_sound(r == 1 ? "TAdUpd00" : r == 2 ? "PAdUpd00" : "ZAdUpd00");
+ 	}
++    int completion_type_key(UnitTypes type) const {
++        // Duke's Siege/Unsiege animation changes his DAT type, not his identity.
++        if(game_st.hero_mode)if(const auto* hero=hero_definition(type))return hero->id;
++        return int(type);
++    }
++    int hero_ready_sound(const unit_t* u) const {
++        if(!game_st.hero_mode || ut_turret(u))return -1;
++        if(!hero_definition(u->unit_type->id) && !unit_is(u,UnitTypes::Hero_Tassadar_Zeratul_Archon))return -1;
++        // Use the hero's race even in a mixed-race army, never the player's race.
++        int race=int(unit_race(u));return race>=0&&race<3?32+race:-1;
++    }
+ 	// Auto-spawned / transient units the game never announces (larva trickle, morph
+ 	// eggs, carrier interceptors, reaver scarabs) — skip their ready voice.
+ 	int ready_sound_for(const unit_t* u) const {
+         if (ut_turret(u)) return -1;
++        if (int rescue=hero_ready_sound(u);rescue>=0)return rescue;
+         if (unit_is(u, UnitTypes::Terran_Siege_Tank_Tank_Mode) || unit_is(u, UnitTypes::Terran_Siege_Tank_Siege_Mode))
+             return find_sound("TTaRdy00");
+         if (ut_building(u) && unit_race(u) == race_t::terran)
+@@ -2056,6 +2068,7 @@
+         return -1;
+     }
+     bool announces_ready(const unit_t* u) const {
++        if(hero_ready_sound(u)>=0 && (u_hallucination(u) || spectator || st.players[my_player].controller!=player_t::controller_occupied))return false;
+ 		using U = UnitTypes;
+ 		switch (u->unit_type->id) {
+ 		case U::Zerg_Larva: case U::Zerg_Egg: case U::Zerg_Cocoon: case U::Zerg_Lurker_Egg:
+@@ -2266,7 +2279,7 @@
+ 		if (old_owner == new_owner || new_owner != my_player || spectator || !u->sprite || ut_turret(u)) return;
+ 		rescue_flashes[u->sprite->index] = {get_unit_id(u),st.current_frame};
+ 		// Ownership changes are not production completions.
+-		announced[get_unit_id(u).raw_value] = int(u->unit_type->id);
++		announced[get_unit_id(u).raw_value] = completion_type_key(u->unit_type->id);
+ 		last_life[get_unit_id(u).raw_value] = u->hp.ceil().integer_part() + u->shield_points.integer_part();
+ 	}
+ 	const unit_t* selection_flash_unit(const sprite_t* sprite) const override {
+@@ -2286,7 +2299,7 @@
+ 		// Rescued units are not newly produced units: don't play their ready lines.
+ 		for (auto* u : ptr(st.player_units[new_owner])) if (u_completed(u)) {
+ 			auto id = get_unit_id(u).raw_value;
+-			announced[id] = int(u->unit_type->id);
++			announced[id] = completion_type_key(u->unit_type->id);
+ 			last_life[id] = u->hp.ceil().integer_part() + u->shield_points.integer_part();
+ 		}
+ 		last_rescue_sound = 32 + int(race);
+@@ -2331,8 +2344,8 @@
+ 			if (u_completed(u) && !archon_merging(u) && u->order_type->id != Orders::Sieging
+ 			    && u->order_type->id != Orders::Unsieging) {
+ 				auto previous = announced.find(id);
+-				bool fresh = previous == announced.end() || previous->second != int(u->unit_type->id);
+-				announced[id] = int(u->unit_type->id);
++				bool fresh = previous == announced.end() || completion_type_key(UnitTypes(previous->second)) != completion_type_key(u->unit_type->id);
++				announced[id] = completion_type_key(u->unit_type->id);
+ 				if (fresh && !seeding && announces_ready(u)) {
+ 					last_ready_type = int(u->unit_type->id); last_ready_sound = ready_sound_for(u);
+ 					++ready_notifications;

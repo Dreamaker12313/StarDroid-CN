@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "checks": "PASS 131 campaign progress and original mission UI checks: native outcome hook, persistent separate IDs, save owners, deletion/recreation, replay/custom/cinematic exclusions, original fonts, widened targets, clipped labels, scroll dragging and end reachability",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/CampaignProgress.java": "bf8c8c9181bbbcbb3a2a28a6612c8adcde8051083ba7b2e96e956e19bc0e9a51",
+    "app/src/main/java/org/openbw/androidtest/CampaignCatalog.java": "5126fcd1d4b4f860b133ecd54da440cf2b5630e2b45641dcf753b0c0c7fdd321",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "d4111453f93688a93933d97f2de48cf70a24b8142325badf0aae714c1e1994d3",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "d2578a7d45e61ef92e5027b7fd0ee66dd785061ce723ad12d453fb7bd64a5a0f",
+    "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
+    "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "9108b45139f4ec24664715e211fde61ee1d59fe82a8606b60563ac19f4cf63c6",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "e753454718d383b78d943a7b85e992e08c13f9e7ed4519e7f2bad78a5d9777c3",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "9a7394decd9071d5b1fb1159f5f07a5fb1d2dc9e1fceaff496e03de6e6a3b94e",
+    "tests/run_campaign_progress81.py": "bb4857c9f7fd485b77d86d89456a257b4c26f63b272d964424f4d364efca9c24"
+  },
+  "screenshots": [
+    "build-native/campaign81/mission-history.png"
+  ],
+  "completionHistoryBackfilled": false,
+  "saveOwnership": "Immutable Player ID; legacy name only while the original ID still exists",
+  "scrollTargetWidth": 36,
+  "arrowTargetHeight": 32,
+  "missionActionWidth": 164,
+  "missionActionHeight": 34
+}

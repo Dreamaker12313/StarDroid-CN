@@ -1,0 +1,58 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -2537,6 +2537,7 @@
+ 		while (!u->build_queue.empty()) cancel_build_queue(u, u->build_queue.size() - 1);
+ 	}
+ 
++	virtual void on_addon_order_accepted(unit_t*, const unit_type_t*) {}
+ 	void place_building(unit_t* u, const order_type_t* order_type, const unit_type_t* unit_type, xy position) {
+ 		if (order_type->id == Orders::BuildingLand) {
+ 			set_unit_order(u, order_type, position);
+@@ -2556,6 +2557,14 @@
+ 		}
+ 		if (!has_available_supply_for(u->owner, unit_type, true)) return;
+ 		if (!has_available_resources_for(u->owner, unit_type, true)) return;
++        // Audio notification only: a newly accepted add-on request, never its
++        // later lift/land/build frames or the same pending request repeated.
++        bool notify_addon = order_type->id == Orders::PlaceAddon && ut_addon(unit_type);
++        if (notify_addon && u->building.addon_build_type == unit_type) {
++            if (u->order_type->id == Orders::PlaceAddon && u->order_target.pos == position) notify_addon = false;
++            for (auto& queued : u->order_queue)
++                if (queued.order_type->id == Orders::PlaceAddon && queued.target.position == position) notify_addon = false;
++        }
+ 		set_unit_order(u, order_type, position);
+ 		cancel_build_queue(u);
+ 		if (ut_building(u) && ut_building(unit_type)) {
+@@ -2563,6 +2572,7 @@
+ 		} else {
+ 			build_queue_push(u, unit_type);
+ 		}
++        if (notify_addon) on_addon_order_accepted(u, unit_type);
+ 	}
+ 
+ 	bool player_has_supply_and_resources_for(int owner, const unit_type_t* unit_type, bool show_error = false) {
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -499,6 +499,13 @@
+ 		}
+ 		return nullptr;
+ 	}
++
++    void on_addon_order_accepted(unit_t* builder, const unit_type_t* addon) override {
++        if (!builder || builder->owner != my_player || spectator || campaign_speech_muted
++            || st.players[builder->owner].controller != player_t::controller_occupied) return;
++        // Use the same original race construction cue as worker placement.
++        play_sound(4 + int(unit_race(addon)), xy(), nullptr, false);
++    }
+ 
+ 	// Play one of a unit's voice-ack sounds (first..last inclusive), the way the
+ 	// original game client did on select/order — the sim never plays these.
+@@ -2599,7 +2606,7 @@
+ 			// from it and lifts off only when that differs from where the parent stands.
+ 			cmd_build(Orders::PlaceAddon, pending_addon,
+ 			          tx + pending_addon->addon_position.x / 32, ty + pending_addon->addon_position.y / 32);
+-			if (auto* u = primary_selected()) play_unit_ack(u,u->unit_type->first_yes_sound,u->unit_type->last_yes_sound);
++			// Construction feedback waits for the command to be accepted by the engine.
+ 			clear_pending();
+ 			return;
+ 		}

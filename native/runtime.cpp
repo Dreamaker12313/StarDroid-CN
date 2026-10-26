@@ -26,6 +26,7 @@ static int touch_radius=28;
 static bool touch_attack_move=true;
 static bool touch_ground_orders=true;
 static bool nearby_defenders=true;
+static bool replay_seek_audio_muted=false;
 extern "C" {
 uint8_t* openbw_framebuffer();
 int openbw_framebuffer_width();
@@ -33,10 +34,12 @@ int openbw_framebuffer_height();
 void openbw_mouse_move(int,int);
 void openbw_mouse_button(int,int,int,int,int);
 void openbw_key(int,int,int);
+void openbw_reset_input();
+void openbw_command_button(int,int);
 void js_read_data(int index,void* dst,unsigned offset,unsigned n){if(index<0||index>=11)throw std::runtime_error("Invalid archive index");archives[index].read(dst,offset,n);}
 unsigned js_file_size(int i){return i>=0&&i<11?unsigned(archives[i].size):0;}
 int js_sound_load(const void* data,unsigned n){return naudio::add(data,n);}
-void js_sound_play(int id,int ch,int vol,int pan){naudio::play(id,ch,vol,pan);}
+void js_sound_play(int id,int ch,int vol,int pan){if(!replay_seek_audio_muted)naudio::play(id,ch,vol,pan);}
 int js_sound_is_playing(int ch){return naudio::playing(ch);}
 void js_sound_stop(int ch){naudio::stop(ch);}
 void js_sound_set_volume(int ch,int vol){std::lock_guard<std::mutex> l(naudio::mutex);if(ch>=0&&ch<64)naudio::voices[ch].left=naudio::voices[ch].right=vol/128.f;}
@@ -45,7 +48,10 @@ void js_sound_set_volume(int ch,int vol){std::lock_guard<std::mutex> l(naudio::m
 #include "hero_mode.h"
 #include "save_state.h"
 static bool net_active=false;
+namespace native_replay {static bool is_active();static void step();static void reset();static void begin();}
+
 static void native_step(){
+ if(native_replay::is_active()){native_replay::step();return;}
  if(net_active)return;
  if(!g_ui||g_ui->outcome)return;
  // Input is a stream of BW commands; the native host must consume it just as
@@ -56,13 +62,16 @@ static void native_step(){
 }
 // The map is reloaded by Java first; the snapshot then replaces its live state.
 static std::vector<uint8_t> save_game() {
- native_save::check(g_ui!=nullptr,"No game is running");native_save::check(!net_active,"Save/load is unavailable during nearby multiplayer");native_save::HostState host;host.bot_slot=custom_bot_slot;
+ native_save::check(g_ui!=nullptr,"No game is running");native_save::check(!native_replay::is_active(),"Cannot save a replay as a game.");native_save::check(!net_active,"Save/load is unavailable during nearby multiplayer");native_save::HostState host;host.bot_slot=custom_bot_slot;
  return native_save::save(*g_ui,g_campaign,host);
 }
 static void restore_game(std::vector<uint8_t>& bytes) {
+ native_save::check(!native_replay::is_active(),"Cannot load a saved game during replay playback.");
  native_save::check(g_ui!=nullptr,"No game is running");native_save::check(!net_active,"Save/load is unavailable during nearby multiplayer");
  auto host=native_save::restore(*g_ui,g_campaign,bytes);
  g_ui->set_test_invincible(false);
+ g_ui->set_test_unlimited_supply(false);
+ g_ui->rep_on=false; // A resumed world is not a replay starting at frame zero.
  custom_bot_slot=host.bot_slot;
  // One-shot effects from the discarded world must not bleed into a loaded save.
  for(int ch=0;ch<57;ch++)naudio::stop(ch);
@@ -78,11 +87,13 @@ struct AssetReader {
 using NativeMPQ=bwgame::data_loading::mpq_file<AssetReader>;
 static std::array<std::unique_ptr<NativeMPQ>,11> readers;
 static void close_game(){
+ native_replay::reset();
  net_active=false;
  if(g_ui){g_ui->wnd.destroy();if(g_campaign)delete g_campaign;else delete g_ui;}
  g_ui=nullptr;g_campaign=nullptr;delete g_mission;g_mission=nullptr;delete g_loader;g_loader=nullptr;g_mission_sounds.clear();naudio::clear_game();naudio::stop(62);
 }
 #include "multiplayer.h"
+#include "replay.h"
 static void open_archive(int i,const std::string& path){if(i<0||i>=11)throw std::runtime_error("Invalid archive slot");readers[i].reset();archives[i].open(path);if(archives[i].data)readers[i].reset(new NativeMPQ(std::to_string(i).c_str()));}
 static bwgame::a_vector<uint8_t> read_asset(int index,const std::string& filename){
  bwgame::a_vector<uint8_t> data;
@@ -94,14 +105,47 @@ static bwgame::a_vector<uint8_t> read_asset(int index,const std::string& filenam
  if(index>=0){if(index>=11)throw std::runtime_error("Invalid asset slot");read(index);}else for(int i:{2,1,0,4})if(read(i))break;
  return data;
 }
-static const char* text_query(int id){switch(id){
+static const char* text_query(int id){if(id==1&&native_replay::is_active())return native_replay::resources();if(id==0&&native_replay::is_active()){static std::string name;name=openbw_card();name=name.substr(0,name.find('\n'));return name.c_str();}switch(id){
  case 0:return openbw_card();case 1:return openbw_resources();case 2:return openbw_status();case 3:return openbw_wires();case 4:return openbw_unit_details();case 5:return openbw_campaign_events();case 6:return openbw_campaign_status();case 7:return openbw_campaign_timer();case 8:return openbw_error();case 9:return openbw_stats();case 10:return openbw_debug_units();case 11:return openbw_campaign_ai_error();case 12:return openbw_messages();case 13:return openbw_debug_dump();case 14:return g_ui?g_ui->cargo_status():"";default:return "";}}
-static int value_query(int id,int n){switch(id){case 0:return openbw_cursor();case 1:return openbw_selected_type();case 2:return openbw_production_icon();case 3:return openbw_production_kind();case 4:return openbw_production_queue_type(n);case 5:return openbw_selected_race();case 6:return openbw_wire_box();case 7:return openbw_outcome();case 8:return openbw_frame();case 9:return openbw_map_w();case 10:return openbw_map_h();case 11:return openbw_portrait_for_type(n);case 12:return openbw_portrait_talking();case 13:return openbw_map_tileset();case 14:return openbw_minimap_terrain();case 16:return openbw_placement_valid((n>>16)&65535,n&65535);case 17:return openbw_touch_action((n>>16)&65535,n&65535);case 18:return g_ui&&g_ui->show_order_lines;case 19:return int(naudio::position_ms(n));case 20:return nearby_defenders;case 21:return g_ui?g_ui->group_count(n):0;case 22:return g_ui&&g_ui->test_invincible;case 23:return openbw_cursor_box();default:return 0;}}
+static int value_query(int id,int n){if(native_replay::is_active()&&id==0)return 0;switch(id){case 25:return native_replay::is_active();case 26:return native_replay::playing.frames;case 27:return native_replay::viewpoint;case 28:return native_replay::seeking;case 29:return native_replay::seek_target;case 0:return openbw_cursor();case 1:return openbw_selected_type();case 2:return openbw_production_icon();case 3:return openbw_production_kind();case 4:return openbw_production_queue_type(n);case 5:return openbw_selected_race();case 6:return openbw_wire_box();case 7:return openbw_outcome();case 8:return openbw_frame();case 9:return openbw_map_w();case 10:return openbw_map_h();case 11:return openbw_portrait_for_type(n);case 12:return openbw_portrait_talking();case 13:return openbw_map_tileset();case 14:return openbw_minimap_terrain();case 16:return openbw_placement_valid((n>>16)&65535,n&65535);case 17:return openbw_touch_action((n>>16)&65535,n&65535);case 18:return g_ui&&g_ui->show_order_lines;case 19:return int(naudio::position_ms(n));case 20:return nearby_defenders;case 21:return g_ui?g_ui->group_count(n):0;case 22:return g_ui&&g_ui->test_invincible;case 23:return openbw_cursor_box();case 24:return g_ui&&g_ui->test_unlimited_supply;default:return 0;}}
+static bool touch_beacon_move(int x,int y){
+ if(!g_ui||g_ui->paused||g_ui->campaign_control_lock||g_ui->spectator||g_ui->pending_build||g_ui->targeting)return false;
+ auto* beacon=g_ui->select_get_unit_at(g_ui->screen_to_map(x,y));
+ if(!beacon||!beacon->sprite||g_ui->unit_hidden_by_fog(beacon)||!g_ui->unit_is_special_beacon(beacon))return false;
+ auto* selected=g_ui->primary_selected();
+ if(!selected||selected->owner!=g_ui->my_player||g_ui->unit_dying(selected))return false;
+ g_ui->refresh_card();
+ bool mobile=false;for(const auto& c:g_ui->card)if(c.act==bwgame::play_ui::C_MOVE&&c.enabled)mobile=true;
+ if(!mobile)return false;
+ // Beacons are destinations, including owned ones. Use their center rather
+ // than a unit-target Follow order, which can stop outside the trigger area.
+ auto destination=beacon->sprite->position;
+ g_ui->sync_selection();g_ui->cmd_order(bwgame::Orders::Move,destination,nullptr,g_ui->key_shift());
+ g_ui->show_marker(destination);
+ g_ui->play_unit_ack(selected,selected->unit_type->first_yes_sound,selected->unit_type->last_yes_sound);
+ return true;
+}
 static void command(int op,int a,int b,int c,int d){
- if(net_active && ((op>=9&&op<=18&&op!=12)||op==20||op==23||op==29))return;
+ if(native_replay::is_active()){
+  if(op==31){native_replay::set_view(a);return;}
+  if(op==4)d=1;
+  if(op==1&&b!=1)return;
+  if(op==33&&b!=1)return;
+  if(op==32&&a&&c!=224&&c!=225&&c!=228&&c!=229&&c!=43&&c!=44)return;
+  if(op!=0&&op!=1&&op!=3&&op!=4&&op!=5&&op!=6&&op!=8&&op!=19&&op!=21&&op!=22&&op!=26&&op!=27&&op!=28&&op!=32&&op!=33&&op!=34)return;
+ }
+ if(net_active && ((op>=9&&op<=18&&op!=12)||op==20||op==23||op==29||op==30))return;
+ if(g_ui&&(op==9||op==11||op==13||op==15||op==16||op==17||op==18))g_ui->rep_on=false;
  switch(op){
  case 0:openbw_mouse_move(a,b);break;case 1:openbw_mouse_button(a,b,c,d,1);break;case 2:openbw_key(1,a,b);openbw_key(0,a,b);break;case 3:openbw_pan(a,b);break;
+ // Desktop input keeps real press/release lifetimes and double-click counts.
+ // Coordinates come from op 0; input still uses the existing BW command stream.
+ case 32:openbw_key(a!=0,b,c);break;
+ case 33:if(g_ui&&(b==1||b==3)){int x,y;g_ui->wnd.get_cursor_pos(&x,&y);openbw_mouse_button(a!=0,b,x,y,c>=2?2:1);}break;
+ case 34:openbw_reset_input();openbw_touch_cancel();if(g_ui)g_ui->is_moving_replay_slider=false;break;
+ case 35:openbw_command_button(a,b);break;
  case 4:{
+  if(!d&&touch_beacon_move(a,b))break;
   if (g_ui) if (auto* near=g_ui->touch_selection_near(a,b,std::max(0,int(touch_radius/std::max(.5,g_ui->minimap_scale))),d!=0)) {
    g_ui->current_selection_clear();g_ui->current_selection_add(near);
    if(c && near->owner==g_ui->my_player && !g_ui->ut_building(near))
@@ -117,11 +161,12 @@ static void command(int op,int a,int b,int c,int d){
   }
   if(action==3 && touch_attack_move)openbw_touch_attack();int button=(action==1 || (action==3 && !touch_attack_move))?3:1;openbw_mouse_move(a,b);openbw_mouse_button(1,button,a,b,c?2:1);openbw_mouse_button(0,button,a,b,c?2:1);break;}
  case 22:touch_radius=std::max(0,std::min(40,a));touch_attack_move=b!=0;touch_ground_orders=c!=0;break;
- case 23:nearby_defenders=a!=0;if(g_campaign){g_campaign->base_defence_enabled=nearby_defenders;if(!nearby_defenders)g_campaign->defence_alerts={};}break;
+ case 23:nearby_defenders=a!=0;if(g_campaign&&g_campaign->base_defence_enabled!=nearby_defenders){g_campaign->base_defence_enabled=nearby_defenders;if(!nearby_defenders)g_campaign->defence_alerts={};if(g_ui->st.current_frame)g_ui->rep_on=false;else native_replay::begin();}break;
  case 26:if(g_ui)g_ui->host_controls_edge_scroll=a!=0;break;
  case 27:if(g_ui)g_ui->original_larvae_selection=a!=0;break;
  case 28:if(g_ui)g_ui->single_larva_morph=a!=0;break;
  case 29:if(g_ui)g_ui->set_test_invincible(a!=0);break;
+ case 30:if(g_ui)g_ui->set_test_unlimited_supply(a!=0);break;
  case 25:if(g_ui && !g_ui->paused && !g_ui->campaign_control_lock && a>=0 && a<10){g_ui->clear_pending();if(b)g_ui->assign_group(a);else g_ui->recall_group(a);}break;
  case 24:if(g_ui){g_ui->sync_selection();g_ui->cmds.unload(uint16_t(a));}break;
  case 5:openbw_touch_cancel();break;case 6:openbw_set_paused(a);break;case 7:openbw_cancel(a);break;case 8:openbw_set_minimap_terrain(a);break;case 9:openbw_test_money();break;case 10:openbw_test_instant(a);break;case 11:openbw_reveal_map();break;case 12:openbw_resign();break;case 13:openbw_debug_outcome(a);break;case 14:openbw_debug_select(a,b);break;case 15:openbw_debug_set_life(a,b,c);break;case 16:openbw_debug_kill(a);break;case 17:openbw_debug_resources(a,b);break;case 18:openbw_debug_warp(a,b,c);break;case 19:openbw_set_order_lines(a);break;case 21:if(g_ui){g_ui->hud_bottom_inset=std::max(0,a);g_ui->clamp_viewport();}break;case 20:custom_bot_slot=std::max(-1,std::min(7,a));custom_ai_race=std::max(0,std::min(2,b));g_terran_ai_level=std::max(0,std::min(2,c));g_skirmish_expansion=d!=1;break;
@@ -198,7 +243,7 @@ JNI(multiplayerApplyAll) void JNICALL Java_org_openbw_androidtest_NativeBridge_m
 JNI(multiplayerStep) void JNICALL Java_org_openbw_androidtest_NativeBridge_multiplayerStep(JNIEnv* e,jclass){try{net_step();}catch(const std::exception& x){fail(e,x);}}
 JNI(multiplayerPeerLeft) void JNICALL Java_org_openbw_androidtest_NativeBridge_multiplayerPeerLeft(JNIEnv* e,jclass){try{net_peer_left();}catch(const std::exception& x){fail(e,x);}}
 JNI(resize) void JNICALL Java_org_openbw_androidtest_NativeBridge_resize(JNIEnv* e,jclass,jint w,jint h,jdouble scale){try{openbw_resize(w,h);openbw_set_view_scale(scale);}catch(const std::exception& x){fail(e,x);}}
-JNI(frame) void JNICALL Java_org_openbw_androidtest_NativeBridge_frame(JNIEnv* e,jclass,jobject b,jint steps,jdouble time){try{for(int i=0;i<steps;i++)native_step();openbw_render(time);bitmap(e,b,openbw_framebuffer(),openbw_framebuffer_width(),openbw_framebuffer_height());}catch(const std::exception& x){fail(e,x);}}
+JNI(frame) void JNICALL Java_org_openbw_androidtest_NativeBridge_frame(JNIEnv* e,jclass,jobject b,jint steps,jdouble time){try{if(native_replay::seeking)native_replay::pump_seek();else for(int i=0;i<steps;i++)native_step();openbw_render(time);bitmap(e,b,openbw_framebuffer(),openbw_framebuffer_width(),openbw_framebuffer_height());}catch(const std::exception& x){fail(e,x);}}
 JNI(text) jstring JNICALL Java_org_openbw_androidtest_NativeBridge_text(JNIEnv* e,jclass,jint id){try{return e->NewStringUTF(text_query(id));}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(rawText) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_rawText(JNIEnv* e,jclass,jint id){try{const char* s=text_query(id);return bytes(e,reinterpret_cast<const uint8_t*>(s),strlen(s));}catch(const std::exception& x){fail(e,x);return nullptr;}}
 // Independent reader: background map imports never replace the live game's archive.
@@ -214,17 +259,24 @@ JNI(archiveText) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_arc
  if(h->block_index>=archive.mpq.block_table.size()||archive.mpq.block_table[h->block_index].size>1024*1024)throw std::runtime_error("Invalid language table");
  bwgame::a_vector<uint8_t> table;archive(table,name);return bytes(e,table.data(),table.size());
  }catch(const std::exception& x){fail(e,x);return nullptr;}}
-JNI(value) jint JNICALL Java_org_openbw_androidtest_NativeBridge_value(JNIEnv* e,jclass,jint id,jint n){try{if(id==15)return g_ui&&g_ui->rep_on;return value_query(id,n);}catch(const std::exception& x){fail(e,x);return 0;}}
+JNI(value) jint JNICALL Java_org_openbw_androidtest_NativeBridge_value(JNIEnv* e,jclass,jint id,jint n){try{if(id==15)return g_ui&&g_ui->rep_on&&native_replay::recording.present&&!native_replay::is_active();return value_query(id,n);}catch(const std::exception& x){fail(e,x);return 0;}}
 JNI(saveState) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_saveState(JNIEnv* e,jclass){try{auto data=save_game();return bytes(e,data.data(),data.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(restoreState) void JNICALL Java_org_openbw_androidtest_NativeBridge_restoreState(JNIEnv* e,jclass,jbyteArray b){try{if(!b)throw std::runtime_error("Missing saved game");size_t n=e->GetArrayLength(b);native_save::check(n<=native_save::MAX_BYTES);std::vector<uint8_t> data(n);e->GetByteArrayRegion(b,0,n,(jbyte*)data.data());restore_game(data);}catch(const std::exception& x){fail(e,x);}}
-JNI(seekSound) void JNICALL Java_org_openbw_androidtest_NativeBridge_seekSound(JNIEnv*,jclass,jint ch,jint ms){std::lock_guard<std::mutex> l(naudio::mutex);if(ch<0||ch>=64||ms<0)return;auto& v=naudio::voices[ch];if(v.clip)v.position=std::min(double(v.clip->pcm.size()/v.clip->channels),ms*v.clip->rate/1000.);}
+JNI(seekSound) void JNICALL Java_org_openbw_androidtest_NativeBridge_seekSound(JNIEnv*,jclass,jint ch,jint ms){std::lock_guard<std::mutex> l(naudio::mutex);if(ch<0||ch>=64||ms<0)return;auto& v=naudio::voices[ch];if(v.clip)v.position=std::min(double(v.clip->pcm.size()/v.clip->channels),double(ms)*v.clip->rate/1000.);}
 JNI(soundPosition) jdouble JNICALL Java_org_openbw_androidtest_NativeBridge_soundPosition(JNIEnv*,jclass,jint ch){return ch>=0&&ch<64?naudio::position_ms(ch):-1;}
 JNI(scoreSound) jint JNICALL Java_org_openbw_androidtest_NativeBridge_scoreSound(JNIEnv* e,jclass,jbyteArray fill,jbyteArray ending,jint duration){try{
  auto f=net_java_bytes(e,fill,8*1024*1024),t=net_java_bytes(e,ending,8*1024*1024);
  auto a=naudio::wav(f.data(),f.size()),b=naudio::wav(t.data(),t.size());
  naudio::play_clip(naudio::score_clip(*a,*b,duration),57);return duration;
  }catch(const std::exception& x){fail(e,x);return 0;}}
-JNI(replay) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replay(JNIEnv* e,jclass){try{const auto* p=openbw_save_replay();return p?bytes(e,p,openbw_replay_len()):nullptr;}catch(const std::exception& x){fail(e,x);return nullptr;}}
+JNI(replay) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replay(JNIEnv* e,jclass){try{auto b=native_replay::save();return b.empty()?nullptr:bytes(e,b.data(),b.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
+JNI(replayInfo) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replayInfo(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);auto info=native_replay::info(b.data(),b.size());return bytes(e,reinterpret_cast<const uint8_t*>(info.data()),info.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
+// Read-only preview: use the same bounded decoder/validation as playback,
+// without opening a game, mounting a map or changing the active replay.
+JNI(replayScenario) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replayScenario(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);auto replay=native_replay::parse(b.data(),b.size());return bytes(e,replay.map.data(),replay.map.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
+JNI(replayOpen) void JNICALL Java_org_openbw_androidtest_NativeBridge_replayOpen(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);native_replay::open(b.data(),b.size());}catch(const std::exception& x){fail(e,x);}}
+JNI(replaySeek) void JNICALL Java_org_openbw_androidtest_NativeBridge_replaySeek(JNIEnv* e,jclass,jint target){try{native_replay::seek(target);}catch(const std::exception& x){fail(e,x);}}
+JNI(replayCancelSeek) void JNICALL Java_org_openbw_androidtest_NativeBridge_replayCancelSeek(JNIEnv* e,jclass){try{native_replay::cancel_seek();}catch(const std::exception& x){fail(e,x);}}
 JNI(command) void JNICALL Java_org_openbw_androidtest_NativeBridge_command(JNIEnv* e,jclass,jint op,jint a,jint b,jint c,jint d){try{command(op,a,b,c,d);}catch(const std::exception& x){fail(e,x);}}
 JNI(asset) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_asset(JNIEnv* e,jclass,jint slot,jstring name){try{auto data=read_asset(slot,utf(e,name));return data.empty()?nullptr:bytes(e,data.data(),data.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(chk) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_chk(JNIEnv* e,jclass){return bytes(e,openbw_campaign_chk(),openbw_campaign_chk_len());}

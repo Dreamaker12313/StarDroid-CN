@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "originalLoadListImported": true,
+  "originalDeleteWidget": 7,
+  "legacyBundlesAccepted": true,
+  "assetComparisons": [
+    {
+      "game": "StarCraft",
+      "asset": "rez/gluload.bin",
+      "bytes": 1073,
+      "sha256": "63035dbf71a7f57c7564a650c2752e91aaf9ee2f21e22628d58aff23f5a03b88"
+    },
+    {
+      "game": "StarCraft",
+      "asset": "glue/load/plist.pcx",
+      "bytes": 17875,
+      "sha256": "fe8c68a955aa29ced88c36656806f070462e54085f0801c8a9d6942c59f3889a"
+    },
+    {
+      "game": "StarCraft",
+      "asset": "glue/load/pinfo.pcx",
+      "bytes": 10736,
+      "sha256": "42284ffd5a30d0659b65626f493faf73deef02723604a2821eba310282ac6425"
+    },
+    {
+      "game": "BroodWar",
+      "asset": "rez/gluload.bin",
+      "bytes": 881,
+      "sha256": "3df8486ffebc42175a44361ab6e97b0df377d9d029dfdead6c5fdf3f6289cbc9"
+    },
+    {
+      "game": "BroodWar",
+      "asset": "glue/load/plist.pcx",
+      "bytes": 17875,
+      "sha256": "fe8c68a955aa29ced88c36656806f070462e54085f0801c8a9d6942c59f3889a"
+    },
+    {
+      "game": "BroodWar",
+      "asset": "glue/load/pinfo.pcx",
+      "bytes": 10736,
+      "sha256": "42284ffd5a30d0659b65626f493faf73deef02723604a2821eba310282ac6425"
+    }
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "c55926c62c6b67c41c17653d6ffe291555546ddf83c4980513e2b3475a19de89",
+    "app/src/main/java/org/openbw/androidtest/CampaignCatalog.java": "5126fcd1d4b4f860b133ecd54da440cf2b5630e2b45641dcf753b0c0c7fdd321",
+    "app/src/main/java/org/openbw/androidtest/InterfaceData.java": "ca87dd5776896b6227986bdfb0f44e1b4d4056e6a9c6b11c05d5b46060442fa1",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "88f07e13cf83fccc0061fab68597d763bd3cacff2019720e8cb1b75fffdbae53",
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "941a4b6bb9a866105aaa874719176d1938fcff587f04d6dff5c6eb128166fab6",
+    "tests/ReplayAssets81Test.java": "4e400a0b27006ec1247d2f2d74575ef4885b88e39f28e40d1934fb956e5fd2e5",
+    "tests/run_replay_assets81.py": "038f8935d4a8a2567abb2c0fe781890458f8e9c845ec28893d980a11f26293e9"
+  }
+}

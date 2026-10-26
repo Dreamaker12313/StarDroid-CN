@@ -1,0 +1,109 @@
+--- a/ui/native_window.h
++++ b/ui/native_window.h
+@@ -15,7 +15,8 @@
+ 			type_resize,
+ 			type_mouse_button_down,
+ 			type_mouse_button_up,
+-			type_mouse_motion
++			type_mouse_motion,
++            type_command_button
+ 		};
+ 		int type = type_none;
+ 		int sym = -1;
+@@ -29,6 +30,8 @@
+ 		int mouse_xrel = -1;
+ 		int mouse_yrel = -1;
+ 		int clicks = -1;
++        int command_index = -1;
++        int command_token = 0;
+ 	};
+ 
+ 	struct window {
+--- a/web/wasm_backend.cpp
++++ b/web/wasm_backend.cpp
+@@ -155,6 +155,17 @@
+ 	e.sym = sym;
+ 	e.scancode = scancode;
+ 	g_window->enqueue(e);
++}
++
++// A host-rendered command button uses its exact identity, not a possibly
++// shared classic hotkey. Keep it in the same modifier-snapshotted event queue.
++OPENBW_EXPORT(openbw_command_button) void openbw_command_button(int index, int token) {
++    if (!g_window || index < 0 || index >= 256 || token <= 0) return;
++    ev_t e;
++    e.type = ev_t::type_command_button;
++    e.command_index = index;
++    e.command_token = token;
++    g_window->enqueue(e);
+ }
+ 
+ // ---------------------------------------------------------------------------
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -298,6 +298,17 @@
+ 	               TechTypes tech = TechTypes::None; UpgradeTypes upg = UpgradeTypes::None;
+ 	               uint16_t unit = 0;          // target unit id (C_UNLOAD)
+ 	               UnitTypes req = UnitTypes::None; };   // grayed: the missing prerequisite to show
++    // Stable local identity for a displayed command. Affordability and enabled
++    // state are intentionally excluded: the live engine checks those at dispatch.
++    int command_token(const cmd_t& c) {
++        uint32_t hash = 2166136261u;
++        auto add = [&](uint32_t v) { for (int i = 0; i != 4; ++i) { hash ^= v & 255; hash *= 16777619u; v >>= 8; } };
++        add(uint32_t(c.act)); add(uint32_t(c.ut)); add(uint32_t(c.tech));
++        add(uint32_t(c.upg)); add(c.unit); add(uint8_t(c.key)); add(uint32_t(menu));
++        const auto* selected = primary_selected();
++        add(selected ? uint32_t(selected->unit_type->id) : uint32_t(UnitTypes::None));
++        return int(hash & 0x7fffffffu) | 1;
++    }
+ 	a_vector<cmd_t> card;
+ 	a_string card_text;                           // "title\nKEY\tLabel\tEN\n…" for the JS overlay
+ 	a_string status_text;                         // producer queue + progress, rebuilt per frame
+@@ -1515,7 +1526,7 @@
+ 		if (id == U::Protoss_High_Templar) card.push_back({'r', "Merge Archon", C_ARCHON, U::Protoss_Archon});
+ 		else if (id == U::Protoss_Dark_Templar) card.push_back({'r', "Dark Archon", C_DARCHON, U::Protoss_Dark_Archon});
+ 		if (id == U::Protoss_Shield_Battery && u_completed(u))
+-			card.push_back({'b', "Recharge Shields", C_RECHARGE, U::None, !unit_is_disabled(u)});
++			card.push_back({'r', "Recharge Shields", C_RECHARGE, U::None, !unit_is_disabled(u)});
+ 		// Targeted spellcaster abilities: visible when the scenario permits the tech,
+ 		// grayed until researched; low energy leaves the icon active. The canonical key falls back to auto-assign on a collision.
+ 		size_t nsp; const spell_t* sp = spells(nsp);
+@@ -1727,6 +1738,8 @@
+             // Supply is in half-units, matching units.dat, and is the final unit's total.
+             card_text += format("\t%d\t%d\t%d", energy, supply,
+                 supply && c.ut != UnitTypes::None ? int(unit_race(get_unit_type(c.ut))) : int(unit_race(sel)));
++            // Fields 16/17 identify the exact command behind the host's grid slot.
++            card_text += format("\t%d\t%d", int(&c - card.data()), command_token(c));
+ 		}
+ 	}
+ 
+@@ -2441,9 +2454,11 @@
+ 
+ 	// Execute the command bound to `key` in the current card. Returns false if
+ 	// the key isn't a command (so base key handling can run).
+-	bool run_command(char key) {
+-		for (auto& c : card) {
+-			if (c.key != key) continue;
++	bool run_command(char key, int command_index = -1) {
++        for (int index = 0; index < int(card.size()); ++index) {
++            // Menu/build commands can replace card; keep the executing command alive.
++            cmd_t c = card[index];
++            if (command_index >= 0 ? index != command_index : c.key != key) continue;
+ 			if (!c.enabled) return true;
+             if (c.act == C_RECHARGE && primary_selected() && primary_selected()->energy < 1_fp8) {
+                 raise_error(E_ENERGY); return true;
+@@ -3470,6 +3485,14 @@
+ 
+ 	bool handle_game_input(const native_window::event_t& e) override {
+ 		using ev = native_window::event_t;
++        if (e.type == ev::type_command_button) {
++            if (paused || campaign_control_lock || spectator) return true;
++            refresh_card();
++            if (e.command_index < 0 || e.command_index >= int(card.size())) return true;
++            if (command_token(card[e.command_index]) != e.command_token) return true;
++            run_command(0, e.command_index);
++            return true;
++        }
+ 		if (e.type == ev::type_mouse_motion) { mouse_x = e.mouse_x; mouse_y = e.mouse_y; return false; }
+ 		// These affect only the view, including while paused or watching a replay.
+ 		if (e.type == ev::type_key_down && e.scancode == 44) {

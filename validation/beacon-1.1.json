@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "version": "1.1",
+  "physicalAndroid": false,
+  "nativeResults": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS all six beacon types, owned/enemy/neutral ownership, SCV/Marine/Civilian; selection retained and actual center Move applied\nPASS grouped units and Shift queued Move\nPASS no-selection, explicit/replay selection-only inspection, enemy selection, immobile building\nPASS explicit Attack and spell target commands retain their order types\nPASS pause/control lock/spectator/build/target/fog guards and ordinary unit selection\nPASS 740 beacon checks",
+  "sourceSha256": {
+    "native/runtime.cpp": "421b505ba2cc85bc3bffacde6e4177bdfdba9529bc3df3791b431b36b14180b1",
+    "tests/native_beacon11.cpp": "0f2ce8013733e58c66beef4a37c94a96711e486bba161336fd4cb59601c24a24",
+    "tests/run_beacon11.py": "1d23e5bead0b3b0c91d29def1c932402b89555fbe0d1eb7d8686a7ad00428449"
+  }
+}

@@ -7,9 +7,25 @@ import java.util.*;
 final class NativeMapPreview {
   private static final String[] TILESETS={"badlands","platform","install","ashworld","jungle","desert","ice","twilight"};
   private final Map<Integer,int[]> colors=new HashMap<Integer,int[]>();
+  Bitmap create(byte[] chk) throws IOException {
+    if(chk==null||chk.length>16*1024*1024)throw new IOException("Preview scenario is unavailable");
+    Map<String,byte[]> chunks=new HashMap<String,byte[]>();
+    for(int p=0;p<chk.length;) {
+      if(chk.length-p<8)throw new IOException("Truncated preview scenario");
+      int size=NativeArt.u32(chk,p+4);String tag=new String(chk,p,4,java.nio.charset.StandardCharsets.US_ASCII);p+=8;
+      if(size<0||size>chk.length-p)throw new IOException("Truncated preview scenario");
+      if(tag.equals("DIM ")||tag.equals("ERA ")||tag.equals("MTXM")||tag.equals("UNIT"))chunks.put(tag,Arrays.copyOfRange(chk,p,p+size));
+      p+=size;
+    }
+    byte[] dim=chunks.get("DIM ");
+    if(dim==null||dim.length!=4)throw new IOException("Preview dimensions are missing");
+    return create(chunks,NativeArt.u16(dim,0),NativeArt.u16(dim,2));
+  }
   Bitmap create(Map<String,byte[]> chunks,int width,int height) throws IOException {
+    if(width<1||height<1||width>256||height>256)throw new IOException("Unsupported preview dimensions");
     byte[] era=chunks.get("ERA "),mtxm=chunks.get("MTXM"),units=chunks.get("UNIT");
     if(mtxm==null||mtxm.length<width*height*2)throw new IOException("Map terrain is missing");
+    if(era!=null&&era.length<2)throw new IOException("Preview tileset is missing");
     int tileset=era==null?0:era[0]&7;int[] palette=colors.get(tileset);
     if(palette==null) {
       String path="tileset/"+TILESETS[tileset];byte[] cv5=NativeBridge.asset(-1,path+".cv5"),vx4=NativeBridge.asset(-1,path+".vx4"),vr4=NativeBridge.asset(-1,path+".vr4"),wpe=NativeBridge.asset(-1,path+".wpe");

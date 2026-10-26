@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.content.res.ColorStateList;
+import android.hardware.input.InputManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ import java.util.concurrent.Executors;
 /** Offline Android host with a native C++ game engine and Android rendering. */
 public final class MainActivity extends Activity {
   private static final String[] MPQS = {"STARDAT.MPQ", "BROODAT.MPQ", "patch_rt.mpq"};
-  private static final int PICK_DATA = 10, PICK_MAP = 11, PICK_REPLAY = 12;
+  private static final int PICK_DATA = 10, PICK_MAP = 11, PICK_REPLAY = 12, IMPORT_REPLAY = 13;
   private NativeNearby nearbyPermissionRequest;
   private NativeNearby nearbyBluetoothRequest;
   void requestNearbyBluetooth(NativeNearby owner,boolean discoverable) {
@@ -66,13 +67,42 @@ public final class MainActivity extends Activity {
     if(owner!=null)owner.permissions();
   }
   private byte[] pendingReplay;
+  private NativeSurface pendingReplayView;
+  private long pendingReplayRequest;
   private final ArrayDeque<String> logs = new ArrayDeque<String>();
   private final ExecutorService io = Executors.newSingleThreadExecutor();
   private FrameLayout root;
   private NativeSurface game;
   private boolean optionsVisible = true, activityResumed;
-  private boolean gamepadSettingsVisible;
+  private InputManager inputManager;
+  private boolean inputDevicesRegistered;
+  private final InputManager.InputDeviceListener inputDevices = new InputManager.InputDeviceListener() {
+    @Override public void onInputDeviceAdded(int deviceId) {}
+    @Override public void onInputDeviceChanged(int deviceId) {}
+    @Override public void onInputDeviceRemoved(int deviceId) { resetPhysicalInput(); }
+  };
   private boolean importing;
+  private GameDataOperation.Lease dataLease;
+  private boolean waitingForDataOperation, storageSuspendedGame;
+  private final Runnable operationRefresh = new Runnable() {
+    @Override public void run() {
+      if(isDestroyed())return;
+      if(GameDataOperation.busy()) {
+        if(noticeView!=null)noticeView.setText(PortText.text(GameDataOperation.message()));
+        root.postDelayed(this,500);
+      } else if(waitingForDataOperation) {
+        waitingForDataOperation=false;notice=GameDataOperation.message();showHome();
+      }
+    }
+  };
+  private final android.content.BroadcastReceiver storageReceiver = new android.content.BroadcastReceiver() {
+    @Override public void onReceive(android.content.Context context, Intent intent) {
+      if (GameDataOperation.busy() || isDestroyed()) return;
+      if (!GameDataStorage.available(MainActivity.this)) {
+        showStorageUnavailable();
+      } else if (optionsVisible) showHome();
+    }
+  };
   private int activeMission = 1;
   private TextView noticeView;
   private String notice = "";
@@ -80,11 +110,20 @@ public final class MainActivity extends Activity {
   @Override
   public void onCreate(Bundle state) {
     super.onCreate(state);
+    inputManager = (InputManager) getSystemService(INPUT_SERVICE);
     AppDiagnostics.install(this);
     NativeCache.beginSession(getCacheDir());
     try { PortText.load(getAssets().open("native/ui-languages.tsv")); }
     catch (IOException e) { AppDiagnostics.recordFailure("UI translations", e); }
     refreshLanguage();
+    android.content.IntentFilter storageEvents = new android.content.IntentFilter();
+    storageEvents.addAction(Intent.ACTION_MEDIA_MOUNTED);
+    storageEvents.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+    storageEvents.addAction(Intent.ACTION_MEDIA_EJECT);
+    storageEvents.addAction(Intent.ACTION_MEDIA_REMOVED);
+    storageEvents.addAction(Intent.ACTION_MEDIA_BAD_REMOVAL);
+    storageEvents.addDataScheme("file");
+    registerReceiver(storageReceiver, storageEvents);
     for (String oldReport : new String[]{"menu-health", "menu-diagnostics", "import-report"})
       getSharedPreferences(oldReport, 0).edit().clear().apply();
     final android.content.Context app = getApplicationContext();
@@ -113,28 +152,45 @@ public final class MainActivity extends Activity {
           return insets;
         });
     fullscreen();
-    if (ready()) startTitle();
+    if (ready() && !busy()) startTitle();
     else showHome();
   }
 
   private File missionFile(int n) {
-    return ProjectFiles.existing(getFilesDir(), CampaignData.filename(CampaignCatalog.id(n)));
+    return ProjectFiles.existing(gameDataDir(), CampaignData.filename(CampaignCatalog.id(n)));
   }
 
   private boolean mapImportRunning;
-  private boolean busy() { return importing || mapImportRunning; }
+  private boolean busy() { return importing || mapImportRunning || GameDataOperation.busy(); }
+
+  private void showStorageUnavailable() {
+    if(game!=null&&!optionsVisible)storageSuspendedGame=true;
+    notice="The selected SD card is unavailable. Reinsert it to play or move game data.";
+    showHome();
+  }
+
+  private void watchDataOperation() {
+    root.removeCallbacks(operationRefresh);
+    if(GameDataOperation.busy()) {
+      waitingForDataOperation=true;
+      root.postDelayed(operationRefresh,500);
+    } else waitingForDataOperation=false;
+  }
 
   private int dp(int value) {
     return Math.round(value * getResources().getDisplayMetrics().density);
   }
 
+  File gameDataDir() { return GameDataStorage.root(this); }
+
   private File dataDir() {
-    File f = new File(getFilesDir(), "mpq");
-    f.mkdirs();
+    File f = new File(gameDataDir(), "mpq");
+    if(GameDataStorage.available(this))f.mkdirs();
     return f;
   }
 
   private boolean ready() {
+    if(!GameDataStorage.available(this))return false;
     for (String name : MPQS) if (new File(dataDir(), name).length() < 32) return false;
     return true;
   }
@@ -189,15 +245,21 @@ public final class MainActivity extends Activity {
     scroll.addView(panel);
     root.addView(scroll, new FrameLayout.LayoutParams(
         Math.min(getResources().getDisplayMetrics().widthPixels, dp(840)), -1, android.view.Gravity.CENTER_HORIZONTAL));
+    if(GameDataOperation.busy())notice=GameDataOperation.message();
+    watchDataOperation();
     text(panel, "App Options", 25, 0xffdce6ff);
     text(panel, "StarDroid · " + BuildConfig.VERSION_NAME, 13, 0xff8da4cf);
-    if (ready()) button(panel, "Return to game menu", () -> startTitle()).setEnabled(!busy());
+    if (ready()) button(panel, storageSuspendedGame?"Resume Game":"Return to game menu", () -> startTitle()).setEnabled(!busy());
     LinearLayout language = section(panel, "Interface language");
     button(language, languageName(), this::chooseLanguage).setEnabled(!busy());
     text(language, "Game voices and campaign text use the language of the imported files.", 13, 0xff8da4cf);
-    LinearLayout input = section(panel, "Controls");
-    button(input, "Gamepad controls", this::requestGamepadSettings).setEnabled(!busy());
     noticeView = notice.isEmpty() ? null : text(panel, notice, 14, 0xffc5cfeb);
+    LinearLayout storage = section(panel, "Game data storage");
+    text(storage, GameDataStorage.internal(this)?"Internal storage":"SD card", 15, 0xffc5cfeb);
+    text(storage, "Saves, replays and player settings stay in internal storage.", 13, 0xff8da4cf);
+    if(!GameDataStorage.available(this))text(storage,"The selected SD card is unavailable. Reinsert it to play or move game data.",14,0xffe0c782);
+    if(GameDataStorage.cards(this).isEmpty())text(storage,"No writable SD card detected.",13,0xff8da4cf);
+    button(storage,GameDataOperation.moving()?"Moving game data…":"Change data storage",this::chooseDataStorage).setEnabled(!busy());
     LinearLayout setup = section(panel, "Game files");
     text(
         setup,
@@ -208,7 +270,7 @@ public final class MainActivity extends Activity {
         14,
         0xffc5cfeb);
     button(setup, importing ? "Importing…" : "Import game files", () -> pickData())
-        .setEnabled(!busy());
+        .setEnabled(!busy() && GameDataStorage.available(this));
     LinearLayout installed = section(panel, "Installed content");
     for (String name : MPQS)
       text(
@@ -242,7 +304,7 @@ public final class MainActivity extends Activity {
         InterfaceData.installedSummary(interfaceFile()) + " · " + (musicFile().exists() ? "✓ " : "○ ") + "Music",
         14,
         0xffc5cfeb);
-    java.util.Set<String> availableMovies = StoryData.installedMovies(getFilesDir());
+    java.util.Set<String> availableMovies = StoryData.installedMovies(gameDataDir());
     for (boolean expansion : new boolean[] {false, true}) {
       int total = 1, have = availableMovies.contains(expansion ? "smk/starxintr.smk" : "smk/starintr.smk") ? 1 : 0;
       for (CinematicCatalog.Entry entry : CinematicCatalog.ALL) if (entry.expansion() == expansion) {
@@ -260,6 +322,64 @@ public final class MainActivity extends Activity {
     String code = p.getString("ui-language", "en");
     PortText.select(code);
     p.edit().putString("ui-language", PortText.language).putBoolean("russian-data", GameLanguage.russianData).apply();
+  }
+
+  private void chooseDataStorage() {
+    if(busy())return;
+    Runnable choose=()->{
+      if(busy()||isDestroyed())return;
+      final List<File> locations=new ArrayList<File>();locations.add(getFilesDir());locations.addAll(GameDataStorage.cards(this));
+      String[] labels=new String[locations.size()];labels[0]=PortText.text("Internal storage");
+      for(int i=1;i<labels.length;i++)labels[i]=PortText.text("SD card")+(labels.length>2?" "+i:"");
+      int current=locations.indexOf(gameDataDir());
+      new AlertDialog.Builder(this).setTitle(PortText.text("Game data storage"))
+          .setSingleChoiceItems(labels,current,(dialog,which)->{
+            if(locations.get(which).equals(gameDataDir())){dialog.dismiss();return;}
+            dialog.dismiss();
+            if(!GameDataStorage.available(this)){notice="The selected SD card is unavailable. Reinsert it to play or move game data.";showHome();return;}
+            new AlertDialog.Builder(this).setTitle(PortText.text("Move game data?"))
+                .setMessage(PortText.text("Existing imported files will be moved and new imports will use this location. Saves and settings stay on this device. App-specific files are removed when the app is uninstalled."))
+                .setPositiveButton(PortText.text("Move game data"),(d,w)->moveData(locations.get(which)))
+                .setNegativeButton(PortText.text("Cancel"),null).show();
+          }).setNegativeButton(PortText.text("Cancel"),null).show();
+    };
+    if(game==null)choose.run();else game.checkDataMove(allowed->{if(allowed)choose.run();else{notice="Return to the main menu before moving game data.";showHome();}});
+  }
+
+  private void moveData(File destination) {
+    if(busy())return;
+    final NativeSurface previous=game;
+    Runnable begin=()->{
+      if(busy()||isDestroyed())return;
+      final GameDataOperation.Lease lease=GameDataOperation.begin("Moving game data…");
+      if(lease==null)return;
+      dataLease=lease;notice="Moving game data…";
+      final File source=gameDataDir();
+      if(previous!=null)previous.shutdown();
+      showHome();
+      io.execute(()->{
+        String result;
+        try {
+          if(previous!=null)previous.awaitShutdown();
+          if(!GameDataStorage.available(this,source)||!GameDataStorage.available(this,destination))throw new IOException("Game data storage is unavailable.");
+          if(!destination.isDirectory()&&!destination.mkdirs())throw new IOException("Cannot create game data folder.");
+          ImportedDataMove.move(source,destination,destination.getUsableSpace(),()->{
+            if(!GameDataStorage.available(this,source)||!GameDataStorage.available(this,destination))throw new IOException("Game data storage is unavailable.");
+          },()->{
+            GameDataStorage.syncImportedDirectories(destination);
+            String path=destination.equals(getFilesDir())?"":destination.getCanonicalPath();
+            if(!getSharedPreferences(GameDataStorage.PREFS,0).edit().putString(GameDataStorage.KEY,path).commit()){
+              getSharedPreferences(GameDataStorage.PREFS,0).edit().putString(GameDataStorage.KEY,source.equals(getFilesDir())?"":source.getCanonicalPath()).commit();
+              throw new IOException("Cannot save data storage setting.");
+            }
+          },(done,total)->importProgress(PortText.text("Moving game data…")+" "+done+" / "+total));
+          result="Game data moved.";
+        }catch(Exception e){result="Game data move failed: "+e.getMessage();}
+        final String message=result;
+        runOnUiThread(()->{if(game==previous)game=null;dataLease=null;GameDataOperation.finish(lease,message);notice=message;refreshLanguage();if(!isDestroyed())showHome();});
+      });
+    };
+    if(previous==null)begin.run();else previous.checkDataMove(allowed->{if(allowed)begin.run();else{notice="Return to the main menu before moving game data.";showHome();}});
   }
 
   private String languageName() {
@@ -301,22 +421,23 @@ public final class MainActivity extends Activity {
   }
 
   private File storyFile() {
-    return ProjectFiles.existing(getFilesDir(), StoryData.NAME);
+    return ProjectFiles.existing(gameDataDir(), StoryData.NAME);
   }
 
   private File movieFile() {
-    return ProjectFiles.existing(getFilesDir(), StoryData.MOVIES);
+    return ProjectFiles.existing(gameDataDir(), StoryData.MOVIES);
   }
 
   private File musicFile() {
-    return ProjectFiles.existing(getFilesDir(), MusicData.NAME);
+    return ProjectFiles.existing(gameDataDir(), MusicData.NAME);
   }
 
   private File interfaceFile() {
-    return ProjectFiles.existing(getFilesDir(), InterfaceData.NAME);
+    return ProjectFiles.existing(gameDataDir(), InterfaceData.NAME);
   }
 
   private void importProgress(String value) {
+    GameDataOperation.update(dataLease,value);
     runOnUiThread(
         () -> {
           notice = value;
@@ -330,7 +451,7 @@ public final class MainActivity extends Activity {
     if (name.toLowerCase(Locale.ROOT).endsWith(".zip")) {
       try (InputStream in = getContentResolver().openInputStream(uri)) {
         if (in == null) throw new IOException("Cannot read the selected ZIP.");
-        return "Imported " + CampaignData.install(in, getFilesDir()) + ".";
+        return "Imported " + CampaignData.install(in, gameDataDir()) + ".";
       }
     }
     ParcelFileDescriptor fd = getContentResolver().openFileDescriptor(uri, "r");
@@ -340,7 +461,7 @@ public final class MainActivity extends Activity {
       boolean expansion = MissionBundle.expansionArchive(in.getChannel());
       return GameContent.install(
           in.getChannel(),
-          getFilesDir(),
+          gameDataDir(),
           expansion,
           id -> {
             ArrayList<String> names = new ArrayList<String>();
@@ -359,6 +480,7 @@ public final class MainActivity extends Activity {
   }
 
   private void pickData() {
+    if(busy()||!GameDataStorage.available(this))return;
     Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT);
     pick.setType("*/*");
     pick.addCategory(Intent.CATEGORY_OPENABLE);
@@ -441,9 +563,21 @@ public final class MainActivity extends Activity {
       if(owner!=null)owner.bluetoothResult(request==49,request==49?result>0:result==RESULT_OK);
       return;
     }
+    if (request == IMPORT_REPLAY) {
+      if(result==RESULT_OK&&data!=null&&data.getData()!=null){
+        final Uri uri=data.getData();final NativeSurface replayView=game;
+        io.execute(()->{String problem=null;try(java.io.InputStream in=getContentResolver().openInputStream(uri)){
+          if(in==null)throw new IOException("Unable to open replay");
+          new NativeReplays(getFilesDir()).importReplay(in,displayName(uri),bytes->NativeBridge.replayInfo(bytes));
+        }catch(Exception e){problem=e.getMessage();}
+        if(replayView!=null)replayView.replayImported(problem);
+        });
+      }return;
+    }
     if (request == PICK_REPLAY) {
       final byte[] bytes = pendingReplay;
-      pendingReplay = null;
+      final NativeSurface replayView=pendingReplayView;final long replayRequest=pendingReplayRequest;
+      pendingReplay = null;pendingReplayView=null;
       if (result == RESULT_OK && data != null && data.getData() != null && bytes != null) {
         final Uri uri = data.getData();
         io.execute(
@@ -451,16 +585,9 @@ public final class MainActivity extends Activity {
               try (java.io.OutputStream out = getContentResolver().openOutputStream(uri, "wt")) {
                 if (out == null) throw new IOException("Unable to open replay destination");
                 out.write(bytes);
-                runOnUiThread(
-                    () -> Toast.makeText(this, PortText.text("Replay saved"), Toast.LENGTH_SHORT).show());
+                if(replayView!=null)replayView.replayExported(replayRequest,"Replay saved");
               } catch (Exception e) {
-                runOnUiThread(
-                    () ->
-                        Toast.makeText(
-                                this,
-                                PortText.text("Replay could not be saved: " + e.getMessage()),
-                                Toast.LENGTH_LONG)
-                            .show());
+                if(replayView!=null)replayView.replayExported(replayRequest,"Replay could not be saved: "+e.getMessage());
               }
             });
       }
@@ -470,8 +597,10 @@ public final class MainActivity extends Activity {
       if (result == RESULT_OK && data != null) {
         final ArrayList<Uri> selected = new ArrayList<Uri>();
         final NativeSurface mapView = game;
-        if(mapView==null || mapImportRunning)return;
-        mapImportRunning=true;mapView.mapImportProgress("Reading map pack…", true);
+        if(mapView==null || busy() || !GameDataStorage.available(this))return;
+        final GameDataOperation.Lease lease=GameDataOperation.begin("Reading map pack…");
+        if(lease==null)return;
+        dataLease=lease;mapImportRunning=true;mapView.mapImportProgress("Reading map pack…", true);
         if (data.getClipData() != null) for (int i = 0; i < data.getClipData().getItemCount(); i++) selected.add(data.getClipData().getItemAt(i).getUri());
         else if (data.getData() != null) selected.add(data.getData());
         io.execute(() -> {
@@ -487,25 +616,27 @@ public final class MainActivity extends Activity {
               if (totalMapBytes > NativeMaps.MAX_BATCH) throw new IOException("Map pack exceeds 8 GiB.");
               if (maps.size() > NativeMaps.MAX_COUNT) throw new IOException("Import up to 10000 maps at once.");
             }
-            NativeMaps.Imported imported = NativeMaps.importMaps(maps, getFilesDir(),
+            NativeMaps.Imported imported = NativeMaps.importMaps(maps, gameDataDir(),
                 map -> NativeMapCheck.validate(NativeBridge.mapScenario(map.getPath())),
-                (done, count) -> mapView.mapImportProgress(done + " / " + count, true));
-            runOnUiThread(() -> {mapImportRunning=false;if(game==mapView)mapView.mapsImported(imported, "");if(optionsVisible)showHome();});
+                (done, count) -> {GameDataOperation.update(lease,done+" / "+count);mapView.mapImportProgress(done + " / " + count, true);});
+            runOnUiThread(() -> {mapImportRunning=false;dataLease=null;GameDataOperation.finish(lease,"");if(isDestroyed())return;if(game==mapView)mapView.mapsImported(imported, "");if(optionsVisible)showHome();});
           } catch (Exception e) {
             for (NativeMaps.Staged map : maps) map.file.delete();
-            runOnUiThread(() -> {mapImportRunning=false;if(game==mapView)mapView.mapsImported(null, e.getMessage());if(optionsVisible){notice=e.getMessage();showHome();}});
+            runOnUiThread(() -> {mapImportRunning=false;dataLease=null;GameDataOperation.finish(lease,e.getMessage());if(isDestroyed())return;if(game==mapView)mapView.mapsImported(null, e.getMessage());if(optionsVisible){notice=e.getMessage();showHome();}});
           }
         });
       }
       return;
     }
-    if (request != PICK_DATA || result != RESULT_OK || data == null) return;
+    if (request != PICK_DATA || result != RESULT_OK || data == null || busy() || !GameDataStorage.available(this)) return;
     final ArrayList<Uri> uris = new ArrayList<Uri>();
     if (data.getClipData() != null) {
       for (int i = 0; i < data.getClipData().getItemCount(); i++)
         uris.add(data.getClipData().getItemAt(i).getUri());
     } else if (data.getData() != null) uris.add(data.getData());
-    importing = true;
+    final GameDataOperation.Lease lease=GameDataOperation.begin("Importing selected files…");
+    if(lease==null)return;
+    dataLease=lease;importing = true;
     notice = "Importing selected files…";
     showHome();
     io.execute(
@@ -524,7 +655,8 @@ public final class MainActivity extends Activity {
           final String resultText = String.join("\n", results);
           runOnUiThread(
               () -> {
-                importing = false;
+                importing = false;dataLease=null;
+                GameDataOperation.finish(lease,resultText);
                 notice = resultText;
                 if (!isDestroyed()) showHome();
               });
@@ -532,6 +664,7 @@ public final class MainActivity extends Activity {
   }
 
   private void startTitle() {
+    if(busy())return;
     if (!ready()) {
       showHome();
       return;
@@ -539,10 +672,22 @@ public final class MainActivity extends Activity {
     optionsVisible = false;
     refreshDisplayArea();
     root.removeAllViews();
+    boolean reopen=storageSuspendedGame&&game!=null;
     if (game == null) game = new NativeSurface(this);
-    else game.title();
+    else if(!reopen)game.title();
     root.addView(game, new FrameLayout.LayoutParams(-1, -1));
-    game.resume();
+    if(reopen) {
+      final NativeSurface resuming=game;
+      game.reopenStorage(()->{
+        if(isDestroyed()||game!=resuming)return;
+        if(!GameDataStorage.available(this)){showStorageUnavailable();return;}
+        storageSuspendedGame=false;
+        if(activityResumed&&!optionsVisible)game.resume();
+      },message->{
+        if(isDestroyed()||game!=resuming)return;
+        notice="Unable to reopen game data: "+message;showHome();
+      });
+    } else {storageSuspendedGame=false;game.resume();}
     game.requestFocus();
   }
 
@@ -556,24 +701,33 @@ public final class MainActivity extends Activity {
     showHome();
   }
 
-  void requestGamepadSettings() {
-    if (gamepadSettingsVisible || isFinishing()) return;
-    gamepadSettingsVisible = true;
-    if (game != null) game.reloadGamepadSettings();
-    GamepadSettings.show(this, getSharedPreferences("native-settings", 0), () -> {
-      gamepadSettingsVisible = false;
-      if (game != null) game.reloadGamepadSettings();
-    });
-  }
-
   @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent event) {
-    if (!optionsVisible && !gamepadSettingsVisible && game != null && game.handleGamepadMotion(event)) return true;
+    if (!optionsVisible && game != null) {
+      if (game.handleDesktopMotion(event)) return true;
+      if (game.handleGamepadMotion(event)) return true;
+    }
     return super.dispatchGenericMotionEvent(event);
   }
 
   @Override public boolean dispatchKeyEvent(android.view.KeyEvent event) {
-    if (!optionsVisible && !gamepadSettingsVisible && game != null && game.handleGamepadKey(event)) return true;
+    if (!optionsVisible && game != null) {
+      if (game.handleGamepadKey(event)) return true;
+      if (game.handleDesktopKey(event)) return true;
+    }
     return super.dispatchKeyEvent(event);
+  }
+
+  private void resetPhysicalInput() {
+    if (game == null) return;
+    game.resetDesktopInput();
+    game.resetGamepadInput();
+  }
+
+  private void watchInputDevices(boolean watch) {
+    if (inputManager == null || inputDevicesRegistered == watch) return;
+    if (watch) inputManager.registerInputDeviceListener(inputDevices, null);
+    else inputManager.unregisterInputDeviceListener(inputDevices);
+    inputDevicesRegistered = watch;
   }
 
   void requestExit() {
@@ -593,9 +747,25 @@ public final class MainActivity extends Activity {
     showHome();
   }
 
-  void saveReplay(byte[] bytes) {
+  void pickReplay() {
+    startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),IMPORT_REPLAY);
+  }
+
+  void recordReplay(byte[] bytes,NativeSurface resultView,long request) {
+    if(bytes==null)return;
+    io.execute(()->{String result;try{
+      String[] header=GameLanguage.decode(NativeBridge.replayInfo(bytes)).split("\\n")[0].split("\\t",-1);
+      String label=header.length>3?header[3]:"Replay";
+      new NativeReplays(getFilesDir()).save(bytes,label+" "+new java.text.SimpleDateFormat("yyyy-MM-dd HH-mm",Locale.ROOT).format(new java.util.Date()));
+      result="Replay saved";
+    }catch(Exception e){result="Replay could not be saved: "+e.getMessage();}
+    final String notice=result;if(resultView!=null)resultView.replayRecorded(request,notice);
+    });
+  }
+
+  void saveReplay(byte[] bytes,NativeSurface replayView,long request) {
     if (bytes == null) return;
-    pendingReplay = bytes;
+    pendingReplay = bytes;pendingReplayView=replayView;pendingReplayRequest=request;
     Intent intent =
         new Intent(Intent.ACTION_CREATE_DOCUMENT)
             .setType("application/octet-stream")
@@ -605,7 +775,7 @@ public final class MainActivity extends Activity {
   }
 
   void pickNativeMap() {
-    if(mapImportRunning)return;
+    if(busy()||!GameDataStorage.available(this))return;
     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
     intent.setType("*/*");
@@ -626,6 +796,7 @@ public final class MainActivity extends Activity {
         .append('\n');
     b.append(game == null ? "Native engine not started" : game.diagnostics()).append('\n');
     b.append(AppDiagnostics.summary(this));
+    b.append("Game data storage: ").append(gameDataDir()).append("; available=").append(GameDataStorage.available(this)).append('\n');
     for (String name : MPQS)
       b.append(name).append(": ").append(new File(dataDir(), name).length()).append(" bytes\n");
     synchronized (this) {
@@ -700,12 +871,13 @@ public final class MainActivity extends Activity {
   public void onWindowFocusChanged(boolean focus) {
     super.onWindowFocusChanged(focus);
     if (focus) fullscreen();
-    else if (game != null) game.resetGamepadInput();
+    else resetPhysicalInput();
   }
 
   @Override
   protected void onPause() {
     activityResumed = false;
+    watchInputDevices(false);
     AppDiagnostics.foreground(false);
     if (game != null) game.suspend();
     super.onPause();
@@ -715,13 +887,20 @@ public final class MainActivity extends Activity {
   protected void onResume() {
     super.onResume();
     activityResumed = true;
+    watchInputDevices(true);
     AppDiagnostics.foreground(true);
-    if (game != null && !optionsVisible) game.resume();
+    if(busy())showHome();
+    else if (!GameDataStorage.available(this))showStorageUnavailable();
+    else if (game != null && !optionsVisible && !storageSuspendedGame) game.resume();
+    else if (optionsVisible) showHome();
     fullscreen();
   }
 
   @Override
   protected void onDestroy() {
+    watchInputDevices(false);
+    unregisterReceiver(storageReceiver);
+    root.removeCallbacks(operationRefresh);
     if (game != null) game.shutdown();
     io.shutdown();
     super.onDestroy();

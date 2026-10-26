@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "scope": "Production feedback dispatch, original-font Canvas rendering and CommandHover input; status/tooltip bounds and pixel preservation",
+  "output": "PASS 16364 checks; 1470 concurrent error/hover or touch-hold renders; three race-colored borders, two widths, three description scales, two command scales, five UI languages; terrain hover/state/tap/hold, expiry/target/modal/disabled guards; status pixels unchanged",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8c1ddece3ec87fa212ea1f8edf106d0910e3030a5f08ac2d6f7ab98c8e3100cb",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "4e7c3af4fcecb16ef2572b1cfbbbcef338be9b1c0afac568745ab650333b17b9",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "cac62546a9c9fdb3fe0ae76ba6657c600b55527969ce26c0eade114d80b2a1f3",
+    "app/src/main/java/org/openbw/androidtest/CommandHover.java": "9b5d1fd7ba632320b4941824a9b8f58345f16d6c0b05f5fe6e81061feee6f47c",
+    "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
+    "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "715d49b416621a93b488e553f53fb317ef378707795f2d927523e1fa89e2b971",
+    "app/src/main/assets/native/ui-languages.tsv": "ef08365128db72e311b9dea09f9ea99a44b3a635650f91bfde2d4143619cb284",
+    "tests/run_hover_errors11.py": "640ff61c02b1c61631915876001fb7ef651277db7b939f4ee51c5461cff8e404"
+  }
+}

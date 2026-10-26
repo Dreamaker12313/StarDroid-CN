@@ -6,7 +6,7 @@
 
 Follow the [installation instructions](../README.md#install) to import the three core MPQs and the campaign/media archives. **App Options** is also the screen shown when game files are missing. It has one import action, the file guide, and **Installed content** counts.
 
-Importing copies content into private app storage. Keep the original archives elsewhere: uninstalling StarDroid or clearing Android app data removes local imports, settings, and saves. Android backup is disabled for this app. Update by installing the matching signed APK over the existing app.
+Importing copies content into the selected app storage. Keep the original archives elsewhere: uninstalling StarDroid or clearing Android app data removes local imports, settings, and saves, including app-specific SD-card files. Android backup is disabled for this app. Update by installing the matching signed APK over the existing app.
 
 Use **Import maps / ZIP…** in the custom-game or host map selector for `.scm`, `.scx`, and ZIP map collections. Campaign bundles belong in **Import game files**. The included community map is **Weave**; additional game maps are not bundled.
 
@@ -20,9 +20,9 @@ changes the port's menus, settings and interface labels. Voices, original unit
 names and campaign text follow the imported game data; the setting does not
 translate recordings. Technical diagnostic details remain available.
 
-## Touch controls and settings
+## Controls and settings
 
-Open **Menu → Options → Touch Controls** during a match. Its **Gesture guide** reflects your current preferences. The [README gesture table](../README.md#touch-controls) describes fresh-install defaults.
+Open **Menu → Options → Controls** during a match. Its **Gesture guide** reflects your current preferences. The [README gesture table](../README.md#touch-controls) describes fresh-install defaults.
 
 ### Selection
 
@@ -86,23 +86,62 @@ Turn **Build buttons follow placement** off for a fixed button position. **Comma
 
 Enable **Show control-group buttons** under **Selection settings**. Tap an empty numbered group to assign the current selection; hold any group to replace its assignment. Tap an assigned group to recall it, and double-tap to center the camera. The small number shows how many units are assigned. A physical keyboard can use Ctrl+number to assign and number to recall.
 
-Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. **Command buttons** also scales control groups; they wrap when necessary to avoid overlapping resources. Sound options control effects and music separately. **Miscellaneous → Cheats** contains single-player controls including **Invincibility** and **Force victory (end match)**. Invincibility protects your units from combat damage, leaves scripted mission deaths intact, and resets after loading or starting a game.
+Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. **Commands & control groups** scales both together. Hover and held-command descriptions can appear alongside command errors or target prompts, with space between the two. Control-group buttons at 100% now match their previous 120% size; choosing 120% enlarges them further. They wrap when necessary to avoid overlapping resources. Sound options retain mute and separate effects/music volume sliders. Set Music to **0** to turn music off. The former music-enable switch is removed; an existing disabled setting becomes volume 0 once. Main-menu music continues without restarting when you change expansions. Music follows your race automatically. **Next track** skips to the next in-game theme while music is audible; it does not interrupt title, briefing or victory/defeat music. There is no manual track picker or sound-preview control. With the original music imports available, Brood War campaigns, custom games, and Nearby matches play four themes for each race: the expansion theme and original first theme share one complete file, followed by the original second and third themes. Missing expansion music falls back to the imported original soundtrack. **Miscellaneous → Cheats** contains single-player controls including **Invincibility** and **Force victory (end match)**. Invincibility protects your units from combat damage, leaves scripted mission deaths intact, and resets after loading or starting a game.
+
+### Mouse and keyboard
+
+Open **Controls → Mouse & keyboard** in the in-game menu. Its settings and mouse/keyboard help share one screen. These controls work alongside touch and gamepad controls.
+
+- **Left click** selects a unit; drag a selection box to select several. **Double-click** or **Ctrl-click** selects units of the same type. **Shift-click** adds to the selection.
+- **Right click** gives a context-sensitive move, attack, gather or interaction order. Hold **Shift** to queue orders. Left click confirms a targeted command or building placement; right click or **Escape** cancels it.
+- Moving the pointer to a screen edge or dragging with the **middle mouse button** moves the camera. The **wheel** zooms the battlefield and scrolls menu lists.
+- Choose **Original** command hotkeys or **Grid** keys: **Q W E** across the top row, **A S D** across the middle, and **Z X C** across the bottom. Tooltips show the active hotkey in brackets, with the key highlighted. **Arrow keys** move the camera. **Ctrl+0–9** assigns a control group; **Shift+0–9** adds the current selection to it; **0–9** recalls it. Press the same number twice quickly to center the camera on that group.
+- **Space** jumps to the latest alert; **Tab** toggles minimap terrain. Hover over or hold the terrain button to see its description; unit markers remain visible when terrain is hidden. **Escape** cancels or goes back; **F10** opens the game menu. **Enter** opens Nearby multiplayer chat.
+- Menu navigation buttons, including those in-game, show a highlighted letter or a key in brackets. Press it to open another menu, go back or switch screens. Settings, speed choices, lobby slots and race choices, imports/exports, Save Replay and in-place replay controls have no menu shortcut or letter highlight. App Options and the battlefield MENU button keep their normal labels. The briefing room’s **Replay** button also has its original highlighted shortcut (**R** in English). Navigation shortcuts stay the same in Original and Grid command modes; gameplay command hotkeys are unchanged. Tooltip borders match your race: Terran blue, Zerg red or Protoss yellow.
+
+**Original** hotkeys are the default. This screen also lets you turn mouse edge scrolling, wheel zoom, middle-button camera dragging and arrow-key camera movement on or off, and adjust camera speed. Wheel scrolling in menu lists remains available when battlefield wheel zoom is off.
+
+Typing a player name or chat message does not issue game commands. Losing focus or disconnecting an input device clears held input, so the camera or a modifier key cannot remain stuck.
 
 ### Gamepad controls
 
-Open **App Options → Gamepad controls**, or **Controls → Gamepad controls** during a game. By default, the left stick moves the pointer, the right stick/D-pad pans the camera, A/Cross selects, B/Circle issues right-click orders, X/Square targets an attack, and Y/Triangle cancels. Hold A/Cross while moving the pointer to box-select. Left shoulder slows the pointer for precision; triggers choose a control group, right shoulder recalls it, and left-stick press assigns it. Start opens the game menu.
+Open **Controls → Gamepad controls** in the in-game menu. By default, the left stick moves the pointer, the right stick/D-pad pans the camera, A/Cross selects, B/Circle issues right-click orders, X/Square targets an attack, and Y/Triangle cancels. Hold A/Cross while moving the pointer to box-select. Left shoulder slows the pointer for precision; triggers choose a control group, right shoulder recalls it, and left-stick press assigns it. Start opens the game menu.
 
-The settings let you reassign buttons, swap sticks, change speeds and adjust the dead zone. Touch controls remain available. See [all defaults and alternatives](CHANGES-1.0.10.md#control-groups-and-controllers).
+The settings use the same original game panels and fonts as the other settings. You can reassign all buttons, swap sticks, change speeds and adjust the dead zone. Touch controls remain available, including when the gamepad is disabled. See [all defaults and alternatives](CHANGES-1.0.10.md#control-groups-and-controllers).
 
 ### Cache storage
 
 The cache holds working copies of imported content. Build 80 removes empty archive space and prepares movies only when played. Existing movie caches are reclaimed automatically. With the tested classic archives, normal content cache is about 235 MB plus the active mission; a movie temporarily needs extra space while opening. Your original imports and saves are preserved.
 
-### Save backup and transfer
+### Imported data on an SD card
 
-**App Options → Export StarDroid save** writes the chosen slot as a portable `.obwsave` file. Keep a backup on a PC or another device. **Import StarDroid save** validates that file before replacing the slot you choose; then use **Load Saved** in the game menu.
+Open **App Options → Game data storage → Change data storage** from the main menu. Select a detected writable removable SD card or internal storage. Existing imported archives, campaign content and custom maps are copied and verified before switching locations and removing the old copies. Future imports use the selected location. Saves, replays, profiles, settings and working caches stay internal.
 
-Original PC StarCraft `.sng` and Brood War `.snx` files use a different state format and cannot be resumed by this version. The transfer feature accepts StarDroid saves, not those original PC formats.
+The SD-card folder is `Android/data/org.openbw.androidtest/files/game-data`. Android removes app-specific files when the app is uninstalled. Keep your original archives separately. Moving requires free space for the copied files plus a small reserve and is unavailable during a match, replay or multiplayer connection. If the selected card is removed, reinsert it before playing or moving the data back. The app does not silently start using a different folder.
+
+### Saving and campaign progress
+
+Use the in-game **Save Game** and **Load Saved** controls. Save-file import and export are not provided.
+
+From build 81 onward, a campaign victory adds a green pixel check beside that mission for the Player ID that started it. Each ID has its own progress. Loading a save retains its original ID, including when continuing to the next mission. Deleting an ID and creating another with the same name starts fresh. Earlier versions did not store completion history, so old victories cannot be marked automatically.
+
+The mission scrollbar, arrows, OK and Cancel have wider touch targets. Menu scrollbars use red pixel triangle arrows, a rectangular track and a hollow red circle thumb. Campaign characters and their episode labels appear after the menu slides into place.
+
+### Unlimited supply
+
+**Menu → Options → Miscellaneous → Cheats → Unlimited supply (200)** removes the need for supply buildings up to the normal 200-supply limit. Unit costs, technology and production time still apply. It affects only your player in single player, resets when loading or starting a game, and disables replay recording for that match. Supply buildings still work normally when the cheat is switched off.
+
+### Replays
+
+Build 81 adds **Load Replay** in the campaign-selection menu. Use **Save Replay** on the results screen of a newly started custom or nearby match to keep a local recording. The replay list uses the original load-menu artwork when available, shows map/player information, and includes **Delete** with a confirmation. **Import Replay** accepts a supported `.rep` file; **Export** shares the selected replay.
+
+During playback, pause or resume, choose 1×–8× speed, switch between everyone's view and individual players, or restart. In build 82, tap or drag the red timeline to seek forward or backward. The display shows “Seeking…” while the engine catches up. Your pause and speed settings are retained. Playback is read-only: orders, cheats and game saves are disabled.
+
+Use the same StarDroid build and game data for StarDroid recordings. Older computer recordings without AI settings, campaign recordings, resumed saves and cheated matches are not supported. Classic human-only Melee/Free-for-All files are accepted, but original-executable parity has not been verified. Remastered extensions and other game types are rejected with an explanation.
+
+The campaign-fix revision of **1.1** changes simulation rules. Earlier StarDroid recordings need the APK that recorded them; their files are retained. Both nearby multiplayer devices must use this revised APK, even when both display version 1.1.
+
+Older interface imports may not include the original load-menu artwork. The replay browser fits the available original menu layout automatically, including its filename list, scrollbar and information window. Import and Export sit side by side, with **Delete** centered below them at the bottom. Replay buttons use transparent backgrounds and the original menu font. Importing the original StarCraft or Brood War CD archive again supplies the load-menu assets automatically. Saving or exporting a replay shows an in-game red confirmation with OK.
 
 ### Campaign objects and voices
 
@@ -113,6 +152,10 @@ fixes neutral-owned objectives such as the psi emitter in Reign of Fire.
 Mission dialogue has its own audio channel and overlapping transmission lines
 queue; game effects cannot replace it. Leaving the mission or loading a save
 intentionally resets the old world's audio.
+
+With movable units selected, a normal tap on a visible beacon sends them to its center and keeps the selection. Explicit selection gestures still select objects. Minerals, unoccupied geysers and protected campaign objects retain their original protection when starting a map. Mission triggers may deliberately change protection; ordinary refineries and destructible mission structures remain attackable. A save made before this fix can retain the old object flags, so restart the affected mission to apply the corrected initialization.
+
+Reign of Fire explicitly plays the Terran rescue cue when its triggers give the normal Zerglings and Drones to the player. Hunter Killers use the normal Zerg rescue cue. This authored difference is preserved; normal rescue cues follow the rescued unit's race.
 
 ## Local multiplayer
 

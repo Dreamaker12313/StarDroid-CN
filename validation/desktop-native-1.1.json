@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "version": "1.1",
+  "simulation": 84,
+  "physicalAndroid": false,
+  "nativeResults": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS left click, held drag/release, double-click, left/right Shift add/remove, right Ctrl same-type selection in a single frame\nPASS Ctrl assignment, Shift append/deduplicate, digit recall, double recall camera center\nPASS physical right Move/Shift queue, Attack hotkey+target, Escape/right cancel, Tab minimap, Space recent alert\nPASS focus reset, paused/cutscene lock, view-only shortcuts, no hidden debug hotkey fall-through\nPASS replay left inspection/view keys; no right orders, attack or group hotkeys; cleanup allowed\nPASS legacy touch/gamepad ops, multiplayer command validation/deferred application, replay save+parse, unchanged simulation 84\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS 60-frame full-world deterministic replay roundtrip with physical selection, right Move, Shift queue and Stop hotkey\nPASS paused replay single/double/drag inspection, gameplay rejection, Tab, checkpoint restoration; ordinary paused matches remain blocked\nPASS 125 native desktop checks",
+  "errors": "",
+  "sourceSha256": {
+    "native/replay.h": "65905ba854efdb7e15fa11b3d90790cba07227ee8e7be144c9a9e7d70065f516",
+    "native/runtime.cpp": "3738ced9a8a65b4947d47408c9797be17e2cac47eaaa052de4133bf20e4a9824",
+    "patches/native-desktop11.patch": "45b480c3ecc62d1d70c12ffff5d9ee4e3a26de16b68a808ed0e86cd9d4c69463",
+    "scripts/prepare_native.py": "71726aea4234faec558244df7132c9aa98aef1578ceb2f0e45e1842462156e2d",
+    "tests/native_desktop11.cpp": "6d1a2e7927e6ce263d6d6d6a905ad6796d050582d4f4905c920ff9fb2ed0806a",
+    "tests/run_desktop11.py": "093b3adbddeb7267d20186fab72ee45f439e9db430232c349daa6c47602db18f"
+  }
+}

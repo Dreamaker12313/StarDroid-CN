@@ -25,13 +25,25 @@
 // ---------------------------------------------------------------------------
 namespace native_window {
 
+struct queued_event : event_t {
+	uint8_t modifiers = 0;
+	queued_event(const event_t& value, uint8_t mask) : event_t(value), modifiers(mask) {}
+};
+
 struct window_impl {
 	int width = 0, height = 0;
 	std::vector<uint8_t> framebuffer;                 // width*height*4 RGBA
-	std::deque<event_t> events;
+	std::deque<queued_event> events;
 	std::array<bool, 512> keys{};
 	int mouse_x = 0, mouse_y = 0;
 	int button_state = 0;                             // bit (1<<(button-1))
+	void enqueue(const event_t& e) {
+		// Input is buffered until render. A Shift/Ctrl press, click and release
+		// may all arrive in one frame; the click must retain its own modifiers.
+		uint8_t mask = (keys[224] ? 1 : 0) | (keys[225] ? 2 : 0)
+			| (keys[228] ? 4 : 0) | (keys[229] ? 8 : 0);
+		events.emplace_back(e, mask);
+	}
 };
 
 // The single live window; the JS input exports target it.
@@ -64,6 +76,9 @@ void window::get_cursor_pos(int* x, int* y) {
 bool window::peek_message(event_t& e) {
 	if (!impl || impl->events.empty()) return false;
 	e = impl->events.front();
+	uint8_t mask = impl->events.front().modifiers;
+	impl->keys[224] = (mask & 1) != 0; impl->keys[225] = (mask & 2) != 0;
+	impl->keys[228] = (mask & 4) != 0; impl->keys[229] = (mask & 8) != 0;
 	impl->events.pop_front();
 	return true;
 }
@@ -112,12 +127,12 @@ OPENBW_EXPORT(openbw_mouse_move) void openbw_mouse_move(int x, int y) {
 	e.type = ev_t::type_mouse_motion;
 	e.mouse_x = x; e.mouse_y = y;
 	e.button_state = g_window->button_state;
-	g_window->events.push_back(e);
+	g_window->enqueue(e);
 }
 
 // button: SDL-style 1=left, 2=middle, 3=right
 OPENBW_EXPORT(openbw_mouse_button) void openbw_mouse_button(int down, int button, int x, int y, int clicks) {
-	if (!g_window) return;
+	if (!g_window || button < 1 || button > 3) return;
 	g_window->mouse_x = x;
 	g_window->mouse_y = y;
 	int bit = 1 << (button - 1);
@@ -129,7 +144,7 @@ OPENBW_EXPORT(openbw_mouse_button) void openbw_mouse_button(int down, int button
 	e.mouse_x = x; e.mouse_y = y;
 	e.button_state = g_window->button_state;
 	e.clicks = clicks;
-	g_window->events.push_back(e);
+	g_window->enqueue(e);
 }
 
 OPENBW_EXPORT(openbw_key) void openbw_key(int down, int sym, int scancode) {
@@ -139,7 +154,18 @@ OPENBW_EXPORT(openbw_key) void openbw_key(int down, int sym, int scancode) {
 	e.type = down ? ev_t::type_key_down : ev_t::type_key_up;
 	e.sym = sym;
 	e.scancode = scancode;
-	g_window->events.push_back(e);
+	g_window->enqueue(e);
+}
+
+// A host-rendered command button uses its exact identity, not a possibly
+// shared classic hotkey. Keep it in the same modifier-snapshotted event queue.
+OPENBW_EXPORT(openbw_command_button) void openbw_command_button(int index, int token) {
+    if (!g_window || index < 0 || index >= 256 || token <= 0) return;
+    ev_t e;
+    e.type = ev_t::type_command_button;
+    e.command_index = index;
+    e.command_token = token;
+    g_window->enqueue(e);
 }
 
 // ---------------------------------------------------------------------------
@@ -329,5 +355,13 @@ extern "C" void openbw_discard_pointer_events() {
         if (i->type == event_t::type_mouse_motion || i->type == event_t::type_mouse_button_down || i->type == event_t::type_mouse_button_up) i=q.erase(i);
         else ++i;
     }
+    g_window->button_state = 0;
+}
+
+// Focus/device transitions must not leave held modifiers or a queued click.
+extern "C" void openbw_reset_input() {
+    if (!g_window) return;
+    g_window->events.clear();
+    g_window->keys.fill(false);
     g_window->button_state = 0;
 }

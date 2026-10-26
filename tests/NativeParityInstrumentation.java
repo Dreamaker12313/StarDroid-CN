@@ -80,7 +80,7 @@ public final class NativeParityInstrumentation extends NativeInstrumentation {
       game = (NativeSurface) field(activity, "game");
       task(() -> {
         check(game != null, "Native surface missing"); set(game, "wide", false); set(game, "zoom", 1f); set(game, "speed", 42.);
-        set(game, "muted", false); set(game, "musicEnabled", true); set(game, "musicTrack", "auto"); set(game, "orderLines", false);
+        set(game, "muted", false); set(game, "music", .65f); set(game, "orderLines", false);
       });
       if (!touchOnly) {
       screenshot("title"); glueTap(3); screenshot("chooser");
@@ -185,9 +185,8 @@ public final class NativeParityInstrumentation extends NativeInstrumentation {
       task(() -> select("Larva")); screenshot("larva");
       openMenu(); screenshot("menu"); menuTap("gamemenu", 3); screenshot("options");
       menuTap("options", 2); screenshot("sound");
-      tap(230, 89); task(() -> check((Boolean) field(game, "muted"), "Mute toggle missing")); tap(230, 89);
-      tap(260, 250); task(() -> check(field(game, "modal").equals("tracks"), "Track picker missing"));
-      tap(410, 81); task(() -> check(field(game, "musicTrack").equals("terran1"), "Music selection failed"));
+      tap(230, 101); task(() -> check((Boolean) field(game, "muted"), "Mute toggle missing")); tap(230, 101);
+      task(() -> check(field(game, "currentMusicPath").equals("music/zerg1.wav"), "Automatic race music missing"));
       back(); menuTap("options", 1); screenshot("speed"); tap(240, 264);
       task(() -> {check((Double) field(game, "speed") == 2.625, "16x speed is missing"); report.put("speed16x", true);});
       back(); menuTap("options", 3); screenshot("video"); tap(250, 89);

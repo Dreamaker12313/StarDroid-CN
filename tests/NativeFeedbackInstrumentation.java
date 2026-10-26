@@ -47,7 +47,7 @@ public final class NativeFeedbackInstrumentation extends NativeInstrumentation {
       MainActivity a=(MainActivity)startActivitySync(new Intent(getTargetContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
       game=(NativeSurface)field(a,"game"); check(game!=null,"Missing native view"); settle();
       task(() -> {
-        set(game,"wide",false); set(game,"zoom",1f); set(game,"musicEnabled",true); set(game,"muted",false);
+        set(game,"wide",false); set(game,"zoom",1f); set(game,"music",.65f); set(game,"muted",false);
         invoke("syncAudio"); invoke("showTitle");
         short[] pcm=new short[96000]; NativeBridge.mix(pcm,48000);
         int before=NativeBridge.value(19,63); check(before>0,"Title music is silent");
