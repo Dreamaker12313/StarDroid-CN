@@ -225,8 +225,15 @@ final class NativeGlue implements AutoCloseable {
     return (float) (slideDistance(w) * amount);
   }
 
+  boolean campaignChoice(int id) {
+    return (name.equals("glucmpgn") || name.equals("gluexpcmpgn")) && id >= 6 && id <= 8;
+  }
+
   boolean labelVisible(int id) {
     NativeArt.Widget w = layout.get(id);
+    // Campaign characters stay fixed while the lower controls slide. Their
+    // zero slide distance must not reveal either the art or episode labels early.
+    if (campaignChoice(id)) return w != null && !exiting && (!slide || elapsed >= ENTER_MS);
     return w != null && (!(exiting || elapsed < ENTER_MS) || slideDistance(w) == 0);
   }
 
@@ -239,6 +246,8 @@ final class NativeGlue implements AutoCloseable {
       c.drawBitmap(entry.getValue(), w.x, w.y, NativeArt.PIXELS);
     }
     for (Layer l : layers) {
+      if (campaignChoice(l.widget.id) && !labelVisible(l.widget.id)) continue;
+      double layerElapsed = Math.max(0, animationElapsed - (slide && campaignChoice(l.widget.id) ? ENTER_MS : 0));
       boolean active = (hot == l.widget.id && !exiting) || (selectedStart && l.widget.id == 13);
       if (active && !l.wasHot) l.hotTime = 0;
       if (active) l.hotTime += dt;
@@ -249,7 +258,7 @@ final class NativeGlue implements AutoCloseable {
         for (Layer h : layers) if (h.widget.id == l.widget.id && h.spec.name.endsWith("/starton.smk")) hasHover = true;
         if (hasHover) continue;
       }
-      double time = (l.spec.flags & 8) != 0 ? l.hotTime : animationElapsed;
+      double time = (l.spec.flags & 8) != 0 ? l.hotTime : layerElapsed;
       boolean loop = (l.spec.flags & 4) != 0;
       if (l.spec.name.endsWith("/proloop.smk")) {
         time -= projectorIntro(l);
@@ -266,7 +275,7 @@ final class NativeGlue implements AutoCloseable {
       if (name.equals("glurdyt") && l.spec.name.endsWith("/start.smk")) brightness = .55f;
       paint.setColorFilter(brightness == 1 ? null : new ColorMatrixColorFilter(
           new float[] {brightness,0,0,0,0, 0,brightness,0,0,0, 0,0,brightness,0,0, 0,0,0,1,0}));
-      float alpha = (l.spec.flags & 1) != 0 ? (float)Math.min(1, animationElapsed / 600) : 1;
+      float alpha = (l.spec.flags & 1) != 0 ? (float)Math.min(1, layerElapsed / 600) : 1;
       // This movie contains the room scenery as well as the glowing crystal.
       // Blend the intact frame with its matching backdrop; SCREEN doubled the
       // scenery and multiplying RGB made a dark rectangle on hover.
@@ -339,32 +348,34 @@ final class NativeGlue implements AutoCloseable {
   }
 
   void scrollbar(Canvas c,float x,float y,int height,float value) {
-    byte[] data=art.read("glue/palnl/dlg.grp");
-    for(int id:new int[]{16,19})if(!selectors.containsKey("scroll:"+id))selectors.put("scroll:"+id,scrollSprite(data,id));
-    Bitmap up=selectors.get("scroll:16"),down=selectors.get("scroll:19");
-    if(up!=null)c.drawBitmap(up,x,y,NativeArt.PIXELS);
-    if(down!=null)c.drawBitmap(down,x,y+height-16,NativeArt.PIXELS);
-    // A small, beveled circular grip stays readable over the original stonework.
-    float cy=y+23+Math.max(0,Math.min(1,value))*(height-46);
-    scrollbarPaint.setColor(0xff151b13);c.drawCircle(x+8,cy+1,6,scrollbarPaint);
-    scrollbarPaint.setColor(0xffa8bc77);c.drawCircle(x+8,cy,5,scrollbarPaint);
-    scrollbarPaint.setColor(0xff475435);c.drawCircle(x+8,cy,3,scrollbarPaint);
-    scrollbarPaint.setColor(0xffd0d99b);c.drawCircle(x+7,cy-1,1,scrollbarPaint);
-  }
-
-  private Bitmap scrollSprite(byte[] data,int id){
-    Bitmap b=NativeArt.grp(data,id,background.palette,true,false);if(b==null)return null;
-    int w=b.getWidth(),h=b.getHeight();int[] pixels=new int[w*h];b.getPixels(pixels,0,w,0,0,w,h);
-    // Transparent surrounds, including the old rectangular tile outline.
-    for(int y=0;y<h;y++)for(int x=0;x<w;x++){int rgb=pixels[y*w+x]&0xffffff;
-      if(x<2||y<2||x>=w-2||y>=h-2||(rgb>>16&255)<16&&(rgb>>8&255)<16&&(rgb&255)<16)pixels[y*w+x]=0;
-      else if((pixels[y*w+x]>>>24)!=0){
-        // Keep the original arrow's silhouette and shading; lift its dark ink
-        // toward the classic menu's olive highlight instead of adding a box.
-        int r=92+(rgb>>16&255)*3/5,g=Math.min(255,110+(rgb>>8&255)*3/5),blue=42+(rgb&255)/2;
-        pixels[y*w+x]=(pixels[y*w+x]&0xff000000)|r<<16|g<<8|blue;
-      }}
-    b.recycle();return Bitmap.createBitmap(pixels,w,h,Bitmap.Config.ARGB_8888);
+    // Integer rectangles keep the reference's stepped outline crisp at every
+    // menu scale. The hollow controls leave the original artwork visible.
+    int left=Math.round(x),top=Math.round(y),bottom=top+height;
+    scrollbarPaint.setColor(0xffc00024);
+    c.drawRect(left+1,top+17,left+2,bottom-16,scrollbarPaint);
+    c.drawRect(left+14,top+17,left+15,bottom-16,scrollbarPaint);
+    c.drawRect(left+1,top+17,left+15,top+18,scrollbarPaint);
+    c.drawRect(left+1,bottom-17,left+15,bottom-16,scrollbarPaint);
+    scrollbarPaint.setColor(0xffff0033);
+    for(int row=0;row<13;row++) {
+      int spread=row/2;
+      c.drawRect(left+7-spread,top+1+row,left+9-spread,top+2+row,scrollbarPaint);
+      c.drawRect(left+7+spread,top+1+row,left+9+spread,top+2+row,scrollbarPaint);
+      c.drawRect(left+7-spread,bottom-2-row,left+9-spread,bottom-1-row,scrollbarPaint);
+      c.drawRect(left+7+spread,bottom-2-row,left+9+spread,bottom-1-row,scrollbarPaint);
+    }
+    c.drawRect(left+1,top+13,left+15,top+14,scrollbarPaint);
+    c.drawRect(left+1,bottom-14,left+15,bottom-13,scrollbarPaint);
+    // Retain the input handlers' exact center/travel, including their wider
+    // invisible grab targets; only the one-pixel red silhouette changes.
+    int cy=Math.round(y+23+Math.max(0,Math.min(1,value))*(height-46));
+    c.drawRect(left+5,cy-6,left+12,cy-5,scrollbarPaint);
+    c.drawRect(left+5,cy+6,left+12,cy+7,scrollbarPaint);
+    for(int row=-5;row<=5;row++) {
+      int inset=Math.abs(row)==5?2:Math.abs(row)==4?1:0;
+      c.drawRect(left+2+inset,cy+row,left+3+inset,cy+row+1,scrollbarPaint);
+      c.drawRect(left+14-inset,cy+row,left+15-inset,cy+row+1,scrollbarPaint);
+    }
   }
 
   Bitmap selectFrame(int width, int height) {

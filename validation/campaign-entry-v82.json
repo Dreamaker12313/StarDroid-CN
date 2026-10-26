@@ -1,0 +1,115 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT shim with production NativeGlue, NativeArt, NativeSurface campaign/button methods and original libsmacker-decoded assets",
+  "result": "PASS 471 campaign entry checks: original SC/BW characters, episode labels and hit targets hidden at 0/335/669 ms; revealed at completed 670 ms slide; deferred movie fade/time; cached first-frame flash prevention; hover; exit; repeated SC/BW entry; no-slide/large-frame cases; no movie leaks",
+  "decodedMovies": {
+    "25f50dd72608655dad1f6edf7a013c59af64e8d77d7a5e8755f236fe123ceff4": {
+      "asset": "0/glue/campaign/disk.smk",
+      "frames": 36,
+      "width": 148,
+      "height": 60
+    },
+    "b35138142304d1b1de8bec5ac2fe11a64acd8841ceb4655612c0e76c19b6152f": {
+      "asset": "0/glue/campaign/prot.smk",
+      "frames": 70,
+      "width": 180,
+      "height": 212
+    },
+    "30fc1e30e2904eff7161b03b224f2b86d94e47ac67fe3a15f80d08932bb4c6ca": {
+      "asset": "0/glue/campaign/proton.smk",
+      "frames": 31,
+      "width": 220,
+      "height": 304
+    },
+    "98efc9a821c200048992b053a7dae85d61096f616ea9b908ea7df25e5ff54d65": {
+      "asset": "0/glue/campaign/terr.smk",
+      "frames": 78,
+      "width": 232,
+      "height": 208
+    },
+    "a2bfbc164f054a1b38f6422b7eb0c98e22e18b8b48ae31115e3f3c662c9f3ced": {
+      "asset": "0/glue/campaign/terron.smk",
+      "frames": 20,
+      "width": 356,
+      "height": 224
+    },
+    "64b3a518543b5a7745a0c98da71d16f902d8cdacc29c45ef8ac14e2198d9f148": {
+      "asset": "0/glue/campaign/zerg.smk",
+      "frames": 70,
+      "width": 196,
+      "height": 220
+    },
+    "7cddeb7e91f92e6eb083480e92737a214ba511505087189b84c9eeced2a6b5eb": {
+      "asset": "0/glue/campaign/zergon.smk",
+      "frames": 20,
+      "width": 220,
+      "height": 172
+    },
+    "52b33b25076fe29b4c12dce6476ff93e4ca4151220b8989d422b5c12be4bad80": {
+      "asset": "1/glue/expcampaign/xprot.smk",
+      "frames": 70,
+      "width": 180,
+      "height": 240
+    },
+    "ccec3196b8bf9da2b197e7ac992108cda965ddeabb3ceaea8ced5aed74fc9ec4": {
+      "asset": "1/glue/expcampaign/xproton.smk",
+      "frames": 20,
+      "width": 256,
+      "height": 256
+    },
+    "d7e1b3efa48de9bd3831641775efd2534151f63f620f4af4cd0d817d22b0b679": {
+      "asset": "1/glue/expcampaign/xterr.smk",
+      "frames": 69,
+      "width": 180,
+      "height": 252
+    },
+    "7a0bb5b1b1e315313c40fea62ac1e0c86d5b8f4c338b31e175738a217f7485b0": {
+      "asset": "1/glue/expcampaign/xterron.smk",
+      "frames": 20,
+      "width": 356,
+      "height": 224
+    },
+    "f5f20811e06d209c6fb27e66a2351177bffed875fcb0b4bca3756414468bc504": {
+      "asset": "1/glue/expcampaign/xzerg.smk",
+      "frames": 70,
+      "width": 204,
+      "height": 280
+    },
+    "8bb6f2d3b76040422e66429b60f1946b7496c4597069058c004ac96efaf75790": {
+      "asset": "1/glue/expcampaign/xzergon.smk",
+      "frames": 20,
+      "width": 256,
+      "height": 256
+    }
+  },
+  "captures": [
+    "build-native/campaign-entry82/glucmpgn-0ms.png",
+    "build-native/campaign-entry82/glucmpgn-1270ms.png",
+    "build-native/campaign-entry82/glucmpgn-335ms.png",
+    "build-native/campaign-entry82/glucmpgn-669ms.png",
+    "build-native/campaign-entry82/glucmpgn-670ms.png",
+    "build-native/campaign-entry82/glucmpgn-671ms.png",
+    "build-native/campaign-entry82/glucmpgn-970ms.png",
+    "build-native/campaign-entry82/glucmpgn-exit.png",
+    "build-native/campaign-entry82/gluexpcmpgn-0ms.png",
+    "build-native/campaign-entry82/gluexpcmpgn-1270ms.png",
+    "build-native/campaign-entry82/gluexpcmpgn-335ms.png",
+    "build-native/campaign-entry82/gluexpcmpgn-669ms.png",
+    "build-native/campaign-entry82/gluexpcmpgn-670ms.png",
+    "build-native/campaign-entry82/gluexpcmpgn-671ms.png",
+    "build-native/campaign-entry82/gluexpcmpgn-970ms.png",
+    "build-native/campaign-entry82/gluexpcmpgn-exit.png"
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "13a58d4e2835b66425457d63ab9778a275a2369744188aa000f8931f7c1f0a8c",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "e753454718d383b78d943a7b85e992e08c13f9e7ed4519e7f2bad78a5d9777c3",
+    "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
+    "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "9108b45139f4ec24664715e211fde61ee1d59fe82a8606b60563ac19f4cf63c6",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "f6ce9344d38fdf9bf8e32a870a53bd0b8a442442e5349b220911ee14f4cf9d88",
+    "tests/run_campaign_entry82.py": "e58c94bcae5559ed5e83baedb423f55cef602e5a27b2cd8f41b685a537dc0bd9",
+    "vendor/libsmacker/smacker.c": "d2a9adda0f8d36e952cdb44ec2fefbbe1f4146319272e779eed15f6c06a813a5"
+  }
+}

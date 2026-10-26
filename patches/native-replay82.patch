@@ -1,0 +1,20 @@
+--- a/ui/ui.h
++++ b/ui/ui.h
+@@ -1767,17 +1767,9 @@
+ 	rect get_replay_slider_area() {
+-#ifdef EMSCRIPTEN
++		// The native host owns replay controls and incremental seeking. The
++		// desktop slider only changes replay_frame, which this host never runs;
++		// drawing it would leave a nonfunctional purple bar over the world.
+ 		return {};
+-#endif
+-		rect r;
+-		int width = 192;
+-		int height = 32;
+-		r.from.x = (int)screen_width - 8 - width;
+-		r.from.y = (int)screen_height - 8 - 128 - height;
+-		r.to.x = r.from.x + width;
+-		r.to.y = r.from.y + height;
+-		if (r.from.x < 0 || r.from.y < 0) return {};
+-		return r;
+ 	}

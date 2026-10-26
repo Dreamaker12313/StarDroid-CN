@@ -102,9 +102,9 @@ The cache holds working copies of imported content. Build 80 removes empty archi
 
 Use the in-game **Save Game** and **Load Saved** controls. Save-file import and export are not provided.
 
-From build 81 onward, a campaign victory adds a green circled check beside that mission for the Player ID that started it. Each ID has its own progress. Loading a save retains its original ID, including when continuing to the next mission. Deleting an ID and creating another with the same name starts fresh. Earlier versions did not store completion history, so old victories cannot be marked automatically.
+From build 81 onward, a campaign victory adds a green pixel check beside that mission for the Player ID that started it. Each ID has its own progress. Loading a save retains its original ID, including when continuing to the next mission. Deleting an ID and creating another with the same name starts fresh. Earlier versions did not store completion history, so old victories cannot be marked automatically.
 
-The mission scrollbar, arrows, OK and Cancel have wider touch targets.
+The mission scrollbar, arrows, OK and Cancel have wider touch targets. Menu scrollbars use red pixel triangle arrows, a rectangular track and a hollow red circle thumb. Campaign characters and their episode labels appear after the menu slides into place.
 
 ### Unlimited supply
 
@@ -114,11 +114,11 @@ The mission scrollbar, arrows, OK and Cancel have wider touch targets.
 
 Build 81 adds **Load Replay** in the campaign-selection menu. Use **Save Replay** on the results screen of a newly started custom or nearby match to keep a local recording. The replay list uses the original load-menu artwork when available, shows map/player information, and includes **DELETE** with a confirmation. **Import Replay** accepts a supported `.rep` file; **Export** shares the selected replay.
 
-During playback, pause or resume, choose 1×–8× speed, switch between everyone's view and individual players, or restart. Playback is read-only: orders, cheats and game saves are disabled.
+During playback, pause or resume, choose 1×–8× speed, switch between everyone's view and individual players, or restart. In build 82, tap or drag the red timeline to seek forward or backward. The display shows “Seeking…” while the engine catches up. Your pause and speed settings are retained. Playback is read-only: orders, cheats and game saves are disabled.
 
 Use the same StarDroid build and game data for StarDroid recordings. Older computer recordings without AI settings, campaign recordings, resumed saves and cheated matches are not supported. Classic human-only Melee/Free-for-All files are accepted, but original-executable parity has not been verified. Remastered extensions and other game types are rejected with an explanation.
 
-Older interface imports may not include the original load-menu artwork. Playback still works with the existing menu fallback; importing the original StarCraft or Brood War CD archive again supplies the load-menu assets automatically.
+Older interface imports may not include the original load-menu artwork. The replay browser fits the available original menu layout automatically, including its filename list, scrollbar and information window. Import and Export sit side by side, with DELETE below. Importing the original StarCraft or Brood War CD archive again supplies the load-menu assets automatically. Saving or exporting a replay shows an in-game red confirmation with OK.
 
 ### Campaign objects and voices
 

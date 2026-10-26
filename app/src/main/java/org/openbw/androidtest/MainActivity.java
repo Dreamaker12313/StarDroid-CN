@@ -66,6 +66,8 @@ public final class MainActivity extends Activity {
     if(owner!=null)owner.permissions();
   }
   private byte[] pendingReplay;
+  private NativeSurface pendingReplayView;
+  private long pendingReplayRequest;
   private final ArrayDeque<String> logs = new ArrayDeque<String>();
   private final ExecutorService io = Executors.newSingleThreadExecutor();
   private FrameLayout root;
@@ -453,7 +455,8 @@ public final class MainActivity extends Activity {
     }
     if (request == PICK_REPLAY) {
       final byte[] bytes = pendingReplay;
-      pendingReplay = null;
+      final NativeSurface replayView=pendingReplayView;final long replayRequest=pendingReplayRequest;
+      pendingReplay = null;pendingReplayView=null;
       if (result == RESULT_OK && data != null && data.getData() != null && bytes != null) {
         final Uri uri = data.getData();
         io.execute(
@@ -461,16 +464,9 @@ public final class MainActivity extends Activity {
               try (java.io.OutputStream out = getContentResolver().openOutputStream(uri, "wt")) {
                 if (out == null) throw new IOException("Unable to open replay destination");
                 out.write(bytes);
-                runOnUiThread(
-                    () -> Toast.makeText(this, PortText.text("Replay saved"), Toast.LENGTH_SHORT).show());
+                if(replayView!=null)replayView.replayExported(replayRequest,"Replay saved");
               } catch (Exception e) {
-                runOnUiThread(
-                    () ->
-                        Toast.makeText(
-                                this,
-                                PortText.text("Replay could not be saved: " + e.getMessage()),
-                                Toast.LENGTH_LONG)
-                            .show());
+                if(replayView!=null)replayView.replayExported(replayRequest,"Replay could not be saved: "+e.getMessage());
               }
             });
       }
@@ -612,7 +608,7 @@ public final class MainActivity extends Activity {
     startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),IMPORT_REPLAY);
   }
 
-  void recordReplay(byte[] bytes) {
+  void recordReplay(byte[] bytes,NativeSurface resultView,long request) {
     if(bytes==null)return;
     io.execute(()->{String result;try{
       String[] header=GameLanguage.decode(NativeBridge.replayInfo(bytes)).split("\\n")[0].split("\\t",-1);
@@ -620,13 +616,13 @@ public final class MainActivity extends Activity {
       new NativeReplays(getFilesDir()).save(bytes,label+" "+new java.text.SimpleDateFormat("yyyy-MM-dd HH-mm",Locale.ROOT).format(new java.util.Date()));
       result="Replay saved";
     }catch(Exception e){result="Replay could not be saved: "+e.getMessage();}
-    final String notice=result;runOnUiThread(()->Toast.makeText(this,PortText.text(notice),Toast.LENGTH_LONG).show());
+    final String notice=result;if(resultView!=null)resultView.replayRecorded(request,notice);
     });
   }
 
-  void saveReplay(byte[] bytes) {
+  void saveReplay(byte[] bytes,NativeSurface replayView,long request) {
     if (bytes == null) return;
-    pendingReplay = bytes;
+    pendingReplay = bytes;pendingReplayView=replayView;pendingReplayRequest=request;
     Intent intent =
         new Intent(Intent.ACTION_CREATE_DOCUMENT)
             .setType("application/octet-stream")

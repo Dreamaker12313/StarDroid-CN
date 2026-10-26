@@ -26,6 +26,7 @@ static int touch_radius=28;
 static bool touch_attack_move=true;
 static bool touch_ground_orders=true;
 static bool nearby_defenders=true;
+static bool replay_seek_audio_muted=false;
 extern "C" {
 uint8_t* openbw_framebuffer();
 int openbw_framebuffer_width();
@@ -36,7 +37,7 @@ void openbw_key(int,int,int);
 void js_read_data(int index,void* dst,unsigned offset,unsigned n){if(index<0||index>=11)throw std::runtime_error("Invalid archive index");archives[index].read(dst,offset,n);}
 unsigned js_file_size(int i){return i>=0&&i<11?unsigned(archives[i].size):0;}
 int js_sound_load(const void* data,unsigned n){return naudio::add(data,n);}
-void js_sound_play(int id,int ch,int vol,int pan){naudio::play(id,ch,vol,pan);}
+void js_sound_play(int id,int ch,int vol,int pan){if(!replay_seek_audio_muted)naudio::play(id,ch,vol,pan);}
 int js_sound_is_playing(int ch){return naudio::playing(ch);}
 void js_sound_stop(int ch){naudio::stop(ch);}
 void js_sound_set_volume(int ch,int vol){std::lock_guard<std::mutex> l(naudio::mutex);if(ch>=0&&ch<64)naudio::voices[ch].left=naudio::voices[ch].right=vol/128.f;}
@@ -104,7 +105,7 @@ static bwgame::a_vector<uint8_t> read_asset(int index,const std::string& filenam
 }
 static const char* text_query(int id){if(id==1&&native_replay::is_active())return native_replay::resources();if(id==0&&native_replay::is_active()){static std::string name;name=openbw_card();name=name.substr(0,name.find('\n'));return name.c_str();}switch(id){
  case 0:return openbw_card();case 1:return openbw_resources();case 2:return openbw_status();case 3:return openbw_wires();case 4:return openbw_unit_details();case 5:return openbw_campaign_events();case 6:return openbw_campaign_status();case 7:return openbw_campaign_timer();case 8:return openbw_error();case 9:return openbw_stats();case 10:return openbw_debug_units();case 11:return openbw_campaign_ai_error();case 12:return openbw_messages();case 13:return openbw_debug_dump();case 14:return g_ui?g_ui->cargo_status():"";default:return "";}}
-static int value_query(int id,int n){if(native_replay::is_active()&&id==0)return 0;switch(id){case 25:return native_replay::is_active();case 26:return native_replay::playing.frames;case 27:return native_replay::viewpoint;case 0:return openbw_cursor();case 1:return openbw_selected_type();case 2:return openbw_production_icon();case 3:return openbw_production_kind();case 4:return openbw_production_queue_type(n);case 5:return openbw_selected_race();case 6:return openbw_wire_box();case 7:return openbw_outcome();case 8:return openbw_frame();case 9:return openbw_map_w();case 10:return openbw_map_h();case 11:return openbw_portrait_for_type(n);case 12:return openbw_portrait_talking();case 13:return openbw_map_tileset();case 14:return openbw_minimap_terrain();case 16:return openbw_placement_valid((n>>16)&65535,n&65535);case 17:return openbw_touch_action((n>>16)&65535,n&65535);case 18:return g_ui&&g_ui->show_order_lines;case 19:return int(naudio::position_ms(n));case 20:return nearby_defenders;case 21:return g_ui?g_ui->group_count(n):0;case 22:return g_ui&&g_ui->test_invincible;case 23:return openbw_cursor_box();case 24:return g_ui&&g_ui->test_unlimited_supply;default:return 0;}}
+static int value_query(int id,int n){if(native_replay::is_active()&&id==0)return 0;switch(id){case 25:return native_replay::is_active();case 26:return native_replay::playing.frames;case 27:return native_replay::viewpoint;case 28:return native_replay::seeking;case 29:return native_replay::seek_target;case 0:return openbw_cursor();case 1:return openbw_selected_type();case 2:return openbw_production_icon();case 3:return openbw_production_kind();case 4:return openbw_production_queue_type(n);case 5:return openbw_selected_race();case 6:return openbw_wire_box();case 7:return openbw_outcome();case 8:return openbw_frame();case 9:return openbw_map_w();case 10:return openbw_map_h();case 11:return openbw_portrait_for_type(n);case 12:return openbw_portrait_talking();case 13:return openbw_map_tileset();case 14:return openbw_minimap_terrain();case 16:return openbw_placement_valid((n>>16)&65535,n&65535);case 17:return openbw_touch_action((n>>16)&65535,n&65535);case 18:return g_ui&&g_ui->show_order_lines;case 19:return int(naudio::position_ms(n));case 20:return nearby_defenders;case 21:return g_ui?g_ui->group_count(n):0;case 22:return g_ui&&g_ui->test_invincible;case 23:return openbw_cursor_box();case 24:return g_ui&&g_ui->test_unlimited_supply;default:return 0;}}
 static void command(int op,int a,int b,int c,int d){
  if(native_replay::is_active()){
   if(op==31){native_replay::set_view(a);return;}
@@ -214,7 +215,7 @@ JNI(multiplayerApplyAll) void JNICALL Java_org_openbw_androidtest_NativeBridge_m
 JNI(multiplayerStep) void JNICALL Java_org_openbw_androidtest_NativeBridge_multiplayerStep(JNIEnv* e,jclass){try{net_step();}catch(const std::exception& x){fail(e,x);}}
 JNI(multiplayerPeerLeft) void JNICALL Java_org_openbw_androidtest_NativeBridge_multiplayerPeerLeft(JNIEnv* e,jclass){try{net_peer_left();}catch(const std::exception& x){fail(e,x);}}
 JNI(resize) void JNICALL Java_org_openbw_androidtest_NativeBridge_resize(JNIEnv* e,jclass,jint w,jint h,jdouble scale){try{openbw_resize(w,h);openbw_set_view_scale(scale);}catch(const std::exception& x){fail(e,x);}}
-JNI(frame) void JNICALL Java_org_openbw_androidtest_NativeBridge_frame(JNIEnv* e,jclass,jobject b,jint steps,jdouble time){try{for(int i=0;i<steps;i++)native_step();openbw_render(time);bitmap(e,b,openbw_framebuffer(),openbw_framebuffer_width(),openbw_framebuffer_height());}catch(const std::exception& x){fail(e,x);}}
+JNI(frame) void JNICALL Java_org_openbw_androidtest_NativeBridge_frame(JNIEnv* e,jclass,jobject b,jint steps,jdouble time){try{if(native_replay::seeking)native_replay::pump_seek();else for(int i=0;i<steps;i++)native_step();openbw_render(time);bitmap(e,b,openbw_framebuffer(),openbw_framebuffer_width(),openbw_framebuffer_height());}catch(const std::exception& x){fail(e,x);}}
 JNI(text) jstring JNICALL Java_org_openbw_androidtest_NativeBridge_text(JNIEnv* e,jclass,jint id){try{return e->NewStringUTF(text_query(id));}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(rawText) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_rawText(JNIEnv* e,jclass,jint id){try{const char* s=text_query(id);return bytes(e,reinterpret_cast<const uint8_t*>(s),strlen(s));}catch(const std::exception& x){fail(e,x);return nullptr;}}
 // Independent reader: background map imports never replace the live game's archive.
@@ -243,6 +244,8 @@ JNI(scoreSound) jint JNICALL Java_org_openbw_androidtest_NativeBridge_scoreSound
 JNI(replay) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replay(JNIEnv* e,jclass){try{auto b=native_replay::save();return b.empty()?nullptr:bytes(e,b.data(),b.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(replayInfo) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replayInfo(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);auto info=native_replay::info(b.data(),b.size());return bytes(e,reinterpret_cast<const uint8_t*>(info.data()),info.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(replayOpen) void JNICALL Java_org_openbw_androidtest_NativeBridge_replayOpen(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);native_replay::open(b.data(),b.size());}catch(const std::exception& x){fail(e,x);}}
+JNI(replaySeek) void JNICALL Java_org_openbw_androidtest_NativeBridge_replaySeek(JNIEnv* e,jclass,jint target){try{native_replay::seek(target);}catch(const std::exception& x){fail(e,x);}}
+JNI(replayCancelSeek) void JNICALL Java_org_openbw_androidtest_NativeBridge_replayCancelSeek(JNIEnv* e,jclass){try{native_replay::cancel_seek();}catch(const std::exception& x){fail(e,x);}}
 JNI(command) void JNICALL Java_org_openbw_androidtest_NativeBridge_command(JNIEnv* e,jclass,jint op,jint a,jint b,jint c,jint d){try{command(op,a,b,c,d);}catch(const std::exception& x){fail(e,x);}}
 JNI(asset) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_asset(JNIEnv* e,jclass,jint slot,jstring name){try{auto data=read_asset(slot,utf(e,name));return data.empty()?nullptr:bytes(e,data.data(),data.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(chk) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_chk(JNIEnv* e,jclass){return bytes(e,openbw_campaign_chk(),openbw_campaign_chk_len());}

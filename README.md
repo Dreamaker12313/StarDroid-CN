@@ -14,7 +14,7 @@ Put together by **ToadWarrior**.
 
 Version **1.0.10** adds gamepad controls and invincibility, fixes worker cancellation and AI ammunition production, and substantially reduces content-cache storage. Install `StarDroid-1.0.10.apk` over the existing app. [Released changes](docs/CHANGES-1.0.10.md).
 
-The current source targets **1.0.11 / build 81**, with replay playback, revised controls, a capped supply cheat and per-player campaign completion marks. [Development changes](docs/CHANGES-1.0.11.md). **Diagnostics / credits** remains available.
+The current source targets **1.0.12 / build 82**, with working replay seeking, corrected replay layouts, pixel scrollbars and in-game save confirmations. [Development changes](docs/CHANGES-1.0.12.md). **Diagnostics / credits** remains available.
 
 ## Features
 
@@ -138,11 +138,11 @@ Tassadar and Zeratul can merge into their hero Archon. Both hero slots remain oc
 - If an APK will not install over an existing app, check CPU architecture and signing identity. Independently signed builds cannot replace the distributed APK in place.
 - Build 81 adds **Load Replay**, local replay storage and **DELETE**. See [replay controls and compatibility](docs/PLAYER-GUIDE.md#replays).
 
-More details: [player guide](docs/PLAYER-GUIDE.md) · [current source changes](docs/CHANGES-1.0.11.md) · [1.0 changes](docs/FIXES-1.0.md) · [validation record](VALIDATION.md).
+More details: [player guide](docs/PLAYER-GUIDE.md) · [current source changes](docs/CHANGES-1.0.12.md) · [1.0 changes](docs/FIXES-1.0.md) · [validation record](VALIDATION.md).
 
 ## Development
 
-The current source targets **1.0.11 / build 81**. It adds replay browsing/playback, original-style gamepad settings, a supply cheat capped at 200, larger control groups, and completed-mission marks for each Player ID. See [build 81 changes](docs/CHANGES-1.0.11.md), [build 80 changes](docs/CHANGES-1.0.10.md), and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
+The current source targets **1.0.12 / build 82**. It fixes replay layouts for both current and older imports, adds working timeline seeking, and refines pixel controls and campaign transitions. See [build 82 changes](docs/CHANGES-1.0.12.md), [build 81 changes](docs/CHANGES-1.0.11.md), [build 80 changes](docs/CHANGES-1.0.10.md), and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
 
 The current Android app uses a native C++ engine, JNI, Android Canvas, and AudioTrack. The older web implementation remains as historical source and is not shipped in the APK.
 
@@ -152,7 +152,7 @@ On an x86-64 Linux development machine with Python 3.10+, JDK 17, Git, and `patc
 python3 scripts/build.py
 ```
 
-The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.11.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
+The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.12.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
 
 Automated checks cover upgrade progression, command cards, touch routing, saves, multiplayer protocol behavior, UI layouts, and screen-edge rendering with AddressSanitizer and guarded buffers. These do not replace physical-device checks; installation, radio interoperability, touch, audio, and full campaign playthroughs need broader device testing. See [VALIDATION.md](VALIDATION.md) for exact coverage and limitations.
 

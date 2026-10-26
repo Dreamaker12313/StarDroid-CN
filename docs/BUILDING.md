@@ -28,10 +28,10 @@ This downloads the pinned tools, prepares the vendored engine with the patches i
 
 Outputs:
 
-- `dist/StarDroid-1.0.11.apk`
+- `dist/StarDroid-1.0.12.apk`
 - `dist/SHA256SUMS.txt`
 
-The current source version is **1.0.11**, with Android version code **81**. The checked-in native libraries remain 1.0.8; rebuild both ABIs to include the current source changes. The released 1.0.10 APK contains rebuilt libraries and is recorded in `validation/package-v80.json`. Build 81 validation is recorded separately in `validation/package-v81.json`. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
+The current source version is **1.0.12**, with Android version code **82**. The checked-in native libraries remain 1.0.8; rebuild both ABIs to include the current source changes. The released 1.0.10 APK contains rebuilt libraries and is recorded in `validation/package-v80.json`. Build 81 and 82 validation are recorded separately in `validation/package-v81.json` and `validation/package-v82.json`. The application ID remains `org.openbw.androidtest` for compatibility with existing installations and JNI bindings. The installed app name is **StarDroid**.
 
 Use `STARDROID_ANDROID_TOOLS` to select a tool-cache directory. The historical `OPENBW_ANDROID_TOOLS` variable is still accepted. The default is `.tools/` in the repository. The helper writes a local `local.properties` pointing Gradle at the staged SDK.
 

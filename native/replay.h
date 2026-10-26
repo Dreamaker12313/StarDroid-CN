@@ -21,6 +21,16 @@ static Parsed playing;
 static std::vector<uint8_t> opened;
 static bool active=false;
 static int viewpoint=-1;
+// Checkpoints are disposable accelerators, never replay-file data. Their full
+// action cursor and local AI state must travel with the serialized world.
+constexpr size_t MAX_CHECKPOINT_BYTES=48u*1024*1024,MAX_CHECKPOINTS=8;
+constexpr int CHECKPOINT_INTERVAL=24*30,SEEK_BATCH_FRAMES=128;
+struct Checkpoint {int frame=0;std::vector<uint8_t> bytes;};
+static std::vector<Checkpoint> checkpoints;
+static bool seeking=false,checkpoint_disabled=false;
+static int seek_target=0;
+static size_t cache_bytes(){size_t n=0;for(auto& c:checkpoints)n+=c.bytes.capacity();return n;}
+static void remember_checkpoint();
 static bool is_active(){return active;}
 static std::string clean(const uint8_t* p,size_t n) {std::string s;for(size_t i=0;i<n&&p[i];i++)if(p[i]>=32&&p[i]!=127)s+=char(p[i]);return s;}
 static uint32_t u32(const uint8_t* p){return uint32_t(p[0])|uint32_t(p[1])<<8|uint32_t(p[2])<<16|uint32_t(p[3])<<24;}
@@ -149,7 +159,8 @@ static Parsed parse(const uint8_t* data,size_t size) {
  } else for(int i=0;i<8;i++)need(p.controllers[i]!=bwgame::player_t::controller_computer_game&&p.controllers[i]!=bwgame::player_t::controller_computer,"This computer-player replay lacks StarDroid AI settings. Record a new replay.");
  return p;
 }
-static void reset(){recording=Rules();playing=Parsed();opened.clear();active=false;viewpoint=-1;}
+static void reset(){recording=Rules();playing=Parsed();std::vector<uint8_t>().swap(opened);active=false;viewpoint=-1;
+ checkpoints.clear();seeking=false;seek_target=0;checkpoint_disabled=false;replay_seek_audio_muted=false;}
 static void begin() {
  recording=Rules();if(!g_ui||!g_ui->rep_on||g_ui->st.current_frame!=0)return;
  auto& r=recording;r.present=true;r.player=g_ui->my_player;r.heroes=g_ui->game_st.hero_mode;r.teams=g_ui->game_st.team_game;r.difficulty=g_campaign?g_campaign->melee_ai_level:2;
@@ -225,14 +236,110 @@ static void open(const uint8_t* data,size_t size) {
    need(uint64_t(bwgame::sim_checksum(g_ui->st))==r.initial,"Replay initial state does not match this build.");
   }
   g_ui->rep_on=false;g_ui->spectator=true;g_ui->competitive=false;g_ui->outcome=0;g_ui->wnd.create("StarDroid Replay",0,0,640,480);g_ui->resize(640,480);g_ui->set_image_data();
-  g_ui->center_on(g_ui->game_st.start_locations[owner]);g_ui->outgoing.clear();active=true;set_view(-1);openbw_set_external_cursor(1);openbw_mouse_move(-100,-100);
+  g_ui->center_on(g_ui->game_st.start_locations[owner]);g_ui->outgoing.clear();active=true;set_view(-1);openbw_set_external_cursor(1);openbw_mouse_move(-100,-100);remember_checkpoint();
  }catch(...){close_game();throw;}
 }
-static void step() {
- if(!active||!g_ui||g_ui->paused||g_ui->st.current_frame>=playing.frames)return;
+static void advance() {
+ if(!active||!g_ui||g_ui->st.current_frame>=playing.frames)return;
  g_ui->outgoing.clear();g_ui->outcome=0;
  // Execute only recorded player input; continue the same local AI simulation.
  g_ui->execute_actions(playing.actions.data(),playing.actions.data()+playing.actions.size());
  if(g_campaign)g_campaign->campaign_tick();g_ui->state_functions::next_frame();g_ui->outgoing.clear();g_ui->outcome=0;
+}
+// A snapshot operation is bounded by one world, unlike replaying a long match.
+// Fixed byte/count caps prevent a long replay from retaining unbounded worlds.
+static void remember_checkpoint() {
+ if(!active||!g_ui||checkpoint_disabled)return;
+ int frame=g_ui->st.current_frame;
+ for(auto& c:checkpoints)if(std::abs(c.frame-frame)<CHECKPOINT_INTERVAL)return;
+ try {
+  native_save::HostState host;auto bytes=native_save::save(*g_ui,g_campaign,host);
+  if(bytes.capacity()>MAX_CHECKPOINT_BYTES){checkpoint_disabled=true;return;}
+  // Reserve room before installing the new checkpoint. Always retain frame zero.
+  while(checkpoints.size()>=MAX_CHECKPOINTS||cache_bytes()+bytes.capacity()>MAX_CHECKPOINT_BYTES){
+   if(checkpoints.size()<=1)return;
+   size_t remove=1;int tightest=std::numeric_limits<int>::max();
+   for(size_t i=1;i<checkpoints.size();i++){
+    int next=i+1<checkpoints.size()?checkpoints[i+1].frame:frame;
+    int gap=std::abs(next-checkpoints[i-1].frame);
+    if(gap<tightest){tightest=gap;remove=i;}
+   }
+   checkpoints.erase(checkpoints.begin()+remove);
+  }
+  checkpoints.push_back({frame,std::move(bytes)});
+  std::sort(checkpoints.begin(),checkpoints.end(),[](const Checkpoint& a,const Checkpoint& b){return a.frame<b.frame;});
+ }catch(const std::exception&){
+  // A large or unsupported snapshot must not make a valid replay unplayable.
+  // Backward seeks can always reload its original, already-validated bytes.
+  checkpoint_disabled=true;
+ }
+}
+static void silence_seek_audio(){
+ for(int ch=0;ch<57;ch++)naudio::stop(ch);naudio::stop(62);
+ if(g_ui)for(auto& c:g_ui->sound_channels)c.playing=false;
+}
+static void clear_seek_presentation(){
+ if(!g_ui)return;
+ g_ui->current_selection_clear();g_ui->fog_snapshots.assign(2500,{});
+ g_ui->outgoing.clear();g_ui->outcome=0;g_ui->rep_on=false;
+ g_ui->events_seeded=false;g_ui->last_life.clear();g_ui->last_stim.clear();g_ui->announced.clear();
+ g_ui->alerts.clear();g_ui->advisor_queue.clear();g_ui->ready_notifications=0;g_ui->technology_notifications=0;
+ g_ui->rescue_notifications=0;g_ui->msg_log.clear();
+ silence_seek_audio();
+}
+// Queue only: touch events never run catch-up work or reload the world.
+static void seek(int target){
+ if(!active||!g_ui)return;
+ seek_target=std::max(0,std::min(playing.frames,target));
+ seeking=seek_target!=g_ui->st.current_frame;
+ replay_seek_audio_muted=seeking;if(seeking)silence_seek_audio();else clear_seek_presentation();
+}
+static void cancel_seek(){
+ if(seeking)clear_seek_presentation();seeking=false;replay_seek_audio_muted=false;
+ seek_target=g_ui?g_ui->st.current_frame:0;
+}
+static void pump_seek(){
+ if(!seeking||!active||!g_ui)return;
+ int target=seek_target;
+ auto deadline=std::chrono::steady_clock::now()+std::chrono::milliseconds(6);
+ Checkpoint* best=nullptr;
+ for(auto& c:checkpoints)if(c.frame<=target&&(!best||c.frame>best->frame))best=&c;
+ bool restore=g_ui->st.current_frame>target||(best&&best->frame>g_ui->st.current_frame);
+ if(restore){
+  auto camera=g_ui->screen_pos;int owner=viewpoint;bool paused=g_ui->paused;
+  int width=g_ui->screen_width,height=g_ui->screen_height,inset=g_ui->hud_bottom_inset;
+  auto scale=g_ui->minimap_scale;int volume=g_ui->global_volume;
+  bool terrain=g_ui->minimap_terrain,lines=g_ui->show_order_lines,edge=g_ui->host_controls_edge_scroll;
+  bool larvae=g_ui->original_larvae_selection,single=g_ui->single_larva_morph;
+  if(best)native_save::restore(*g_ui,g_campaign,best->bytes);
+  else {
+   // No retained anchor (for example, an oversized map): reload one world,
+   // then resume bounded work next tick. open() owns its input before reset().
+   open(opened.data(),opened.size());
+   openbw_resize(width,height);openbw_set_view_scale(scale);g_ui->hud_bottom_inset=inset;
+   g_ui->global_volume=volume;g_ui->minimap_terrain=terrain;g_ui->show_order_lines=lines;
+   g_ui->host_controls_edge_scroll=edge;g_ui->original_larvae_selection=larvae;g_ui->single_larva_morph=single;
+  }
+  viewpoint=owner;g_ui->fog_player=owner;g_ui->screen_pos=camera;g_ui->clamp_viewport();g_ui->paused=paused;
+  seeking=true;seek_target=target;replay_seek_audio_muted=true;clear_seek_presentation();
+  // Return immediately after the world-sized restore/reload operation.
+  if(g_ui->st.current_frame==target)cancel_seek();
+  return;
+ }
+ auto volume=g_ui->global_volume;g_ui->global_volume=0;
+ try {
+  for(int count=0;count<SEEK_BATCH_FRAMES&&g_ui->st.current_frame<target;count++){
+   advance();
+   if(std::chrono::steady_clock::now()>=deadline)break;
+  }
+ }catch(...){g_ui->global_volume=volume;cancel_seek();throw;}
+ g_ui->global_volume=volume;
+ if(g_ui->st.current_frame==target){remember_checkpoint();cancel_seek();}
+ else if(g_ui->st.current_frame%CHECKPOINT_INTERVAL<SEEK_BATCH_FRAMES)remember_checkpoint();
+}
+static void step(){
+ if(!active||!g_ui||g_ui->paused||seeking)return;
+ advance();
+ if(g_ui->st.current_frame%CHECKPOINT_INTERVAL==0)remember_checkpoint();
 }
 } // namespace native_replay

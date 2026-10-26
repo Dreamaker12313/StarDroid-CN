@@ -67,6 +67,12 @@ final class NativeSurface extends SurfaceView
   private float replayOffset;
   private boolean replayGame,replayPaused,replayExpansion,replayReturnExpansion,replayValid;
   private int replayRate=1;
+  private boolean replaySeeking;
+  private long replaySaveRequest;
+  private NativeResults replaySaveScreen;
+  private long replayBrowserGeneration;
+  private Runnable replayAcknowledgement;
+  private NativeArt.Font replayLargeSource,replaySmallSource,replayLargeGreen,replaySmallGreen;
   private double speed = 42;
   private Runnable pendingScreen;
   private boolean slideLocked;
@@ -609,6 +615,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void showReplays() {
+    replayBrowserGeneration++;
     if(replayGame)expansion=replayReturnExpansion;
     replayGame=false;activeGame=false;campaign=null;currentMission=null;lastOutcome=0;
     closeNearby();NativeBridge.endGame();closeBriefMovies();
@@ -624,10 +631,14 @@ final class NativeSurface extends SurfaceView
       replayFiles=replays.list();
       if(selectedReplay==null||!replayFiles.contains(selectedReplay))selectedReplay=replayFiles.isEmpty()?null:replayFiles.get(0);
       replayOffset=Math.min(replayOffset,replayMaxOffset());selectReplay(selectedReplay);
-    } catch(Exception e){replayNotice=e.getMessage();replayFiles=Collections.emptyList();selectedReplay=null;}
+    } catch(Exception e){replayFiles=Collections.emptyList();selectedReplay=null;replayMessage(e.getMessage());}
   }
 
-  private float replayMaxOffset(){return Math.max(0,replayFiles.size()*22-218);}
+  private RectF replayListBounds() {
+    NativeArt.Widget box=glue==null?null:glue.layout.get(glue.name.equals("gluload")?6:5);
+    return box==null?new RectF(60,130,348,248):box.rect();
+  }
+  private float replayMaxOffset(){return Math.max(0,replayFiles.size()*22-replayListBounds().height());}
   private void selectReplay(File file) {
     selectedReplay=file;replayDetails="";replayValid=false;replayPlayers.clear();replayRaces.clear();replayNotice="";
     if(file==null)return;
@@ -637,7 +648,7 @@ final class NativeSurface extends SurfaceView
       replayDetails=info[3]+"\n"+(replayExpansion?"Brood War":"StarCraft")+"\n"+replayTime(Integer.parseInt(info[0]));
       for(int i=1;i<rows.length;i++){String[] player=rows[i].split("\t",-1);replayPlayers.add(Integer.parseInt(player[0]));replayRaces.add(Integer.parseInt(player[1]));replayDetails+="\n"+player[2]+" · "+MatchSetup.RACES[Integer.parseInt(player[1])%3];}
       replayValid=true;
-    }catch(Exception e){replayNotice=e.getMessage();}
+    }catch(Exception e){replayMessage(e.getMessage());}
   }
 
   private static String replayTime(int frames){int seconds=Math.max(0,frames)/24;return String.format(Locale.ROOT,"%d:%02d",seconds/60,seconds%60);}
@@ -646,43 +657,116 @@ final class NativeSurface extends SurfaceView
     if(glue==null){drawMenuUnavailable(c,this::showCampaign);return;}
     if(glue.exiting||glue.elapsed<NativeGlue.ENTER_MS)return;
     uiLine(c,"Load Replay",glue.large,40,66,290,22,0,2);
-    c.save();c.clipRect(64,92,346,310);
-    if(replayFiles.isEmpty())glue.small.draw(c,"No saved replays",68,100,270,0,2,0);
-    for(int i=Math.max(0,(int)(replayOffset/22));i<replayFiles.size()&&i*22-replayOffset<218;i++){
-      final File file=replayFiles.get(i);float y=92+i*22-replayOffset;
-      glue.small.draw(c,NativeResults.fit(glue.small,NativeReplays.label(file),272),68,y+3,272,0,file.equals(selectedReplay)?4:2,0);
-      add(new RectF(64,Math.max(92,y),346,Math.min(310,y+22)),()->selectReplay(file),true);
+    // The legacy custom-game list is much shorter and lower than gluload's list.
+    // Use the imported BIN's list rectangle for both clipping and touch targets.
+    RectF box=replayListBounds();float right=box.right-20;
+    replayOffset=Math.max(0,Math.min(replayOffset,replayMaxOffset()));
+    c.save();c.clipRect(box.left,box.top,right,box.bottom);
+    if(replayFiles.isEmpty())glue.small.draw(c,"No saved replays",box.left+4,box.top+8,(int)(right-box.left-8),0,2,0);
+    for(int i=Math.max(0,(int)(replayOffset/22));i<replayFiles.size()&&i*22-replayOffset<box.height();i++){
+      final File file=replayFiles.get(i);float y=box.top+i*22-replayOffset;
+      uiLine(c,NativeReplays.label(file),glue.small,box.left+4,y,(int)(right-box.left-8),22,0,file.equals(selectedReplay)?4:2);
+      add(new RectF(box.left,Math.max(box.top,y),right,Math.min(box.bottom,y+22)),()->selectReplay(file),true);
     }
     c.restore();
-    float max=replayMaxOffset();glue.scrollbar(c,350,92,218,max==0?0:replayOffset/max);
-    add(new RectF(346,88,370,110),()->replayOffset=Math.max(0,replayOffset-22),max>0);
-    add(new RectF(346,292,370,314),()->replayOffset=Math.min(max,replayOffset+22),max>0);
-    Button bar=new Button(new RectF(346,110,370,292),()->{},max>0);bar.vertical=true;bar.slider=v->replayOffset=v*replayMaxOffset();buttons.add(bar);
-    try {c.drawBitmap(art.pcx("glue/load/pinfo.pcx",true,-1).image,388,55,NativeArt.PIXELS);}
-    catch(Exception missing){panel(c,386,84,230,258);}
-    body(c,replayNotice.isEmpty()?replayDetails:replayNotice,404,112,204,224);
+    drawReplayScrollbar(c,box);
     if(glue.name.equals("gluload")){
-      glueButton(c,7,"DELETE",()->{if(selectedReplay!=null)modal="replay-delete";});
-      glueButton(c,4,"OK",()->{if(replayValid)startReplay(selectedReplay);});
-      glueButton(c,5,"Cancel",()->navigate(this::showCampaign));
+      try {c.drawBitmap(art.pcx("glue/load/pinfo.pcx",true,-1).image,388,55,NativeArt.PIXELS);}
+      catch(Exception missing){replayPanel(c,390,104,218,250);}
+      drawReplayDetails(c,404,112,190,224);
     }else{
-      redButton(c,"DELETE",44,332,164,20,()->modal="replay-delete",selectedReplay!=null);
-      redButton(c,"OK",441,383,152,22,()->startReplay(selectedReplay),replayValid);
-      redButton(c,"Cancel",477,419,132,22,()->navigate(this::showCampaign),true);
+      // glucustm already supplies the right-hand original pInfo background.
+      // Never cover it with the unrelated generic blue dialog panel.
+      drawReplayDetails(c,410,58,190,244);
     }
-    redButton(c,"Import Replay",218,332,136,20,()->activity.runOnUiThread(activity::pickReplay),true);
-    redButton(c,"Export",44,366,164,20,()->{try{byte[] data=replays.read(selectedReplay);activity.runOnUiThread(()->activity.saveReplay(data));}catch(Exception e){replayNotice=e.getMessage();}},selectedReplay!=null);
+    replayButton(c,"Import Replay",44,332,164,22,()->activity.runOnUiThread(activity::pickReplay),true);
+    replayButton(c,"Export",218,332,136,22,()->{
+      try{byte[] data=replays.read(selectedReplay);final long request=replayBrowserGeneration;activity.runOnUiThread(()->activity.saveReplay(data,this,request));}
+      catch(Exception e){replayMessage("Replay could not be saved: "+e.getMessage());}
+    },selectedReplay!=null);
+    replayButton(c,"DELETE",44,366,164,22,()->modal="replay-delete",selectedReplay!=null);
+    replayButton(c,"OK",441,383,152,22,()->startReplay(selectedReplay),replayValid);
+    replayButton(c,"Cancel",477,419,132,22,()->navigate(this::showCampaign),true);
   }
+
+  private void drawReplayDetails(Canvas c,int x,int y,int width,int height) {
+    NativeArt.Font font=glue.small;int lines=font.lines(replayDetails,width).size(),lineHeight=16;
+    if(lines*lineHeight>height){font=glue.tiny;lines=font.lines(replayDetails,width).size();lineHeight=Math.max(font.height,Math.min(14,height/Math.max(1,lines)));}
+    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,replayDetails,x,y,width,0,2,lineHeight);c.restore();
+  }
+
+  private void drawReplayScrollbar(Canvas c,RectF box) {
+    float x=box.right-18,y=box.top,max=replayMaxOffset();int height=Math.round(box.height());
+    glue.scrollbar(c,x,y,height,max==0?0:replayOffset/max);
+    add(new RectF(x-2,y,box.right,y+16),()->replayOffset=Math.max(0,replayOffset-22),max>0);
+    add(new RectF(x-2,box.bottom-16,box.right,box.bottom),()->replayOffset=Math.min(replayMaxOffset(),replayOffset+22),max>0);
+    Button bar=new Button(new RectF(x-2,y+16,box.right,box.bottom-16),()->{},max>0);bar.vertical=true;
+    final float travel=height-46;final long[] dragStarted={Long.MIN_VALUE};final float[] grip={0};
+    bar.slider=v->{
+      float maximum=replayMaxOffset(),position=v*bar.rect.height()-7;
+      if(dragStarted[0]!=downAt){dragStarted[0]=downAt;float thumb=maximum>0?replayOffset/maximum*travel:0;grip[0]=Math.abs(position-thumb)<=7?position-thumb:0;}
+      replayOffset=Math.max(0,Math.min(maximum,(position-grip[0])/travel*maximum));
+    };
+    buttons.add(bar);
+  }
+
+  private NativeArt.Font replayFont(boolean large) {
+    NativeArt.Font source=page.equals("results")&&results!=null?(large?results.large:results.small)
+        :hud!=null?(large?hud.large:hud.small):glue==null?null:(large?glue.large:glue.small);
+    if(source==null)return null;
+    if(large){if(replayLargeSource!=source){replayLargeSource=source;replayLargeGreen=source.withShadedColor(0xff76b948);}return replayLargeGreen;}
+    if(replaySmallSource!=source){replaySmallSource=source;replaySmallGreen=source.withShadedColor(0xff76b948);}return replaySmallGreen;
+  }
+
+  private void replayPanel(Canvas c,float x,float y,int width,int height) {
+    paint.setColor(Color.BLACK);c.drawRect(x,y,x+width,y+height,paint);
+    redBorder(c,x,y,width,height,false);redBorder(c,x+3,y+3,width-6,height-6,false);
+  }
+
+  private void replayMessage(String message) {replayNotice=message==null?"":message;modal="replay-notice";cancelGesture();}
 
   private boolean drawReplayDialog(Canvas c) {
-    if(!modal.equals("replay-delete"))return false;
-    panel(c,112,126,416,222);text(c,"Delete replay?",128,142,384,1,2);
-    body(c,selectedReplay==null?"":NativeReplays.label(selectedReplay),140,190,360,58);
-    button(c,"DELETE",140,282,160,28,()->{try{replays.delete(selectedReplay);modal="";refreshReplays();}catch(Exception e){replayNotice=e.getMessage();modal="";}},selectedReplay!=null);
-    button(c,"Cancel",340,282,160,28,()->modal="",true);return true;
+    if(!modal.equals("replay-delete")&&!modal.equals("replay-notice"))return false;
+    boolean deleting=modal.equals("replay-delete");float x=(logicalWidth-416)/2f;
+    paint.setColor(0x98000000);c.drawRect(0,0,logicalWidth,480,paint);replayPanel(c,x,126,416,222);
+    NativeArt.Font heading=replayFont(true),small=replayFont(false);
+    if(deleting&&heading!=null)uiLine(c,"Delete replay?",heading,x+16,142,384,26,1,2);
+    String message=deleting?(selectedReplay==null?"":NativeReplays.label(selectedReplay)):replayNotice;
+    c.save();c.clipRect(x+28,178,x+388,262);
+    NativeArt.Font messageFont=deleting?small:heading;
+    if(messageFont!=null&&messageFont.lines(message,360).size()>4)messageFont=small;
+    if(messageFont!=null)messageFont.draw(c,message,x+28,178,360,deleting?0:1,2,20);else fallback(c,message,x+28,178,14,0xffc5cce3);
+    c.restore();
+    if(deleting){
+      replayButton(c,"DELETE",x+28,282,160,28,()->{try{replays.delete(selectedReplay);modal="";refreshReplays();}catch(Exception e){replayMessage(e.getMessage());}},selectedReplay!=null);
+      replayButton(c,"Cancel",x+228,282,160,28,()->modal="",true);
+    }else replayButton(c,"OK",x+128,282,160,28,()->modal="",true);
+    return true;
   }
 
-  void replayImported(String issue){enqueue(()->{if(page.equals("replays")){refreshReplays();if(issue!=null)replayNotice=issue;}});}
+  void replayImported(String issue){enqueue(()->{if(page.equals("replays")){refreshReplays();if(issue!=null)replayMessage(issue);}});}
+
+  private void saveCurrentReplay() {
+    try{
+      byte[] bytes=NativeBridge.replay();replaySaveScreen=results;final long request=++replaySaveRequest;
+      activity.runOnUiThread(()->activity.recordReplay(bytes,this,request));
+    }catch(Exception e){replayMessage("Replay could not be saved: "+e.getMessage());}
+  }
+
+  void replayRecorded(long request,String message) {
+    enqueue(()->{if(request==replaySaveRequest&&page.equals("results")&&results==replaySaveScreen){
+      final NativeResults savedScreen=replaySaveScreen;
+      replayAcknowledgement=()->{if(page.equals("results")&&results==savedScreen)replayMessage(message);};
+    }});
+  }
+
+  void replayExported(long request,String message) {
+    enqueue(()->{replayAcknowledgement=()->{if(page.equals("replays")&&request==replayBrowserGeneration)replayMessage(message);};});
+  }
+
+  private void presentReplayAcknowledgement() {
+    if(replayAcknowledgement!=null&&modal.isEmpty()){Runnable notice=replayAcknowledgement;replayAcknowledgement=null;notice.run();}
+  }
 
   private void startReplay(File file) {
     if(file==null)return;
@@ -690,37 +774,56 @@ final class NativeSurface extends SurfaceView
       byte[] bytes=replays.read(file);selectReplay(file);if(!replayValid)return;
       if(!replayGame)replayReturnExpansion=expansion;
       closeGlue();closeNearby();closeBriefMovies();if(hud!=null){hud.close();hud=null;}
-      NativeBridge.replayOpen(bytes);replayGame=true;activeGame=true;replayPaused=false;replayRate=1;
+      NativeBridge.replayOpen(bytes);replayGame=true;activeGame=true;replayPaused=false;replayRate=1;replaySeeking=false;
       playingReplay=file;expansion=replayExpansion;campaign=null;currentMission=null;missionCode=0;
       missionRace=replayRaces.isEmpty()?1:replayRaces.get(0);multiplayerGame=false;multiplayerSaves=false;lastOutcome=0;errorSeq=-1;commandError="";
       releaseSavedMap();activeMapSource=null;
       hud=new NativeHud(art,missionRace,commandMaps);page="game";modal="";startupTips=false;instant=false;
       resizeWorld();syncControls();NativeBridge.frame(world,0,clock);NativeBridge.sound(null,62,false);
       music("game");accumulator=0;lastTime=0;cancelGesture();
-    }catch(Exception e){showReplays();replayNotice=e.getMessage();}
+    }catch(Exception e){showReplays();replayMessage(e.getMessage());}
   }
 
   private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
-    c.drawBitmap(hud.panel(width,height,true,enabled),x,y,NativeArt.PIXELS);
-    NativeArt.Font font=hud.large.measure(label)<=width-8?hud.large:hud.small;
+    paint.setColor(Color.BLACK);c.drawRect(x,y,x+width,y+height,paint);
     boolean hot=pressed!=null&&pressed.rect.contains(x+width/2f,y+height/2f);
-    uiLine(c,label,font,x+4,y,width-8,height,1,enabled?hot?2:3:5);
+    redBorder(c,x,y,width,height,hot&&enabled);
+    NativeArt.Font font=replayFont(true),small=replayFont(false);
+    if(font!=null){if(font.measure(label)>width-8)font=small;uiLine(c,label,font,x+4,y,width-8,height,1,enabled?hot?4:3:5);}
     add(new RectF(x,y,x+width,y+height),action,enabled);
   }
 
+  private void seekReplay(float value) {
+    if(!replayGame)return;
+    NativeBridge.replaySeek(Math.round(Math.max(0,Math.min(1,value))*NativeBridge.value(26,0)));
+    replaySeeking=NativeBridge.value(28,0)!=0;accumulator=0;
+  }
+
   private void drawReplayControls(Canvas c) {
-    float x=logicalWidth-156;
-    panel(c,x,348,154,130);
-    hud.small.draw(c,replayTime(NativeBridge.value(8,0))+" / "+replayTime(NativeBridge.value(26,0)),x+6,355,142,1,2,0);
-    replayButton(c,replayPaused?"Play":"Pause",x+6,376,104,25,()->{if(NativeBridge.value(8,0)<NativeBridge.value(26,0))replayPaused=!replayPaused;},true);
-    replayButton(c,replayRate+"x",x+116,376,32,25,()->{replayRate=replayRate==8?1:replayRate*2;accumulator=0;},true);
+    float x=logicalWidth-156;int frame=NativeBridge.value(8,0),end=NativeBridge.value(26,0);
+    boolean seeking=NativeBridge.value(28,0)!=0;int target=seeking?NativeBridge.value(29,0):frame;
+    replayPanel(c,x,348,154,130);
+    uiLine(c,seeking?PortText.text("Seeking…")+" "+replayTime(frame)+" / "+replayTime(target):replayTime(frame)+" / "+replayTime(end),replayFont(false),x+6,352,142,18,1,2);
+    // Pixel rail and hollow grip; its endpoints are identical to the touch scale.
+    float left=x+13,right=x+141,center=left+(end>0?target/(float)end:0)*(right-left);
+    paint.setColor(0xff861414);c.drawRect(left,377,right,378,paint);c.drawRect(left,382,right,383,paint);
+    c.drawRect(left,377,left+1,383,paint);c.drawRect(right-1,377,right,383,paint);
+    paint.setColor(0xffd92b24);c.drawRect(left,379,left+(end>0?frame/(float)end:0)*(right-left),381,paint);
+    paint.setColor(Color.BLACK);c.drawRect(center-5,375,center+6,385,paint);
+    int cx=Math.round(center);paint.setColor(0xffd92b24);
+    c.drawRect(cx-3,373,cx+4,374,paint);c.drawRect(cx-3,386,cx+4,387,paint);
+    for(int row=-6;row<=5;row++){int inset=Math.abs(row)>=5?2:Math.abs(row)>=3?1:0;
+      c.drawRect(cx-6+inset,380+row,cx-5+inset,381+row,paint);c.drawRect(cx+6-inset,380+row,cx+7-inset,381+row,paint);}
+    Button seek=new Button(new RectF(left,370,right,390),()->{},end>0);seek.slider=this::seekReplay;buttons.add(seek);
+    replayButton(c,replayPaused?"Play":"Pause",x+6,398,104,21,()->{if(NativeBridge.value(8,0)<NativeBridge.value(26,0)||NativeBridge.value(28,0)!=0)replayPaused=!replayPaused;},true);
+    replayButton(c,replayRate+"x",x+116,398,32,21,()->{replayRate=replayRate==8?1:replayRate*2;accumulator=0;},true);
     int owner=NativeBridge.value(27,0);
-    replayButton(c,owner<0?"Everyone":"Player "+(owner+1),x+6,409,142,25,()->{
+    replayButton(c,owner<0?"Everyone":"Player "+(owner+1),x+6,425,142,21,()->{
       int at=replayPlayers.indexOf(NativeBridge.value(27,0))+1;
       NativeBridge.command(31,at>=replayPlayers.size()?-1:replayPlayers.get(at),0,0,0);
       if(at<replayRaces.size()&&missionRace!=replayRaces.get(at)){missionRace=replayRaces.get(at);hud.close();hud=new NativeHud(art,missionRace,commandMaps);music("game");}
     },true);
-    replayButton(c,"Restart",x+6,442,142,25,()->startReplay(playingReplay),true);
+    replayButton(c,"Restart",x+6,452,142,21,()->startReplay(playingReplay),true);
   }
 
   private void showCampaign() {
@@ -873,7 +976,7 @@ final class NativeSurface extends SurfaceView
       } else accumulator = 0;
       advanceCamera(dt);
       try {NativeBridge.frame(world, steps, clock);}
-      catch(RuntimeException playbackFailure){if(!replayGame)throw playbackFailure;showReplays();replayNotice="Replay could not be played: "+playbackFailure.getMessage();return;}
+      catch(RuntimeException playbackFailure){if(!replayGame)throw playbackFailure;showReplays();replayMessage("Replay could not be played: "+playbackFailure.getMessage());return;}
       if (campaign != null && !paused) campaign.poll();
       String[] error = NativeBridge.text(8).split("\t", 2);
       if (error.length > 1) {
@@ -885,7 +988,8 @@ final class NativeSurface extends SurfaceView
           hint = ""; hintUntil = 0;
         }
       }
-      if(replayGame && NativeBridge.value(8,0)>=NativeBridge.value(26,0))replayPaused=true;
+      if(replayGame){boolean seeking=NativeBridge.value(28,0)!=0;if(replaySeeking&&!seeking)accumulator=0;replaySeeking=seeking;
+        if(!seeking&&NativeBridge.value(8,0)>=NativeBridge.value(26,0))replayPaused=true;}
       int outcome = replayGame?0:NativeBridge.value(7, 0);
       if (outcome != 0 && lastOutcome == 0) {
         lastOutcome = outcome;
@@ -916,21 +1020,20 @@ final class NativeSurface extends SurfaceView
   }
 
   private void draw(Canvas c, double dt) {
+    presentReplayAcknowledgement();
     placementButtonRow = null;
     if (page.equals("results") && results != null) {
       results.canSave = NativeBridge.value(15, 0) != 0;
       results.hot = hoverButton;
-      results.draw(c, modal.startsWith("gamepad") ? 0 : dt);
+      results.draw(c, !modal.isEmpty() ? 0 : dt);
       if (modal.startsWith("gamepad")) {buttons.clear(); drawGamepadSettings(c); return;}
+      if(modal.startsWith("replay-")){buttons.clear();drawReplayDialog(c);return;}
       if (!results.ready() || pendingScreen != null) return;
       NativeArt.Widget save = results.layout.get(61);
       if (save != null)
         add(
             save.hit(),
-            () -> {
-              byte[] bytes = NativeBridge.replay();
-              activity.runOnUiThread(() -> activity.recordReplay(bytes));
-            },
+            this::saveCurrentReplay,
             results.canSave);
       for (int i = 0; i < 4; i++) {
         final int tab = i;
@@ -1138,7 +1241,7 @@ final class NativeSurface extends SurfaceView
       return;
     }
     NativeArt.Widget w = glue.layout.get(id);
-    if (w == null) return;
+    if (w == null || glue.campaignChoice(id) && !glue.labelVisible(id)) return;
     glue.label(c, id, label, true);
     RectF r = w.hit();
     r.offset(glue.shift(w), 0);
@@ -1203,13 +1306,14 @@ final class NativeSurface extends SurfaceView
   }
 
   private void drawMissionCheck(Canvas c,float x,float y) {
-    // The classic menu fonts have no checkmark glyph. Keep this small and
-    // independent of Android's font or the language of the imported data.
-    paint.setColor(0xff7cdb58);paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(1.3f);
-    c.drawCircle(x,y,6.5f,paint);
-    paint.setStrokeWidth(1.8f);
-    c.drawLine(x-3.6f,y,x-1,y+2.6f,paint);c.drawLine(x-1,y+2.6f,x+4,y-3,paint);
-    paint.setStrokeWidth(1);paint.setStyle(Paint.Style.FILL);
+    // A plain bitmap-style tick matches the menu fonts without introducing
+    // an antialiased circle or changing completion's per-mission-ID state.
+    Paint pixel=new Paint();pixel.setColor(0xff7cdb58);
+    int left=Math.round(x),top=Math.round(y);
+    for(int column=-5;column<=4;column++) {
+      int row=column<-2?column+4:-column;
+      c.drawRect(left+column,top+row,left+column+1,top+row+3,pixel);
+    }
   }
 
   private void newProfile() {
@@ -2330,7 +2434,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void modalBack() {
-    if (modal.equals("replay-delete")) {modal="";return;}
+    if (modal.equals("replay-delete")||modal.equals("replay-notice")) {modal="";return;}
     if (modal.startsWith("gamepad")) { gamepadSettingsBack(); return; }
     if (modal.equals("control-timing")) { modal = "control-select"; return; }
     if(modal.equals("nearby-error")){showMain();return;}
