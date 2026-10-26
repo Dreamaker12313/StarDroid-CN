@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "result": "PASS 40 replay storage checks: byte preservation, labels, order, deduplication, bounded imports, validation rollback, atomic writes, owned DELETE and symlink isolation",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeReplays.java": "2f83dd2778af6b4758e6a272b8293f1e20be4b35a84d30521a38747b593e0077",
+    "tests/ReplayStorage81Test.java": "2f4cbc90884c8635b3fb26d55b531b353e0c79beb8d97974f7fb277929cebf8c",
+    "tests/run_replay_storage81.py": "23b625d7c6ff2692c64ca949b6d39cef0dce20dd7ec72f3af6c3537543bd49c4"
+  }
+}

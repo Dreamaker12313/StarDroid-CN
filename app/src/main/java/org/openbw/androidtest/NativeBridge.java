@@ -45,6 +45,8 @@ final class NativeBridge {
   static native byte[] chk();
 
   static native byte[] replay();
+  static native byte[] replayInfo(byte[] data);
+  static native void replayOpen(byte[] data);
 
   static native byte[] saveState();
 

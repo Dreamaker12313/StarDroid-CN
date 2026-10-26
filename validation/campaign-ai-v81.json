@@ -1,0 +1,7152 @@
+{
+  "version": "1.0.11",
+  "passed": true,
+  "originalArchivesTested": true,
+  "physicalAndroid": false,
+  "fullPlaythrough": false,
+  "scope": "64 original maps: actual 4,800-frame unattended startup and static AI-entry lookup; Revolution controlled original-trigger progression, production, attack and replacement checks.",
+  "missionCount": 64,
+  "aiStartActions": 609,
+  "distinctAiScripts": 172,
+  "requestedFramesPerMission": 4800,
+  "checks": [
+    "PASS Revolution waits for its original activation event",
+    "PASS original cleared-guard activation path and inactive snapshot restoration",
+    "PASS Kerrigan rescue, Antigan rebellion and original aircraft activation trigger",
+    "PASS original Confederate production, mining and delayed first attack",
+    "PASS original build request replaces destroyed Barracks and deterministic save continuation"
+  ],
+  "revolutionOutput": [
+    "openbw_init: map 'T5) The Antigan Revolt' 3072x3072, slot 0 of 1, units=9, fog_player=0",
+    "PASS Revolution waits for its original activation event",
+    "PASS original cleared-guard activation path and inactive snapshot restoration",
+    "PASS Kerrigan rescue, Antigan rebellion and original aircraft activation trigger",
+    "FRAME 17440 clock=16603 outcome=0 AIERR=",
+    "2\t3\t0\t0\t0\t0\t0\t0\t0",
+    "3\t3\t0\t0\t0\t0\t0\t0\t0",
+    "6\t202\t2\t4\t1\t7514\t6432\t7164\t6157",
+    "REVOLUTION firstAttack=14972",
+    "WORKER 2150,2940 order=81 target=-1",
+    "WORKER 2206,2884 order=81 target=-1",
+    "WORKER 2584,2663 order=81 target=-1",
+    "WORKER 235,2603 order=87 target=177",
+    "WORKER 212,2690 order=85 target=-1",
+    "WORKER 299,2712 order=90 target=-1",
+    "PASS original Confederate production, mining and delayed first attack",
+    "PASS original build request replaces destroyed Barracks and deterministic save continuation"
+  ],
+  "missions": [
+    {
+      "mission": "terrantutorial",
+      "code": 50,
+      "title": "Boot Camp",
+      "chkSha256": "4aafcfe93cc42cb642fde912a459a6c89b0cd6a1f8160c93cac3c34dd0b13af1",
+      "aiStarts": [],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "terran01",
+      "code": 1,
+      "title": "Wasteland",
+      "chkSha256": "4b0e5009c4ae80cfb4cb13ede30842db0aa05bb3be2eedad695fb093fa5786f6",
+      "aiStarts": [],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "terran02",
+      "code": 2,
+      "title": "Backwater Station",
+      "chkSha256": "d8a7f6b70422ff32e4fd3f6293de4013f883e0761814d4496ffd18b7eb13dfce",
+      "aiStarts": [],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "terran03",
+      "code": 3,
+      "title": "Desperate Alliance",
+      "chkSha256": "9d83a8bde18c38ee12f54f4c5253bed5466027fc612141e9a7415c94d3346737",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "Ter3",
+          "location": 6,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "Suic",
+          "location": 0,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 4,
+          "opcodes": 40,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 2,
+          "mineralsCounter": 5648,
+          "gasCounter": 5096,
+          "mineralsRemaining": 5548,
+          "gasRemaining": 4996
+        }
+      ]
+    },
+    {
+      "mission": "terran04",
+      "code": 4,
+      "title": "The Jacobs Installation",
+      "chkSha256": "a48e1d1682f0a6e68eeec4ef0fc82efc48e70a11b4315de8c091079c68e10601",
+      "aiStarts": [],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "terran05",
+      "code": 5,
+      "title": "Revolution",
+      "chkSha256": "35cd98bc0590c0f36e5d8f75e41a29b254db2d6cf8dec5480e6ffd7602609829",
+      "aiStarts": [
+        {
+          "trigger": 8,
+          "script": "Rscu",
+          "location": 0,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "Ter5",
+          "location": 4,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "Te5H",
+          "location": 17,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 13,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 15,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 16,
+          "script": "ClrC",
+          "location": 20,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 2,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 3,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 6,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "terran06",
+      "code": 6,
+      "title": "Norad II",
+      "chkSha256": "80dd42e4d4540d0340113b92aae02120b9919a5dac359b010607ec7c26e72ead",
+      "aiStarts": [
+        {
+          "trigger": 6,
+          "script": "Ter6",
+          "location": 4,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Te6b",
+          "location": 7,
+          "ownerGroups": [
+            21
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "Rscu",
+          "location": 0,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 2,
+          "opcodes": 1,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 6,
+          "opcodes": 1,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "terran08",
+      "code": 8,
+      "title": "The Trump Card",
+      "chkSha256": "dab280d946f059845ba3084da11f159091bfbc24c4cd54eb2a352ff1a165f515",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "Ter8",
+          "location": 1,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 2,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 1440,
+      "aiClock": 1416,
+      "outcome": 2,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 4,
+          "opcodes": 130,
+          "buildOrders": 3,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 4136,
+          "gasCounter": 4000,
+          "mineralsRemaining": 3536,
+          "gasRemaining": 3500
+        }
+      ]
+    },
+    {
+      "mission": "terran09",
+      "code": 9,
+      "title": "The Big Push",
+      "chkSha256": "083be62ec869ddf049f816eaf873355c57381b869581717234f3499b39ab23c7",
+      "aiStarts": [
+        {
+          "trigger": 6,
+          "script": "Tr9H",
+          "location": 3,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Tr9L",
+          "location": 2,
+          "ownerGroups": [
+            21
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 4,
+          "opcodes": 37,
+          "buildOrders": 3,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 6008,
+          "gasCounter": 6032,
+          "mineralsRemaining": 5808,
+          "gasRemaining": 5882
+        },
+        {
+          "owner": 5,
+          "opcodes": 36,
+          "buildOrders": 3,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 4008,
+          "gasCounter": 4040,
+          "mineralsRemaining": 3808,
+          "gasRemaining": 3890
+        }
+      ]
+    },
+    {
+      "mission": "terran11",
+      "code": 11,
+      "title": "New Gettysburg",
+      "chkSha256": "1b55e907af8c4c5c6c5e0adcc775b8fe82e263d7afb9eba70ded40d11d5e412c",
+      "aiStarts": [
+        {
+          "trigger": 7,
+          "script": "T11z",
+          "location": 3,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "T11a",
+          "location": 1,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "T11b",
+          "location": 2,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "SuiR",
+          "location": 0,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "SuiR",
+          "location": 0,
+          "ownerGroups": [
+            20
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 3627,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 43,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 10792,
+          "gasCounter": 6424,
+          "mineralsRemaining": 9817,
+          "gasRemaining": 5599
+        },
+        {
+          "owner": 3,
+          "opcodes": 37,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 3440,
+          "gasCounter": 3384,
+          "mineralsRemaining": 2490,
+          "gasRemaining": 2534
+        }
+      ]
+    },
+    {
+      "mission": "terran12",
+      "code": 12,
+      "title": "The Hammer Falls",
+      "chkSha256": "2a3efca711b5a75ffd0ea569802fe0bd4dbfcfbfa0b0f308d897c0dca698fd7d",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "T12N",
+          "location": 3,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "T12P",
+          "location": 1,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 152,
+          "buildOrders": 5,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 10176,
+          "gasCounter": 10592,
+          "mineralsRemaining": 9376,
+          "gasRemaining": 9792
+        },
+        {
+          "owner": 6,
+          "opcodes": 160,
+          "buildOrders": 6,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 10752,
+          "gasCounter": 10688,
+          "mineralsRemaining": 9302,
+          "gasRemaining": 9338
+        }
+      ]
+    },
+    {
+      "mission": "zerg01",
+      "code": 101,
+      "title": "Among the Ruins",
+      "chkSha256": "f4794b4f8fc90f6ea9c4a585faa2c0a1de25450311256c7329a288d4dcd826ad",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "Zer1",
+          "location": 1,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 5,
+          "opcodes": 22,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 5048,
+          "gasCounter": 5000,
+          "mineralsRemaining": 5048,
+          "gasRemaining": 5000
+        }
+      ]
+    },
+    {
+      "mission": "zerg02",
+      "code": 102,
+      "title": "Egression",
+      "chkSha256": "5819629c7bf99c941ab64225de24e4aa60c5164ad5c00345258aa62fe6a0eadf",
+      "aiStarts": [
+        {
+          "trigger": 8,
+          "script": "Zer2",
+          "location": 5,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 29,
+          "buildOrders": 1,
+          "trainOrders": 1,
+          "attacks": 1,
+          "mineralsCounter": 5224,
+          "gasCounter": 5480,
+          "mineralsRemaining": 5024,
+          "gasRemaining": 5480
+        }
+      ]
+    },
+    {
+      "mission": "zerg03",
+      "code": 103,
+      "title": "The Swarm",
+      "chkSha256": "a62ddf17410b37aa406aaf6a0024edb1aae9f69521e5abeab7a537baf638f7d7",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "Zer3",
+          "location": 3,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 3367,
+      "aiClock": 3343,
+      "outcome": 2,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 6,
+          "opcodes": 35,
+          "buildOrders": 2,
+          "trainOrders": 0,
+          "attacks": 1,
+          "mineralsCounter": 8184,
+          "gasCounter": 8320,
+          "mineralsRemaining": 8084,
+          "gasRemaining": 8220
+        }
+      ]
+    },
+    {
+      "mission": "zerg04",
+      "code": 104,
+      "title": "Agent of the Swarm",
+      "chkSha256": "535c6d75f4225224abf36965627d7e7889c3e3b245a97d95843933d5cfb9de2a",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "Zer4",
+          "location": 4,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "Ze4S",
+          "location": 5,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4365,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 206,
+          "buildOrders": 0,
+          "trainOrders": 5,
+          "attacks": 2,
+          "mineralsCounter": 9208,
+          "gasCounter": 9424,
+          "mineralsRemaining": 8933,
+          "gasRemaining": 9324
+        }
+      ]
+    },
+    {
+      "mission": "zerg05",
+      "code": 105,
+      "title": "The Amerigo",
+      "chkSha256": "d758f917aebef2775b76bf90a5637fc7308ef4540334b05567e3c0caa6666e45",
+      "aiStarts": [],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "zerg06",
+      "code": 106,
+      "title": "The Dark Templar",
+      "chkSha256": "f441dcbdc4878d16a0e71790464d9ef8d677aad0c85e2463d0fa4ff2616af1f1",
+      "aiStarts": [
+        {
+          "trigger": 8,
+          "script": "Zer6",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 41,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 1,
+          "mineralsCounter": 5736,
+          "gasCounter": 5528,
+          "mineralsRemaining": 4436,
+          "gasRemaining": 4528
+        }
+      ]
+    },
+    {
+      "mission": "zerg07",
+      "code": 107,
+      "title": "The Culling",
+      "chkSha256": "2c39850f5a902c369130da3ebfce6d32d087e1d1d8fca1204ef6ef2f9a1b5e9d",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "Zr7a",
+          "location": 1,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "Zr7s",
+          "location": 3,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "Zr7s",
+          "location": 5,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "Zr7g",
+          "location": 2,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "zerg08",
+      "code": 108,
+      "title": "Eye for an Eye",
+      "chkSha256": "ea8af2d5458e5c27ad53419a80420f32619c60a7830eefd4742b767f3dc0cac2",
+      "aiStarts": [
+        {
+          "trigger": 8,
+          "script": "Zer8",
+          "location": 4,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "Ze8T",
+          "location": 5,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "MvTe",
+          "location": 9,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "MvTe",
+          "location": 7,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "MvTe",
+          "location": 6,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 19,
+          "script": "MvTe",
+          "location": 6,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 20,
+          "script": "MvTe",
+          "location": 7,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 21,
+          "script": "MvTe",
+          "location": 9,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 27,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 0,
+          "mineralsCounter": 8840,
+          "gasCounter": 8000,
+          "mineralsRemaining": 8290,
+          "gasRemaining": 8000
+        },
+        {
+          "owner": 2,
+          "opcodes": 31,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 8752,
+          "gasCounter": 8000,
+          "mineralsRemaining": 7902,
+          "gasRemaining": 7300
+        }
+      ]
+    },
+    {
+      "mission": "zerg09",
+      "code": 109,
+      "title": "The Invasion of Aiur",
+      "chkSha256": "fd99e4670f57110dd7720777a188d6447c7e23a02334c691f90790c5752f8205",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "Zer9",
+          "location": 6,
+          "ownerGroups": [
+            21
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Z9ly",
+          "location": 4,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Z9ry",
+          "location": 5,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 15,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 16,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 17,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 19,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 18,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 21,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 20,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "VluA",
+          "location": 14,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "Z9lo",
+          "location": 7,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "Z9ro",
+          "location": 8,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "VluA",
+          "location": 9,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "VluA",
+          "location": 10,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "VluA",
+          "location": 11,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "VluA",
+          "location": 12,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "VluA",
+          "location": 13,
+          "ownerGroups": [
+            20
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 63,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 5000,
+          "gasCounter": 5000,
+          "mineralsRemaining": 5000,
+          "gasRemaining": 5000
+        },
+        {
+          "owner": 2,
+          "opcodes": 28,
+          "buildOrders": 1,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 5000,
+          "gasCounter": 5048,
+          "mineralsRemaining": 4400,
+          "gasRemaining": 4648
+        },
+        {
+          "owner": 6,
+          "opcodes": 63,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 5000,
+          "gasCounter": 5000,
+          "mineralsRemaining": 5000,
+          "gasRemaining": 5000
+        }
+      ]
+    },
+    {
+      "mission": "zerg10",
+      "code": 110,
+      "title": "Full Circle",
+      "chkSha256": "7d9befb178c53014bc7c7efdcb6ed208a0aa7c97b4a37141cbca5345fd6d15fb",
+      "aiStarts": [
+        {
+          "trigger": 4,
+          "script": "Z10b",
+          "location": 3,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "Z10a",
+          "location": 4,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "Z10d",
+          "location": 6,
+          "ownerGroups": [
+            21
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "Z10c",
+          "location": 5,
+          "ownerGroups": [
+            21
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "Z10e",
+          "location": 7,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 2,
+          "opcodes": 72,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 8352,
+          "gasCounter": 8512,
+          "mineralsRemaining": 5627,
+          "gasRemaining": 6262
+        },
+        {
+          "owner": 7,
+          "opcodes": 108,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 8192,
+          "gasCounter": 8464,
+          "mineralsRemaining": 5392,
+          "gasRemaining": 6189
+        }
+      ]
+    },
+    {
+      "mission": "protoss01",
+      "code": 201,
+      "title": "First Strike",
+      "chkSha256": "374a08c6d15bbd32280091e54164047b12c6ffc526d12d0663a0c7df18784188",
+      "aiStarts": [
+        {
+          "trigger": 6,
+          "script": "Pro1",
+          "location": 2,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 29,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 1,
+          "mineralsCounter": 4616,
+          "gasCounter": 4000,
+          "mineralsRemaining": 4116,
+          "gasRemaining": 3550
+        }
+      ]
+    },
+    {
+      "mission": "protoss02",
+      "code": 202,
+      "title": "Into the Flames",
+      "chkSha256": "c2a1faa77faaa8f85d178da8d5502a9235749240244b7403d240bff9b220fe24",
+      "aiStarts": [
+        {
+          "trigger": 4,
+          "script": "Pro2",
+          "location": 2,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 6,
+          "opcodes": 39,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 2,
+          "mineralsCounter": 6400,
+          "gasCounter": 6384,
+          "mineralsRemaining": 6050,
+          "gasRemaining": 6034
+        }
+      ]
+    },
+    {
+      "mission": "protoss03",
+      "code": 203,
+      "title": "Higher Ground",
+      "chkSha256": "6e73084830bd7c49da9dfeeb11e11b9e589b066b3e4290836cd2baf4415762e6",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "Pr3R",
+          "location": 3,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "Pr3G",
+          "location": 4,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 48,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 2,
+          "mineralsCounter": 5480,
+          "gasCounter": 5424,
+          "mineralsRemaining": 3905,
+          "gasRemaining": 3799
+        },
+        {
+          "owner": 6,
+          "opcodes": 42,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 8312,
+          "gasCounter": 8384,
+          "mineralsRemaining": 6862,
+          "gasRemaining": 7034
+        }
+      ]
+    },
+    {
+      "mission": "protoss04",
+      "code": 204,
+      "title": "The Hunt for Tassadar",
+      "chkSha256": "9cf4f218e0b29b7e61743fd6383dab6c3aec4a5e12c6fade0b0fc37ae44c67b3",
+      "aiStarts": [
+        {
+          "trigger": 9,
+          "script": "Pro4",
+          "location": 2,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "protoss05",
+      "code": 205,
+      "title": "Choosing Sides",
+      "chkSha256": "0911c2cf8b484c266e26ed3c439cd917e0dc0cd9a7cb62985bc4800f7b64afe5",
+      "aiStarts": [
+        {
+          "trigger": 8,
+          "script": "Suic",
+          "location": 0,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "Pr5I",
+          "location": 16,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "Pr5B",
+          "location": 17,
+          "ownerGroups": [
+            21
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 3,
+          "opcodes": 40,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 0,
+          "mineralsCounter": 5504,
+          "gasCounter": 5616,
+          "mineralsRemaining": 3679,
+          "gasRemaining": 3841
+        },
+        {
+          "owner": 4,
+          "opcodes": 38,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 5168,
+          "gasCounter": 5624,
+          "mineralsRemaining": 3518,
+          "gasRemaining": 4074
+        }
+      ]
+    },
+    {
+      "mission": "protoss06",
+      "code": 206,
+      "title": "Into the Darkness",
+      "chkSha256": "30f0a374867c7b57cf51e5c445041020eebbe4a1fcbc074359a581a5bc5f5eee",
+      "aiStarts": [
+        {
+          "trigger": 12,
+          "script": "Suic",
+          "location": 0,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "protoss07",
+      "code": 207,
+      "title": "Homeland",
+      "chkSha256": "a813922890e6eafe4feda27b591715c465e98e8ee40e3717b5c2b0735e403a83",
+      "aiStarts": [
+        {
+          "trigger": 6,
+          "script": "Pro7",
+          "location": 4,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "Pr7B",
+          "location": 5,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Pr7S",
+          "location": 6,
+          "ownerGroups": [
+            18
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4233,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 69,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 2,
+          "mineralsCounter": 11216,
+          "gasCounter": 10624,
+          "mineralsRemaining": 8866,
+          "gasRemaining": 8424
+        },
+        {
+          "owner": 4,
+          "opcodes": 59,
+          "buildOrders": 1,
+          "trainOrders": 0,
+          "attacks": 2,
+          "mineralsCounter": 10296,
+          "gasCounter": 10600,
+          "mineralsRemaining": 7396,
+          "gasRemaining": 8300
+        }
+      ]
+    },
+    {
+      "mission": "protoss08",
+      "code": 208,
+      "title": "The Trial of Tassadar",
+      "chkSha256": "4ee5b213ce8e46b5a3b1ab3e815767a91b0b1f720d503cb203548730ce0efc37",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "Pro8",
+          "location": 2,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "Pr8B",
+          "location": 3,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "Pr8D",
+          "location": 4,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 54,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 10152,
+          "gasCounter": 10768,
+          "mineralsRemaining": 7177,
+          "gasRemaining": 8618
+        },
+        {
+          "owner": 3,
+          "opcodes": 70,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 1,
+          "mineralsCounter": 10360,
+          "gasCounter": 10576,
+          "mineralsRemaining": 7260,
+          "gasRemaining": 8126
+        }
+      ]
+    },
+    {
+      "mission": "protoss09",
+      "code": 209,
+      "title": "Shadow Hunters",
+      "chkSha256": "5af7dd1b80328ee75501b18e54c5f8849c320ca247e3380e1aae1349d4a8a15c",
+      "aiStarts": [
+        {
+          "trigger": 9,
+          "script": "Pro9",
+          "location": 3,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "Pr9W",
+          "location": 5,
+          "ownerGroups": [
+            20
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "Pr9Y",
+          "location": 4,
+          "ownerGroups": [
+            21
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 38,
+          "buildOrders": 6,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 15000,
+          "gasCounter": 15288,
+          "mineralsRemaining": 13050,
+          "gasRemaining": 13488
+        },
+        {
+          "owner": 5,
+          "opcodes": 46,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 0,
+          "mineralsCounter": 30008,
+          "gasCounter": 30720,
+          "mineralsRemaining": 27908,
+          "gasRemaining": 28620
+        },
+        {
+          "owner": 6,
+          "opcodes": 38,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 20128,
+          "gasCounter": 20352,
+          "mineralsRemaining": 18278,
+          "gasRemaining": 18552
+        }
+      ]
+    },
+    {
+      "mission": "protoss10",
+      "code": 210,
+      "title": "Eye of the Storm",
+      "chkSha256": "e8bc84347cd8810d423e76c8e739612de777f579dd287eca2ef5bc620ff4ebdd",
+      "aiStarts": [
+        {
+          "trigger": 6,
+          "script": "P10o",
+          "location": 27,
+          "ownerGroups": [
+            3
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "P10C",
+          "location": 23,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Pr10",
+          "location": 24,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Pr10",
+          "location": 25,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "Pr10",
+          "location": 26,
+          "ownerGroups": [
+            0
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 96,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 8896,
+          "gasCounter": 8648,
+          "mineralsRemaining": 7196,
+          "gasRemaining": 6948
+        },
+        {
+          "owner": 3,
+          "opcodes": 45,
+          "buildOrders": 1,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 8864,
+          "gasCounter": 8528,
+          "mineralsRemaining": 7064,
+          "gasRemaining": 6928
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss01",
+      "code": 301,
+      "title": "Escape from Aiur",
+      "chkSha256": "ef8153dbfc7d9216207aaac7cda7a2950980cdb35a9c72612a67dc7b76a09e67",
+      "aiStarts": [
+        {
+          "trigger": 0,
+          "script": "PB1A",
+          "location": 32,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "PB1B",
+          "location": 33,
+          "ownerGroups": [
+            20
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 3,
+          "opcodes": 15,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 10512,
+          "gasCounter": 10000,
+          "mineralsRemaining": 10512,
+          "gasRemaining": 10000
+        },
+        {
+          "owner": 4,
+          "opcodes": 15,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 10640,
+          "gasCounter": 10000,
+          "mineralsRemaining": 10640,
+          "gasRemaining": 10000
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss02",
+      "code": 302,
+      "title": "Dunes of Shakuras",
+      "chkSha256": "07725cd6a26052101ecfef735105c204309a40518de1a232736aefb268f01011",
+      "aiStarts": [
+        {
+          "trigger": 6,
+          "script": "+Vi1",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "PB2A",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "SuiR",
+          "location": 0,
+          "ownerGroups": [
+            3
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "SuiR",
+          "location": 0,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "expprotoss03",
+      "code": 303,
+      "title": "Legacy of the Xel'Naga",
+      "chkSha256": "d4d49e69460b587bc55af2852409366ccff1ed433a101535ac391b288f74bbf8",
+      "aiStarts": [
+        {
+          "trigger": 2,
+          "script": "PB3C",
+          "location": 5,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "PB3A",
+          "location": 1,
+          "ownerGroups": [
+            3
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 18,
+          "script": "PB3F",
+          "location": 36,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 19,
+          "script": "PB3F",
+          "location": 37,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 20,
+          "script": "PB3F",
+          "location": 38,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 21,
+          "script": "PB3F",
+          "location": 39,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 22,
+          "script": "-Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 23,
+          "script": "-Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 27,
+          "script": "TB7B",
+          "location": 64,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "+Vi3",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 12,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 250,
+          "gasCounter": 75,
+          "mineralsRemaining": 250,
+          "gasRemaining": 75
+        },
+        {
+          "owner": 3,
+          "opcodes": 38,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 30352,
+          "gasCounter": 30800,
+          "mineralsRemaining": 30327,
+          "gasRemaining": 30725
+        },
+        {
+          "owner": 4,
+          "opcodes": 41,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 1,
+          "mineralsCounter": 30640,
+          "gasCounter": 30768,
+          "mineralsRemaining": 30465,
+          "gasRemaining": 30543
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss04",
+      "code": 304,
+      "title": "The Quest for Uraj",
+      "chkSha256": "f495e751fb3975fa7a701f5a250d554dadee5776a7a2d35c038980883293c863",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "PB4A",
+          "location": 7,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "PB4B",
+          "location": 8,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "PB4C",
+          "location": 20,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 21,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 24,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 25,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 26,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 27,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 28,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 16,
+          "script": "Enmy",
+          "location": 1,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 20,
+          "script": "TARE",
+          "location": 34,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 20,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "TB7A",
+          "location": 64,
+          "ownerGroups": [
+            18
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 26,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 1,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 1000,
+          "gasCounter": 100,
+          "mineralsRemaining": 1000,
+          "gasRemaining": 100
+        },
+        {
+          "owner": 5,
+          "opcodes": 17,
+          "buildOrders": 0,
+          "trainOrders": 9,
+          "attacks": 0,
+          "mineralsCounter": 496,
+          "gasCounter": 352,
+          "mineralsRemaining": 96,
+          "gasRemaining": 352
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss05",
+      "code": 305,
+      "title": "The Battle of Braxis",
+      "chkSha256": "b32673a2c6b5aa4479202df8ddc408c2cca29cca094b77e357fb1f930103b963",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "+Vi3",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 2,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 21,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 24,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 25,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 56,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 26,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 28,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 31,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 36,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 37,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 44,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 3,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 30,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 32,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            6
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 6,
+          "opcodes": 48,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss06",
+      "code": 306,
+      "title": "Return to Char",
+      "chkSha256": "4eb75410295fe4ac68a4c45e0179a91afb72d0078bf98a808461a7c54a62f611",
+      "aiStarts": [
+        {
+          "trigger": 2,
+          "script": "PB6A",
+          "location": 2,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "PB6B",
+          "location": 5,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "PB6C",
+          "location": 3,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "PB6D",
+          "location": 16,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "PB6E",
+          "location": 17,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 22,
+          "script": "+Vi0",
+          "location": 0,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 4,
+          "opcodes": 89,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 1,
+          "mineralsCounter": 61160,
+          "gasCounter": 60768,
+          "mineralsRemaining": 61160,
+          "gasRemaining": 60768
+        },
+        {
+          "owner": 5,
+          "opcodes": 71,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 60488,
+          "gasCounter": 60720,
+          "mineralsRemaining": 60488,
+          "gasRemaining": 60720
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss07",
+      "code": 307,
+      "title": "The Insurgent",
+      "chkSha256": "44b57433f843a111d02e565fb8976a2396a228bf08ef058c5c0a1a9c6d5ef274",
+      "aiStarts": [
+        {
+          "trigger": 0,
+          "script": "PB7A",
+          "location": 1,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 0,
+          "script": "PB7B",
+          "location": 2,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 0,
+          "script": "PB7C",
+          "location": 3,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "+Vi7",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "-Vi7",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 5,
+          "opcodes": 79,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 1,
+          "mineralsCounter": 21688,
+          "gasCounter": 20464,
+          "mineralsRemaining": 20088,
+          "gasRemaining": 20464
+        }
+      ]
+    },
+    {
+      "mission": "expprotoss08",
+      "code": 308,
+      "title": "Countdown",
+      "chkSha256": "600dbf632ff6a1b2987e482912312f29189cde3a3c3a599b13c2c6d4b56e5acb",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "PB8A",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "PB8B",
+          "location": 2,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "PB8C",
+          "location": 3,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "PB8D",
+          "location": 4,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "PB5C",
+          "location": 8,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "PB8E",
+          "location": 5,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "PB8F",
+          "location": 6,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "PB5A",
+          "location": 3,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "Enmy",
+          "location": 10,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 13,
+          "script": "PB5B",
+          "location": 5,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 13,
+          "script": "Enmy",
+          "location": 10,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 13,
+          "script": "HaHe",
+          "location": 10,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 69,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 1,
+          "mineralsCounter": 51056,
+          "gasCounter": 50584,
+          "mineralsRemaining": 50906,
+          "gasRemaining": 50534
+        },
+        {
+          "owner": 4,
+          "opcodes": 71,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 50808,
+          "gasCounter": 50696,
+          "mineralsRemaining": 50208,
+          "gasRemaining": 50196
+        },
+        {
+          "owner": 5,
+          "opcodes": 84,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 51576,
+          "gasCounter": 50560,
+          "mineralsRemaining": 50976,
+          "gasRemaining": 49960
+        }
+      ]
+    },
+    {
+      "mission": "expterran01",
+      "code": 401,
+      "title": "First Strike",
+      "chkSha256": "48b3dee553ae2e0b2747b9cd4b85f5a4dfc982dc89bb523fad015acdc4c7b5ab",
+      "aiStarts": [
+        {
+          "trigger": 2,
+          "script": "TB1A",
+          "location": 1,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 65,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 1,
+          "mineralsCounter": 11088,
+          "gasCounter": 10504,
+          "mineralsRemaining": 10838,
+          "gasRemaining": 10304
+        }
+      ]
+    },
+    {
+      "mission": "expterran02",
+      "code": 402,
+      "title": "The Dylarian Shipyards",
+      "chkSha256": "dda5b662bd21a7335f076a56a65690b35e441a1a0fe6aebc84676f0951934108",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "-Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 24,
+          "script": "TB2B",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 24,
+          "script": "EnBk",
+          "location": 64,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 41,
+          "script": "SuiR",
+          "location": 0,
+          "ownerGroups": [
+            0
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 19,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 10000,
+          "gasCounter": 10000,
+          "mineralsRemaining": 10000,
+          "gasRemaining": 10000
+        },
+        {
+          "owner": 6,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "expterran03",
+      "code": 403,
+      "title": "Ruins of Tarsonis",
+      "chkSha256": "76516a763fe806b2a4e2c6814c4fcd3e05f51a21c8aa8817837a74b4fcf9ff38",
+      "aiStarts": [
+        {
+          "trigger": 6,
+          "script": "Ally",
+          "location": 64,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "TB3C",
+          "location": 4,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "TB3A",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "TB3D",
+          "location": 3,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "TB3B",
+          "location": 2,
+          "ownerGroups": [
+            3
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 16,
+          "script": "+Vi1",
+          "location": 0,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "+Vi6",
+          "location": 0,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 25,
+          "script": "-Vi1",
+          "location": 0,
+          "ownerGroups": [
+            6
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 22,
+          "buildOrders": 1,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 20176,
+          "gasCounter": 20624,
+          "mineralsRemaining": 19651,
+          "gasRemaining": 20174
+        },
+        {
+          "owner": 1,
+          "opcodes": 4,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 3,
+          "opcodes": 40,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 1,
+          "mineralsCounter": 20368,
+          "gasCounter": 20488,
+          "mineralsRemaining": 19893,
+          "gasRemaining": 19963
+        },
+        {
+          "owner": 4,
+          "opcodes": 29,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 20224,
+          "gasCounter": 20768,
+          "mineralsRemaining": 19749,
+          "gasRemaining": 20243
+        },
+        {
+          "owner": 5,
+          "opcodes": 105,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 2,
+          "mineralsCounter": 20360,
+          "gasCounter": 20496,
+          "mineralsRemaining": 19660,
+          "gasRemaining": 19846
+        },
+        {
+          "owner": 6,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 500,
+          "gasCounter": 100,
+          "mineralsRemaining": 500,
+          "gasRemaining": 100
+        }
+      ]
+    },
+    {
+      "mission": "expterran04",
+      "code": 404,
+      "title": "Assault on Korhal",
+      "chkSha256": "988d5c2c1692a63038a3e7a895dd0d35fe9cf3696523e37858f4b5f69f9a8401",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "TB4C",
+          "location": 1,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "TB4D",
+          "location": 2,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "TB4A",
+          "location": 3,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "TB4B",
+          "location": 4,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 31,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 21,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 24,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 25,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 68,
+          "buildOrders": 0,
+          "trainOrders": 3,
+          "attacks": 0,
+          "mineralsCounter": 41192,
+          "gasCounter": 40432,
+          "mineralsRemaining": 40917,
+          "gasRemaining": 40307
+        },
+        {
+          "owner": 1,
+          "opcodes": 130,
+          "buildOrders": 0,
+          "trainOrders": 6,
+          "attacks": 1,
+          "mineralsCounter": 40920,
+          "gasCounter": 40504,
+          "mineralsRemaining": 40470,
+          "gasRemaining": 40304
+        }
+      ]
+    },
+    {
+      "mission": "expterran05a",
+      "code": 405,
+      "title": "Emperor's Fall (Ground Zero)",
+      "chkSha256": "c957cb9946b7e756be3fbbbcee27438891695522612bc3f9e7ced880ae7e07ef",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "TB2A",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "TB5A",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "TB5B",
+          "location": 2,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "TB5C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 21,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 24,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 25,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "NuHe",
+          "location": 28,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "NuHe",
+          "location": 29,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "NuHe",
+          "location": 30,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 100,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 84,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 91,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 95,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 86,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 88,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 93,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 49,
+          "script": "ReHe",
+          "location": 97,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 172,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 50160,
+          "gasCounter": 50088,
+          "mineralsRemaining": 50110,
+          "gasRemaining": 50063
+        },
+        {
+          "owner": 1,
+          "opcodes": 64,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 50104,
+          "gasCounter": 50072,
+          "mineralsRemaining": 49954,
+          "gasRemaining": 49972
+        }
+      ]
+    },
+    {
+      "mission": "expterran05b",
+      "code": 415,
+      "title": "Emperor's Fall (Birds of War)",
+      "chkSha256": "ef5270cc733291603cc1646dff1ce03f40dc310a6025d4ea99ebe53ff88d5a20",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "TB5D",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "TB5E",
+          "location": 2,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "TB5F",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 21,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 24,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 25,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "ReHe",
+          "location": 88,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "DWHe",
+          "location": 98,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "NuHe",
+          "location": 94,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "ReHe",
+          "location": 95,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "ReHe",
+          "location": 96,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "ReHe",
+          "location": 97,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "ReHe",
+          "location": 93,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 26,
+          "script": "ReHe",
+          "location": 99,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 14,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 1,
+          "opcodes": 62,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 50408,
+          "gasCounter": 50792,
+          "mineralsRemaining": 50258,
+          "gasRemaining": 50692
+        }
+      ]
+    },
+    {
+      "mission": "expterran06",
+      "code": 406,
+      "title": "Emperor's Flight",
+      "chkSha256": "54d0997fa091fc6ffb6e16491fda29281ed89d2e5b3d0e0be3f2b2d7c14c4e17",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "TB6D",
+          "location": 5,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "TB6B",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "TB6A",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 14,
+          "script": "ZARx",
+          "location": 4,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 41,
+          "script": "-Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 51,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 61,
+          "script": "TB7F",
+          "location": 4,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 63,
+          "script": "+Vi6",
+          "location": 0,
+          "ownerGroups": [
+            7
+          ]
+        },
+        {
+          "trigger": 68,
+          "script": "+Vi6",
+          "location": 0,
+          "ownerGroups": [
+            3
+          ]
+        },
+        {
+          "trigger": 70,
+          "script": "+Vi7",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 70,
+          "script": "+Vi3",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 17,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 184,
+          "gasCounter": 0,
+          "mineralsRemaining": 34,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 6,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 1000,
+          "gasCounter": 200,
+          "mineralsRemaining": 1000,
+          "gasRemaining": 200
+        }
+      ]
+    },
+    {
+      "mission": "expterran07",
+      "code": 407,
+      "title": "Patriot's Blood",
+      "chkSha256": "c6835b14e8362a4edd66305b3821788386fa8b1deeffb39867d56a55884c508d",
+      "aiStarts": [
+        {
+          "trigger": 2,
+          "script": "Enmy",
+          "location": 3,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "Rscu",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 81,
+          "script": "Rscu",
+          "location": 0,
+          "ownerGroups": [
+            19
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 6,
+          "opcodes": 1,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "expterran08",
+      "code": 408,
+      "title": "To Chain the Beast",
+      "chkSha256": "b1d19c2323564ba64c252c1d5ba4705ffd6fbc69f8ed3cf36936ecb0da8d4197",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "TB8A",
+          "location": 5,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZARE",
+          "location": 21,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "TB8B",
+          "location": 8,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "ZARx",
+          "location": 9,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "TB8E",
+          "location": 6,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "TB8F",
+          "location": 7,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "TB8C",
+          "location": 8,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 21,
+          "script": "JYDg",
+          "location": 11,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 39,
+          "script": "+Vi1",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 43,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 69,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 2,
+          "mineralsCounter": 50792,
+          "gasCounter": 50856,
+          "mineralsRemaining": 50792,
+          "gasRemaining": 50856
+        },
+        {
+          "owner": 4,
+          "opcodes": 92,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 51568,
+          "gasCounter": 50616,
+          "mineralsRemaining": 51568,
+          "gasRemaining": 50616
+        },
+        {
+          "owner": 5,
+          "opcodes": 75,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 50184,
+          "gasCounter": 50616,
+          "mineralsRemaining": 50134,
+          "gasRemaining": 50616
+        },
+        {
+          "owner": 6,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 1500,
+          "gasCounter": 300,
+          "mineralsRemaining": 1500,
+          "gasRemaining": 300
+        }
+      ]
+    },
+    {
+      "mission": "expzerg01",
+      "code": 501,
+      "title": "Vile Disruption",
+      "chkSha256": "9f308010673e284524a98138aef2a21a96fa135cd2a5360b5a4d04914985fe55",
+      "aiStarts": [],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": []
+    },
+    {
+      "mission": "expzerg02",
+      "code": 502,
+      "title": "Reign of Fire",
+      "chkSha256": "32985e8804ca7e667c26a95b44f8c0f171586a899cd1acf0b6abb06a666309c3",
+      "aiStarts": [
+        {
+          "trigger": 0,
+          "script": "ZB2A",
+          "location": 112,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 0,
+          "script": "ZB2B",
+          "location": 113,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 107,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 108,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 109,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 110,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 111,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 114,
+          "ownerGroups": [
+            19
+          ]
+        },
+        {
+          "trigger": 19,
+          "script": "Enmy",
+          "location": 64,
+          "ownerGroups": [
+            21
+          ]
+        },
+        {
+          "trigger": 57,
+          "script": "EnBk",
+          "location": 94,
+          "ownerGroups": [
+            7
+          ]
+        },
+        {
+          "trigger": 57,
+          "script": "EnBk",
+          "location": 102,
+          "ownerGroups": [
+            7
+          ]
+        },
+        {
+          "trigger": 57,
+          "script": "EnBk",
+          "location": 103,
+          "ownerGroups": [
+            7
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 7,
+          "opcodes": 18,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "expzerg03",
+      "code": 503,
+      "title": "The Kel-Morian Combine",
+      "chkSha256": "3d4db669c12a60a60ee7edcebcaf77ebc79fd2e30e2418dc37dcb2701efa8eb2",
+      "aiStarts": [
+        {
+          "trigger": 3,
+          "script": "ZB3A",
+          "location": 4,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 21,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 24,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 25,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "EnBk",
+          "location": 26,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "ZB3B",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "ZB3C",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "ZB3D",
+          "location": 2,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "ZB3E",
+          "location": 5,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 22,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            7
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 363,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 20168,
+          "gasCounter": 20472,
+          "mineralsRemaining": 19018,
+          "gasRemaining": 19322
+        },
+        {
+          "owner": 1,
+          "opcodes": 370,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 30624,
+          "gasCounter": 30672,
+          "mineralsRemaining": 29024,
+          "gasRemaining": 29147
+        },
+        {
+          "owner": 4,
+          "opcodes": 395,
+          "buildOrders": 0,
+          "trainOrders": 3,
+          "attacks": 0,
+          "mineralsCounter": 25632,
+          "gasCounter": 25752,
+          "mineralsRemaining": 24657,
+          "gasRemaining": 24952
+        },
+        {
+          "owner": 5,
+          "opcodes": 345,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 20520,
+          "gasCounter": 20880,
+          "mineralsRemaining": 19720,
+          "gasRemaining": 20080
+        },
+        {
+          "owner": 6,
+          "opcodes": 378,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 30504,
+          "gasCounter": 30680,
+          "mineralsRemaining": 28979,
+          "gasRemaining": 29230
+        },
+        {
+          "owner": 7,
+          "opcodes": 2,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04a",
+      "code": 504,
+      "title": "The Liberation of Korhal",
+      "chkSha256": "9fa70aa9def47962d6fe6a2e597a021a90bea81f2fefeae58297df285d2a66f6",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "ZB4A",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4B",
+          "location": 2,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZB4D",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 100,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 1,
+          "mineralsCounter": 50424,
+          "gasCounter": 50672,
+          "mineralsRemaining": 50049,
+          "gasRemaining": 50572
+        },
+        {
+          "owner": 4,
+          "opcodes": 62,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 65416,
+          "gasCounter": 65496,
+          "mineralsRemaining": 64866,
+          "gasRemaining": 64946
+        },
+        {
+          "owner": 6,
+          "opcodes": 76,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 75408,
+          "gasCounter": 75664,
+          "mineralsRemaining": 75308,
+          "gasRemaining": 75614
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04b",
+      "code": 514,
+      "title": "The Liberation of Korhal",
+      "chkSha256": "57ed718ac4cf2f60460411f91b2a6e7c29d865f956a740fd3e9a4cb1d76693b8",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "ZB4A",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4B",
+          "location": 2,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZB4D",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 100,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 1,
+          "mineralsCounter": 50424,
+          "gasCounter": 50672,
+          "mineralsRemaining": 50049,
+          "gasRemaining": 50572
+        },
+        {
+          "owner": 4,
+          "opcodes": 62,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 65416,
+          "gasCounter": 65496,
+          "mineralsRemaining": 64866,
+          "gasRemaining": 64946
+        },
+        {
+          "owner": 6,
+          "opcodes": 76,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 75472,
+          "gasCounter": 75664,
+          "mineralsRemaining": 75372,
+          "gasRemaining": 75614
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04c",
+      "code": 524,
+      "title": "The Liberation of Korhal",
+      "chkSha256": "e18eb7d59029b5f62895a13da98f592252f1512eb9913bf63acf04c7b43b3f94",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "ZB4A",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4B",
+          "location": 2,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZB4D",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 100,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 1,
+          "mineralsCounter": 50416,
+          "gasCounter": 50672,
+          "mineralsRemaining": 50041,
+          "gasRemaining": 50572
+        },
+        {
+          "owner": 4,
+          "opcodes": 62,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 65416,
+          "gasCounter": 65496,
+          "mineralsRemaining": 64866,
+          "gasRemaining": 64946
+        },
+        {
+          "owner": 6,
+          "opcodes": 76,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 75592,
+          "gasCounter": 75544,
+          "mineralsRemaining": 75492,
+          "gasRemaining": 75494
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04d",
+      "code": 534,
+      "title": "The Liberation of Korhal",
+      "chkSha256": "70f52da6ec0ca0dc48d6d60f829f0099c85ce12e55187ff318846eb70e44fd94",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "ZB4A",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4B",
+          "location": 2,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZB4D",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 100,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 1,
+          "mineralsCounter": 50416,
+          "gasCounter": 50672,
+          "mineralsRemaining": 50041,
+          "gasRemaining": 50572
+        },
+        {
+          "owner": 4,
+          "opcodes": 62,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 65416,
+          "gasCounter": 65496,
+          "mineralsRemaining": 64866,
+          "gasRemaining": 64946
+        },
+        {
+          "owner": 6,
+          "opcodes": 76,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 75264,
+          "gasCounter": 75664,
+          "mineralsRemaining": 75164,
+          "gasRemaining": 75614
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04e",
+      "code": 544,
+      "title": "The Liberation of Korhal",
+      "chkSha256": "c27d7cd80d28cf6b9d8151a765001e7883827809675a37d8005c775fc9eed1dd",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "ZB4A",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4B",
+          "location": 2,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZB4D",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 100,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 1,
+          "mineralsCounter": 50424,
+          "gasCounter": 50672,
+          "mineralsRemaining": 50049,
+          "gasRemaining": 50572
+        },
+        {
+          "owner": 4,
+          "opcodes": 62,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 65416,
+          "gasCounter": 65496,
+          "mineralsRemaining": 64866,
+          "gasRemaining": 64946
+        },
+        {
+          "owner": 6,
+          "opcodes": 76,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 75264,
+          "gasCounter": 75664,
+          "mineralsRemaining": 75164,
+          "gasRemaining": 75614
+        }
+      ]
+    },
+    {
+      "mission": "expzerg04f",
+      "code": 554,
+      "title": "The Liberation of Korhal",
+      "chkSha256": "50f61e57b89027c7c72bef0d6ccb6a15b9886f119cf77587cf4715f4e7e9dc93",
+      "aiStarts": [
+        {
+          "trigger": 1,
+          "script": "ZB4A",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 1,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4B",
+          "location": 2,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "ZB4C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 2,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZB4D",
+          "location": 7,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 100,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 1,
+          "mineralsCounter": 50488,
+          "gasCounter": 50592,
+          "mineralsRemaining": 50113,
+          "gasRemaining": 50492
+        },
+        {
+          "owner": 4,
+          "opcodes": 62,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 1,
+          "mineralsCounter": 65296,
+          "gasCounter": 65632,
+          "mineralsRemaining": 64746,
+          "gasRemaining": 65082
+        },
+        {
+          "owner": 6,
+          "opcodes": 76,
+          "buildOrders": 0,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 75344,
+          "gasCounter": 75544,
+          "mineralsRemaining": 75244,
+          "gasRemaining": 75494
+        }
+      ]
+    },
+    {
+      "mission": "expzerg05",
+      "code": 505,
+      "title": "True Colors",
+      "chkSha256": "cd85a53ed3c9345dd4f8987421b5709d8bf87faa7d038fe149790151c70ac6b9",
+      "aiStarts": [
+        {
+          "trigger": 0,
+          "script": "+Vi4",
+          "location": 0,
+          "ownerGroups": [
+            3
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 5,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 6,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "ZB5A",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "ZB5B",
+          "location": 2,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "ZB5C",
+          "location": 20,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "ZB5D",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "ZB5E",
+          "location": 4,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 28,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    },
+    {
+      "mission": "expzerg06",
+      "code": 506,
+      "title": "Fury of the Swarm",
+      "chkSha256": "dc0529f66c56a650cf3c5d1eb5a9addaf00e6d97c9473d91ba9fc31422c9af14",
+      "aiStarts": [
+        {
+          "trigger": 4,
+          "script": "ZB6A",
+          "location": 1,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "ZB6C",
+          "location": 32,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "ZB6B",
+          "location": 2,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "ZB6D",
+          "location": 34,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "ZB6E",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 4,
+          "opcodes": 316,
+          "buildOrders": 4,
+          "trainOrders": 2,
+          "attacks": 0,
+          "mineralsCounter": 60136,
+          "gasCounter": 60232,
+          "mineralsRemaining": 59636,
+          "gasRemaining": 60132
+        },
+        {
+          "owner": 5,
+          "opcodes": 63,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 60432,
+          "gasCounter": 60520,
+          "mineralsRemaining": 60307,
+          "gasRemaining": 60345
+        },
+        {
+          "owner": 6,
+          "opcodes": 30,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 60248,
+          "gasCounter": 60624,
+          "mineralsRemaining": 60248,
+          "gasRemaining": 60624
+        }
+      ]
+    },
+    {
+      "mission": "expzerg07",
+      "code": 507,
+      "title": "Drawing of the Web",
+      "chkSha256": "2541f8af8528b0db42520ec3e1e138e1cb9f67b2be12a4e60d06edc3fa2ccfdb",
+      "aiStarts": [
+        {
+          "trigger": 2,
+          "script": "ZB7A",
+          "location": 6,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 3,
+          "script": "ZB7B",
+          "location": 7,
+          "ownerGroups": [
+            5
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 40,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 75504,
+          "gasCounter": 75416,
+          "mineralsRemaining": 74479,
+          "gasRemaining": 75166
+        },
+        {
+          "owner": 5,
+          "opcodes": 31,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 1,
+          "mineralsCounter": 50424,
+          "gasCounter": 50584,
+          "mineralsRemaining": 50124,
+          "gasRemaining": 50584
+        }
+      ]
+    },
+    {
+      "mission": "expzerg08",
+      "code": 508,
+      "title": "To Slay the Beast",
+      "chkSha256": "22ac125001ebb5835a697f3186160d3bdfd2de8913e24ff9eb3adb25ba41423a",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "ZB8A",
+          "location": 1,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "ZB8B",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "ZB8C",
+          "location": 3,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "ZB8D",
+          "location": 4,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 7,
+          "script": "ZB8E",
+          "location": 6,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 8,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 21,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 24,
+          "script": "+Vi0",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 24,
+          "script": "+Vi1",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 32,
+          "script": "ReHe",
+          "location": 32,
+          "ownerGroups": [
+            4
+          ]
+        },
+        {
+          "trigger": 32,
+          "script": "ReHe",
+          "location": 27,
+          "ownerGroups": [
+            4
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 4,
+          "opcodes": 177,
+          "buildOrders": 0,
+          "trainOrders": 4,
+          "attacks": 0,
+          "mineralsCounter": 76448,
+          "gasCounter": 75560,
+          "mineralsRemaining": 75623,
+          "gasRemaining": 74810
+        },
+        {
+          "owner": 6,
+          "opcodes": 144,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 1,
+          "mineralsCounter": 76840,
+          "gasCounter": 75608,
+          "mineralsRemaining": 76165,
+          "gasRemaining": 74883
+        }
+      ]
+    },
+    {
+      "mission": "expzerg09",
+      "code": 509,
+      "title": "The Reckoning",
+      "chkSha256": "f7987c26f0b990d5b13e3e5dbd0f3788d11cf8bbe67c73aa5904bdbfc591b9a9",
+      "aiStarts": [
+        {
+          "trigger": 5,
+          "script": "+Vi0",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "+Vi7",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "ZB9A",
+          "location": 7,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 14,
+          "script": "-Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        },
+        {
+          "trigger": 16,
+          "script": "ZB9B",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 16,
+          "script": "ZB9C",
+          "location": 19,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 4,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 17,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 23,
+          "script": "ReHe",
+          "location": 23,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 42,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 88,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 49,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 50,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 51,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 52,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 53,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 54,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 55,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 56,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 57,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 58,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 59,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 60,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 61,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 62,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 70,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 71,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 72,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 73,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 74,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 75,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 76,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 77,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 78,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 79,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 28,
+          "script": "ReHe",
+          "location": 80,
+          "ownerGroups": [
+            2
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 1,
+          "opcodes": 69,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 30432,
+          "gasCounter": 30792,
+          "mineralsRemaining": 29332,
+          "gasRemaining": 30342
+        },
+        {
+          "owner": 6,
+          "opcodes": 68,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 30256,
+          "gasCounter": 30984,
+          "mineralsRemaining": 30256,
+          "gasRemaining": 30984
+        }
+      ]
+    },
+    {
+      "mission": "expzerg10",
+      "code": 510,
+      "title": "Omega",
+      "chkSha256": "856026e96c23b5080bfb11a185fb86bdb8accf4f46c4113bfd3588192d97fbc4",
+      "aiStarts": [
+        {
+          "trigger": 4,
+          "script": "ZB0A",
+          "location": 1,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 4,
+          "script": "ZB0B",
+          "location": 2,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "ZB0C",
+          "location": 3,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 5,
+          "script": "ZB0D",
+          "location": 4,
+          "ownerGroups": [
+            1
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "ZB0E",
+          "location": 5,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 6,
+          "script": "ZB0F",
+          "location": 6,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 7,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 8,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 14,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 12,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 13,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 11,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 9,
+          "script": "EnBk",
+          "location": 15,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 16,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 18,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 19,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 20,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 21,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 22,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 23,
+          "ownerGroups": [
+            6
+          ]
+        },
+        {
+          "trigger": 11,
+          "script": "ZB1F",
+          "location": 64,
+          "ownerGroups": [
+            0,
+            6
+          ]
+        },
+        {
+          "trigger": 12,
+          "script": "ZB1F",
+          "location": 64,
+          "ownerGroups": [
+            1
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 130,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 30880,
+          "gasCounter": 30600,
+          "mineralsRemaining": 30680,
+          "gasRemaining": 30400
+        },
+        {
+          "owner": 1,
+          "opcodes": 112,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 31016,
+          "gasCounter": 30632,
+          "mineralsRemaining": 29091,
+          "gasRemaining": 29182
+        },
+        {
+          "owner": 6,
+          "opcodes": 145,
+          "buildOrders": 0,
+          "trainOrders": 1,
+          "attacks": 0,
+          "mineralsCounter": 30832,
+          "gasCounter": 30592,
+          "mineralsRemaining": 29932,
+          "gasRemaining": 29717
+        }
+      ]
+    },
+    {
+      "mission": "expbonus",
+      "code": 599,
+      "title": "Dark Origin",
+      "chkSha256": "6dd16b341f1dd2fabbbc28ed8a06d1b22df6e5f225e0b2baa9597da3c24a3c99",
+      "aiStarts": [
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 9,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 10,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 10,
+          "script": "EnBk",
+          "location": 17,
+          "ownerGroups": [
+            0
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 32,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 46,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 28,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 29,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 30,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 31,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 47,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 29,
+          "script": "ReHe",
+          "location": 27,
+          "ownerGroups": [
+            5
+          ]
+        },
+        {
+          "trigger": 31,
+          "script": "Rscu",
+          "location": 0,
+          "ownerGroups": [
+            2
+          ]
+        },
+        {
+          "trigger": 34,
+          "script": "+Vi2",
+          "location": 0,
+          "ownerGroups": [
+            18
+          ]
+        }
+      ],
+      "frame": 4800,
+      "aiClock": 4800,
+      "outcome": 0,
+      "aiError": "",
+      "playerAi": [
+        {
+          "owner": 0,
+          "opcodes": 6,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 2,
+          "opcodes": 1,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        },
+        {
+          "owner": 5,
+          "opcodes": 16,
+          "buildOrders": 0,
+          "trainOrders": 0,
+          "attacks": 0,
+          "mineralsCounter": 0,
+          "gasCounter": 0,
+          "mineralsRemaining": 0,
+          "gasRemaining": 0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Not full mission playthroughs or a proof of all future AI branches.",
+    "Startup may end early on the original mission outcome; idle event-gated armies are expected.",
+    "Revolution uses controlled relocation of original units, invincible objective heroes/entry units and controlled destruction to exercise original triggers; no AI resources or script commands are injected.",
+    "Resource counters include trigger-granted resources; mining is additionally checked against the initial 6,000 mineral/gas grant.",
+    "Campaign AI implementation is not claimed to reproduce Blizzard timing/strategy exactly."
+  ],
+  "coreSha256": {
+    "STARDAT.MPQ": "dede48dd9b313817b118a4c117101c9a70cf19264756e9db4e9be1af7f852e9a",
+    "BROODAT.MPQ": "5315b4f166bd4cbb125e5009883e52975cac9a669860abc92ab718341c569a35",
+    "patch_rt.mpq": "58bd856aac2328b42af4b9538c248367150c876e57ec596a9f30e3e81d8ddf11"
+  },
+  "scriptSha256": {
+    "aiscript.bin": "635433e546998e05529a9d6acc806c06b528c7ce5075a206f6f2c8de44ffed6e",
+    "bwscript.bin": "15a1a5b3fb4f2cab2e7b7b507ae04d4e2ef097c77081cfeb950d9a2e4ebee382"
+  },
+  "binarySha256": "c050addc8b210f6c777caaeb9aec26734ecba11904308cbb4763cdd5582a1a31",
+  "sourceSha256": {
+    "tests/native_campaign_ai81.cpp": "69b3d107385b568f046ed736d52632961279c5f5f2264cae8f08569858533977",
+    "tests/run_campaign_ai81.py": "b0144498fb4e15a7e160b226cd9b73f168fd335595ce4b4a12a6b12ded8def7b",
+    "tests/native_mission_extract.cpp": "4309bec0058f9011a6d1d785e7f497df78b546dc453ec669f46a9db012216f7a",
+    "tests/build_native_host.py": "9943a924dab6aa17fb3a7da01057e675591addeda94e4642dbf4a24918186f87",
+    "scripts/prepare_native.py": "8642d9717e9b2e1781daa7a2dae3f0a573cd53c74c643ec930c553640c78aafa",
+    "app/src/main/assets/native/missions.json": "96b8a781ef517e72afda0bb09a311b30d681686862c4370bd04ce0c9d17ccb57",
+    "patches/campaign.patch": "ca688d15ba6d24a64c3b9d260bd208ee3dbed3c927c36d936deaa92f70a9d609",
+    "patches/native-addon-sound81.patch": "2a2d8e42da8b0b2abf9e055514268a39da80c0c0e769ea2594f90bef051b4fea",
+    "patches/native-ai-abilities79.patch": "332a8b6aef3e3e8ad18e1be8a210e0faf5a7ee10f5dd0e3fc5bb93b17fdc6f3c",
+    "patches/native-ai-production80.patch": "313bb25f84ef1f643fa12b1664e4bd38804d37aace704571a25d30a439739259",
+    "patches/native-ai43.patch": "db4d250f42c33f7067e057be6e3c471c8777f0de66afd35422437b2ff5f44cd5",
+    "patches/native-ai45.patch": "c45e447ddc9d4b91c56423297cba8b6c985ccf4f6a724bcfdc8dafba89175fa6",
+    "patches/native-campaign36.patch": "33c96c45642e89b5c61a451c3092b5faaa57fee6fda61612c116d4d00ce0ee6a",
+    "patches/native-campaign79.patch": "66af31869a0ef4d9a7c6e7cf9f3880eb6d0edc37e777444405b7a314b49f60cb",
+    "patches/native-controls38.patch": "04f5614d3b4797215cc58442ed18e21bb39891cdfc01d79d7f557e373f4487d0",
+    "patches/native-controls80.patch": "7909f322665ad884104afcb17c8dfe3e043e5c2cc655d1c5346e95dd48a9a0d6",
+    "patches/native-finale37.patch": "f1050e7a66ee1a37f7159bfcf72f4a7fc94585da4e3ca4aeda21442782165f66",
+    "patches/native-fog-target79.patch": "566468c4610f499bf4ff00cd89203563980c4bcc00db89d0d9d980d5d33025be",
+    "patches/native-gameplay.patch": "327b7b1b36dd32ea7f06d3ca8bc1b3beac37a19b8f91938bb687521b1ef45356",
+    "patches/native-missions.patch": "f51c810ca7de1c4fe90181f6df63d163873720dcb0e6a243d64b3b25342c0f4d",
+    "patches/native-placement68.patch": "c3e8d9539a96cfa80b4fb81787012d56b7d690b111db45dd51ed0b8984f44490",
+    "patches/native-polish33.patch": "2f9efd4fd0db6ae9e374f15d549c4463f46832ce0fcfd073feadf182b31bae3c",
+    "patches/native-polish39.patch": "9a323dd664fa4685d0cee3ab531791c59ae970273eaa71ad4b65a78dc210a0a8",
+    "patches/native-polish40.patch": "2b588458a28921ad8ff8e5f88e3c573ec54e64490f29ae8d6b9d83deaeccfc49",
+    "patches/native-polish41.patch": "4776feefa2455e2114f97cc5ffb4b286cb072cfec1ff3bc2fe85f3f34cd75ea5",
+    "patches/native-polish42.patch": "92d7b77fc836e310d235f64b7c97029f82a422500501d2c2f94b32bcf045b667",
+    "patches/native-polish44.patch": "99840a772d41ff39162adb5908fbc68ab0a17aabb116b6ef0c0d39566eb3862c",
+    "patches/native-polish46.patch": "4c63797244f1c1905598e0972f48fc3605f49d3777696b7b572de78a3b1559de",
+    "patches/native-polish54.patch": "9e0ff4265c500933c1b3e3d27d361c136b58571d5b8ceeb19a3fa9304eb4d65f",
+    "patches/native-polish55.patch": "f9c05de5addfccbc2906dded592299c9f04177d515f9f15223ec040038a71b9e",
+    "patches/native-polish56.patch": "3108041b695e62d1a4acd2e7f5e93cd9570aeef41d9aa32d5aece94c9b25e822",
+    "patches/native-polish57.patch": "e45b0563c93ffffc86c2885203c934653046ba7ea5a1aa912e8fc4ac7bc57210",
+    "patches/native-polish58.patch": "613bf7009bc1bbd6229b1b95c602a0ac9f1c353d0007f09a3cd1891729c5ae33",
+    "patches/native-polish59.patch": "d8c014bcc48bcc725da55237ae2926ad993c700c522f6f6c1a9bb657b8fa66ca",
+    "patches/native-polish77.patch": "5ba1e0dabec615513824d8d58312aa31fc127c715141b20a41079c2f227d0643",
+    "patches/native-polish78.patch": "bd18f01cea48e2cbce58661b31918dd1e3b2fe7e04e053cfd7e151a376e3459e",
+    "patches/native-revision.patch": "133f6dc491dad33bb6fbd5fb3b19ce9e65b8952007c82c5fec312fff46f75103",
+    "patches/native-saves34.patch": "975765698ce5695f1298c30dbda0c866997c812628c755efdfa3bbf7c8b802e6",
+    "patches/native-scroll69.patch": "4d484a750edf2c82b7bf45a37fef12a278d8cf6a032f5efe5a1f91829337758a",
+    "patches/native-supply81.patch": "7c7cda24ea89a578a47a28e5799a23156b2550b9fe3fbd1301c80b7d1c646471",
+    "patches/native-unit-names79.patch": "b09b2ffcc193de2b2ab28b34aef78ab0f1fbfec99c85d64394316e559fd336f0",
+    "patches/native-upgrades1.patch": "780b4beaa60d8897128202322f0852ba091b390b6eff5f9b53c2b9cfea007811"
+  }
+}

@@ -45,7 +45,7 @@ import java.util.concurrent.Executors;
 /** Offline Android host with a native C++ game engine and Android rendering. */
 public final class MainActivity extends Activity {
   private static final String[] MPQS = {"STARDAT.MPQ", "BROODAT.MPQ", "patch_rt.mpq"};
-  private static final int PICK_DATA = 10, PICK_MAP = 11, PICK_REPLAY = 12;
+  private static final int PICK_DATA = 10, PICK_MAP = 11, PICK_REPLAY = 12, IMPORT_REPLAY = 13;
   private NativeNearby nearbyPermissionRequest;
   private NativeNearby nearbyBluetoothRequest;
   void requestNearbyBluetooth(NativeNearby owner,boolean discoverable) {
@@ -71,7 +71,6 @@ public final class MainActivity extends Activity {
   private FrameLayout root;
   private NativeSurface game;
   private boolean optionsVisible = true, activityResumed;
-  private boolean gamepadSettingsVisible;
   private boolean importing;
   private int activeMission = 1;
   private TextView noticeView;
@@ -196,7 +195,7 @@ public final class MainActivity extends Activity {
     button(language, languageName(), this::chooseLanguage).setEnabled(!busy());
     text(language, "Game voices and campaign text use the language of the imported files.", 13, 0xff8da4cf);
     LinearLayout input = section(panel, "Controls");
-    button(input, "Gamepad controls", this::requestGamepadSettings).setEnabled(!busy());
+    button(input, "Gamepad controls", this::requestGamepadSettings).setEnabled(!busy() && ready());
     noticeView = notice.isEmpty() ? null : text(panel, notice, 14, 0xffc5cfeb);
     LinearLayout setup = section(panel, "Game files");
     text(
@@ -441,6 +440,17 @@ public final class MainActivity extends Activity {
       if(owner!=null)owner.bluetoothResult(request==49,request==49?result>0:result==RESULT_OK);
       return;
     }
+    if (request == IMPORT_REPLAY) {
+      if(result==RESULT_OK&&data!=null&&data.getData()!=null){
+        final Uri uri=data.getData();final NativeSurface replayView=game;
+        io.execute(()->{String problem=null;try(java.io.InputStream in=getContentResolver().openInputStream(uri)){
+          if(in==null)throw new IOException("Unable to open replay");
+          new NativeReplays(getFilesDir()).importReplay(in,displayName(uri),bytes->NativeBridge.replayInfo(bytes));
+        }catch(Exception e){problem=e.getMessage();}
+        if(replayView!=null)replayView.replayImported(problem);
+        });
+      }return;
+    }
     if (request == PICK_REPLAY) {
       final byte[] bytes = pendingReplay;
       pendingReplay = null;
@@ -557,22 +567,27 @@ public final class MainActivity extends Activity {
   }
 
   void requestGamepadSettings() {
-    if (gamepadSettingsVisible || isFinishing()) return;
-    gamepadSettingsVisible = true;
-    if (game != null) game.reloadGamepadSettings();
-    GamepadSettings.show(this, getSharedPreferences("native-settings", 0), () -> {
-      gamepadSettingsVisible = false;
-      if (game != null) game.reloadGamepadSettings();
-    });
+    if (isFinishing() || busy() || !ready()) return;
+    final boolean fromAppOptions = optionsVisible;
+    if (fromAppOptions) {
+      optionsVisible = false;
+      refreshDisplayArea();
+      root.removeAllViews();
+      if (game == null) game = new NativeSurface(this);
+      root.addView(game, new FrameLayout.LayoutParams(-1, -1));
+      game.resume();
+      game.requestFocus();
+    }
+    game.openGamepadSettings(fromAppOptions);
   }
 
   @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent event) {
-    if (!optionsVisible && !gamepadSettingsVisible && game != null && game.handleGamepadMotion(event)) return true;
+    if (!optionsVisible && game != null && game.handleGamepadMotion(event)) return true;
     return super.dispatchGenericMotionEvent(event);
   }
 
   @Override public boolean dispatchKeyEvent(android.view.KeyEvent event) {
-    if (!optionsVisible && !gamepadSettingsVisible && game != null && game.handleGamepadKey(event)) return true;
+    if (!optionsVisible && game != null && game.handleGamepadKey(event)) return true;
     return super.dispatchKeyEvent(event);
   }
 
@@ -591,6 +606,22 @@ public final class MainActivity extends Activity {
     }
     notice = message;
     showHome();
+  }
+
+  void pickReplay() {
+    startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),IMPORT_REPLAY);
+  }
+
+  void recordReplay(byte[] bytes) {
+    if(bytes==null)return;
+    io.execute(()->{String result;try{
+      String[] header=GameLanguage.decode(NativeBridge.replayInfo(bytes)).split("\\n")[0].split("\\t",-1);
+      String label=header.length>3?header[3]:"Replay";
+      new NativeReplays(getFilesDir()).save(bytes,label+" "+new java.text.SimpleDateFormat("yyyy-MM-dd HH-mm",Locale.ROOT).format(new java.util.Date()));
+      result="Replay saved";
+    }catch(Exception e){result="Replay could not be saved: "+e.getMessage();}
+    final String notice=result;runOnUiThread(()->Toast.makeText(this,PortText.text(notice),Toast.LENGTH_LONG).show());
+    });
   }
 
   void saveReplay(byte[] bytes) {

@@ -45,6 +45,8 @@ static void configured_init(int width,int height,int slot,const int* races,const
  }
  g_ui->test_instant=false;g_ui->rep.game_name=network?"OpenBW Local Multiplayer":"OpenBW Custom Game";
  openbw_set_external_cursor(1);openbw_mouse_move(-100,-100);
+ if(g_campaign)g_campaign->base_defence_enabled=network||nearby_defenders;
+ native_replay::begin();
 }
 static void net_init(int width,int height,int slot,int first,int second,bool expansion) {
  int races[]={first,second,1,1,1,1,1,1},controllers[]={1,1,0,0,0,0,0,0};

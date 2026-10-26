@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "version": "1.0.11",
+  "versionCode": 81,
+  "apkSha256": "144f087eab294f9ab8fee61c82d5d0fb1be4a86a40fe029eab2b89abd2b5763b",
+  "apkBytes": 2411846,
+  "previousApkSha256": "1a86ccfd2e89d0718ac83b76ee178124d65c8b75ae315612dc753084f149f185",
+  "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
+  "originalReleaseSigningIdentity": true,
+  "nativeEngineRebuilt": true,
+  "nativeEngineVersion": "1.0.11-build81",
+  "changedNativeAndAssetEntries": [
+    "assets/native/ui-languages.tsv",
+    "lib/arm64-v8a/libopenbw.so",
+    "lib/arm64-v8a/libsmacker.so",
+    "lib/x86_64/libopenbw.so",
+    "lib/x86_64/libsmacker.so"
+  ],
+  "addedAssets": [],
+  "unchangedNativeAndAssetEntries": 72,
+  "saveFileTransferSupported": false,
+  "inGameSaveLoadRetained": true,
+  "permissionsUnchanged": true,
+  "multiplayerProtocolBuild": 80,
+  "decoderBinaryChanges": [
+    "lib/arm64-v8a/libsmacker.so",
+    "lib/x86_64/libsmacker.so"
+  ],
+  "decoderSourceUnchanged": true,
+  "jniMethodsVerified": 44,
+  "loadAlignmentBytes": 16384,
+  "librarySha256": {
+    "arm64-v8a/libopenbw.so": "449885369941f621f41fa0f732c50b3ad6430f129e343e69cd3294ab452bc691",
+    "arm64-v8a/libsmacker.so": "b70ebf1bf5b089eb5b2ddca31c3cfef823a62fbf9465edc90f7ab070ade1b8ad",
+    "x86_64/libopenbw.so": "fa9ebf1c6094ebd1ff858dd86fe952ffea40c165bc0722e48aaf3ae86384af87",
+    "x86_64/libsmacker.so": "1eb0561b5d9415ab70af9e6bb03fe32d6db07d939b5eb626af018c7f92864ad3"
+  },
+  "translationRows": 685,
+  "lintErrors": 0,
+  "lintWarnings": 11,
+  "physicalDevicesTested": false,
+  "regressionReports": [
+    "supply-v81.json",
+    "addon-sound-v81.json",
+    "gamepad-v81.json",
+    "campaign-progress-v81.json",
+    "campaign-ai-v81.json",
+    "replay-storage-v81.json",
+    "replay-assets-v81.json",
+    "replay-ui-v81.json",
+    "replay-v81.json",
+    "native-build81.json"
+  ],
+  "sourceSha256": {
+    "tests/check_revision81_package.py": "69814004e9203284b80099177bcce1f2c6689c24b11994f48807cd6ec1999997",
+    "app/build.gradle": "bbb7fc7f3179ef83569ef87be58cc7b39fba979b820f8ba443e49c222869ac48",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "b2de3ecfa967bfa0900fc37a8206f9f16a6b7ca51ded99d75b6c5e32e2854a86",
+    "app/src/main/assets/native/ui-languages.tsv": "bf1aa7bbfcb0f065508c92bea231f801277c7520ef142012c2776de59d1e6b51"
+  }
+}

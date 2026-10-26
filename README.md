@@ -6,15 +6,15 @@
 
 StarDroid adapts the OpenBW engine for Android devices. Play campaigns, set up custom battles against computer opponents, or host a nearby multiplayer match. The interface uses the classic artwork, fonts, music, and sounds imported from your own game files.
 
-**Version 1.0.9 · Android 8.0+ · ARM64 and x86-64**
+**Latest release 1.0.10 · Android 8.0+ · ARM64 and x86-64**
 
 Put together by **ToadWarrior**.
 
-[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.9/StarDroid-1.0.9.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0.9) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.9/StarDroid-1.0.9-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
+[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/StarDroid-1.0.10.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0.10) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/StarDroid-1.0.10-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
 
-Version **1.0.9** fixes Reign of Fire's false defeat, restores pre-placed Nydus connections, corrects campaign names and portraits, expands computer ability use, improves fog targeting and map scrolling, and gives **Next track** four theme stops for **all three Brood War races**. Install `StarDroid-1.0.9.apk` over the existing app. [Changes and update steps](docs/RELEASE-1.0.9.md).
+Version **1.0.10** adds gamepad controls and invincibility, fixes worker cancellation and AI ammunition production, and substantially reduces content-cache storage. Install `StarDroid-1.0.10.apk` over the existing app. [Released changes](docs/CHANGES-1.0.10.md).
 
-The release includes the earlier large-map imports, larvae options, five interface languages, AI transports, original fonts and protected dialogue. **Diagnostics / credits** remains available. See [technical changes and validation](docs/CAMPAIGN-FIXES-79.md).
+The current source targets **1.0.11 / build 81**, with replay playback, revised controls, a capped supply cheat and per-player campaign completion marks. [Development changes](docs/CHANGES-1.0.11.md). **Diagnostics / credits** remains available.
 
 ## Features
 
@@ -31,7 +31,7 @@ StarDroid is an unofficial fan project. **Game data is not included.** You need 
 
 ## Install
 
-1. Download **[StarDroid-1.0.8.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.9/StarDroid-1.0.9.apk)** on your Android device. The source-code ZIP is for development, not installation.
+1. Download **[StarDroid-1.0.10.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/StarDroid-1.0.10.apk)** on your Android device. The source-code ZIP is for development, not installation.
 2. Open the APK on your Android device. If Android asks, allow the browser or file manager you are using to install apps from that source.
 3. Launch **StarDroid**. The import screen appears automatically when required files are missing.
 4. Tap **Import game files**, choose the files below, and let importing finish. You can select multiple files if your file picker supports it.
@@ -62,7 +62,7 @@ This release targets classic game data. A modern launcher installation or Remast
 - Enough free space for imported archives and campaign/media content; these are much larger than the APK.
 - Bluetooth for local multiplayer. Wi-Fi Direct is optional and depends on Android version and hardware support.
 
-The [download checksums](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.8/SHA256SUMS.txt) record the SHA-256 of the published APK and source archive.
+The [download checksums](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/SHA256SUMS.txt) record the SHA-256 of the published APK and source archive.
 
 ## Quick start
 
@@ -82,7 +82,7 @@ Open **Custom Game**, choose or import a map, and set the game type, speed, diff
 
 ### Local multiplayer
 
-1. Install the **same release build** and compatible game data on every device. Build 78 has a simulation compatibility check; use the same release APK on every device.
+1. Install the **same release build** and compatible game data on every device. The simulation compatibility check requires matching builds.
 2. Open **Multiplayer**, choose a player name and expansion, then select **Bluetooth + Wi-Fi Direct** or **Bluetooth**.
 3. On the host, choose **Host Game**, select a map and settings, and create the lobby.
 4. On other devices, choose **Join Game**, select the host, and join. Accept Android pairing prompts and confirm that the displayed pairing codes match.
@@ -113,7 +113,7 @@ These are the defaults for a fresh installation. Existing preferences are retain
 
 **Build** and **Cancel** stay below the building preview. Controls underneath them cannot be pressed while those buttons are active. While dragging a preview, hold near an edge to scroll. Drag beneath the command bar to scroll down; lift your finger to stop before confirming. You can disable placement edge scrolling with **Camera settings → Scroll while placing**.
 
-Open **Menu → Options → Touch Controls** to change selection timing, drag behavior, camera sensitivity, descriptions, ground-tap orders, and placement. Version 1.0.1 turns minimap hold-to-order off for fresh settings and presets; updates preserve any saved choice. To change an existing installation, open **Camera settings → Minimap hold issues orders**. Enable optional control groups in **Selection settings**: hold a group to assign units, tap to recall, and double-tap to center the camera. See the [full controls guide](docs/PLAYER-GUIDE.md#touch-controls-and-settings).
+Open **Menu → Options → Controls** to change selection timing, drag behavior, camera sensitivity, descriptions, ground-tap orders, and placement. Version 1.0.1 turns minimap hold-to-order off for fresh settings and presets; updates preserve any saved choice. To change an existing installation, open **Camera settings → Minimap hold issues orders**. Enable optional control groups in **Selection settings**: hold a group to assign units, tap to recall, and double-tap to center the camera. See the [full controls guide](docs/PLAYER-GUIDE.md#controls-and-settings).
 
 ## Hero Mode
 
@@ -136,13 +136,13 @@ Tassadar and Zeratul can merge into their hero Archon. Both hero slots remain oc
 - If a device cannot find the host, check Bluetooth permissions and pairing prompts, use **Search Again**, or try Bluetooth-only mode. Older Android versions can require Location permission and Location services for discovery.
 - For missing content, check **App Options → Installed content** and reimport the relevant original archive.
 - If an APK will not install over an existing app, check CPU architecture and signing identity. Independently signed builds cannot replace the distributed APK in place.
-- Replay loading/export is not a supported player feature in this release.
+- Build 81 adds **Load Replay**, local replay storage and **DELETE**. See [replay controls and compatibility](docs/PLAYER-GUIDE.md#replays).
 
-More details: [player guide](docs/PLAYER-GUIDE.md) · [current changes](docs/RELEASE-1.0.8.md) · [1.0 changes](docs/FIXES-1.0.md) · [validation record](VALIDATION.md).
+More details: [player guide](docs/PLAYER-GUIDE.md) · [current source changes](docs/CHANGES-1.0.11.md) · [1.0 changes](docs/FIXES-1.0.md) · [validation record](VALIDATION.md).
 
 ## Development
 
-The current source targets **1.0.10 / build 80**. It adds gamepad settings, invincibility, reliable/scalable control groups, Drone cancellation fixes, broader AI ammunition production, and compact caches. Normal in-game saving and loading are unchanged. See [build 80 changes](docs/CHANGES-1.0.10.md) and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
+The current source targets **1.0.11 / build 81**. It adds replay browsing/playback, original-style gamepad settings, a supply cheat capped at 200, larger control groups, and completed-mission marks for each Player ID. See [build 81 changes](docs/CHANGES-1.0.11.md), [build 80 changes](docs/CHANGES-1.0.10.md), and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
 
 The current Android app uses a native C++ engine, JNI, Android Canvas, and AudioTrack. The older web implementation remains as historical source and is not shipped in the APK.
 
@@ -152,7 +152,7 @@ On an x86-64 Linux development machine with Python 3.10+, JDK 17, Git, and `patc
 python3 scripts/build.py
 ```
 
-The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.10.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
+The build downloads pinned Android tools, prepares the patched engine, and writes **`dist/StarDroid-1.0.11.apk`**. Downloads and native compilation need additional disk space and time. Without an explicitly configured release key, local builds use Android's development signing key. See [build instructions](docs/BUILDING.md) for signing, faster rebuilds, and tests.
 
 Automated checks cover upgrade progression, command cards, touch routing, saves, multiplayer protocol behavior, UI layouts, and screen-edge rendering with AddressSanitizer and guarded buffers. These do not replace physical-device checks; installation, radio interoperability, touch, audio, and full campaign playthroughs need broader device testing. See [VALIDATION.md](VALIDATION.md) for exact coverage and limitations.
 

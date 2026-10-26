@@ -1,0 +1,235 @@
+{
+  "version": 81,
+  "topic": "Replay capture and playback",
+  "passed": true,
+  "generatedUtc": "2026-10-26T05:45:29.873595+00:00",
+  "scope": "Native host simulation with locally supplied original data; not Android-device UI testing.",
+  "sourceSha256": {
+    "tests/native_replay81.cpp": "a75da61db7eb4f83b22f1cfb55747a62c69a519237a981f64b5af399776c8bd1",
+    "tests/run_replay81.py": "2863a3a39e3b46bd3096be576b65044b2c59181618b8baf119a73c4795624657",
+    "tests/build_native_host.py": "9943a924dab6aa17fb3a7da01057e675591addeda94e4642dbf4a24918186f87",
+    "native/replay.h": "12de9d0a486829007344ca322c8fe0c7973eb25512dae46f30356ba7e00f1ce0",
+    "native/runtime.cpp": "0936726c87eb167c862837e9b41bdac391907c315f2ed26ebd8c230a788de42b",
+    "native/multiplayer.h": "60af3a34bf8ec9ee22327f7070a9d22d305b26f418ef072fc2e8c4da44e92e16",
+    "native/hero_mode.h": "371cce07d5ff3fffbd9fd7244f47b21bff83306fabd210e75b869eae38ea80c7",
+    "native/save_state.h": "6d86ac14f28f73f89b9c15c1f87f671bd4d90bffe3c80c8d052b9cf85687c482",
+    "native/generated/wasm_main.cpp": "809eb880c0eb0888d871c2c45f7cf71b40d901ecb67ed5acc492ceb6c7d1f9ab",
+    "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2",
+    "scripts/prepare_native.py": "8642d9717e9b2e1781daa7a2dae3f0a573cd53c74c643ec930c553640c78aafa",
+    "patches/native-supply81.patch": "7c7cda24ea89a578a47a28e5799a23156b2550b9fe3fbd1301c80b7d1c646471",
+    "patches/native-addon-sound81.patch": "2a2d8e42da8b0b2abf9e055514268a39da80c0c0e769ea2594f90bef051b4fea"
+  },
+  "integratedEngineHashes": {
+    "bwgame.h": "bc74da3cea92a373460ffaa613ef1266d38e83aab8715ac6d4e73ee4d993f399",
+    "actions.h": "f94bc8fa293b621949e25f01b1bbbb8b489674a9002d510a450673ab0e7293e8",
+    "replay.h": "ebd6f000f942dd4e945ffa1baf6ebee87892d1c88c165db96ea8982cb0fc62b1",
+    "replay_saver.h": "a5ed75aaeef61f73708c6db13eedb529c1af197c277a6b4641960ee1b6e1d219",
+    "web/sandbox.h": "e587488d0acb6c17525dca8a65544e7eebd0e40283c844c52b9ff92f235934ca",
+    "web/campaign_ai.h": "c3b73bbb4579c3902e07c7ef1c2943a43139315bb8d93635021acd0e856cacf7"
+  },
+  "regressions": [
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=9, fog_player=0",
+    "PASS roundtrip race=0 difficulty=0 expansion=1 ffa=0 teams=0 heroes=0 defenders=1 frames=2200 actionBytes=70 worldHash=15116787156264505011 syncHash=18272103494167300718",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 3, units=9, fog_player=0",
+    "PASS roundtrip race=0 difficulty=1 expansion=1 ffa=1 teams=0 heroes=0 defenders=0 frames=2200 actionBytes=70 worldHash=12708815065729781191 syncHash=11673439568638260057",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 3, units=9, fog_player=0",
+    "PASS roundtrip race=0 difficulty=2 expansion=1 ffa=0 teams=1 heroes=0 defenders=1 frames=2200 actionBytes=70 worldHash=4427524946231655246 syncHash=15075171407699859049",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "PASS roundtrip race=1 difficulty=0 expansion=1 ffa=0 teams=0 heroes=0 defenders=0 frames=2200 actionBytes=70 worldHash=2407819400055152825 syncHash=11625025611368554674",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 3, units=5, fog_player=0",
+    "PASS roundtrip race=1 difficulty=1 expansion=1 ffa=1 teams=0 heroes=0 defenders=1 frames=2200 actionBytes=70 worldHash=6804361462044217573 syncHash=5612076018172501399",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 3, units=5, fog_player=0",
+    "PASS roundtrip race=1 difficulty=2 expansion=1 ffa=0 teams=1 heroes=0 defenders=0 frames=2200 actionBytes=70 worldHash=281317171381412253 syncHash=16737218438270931236",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "PASS roundtrip race=2 difficulty=0 expansion=1 ffa=0 teams=0 heroes=0 defenders=1 frames=2200 actionBytes=70 worldHash=12688782804383979026 syncHash=5724814079973858485",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 3, units=5, fog_player=0",
+    "PASS roundtrip race=2 difficulty=1 expansion=1 ffa=1 teams=0 heroes=0 defenders=0 frames=2200 actionBytes=70 worldHash=13004289619139466752 syncHash=4073520318511581946",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 3, units=5, fog_player=0",
+    "PASS roundtrip race=2 difficulty=2 expansion=1 ffa=0 teams=1 heroes=1 defenders=1 frames=2200 actionBytes=70 worldHash=14702996076877103805 syncHash=15636702460096318302",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "PASS roundtrip race=1 difficulty=2 expansion=0 ffa=0 teams=0 heroes=0 defenders=1 frames=2200 actionBytes=70 worldHash=10653864444811763577 syncHash=10446046776326228071",
+    "PASS native renderer: periodic live/replay updates preserve world parity; 640x480 framebuffer coloredPixels=307200",
+    "PASS corruption: classic CRC, truncation, total size, version, settings, frame/map/string bounds, command validation, footer integrity and asset mismatch",
+    "PASS map admission boundaries: 1/256 dimensions, absent string table, valid STRx and shared offsets",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0",
+    "PASS classic human-only replay without StarDroid footer; real commands and 2200-frame world parity",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 1 of 3, units=5, fog_player=1",
+    "PASS nearby two-player command streams, allied vision, AI and nonzero local slot; 2200-frame world parity",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 2, units=5, fog_player=0",
+    "PASS recording eligibility excludes cheats, changed AI behaviour and resumed saves",
+    "PASS 24674 checks in 12 replay scenarios"
+  ],
+  "scenarios": [
+    {
+      "race": "0",
+      "difficulty": "0",
+      "expansion": "1",
+      "ffa": "0",
+      "teams": "0",
+      "heroes": "0",
+      "defenders": "1",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "15116787156264505011",
+      "syncHash": "18272103494167300718"
+    },
+    {
+      "race": "0",
+      "difficulty": "1",
+      "expansion": "1",
+      "ffa": "1",
+      "teams": "0",
+      "heroes": "0",
+      "defenders": "0",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "12708815065729781191",
+      "syncHash": "11673439568638260057"
+    },
+    {
+      "race": "0",
+      "difficulty": "2",
+      "expansion": "1",
+      "ffa": "0",
+      "teams": "1",
+      "heroes": "0",
+      "defenders": "1",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "4427524946231655246",
+      "syncHash": "15075171407699859049"
+    },
+    {
+      "race": "1",
+      "difficulty": "0",
+      "expansion": "1",
+      "ffa": "0",
+      "teams": "0",
+      "heroes": "0",
+      "defenders": "0",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "2407819400055152825",
+      "syncHash": "11625025611368554674"
+    },
+    {
+      "race": "1",
+      "difficulty": "1",
+      "expansion": "1",
+      "ffa": "1",
+      "teams": "0",
+      "heroes": "0",
+      "defenders": "1",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "6804361462044217573",
+      "syncHash": "5612076018172501399"
+    },
+    {
+      "race": "1",
+      "difficulty": "2",
+      "expansion": "1",
+      "ffa": "0",
+      "teams": "1",
+      "heroes": "0",
+      "defenders": "0",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "281317171381412253",
+      "syncHash": "16737218438270931236"
+    },
+    {
+      "race": "2",
+      "difficulty": "0",
+      "expansion": "1",
+      "ffa": "0",
+      "teams": "0",
+      "heroes": "0",
+      "defenders": "1",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "12688782804383979026",
+      "syncHash": "5724814079973858485"
+    },
+    {
+      "race": "2",
+      "difficulty": "1",
+      "expansion": "1",
+      "ffa": "1",
+      "teams": "0",
+      "heroes": "0",
+      "defenders": "0",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "13004289619139466752",
+      "syncHash": "4073520318511581946"
+    },
+    {
+      "race": "2",
+      "difficulty": "2",
+      "expansion": "1",
+      "ffa": "0",
+      "teams": "1",
+      "heroes": "1",
+      "defenders": "1",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "14702996076877103805",
+      "syncHash": "15636702460096318302"
+    },
+    {
+      "race": "1",
+      "difficulty": "2",
+      "expansion": "0",
+      "ffa": "0",
+      "teams": "0",
+      "heroes": "0",
+      "defenders": "1",
+      "frames": "2200",
+      "actionBytes": "70",
+      "worldHash": "10653864444811763577",
+      "syncHash": "10446046776326228071"
+    }
+  ],
+  "nativeFrameCapture": {
+    "path": "build-native/replay81/replay-frame.png",
+    "width": 640,
+    "height": 480,
+    "sha256": "9102ae16a58cf601786bbcc544b60f97a1b984593462fa2fd4fbef32ed4537f5"
+  },
+  "data": {
+    "STARDAT.MPQ": {
+      "bytes": 66938872,
+      "sha256": "dede48dd9b313817b118a4c117101c9a70cf19264756e9db4e9be1af7f852e9a"
+    },
+    "BROODAT.MPQ": {
+      "bytes": 25494976,
+      "sha256": "5315b4f166bd4cbb125e5009883e52975cac9a669860abc92ab718341c569a35"
+    },
+    "patch_rt.mpq": {
+      "bytes": 1085206,
+      "sha256": "58bd856aac2328b42af4b9538c248367150c876e57ec596a9f30e3e81d8ddf11"
+    },
+    "weave.scx": {
+      "bytes": 41672,
+      "sha256": "1956cdf864ca30a5f5e6c438857ba715d07bfb80988077cbefae8431c63e0a94"
+    }
+  },
+  "commands": [
+    "python3 scripts/prepare_native.py",
+    "python3 tests/run_replay81.py CORE_DIR"
+  ],
+  "limitations": [
+    "Roundtrips cover ten AI custom matches, one human-only classic replay and one nearby match on one map, each 2200 frames.",
+    "Classic replay bytes are produced by the integrated recorder; no original-executable replay fixture or frame-parity comparison.",
+    "Campaign replays are not supported; recording is for new custom/nearby matches.",
+    "UI presentation is checked separately; these tests do not run on Android."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "originalArchivesTested": true,
+  "sourceSha256": {
+    "patches/native-addon-sound81.patch": "2a2d8e42da8b0b2abf9e055514268a39da80c0c0e769ea2594f90bef051b4fea",
+    "scripts/prepare_native.py": "8642d9717e9b2e1781daa7a2dae3f0a573cd53c74c643ec930c553640c78aafa",
+    "tests/build_native_host.py": "9943a924dab6aa17fb3a7da01057e675591addeda94e4642dbf4a24918186f87",
+    "tests/native_addon_sound81.cpp": "0e9c0730a63820f6649774ea2119d35f994b9d73914ef52f00b2596a4e84c54b",
+    "tests/run_addon_sound81.py": "5dc5b334793739a30bd972f6c4a6715283cc008aad31e8527d7659eee4abacb0",
+    "native/runtime.cpp": "0936726c87eb167c862837e9b41bdac391907c315f2ed26ebd8c230a788de42b",
+    "native/replay.h": "12de9d0a486829007344ca322c8fe0c7973eb25512dae46f30356ba7e00f1ce0",
+    "native/generated/wasm_main.cpp": "809eb880c0eb0888d871c2c45f7cf71b40d901ecb67ed5acc492ceb6c7d1f9ab",
+    "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2"
+  },
+  "preparedEngineSha256": {
+    "bwgame.h": "bc74da3cea92a373460ffaa613ef1266d38e83aab8715ac6d4e73ee4d993f399",
+    "actions.h": "f94bc8fa293b621949e25f01b1bbbb8b489674a9002d510a450673ab0e7293e8",
+    "web/sandbox.h": "e587488d0acb6c17525dca8a65544e7eebd0e40283c844c52b9ff92f235934ca",
+    "ui/ui.h": "9e7994869f240749b2eea9c59942c19e8a8a6679983f977d0f68b793be8d2803"
+  },
+  "checks": [
+    "PASS addon=107 parent=106 originalSound=Misc\\TBldgPlc.wav accepted once; UI placement/cancel, queue delay, repeat and frames silent",
+    "PASS addon=108 parent=106 originalSound=Misc\\TBldgPlc.wav accepted once; UI placement/cancel, queue delay, repeat and frames silent",
+    "PASS addon=120 parent=113 originalSound=Misc\\TBldgPlc.wav accepted once; UI placement/cancel, queue delay, repeat and frames silent",
+    "PASS addon=115 parent=114 originalSound=Misc\\TBldgPlc.wav accepted once; UI placement/cancel, queue delay, repeat and frames silent",
+    "PASS addon=117 parent=116 originalSound=Misc\\TBldgPlc.wav accepted once; UI placement/cancel, queue delay, repeat and frames silent",
+    "PASS addon=118 parent=116 originalSound=Misc\\TBldgPlc.wav accepted once; UI placement/cancel, queue delay, repeat and frames silent",
+    "PASS blocked space, missing minerals/gas, other player, AI controller/direct AI and replay spectator are silent",
+    "PASS 95 add-on sound checks"
+  ]
+}

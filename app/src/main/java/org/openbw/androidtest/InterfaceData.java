@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.zip.*;
 import org.json.*;
 
-/** Original fonts and campaign palette stay private on this device. */
+/** Original fonts and optional menu artwork stay private on this device. */
 final class InterfaceData {
     static final String NAME = "StarDroid-Interface.zip";
     static final String[] FONT_SIZES = {"8","10","12","14","16","16x","32","50"};
@@ -20,6 +20,12 @@ final class InterfaceData {
             names.add("glue\\palcs\\" + n);
         for (String n : new String[]{"plistmap2.pcx","pinfo.pcx","pslots.pcx"})
             names.add("glue\\create\\" + n);
+        // The original load-list layout and its panel are on the campaign CD,
+        // rather than in every installed StarDat/BrooDat version. Keep optional
+        // so earlier bundles and core-only installs continue to work.
+        names.add("rez\\gluload.bin");
+        for (String n : new String[]{"plist.pcx","pinfo.pcx"}) names.add("glue\\load\\" + n);
+        for (String n : new String[]{"pcancel.pcx","pok.pcx"}) names.add("glue\\palnl\\" + n);
         return names;
     }
     static void install(File temporary, File target) throws IOException {
@@ -136,7 +142,7 @@ final class InterfaceData {
     }
     static void validate(File file) throws IOException {
         try (ZipFile zip = new ZipFile(file)) {
-            if (file.length() > 20L*1024*1024 || zip.size() > 32) throw new IOException("Interface import is too large.");
+            if (file.length() > 20L*1024*1024 || zip.size() > names().size() + 5) throw new IOException("Interface import is too large.");
             JSONObject m = readManifest(zip);
             if (!"openbw-interface-bundle-v1".equals(m.getString("format"))) throw new IOException("Invalid interface format.");
             for (String n : new String[]{"header.bin","hash-table.bin","block-table.bin"}) {

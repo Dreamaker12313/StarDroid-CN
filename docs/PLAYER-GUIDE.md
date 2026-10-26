@@ -20,9 +20,9 @@ changes the port's menus, settings and interface labels. Voices, original unit
 names and campaign text follow the imported game data; the setting does not
 translate recordings. Technical diagnostic details remain available.
 
-## Touch controls and settings
+## Controls and settings
 
-Open **Menu → Options → Touch Controls** during a match. Its **Gesture guide** reflects your current preferences. The [README gesture table](../README.md#touch-controls) describes fresh-install defaults.
+Open **Menu → Options → Controls** during a match. Its **Gesture guide** reflects your current preferences. The [README gesture table](../README.md#touch-controls) describes fresh-install defaults.
 
 ### Selection
 
@@ -86,23 +86,39 @@ Turn **Build buttons follow placement** off for a fixed button position. **Comma
 
 Enable **Show control-group buttons** under **Selection settings**. Tap an empty numbered group to assign the current selection; hold any group to replace its assignment. Tap an assigned group to recall it, and double-tap to center the camera. The small number shows how many units are assigned. A physical keyboard can use Ctrl+number to assign and number to recall.
 
-Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. **Command buttons** also scales control groups; they wrap when necessary to avoid overlapping resources. Sound options control effects and music separately. **Miscellaneous → Cheats** contains single-player controls including **Invincibility** and **Force victory (end match)**. Invincibility protects your units from combat damage, leaves scripted mission deaths intact, and resets after loading or starting a game.
+Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. **Commands & control groups** scales both together. Control-group buttons at 100% now match their previous 120% size; choosing 120% enlarges them further. They wrap when necessary to avoid overlapping resources. Sound options control effects and music separately. **Miscellaneous → Cheats** contains single-player controls including **Invincibility** and **Force victory (end match)**. Invincibility protects your units from combat damage, leaves scripted mission deaths intact, and resets after loading or starting a game.
 
 ### Gamepad controls
 
 Open **App Options → Gamepad controls**, or **Controls → Gamepad controls** during a game. By default, the left stick moves the pointer, the right stick/D-pad pans the camera, A/Cross selects, B/Circle issues right-click orders, X/Square targets an attack, and Y/Triangle cancels. Hold A/Cross while moving the pointer to box-select. Left shoulder slows the pointer for precision; triggers choose a control group, right shoulder recalls it, and left-stick press assigns it. Start opens the game menu.
 
-The settings let you reassign buttons, swap sticks, change speeds and adjust the dead zone. Touch controls remain available. See [all defaults and alternatives](CHANGES-1.0.10.md#control-groups-and-controllers).
+The settings use the same original game panels and fonts as the other settings. You can reassign all buttons, swap sticks, change speeds and adjust the dead zone. Touch controls remain available, including when the gamepad is disabled. Returning to App Options preserves the current game. See [all defaults and alternatives](CHANGES-1.0.10.md#control-groups-and-controllers).
 
 ### Cache storage
 
 The cache holds working copies of imported content. Build 80 removes empty archive space and prepares movies only when played. Existing movie caches are reclaimed automatically. With the tested classic archives, normal content cache is about 235 MB plus the active mission; a movie temporarily needs extra space while opening. Your original imports and saves are preserved.
 
-### Save backup and transfer
+### Saving and campaign progress
 
-**App Options → Export StarDroid save** writes the chosen slot as a portable `.obwsave` file. Keep a backup on a PC or another device. **Import StarDroid save** validates that file before replacing the slot you choose; then use **Load Saved** in the game menu.
+Use the in-game **Save Game** and **Load Saved** controls. Save-file import and export are not provided.
 
-Original PC StarCraft `.sng` and Brood War `.snx` files use a different state format and cannot be resumed by this version. The transfer feature accepts StarDroid saves, not those original PC formats.
+From build 81 onward, a campaign victory adds a green circled check beside that mission for the Player ID that started it. Each ID has its own progress. Loading a save retains its original ID, including when continuing to the next mission. Deleting an ID and creating another with the same name starts fresh. Earlier versions did not store completion history, so old victories cannot be marked automatically.
+
+The mission scrollbar, arrows, OK and Cancel have wider touch targets.
+
+### Unlimited supply
+
+**Menu → Options → Miscellaneous → Cheats → Unlimited supply (200)** removes the need for supply buildings up to the normal 200-supply limit. Unit costs, technology and production time still apply. It affects only your player in single player, resets when loading or starting a game, and disables replay recording for that match. Supply buildings still work normally when the cheat is switched off.
+
+### Replays
+
+Build 81 adds **Load Replay** in the campaign-selection menu. Use **Save Replay** on the results screen of a newly started custom or nearby match to keep a local recording. The replay list uses the original load-menu artwork when available, shows map/player information, and includes **DELETE** with a confirmation. **Import Replay** accepts a supported `.rep` file; **Export** shares the selected replay.
+
+During playback, pause or resume, choose 1×–8× speed, switch between everyone's view and individual players, or restart. Playback is read-only: orders, cheats and game saves are disabled.
+
+Use the same StarDroid build and game data for StarDroid recordings. Older computer recordings without AI settings, campaign recordings, resumed saves and cheated matches are not supported. Classic human-only Melee/Free-for-All files are accepted, but original-executable parity has not been verified. Remastered extensions and other game types are rejected with an explanation.
+
+Older interface imports may not include the original load-menu artwork. Playback still works with the existing menu fallback; importing the original StarCraft or Brood War CD archive again supplies the load-menu assets automatically.
 
 ### Campaign objects and voices
 

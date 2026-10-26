@@ -27,7 +27,7 @@ final class MenuLabels {
     }
     if (name.equals("options")) switch (id) {
       case 1: return "Game Speed"; case 2: return "Sound & Music"; case 3: return "Video Options";
-      case 4: return "Touch Controls"; case 65533: return "Previous"; case 65535: return "Game Options";
+      case 4: return "Controls"; case 65533: return "Previous"; case 65535: return "Game Options";
     }
     if (name.equals("abrtmenu")) switch (id) {
       case 1: return "Restart Mission"; case 2: return "Return to menu"; case 3: return "Exit";

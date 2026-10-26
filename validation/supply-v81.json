@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "originalArchivesTested": true,
+  "checks": [
+    "PASS all races: effective 200 HUD, real supply preserved, 199/200 and half-supply boundaries, Lurker delta, enemy/spectator isolation",
+    "PASS race=1 production command starts/finishes paid worker at 199/200 without provider; hardcap, map restrictions and money retained",
+    "PASS race=2 production command starts/finishes paid worker at 199/200 without provider; hardcap, map restrictions and money retained",
+    "PASS multi-larva Zergling command reserves one two-unit egg at199, charges once and finishes at200",
+    "PASS provider creation/death accounting, original provider contribution, toggle-off, save/newgame reset and multiplayer rejection"
+  ],
+  "sourceSha256": {
+    "patches/native-supply81.patch": "7c7cda24ea89a578a47a28e5799a23156b2550b9fe3fbd1301c80b7d1c646471",
+    "patches/native-controls80.patch": "7909f322665ad884104afcb17c8dfe3e043e5c2cc655d1c5346e95dd48a9a0d6",
+    "scripts/prepare_native.py": "8642d9717e9b2e1781daa7a2dae3f0a573cd53c74c643ec930c553640c78aafa",
+    "tests/build_native_host.py": "9943a924dab6aa17fb3a7da01057e675591addeda94e4642dbf4a24918186f87",
+    "native/runtime.cpp": "0936726c87eb167c862837e9b41bdac391907c315f2ed26ebd8c230a788de42b",
+    "native/save_state.h": "6d86ac14f28f73f89b9c15c1f87f671bd4d90bffe3c80c8d052b9cf85687c482",
+    "native/generated/wasm_main.cpp": "809eb880c0eb0888d871c2c45f7cf71b40d901ecb67ed5acc492ceb6c7d1f9ab",
+    "native/generated/wasm_backend.cpp": "336249cce1e6a61a4fbf109a98213937386915de9ae2c4c69f722e0a88e867b2",
+    "tests/native_controls80.cpp": "0576e5f442c8f901534e484bd03bd1d4105c21badc778a0093ad5f85f967faec",
+    "tests/native_supply81.cpp": "f8e15c1c329196888a4d0abcfb8ebee4d31ef82a70ef202a7a45ac8a2bdc3a1d",
+    "tests/run_supply81.py": "f8f17d8b72958124ed9174747ba1aae3fcaed5b7208873deae25c410f2a80e0b",
+    "native/replay.h": "12de9d0a486829007344ca322c8fe0c7973eb25512dae46f30356ba7e00f1ce0"
+  }
+}

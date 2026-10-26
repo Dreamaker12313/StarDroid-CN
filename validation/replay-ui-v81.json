@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT shim using production native artwork/menu/input methods; replay parser/clock mocked",
+  "methods": [
+    "font",
+    "text",
+    "panel",
+    "body",
+    "fallback",
+    "uiLine",
+    "redBorder",
+    "menuHot",
+    "menuColor",
+    "redButton",
+    "glueButton",
+    "button",
+    "menuButton",
+    "replayMaxOffset",
+    "replayTime",
+    "selectReplay",
+    "refreshReplays",
+    "drawReplayBrowser",
+    "drawReplayDialog",
+    "replayButton",
+    "drawReplayControls",
+    "touch"
+  ],
+  "result": "PASS 132 replay UI checks: original artwork; virtualized 0\u201340 files; arrows/track/drag/final selection; metadata; import/export; selected-file DELETE/cancel; invalid-file rejection; pause/speed/player/restart controls; race HUD/music lifecycle; five-language browser and playback captures",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "9a7394decd9071d5b1fb1159f5f07a5fb1d2dc9e1fceaff496e03de6e6a3b94e",
+    "app/src/main/java/org/openbw/androidtest/NativeReplays.java": "2f83dd2778af6b4758e6a272b8293f1e20be4b35a84d30521a38747b593e0077",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "d4111453f93688a93933d97f2de48cf70a24b8142325badf0aae714c1e1994d3",
+    "app/src/main/assets/native/ui-languages.tsv": "bf1aa7bbfcb0f065508c92bea231f801277c7520ef142012c2776de59d1e6b51",
+    "tests/run_replay_ui81.py": "af2335d3ee514df239bc14471725b88dd33c3d544e0411fa08789731d51271b7"
+  }
+}
