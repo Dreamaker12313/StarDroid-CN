@@ -47,7 +47,12 @@
     "desktopWheel",
     "handleDesktopKey",
     "desktopKey",
-    "advanceDesktop"
+    "advanceDesktop",
+    "desktopGridCommand",
+    "changeDesktop",
+    "openDesktopSettings",
+    "desktopSettingsBack",
+    "openGamepadSettings"
   ],
   "activityMethods": [
     "dispatchGenericMotionEvent",
@@ -56,14 +61,15 @@
     "onWindowFocusChanged",
     "onInputDeviceRemoved"
   ],
-  "output": "PASS touch regression\nPASS gamepad regression\nPASS typing\nPASS mouse world\nPASS HUD and menus\nPASS navigation\nPASS keyboard\nPASS lifecycle\nPASS Activity routing\nPASS input transitions\nPASS 273 production Java routing checks",
+  "output": "PASS touch regression\nPASS gamepad regression\nPASS typing\nPASS mouse world\nPASS HUD and menus\nPASS navigation\nPASS keyboard\nPASS lifecycle\nPASS Activity routing\nPASS input transitions\nPASS grid hotkeys\nPASS desktop options\nPASS settings persistence and access\nPASS 1017 production Java routing checks",
   "sourceSha256": {
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "a217d133571cf5f9516e9bde429f24aa6a4f9c36be8f5a36e6b22f2d06d7f58a",
-    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "b137b878df5b8f09c9abdae5d0d41e6c2089e35e102fb04aedd066df4eedcda9",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8d704649746daa60185c0389e4b16f296bbdb2217b38bc0678c35c44003b7017",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "c24bd1374b16b27b92cf1a4e8a7ec27f2e026a4983d0566d1f9f62793003cd61",
     "app/src/main/java/org/openbw/androidtest/DesktopControls.java": "5c91f04f24a71c4ad2ab9a0a3c91500ba1ee4c006d0b6bc9b097b695eee1db0a",
+    "app/src/main/java/org/openbw/androidtest/DesktopSettings.java": "0d91d0b330e7ceabe7ba197597d3ce9ec4de8e35258186b970dbe9ae6e95095c",
     "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
     "app/src/main/java/org/openbw/androidtest/CameraPan.java": "4ffff04674daa6935e9371e9040321b7823c3fb434dab84b2bd37d417d4a6871",
     "app/src/main/java/org/openbw/androidtest/GamepadControls.java": "dd03141a97a2790c2cc4daef904f7605da25da5f080c7e5ace82f41865da000b",
-    "tests/run_desktop_input11.py": "a91b47b9505b638e629370d50a2d901d8bd80cd403c393c7fe7f65e9ff2e61d9"
+    "tests/run_desktop_input11.py": "f53b2292de50b24e70f505e631983e07be8e2b70c13a93d9e68ca523af753b67"
   }
 }

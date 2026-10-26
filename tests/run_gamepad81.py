@@ -37,7 +37,7 @@ harness=harness.replace('void cancelGesture(){gesture="";pressed=null;listVeloci
 harness=harness.replace('String gesture="",scrollingList="",page="custom",modal="",hint="";','String gesture="",scrollingList="",page="game",modal="",hint="";')
 harness=harness.replace('int selections,imports;','''int selections,imports,commandPercent=100,resourcePercent=100,logicalWidth=640,physicalWidth=1920,physicalHeight=1440;
  android.content.SharedPreferences prefs=new android.content.SharedPreferences();
- final GamepadControls gamepad=new GamepadControls();final HashMap<Integer,Integer>gamepadHeld=new HashMap<>();
+ final DesktopSettings desktopSettings=new DesktopSettings();final GamepadControls gamepad=new GamepadControls();final HashMap<Integer,Integer>gamepadHeld=new HashMap<>();
  float padX=320,padY=200,padPointerX,padPointerY,padCameraX,padCameraY,padHatX,padHatY;
  boolean padActive,padPrecision,padNativeDrag,padTouchDrag;int padDevice=-1,padGroup=1;long padClickAt;
  String padDragPage="",padDragModal="",gamepadReturnModal="";boolean gamepadReturnAppOptions;int gamepadBinding;Paint paint=new Paint();ArrayList<Runnable>queue=new ArrayList<>();int backs,menus,suspends;void suspend(){suspends++;}
@@ -71,7 +71,7 @@ harness+='''
  static void at(Controls81Test h,int index){h.buttons.get(index).action.run();h.flush();}
  static void menuChecks(Controls81Test h,String[]args)throws Exception{
   h.gamepad.reset();h.gamepad.save(h.prefs);h.modal="controls";h.page="game";
-  h.padCameraX=1;h.padNativeDrag=true;h.openGamepadSettings(false);h.flush();
+  h.padCameraX=1;h.padNativeDrag=true;h.openGamepadSettings();h.flush();
   check(h.modal.equals("gamepad")&&!h.padActive&&!h.padNativeDrag&&h.padCameraX==0,"Opening settings retained game input");
   h.redrawSettings();check(h.buttons.size()==9,"Main gamepad sheet lacks controls");
   // Actual production slider handlers preserve the full old range and save values.
@@ -105,10 +105,10 @@ harness+='''
   h.modal="gamepad-reset";h.redrawSettings();at(h,1);check(h.gamepad.pointerSpeed==3&&h.modal.equals("gamepad"),"Cancel reset changed preferences");
   h.modal="gamepad-reset";h.redrawSettings();at(h,0);near(h.gamepad.pointerSpeed,1,"Reset pointer speed");check(h.gamepad.bindings[0]==GamepadControls.CLICK,"Reset bindings");
   h.gamepadSettingsBack();check(h.modal.equals("controls")&&h.page.equals("game"),"In-game settings did not return to Controls");
-  h.modal="menu";h.openGamepadSettings(true);h.flush();h.gamepadSettingsBack();
-  check(h.modal.equals("menu")&&h.activity.appOptions==1&&h.suspends==1&&h.activeGame,"App Options return changed the game");
-  h.modal="";h.page="main";h.openGamepadSettings(false);h.flush();h.gamepadSettingsBack();
-  check(h.modal.isEmpty()&&h.page.equals("main")&&h.activity.appOptions==1,"Main-menu settings route changed page");
+  h.modal="menu";h.openGamepadSettings();h.flush();h.gamepadSettingsBack();
+  check(h.modal.equals("menu")&&h.activity.appOptions==0&&h.suspends==0&&h.activeGame,"In-game return unexpectedly opens App Options");
+  h.modal="";h.page="main";h.openGamepadSettings();h.flush();
+  check(h.modal.isEmpty()&&h.page.equals("main")&&h.activity.appOptions==0,"Main-menu can still open gamepad settings");
   // Fixed-size sheets expose every choice without scrolling or off-screen hit boxes.
   PortText.load(Files.newInputStream(Paths.get(args[2])));
   for(String lang:new String[]{"en","ru","de","es","fr"})for(String page:new String[]{"main","game"}){
@@ -206,8 +206,8 @@ harness+='''
  h.gamepad.swapSticks=true;check(h.handleGamepadMotion(motion),"Swapped motion ignored");h.flush();near(h.padPointerY,-1,"Swap did not map right stick to pointer");near(h.padCameraX,1,"Swap did not map left stick to camera");
  motion.source=2;check(!h.handleGamepadMotion(motion),"Touchscreen misidentified as gamepad");
  h.gamepad.enabled=false;check(!h.handleGamepadKey(new KeyEvent(KeyEvent.KEYCODE_BUTTON_A,0,0)),"Disabled controller consumed key");
- menuChecks(h,args);checks+=MainActivityRoute81.test();
- System.out.println("PASS "+checks+" production group/controller checks: redraw and touch jitter, assign/recall/cancel, UI scale/resource overlap, preferences, sticks/deadzone/swap, left-drag/right-click, HUD routing, rebinding, duplicate trigger lifecycle, modal isolation, reset and disconnect, native settings and all bindings, five languages, preserved App Options game lifecycle");
+ menuChecks(h,args);
+ System.out.println("PASS "+checks+" production group/controller checks: redraw and touch jitter, assign/recall/cancel, UI scale/resource overlap, preferences, sticks/deadzone/swap, left-drag/right-click, HUD routing, rebinding, duplicate trigger lifecycle, modal isolation, reset and disconnect, native settings and all bindings, five languages, in-game-only settings access");
  }
 }
 class NativeMaps{static String label(File f){return f==null?"Practice map":f.getName();}}
@@ -229,6 +229,7 @@ sources['android/view/MotionEvent.java']=sources['android/view/MotionEvent.java'
  public int getSource(){return source;}public float getAxisValue(int a){return axes.getOrDefault(a,0f);}
  int action;''')
 sources['android/view/InputDevice.java']='''package android.view;public class InputDevice{public static final int SOURCE_GAMEPAD=1025,SOURCE_JOYSTICK=16777232;public static boolean connected=true;public int getSources(){return SOURCE_GAMEPAD|SOURCE_JOYSTICK;}public static InputDevice getDevice(int id){return connected?new InputDevice():null;}public MotionRange getMotionRange(int axis,int source){return new MotionRange();}public static class MotionRange{public float getFlat(){return .1f;}}}'''
+sources['org/openbw/androidtest/NativeHud.java']=sources['org/openbw/androidtest/NativeHud.java'].replace('class NativeHud {','class NativeHud {boolean gridHotkeys;String hint(Hit h){return h.fields==null?h.help:h.fields[1];}')
 hud_source=(src/'NativeHud.java').read_text()
 def hud_method(name):
  m=re.search(r'^  (?:static )?(?:void|Bitmap) '+name+r'\(',hud_source,re.M);assert m,name
@@ -248,48 +249,16 @@ bridge=bridge.replace('static int commands;static void command(int a,int b,int c
  static String text(int id){return "800\\t600\\t24\\t60\\t2\\t0\\t0\\t24\\t60";}static int value(int a,int b){return a==21?groups[b]:0;}static int matches(int op,int a,int b){int n=0;for(int[]x:calls)if(x[0]==op&&x[1]==a&&x[2]==b)n++;return n;}
  static int count(int op){int n=0;for(int[]x:calls)if(x[0]==op)n++;return n;}''')
 sources['org/openbw/androidtest/NativeBridge.java']=bridge
-# Run the exact App Options routing method against a bounded lifecycle shim.
+# Desktop/controller settings intentionally have no App Options entry anymore.
 activity_source=(src/'MainActivity.java').read_text()
-a=activity_source.index('  void requestGamepadSettings() {');i=activity_source.index('{',a)+1;depth=1
-while depth:
- if activity_source[i]=='{':depth+=1
- elif activity_source[i]=='}':depth-=1
- i+=1
-control_start=activity_source.index('  private void requestControlSettings(boolean desktop) {')
-control_end=activity_source.index('{',control_start)+1;depth=1
-while depth:
- if activity_source[control_end]=='{':depth+=1
- elif activity_source[control_end]=='}':depth-=1
- control_end+=1
-sources['org/openbw/androidtest/MainActivityRoute81.java']='''package org.openbw.androidtest;
-final class MainActivityRoute81 {
- boolean optionsVisible=true,finishing,working,prepared=true;int refresh;
- NativeSurface game;Root root=new Root();
- boolean isFinishing(){return finishing;}boolean busy(){return working;}boolean ready(){return prepared;}
- void refreshDisplayArea(){refresh++;}
- static class Root{int removes,adds;Object view;void removeAllViews(){removes++;view=null;}void addView(Object v,FrameLayout.LayoutParams p){adds++;view=v;}}
- static class FrameLayout{static class LayoutParams{LayoutParams(int w,int h){}}}
-''' + activity_source[a:i] + activity_source[control_start:control_end] + '''
- static void check(boolean b){if(!b)throw new AssertionError("App Options gamepad routing");}
- static int test(){
-  MainActivityRoute81 a=new MainActivityRoute81();a.game=new NativeSurface(a);NativeSurface existing=a.game;
-  a.requestGamepadSettings();check(a.game==existing&&a.root.view==existing&&!a.optionsVisible&&existing.resumes==1&&existing.fromApp&&existing.opens==1);
-  a.requestGamepadSettings();check(a.root.removes==1&&a.root.adds==1&&a.game.resumes==1&&!existing.fromApp&&existing.opens==2);
-  MainActivityRoute81 b=new MainActivityRoute81();b.requestGamepadSettings();check(b.game!=null&&b.game.opens==1&&b.game.fromApp&&b.root.view==b.game);
-  MainActivityRoute81 c=new MainActivityRoute81();c.prepared=false;c.requestGamepadSettings();check(c.game==null&&c.optionsVisible&&c.root.removes==0);
-  c.prepared=true;c.working=true;c.requestGamepadSettings();check(c.game==null);c.working=false;c.finishing=true;c.requestGamepadSettings();check(c.game==null);
-  return 6;
- }
-}
-final class NativeSurface {int opens,resumes,focus;boolean fromApp;NativeSurface(MainActivityRoute81 a){}
- void resume(){resumes++;}void requestFocus(){focus++;}void openGamepadSettings(boolean b){fromApp=b;opens++;}void openDesktopSettings(boolean b){fromApp=b;opens++;}}
-'''
+for callback in ['requestDesktopSettings','requestGamepadSettings','requestControlSettings']:
+ assert callback not in activity_source, 'Removed App Options control route still present: '+callback
 for name,text in sources.items():
  target=b/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_text(text)
-real=[src/n for n in ['GamepadControls.java','GamepadSettings.java','NativeArt.java','NativeGlue.java','NativeResults.java','CommandHint.java','MenuLabels.java','ClassicFontCipher.java','GameLanguage.java','PortText.java']]
+real=[src/n for n in ['DesktopSettings.java','GamepadControls.java','GamepadSettings.java','NativeArt.java','NativeGlue.java','NativeResults.java','CommandHint.java','MenuLabels.java','ClassicFontCipher.java','GameLanguage.java','PortText.java']]
 jar=r/'build-native/json-20240303.jar'
 subprocess.run(['javac','-cp',str(jar),'-d',str(b/'classes'),*[str(b/n) for n in sources],*map(str,real)],check=True)
 result=subprocess.run(['java','-Djava.awt.headless=true','-cp',str(b/'classes')+':'+str(jar),'org.openbw.androidtest.Controls81Test',str(assets),str(b),str(r/'app/src/main/assets/native/ui-languages.tsv')],capture_output=True,text=True)
 print(result.stdout+result.stderr,end='');result.check_returncode()
-files=[src/'MainActivity.java',src/'MenuLabels.java',r/'app/src/main/assets/native/ui-languages.tsv',src/'NativeSurface.java',src/'GamepadControls.java',src/'GamepadSettings.java',src/'NativeBridge.java',Path(__file__)]
+files=[src/'MainActivity.java',src/'MenuLabels.java',r/'app/src/main/assets/native/ui-languages.tsv',src/'NativeSurface.java',src/'DesktopSettings.java',src/'GamepadControls.java',src/'GamepadSettings.java',src/'NativeBridge.java',Path(__file__)]
 (r/'validation/gamepad-v81.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'methods':names+['touch'],'result':result.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}},indent=2)+'\n')

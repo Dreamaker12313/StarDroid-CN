@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "canvas": "AWT shim, production slot/tooltip/font methods, local original artwork and font.gid",
+  "result": "PASS 230 native-generated command cards share fresh grid/render slots\nPASS 13874 slot/heading/color checks; 130 original/fallback-font renders; three races, five UI languages, Original/Grid, widths/scales, paging, cancellation and non-command exclusions",
+  "nativeCardCount": 230,
+  "nativeCorpusSha256": "0846b8028238d1526a638b28fe6a64a99fcb3c764962c8ddd0c2a3840f7efb9f",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "be867b26c51449be5d435594e7239c29f67030b83005574d5851b2407cc2d013",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "cac62546a9c9fdb3fe0ae76ba6657c600b55527969ce26c0eade114d80b2a1f3",
+    "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
+    "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
+    "app/src/main/java/org/openbw/androidtest/PortText.java": "9108b45139f4ec24664715e211fde61ee1d59fe82a8606b60563ac19f4cf63c6",
+    "app/src/main/assets/native/commands.json": "29fb6aea657c1fb557d20dbdf704dd5995026ad45f6dc5dce40d64da2e0e3509",
+    "app/src/main/assets/native/ui-languages.tsv": "41f3a642596a9dbbdffbf0969ad448b2be6cf9e7d99c38ebb153bc89332f44bf",
+    "tests/run_hotkey_tooltips11.py": "1f52d912df6289add37c4f776a82c68ce63716ad537e10a87e96f8767d3c8d9b"
+  }
+}

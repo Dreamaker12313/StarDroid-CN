@@ -253,9 +253,6 @@ public final class MainActivity extends Activity {
     LinearLayout language = section(panel, "Interface language");
     button(language, languageName(), this::chooseLanguage).setEnabled(!busy());
     text(language, "Game voices and campaign text use the language of the imported files.", 13, 0xff8da4cf);
-    LinearLayout input = section(panel, "Controls");
-    button(input, "Mouse & keyboard", this::requestDesktopSettings).setEnabled(!busy() && ready());
-    button(input, "Gamepad controls", this::requestGamepadSettings).setEnabled(!busy() && ready());
     noticeView = notice.isEmpty() ? null : text(panel, notice, 14, 0xffc5cfeb);
     LinearLayout storage = section(panel, "Game data storage");
     text(storage, GameDataStorage.internal(this)?"Internal storage":"SD card", 15, 0xffc5cfeb);
@@ -702,30 +699,6 @@ public final class MainActivity extends Activity {
 
   void requestAppOptions() {
     showHome();
-  }
-
-  void requestGamepadSettings() {
-    requestControlSettings(false);
-  }
-
-  void requestDesktopSettings() {
-    requestControlSettings(true);
-  }
-
-  private void requestControlSettings(boolean desktop) {
-    if (isFinishing() || busy() || !ready()) return;
-    final boolean fromAppOptions = optionsVisible;
-    if (fromAppOptions) {
-      optionsVisible = false;
-      refreshDisplayArea();
-      root.removeAllViews();
-      if (game == null) game = new NativeSurface(this);
-      root.addView(game, new FrameLayout.LayoutParams(-1, -1));
-      game.resume();
-      game.requestFocus();
-    }
-    if (desktop) game.openDesktopSettings(fromAppOptions);
-    else game.openGamepadSettings(fromAppOptions);
   }
 
   @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent event) {

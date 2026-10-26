@@ -1,3 +1,15 @@
+# StarDroid 1.1 hotkey settings and highlighted command keys
+
+Public version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Original and QWE/ASD/ZXC grid bindings use the live displayed command layout. Grid input dispatches the exact command identity and validates it again natively, preserving Shift queues and rejecting stale/invalid commands; it never falls through to an unrelated original letter. A zero-step input flush handles rapid submenu changes. Original Shield Battery Recharge Shields is corrected from B to R after checking imported command text. Native validation passes 4,249 checks across 230 command cards and 1,074 identities, plus 125 desktop/replay regression checks. [Native command checks](validation/hotkeys-native11.json).
+- Production Java routing, settings defaults/persistence and camera options pass 1,017 checks, including caps/foreign layouts, held keys, text entry, all grid positions, immediate menu-close input, fresh command lookup, replay guards and in-game-only settings access. Existing gamepad checks pass 4,173 cases. [Java input/settings](validation/desktop-input11.json), [gamepad regression](validation/gamepad-v81.json).
+- Command headings append the active key in normal brackets with a yellow letter. Checks cover original and grid modes, all races, five UI languages, disabled/synthetic Cancel/More commands, original and fallback fonts, and unchanged resource icons. Hotkey validation passes 13,874 checks with 130 original/fallback-font renders. Hover and command errors still coexist, with 12,974 regression checks. [Hotkey rendering](validation/hotkey-tooltips11.json), [error/hover regression](validation/hover-errors11.json).
+- One Mouse & keyboard settings panel contains both help sections, hotkey choice, four camera/zoom toggles and a camera-speed slider. Arrow keys appear only in Keyboard help. Mouse/keyboard and gamepad settings are available only through the in-game Controls menu. Actual panel/button/body callbacks pass 4,680 checks across 90 renders; 266 text checks verify all five languages fit. [Settings layout](validation/desktop-guide11.json).
+- Both Android ABIs are rebuilt, with separate signed-package checks for version, original update certificate, JNI exports, 16 KiB alignment, permissions and asset contents. [Native build](validation/native-build-hotkeys11.json), [signed APK](validation/package-hotkeys11.json).
+
+These are host/native simulation, rendering, Android API/build and lint checks. Physical Android USB/Bluetooth input and phone installation remain unverified. Earlier reports below refer to their own source revisions.
+
 # StarDroid 1.1 mouse and keyboard controls
 
 Public version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

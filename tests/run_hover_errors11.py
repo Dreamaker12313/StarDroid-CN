@@ -10,6 +10,8 @@ b=r/'build-native/hover-errors11';b.mkdir(parents=True,exist_ok=True)
 jdk=r/'.tools/jdk17/usr/lib/jvm/java-17-openjdk-amd64/bin'
 if (jdk/'javac').is_file():os.environ['PATH']=str(jdk)+os.pathsep+os.environ['PATH']
 assets=b/'assets';shutil.copytree(r/'build-native/replay-ui81/assets',assets,dirs_exist_ok=True)
+metadata=assets/'0/font/font.gid';metadata.parent.mkdir(parents=True,exist_ok=True)
+subprocess.run([str(r/'build-native/reign79/extract'),str(r/'build-native/reign79/core/STARDAT.MPQ'),'font/font.gid',str(metadata)],check=True,stdout=subprocess.DEVNULL)
 for name in ['game/tfontgam.pcx','game/icons.grp','tileset/badlands.wpe']+['game/'+race+'console.pcx'for race in 'ztp']:
  for slot,archive in [(0,'STARDAT.MPQ'),(1,'BROODAT.MPQ'),(2,'patch_rt.mpq')]:
   target=assets/str(slot)/name;target.parent.mkdir(parents=True,exist_ok=True)
@@ -38,11 +40,11 @@ def method(text,signature):
 hud=(src/'NativeHud.java').read_text();surface=(src/'NativeSurface.java').read_text()
 feedback=method(surface,'  private void drawCommandFeedback(Canvas c)')
 assert 'drawCommandFeedback(c);' in method(surface,'  private void draw(Canvas c, double dt)'), 'Game render does not call tested feedback'
-methods='\n'.join(method(hud,s)for s in ['  static int number(','  String hint(','  float commandErrorTop(','  void commandError(','  void tooltip(Canvas canvas, String text, int width) {','  void tooltip(Canvas canvas, String text, int width, int supplyRace) {','  void tooltip(Canvas canvas, String text, int width, int supplyRace, float bottomLimit) {'])
+methods='\n'.join(method(hud,s)for s in ['  static int number(','  String hotkey(', '  String hint(','  float commandErrorTop(','  void commandError(','  void tooltip(Canvas canvas, String text, int width) {','  void tooltip(Canvas canvas, String text, int width, int supplyRace) {','  void tooltip(Canvas canvas, String text, int width, int supplyRace, float bottomLimit) {'])
 sources['org/openbw/androidtest/NativeHud.java']='''package org.openbw.androidtest;import android.graphics.*;import java.util.*;
 class NativeHud {
- static final int WORLD_BOTTOM=376;int race;float commandScale=1,descriptionScale=1;NativeArt.Font small,errorShadow;NativeArt.PCX console;final Bitmap[]resources=new Bitmap[3],supplyIcons=new Bitmap[3];final List<Hit>hits=new ArrayList<>();
- static final class Hit{RectF rect;String[]fields;int cancel=-1,selectUnit=-1,unload=-1;boolean more;String help;}
+ static final int WORLD_BOTTOM=376;int race;boolean gridHotkeys;float commandScale=1,descriptionScale=1;NativeArt.Font small,errorShadow;NativeArt.PCX console;final Bitmap[]resources=new Bitmap[3],supplyIcons=new Bitmap[3];final List<Hit>hits=new ArrayList<>();
+ static final class Hit{RectF rect;String[]fields;int slot=-1,cancel=-1,selectUnit=-1,unload=-1;boolean more;String help;}
  NativeHud(NativeArt art,int race){this.race=race;console=art.pcx("game/"+new String[]{"z","t","p"}[race]+"console.pcx",true,-1);int[]palette=console.palette.clone();byte[]wpe=art.read("tileset/badlands.wpe");for(int i=0;i<256;i++)palette[i]=Color.rgb(wpe[i*4]&255,wpe[i*4+1]&255,wpe[i*4+2]&255);NativeArt.PCX colors=art.pcx("game/tfontgam.pcx",false,-1);small=art.font("10",colors,palette,0);errorShadow=small.withShadedColor(0xff000000);byte[]icons=art.read("game/icons.grp");int[]ids={0,1+race,4+race};for(int i=0;i<3;i++){resources[i]=NativeArt.grp(icons,ids[i],palette,true,false);supplyIcons[i]=NativeArt.grp(icons,4+i,palette,true,false);}}
  String requirement(String[]fields){return "";}
  static void image(Canvas c,Bitmap b,float x,float y){if(b!=null)c.drawBitmap(b,x,y,NativeArt.PIXELS);}
@@ -67,7 +69,7 @@ public class HoverErrors11Test {
  static Bitmap blank(int width){return Bitmap.createBitmap(width,480,Bitmap.Config.ARGB_8888);}
  static void same(Bitmap a,Bitmap z,int x,int y,int w,int h,String why){checks++;for(int yy=y;yy<y+h;yy++)for(int xx=x;xx<x+w;xx++)if(a.image.getRGB(xx,yy)!=z.image.getRGB(xx,yy))throw new AssertionError(why+" at "+xx+","+yy);}
  static boolean ink(Bitmap b){for(int y=0;y<b.getHeight();y++)for(int x=0;x<b.getWidth();x++)if((b.image.getRGB(x,y)>>>24)!=0)return true;return false;}
- static NativeHud.Hit hit(int width,int supply){NativeHud.Hit h=new NativeHud.Hit();h.rect=new RectF(width-100,400,width-60,438);h.fields=new String[]{"1","Train Marine","1","0","50","25","","","Ranged ground combat unit.","0","0","-1","-1","0","2",String.valueOf(supply)};return h;}
+ static NativeHud.Hit hit(int width,int supply){NativeHud.Hit h=new NativeHud.Hit();h.slot=0;h.rect=new RectF(width-100,400,width-60,438);h.fields=new String[]{"m","Train Marine","1","0","50","25","","","Ranged ground combat unit.","0","0","-1","-1","0","2",String.valueOf(supply)};return h;}
  static void stateCases(NativeArt art)throws Exception{
   HoverErrors11Test v=new HoverErrors11Test();CheckedHud hud=new CheckedHud(art,1);v.hud=hud;NativeHud.Hit hit=hit(640,2);hud.hits.add(hit);v.commandHover.hover(550,410,false);v.commandError="Not enough minerals";
   Bitmap both=blank(640);v.drawCommandFeedback(new Recording(both));check(hud.errorCalls==1&&hud.tooltipCalls==1,"Error replaced mouse hover");check(hud.shownSupply==2,"Command supply race changed");

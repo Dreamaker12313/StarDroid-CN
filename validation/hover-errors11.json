@@ -4,15 +4,15 @@
   "scope": "Production feedback dispatch, original-font Canvas rendering and CommandHover input; status/tooltip bounds and pixel preservation",
   "output": "PASS 12974 checks; 1440 concurrent error/hover or touch-hold renders; three races, two widths, three description scales, two command scales, five UI languages; expiry/target/modal/disabled guards; status pixels unchanged",
   "sourceSha256": {
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "a217d133571cf5f9516e9bde429f24aa6a4f9c36be8f5a36e6b22f2d06d7f58a",
-    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "ad84a623a56ddfd27ebab72ff4d510d5e29afb21dab860593f9b3987ad988e73",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8d704649746daa60185c0389e4b16f296bbdb2217b38bc0678c35c44003b7017",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "be867b26c51449be5d435594e7239c29f67030b83005574d5851b2407cc2d013",
     "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
-    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "3bb80f0a60fc526b2c9abf9606902ab73dbf9070115734b6a57420e30827f6f7",
+    "app/src/main/java/org/openbw/androidtest/CommandHint.java": "cac62546a9c9fdb3fe0ae76ba6657c600b55527969ce26c0eade114d80b2a1f3",
     "app/src/main/java/org/openbw/androidtest/CommandHover.java": "39e0d1ae86f6cc792b22987d8a4d8e271d50701c36db2cc5e83cc3f35b895b71",
     "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
     "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
     "app/src/main/java/org/openbw/androidtest/PortText.java": "9108b45139f4ec24664715e211fde61ee1d59fe82a8606b60563ac19f4cf63c6",
-    "app/src/main/assets/native/ui-languages.tsv": "8c8674b65bc51f81088cfb95717df32c5abbf4557213604a0b195e1faafd28a9",
-    "tests/run_hover_errors11.py": "fcb4032004f6a3665a0edf0d16abd9e500031b8bde7d11b8ad3624f28c66bd9f"
+    "app/src/main/assets/native/ui-languages.tsv": "41f3a642596a9dbbdffbf0969ad448b2be6cf9e7d99c38ebb153bc89332f44bf",
+    "tests/run_hover_errors11.py": "701f4834abb26e88114eb68314674736fe81b1d55d34c1840088e30318650a4b"
   }
 }

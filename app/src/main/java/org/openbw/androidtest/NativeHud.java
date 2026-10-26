@@ -30,6 +30,7 @@ final class NativeHud implements AutoCloseable {
   final Bitmap[] wireTiles = new Bitmap[12], cargoTiles = new Bitmap[8];
   final NativePortrait portrait;
   boolean paused;
+  boolean gridHotkeys;
   RectF pressedCommand;
   RectF pressedButton;
   float extra;
@@ -39,6 +40,7 @@ final class NativeHud implements AutoCloseable {
   static final class Hit {
     RectF rect;
     String[] fields;
+    int slot = -1;
     int cancel = -1;
     int selectUnit = -1;
     int unload = -1;
@@ -507,9 +509,8 @@ final class NativeHud implements AutoCloseable {
     }
   }
 
-  void drawCommands(Canvas c, String[] lines, int type, String title, int width) {
-    c.save(); c.translate(width, 480); c.scale(commandScale, commandScale); c.translate(-width, -480);
-    int firstCommandHit = hits.size();
+  /** One layout model for rendering and fresh keyboard dispatch, including submenus and pages. */
+  private List<Hit> commandBindings(String[] lines, int type, String title) {
     String signature = String.join("\n", Arrays.copyOfRange(lines, 1, lines.length));
     if (!previous.equals(signature)) {
       page = 0;
@@ -568,11 +569,41 @@ final class NativeHud implements AutoCloseable {
             used[j] = true;
             break;
           }
+    List<Hit> bindings = new ArrayList<Hit>();
     for (int i = 0; i < commands.size(); i++) {
-      String[] f = commands.get(i);
-      int slot = positions[i];
-      if (slot < 0) continue;
-      RectF button = commandRect(slot, width);
+      if (positions[i] < 0) continue;
+      Hit hit = new Hit(); hit.slot = positions[i]; hit.fields = commands.get(i); bindings.add(hit);
+    }
+    if (pages > 1) { Hit more = new Hit(); more.slot = 8; more.more = true; bindings.add(more); }
+    return bindings;
+  }
+
+  Hit commandHitForSlot(int slot, String card, int type) {
+    if (slot < 0 || slot >= 9 || card == null || card.isEmpty()) return null;
+    String[] lines = card.split("\n");
+    String title = lines[0].split("\t", 2)[0];
+    for (Hit hit : commandBindings(lines, type, title)) if (hit.slot == slot) return hit;
+    return null;
+  }
+
+  String hotkey(Hit hit) {
+    if (hit.slot < 0 || hit.slot >= 9) return "";
+    if (gridHotkeys) return Character.toString("QWEASDZXC".charAt(hit.slot));
+    return CommandHint.originalHotkey(hit.fields);
+  }
+
+  void drawCommands(Canvas c, String[] lines, int type, String title, int width) {
+    c.save(); c.translate(width, 480); c.scale(commandScale, commandScale); c.translate(-width, -480);
+    int firstCommandHit = hits.size();
+    for (Hit hit : commandBindings(lines, type, title)) {
+      RectF button = commandRect(hit.slot, width);
+      if (hit.more) {
+        image(c, frame(0), button.left, button.top);
+        tiny.draw(c, "More", button.left, button.top + 10, 36, 1, 3, 0);
+        hit.rect = new RectF(button.left, button.top, button.left + 40, button.top + 38);
+        hits.add(hit); continue;
+      }
+      String[] f = hit.fields;
       float x = button.left, y = button.top;
       image(c, frame(0), x, y);
       int id = number(f, 10, number(f, 3, -1));
@@ -583,9 +614,7 @@ final class NativeHud implements AutoCloseable {
       Bitmap icon = icon(id, f[2].equals("0") ? 1 : number(f, 9, 0) == 1 ? 2 : 0);
       if (icon != null) image(c, icon, x, y);
       else tiny.draw(c, f[1], x + 2, y + 8, 34, 1, 3, 0);
-      Hit hit = new Hit();
       hit.rect = new RectF(x, y, x + 36, y + 34);
-      hit.fields = f;
       if (pressedCommand != null && pressedCommand.contains(width + (x + 18 - width) * commandScale,
           480 + (y + 18 - 480) * commandScale)) {
         Paint highlight = new Paint();
@@ -595,16 +624,6 @@ final class NativeHud implements AutoCloseable {
         c.drawRect(x + 1, y + 1, x + 35, y + 35, highlight);
       }
       hits.add(hit);
-    }
-    if (pages > 1) {
-      RectF button = commandRect(8, width);
-      float x = button.left, y = button.top;
-      image(c, frame(0), x, y);
-      tiny.draw(c, "More", x, y + 10, 36, 1, 3, 0);
-      Hit h = new Hit();
-      h.rect = new RectF(x, y, x + 40, y + 38);
-      h.more = true;
-      hits.add(h);
     }
     c.restore();
     for (int i = firstCommandHit; i < hits.size(); i++) {
@@ -616,10 +635,10 @@ final class NativeHud implements AutoCloseable {
 
   String hint(Hit hit) {
     if (hit.unload >= 0) return hit.help == null ? "Unload passenger" : hit.help;
-    if (hit.fields != null) return CommandHint.describe(hit.fields, requirement(hit.fields));
+    if (hit.fields != null) return CommandHint.describe(hit.fields, requirement(hit.fields), hotkey(hit));
     if (hit.help != null) return hit.help;
     if (hit.cancel >= 0) return "Cancel production\nCancels this item in the production queue.";
-    if (hit.more) return "More commands\nShows the next page of commands.";
+    if (hit.more) return "More commands" + (hotkey(hit).isEmpty() ? "" : " [\u0003" + hotkey(hit) + "\u0002]") + "\nShows the next page of commands.";
     if (hit.selectUnit >= 0) return "Select unit\nSelects this unit from the group.";
     return "";
   }
@@ -636,6 +655,9 @@ final class NativeHud implements AutoCloseable {
     int boxWidth=260,lineHeight=Math.max(15,small.height+3);
     List<String> rows=new ArrayList<String>();
     for(String row:text.replace("\r\n","\n").replace('\r','\n').split("\n",-1)) {
+      // Translate the title separately so localization cannot erase the key color.
+      int keyAt = row.lastIndexOf(" [\u0003");
+      if (keyAt >= 0 && row.endsWith("\u0002]")) row = PortText.text(row.substring(0, keyAt)) + row.substring(keyAt);
       if(row.matches("[0-9].* (minerals|Vespene Gas|supply|energy).*")) {
         String current="";int used=0;
         for(String item:row.split(" · ")) {

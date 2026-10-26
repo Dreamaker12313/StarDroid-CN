@@ -90,21 +90,23 @@ Interface-size options adjust resources, command buttons, descriptions, and sele
 
 ### Mouse and keyboard
 
-Open **App Options → Mouse & keyboard**, or **Controls → Mouse & keyboard** during a game, for the guide. Mouse and keyboard controls work alongside touch and gamepad controls.
+Open **Controls → Mouse & keyboard** in the in-game menu. Its settings and mouse/keyboard help share one screen. These controls work alongside touch and gamepad controls.
 
 - **Left click** selects a unit; drag a selection box to select several. **Double-click** or **Ctrl-click** selects units of the same type. **Shift-click** adds to the selection.
 - **Right click** gives a context-sensitive move, attack, gather or interaction order. Hold **Shift** to queue orders. Left click confirms a targeted command or building placement; right click or **Escape** cancels it.
-- **Arrow keys**, moving the pointer to a screen edge, or dragging with the **middle mouse button** move the camera. The **wheel** zooms the battlefield and scrolls menu lists.
-- Use the command card's letter hotkeys. **Ctrl+0–9** assigns a control group; **Shift+0–9** adds the current selection to it; **0–9** recalls it. Press the same number twice quickly to center the camera on that group.
+- Moving the pointer to a screen edge or dragging with the **middle mouse button** moves the camera. The **wheel** zooms the battlefield and scrolls menu lists.
+- Choose **Original** command hotkeys or **Grid** keys: **Q W E** across the top row, **A S D** across the middle, and **Z X C** across the bottom. Tooltips show the active hotkey in brackets, with the key highlighted. **Arrow keys** move the camera. **Ctrl+0–9** assigns a control group; **Shift+0–9** adds the current selection to it; **0–9** recalls it. Press the same number twice quickly to center the camera on that group.
 - **Space** jumps to the latest alert; **Tab** toggles minimap terrain. **Escape** cancels or goes back; **F10** opens the game menu. **Enter** opens Nearby multiplayer chat.
+
+**Original** hotkeys are the default. This screen also lets you turn mouse edge scrolling, wheel zoom, middle-button camera dragging and arrow-key camera movement on or off, and adjust camera speed. Wheel scrolling in menu lists remains available when battlefield wheel zoom is off.
 
 Typing a player name or chat message does not issue game commands. Losing focus or disconnecting an input device clears held input, so the camera or a modifier key cannot remain stuck.
 
 ### Gamepad controls
 
-Open **App Options → Gamepad controls**, or **Controls → Gamepad controls** during a game. By default, the left stick moves the pointer, the right stick/D-pad pans the camera, A/Cross selects, B/Circle issues right-click orders, X/Square targets an attack, and Y/Triangle cancels. Hold A/Cross while moving the pointer to box-select. Left shoulder slows the pointer for precision; triggers choose a control group, right shoulder recalls it, and left-stick press assigns it. Start opens the game menu.
+Open **Controls → Gamepad controls** in the in-game menu. By default, the left stick moves the pointer, the right stick/D-pad pans the camera, A/Cross selects, B/Circle issues right-click orders, X/Square targets an attack, and Y/Triangle cancels. Hold A/Cross while moving the pointer to box-select. Left shoulder slows the pointer for precision; triggers choose a control group, right shoulder recalls it, and left-stick press assigns it. Start opens the game menu.
 
-The settings use the same original game panels and fonts as the other settings. You can reassign all buttons, swap sticks, change speeds and adjust the dead zone. Touch controls remain available, including when the gamepad is disabled. Returning to App Options preserves the current game. See [all defaults and alternatives](CHANGES-1.0.10.md#control-groups-and-controllers).
+The settings use the same original game panels and fonts as the other settings. You can reassign all buttons, swap sticks, change speeds and adjust the dead zone. Touch controls remain available, including when the gamepad is disabled. See [all defaults and alternatives](CHANGES-1.0.10.md#control-groups-and-controllers).
 
 ### Cache storage
 

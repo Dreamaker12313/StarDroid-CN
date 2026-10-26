@@ -1,6 +1,8 @@
 # StarDroid 1.1 — build 83
 
-- Added mouse and keyboard controls: selection boxes, context-sensitive right-click orders, queued orders, camera movement, wheel zoom/list scrolling, original command hotkeys and control groups. The original-style Controls menu includes a mouse/keyboard guide. Touch and gamepad controls remain available.
+- Added mouse and keyboard controls: selection boxes, context-sensitive right-click orders, queued orders, camera movement, wheel zoom/list scrolling, original or QWE/ASD/ZXC grid hotkeys and control groups. Command tooltips show the active key in brackets, with the key highlighted. Mouse and keyboard settings keep their help together in one screen. Mouse/keyboard and gamepad settings are available from the in-game Controls menu. Touch controls remain available.
+
+- Corrected the original Shield Battery **Recharge Shields** hotkey to **R**.
 
 - Hover and touch-hold descriptions stay visible while a command error or target prompt is shown. The description sits above the message with a gap, including enlarged interfaces and widescreen.
 - Removed **Play original music**. Music volume **0** turns music off; **Mute all sound**, separate Effects/Music sliders and **Next track** remain. An old disabled-music setting migrates to volume 0 once, so updating does not unexpectedly turn music on.
@@ -14,7 +16,7 @@
 - Sound Settings retains mute, effects volume and music volume. **Next track** advances the current in-game soundtrack, including the second theme embedded in each race’s first Brood War music file. Long-track seeking also fixes an integer overflow that previously jumped to the wrong position. The manual track picker and sound preview remain removed; old manual track choices no longer override automatic playback.
 - Verified the four-theme Brood War loop for Terran, Zerg and Protoss using the supplied classic archives. Each expansion `race1.wav` contains the Brood War theme followed by the original first theme, then `race2.wav` and `race3.wav` complete the loop. Campaigns, custom games and nearby matches share automatic playback. Missing expansion imports fall back to the original soundtrack.
 
-This score/menu/sound revision keeps version **1.1 / code 83** and simulation compatibility **84**. It does not introduce another replay or multiplayer compatibility break.
+This revision keeps version **1.1 / code 83** and simulation compatibility **84**. It does not introduce another replay or multiplayer compatibility break.
 
 Earlier fixes in this revision:
 

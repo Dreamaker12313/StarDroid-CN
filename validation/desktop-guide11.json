@@ -2,15 +2,15 @@
   "passed": true,
   "physicalAndroid": false,
   "canvas": "AWT shim using production font drawing, extracted production settings helpers and original local font/artwork fixtures",
-  "result": "en 0 0: 7 lines / 112 px\nen 0 1: 6 lines / 96 px\nen 1 0: 7 lines / 112 px\nen 1 1: 6 lines / 96 px\nru 0 0: 12 lines / 192 px\nru 0 1: 11 lines / 176 px\nru 1 0: 10 lines / 160 px\nru 1 1: 8 lines / 128 px\nde 0 0: 10 lines / 160 px\nde 0 1: 7 lines / 112 px\nde 1 0: 9 lines / 144 px\nde 1 1: 7 lines / 112 px\nes 0 0: 10 lines / 160 px\nes 0 1: 8 lines / 128 px\nes 1 0: 9 lines / 144 px\nes 1 1: 6 lines / 96 px\nfr 0 0: 11 lines / 176 px\nfr 0 1: 8 lines / 128 px\nfr 1 0: 10 lines / 160 px\nfr 1 1: 7 lines / 112 px\nPASS 265 translated guide checks; 20 original-font renderings; all fit 324 x 224",
-  "fullPanels": "PASS 2270 full settings-sheet checks; 110 renders across five languages, menu/three race styles and two aspect ratios; buttons remain fully readable and inside panels",
+  "result": "en 0 0: 13 lines / 208 px\nen 0 1: 13 lines / 208 px\nru 0 0: 13 lines / 208 px\nru 0 1: 13 lines / 208 px\nde 0 0: 13 lines / 208 px\nde 0 1: 13 lines / 208 px\nes 0 0: 13 lines / 208 px\nes 0 1: 13 lines / 208 px\nfr 0 0: 13 lines / 208 px\nfr 0 1: 13 lines / 208 px\nPASS 266 translated guide checks; 10 original-font renderings; all fit 560 x 228",
+  "fullPanels": "PASS 4680 full settings-sheet checks; 90 renders across five languages, three race styles, both hotkey modes and two aspect ratios; labels and combined help fit, settings controls persist and remain inside panels",
   "sourceSha256": {
-    "app/src/main/java/org/openbw/androidtest/DesktopGuide.java": "b117f2a0b6d08f1ef36433aec625dff2333e7dc06c0d80b83d851cf13aad1f20",
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "a217d133571cf5f9516e9bde429f24aa6a4f9c36be8f5a36e6b22f2d06d7f58a",
-    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "ad84a623a56ddfd27ebab72ff4d510d5e29afb21dab860593f9b3987ad988e73",
+    "app/src/main/java/org/openbw/androidtest/DesktopGuide.java": "1e972622857a83465a5640e2ac23d2ea60c7eefbb092a686ec76c4f8a1e83c2f",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8d704649746daa60185c0389e4b16f296bbdb2217b38bc0678c35c44003b7017",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "be867b26c51449be5d435594e7239c29f67030b83005574d5851b2407cc2d013",
     "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
     "app/src/main/java/org/openbw/androidtest/PortText.java": "9108b45139f4ec24664715e211fde61ee1d59fe82a8606b60563ac19f4cf63c6",
-    "app/src/main/assets/native/ui-languages.tsv": "ccb2695f6a05063bb1c1efe872b803a3abca0aade3d77454224ac17a7cc0f87d",
-    "tests/run_desktop_guide11.py": "1e6f150c1a02fc276071291cd1c814dbdc2a0aeac6a797541aa5565cdd94572e"
+    "app/src/main/assets/native/ui-languages.tsv": "41f3a642596a9dbbdffbf0969ad448b2be6cf9e7d99c38ebb153bc89332f44bf",
+    "tests/run_desktop_guide11.py": "52912bb6686071236c1d1a2f6901031aa65b8d05c137175aaed20db04bc10d2a"
   }
 }

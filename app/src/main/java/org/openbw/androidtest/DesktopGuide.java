@@ -1,22 +1,21 @@
 package org.openbw.androidtest;
 
-/** Shared help text for the original-artwork mouse and keyboard controls sheet. */
+/** Help kept together on the mouse and keyboard settings sheet. */
 final class DesktopGuide {
   static final String MOUSE_GUIDE =
-      "Left click selects; drag a box to select a group.\n"
-      + "Right click moves, attacks or interacts.\n"
-      + "Shift-click adds to selection; Shift-orders queue.\n"
+      "Left click selects; drag a selection box.\n"
+      + "Right click orders. Shift adds or queues.\n"
       + "Double-click or Ctrl-click selects the same type.\n"
-      + "Arrow keys, screen edges or middle-drag move the camera.\n"
-      + "Wheel zooms the battlefield or scrolls menu lists.";
+      + "Screen edges or middle-drag move the camera.\n"
+      + "Wheel zooms or scrolls lists.";
 
   static final String KEYBOARD_GUIDE =
-      "Use the command card's letter hotkeys.\n"
-      + "Ctrl+0-9 assigns a group; 0-9 recalls it.\n"
+      "Arrow keys move the camera.\n"
+      + "Original uses command letters; Grid uses QWE / ASD / ZXC.\n"
+      + "Ctrl+0-9 assigns; Shift+0-9 adds; 0-9 recalls.\n"
       + "Press a group number twice to center the camera.\n"
-      + "Space jumps to the latest alert. Tab toggles terrain.\n"
-      + "Escape cancels or goes back. F10 opens the game menu.\n"
-      + "Enter opens multiplayer chat.";
+      + "Space: latest alert. Tab: terrain. Enter: chat.\n"
+      + "Escape cancels or goes back. F10 opens the game menu.";
 
   private DesktopGuide() {}
 }

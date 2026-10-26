@@ -35,6 +35,7 @@ void openbw_mouse_move(int,int);
 void openbw_mouse_button(int,int,int,int,int);
 void openbw_key(int,int,int);
 void openbw_reset_input();
+void openbw_command_button(int,int);
 void js_read_data(int index,void* dst,unsigned offset,unsigned n){if(index<0||index>=11)throw std::runtime_error("Invalid archive index");archives[index].read(dst,offset,n);}
 unsigned js_file_size(int i){return i>=0&&i<11?unsigned(archives[i].size):0;}
 int js_sound_load(const void* data,unsigned n){return naudio::add(data,n);}
@@ -142,6 +143,7 @@ static void command(int op,int a,int b,int c,int d){
  case 32:openbw_key(a!=0,b,c);break;
  case 33:if(g_ui&&(b==1||b==3)){int x,y;g_ui->wnd.get_cursor_pos(&x,&y);openbw_mouse_button(a!=0,b,x,y,c>=2?2:1);}break;
  case 34:openbw_reset_input();openbw_touch_cancel();if(g_ui)g_ui->is_moving_replay_slider=false;break;
+ case 35:openbw_command_button(a,b);break;
  case 4:{
   if(!d&&touch_beacon_move(a,b))break;
   if (g_ui) if (auto* near=g_ui->touch_selection_near(a,b,std::max(0,int(touch_radius/std::max(.5,g_ui->minimap_scale))),d!=0)) {

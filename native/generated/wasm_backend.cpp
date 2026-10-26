@@ -157,6 +157,17 @@ OPENBW_EXPORT(openbw_key) void openbw_key(int down, int sym, int scancode) {
 	g_window->enqueue(e);
 }
 
+// A host-rendered command button uses its exact identity, not a possibly
+// shared classic hotkey. Keep it in the same modifier-snapshotted event queue.
+OPENBW_EXPORT(openbw_command_button) void openbw_command_button(int index, int token) {
+    if (!g_window || index < 0 || index >= 256 || token <= 0) return;
+    ev_t e;
+    e.type = ev_t::type_command_button;
+    e.command_index = index;
+    e.command_token = token;
+    g_window->enqueue(e);
+}
+
 // ---------------------------------------------------------------------------
 // native_window_drawing — software surfaces
 // ---------------------------------------------------------------------------
