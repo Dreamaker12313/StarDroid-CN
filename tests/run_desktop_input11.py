@@ -20,7 +20,7 @@ def constants(kind):
  return '\n'.join('public static final int '+m.group(1)+'='+m.group(2)+';' for m in re.finditer(r'public static final int (\w+) = (-?\d+);',text))
 
 def method(text,name):
- m=re.search(r'^  +(?:@Override )?(?:(?:public|private|protected|static|final|synchronized) )*(?:void|boolean|int|float|double) '+name+r'\(',text,re.M)
+ m=re.search(r'^  +(?:@Override )?(?:(?:public|private|protected|static|final|synchronized) )*(?:void|boolean|int|float|double|String) '+name+r'\(',text,re.M)
  assert m,'Production method missing: '+name
  end=text.index('{',m.end())+1;depth=1
  while depth:
@@ -37,6 +37,7 @@ sources={
  public int left,top,right,bottom;public Rect(int l,int t,int r,int b){left=l;top=t;right=r;bottom=b;}public int width(){return right-left;}public int height(){return bottom-top;}}
 ''',
  'android/graphics/Bitmap.java':'package android.graphics;public class Bitmap{}',
+ 'android/graphics/Canvas.java':'package android.graphics;public class Canvas{public void drawBitmap(Bitmap b,float x,float y,Object p){}public void save(){}public void restore(){}public void clipRect(float a,float b,float c,float d){}}',
  'android/content/SharedPreferences.java':'''package android.content;public class SharedPreferences{public final java.util.Map<String,String>values=new java.util.HashMap<>();public String getString(String k,String d){return values.getOrDefault(k,d);}public Editor edit(){return new Editor();}public class Editor{public Editor putString(String k,String v){values.put(k,v);return this;}public void apply(){}}}''',
  'android/os/SystemClock.java':'package android.os;public class SystemClock{public static long now;public static long uptimeMillis(){return now;}}',
  'android/view/InputDevice.java':'''package android.view;public class InputDevice{'''+constants('InputDevice')+'''
@@ -59,13 +60,21 @@ sources={
  static void clear(){calls.clear();}static int count(int op){int n=0;for(int[]c:calls)if(c[0]==op)n++;return n;}static int count(int op,int a,int b){int n=0;for(int[]c:calls)if(c[0]==op&&c[1]==a&&c[2]==b)n++;return n;}static int[]last(int op){for(int i=calls.size()-1;i>=0;i--)if(calls.get(i)[0]==op)return calls.get(i);throw new AssertionError("No native operation "+op);}}
 ''',
  'org/openbw/androidtest/NativeHud.java':'''package org.openbw.androidtest;import java.util.*;import android.graphics.*;class NativeHud{
- static final int WORLD_BOTTOM=376;int page,race,lookupCalls,lookupFrame;boolean gridHotkeys;String lookupCard;final Map<Integer,Hit>slots=new HashMap<>();final RectF minimap=new RectF(0,338,136,480);final Rect miniSource=new Rect(0,338,136,480);final List<Hit>hits=new ArrayList<>();
+ static final int WORLD_BOTTOM=376;int page,race,lookupCalls,lookupFrame;boolean gridHotkeys;String lookupCard;NativeArt.Font large=new NativeArt.Font();Bitmap panel(int w,int h,boolean button,boolean enabled){return new Bitmap();}final Map<Integer,Hit>slots=new HashMap<>();final RectF minimap=new RectF(0,338,136,480);final Rect miniSource=new Rect(0,338,136,480);final List<Hit>hits=new ArrayList<>();
  static class Hit{RectF rect;int slot=-1;int unload=-1,cancel=-1,selectUnit=-1;boolean more;String help;String[]fields;}
  Hit commandHitForSlot(int slot,String card,int type){lookupCalls++;lookupCard=card;lookupFrame=NativeBridge.frames;return slots.get(slot);}String hint(Hit h){return h.fields==null?h.help:h.fields[1];}Hit hit(float x,float y){for(Hit h:hits)if(h.rect.contains(x,y))return h;return null;}String requirement(String[]f){return "";}static int number(String[]f,int i,int d){return f!=null&&i<f.length?Integer.parseInt(f[i]):d;}}
 ''',
- 'org/openbw/androidtest/NativeArt.java':'''package org.openbw.androidtest;import android.graphics.*;class NativeArt{static class Widget{int type,id;RectF rect=new RectF();RectF hit(){return rect;}RectF rect(){return rect;}}}
+ 'org/openbw/androidtest/NativeArt.java':'''package org.openbw.androidtest;import android.graphics.*;class NativeArt{
+ static final Object PIXELS=null;static String lastLabel="";static String clean(String s){return s==null?"":s.replaceAll("[\\\\x00-\\\\x1f]", "");}
+ static class Font{int height=16;int measure(String s){return clean(PortText.text(s)).length()*8;}void draw(Canvas c,String s,float x,float y,int width,int align,int color,int line){lastLabel=PortText.text(s);}}
+ static class Widget{int type,id,flags,x,y,w=180,h=28;String text="";RectF rect=new RectF();RectF hit(){return rect;}RectF rect(){return rect;}}
+ static class Dialog{java.util.List<Widget>widgets=new java.util.ArrayList<>();Widget get(int id){for(Widget w:widgets)if(w.id==id)return w;return null;}}
+ }
 ''',
- 'org/openbw/androidtest/NativeGlue.java':'''package org.openbw.androidtest;import java.util.*;class NativeGlue{static final int ENTER_MS=500;int hot;boolean exiting;double elapsed=1000;Layout layout=new Layout();float shift(NativeArt.Widget w){return 0;}static class Layout{List<NativeArt.Widget>widgets=new ArrayList<>();NativeArt.Widget get(int id){for(NativeArt.Widget w:widgets)if(w.id==id)return w;return null;}}}
+ 'org/openbw/androidtest/NativeGlue.java':'''package org.openbw.androidtest;import java.util.*;import android.graphics.*;class NativeGlue{
+ static final int ENTER_MS=500;int hot;String name="glumain";boolean exiting,slide=true,visible=true;double elapsed=1000;NativeArt.Dialog layout=new NativeArt.Dialog();NativeArt.Font large=new NativeArt.Font();
+ float shift(NativeArt.Widget w){return 0;}boolean campaignChoice(int id){return name.equals("glucmpgn")&&(id==6||id==7||id==8);}boolean labelVisible(int id){return visible;}Bitmap panel(int w,int h,boolean button){return new Bitmap();}
+ void label(Canvas c,int id,String override,boolean enabled){String s=MenuLabels.forWidget(name,id,layout.get(id),override);NativeArt.lastLabel=enabled?s:NativeArt.clean(s);}}
 ''',
  'org/openbw/androidtest/CommandHint.java':'package org.openbw.androidtest;class CommandHint{static String describe(String[]f,String requirement){return f[1];}}',
 }
@@ -74,15 +83,16 @@ sources={
 # action recording. Rendering, OS device delivery and native game results are
 # covered by separate suites and must not be inferred from these host checks.
 surface=(src/'NativeSurface.java').read_text()
+sources['org/openbw/androidtest/NativeResults.java']='package org.openbw.androidtest;class NativeResults{'+method((src/'NativeResults.java').read_text(),'fit')+'}'
 names=['physicalScale','lx','ly','onTouchEvent','onKeyUp','onKeyDown','onHoverEvent','onGenericMotionEvent','touch','setListOffset','placeBuilding','placementButtonAt','blockPlacementTouch','cameraBottom','panCamera','aim','mini','handleGamepadMotion','handleGamepadKey','gamepadDirection','activateGamepad','gamepadActionHeld','gamepadButton','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag','resetGamepad','advanceGamepad']
-names+=['resetDesktopInput','resetGamepadInput','resetDesktop','syncDesktopModifiers','handleDesktopMotion','desktopMotion','desktopCursor','desktopPrimary','desktopSecondary','activateDesktopHud','desktopTouch','desktopWheel','handleDesktopKey','desktopKey','advanceDesktop','desktopGridCommand','changeDesktop','openDesktopSettings','desktopSettingsBack','openGamepadSettings']
+names+=['resetDesktopInput','resetGamepadInput','resetDesktop','syncDesktopModifiers','handleDesktopMotion','desktopMotion','desktopCursor','desktopPrimary','desktopSecondary','activateDesktopHud','desktopTouch','desktopWheel','handleDesktopKey','desktopKey','advanceDesktop','desktopGridCommand','changeDesktop','openDesktopSettings','desktopSettingsBack','openGamepadSettings','desktopMenuCommand','addMenuButton','menuButton','originalMenuButton','replayMenuAction','glueButton','button','uiLine']
 harness=r'''package org.openbw.androidtest;
 import android.view.*;import android.graphics.*;import java.util.*;
 class SurfaceBase{public boolean onTouchEvent(MotionEvent e){return false;}public boolean onHoverEvent(MotionEvent e){return false;}public boolean onGenericMotionEvent(MotionEvent e){return false;}public boolean onKeyDown(int key,KeyEvent e){return false;}public boolean onKeyUp(int key,KeyEvent e){return false;}}
 public class DesktopInput11Test extends SurfaceBase{
  static int checks,failures;static void run(String name,Runnable test){try{test.run();System.out.println("PASS "+name);}catch(AssertionError e){failures++;System.err.println("FAIL "+name+": "+e.getMessage());}}static void check(boolean b,String why){checks++;if(!b)throw new AssertionError(why);}static void near(double a,double b,String why){check(Math.abs(a-b)<.01,why+": "+a+" != "+b);}
  final List<Runnable>queue=new ArrayList<>();void enqueue(Runnable a){queue.add(a);}void flush(){while(!queue.isEmpty())queue.remove(0).run();}
- static class Button{RectF rect;Runnable action,longAction;boolean enabled=true,vertical,placementButton,controlGroup;java.util.function.Consumer<Float>slider;Button(RectF r,Runnable a){rect=r;action=a;}}
+ static class Button{RectF rect;Runnable action,longAction;boolean enabled=true,vertical,placementButton,controlGroup;int key;String page,modal;java.util.function.Consumer<Float>slider;Button(RectF r,Runnable a){this(r,a,true);}Button(RectF r,Runnable a,boolean e){rect=r;action=a;enabled=e;}}
  static class Controls{float pinchSpeed=1,panSpeed=1,placementOffset;boolean pinchZoom=true,confirmBuild,minimapOrders,doubleTap,holdSelect,placementScroll;long miniHoldMs=400,doubleTapMs=250,holdMs=450;float panFactor(){return 1;}String dragGesture(long t){return "pan";}}
  static class Activity{void runOnUiThread(Runnable r){r.run();}void requestAppOptions(){}void requestGamepadSettings(){}}
  final Activity activity=new Activity();final Controls controls=new Controls();final CommandHover commandHover=new CommandHover();final CameraPan cameraPan=new CameraPan();final DesktopControls desktop=new DesktopControls();final DesktopSettings desktopSettings=new DesktopSettings();final android.content.SharedPreferences prefs=new android.content.SharedPreferences();
@@ -106,6 +116,9 @@ public class DesktopInput11Test extends SurfaceBase{
  long desktopDownAt,desktopLastClickAt;String desktopPrimary="",desktopPage="",desktopModal="";NativeHud.Hit desktopHudHit;
  RectF replayListBounds(){return new RectF(50,130,350,240);}float replayMaxOffset(){return 1000;}
  void gamepadSettingsBack(){modal="";}void controlGroup(int n,boolean assign){NativeBridge.command(25,n,assign?1:0,0,0);}
+ final NativeArt.Dialog menuLayout=new NativeArt.Dialog();NativeArt.Dialog dialog(String name){return menuLayout;}
+ NativeArt.Font font(){return page.equals("game")&&hud!=null?hud.large:glue!=null?glue.large:null;}
+ void text(Canvas c,String label,float x,float y,int w,int align,int color){NativeArt.lastLabel=PortText.text(label);}void panel(Canvas c,float x,float y,float w,float h){}
 
 '''
 
@@ -114,12 +127,12 @@ harness+='\n'.join(method(surface,n)for n in names)
 def finish():
  for name,content in sources.items():
   target=b/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_text(content)
- real=[src/n for n in ['DesktopControls.java','DesktopSettings.java','CommandHover.java','CameraPan.java','GamepadControls.java']]
+ real=[src/n for n in ['DesktopControls.java','DesktopSettings.java','CommandHover.java','CameraPan.java','GamepadControls.java','MenuLabels.java','PortText.java']]
  jar=r/'build-native/json-20240303.jar'
  subprocess.run(['javac','-cp',str(jar),'-d',str(b/'classes'),*[str(b/n)for n in sources],*map(str,real)],check=True)
- call=subprocess.run(['java','-cp',str(b/'classes')+':'+str(jar),'org.openbw.androidtest.DesktopInput11Test'],capture_output=True,text=True)
+ call=subprocess.run(['java','-cp',str(b/'classes')+':'+str(jar),'org.openbw.androidtest.DesktopInput11Test'],cwd=r,capture_output=True,text=True)
  print(call.stdout+call.stderr,end='');call.check_returncode()
- files=[src/'NativeSurface.java',src/'MainActivity.java',*real,Path(__file__)]
+ files=[src/'NativeSurface.java',src/'MainActivity.java',src/'NativeResults.java',r/'app/src/main/assets/native/ui-languages.tsv',*real,Path(__file__)]
  (r/'validation/desktop-input11.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'nativeEngine':False,'scope':'Production Java physical mouse and keyboard event routing with recorded native calls; Android event-delivery and native simulation are not emulated','methods':names,'activityMethods':activity_names,'output':call.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest()for f in files}},indent=2)+'\n')
 
 harness+=r'''
@@ -303,7 +316,39 @@ harness+=r'''
   h.modal="controls";h.openDesktopSettings();h.flush();check(h.modal.equals("control-desktop")&&h.desktopReturnModal.equals("controls"),"In-game desktop settings do not open/remember parent");h.desktopSettingsBack();check(h.modal.equals("controls"),"Desktop settings Previous does not return to Controls");h.modal="";h.page="main";h.openDesktopSettings();h.openGamepadSettings();h.flush();check(h.modal.isEmpty()&&h.page.equals("main"),"Desktop/gamepad settings remain accessible outside a game");
   h.page="game";h.activeGame=false;h.openDesktopSettings();h.openGamepadSettings();h.flush();check(h.modal.isEmpty(),"Desktop/gamepad settings open without active engine");h.activeGame=true;h.modal="controls";h.openGamepadSettings();h.flush();check(h.modal.equals("gamepad")&&h.gamepadReturnModal.equals("controls"),"In-game gamepad settings route changed");
  }
- public static void main(String[]args){InputDevice.devices.put(1,new InputDevice(InputDevice.SOURCE_KEYBOARD));InputDevice.devices.put(2,new InputDevice(InputDevice.SOURCE_MOUSE));InputDevice.devices.put(3,new InputDevice(InputDevice.SOURCE_GAMEPAD|InputDevice.SOURCE_JOYSTICK));run("touch regression",DesktopInput11Test::touchRegression);run("gamepad regression",DesktopInput11Test::gamepadRegression);run("typing",DesktopInput11Test::typingRegression);run("mouse world",DesktopInput11Test::worldMouseChecks);run("HUD and menus",DesktopInput11Test::hudMenuChecks);run("navigation",DesktopInput11Test::navigationChecks);run("keyboard",DesktopInput11Test::keyboardChecks);run("lifecycle",DesktopInput11Test::lifecycleChecks);run("Activity routing",DesktopInput11Test::activityChecks);run("input transitions",DesktopInput11Test::transitionChecks);run("grid hotkeys",DesktopInput11Test::gridChecks);run("desktop options",DesktopInput11Test::optionChecks);run("settings persistence and access",DesktopInput11Test::settingsChecks);if(failures>0)throw new AssertionError(failures+" groups failed after "+checks+" checks");System.out.println("PASS "+checks+" production Java routing checks");}
+ static NativeArt.Widget widget(int id,String text){NativeArt.Widget w=new NativeArt.Widget();w.id=id;w.flags=0x200;w.text=text;w.rect=new RectF(20,30,200,58);return w;}
+ static void marked(DesktopInput11Test h,String label,Runnable action,boolean enabled){h.menuButton(new Canvas(),label,20,30,180,28,action,enabled);}
+ static void pressLetter(DesktopInput11Test h,int letter){int key=KeyEvent.KEYCODE_A+letter-'a';keyboard(h,key,true,Character.toUpperCase(letter),0,0);keyboard(h,key,false,0,0,0);}
+ static void menuMnemonicChecks(){
+  Canvas c=new Canvas();String save="\u0004S\u0001ave Game";DesktopInput11Test h=new DesktopInput11Test();h.page="main";h.activeGame=false;h.glue=new NativeGlue();h.glue.layout.widgets.add(widget(3,"s\u0004S\u0001ingle Player"));
+  h.glueButton(c,3,null,()->h.actions++);check(NativeArt.lastLabel.equals("\u0004S\u0001ingle Player")&&h.buttons.get(0).key=='s',"Main-menu native dispatch byte leaked or mnemonic was not bound");check(h.buttons.get(0).page.equals("main")&&h.buttons.get(0).modal.isEmpty(),"Menu binding does not remember page/modal");
+  NativeBridge.clear();keyboard(h,KeyEvent.KEYCODE_S,true,0x44b,0,0);check(h.actions==1&&h.buttons.isEmpty(),"Advertised main-menu key did not activate and invalidate old bindings");h.glueButton(c,3,null,()->h.actions++);keyboard(h,KeyEvent.KEYCODE_S,true,'S',0,0);keyboard(h,KeyEvent.KEYCODE_S,true,'s',0,1);check(h.actions==1,"Held/duplicate menu key fired after redraw");keyboard(h,KeyEvent.KEYCODE_S,false,0,0,0);check(h.actions==1,"Menu key-up activates action");pressLetter(h,'s');check(h.actions==2&&NativeBridge.count(32)==0&&NativeBridge.count(35)==0,"Menu key leaked into native gameplay");
+  for(boolean enabled:new boolean[]{false,true}){h.buttons.clear();marked(h,save,enabled?null:()->h.actions++,enabled);check(h.buttons.get(0).key==0&&MenuLabels.mnemonic(NativeArt.lastLabel)==0,"Disabled/no-action button advertises a hotkey");int before=h.actions;pressLetter(h,'s');check(h.actions==before,"Disabled/no-action menu binding activated");}
+  h.buttons.clear();marked(h,"Save Game",()->h.actions++,true);check(h.buttons.get(0).key==0,"Plain label gained an invented key");int before=h.actions;pressLetter(h,'s');check(h.actions==before,"Unmarked label responds to an invented key");
+  h.buttons.clear();marked(h,save,()->h.actions++,true);marked(h,"\u0004S\u0001ound",()->h.actions+=10,true);before=h.actions;pressLetter(h,'s');check(h.actions==before&&h.buttons.size()==2,"Duplicate advertised keys selected the wrong action");h.buttons.get(1).enabled=false;pressLetter(h,'s');check(h.actions==before+1,"Disabled duplicate blocks unique enabled action");
+  h.buttons.clear();marked(h,save,()->h.actions++,true);before=h.actions;keyboard(h,KeyEvent.KEYCODE_S,true,'s',KeyEvent.META_CTRL_ON,0);keyboard(h,KeyEvent.KEYCODE_S,false,0,0,0);check(h.actions==before,"Ctrl shortcut accidentally activates plain menu key");keyboard(h,KeyEvent.KEYCODE_S,true,'S',KeyEvent.META_SHIFT_ON,0);keyboard(h,KeyEvent.KEYCODE_S,false,0,0,0);check(h.actions==before+1,"Shift/caps menu letter cannot activate its advertised key");
+  h.buttons.clear();marked(h,save,()->h.actions++,true);before=h.actions;h.page="registry";pressLetter(h,'s');check(h.actions==before,"Old page binding activated before redraw");h.buttons.clear();h.page="main";marked(h,save,()->h.actions++,true);h.modal="choose";pressLetter(h,'s');check(h.actions==before,"Background binding activated through a modal before redraw");
+  for(int guard=0;guard<4;guard++){h.buttons.clear();h.page="main";h.modal="";h.activeGame=false;h.profileEditing=false;h.chatEditing=false;h.pendingScreen=null;marked(h,save,()->h.actions++,true);if(guard==0)h.pendingScreen=new Object();if(guard==1)h.profileEditing=true;if(guard==2)h.chatEditing=true;if(guard==3){h.activeGame=true;h.page="game";}before=h.actions;h.desktopMenuCommand('s');check(h.actions==before,"Direct menu command bypasses lifecycle guard "+guard);}h.pendingScreen=null;h.profileEditing=h.chatEditing=false;
+  h.buttons.clear();h.page="game";h.activeGame=true;h.modal="menu";marked(h,save,()->h.actions++,true);before=h.actions;NativeBridge.clear();pressLetter(h,'s');check(h.actions==before+1&&NativeBridge.count(32)==0&&NativeBridge.count(35)==0,"In-game modal mnemonic reaches world command");h.modal="";NativeBridge.clear();pressLetter(h,'s');check(NativeBridge.count(32,1,'s')==1,"Original gameplay S was replaced by menu dispatch");
+  h.modal="menu";h.buttons.clear();marked(h,"Previous (\u0004Esc\u0001)",()->h.actions++,true);before=h.actions;int backs=h.backs;keyboard(h,KeyEvent.KEYCODE_ESCAPE,true,27,0,0);keyboard(h,KeyEvent.KEYCODE_ESCAPE,false,0,0,0);check(h.backs==backs+1&&h.actions==before,"Menu Escape no longer follows global back behavior");h.modal="";keyboard(h,KeyEvent.KEYCODE_F10,true,0,0,0);keyboard(h,KeyEvent.KEYCODE_F10,false,0,0,0);check(h.modal.equals("menu")&&h.menus==1,"Global F10 menu behavior changed");
+  h.buttons.clear();h.page="main";h.activeGame=false;h.modal="";marked(h,save,()->{h.actions++;h.modal="choose";},true);marked(h,"\u0004C\u0001redits",()->h.actions+=100,true);before=h.actions;pressLetter(h,'s');h.modal="";pressLetter(h,'c');check(h.actions==before+1,"Returning to a page before redraw revives a previous action");
+ }
+ static void menuLabelBindingChecks(){
+  Canvas c=new Canvas();DesktopInput11Test h=new DesktopInput11Test();h.modal="menu";h.menuLayout.widgets.add(widget(1,"s\u0004S\u0001ave Game"));h.originalMenuButton(c,"gamemenu",1,null,0,0,()->h.actions++,true);check(NativeArt.lastLabel.equals("\u0004S\u0001ave Game")&&h.buttons.get(0).key=='s',"Original menu lost BIN mnemonic before rendering/binding");pressLetter(h,'s');check(h.actions==1,"Original menu advertised S does not activate");
+  h.buttons.clear();h.menuButton(c,"Long text \u0004Z\u0001",0,0,48,28,()->h.actions++,true);check(NativeArt.lastLabel.endsWith("...")&&MenuLabels.mnemonic(NativeArt.lastLabel)==0&&h.buttons.get(0).key==0,"Truncated-away mnemonic remains active or highlighted");int before=h.actions;pressLetter(h,'z');check(h.actions==before,"Truncated label activated invisible key");
+  h.buttons.clear();h.menuButton(c,"\u0004S\u0001ave Game",0,0,48,28,()->h.actions++,true);check(NativeArt.lastLabel.equals("\u0004S\u0001a...")&&h.buttons.get(0).key=='s',"Fitting stripped surviving mnemonic");pressLetter(h,'s');check(h.actions==before+1,"Fitted surviving mnemonic does not activate");
+  h.page="replays";h.activeGame=false;h.modal="";h.glue=new NativeGlue();h.glue.name="gluload";h.glue.layout.widgets.add(widget(4,"o\u0004O\u0001K"));h.buttons.clear();h.replayMenuAction(c,4,"OK",()->h.actions++,true);check(h.buttons.get(0).key=='o'&&NativeArt.lastLabel.equals("\u0004O\u0001K"),"Replay action override lost original key");before=h.actions;pressLetter(h,'o');check(h.actions==before+1,"Replay action key failed");
+  h.buttons.clear();h.replayMenuAction(c,4,"OK",()->h.actions++,false);check(MenuLabels.mnemonic(NativeArt.lastLabel)==0&&h.buttons.get(0).key==0,"Unavailable replay action has highlighted/active key");h.buttons.clear();h.glue.visible=false;h.replayMenuAction(c,4,"OK",()->h.actions++,true);check(h.buttons.isEmpty(),"Invisible replay action has a binding");h.glue.visible=true;h.pendingScreen=new Object();h.replayMenuAction(c,4,"OK",()->h.actions++,true);check(MenuLabels.mnemonic(NativeArt.lastLabel)=='o'&&h.buttons.get(0).key==0,"Transition changed replay caption color or left action available");h.pendingScreen=null;
+  h.buttons.clear();h.glue.name="glumain";h.glue.layout.widgets.add(widget(3,"s\u0004S\u0001ingle Player"));h.glue.visible=false;h.glueButton(c,3,null,()->h.actions++);check(h.buttons.isEmpty(),"Invisible main-menu label gained a key");h.glue.visible=true;h.glue.elapsed=0;h.glueButton(c,3,null,()->h.actions++);check(MenuLabels.mnemonic(NativeArt.lastLabel)=='s'&&h.buttons.get(0).key==0,"Entry animation blinks gray or accepts keys too early");
+  h.glue=null;h.page="main";h.buttons.clear();h.button(c,"\u0004S\u0001ave",0,0,180,28,()->h.actions++,true);check(h.buttons.get(0).key==0,"No bitmap font fallback advertises an invisible mnemonic");
+  try{PortText.load(new java.io.FileInputStream("app/src/main/assets/native/ui-languages.tsv"));}catch(java.io.IOException e){throw new AssertionError(e);}
+  for(String language:new String[]{"en","ru","de","es","fr"}){
+   PortText.select(language);h.page="game";h.activeGame=true;h.modal="menu";h.buttons.clear();h.originalMenuButton(c,"gamemenu",1,null,0,0,()->h.actions++,true);int shown=MenuLabels.mnemonic(NativeArt.lastLabel);check(h.buttons.get(0).key==shown,"Translated visible key differs from dispatch key: "+language);
+   before=h.actions;for(int key='a';key<='z';key++)if(key!=shown)pressLetter(h,key);check(h.actions==before,"Translated menu has an unadvertised key: "+language);if(shown!=0){pressLetter(h,shown);check(h.actions==before+1,"Translated visible mnemonic cannot activate: "+language);}else check(h.buttons.get(0).key==0,"Missing translated Latin letter was assigned another key");
+  }
+  PortText.select("en");
+ }
+ public static void main(String[]args){InputDevice.devices.put(1,new InputDevice(InputDevice.SOURCE_KEYBOARD));InputDevice.devices.put(2,new InputDevice(InputDevice.SOURCE_MOUSE));InputDevice.devices.put(3,new InputDevice(InputDevice.SOURCE_GAMEPAD|InputDevice.SOURCE_JOYSTICK));run("touch regression",DesktopInput11Test::touchRegression);run("gamepad regression",DesktopInput11Test::gamepadRegression);run("typing",DesktopInput11Test::typingRegression);run("mouse world",DesktopInput11Test::worldMouseChecks);run("HUD and menus",DesktopInput11Test::hudMenuChecks);run("navigation",DesktopInput11Test::navigationChecks);run("keyboard",DesktopInput11Test::keyboardChecks);run("lifecycle",DesktopInput11Test::lifecycleChecks);run("Activity routing",DesktopInput11Test::activityChecks);run("input transitions",DesktopInput11Test::transitionChecks);run("grid hotkeys",DesktopInput11Test::gridChecks);run("desktop options",DesktopInput11Test::optionChecks);run("settings persistence and access",DesktopInput11Test::settingsChecks);run("menu mnemonic routing",DesktopInput11Test::menuMnemonicChecks);run("menu label binding",DesktopInput11Test::menuLabelBindingChecks);if(failures>0)throw new AssertionError(failures+" groups failed after "+checks+" checks");System.out.println("PASS "+checks+" production Java routing checks");}
 }
 '''
 sources['org/openbw/androidtest/DesktopInput11Test.java']=harness

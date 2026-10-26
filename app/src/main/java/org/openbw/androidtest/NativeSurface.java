@@ -162,6 +162,8 @@ final class NativeSurface extends SurfaceView
     RectF rect;
     Runnable action, longAction;
     boolean enabled,vertical,placementButton,controlGroup;
+    int key;
+    String page, modal;
     java.util.function.Consumer<Float> slider;
 
     Button(RectF r, Runnable a, boolean e) {
@@ -844,10 +846,11 @@ final class NativeSurface extends SurfaceView
 
   private void replayMenuAction(Canvas c,int id,String label,Runnable action,boolean enabled) {
     NativeArt.Widget widget=glue.layout.get(id);
-    if(widget==null)return;
+    if(widget==null||!glue.labelVisible(id))return;
     // Keep the original OK/Cancel artwork, hit box and font metrics intact.
-    glue.label(c,id,label,enabled);
-    add(widget.hit(),action,enabled&&pendingScreen==null);
+    boolean available=enabled&&action!=null&&pendingScreen==null;
+    glue.label(c,id,label,enabled&&action!=null);
+    addMenuButton(widget.hit(),action,available,MenuLabels.forWidget(glue.name,id,widget,label));
   }
 
   private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
@@ -1330,12 +1333,20 @@ final class NativeSurface extends SurfaceView
     else panel(c, x, y, w, h);
     NativeArt.Font f = font();
     float fy = y + (h - (f == null ? 18 : f.height)) / 2;
-    text(c, label, x + 3, fy, (int) w - 6, 1, enabled ? 3 : 5);
-    add(new RectF(x, y, x + w, y + h), action, enabled);
+    String shown=enabled&&action!=null?PortText.text(label):NativeArt.clean(PortText.text(label));
+    text(c, shown, x + 3, fy, (int) w - 6, 1, enabled ? 3 : 5);
+    addMenuButton(new RectF(x, y, x + w, y + h), action, enabled, f==null?"":shown);
   }
 
   private void add(RectF rect, Runnable run, boolean enabled) {
     buttons.add(new Button(rect, run, enabled));
+  }
+
+  private void addMenuButton(RectF rect, Runnable run, boolean enabled, String shown) {
+    Button button=new Button(rect,run,enabled&&run!=null);
+    button.key=button.enabled?MenuLabels.mnemonic(shown):0;
+    button.page=page;button.modal=modal;
+    buttons.add(button);
   }
 
   private void glueButton(Canvas c, int id, String label, Runnable run) {
@@ -1346,11 +1357,12 @@ final class NativeSurface extends SurfaceView
       return;
     }
     NativeArt.Widget w = glue.layout.get(id);
-    if (w == null || glue.campaignChoice(id) && !glue.labelVisible(id)) return;
-    glue.label(c, id, label, true);
+    if (w == null || !glue.labelVisible(id)) return;
+    boolean enabled=run!=null&&pendingScreen==null&&(glue.elapsed>=NativeGlue.ENTER_MS||!glue.slide);
+    glue.label(c, id, label, run!=null);
     RectF r = w.hit();
     r.offset(glue.shift(w), 0);
-    add(r, run, pendingScreen == null && (glue.elapsed >= NativeGlue.ENTER_MS || !glue.slide));
+    addMenuButton(r,run,enabled,MenuLabels.forWidget(glue.name,id,w,label));
   }
 
   private void message(String text) {
@@ -1800,7 +1812,7 @@ final class NativeSurface extends SurfaceView
     catch(Exception e){nearby.fail(e.getMessage());}
   }
   private void uiLine(Canvas c,String label,NativeArt.Font font,float x,float y,int width,int height,int align,int color){
-    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,NativeResults.fit(font,label,width),x,y+Math.max(0,(height-font.height)/2f),width,align,color,0);c.restore();
+    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,MenuLabels.applyMnemonic(label,NativeResults.fit(font,label,width)),x,y+Math.max(0,(height-font.height)/2f),width,align,color,0);c.restore();
   }
   private boolean menuHot(float x,float y,float w,float h){return pendingScreen==null && (modal.isEmpty()||modal.startsWith("profile-")) && menuHoverX>=x && menuHoverX<x+w && menuHoverY>=y && menuHoverY<y+h;}
   private int menuColor(float x,float y,float w,float h,boolean enabled){return !enabled?5:menuHot(x,y,w,h)?4:3;}
@@ -2284,15 +2296,17 @@ final class NativeSurface extends SurfaceView
       Runnable action, boolean enabled) {
     c.drawBitmap(hud.panel(Math.round(w), Math.round(h), true, enabled), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + w / 2, y + h / 2);
-    uiLine(c, enabled ? label : NativeArt.clean(label), hud.large, x+4, y, (int)w-8, (int)h, 1,
+    String shown=MenuLabels.applyMnemonic(label,NativeResults.fit(hud.large,label,(int)w-8));
+    if(!enabled||action==null)shown=NativeArt.clean(shown);
+    uiLine(c, shown, hud.large, x+4, y, (int)w-8, (int)h, 1,
         enabled ? hot ? 2 : 3 : 5);
-    add(new RectF(x, y, x + w, y + h), action, enabled);
+    addMenuButton(new RectF(x, y, x + w, y + h), action, enabled, shown);
   }
 
   private void originalMenuButton(Canvas c, String layout, int id, String label,
       float x, float y, Runnable action, boolean enabled) {
     NativeArt.Widget w = dialog(layout).get(id);
-    if (w != null) menuButton(c, label == null ? MenuLabels.forDialog(layout, id, NativeArt.clean(w.text)) : label,
+    if (w != null) menuButton(c, MenuLabels.forWidget(layout,id,w,label),
         x + w.x, y + w.y, w.w, w.h, action, enabled);
   }
 
@@ -3965,6 +3979,10 @@ final class NativeSurface extends SurfaceView
     if(key==KeyEvent.KEYCODE_F10){if(down&&activeGame&&page.equals("game")){resetDesktop(false);if(modal.isEmpty())openMenu();else modalBack();}return;}
     if(key==KeyEvent.KEYCODE_ESCAPE&&(!activeGame||!page.equals("game")||!modal.isEmpty())){if(down){resetDesktop(false);back();}return;}
     if(symbol==13){if(down&&activeGame&&page.equals("game")&&modal.isEmpty()){resetDesktop(false);openChat();}return;}
+    if(!activeGame||!page.equals("game")||!modal.isEmpty()){
+      if(down&&!ctrl&&!desktop.ctrl())desktopMenuCommand(symbol);
+      return;
+    }
     if(activeGame&&page.equals("game")&&modal.isEmpty()){
       if(desktopSettings.gridHotkeys&&symbol>='a'&&symbol<='z'){
         if(down)desktopGridCommand(symbol);
@@ -3972,6 +3990,22 @@ final class NativeSurface extends SurfaceView
       }
       NativeBridge.command(32,down?1:0,symbol,DesktopControls.scanCode(key),0);
     }
+  }
+
+  private void desktopMenuCommand(int symbol){
+    if(pendingScreen!=null||profileEditing||chatEditing||activeGame&&page.equals("game")&&modal.isEmpty())return;
+    Button match=null;
+    for(Button button:buttons){
+      if(!button.enabled||button.action==null||button.key==0||button.key!=symbol
+          ||!page.equals(button.page)||!modal.equals(button.modal))continue;
+      if(match!=null)return; // An ambiguous caption must never invoke the wrong action.
+      match=button;
+    }
+    if(match==null)return;
+    // Actions can change the page or dialog before another render. No previous
+    // screen's key binding remains active in that interval, even after returning.
+    buttons.clear();pressed=null;
+    sfx("button");match.action.run();
   }
 
   private void advanceDesktop(double milliseconds){
@@ -4060,8 +4094,23 @@ final class NativeSurface extends SurfaceView
     desktopToggle(c,"Arrow-key camera",desktopSettings.arrowPan,x+318,y+112,()->desktopSettings.arrowPan=!desktopSettings.arrowPan);
     gamepadSlider(c,"Camera speed",Math.round(desktopSettings.cameraSpeed*100),25,250,x+22,y+144,
         value->{desktopSettings.cameraSpeed=value/100f;desktopSettings.save(prefs);});
-    body(c,"Mouse\n"+DesktopGuide.MOUSE_GUIDE+"\nKeyboard\n"+DesktopGuide.KEYBOARD_GUIDE,x+22,y+184,560,228);
+    drawDesktopGuide(c,x+22,y+184);
     gamepadOption(c,"Previous",null,x+194,y+428,216,28,false,this::desktopSettingsBack);return true;
+  }
+
+  private void desktopGuideHeading(Canvas c,String title,float x,float y){
+    String label=PortText.text(title)+":";
+    // Thicken the original bitmap glyphs by one pixel, keeping their native style.
+    body(c,label,x,y,559,16);
+    body(c,label,x+1,y,559,16);
+  }
+
+  private void drawDesktopGuide(Canvas c,float x,float y){
+    desktopGuideHeading(c,"Mouse",x,y);
+    body(c,DesktopGuide.MOUSE_GUIDE,x,y+16,560,80);
+    // One full text line separates the two sections.
+    desktopGuideHeading(c,"Keyboard",x,y+112);
+    body(c,DesktopGuide.KEYBOARD_GUIDE,x,y+128,560,96);
   }
 
   void reloadGamepadSettings() { enqueue(()->{resetGamepad();gamepad.load(prefs);}); }

@@ -1,3 +1,14 @@
+# StarDroid 1.1 original menu hotkeys and help formatting
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Main-menu and dialog labels retain the imported BIN's original highlighted letters, color resets and secondary-line colors. Replacement captions and translations preserve a mnemonic only when that letter survives; explicit replacement hotkeys take precedence. Disabled captions stay disabled, and clipped-away keys are not moved to a different letter. Original-font checks cover 225 actual BIN captions across nine menus and five languages: 1,181 checks and 900 renders. [Menu highlights](validation/menu-hotkeys11.json).
+- Visible, enabled menu buttons accept their highlighted keyboard key. Typing, modifiers, held repeats, transitions, disabled buttons, ambiguous matches and stale page/dialog bindings are guarded. Command-grid modes remain separate from menu shortcuts. All 1,377 production Java routing checks pass. [Input routing](validation/desktop-input11.json).
+- Combined help uses bold bitmap **Mouse:** and **Keyboard:** headings with a blank line between sections. All five translations fit: 266 text checks, 4,800 panel checks, 10 text renders and 90 complete settings renders. [Guide layout](validation/desktop-guide11.json).
+- Packaging reuses the verified, unchanged native libraries. Signed-APK checks cover the original update identity, unchanged assets/permissions, both ABIs, 47 JNI methods and 16 KiB alignment. [Package proof](validation/package-guide-format11.json).
+
+These are host-rendering/input and Android build checks. Physical Android hardware remains untested. Earlier reports below refer to their recorded source revisions.
+
 # StarDroid 1.1 hotkey settings and highlighted command keys
 
 Public version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

@@ -317,10 +317,8 @@ final class NativeGlue implements AutoCloseable {
   void label(Canvas c, int id, String override, boolean enabled) {
     NativeArt.Widget w = layout.get(id);
     if (!labelVisible(id)) return;
-    String text =
-        override == null
-            ? MenuLabels.forDialog(name, id, w.text.substring((w.flags & 0x200) != 0 && !w.text.isEmpty() ? 1 : 0))
-            : override;
+    String text = MenuLabels.forWidget(name, id, w, override);
+    if (!enabled) text = NativeArt.clean(text);
     NativeArt.Font font =
         (w.flags & 0x4000) != 0 ? button : (w.flags & 0x800) != 0 || w.type == 14 ? large : (w.flags & 0x400) != 0 ? small : tiny;
     int width = Math.max(1, (w.rw > 0 ? w.rw : w.w) - w.tx), height = Math.max(1, (w.rh > 0 ? w.rh : w.h) - w.ty);

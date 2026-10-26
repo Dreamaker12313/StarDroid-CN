@@ -38,9 +38,9 @@
   "result": "PASS 4173 production group/controller checks: redraw and touch jitter, assign/recall/cancel, UI scale/resource overlap, preferences, sticks/deadzone/swap, left-drag/right-click, HUD routing, rebinding, duplicate trigger lifecycle, modal isolation, reset and disconnect, native settings and all bindings, five languages, in-game-only settings access",
   "sourceSha256": {
     "app/src/main/java/org/openbw/androidtest/MainActivity.java": "c24bd1374b16b27b92cf1a4e8a7ec27f2e026a4983d0566d1f9f62793003cd61",
-    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "e753454718d383b78d943a7b85e992e08c13f9e7ed4519e7f2bad78a5d9777c3",
+    "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "6524d413cc8d23c1d7ce4dfd94b344ef8d87d76173e7e55931e0d70b5befa1d9",
     "app/src/main/assets/native/ui-languages.tsv": "41f3a642596a9dbbdffbf0969ad448b2be6cf9e7d99c38ebb153bc89332f44bf",
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8d704649746daa60185c0389e4b16f296bbdb2217b38bc0678c35c44003b7017",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "654a9552439aa981751f4b736f5ba5714fee9a38f865ba69e01ed02552571f88",
     "app/src/main/java/org/openbw/androidtest/DesktopSettings.java": "0d91d0b330e7ceabe7ba197597d3ce9ec4de8e35258186b970dbe9ae6e95095c",
     "app/src/main/java/org/openbw/androidtest/GamepadControls.java": "dd03141a97a2790c2cc4daef904f7605da25da5f080c7e5ace82f41865da000b",
     "app/src/main/java/org/openbw/androidtest/GamepadSettings.java": "495c62d64248babb8430dbb2dee03c71800da0b8b31fa136e06da9aa884a239f",

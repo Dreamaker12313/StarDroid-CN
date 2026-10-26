@@ -80,10 +80,10 @@ public class DesktopGuide11Test {
    for(String label:new String[]{"Mouse & keyboard","Mouse","Keyboard","Command hotkeys","Grid (QWE/ASD/ZXC)","Mouse edge scrolling","Mouse wheel zoom","Middle-button camera drag","Arrow-key camera","Camera speed"})
     check(language.equals("en")||!PortText.text(label).equals(label),"Missing title translation: "+language+" / "+label);
    for(int page=0;page<1;page++) {
-    String text="Mouse\n"+DesktopGuide.MOUSE_GUIDE+"\nKeyboard\n"+DesktopGuide.KEYBOARD_GUIDE;
+    String text=PortText.text("Mouse")+":\n"+DesktopGuide.MOUSE_GUIDE+"\n\n"+PortText.text("Keyboard")+":\n"+DesktopGuide.KEYBOARD_GUIDE;
     check(!DesktopGuide.MOUSE_GUIDE.contains("Arrow"),"Mouse help describes keyboard arrows");
     check(DesktopGuide.KEYBOARD_GUIDE.contains("Arrow keys")&&DesktopGuide.KEYBOARD_GUIDE.contains("QWE / ASD / ZXC"),"Keyboard help omits arrows or grid hotkeys");
-    for(String line:text.split("\n"))check(language.equals("en")||!PortText.text(line).equals(line),"Missing help translation: "+language+" / "+line);
+    for(String line:(DesktopGuide.MOUSE_GUIDE+"\n"+DesktopGuide.KEYBOARD_GUIDE).split("\n"))check(language.equals("en")||!PortText.text(line).equals(line),"Missing help translation: "+language+" / "+line);
     for(int style=0;style<2;style++) {
      NativeArt.Font font=style==0?menu:hud;List<String> lines=font.lines(text,560);
      int height=lines.size()*Math.max(16,font.height+1);
@@ -104,7 +104,7 @@ settings = '''package org.openbw.androidtest;
 import java.nio.file.*;import java.util.*;import android.graphics.*;import javax.imageio.ImageIO;
 public class DesktopSettings11Test {
  static int checks,screens;static void check(boolean ok,String why){checks++;if(!ok)throw new AssertionError(why);}
- static class Button {RectF rect;Runnable action;boolean enabled;java.util.function.Consumer<Float>slider;Button(RectF r,Runnable a,boolean e){rect=r;action=a;enabled=e;}}
+ static class Button {RectF rect;Runnable action;boolean enabled;int key;String page,modal;java.util.function.Consumer<Float>slider;Button(RectF r,Runnable a,boolean e){rect=r;action=a;enabled=e;}}
  static class Controls {int selectionButton,dragMode,holdMs,radius,doubleTapMs,miniHoldMs,tooltipMs,placementOffset;float panSpeed,pinchSpeed;
  boolean originalLarvae,singleLarvaMorph,holdSelect,doubleTap,controlGroups,pinchZoom,reversePan,placementScroll,minimapOrders,groundOrders,attackTap,tooltips,confirmBuild,placementButtonsFollow,commandModeButton;}
  static class Settings {boolean gridHotkeys,edgeScroll=true,wheelZoom=true,middlePan=true,arrowPan=true;float cameraSpeed=1;int saves;void save(Object p){saves++;}}
@@ -116,7 +116,7 @@ public class DesktopSettings11Test {
  void resetDesktop(boolean hidePointer){}
  void changeControls(Runnable r){r.run();}
 '''
-for name in ['font','text','panel','fallback','body','gamepadLine','gamepadOption','gamepadSlider','menuButton','add','desktopToggle','changeDesktop','drawDesktopSettings','drawControls','option','controlOption','toggle','uiLine']:
+for name in ['font','text','panel','fallback','body','gamepadLine','gamepadOption','gamepadSlider','menuButton','add','addMenuButton','desktopToggle','changeDesktop','desktopGuideHeading','drawDesktopGuide','drawDesktopSettings','drawControls','option','controlOption','toggle','uiLine']:
     code = production(name)
     if name == 'uiLine':
         brace = code.index('{') + 1
@@ -157,15 +157,17 @@ settings += r'''
    for(boolean grid:new boolean[]{false,true}){h.modal="control-desktop";h.desktopSettings.gridHotkeys=grid;
     h.desktopSettings.edgeScroll=h.desktopSettings.wheelZoom=h.desktopSettings.middlePan=h.desktopSettings.arrowPan=!grid;h.desktopSettings.cameraSpeed=grid?2.5f:.25f;
     Bitmap b=h.draw(false);h.geometry(false);
-    NativeArt.Font body=h.hud.small;String text="Mouse\n"+DesktopGuide.MOUSE_GUIDE+"\nKeyboard\n"+DesktopGuide.KEYBOARD_GUIDE;
+    NativeArt.Font body=h.hud.small;String text=PortText.text("Mouse")+":\n"+DesktopGuide.MOUSE_GUIDE+"\n\n"+PortText.text("Keyboard")+":\n"+DesktopGuide.KEYBOARD_GUIDE;
     check(body.lines(text,560).size()*Math.max(16,body.height+1)<=228,"Combined help crosses its clip or footer");
+    check(body.lines(DesktopGuide.MOUSE_GUIDE,560).size()*Math.max(16,body.height+1)<=80,"Mouse body crosses blank separator");
+    check(body.lines(DesktopGuide.KEYBOARD_GUIDE,560).size()*Math.max(16,body.height+1)<=96,"Keyboard body crosses footer");
     h.actions();screens++;
     ImageIO.write(b.image,"png",output.resolve("settings-"+language+"-"+width+"-"+style+"-"+(grid?"grid":"original")+".png").toFile());
    }
    h.modal="controls";Bitmap b=h.draw(true);h.geometry(true);h.buttons.get(5).action.run();check(h.modal.equals("control-desktop"),"Sixth row did not open desktop settings");screens++;
    ImageIO.write(b.image,"png",output.resolve("controls-"+language+"-"+width+"-"+style+".png").toFile());
   }
-  System.out.println("PASS "+checks+" full settings-sheet checks; "+screens+" renders across five languages, three race styles, both hotkey modes and two aspect ratios; labels and combined help fit, settings controls persist and remain inside panels");
+  System.out.println("PASS "+checks+" full settings-sheet checks; "+screens+" renders across five languages, three race styles, both hotkey modes and two aspect ratios; labels and separate help blocks fit with bold colon headings and a blank separator, settings controls persist and remain inside panels");
  }
 }'''
 sources['org/openbw/androidtest/DesktopSettings11Test.java'] = settings
@@ -180,5 +182,5 @@ print(result.stdout + result.stderr,end='')
 result.check_returncode()
 panels = subprocess.run(['java','-Djava.awt.headless=true','-cp',str(b / 'classes'),'org.openbw.androidtest.DesktopSettings11Test',str(assets),str(b),str(r / 'app/src/main/assets/native/ui-languages.tsv')],capture_output=True,text=True)
 print(panels.stdout + panels.stderr,end='');panels.check_returncode()
-files = [src / 'DesktopGuide.java',src / 'NativeSurface.java',src / 'NativeHud.java',src / 'NativeArt.java',src / 'PortText.java',r / 'app/src/main/assets/native/ui-languages.tsv',Path(__file__)]
+files = [*real,src / 'NativeSurface.java',src / 'NativeHud.java',src / 'NativeResults.java',r / 'app/src/main/assets/native/ui-languages.tsv',Path(__file__)]
 (r / 'validation/desktop-guide11.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'canvas':'AWT shim using production font drawing, extracted production settings helpers and original local font/artwork fixtures','result':result.stdout.strip(),'fullPanels':panels.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}},indent=2)+'\n')
