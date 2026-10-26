@@ -3,21 +3,22 @@
   "physicalAndroid": false,
   "canvas": "AWT shim using production font drawing, extracted production settings helpers and original local font/artwork fixtures",
   "result": "en 0 0: 14 lines / 224 px\nen 0 1: 14 lines / 224 px\nru 0 0: 14 lines / 224 px\nru 0 1: 14 lines / 224 px\nde 0 0: 14 lines / 224 px\nde 0 1: 14 lines / 224 px\nes 0 0: 14 lines / 224 px\nes 0 1: 14 lines / 224 px\nfr 0 0: 14 lines / 224 px\nfr 0 1: 14 lines / 224 px\nPASS 266 translated guide checks; 10 original-font renderings; all fit 560 x 228",
-  "fullPanels": "PASS 4800 full settings-sheet checks; 90 renders across five languages, three race styles, both hotkey modes and two aspect ratios; labels and separate help blocks fit with bold colon headings and a blank separator, settings controls persist and remain inside panels",
+  "fullPanels": "PASS 5490 full settings-sheet checks; 90 renders across five languages, three race styles, both hotkey modes and two aspect ratios; text-button shortcuts are unique with contrasting yellow/white glyph pixels, labels including bracketed keys fit, separate help blocks have bold colon headings and a blank separator, settings controls persist and remain inside panels",
   "sourceSha256": {
     "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
     "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "e186ca85e4b45ea036d44e6514a00211aebb1a4172792fe016918f4f34a25b80",
     "app/src/main/java/org/openbw/androidtest/CommandHint.java": "cac62546a9c9fdb3fe0ae76ba6657c600b55527969ce26c0eade114d80b2a1f3",
     "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "6524d413cc8d23c1d7ce4dfd94b344ef8d87d76173e7e55931e0d70b5befa1d9",
+    "app/src/main/java/org/openbw/androidtest/MenuHotkeys.java": "6687d5928efc58d7b9f7c5d1d4f29b0ce572f87e4566a2e9790d5bf8214d4b32",
     "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
     "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
     "app/src/main/java/org/openbw/androidtest/PortText.java": "715d49b416621a93b488e553f53fb317ef378707795f2d927523e1fa89e2b971",
     "app/src/main/java/org/openbw/androidtest/DesktopGuide.java": "1e972622857a83465a5640e2ac23d2ea60c7eefbb092a686ec76c4f8a1e83c2f",
     "app/src/main/java/org/openbw/androidtest/GamepadSettings.java": "495c62d64248babb8430dbb2dee03c71800da0b8b31fa136e06da9aa884a239f",
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "654a9552439aa981751f4b736f5ba5714fee9a38f865ba69e01ed02552571f88",
-    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "be867b26c51449be5d435594e7239c29f67030b83005574d5851b2407cc2d013",
-    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "2264b0dcf69c0f36e04810cf722b4f0c9bd82d8d96c1f6f111d7d7e9b0046c48",
-    "app/src/main/assets/native/ui-languages.tsv": "41f3a642596a9dbbdffbf0969ad448b2be6cf9e7d99c38ebb153bc89332f44bf",
-    "tests/run_desktop_guide11.py": "250a1a6c140b8f9d8b3fb3fa9798c6ff104c405f81468805aac20a4008ee7de8"
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "a6845d7119fdbd5cbcbae58e0f8adbad88394670e60936ffc9daf1268b9363de",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "4e7c3af4fcecb16ef2572b1cfbbbcef338be9b1c0afac568745ab650333b17b9",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "ad587572e08cbead5633cdf79a6c656ea03938ffb8aadae473606fdf3468dda9",
+    "app/src/main/assets/native/ui-languages.tsv": "ef08365128db72e311b9dea09f9ea99a44b3a635650f91bfde2d4143619cb284",
+    "tests/run_desktop_guide11.py": "c0a93a35ed6dd64bf66948cfaefb5b4c6507aeb8b2f7049feb92e5f98117ee4d"
   }
 }

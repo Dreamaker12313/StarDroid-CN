@@ -109,6 +109,7 @@ public class DesktopSettings11Test {
  boolean originalLarvae,singleLarvaMorph,holdSelect,doubleTap,controlGroups,pinchZoom,reversePan,placementScroll,minimapOrders,groundOrders,attackTap,tooltips,confirmBuild,placementButtonsFollow,commandModeButton;}
  static class Settings {boolean gridHotkeys,edgeScroll=true,wheelZoom=true,middlePan=true,arrowPan=true;float cameraSpeed=1;int saves;void save(Object p){saves++;}}
  final Controls controls=new Controls();final Settings desktopSettings=new Settings();final Object prefs=new Object();NativeGlue glue;NativeHud hud;Paint paint=new Paint();Button pressed;List<Button>buttons=new ArrayList<>();
+ final MenuHotkeys menuHotkeys=new MenuHotkeys(),backgroundMenuHotkeys=new MenuHotkeys();final ArrayList<MenuCaption>menuCaptions=new ArrayList<>();boolean menuBehindModal,replayGame;
  String page="game",modal="control-desktop",hint="";int logicalWidth=640,returns;double hintUntil;String language="en";
  void openDesktopSettings(){modal="control-desktop";}
  void openGamepadSettings(){modal="gamepad";}
@@ -116,7 +117,9 @@ public class DesktopSettings11Test {
  void resetDesktop(boolean hidePointer){}
  void changeControls(Runnable r){r.run();}
 '''
-for name in ['font','text','panel','fallback','body','gamepadLine','gamepadOption','gamepadSlider','menuButton','add','addMenuButton','desktopToggle','changeDesktop','desktopGuideHeading','drawDesktopGuide','drawDesktopSettings','drawControls','option','controlOption','toggle','uiLine']:
+caption_start = surface.index('  private static final class MenuCaption {')
+settings += surface[caption_start:surface.index('\n  }', caption_start) + 4] + '\n'
+for name in ['font','text','panel','fallback','fallbackMenu','body','gamepadLine','gamepadOption','gamepadSlider','menuButton','add','addMenuButton','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','desktopToggle','changeDesktop','desktopGuideHeading','drawDesktopGuide','drawDesktopSettings','drawControls','option','controlOption','toggle','uiLine']:
     code = production(name)
     if name == 'uiLine':
         brace = code.index('{') + 1
@@ -130,11 +133,22 @@ settings += 'void controlsSheet(Canvas c){boolean sheet=true;\n' + x + header + 
 settings += r'''
  Bitmap draw(boolean controlsScreen){buttons.clear();Bitmap b=Bitmap.createBitmap(logicalWidth,480,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);
   Paint bg=new Paint();bg.setColor(0xff080b0b);c.drawRect(0,0,logicalWidth,480,bg);
-  if(controlsScreen)controlsSheet(c);else check(drawDesktopSettings(c),"Desktop settings not handled");return b;}
+  if(controlsScreen)controlsSheet(c);else check(drawDesktopSettings(c),"Desktop settings not handled");flushMenuButtons();return b;}
  void geometry(boolean controlsScreen){
   check(buttons.size()==(controlsScreen?7:8),"Wrong number of settings buttons");int width=controlsScreen?368:604;float left=(logicalWidth-width)/2f,top=controlsScreen?32:8,bottom=top+(controlsScreen?330:464);
   for(int i=0;i<buttons.size();i++){RectF r=buttons.get(i).rect;check(r.left>=left&&r.right<=left+width&&r.top>=top&&r.bottom<=bottom,"Button escapes panel");
    for(int j=0;j<i;j++){RectF o=buttons.get(j).rect;check(r.right<=o.left||r.left>=o.right||r.bottom<=o.top||r.top>=o.bottom,"Buttons overlap");}}
+  Set<Integer>keys=new HashSet<>();for(Button button:buttons)if(button.key!=0)check(keys.add(button.key),"Duplicate menu shortcut");
+  check(keys.size()==(controlsScreen?7:3),"Text buttons missing highlighted menu shortcuts");
+ }
+ void contrast(Bitmap frame){
+  for(int i=0;i<buttons.size();i++){RectF r=buttons.get(i).rect;int pixels=0;
+   for(int y=(int)r.top+3;y<(int)r.bottom-3;y++)for(int x=(int)r.left+3;x<(int)r.right-3;x++){
+    int rgb=frame.image.getRGB(x,y),red=(rgb>>16)&255,green=(rgb>>8)&255,blue=rgb&255;
+    if(i<6?red>180&&green>160&&blue<100:red>235&&green>235&&blue>235)pixels++;
+   }
+   check(pixels>0,"Shortcut contrast missing: "+language+" button "+i+(i<6?" needs yellow key":" needs white key on yellow caption"));
+  }
  }
  void actions(){
   int saved=desktopSettings.saves;
@@ -164,10 +178,10 @@ settings += r'''
     h.actions();screens++;
     ImageIO.write(b.image,"png",output.resolve("settings-"+language+"-"+width+"-"+style+"-"+(grid?"grid":"original")+".png").toFile());
    }
-   h.modal="controls";Bitmap b=h.draw(true);h.geometry(true);h.buttons.get(5).action.run();check(h.modal.equals("control-desktop"),"Sixth row did not open desktop settings");screens++;
+   h.modal="controls";Bitmap b=h.draw(true);h.geometry(true);h.contrast(b);h.buttons.get(5).action.run();check(h.modal.equals("control-desktop"),"Sixth row did not open desktop settings");screens++;
    ImageIO.write(b.image,"png",output.resolve("controls-"+language+"-"+width+"-"+style+".png").toFile());
   }
-  System.out.println("PASS "+checks+" full settings-sheet checks; "+screens+" renders across five languages, three race styles, both hotkey modes and two aspect ratios; labels and separate help blocks fit with bold colon headings and a blank separator, settings controls persist and remain inside panels");
+  System.out.println("PASS "+checks+" full settings-sheet checks; "+screens+" renders across five languages, three race styles, both hotkey modes and two aspect ratios; text-button shortcuts are unique with contrasting yellow/white glyph pixels, labels including bracketed keys fit, separate help blocks have bold colon headings and a blank separator, settings controls persist and remain inside panels");
  }
 }'''
 sources['org/openbw/androidtest/DesktopSettings11Test.java'] = settings
@@ -175,7 +189,7 @@ for name, text in sources.items():
     target = b / name
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(text)
-real = [src / n for n in ['NativeArt.java','NativeGlue.java','CommandHint.java','MenuLabels.java','ClassicFontCipher.java','GameLanguage.java','PortText.java','DesktopGuide.java','GamepadSettings.java']]
+real = [src / n for n in ['NativeArt.java','NativeGlue.java','CommandHint.java','MenuLabels.java','MenuHotkeys.java','ClassicFontCipher.java','GameLanguage.java','PortText.java','DesktopGuide.java','GamepadSettings.java']]
 subprocess.run(['javac','-d',str(b / 'classes'),*[str(b / n) for n in sources],*map(str,real)],check=True)
 result = subprocess.run(['java','-Djava.awt.headless=true','-cp',str(b / 'classes'),'org.openbw.androidtest.DesktopGuide11Test',str(assets),str(b),str(r / 'app/src/main/assets/native/ui-languages.tsv')],capture_output=True,text=True)
 print(result.stdout + result.stderr,end='')

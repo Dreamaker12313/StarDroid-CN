@@ -734,3 +734,9 @@ Mouse edge scrolling	Прокрутка у края экрана	Scrollen am Bil
 Mouse wheel zoom	Масштаб колёсиком	Zoom per Mausrad	Zoom con la rueda	Zoom à la molette
 Middle-button camera drag	Камера средней кнопкой	Ziehen mit mittlerer Maustaste	Arrastrar con el botón central	Glisser avec le bouton central
 Arrow-key camera	Камера клавишами стрелок	Kamera per Pfeiltasten	Cámara con las flechas	Caméra avec les flèches
+
+# Minimap terrain tooltip
+Hide minimap terrain	Скрыть рельеф миникарты	Minikartengelände ausblenden	Ocultar terreno del minimapa	Masquer le terrain de la minicarte
+Show minimap terrain	Показать рельеф миникарты	Minikartengelände einblenden	Mostrar terreno del minimapa	Afficher le terrain de la minicarte
+Hides terrain on the minimap. Unit markers remain visible.	Скрывает рельеф на миникарте. Метки юнитов остаются видимыми.	Blendet das Gelände auf der Minikarte aus. Einheitenmarkierungen bleiben sichtbar.	Oculta el terreno del minimapa. Las marcas de las unidades siguen visibles.	Masque le terrain de la minicarte. Les repères des unités restent visibles.
+Shows terrain on the minimap.	Показывает рельеф на миникарте.	Blendet das Gelände auf der Minikarte ein.	Muestra el terreno del minimapa.	Affiche le terrain de la minicarte.

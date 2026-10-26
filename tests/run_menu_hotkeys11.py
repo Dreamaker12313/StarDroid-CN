@@ -110,9 +110,28 @@ public class MenuHotkeys11Test {
    }
   }
  }
+ static void replayTint(NativeArt art,Path output)throws Exception {
+  byte[]wpe=art.read("tileset/badlands.wpe");int[]palette=new int[256];
+  for(int i=0;i<256;i++)palette[i]=Color.rgb(wpe[i*4]&255,wpe[i*4+1]&255,wpe[i*4+2]&255);
+  NativeArt.Font font=art.font("16",art.pcx("game/tfontgam.pcx",false,-1),palette,1).withShadedColor(0xff76b948);
+  for(char letter:new char[]{'P','R','E','x'}){
+   Bitmap normal=font.glyph(letter,3),key=font.glyph(letter,4);int ink=0,different=0;long normalLight=0,keyLight=0;
+   for(int y=0;y<normal.getHeight();y++)for(int x=0;x<normal.getWidth();x++){
+    int a=normal.image.getRGB(x,y),b=key.image.getRGB(x,y);
+    if((a>>>24)>0){ink++;if(a!=b)different++;normalLight+=Color.red(a)+Color.green(a)+Color.blue(a);keyLight+=Color.red(b)+Color.green(b)+Color.blue(b);
+     check(Color.green(b)>Color.red(b)&&Color.green(b)>Color.blue(b),"Replay key loses the existing green tint");}
+   }
+   check(ink>0&&different==ink,"Tint collapses the replay shortcut brightness ramp: "+letter);
+   check(keyLight>normalLight,"Replay shortcut is not brighter than its caption: "+letter);
+  }
+  PortText.select("en");Bitmap preview=Bitmap.createBitmap(220,48,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(preview);
+  Paint bg=new Paint();bg.setColor(0xff000000);c.drawRect(0,0,220,48,bg);
+  font.draw(c,"\u0004P\u0001ause   1\u0004x\u0001   \u0004R\u0001estart",5,16,210,0,3,0);
+  ImageIO.write(preview.image,"png",output.resolve("replay-shortcut-tint.png").toFile());
+ }
  public static void main(String[]args)throws Exception {
-  NativeBridge.root=Paths.get(args[0]);PortText.load(Files.newInputStream(Paths.get(args[2])));textCases();screens(new NativeArt(),Paths.get(args[1]));
-  System.out.println("PASS "+checks+" checks; "+labels+" real BIN captions; "+highlighted+" surviving mnemonics; "+renders+" original-font renders; nine dialogs, five UI languages, enabled/disabled/hover, exact authored colors, overrides, fitting and bracket preservation");
+  NativeBridge.root=Paths.get(args[0]);PortText.load(Files.newInputStream(Paths.get(args[2])));textCases();NativeArt art=new NativeArt();screens(art,Paths.get(args[1]));replayTint(art,Paths.get(args[1]));
+  System.out.println("PASS "+checks+" checks; "+labels+" real BIN captions; "+highlighted+" surviving mnemonics; "+renders+" original-font renders; nine dialogs, five UI languages, enabled/disabled/hover, exact authored colors, overrides, fitting, bracket preservation and distinct green replay shortcut ramps");
  }
 }'''
 for name,text in sources.items():

@@ -35,6 +35,7 @@ harness=harness.replace('float physicalScale(){return 1;}','float physicalScale(
 harness=harness.replace('void panCamera(float x,float y){}','double panX,panY;void panCamera(double x,double y){panX+=x;panY+=y;}')
 harness=harness.replace('void cancelGesture(){gesture="";pressed=null;listVelocity=0;}','void cancelGesture(){gesture="";pressed=null;listVelocity=0;NativeBridge.command(5,0,0,0,0);}')
 harness=harness.replace('String gesture="",scrollingList="",page="custom",modal="",hint="";','String gesture="",scrollingList="",page="game",modal="",hint="";')
+harness=harness.replace('boolean enabled,vertical,placementButton,controlGroup;', 'boolean enabled,vertical,placementButton,controlGroup;int key;String page,modal;')
 harness=harness.replace('int selections,imports;','''int selections,imports,commandPercent=100,resourcePercent=100,logicalWidth=640,physicalWidth=1920,physicalHeight=1440;
  android.content.SharedPreferences prefs=new android.content.SharedPreferences();
  final DesktopSettings desktopSettings=new DesktopSettings();final GamepadControls gamepad=new GamepadControls();final HashMap<Integer,Integer>gamepadHeld=new HashMap<>();
@@ -44,6 +45,9 @@ harness=harness.replace('int selections,imports;','''int selections,imports,comm
  void enqueue(Runnable action){queue.add(action);}void flush(){while(!queue.isEmpty())queue.remove(0).run();}
  void back(){backs++;}void openMenu(){menus++;modal="menu";}
  float cameraBottom(float x){return 376;}boolean gamepadWorldOverride;
+ boolean replayGame;
+ static class MenuCaption{final Button button;final MenuHotkeys.Entry entry;final boolean highlight;final java.util.function.Consumer<String>draw;MenuCaption(Button b,MenuHotkeys.Entry e,boolean h,java.util.function.Consumer<String>d){button=b;entry=e;highlight=h;draw=d;}}
+ final MenuHotkeys menuHotkeys=new MenuHotkeys(),backgroundMenuHotkeys=new MenuHotkeys();boolean menuBehindModal;final ArrayList<MenuCaption>menuCaptions=new ArrayList<>();
 ''')
 # Existing touch coordinates are logical in this shim. Gamepad uses physical-coordinate events.
 harness=harness.replace('float lx(float x){return x;}float ly(float y){return y;}','float lx(float x){return x/3;}float ly(float y){return y/3;}')
@@ -57,7 +61,7 @@ def production(name):
   elif text[end]=='}':depth-=1
   end+=1
  return text[m.start():end]
-names=['font','text','panel','body','fallback','uiLine','openGamepadSettings','gamepadSettingsBack','changeGamepad','gamepadLine','gamepadOption','gamepadToggle','gamepadSlider','drawGamepadSettings','controlGroupScale','controlGroup','controlGroupRows','drawControlGroups','reloadGamepadSettings','handleGamepadKey','handleGamepadMotion','gamepadDirection','activateGamepad','gamepadActionHeld','gamepadButton','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag','resetGamepad','advanceGamepad']
+names=['font','text','panel','body','fallback','uiLine','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','fallbackMenu','openGamepadSettings','gamepadSettingsBack','changeGamepad','gamepadLine','gamepadOption','gamepadToggle','gamepadSlider','drawGamepadSettings','controlGroupScale','controlGroup','controlGroupRows','drawControlGroups','reloadGamepadSettings','handleGamepadKey','handleGamepadMotion','gamepadDirection','activateGamepad','gamepadActionHeld','gamepadButton','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag','resetGamepad','advanceGamepad']
 harness+='\n'.join(production(n) for n in names)
 # Physical keyboard routing moved to the production event suite in
 # run_desktop_input11.py; do not emulate the old instantaneous group shortcut.
@@ -67,7 +71,7 @@ harness+='''
  void redrawGroups(){buttons.clear();drawControlGroups(new Canvas(Bitmap.createBitmap(640,480,Bitmap.Config.ARGB_8888)));}
  static void key(Controls81Test h,int key,boolean down){check(h.handleGamepadKey(new KeyEvent(key,down?0:1,0)),"Controller key unhandled");h.flush();}
 
- Bitmap redrawSettings(){buttons.clear();Bitmap b=Bitmap.createBitmap(640,480,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);glue.draw(c,1000);check(drawGamepadSettings(c),"Settings modal not handled");return b;}
+ Bitmap redrawSettings(){buttons.clear();menuCaptions.clear();Bitmap b=Bitmap.createBitmap(640,480,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);glue.draw(c,1000);check(drawGamepadSettings(c),"Settings modal not handled");flushMenuButtons();return b;}
  static void at(Controls81Test h,int index){h.buttons.get(index).action.run();h.flush();}
  static void menuChecks(Controls81Test h,String[]args)throws Exception{
   h.gamepad.reset();h.gamepad.save(h.prefs);h.modal="controls";h.page="game";
@@ -230,6 +234,7 @@ sources['android/view/MotionEvent.java']=sources['android/view/MotionEvent.java'
  int action;''')
 sources['android/view/InputDevice.java']='''package android.view;public class InputDevice{public static final int SOURCE_GAMEPAD=1025,SOURCE_JOYSTICK=16777232;public static boolean connected=true;public int getSources(){return SOURCE_GAMEPAD|SOURCE_JOYSTICK;}public static InputDevice getDevice(int id){return connected?new InputDevice():null;}public MotionRange getMotionRange(int axis,int source){return new MotionRange();}public static class MotionRange{public float getFlat(){return .1f;}}}'''
 sources['org/openbw/androidtest/NativeHud.java']=sources['org/openbw/androidtest/NativeHud.java'].replace('class NativeHud {','class NativeHud {boolean gridHotkeys;String hint(Hit h){return h.fields==null?h.help:h.fields[1];}')
+sources['org/openbw/androidtest/NativeHud.java']=sources['org/openbw/androidtest/NativeHud.java'].replace('boolean more;', 'boolean more,terrainToggle;')
 hud_source=(src/'NativeHud.java').read_text()
 def hud_method(name):
  m=re.search(r'^  (?:static )?(?:void|Bitmap) '+name+r'\(',hud_source,re.M);assert m,name
@@ -255,10 +260,10 @@ for callback in ['requestDesktopSettings','requestGamepadSettings','requestContr
  assert callback not in activity_source, 'Removed App Options control route still present: '+callback
 for name,text in sources.items():
  target=b/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_text(text)
-real=[src/n for n in ['DesktopSettings.java','GamepadControls.java','GamepadSettings.java','NativeArt.java','NativeGlue.java','NativeResults.java','CommandHint.java','MenuLabels.java','ClassicFontCipher.java','GameLanguage.java','PortText.java']]
+real=[src/n for n in ['DesktopSettings.java','GamepadControls.java','GamepadSettings.java','NativeArt.java','NativeGlue.java','NativeResults.java','CommandHint.java','MenuLabels.java','MenuHotkeys.java','ClassicFontCipher.java','GameLanguage.java','PortText.java']]
 jar=r/'build-native/json-20240303.jar'
 subprocess.run(['javac','-cp',str(jar),'-d',str(b/'classes'),*[str(b/n) for n in sources],*map(str,real)],check=True)
 result=subprocess.run(['java','-Djava.awt.headless=true','-cp',str(b/'classes')+':'+str(jar),'org.openbw.androidtest.Controls81Test',str(assets),str(b),str(r/'app/src/main/assets/native/ui-languages.tsv')],capture_output=True,text=True)
 print(result.stdout+result.stderr,end='');result.check_returncode()
-files=[src/'MainActivity.java',src/'MenuLabels.java',r/'app/src/main/assets/native/ui-languages.tsv',src/'NativeSurface.java',src/'DesktopSettings.java',src/'GamepadControls.java',src/'GamepadSettings.java',src/'NativeBridge.java',Path(__file__)]
+files=[src/'MainActivity.java',r/'app/src/main/assets/native/ui-languages.tsv',src/'NativeSurface.java',src/'NativeBridge.java',src/'NativeHud.java',*real,Path(__file__)]
 (r/'validation/gamepad-v81.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'methods':names+['touch'],'result':result.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}},indent=2)+'\n')

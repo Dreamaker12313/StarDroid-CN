@@ -45,6 +45,7 @@ final class NativeHud implements AutoCloseable {
     int selectUnit = -1;
     int unload = -1;
     boolean more = false;
+    boolean terrainToggle = false;
     String help;
   }
 
@@ -218,8 +219,9 @@ final class NativeHud implements AutoCloseable {
     image(c, menu, 410 + extra, 387);
     small.draw(c, "MENU", 410 + extra, menuDown ? 392 : 391, 65, 1, menuDown ? 2 : 3, 0);
     Bitmap terrain = dialogButtons[NativeBridge.value(14, 0) != 0 ? 4 : 3];
-    boolean terrainDown = pressedButton != null && pressedButton.contains(36, 333);
+    boolean terrainDown = pressedCommand != null && pressedCommand.contains(36, 333);
     image(c, terrain, 6, terrainDown ? 324 : 323);
+    hits.add(terrainHit(NativeBridge.value(14, 0) != 0));
     drawResources(c, width);
     String card = NativeBridge.text(0), details = NativeBridge.text(4);
     String[] lines = card.split("\n"),
@@ -643,6 +645,17 @@ final class NativeHud implements AutoCloseable {
     return "";
   }
 
+  static Hit terrainHit(boolean shown) {
+    Hit hit = new Hit();
+    hit.rect = new RectF(6, 322, 67, 344);
+    hit.terrainToggle = true;
+    hit.help = PortText.text(shown ? "Hide minimap terrain" : "Show minimap terrain")
+        + " [\u0003Tab\u0002]\n"
+        + PortText.text(shown ? "Hides terrain on the minimap. Unit markers remain visible."
+            : "Shows terrain on the minimap.");
+    return hit;
+  }
+
   void tooltip(Canvas canvas, String text, int width) {
     tooltip(canvas, text, width, race);
   }
@@ -675,8 +688,11 @@ final class NativeHud implements AutoCloseable {
     float left=width-boxWidth*scale-8,top=bottom-height*scale;
     Paint ink=new Paint();canvas.save();canvas.translate(left,top);canvas.scale(scale,scale);
     ink.setColor(0xf5081010);canvas.drawRect(0,0,boxWidth,height,ink);
-    ink.setStyle(Paint.Style.STROKE);ink.setStrokeWidth(1);ink.setColor(0xffb8b880);canvas.drawRect(.5f,.5f,boxWidth-.5f,height-.5f,ink);
-    ink.setColor(0xff3b4430);canvas.drawRect(1.5f,1.5f,boxWidth-1.5f,height-1.5f,ink);canvas.clipRect(4,4,boxWidth-4,height-4);
+    ink.setStyle(Paint.Style.STROKE);ink.setStrokeWidth(1);
+    ink.setColor(race == 0 ? 0xffe43c3c : race == 2 ? 0xfff0cc48 : 0xff4088ff);
+    canvas.drawRect(.5f,.5f,boxWidth-.5f,height-.5f,ink);
+    ink.setColor(race == 0 ? 0xff581818 : race == 2 ? 0xff584814 : 0xff183458);
+    canvas.drawRect(1.5f,1.5f,boxWidth-1.5f,height-1.5f,ink);canvas.clipRect(4,4,boxWidth-4,height-4);
     float y=7;
     for(String row:rows){
       if(row.startsWith("\u0000")){float x=8;for(String item:row.substring(1).split(" · ")){

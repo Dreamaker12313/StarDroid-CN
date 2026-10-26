@@ -21,6 +21,8 @@ final class NativeResults {
   int tab = 0, hot = -1;
   double progress = 0, animationElapsed = 0;
   final Paint paint = new Paint();
+  final MenuHotkeys menuHotkeys=new MenuHotkeys();
+  final Map<Integer,String> buttonCaptions=new HashMap<>();
 
   NativeResults(NativeArt art, int race, boolean victory, String raw) {
     won = victory;
@@ -118,6 +120,24 @@ final class NativeResults {
     if (w != null) c.drawBitmap(pcx.image, null, w.rect(), NativeArt.PIXELS);
   }
 
+  void prepareButtonCaptions(){
+    String[] labels={"Overview","Units","Structures","Resources","OK","Save Replay"};
+    int[] ids={3,4,5,6,7,61};ArrayList<MenuHotkeys.Entry> entries=new ArrayList<>();
+    for(int i=0;i<ids.length;i++)entries.add(new MenuHotkeys.Entry(Integer.toString(ids[i]),
+        MenuLabels.forWidget("gluscore",ids[i],layout.get(ids[i]),labels[i])));
+    menuHotkeys.assign("score",entries);buttonCaptions.clear();
+    for(int i=0;i<ids.length;i++)buttonCaptions.put(ids[i],entries.get(i).shown);
+  }
+
+  String buttonCaption(int id){return buttonCaptions.getOrDefault(id,"");}
+
+  void buttonLabel(Canvas c,int id,NativeArt.Font font,int color,boolean enabled){
+    NativeArt.Widget w=layout.get(id);if(w==null)return;
+    String label=buttonCaption(id);if(!enabled)label=NativeArt.clean(label);
+    c.save();c.clipRect(w.x,w.y,w.x+w.w,w.y+w.h);
+    font.draw(c,MenuHotkeys.fit(font,label,w.w),w.x,w.y+Math.max(0,(w.h-font.height)/2),w.w,1,color,0);c.restore();
+  }
+
   void panels(Canvas c) {
     c.drawBitmap(main.image, 0, 0, NativeArt.PIXELS);
     NativeArt.Widget active = layout.get(3 + tab);
@@ -145,6 +165,7 @@ final class NativeResults {
   }
 
   void draw(Canvas c, double dt) {
+    prepareButtonCaptions();
     animationElapsed += Math.max(0, dt);
     double p = Math.min(1, animationElapsed / (exiting ? NativeGlue.EXIT_MS : NativeGlue.ENTER_MS));
     float distance = 640 * (float)(exiting ? 1-Math.pow(1-p,3) : Math.pow(1-p,3));
@@ -153,8 +174,7 @@ final class NativeResults {
     if(counting && !audioCounting && !exiting){countElapsed+=Math.max(0,dt);progress=Math.min(1,countElapsed/COUNT_MS);}
     panels(c);
     label(c, 2, won ? "Victory!" : "Defeat", title, won ? 4 : 2, 1);
-    String[] tabs = {"Overview", "Units", "Structures", "Resources"};
-    for (int i = 0; i < 4; i++) label(c, 3+i, tabs[i], small, i == tab || hot == 3+i ? 4 : 2, 1);
+    for (int i = 0; i < 4; i++) buttonLabel(c,3+i,small,i == tab || hot == 3+i ? 4 : 2,true);
     String[][] headings = {{"Units", "Structures", "Resources"}, {"Produced", "Killed", "Lost"},
         {"Constructed", "Razed", "Lost"}, {"Minerals", "Vespene Gas", "Spent"}};
     for (int i = 0; i < 3; i++) label(c, 10+i, headings[tab][i], small, 2, 1);
@@ -190,8 +210,8 @@ final class NativeResults {
     NativeArt.Widget time = layout.get(9);
     if (time != null) line(c, "Elapsed Time: " + elapsed/60 + ":" + String.format(Locale.ROOT,"%02d",elapsed%60),
         large,2,0,time.x,time.y,218,time.h);
-    label(c,7,"OK",title,hot == 7 ? 4 : 3,1);
-    label(c,61,"Save Replay",title,canSave ? hot == 61 ? 4 : 3 : 5,1);
+    buttonLabel(c,7,title,hot == 7 ? 4 : 3,true);
+    buttonLabel(c,61,title,canSave ? hot == 61 ? 4 : 3 : 5,canSave);
     c.restore();
   }
 }

@@ -157,6 +157,20 @@ final class NativeSurface extends SurfaceView
   private long diagnosticsAt,diagnosticsFrames;
   private double drawWindowMs,frameWindowMs,displayFps,drawMs,frameMs;
   private volatile String diagnostics = "Native renderer starting";
+  private final MenuHotkeys menuHotkeys=new MenuHotkeys();
+  private final MenuHotkeys backgroundMenuHotkeys=new MenuHotkeys();
+  private final ArrayList<MenuCaption> menuCaptions=new ArrayList<>();
+  private boolean menuBehindModal;
+
+  private static final class MenuCaption {
+    final Button button;
+    final MenuHotkeys.Entry entry;
+    final java.util.function.Consumer<String> draw;
+    final boolean highlight;
+    MenuCaption(Button button,MenuHotkeys.Entry entry,boolean highlight,java.util.function.Consumer<String> draw){
+      this.button=button;this.entry=entry;this.highlight=highlight;this.draw=draw;
+    }
+  }
 
   private static final class Button {
     RectF rect;
@@ -849,8 +863,8 @@ final class NativeSurface extends SurfaceView
     if(widget==null||!glue.labelVisible(id))return;
     // Keep the original OK/Cancel artwork, hit box and font metrics intact.
     boolean available=enabled&&action!=null&&pendingScreen==null;
-    glue.label(c,id,label,enabled&&action!=null);
-    addMenuButton(widget.hit(),action,available,MenuLabels.forWidget(glue.name,id,widget,label));
+    queueMenuButtonVisual(widget.hit(),action,available,enabled&&action!=null,MenuLabels.forWidget(glue.name,id,widget,label),
+        shown->glue.label(c,id,shown,enabled&&action!=null));
   }
 
   private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
@@ -859,19 +873,22 @@ final class NativeSurface extends SurfaceView
       // translations fit exactly as native menu labels do, without smaller fonts.
       redBorder(c,x,y,width,height,false);
       NativeArt.Font font=glue.button;
-      int layoutWidth=NativeGlue.labelWidth(font,label,width-8,height);
-      int textHeight=font.lines(label,layoutWidth).size()*font.height;
-      c.save();c.clipRect(x+4,y,x+width-4,y+height);
-      c.translate(x+4,y+(height-textHeight)/2f);c.scale((width-8)/(float)layoutWidth,1);
-      font.draw(c,label,0,0,layoutWidth,1,menuColor(x,y,width,height,enabled),0);c.restore();
-      add(new RectF(x,y,x+width,y+height),action,enabled);return;
+      queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,shown->{
+        int layoutWidth=NativeGlue.labelWidth(font,shown,width-8,height);
+        int textHeight=font.lines(shown,layoutWidth).size()*font.height;
+        c.save();c.clipRect(x+4,y,x+width-4,y+height);
+        c.translate(x+4,y+(height-textHeight)/2f);c.scale((width-8)/(float)layoutWidth,1);
+        font.draw(c,shown,0,0,layoutWidth,1,menuColor(x,y,width,height,enabled),0);c.restore();
+      });return;
     }
     paint.setColor(Color.BLACK);c.drawRect(x,y,x+width,y+height,paint);
     boolean hot=pressed!=null&&pressed.rect.contains(x+width/2f,y+height/2f);
     redBorder(c,x,y,width,height,hot&&enabled);
-    NativeArt.Font font=replayFont(true),small=replayFont(false);
-    if(font!=null){if(font.measure(label)>width-8)font=small;uiLine(c,label,font,x+4,y,width-8,height,1,enabled?hot?4:3:5);}
-    add(new RectF(x,y,x+width,y+height),action,enabled);
+    NativeArt.Font large=replayFont(true),small=replayFont(false);
+    final NativeArt.Font font=large!=null&&large.measure(label)>width-8?small:large;
+    queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,
+        shown->{if(font!=null)uiLine(c,shown,font,x+4,y,width-8,height,1,enabled?hot?4:3:5);
+          else fallbackMenu(c,shown,x+4,y,width-8,height,enabled?3:5);});
   }
 
   private void seekReplay(float value) {
@@ -1134,40 +1151,43 @@ final class NativeSurface extends SurfaceView
     c.scale(scale,scale);
     c.clipRect(0,0,logicalWidth,480);
     buttons.clear();
-    try {draw(c,dt);drawGamepadCursor(c);if(desktopMouseActive&&desktopInside)drawPointer(c,desktopX,desktopY,desktopPrimary.equals("world")||gamepadWorld(desktopX,desktopY));} finally {c.restoreToCount(save);}
+    menuCaptions.clear();
+    menuBehindModal=!modal.isEmpty();
+    try {draw(c,dt);flushMenuButtons();drawGamepadCursor(c);if(desktopMouseActive&&desktopInside)drawPointer(c,desktopX,desktopY,desktopPrimary.equals("world")||gamepadWorld(desktopX,desktopY));} finally {c.restoreToCount(save);}
   }
 
   private void draw(Canvas c, double dt) {
     presentReplayAcknowledgement();
+    menuBehindModal=!modal.isEmpty();
     placementButtonRow = null;
     if (page.equals("results") && results != null) {
       results.canSave = NativeBridge.value(15, 0) != 0;
       results.hot = hoverButton;
       results.draw(c, !modal.isEmpty() ? 0 : dt);
-      if (modal.startsWith("gamepad")||modal.equals("control-desktop")) {buttons.clear(); drawGamepadSettings(c); return;}
-      if(modal.startsWith("replay-")){buttons.clear();drawReplayDialog(c);return;}
+      if (modal.startsWith("gamepad")||modal.equals("control-desktop")) {buttons.clear();menuBehindModal=false; drawGamepadSettings(c); return;}
+      if(modal.startsWith("replay-")){buttons.clear();menuBehindModal=false;drawReplayDialog(c);return;}
       if (!results.ready() || pendingScreen != null) return;
       NativeArt.Widget save = results.layout.get(61);
       if (save != null)
-        add(
+        addMenuButton(
             save.hit(),
             this::saveCurrentReplay,
-            results.canSave);
+            results.canSave,results.buttonCaption(61));
       for (int i = 0; i < 4; i++) {
         final int tab = i;
         NativeArt.Widget w = results.layout.get(i + 3);
         if (w != null)
-          add(
+          addMenuButton(
               w.hit(),
               () -> {
                 results.tab = tab;
                 results.progress = 0;
                 startScoreCount();
               },
-              true);
+              true,results.buttonCaption(i+3));
       }
       NativeArt.Widget ok = results.layout.get(7);
-      if (ok != null) add(ok.hit(), () -> navigate(this::nextMission), true);
+      if (ok != null) addMenuButton(ok.hit(), () -> navigate(this::nextMission), true,results.buttonCaption(7));
       return;
     }
     if (page.equals("game")) {
@@ -1179,19 +1199,16 @@ final class NativeSurface extends SurfaceView
           campaign != null && campaign.talking >= 0 ? campaign.portraits[campaign.talking] : -1;
       hud.transmissionTalk = NativeBridge.playing(62);
       hud.paused = !modal.isEmpty();
-      hud.pressedCommand = commandHover.pressed == null ? null : commandHover.pressed.rect;
+      hud.pressedCommand = commandHover.pressed != null ? commandHover.pressed.rect
+          : desktopHudHit != null ? desktopHudHit.rect : null;
       hud.pressedButton = pressed == null ? null : pressed.rect;
       hud.resourceScale = resourcePercent / 100f;
       hud.commandScale = commandPercent / 100f;
       hud.descriptionScale = descriptionPercent / 100f;
       hud.gridHotkeys = desktopSettings.gridHotkeys;
       hud.draw(c, world, logicalWidth, zoom, clock);
-      if (modal.isEmpty()) {if(replayGame)drawReplayControls(c);else{drawSelectionButton(c);drawCommandModeButton(c);drawControlGroups(c);}}
+      if (modal.isEmpty()) {if(replayGame){drawReplayControls(c);flushMenuButtons();}else{drawSelectionButton(c);drawCommandModeButton(c);drawControlGroups(c);}}
       add(new RectF(logicalWidth - 230, 387, logicalWidth - 164, 408), this::openMenu, true);
-      add(
-          new RectF(6, 322, 67, 344),
-          () -> NativeBridge.command(8, NativeBridge.value(14, 0) == 0 ? 1 : 0, 0, 0, 0),
-          true);
       if (campaign != null) {
         if (!campaign.message.isEmpty()) {
           float scale = descriptionPercent / 100f;
@@ -1273,7 +1290,9 @@ final class NativeSurface extends SurfaceView
     }
     if (page.equals("game") && placement && modal.isEmpty()) drawPlacementButtons(c);
     if (!modal.isEmpty()) {
+      flushMenuButtons();
       buttons.clear();
+      menuBehindModal=false;
       drawModal(c);
     }
   }
@@ -1286,6 +1305,20 @@ final class NativeSurface extends SurfaceView
       c.drawText(l, x, y + size, paint);
       y += size + 5;
     }
+  }
+
+  private void fallbackMenu(Canvas c,String label,float x,float y,int width,int height,int color){
+    paint.setTextSize(16);paint.setTypeface(Typeface.SANS_SERIF);
+    String shown=PortText.text(label),plain=NativeArt.clean(shown).replace('\n',' ');
+    float measured=paint.measureText(plain),scale=Math.min(1,width/Math.max(1,measured));
+    int normal=color==3?0xffe1cf47:color==5?0xff73798b:0xffc5cce3;
+    c.save();c.clipRect(x,y,x+width,y+height);c.translate(x+(width-measured*scale)/2,y+(height-18)/2f);c.scale(scale,1);
+    float left=0;int tint=normal;
+    for(int i=0;i<shown.length();i++){
+      char ch=shown.charAt(i);if(ch<32){if(ch==4)tint=color==3?0xfff0f4ff:0xffffec73;else if(ch==1)tint=normal;continue;}
+      String glyph=String.valueOf(ch);paint.setColor(tint);c.drawText(glyph,left,16,paint);left+=paint.measureText(glyph);
+    }
+    c.restore();
   }
 
   private NativeArt.Font font() {
@@ -1332,10 +1365,9 @@ final class NativeSurface extends SurfaceView
     else if (glue != null) c.drawBitmap(glue.panel(Math.round(w), Math.round(h), true), x, y, NativeArt.PIXELS);
     else panel(c, x, y, w, h);
     NativeArt.Font f = font();
-    float fy = y + (h - (f == null ? 18 : f.height)) / 2;
-    String shown=enabled&&action!=null?PortText.text(label):NativeArt.clean(PortText.text(label));
-    text(c, shown, x + 3, fy, (int) w - 6, 1, enabled ? 3 : 5);
-    addMenuButton(new RectF(x, y, x + w, y + h), action, enabled, f==null?"":shown);
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,
+        shown->{if(f!=null)uiLine(c,shown,f,x+3,y,(int)w-6,(int)h,1,enabled?3:5);
+          else fallbackMenu(c,shown,x+3,y,(int)w-6,(int)h,enabled?3:5);});
   }
 
   private void add(RectF rect, Runnable run, boolean enabled) {
@@ -1349,6 +1381,36 @@ final class NativeSurface extends SurfaceView
     buttons.add(button);
   }
 
+  private void queueMenuButton(RectF rect,Runnable run,boolean enabled,String label,
+      java.util.function.Consumer<String> drawCaption) {
+    queueMenuButtonVisual(rect,run,enabled,enabled,label,drawCaption);
+  }
+
+  private void queueMenuButtonVisual(RectF rect,Runnable run,boolean enabled,boolean highlight,String label,
+      java.util.function.Consumer<String> drawCaption) {
+    if(run==null){drawCaption.accept(NativeArt.clean(PortText.text(label)));return;}
+    if(page.equals("game")&&modal.isEmpty()&&!replayGame){
+      drawCaption.accept(NativeArt.clean(PortText.text(label)));
+      add(rect,run,enabled);return;
+    }
+    Button button=new Button(rect,run,enabled);button.page=page;button.modal=modal;
+    buttons.add(button);
+    String id=Math.round(rect.left)+":"+Math.round(rect.top)+":"+Math.round(rect.width())+":"+Math.round(rect.height());
+    menuCaptions.add(new MenuCaption(button,new MenuHotkeys.Entry(id,label),highlight,drawCaption));
+  }
+
+  private void flushMenuButtons() {
+    if(menuCaptions.isEmpty())return;
+    ArrayList<MenuHotkeys.Entry> entries=new ArrayList<>();
+    for(MenuCaption caption:menuCaptions)if(buttons.contains(caption.button))entries.add(caption.entry);
+    (menuBehindModal?backgroundMenuHotkeys:menuHotkeys).assign(page+"|"+(menuBehindModal?"":modal),entries);
+    for(MenuCaption caption:menuCaptions)if(buttons.contains(caption.button)){
+      caption.button.key=caption.button.enabled?caption.entry.key:0;
+      caption.draw.accept(caption.highlight?caption.entry.shown:NativeArt.clean(caption.entry.shown));
+    }
+    menuCaptions.clear();
+  }
+
   private void glueButton(Canvas c, int id, String label, Runnable run) {
     if (glue == null) {
       int n = buttons.size();
@@ -1359,10 +1421,10 @@ final class NativeSurface extends SurfaceView
     NativeArt.Widget w = glue.layout.get(id);
     if (w == null || !glue.labelVisible(id)) return;
     boolean enabled=run!=null&&pendingScreen==null&&(glue.elapsed>=NativeGlue.ENTER_MS||!glue.slide);
-    glue.label(c, id, label, run!=null);
     RectF r = w.hit();
     r.offset(glue.shift(w), 0);
-    addMenuButton(r,run,enabled,MenuLabels.forWidget(glue.name,id,w,label));
+    queueMenuButtonVisual(r,run,enabled,run!=null,MenuLabels.forWidget(glue.name,id,w,label),
+        shown->glue.label(c,id,shown,run!=null));
   }
 
   private void message(String text) {
@@ -1487,8 +1549,9 @@ final class NativeSurface extends SurfaceView
       int first = Math.min(profileScroll, Math.max(0, profiles.size()-6));
       for (int i=first; i<Math.min(profiles.size(), first+6); i++) {
         final String name = profiles.get(i);
-        button(c, (name.equals(selectedProfile) ? "> " : "") + name, 120, 112+(i-first)*34,
-            400, 28, () -> {selectedProfile=name;saveProfiles();}, true);
+        float rowY=112+(i-first)*34;panel(c,120,rowY,400,28);
+        fallbackMenu(c,NativeArt.clean((name.equals(selectedProfile)?"> ":"")+name),123,rowY,394,28,3);
+        add(new RectF(120,rowY,520,rowY+28),()->{selectedProfile=name;saveProfiles();},true);
       }
       button(c, "Up", 120, 320, 94, 28, () -> profileScroll=Math.max(0,first-6), first>0);
       button(c, "Down", 226, 320, 94, 28, () -> profileScroll=first+6, first+6<profiles.size());
@@ -1750,7 +1813,9 @@ final class NativeSurface extends SurfaceView
       int row=0,index=0;nearbyPage=Math.min(nearbyPage,Math.max(0,(nearbyGames.size()-1)/7));
       for(Map.Entry<String,String> entry:nearbyGames.entrySet()) {
         if(index++<nearbyPage*7)continue;if(row>=7)break;final String id=entry.getKey();
-        redButton(c,entry.getValue(),64,94+row++*30,270,26,()->selectedNearby=id,true);
+        float rowY=94+row++*30;redBorder(c,64,rowY,270,26,false);
+        uiLine(c,entry.getValue(),glue.dialogue,68,rowY,262,26,1,menuColor(64,rowY,270,26,true));
+        add(new RectF(64,rowY,334,rowY+26),()->selectedNearby=id,true);
       }
       body(c,nearby==null?nearbyStatus:nearby.status,410,95,190,108);
       uiLine(c,nearbyGames.getOrDefault(selectedNearby,"Select a host"),glue.dialogue,410,210,190,32,1,4);
@@ -1766,12 +1831,13 @@ final class NativeSurface extends SurfaceView
       String player=setup.controllers[i]==0?"Closed":setup.controllers[i]==2?"Computer":nearby!=null&&nearby.occupants[i]>=0?nearby.names[i]:"Player (Open)";
       uiLine(c,Integer.toString(i+1),glue.dialogue,29,y,21,24,0,2);
       redBorder(c,52,y,setup.teamGame?141:184,24,movingSlot==i);
-      uiLine(c,player,glue.dialogue,57,y,setup.teamGame?131:174,24,0,editable&&host?menuColor(52,y,setup.teamGame?141:184,24,true):2);
+      queueMenuButton(new RectF(52,y,setup.teamGame?193:236,y+24),()->lobbySlot(slot),editable&&host,player,
+          shown->uiLine(c,shown,glue.dialogue,57,y,setup.teamGame?131:174,24,0,editable&&host?menuColor(52,y,setup.teamGame?141:184,24,true):2));
       float raceX=setup.teamGame?201:244;int raceW=setup.teamGame?85:112;
       redBorder(c,raceX,y,raceW,24,false);
-      uiLine(c,setup.controllers[i]==0?"":MatchSetup.RACES[setup.races[i]],glue.dialogue,raceX+5,y,raceW-10,24,0,menuColor(raceX,y,raceW,24,editable&&!nearby.resuming&&setup.controllers[i]!=0&&(host||i==nearby.localSlot)));
-      add(new RectF(52,y,setup.teamGame?193:236,y+24),()->lobbySlot(slot),editable&&host);
-      add(new RectF(raceX,y,raceX+raceW,y+24),()->{try{nearby.changeRace(slot);}catch(Exception e){nearby.fail(e.getMessage());}},editable&&!nearby.resuming&&setup.controllers[i]!=0&&(host||i==nearby.localSlot));
+      boolean raceEnabled=editable&&!nearby.resuming&&setup.controllers[i]!=0&&(host||i==nearby.localSlot);
+      queueMenuButton(new RectF(raceX,y,raceX+raceW,y+24),()->{try{nearby.changeRace(slot);}catch(Exception e){nearby.fail(e.getMessage());}},raceEnabled,
+          setup.controllers[i]==0?"":MatchSetup.RACES[setup.races[i]],shown->uiLine(c,shown,glue.dialogue,raceX+5,y,raceW-10,24,0,menuColor(raceX,y,raceW,24,raceEnabled)));
       if(setup.teamGame)redButton(c,"T"+setup.teams[i],294,y,62,24,()->{try{nearby.setup.teams[slot]=nearby.setup.teams[slot]%8+1;nearby.settingsChanged();}catch(Exception e){nearby.fail(e.getMessage());}},editable&&host&&!nearby.resuming&&setup.controllers[i]!=0);
     }
     redButton(c,"Hero Mode: "+(setup.heroMode?"On":"Off"),410,57,190,20,()->changeLobbySetting(3),editable&&host&&!nearby.resuming);
@@ -1793,8 +1859,8 @@ final class NativeSurface extends SurfaceView
     add(new RectF(30,455,307,473),this::openChat,nearby!=null&&!nearby.closed);
     redButton(c,"Send",313,455,45,18,this::sendChat,nearby!=null&&!nearby.closed&&!chatDraft.trim().isEmpty());
     if(host) {
-      NativeArt.Widget w=glue.layout.get(7);glue.label(c,7,"Start Game",nearby!=null&&nearby.ready&&nearby.countdown==0&&!nearby.closed);
-      add(w.hit(),()->nearby.start(),nearby!=null&&nearby.ready&&nearby.countdown==0&&!nearby.closed);
+      NativeArt.Widget w=glue.layout.get(7);boolean enabled=nearby!=null&&nearby.ready&&nearby.countdown==0&&!nearby.closed;
+      if(w!=null)queueMenuButton(w.hit(),()->nearby.start(),enabled,MenuLabels.forWidget(glue.name,7,w,"Start Game"),caption->glue.label(c,7,caption,enabled));
     }else customLabel(c,7,"Waiting for host",glue.dialogue,1);
     glueButton(c,8,null,()->navigate(this::showNearby));
   }
@@ -1812,7 +1878,7 @@ final class NativeSurface extends SurfaceView
     catch(Exception e){nearby.fail(e.getMessage());}
   }
   private void uiLine(Canvas c,String label,NativeArt.Font font,float x,float y,int width,int height,int align,int color){
-    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,MenuLabels.applyMnemonic(label,NativeResults.fit(font,label,width)),x,y+Math.max(0,(height-font.height)/2f),width,align,color,0);c.restore();
+    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,MenuHotkeys.paintCaption(font,MenuHotkeys.fit(font,label,width),color),x,y+Math.max(0,(height-font.height)/2f),width,align,color,0);c.restore();
   }
   private boolean menuHot(float x,float y,float w,float h){return pendingScreen==null && (modal.isEmpty()||modal.startsWith("profile-")) && menuHoverX>=x && menuHoverX<x+w && menuHoverY>=y && menuHoverY<y+h;}
   private int menuColor(float x,float y,float w,float h,boolean enabled){return !enabled?5:menuHot(x,y,w,h)?4:3;}
@@ -1824,8 +1890,11 @@ final class NativeSurface extends SurfaceView
     for(int i=1;i<3;i++){c.drawRect(x+3-i,y+i,x+4-i,y+i+1,paint);c.drawRect(x+w-4+i,y+i,x+w-3+i,y+i+1,paint);c.drawRect(x+3-i,y+h-i-1,x+4-i,y+h-i,paint);c.drawRect(x+w-4+i,y+h-i-1,x+w-3+i,y+h-i,paint);}
   }
   private void redButton(Canvas c,String label,float x,float y,int w,int h,Runnable action,boolean enabled){
-    NativeArt.Font font=h<28?glue.dialogue:glue.large;if(font.measure(label)>w-8)font=glue.small;
-    redBorder(c,x,y,w,h,false);uiLine(c,label,font,x+4,y,w-8,h,1,menuColor(x,y,w,h,enabled));if(action!=null)add(new RectF(x,y,x+w,y+h),action,enabled);
+    NativeArt.Font preferred=h<28?glue.dialogue:glue.large;
+    final NativeArt.Font font=preferred.measure(label)>w-8?glue.small:preferred;
+    redBorder(c,x,y,w,h,false);
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,
+        shown->uiLine(c,shown,font,x+4,y,w-8,h,1,menuColor(x,y,w,h,enabled)));
   }
 
   private void showCustom() {
@@ -1939,8 +2008,8 @@ final class NativeSurface extends SurfaceView
     NativeArt.Widget w = glue.layout.get(id);
     if (w == null) return;
     redBorder(c,w.x,w.y,w.w,w.h,false);
-    uiLine(c,label,glue.dialogue,w.x+3,w.y,w.w-6,w.h,0,action==null?2:menuColor(w.x,w.y,w.w,w.h,true));
-    if (action != null) add(w.rect(), action, true);
+    queueMenuButton(w.rect(),action,true,label,
+        shown->uiLine(c,shown,glue.dialogue,w.x+3,w.y,w.w-6,w.h,0,action==null?2:menuColor(w.x,w.y,w.w,w.h,true)));
   }
 
   private boolean installed(JSONObject m) {
@@ -1980,12 +2049,9 @@ final class NativeSurface extends SurfaceView
         RectF rect = w.hit();
         rect.offset(left, top);
         // Original/Expansion are bottom-aligned labels below the two logos.
-        text(c, labels[i], left + w.x,
-            top + w.y + (i < 2 ? w.h - font().height : (w.h - font().height) / 2f), w.w, 1, 3);
-        add(
-            rect,
-            () -> chooseGame(option),
-            true);
+        float labelY=top+w.y+(i<2?w.h-font().height:(w.h-font().height)/2f);
+        queueMenuButton(rect,()->chooseGame(option),true,MenuLabels.forWidget("glugamemode",ids[i],w,labels[i]),
+            shown->text(c,shown,left+w.x,labelY,w.w,1,3));
       }
       return true;
     } catch (Exception e) {
@@ -1994,6 +2060,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void drawModal(Canvas c) {
+    menuBehindModal=false;
     if(modal.equals("nearby-error")) {
       float x=(logicalWidth-440)/2f;panel(c,x,100,440,280);
       text(c,"Nearby Multiplayer",x+20,120,400,1,2);body(c,nearbyStatus,x+24,166,392,138);
@@ -2296,11 +2363,8 @@ final class NativeSurface extends SurfaceView
       Runnable action, boolean enabled) {
     c.drawBitmap(hud.panel(Math.round(w), Math.round(h), true, enabled), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + w / 2, y + h / 2);
-    String shown=MenuLabels.applyMnemonic(label,NativeResults.fit(hud.large,label,(int)w-8));
-    if(!enabled||action==null)shown=NativeArt.clean(shown);
-    uiLine(c, shown, hud.large, x+4, y, (int)w-8, (int)h, 1,
-        enabled ? hot ? 2 : 3 : 5);
-    addMenuButton(new RectF(x, y, x + w, y + h), action, enabled, shown);
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,
+        shown->uiLine(c,shown,hud.large,x+4,y,(int)w-8,(int)h,1,enabled?hot?2:3:5));
   }
 
   private void originalMenuButton(Canvas c, String layout, int id, String label,
@@ -2314,9 +2378,8 @@ final class NativeSurface extends SurfaceView
     c.drawBitmap(hud.panel(Math.round(width), 28, true, true), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + width / 2, y + 14);
     boolean selected = label.startsWith("> ");
-    uiLine(c, selected ? label.substring(2) : label, hud.small, x + 8, y, (int)width-16, 28, 1,
-        hot ? 4 : selected ? 7 : 2);
-    add(new RectF(x, y, x + width, y + 28), action, true);
+    queueMenuButton(new RectF(x,y,x+width,y+28),action,true,selected?label.substring(2):label,
+        shown->uiLine(c,shown,hud.small,x+8,y,(int)width-16,28,1,hot?4:selected?7:2));
   }
 
   private void setWideMode(int mode) {
@@ -2579,7 +2642,7 @@ final class NativeSurface extends SurfaceView
     if (f != null) uiLine(c, label, f, x, y, width, height, align, color);
     else {
       c.save(); c.clipRect(x, y, x + width, y + height);
-      fallback(c, label, x, y, 14, color == 7 ? 0xff94cb64 : 0xffc5cce3);
+      fallbackMenu(c,label,x,y,width,height,color);
       c.restore();
     }
   }
@@ -2592,12 +2655,11 @@ final class NativeSurface extends SurfaceView
     else panel(c, x, y, width, height);
     boolean hot = pressed != null && pressed.rect.contains(x + width / 2f, y + height / 2f);
     int color = hot ? 4 : selected ? 7 : 2;
-    if (detail == null) gamepadLine(c, label, x + 8, y, width - 16, height, 1, color);
-    else {
-      gamepadLine(c, label, x + 8, y + 2, width - 16, 18, 1, 2);
+    if (detail != null) {
       gamepadLine(c, detail, x + 8, y + 20, width - 16, height - 22, 1, color);
     }
-    add(new RectF(x, y, x + width, y + height), action, true);
+    queueMenuButton(new RectF(x,y,x+width,y+height),action,true,label,
+        shown->gamepadLine(c,shown,x+8,detail==null?y:y+2,width-16,detail==null?height:18,1,detail==null?color:2));
   }
 
   private void gamepadToggle(Canvas c, String label, boolean on, float x, float y,
@@ -3554,6 +3616,7 @@ final class NativeSurface extends SurfaceView
       if (mode.equals("command")) {
         NativeHud.Hit h = commandHover.release(hud.hits, x, y, time);
         if (h != null && h.rect.contains(x, y)) {
+          if (h.terrainToggle) { sfx("button"); NativeBridge.command(8, NativeBridge.value(14, 0) == 0 ? 1 : 0, 0, 0, 0); return; }
           if (h.unload >= 0) { NativeBridge.command(24, h.unload, 0, 0, 0); return; }
           if (h.more) {
             hud.page++;
@@ -3916,6 +3979,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void activateDesktopHud(NativeHud.Hit hit){
+    if(hit.terrainToggle){sfx("button");NativeBridge.command(8,NativeBridge.value(14,0)==0?1:0,0,0,0);return;}
     if(hit.unload>=0){NativeBridge.command(24,hit.unload,0,0,0);return;}
     if(hit.more){hud.page++;return;}
     if(hit.help!=null){hint=hit.help;hintUntil=clock+3600;return;}
@@ -3983,6 +4047,13 @@ final class NativeSurface extends SurfaceView
       if(down&&!ctrl&&!desktop.ctrl())desktopMenuCommand(symbol);
       return;
     }
+    if(replayGame){
+      // Replay inspection keeps its native terrain/alert/cancel keys. Only the
+      // visible playback buttons consume letter shortcuts; grid orders stay off.
+      if(symbol==9||symbol==32||symbol==27)NativeBridge.command(32,down?1:0,symbol,DesktopControls.scanCode(key),0);
+      else if(down&&!ctrl&&!desktop.ctrl())desktopMenuCommand(symbol);
+      return;
+    }
     if(activeGame&&page.equals("game")&&modal.isEmpty()){
       if(desktopSettings.gridHotkeys&&symbol>='a'&&symbol<='z'){
         if(down)desktopGridCommand(symbol);
@@ -3993,7 +4064,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void desktopMenuCommand(int symbol){
-    if(pendingScreen!=null||profileEditing||chatEditing||activeGame&&page.equals("game")&&modal.isEmpty())return;
+    if(pendingScreen!=null||profileEditing||chatEditing||activeGame&&page.equals("game")&&modal.isEmpty()&&!replayGame)return;
     Button match=null;
     for(Button button:buttons){
       if(!button.enabled||button.action==null||button.key==0||button.key!=symbol

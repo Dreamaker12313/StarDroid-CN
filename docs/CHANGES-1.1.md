@@ -1,6 +1,7 @@
 # StarDroid 1.1 — build 83
 
-- Restored the original highlighted hotkey letters in main menus and dialogs. Highlighted keys activate enabled buttons; translations retain the original letter when it is present in the translated caption.
+- Menu text buttons show highlighted shortcut letters, including in-game menus. Original keys take priority; buttons use a visible **[key]** suffix when the shortcut cannot be highlighted in their caption. App Options and the battlefield MENU button retain their normal labels.
+- The minimap terrain button has a hover/touch-hold description and shows its **Tab** shortcut. Tooltip borders match the player's race: blue for Terran, red for Zerg and yellow for Protoss.
 - Mouse and keyboard help uses bold **Mouse:** and **Keyboard:** headings, with a blank line between the sections.
 
 - Added mouse and keyboard controls: selection boxes, context-sensitive right-click orders, queued orders, camera movement, wheel zoom/list scrolling, original or QWE/ASD/ZXC grid hotkeys and control groups. Command tooltips show the active key in brackets, with the key highlighted. Mouse and keyboard settings keep their help together in one screen. Mouse/keyboard and gamepad settings are available from the in-game Controls menu. Touch controls remain available.

@@ -1,3 +1,15 @@
+# StarDroid 1.1 menu button shortcuts and race tooltip borders
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Text buttons across the original menus, in-game menus/settings, replay controls, match setup and score screens display unique keyboard shortcuts. Original keys have priority; disabled buttons reserve their keys, and changing option values keeps the same shortcut. Captions without a suitable letter show a compact bracketed key. Native App Options and the live HUD Menu button are unchanged. Checkbox/slider labels and list entries are not treated as command buttons. Background captions render before modal overlays; replay captions render before tooltips.
+- Paint-only contrast uses yellow keys on pale game-font text and white keys on yellow text. Original front-end palettes and replay green styling remain intact. Existing guide renders verify glyph colors and complete translated captions in all five UI languages. [Menu glyphs](validation/menu-hotkeys11.json), [settings layout](validation/desktop-guide11.json).
+- Physical input tests pass 1,467 checks, including original-key priority, collisions, disabled reservation, changing labels, fitting, replay controls, Tab/Space/Escape replay inspection, terrain-button click/hold behavior and click sounds. The 4,173 gamepad checks remain passing. [Desktop routing](validation/desktop-input11.json), [gamepad regression](validation/gamepad-v81.json).
+- The minimap terrain toggle now has mouse-hover and touch-hold help with the current Show/Hide action and Tab shortcut. Tooltip borders are blue for Terran, red for Zerg and yellow for Protoss. Pressed artwork, quick taps/clicks, tooltip preferences and simultaneous errors remain supported. Renderer checks pass 16,364 assertions across 1,470 renders; existing command tooltip checks also pass. [Hover/terrain/borders](validation/hover-errors11.json), [command tooltips](validation/hotkey-tooltips11.json).
+- Packaging reuses the verified native libraries unchanged and permits only the intended translation asset changes. Signature, version, permissions, both ABIs, 47 JNI methods, 16 KiB alignment and Android lint are verified. [Package proof](validation/package-menu-polish11.json).
+
+These are host-rendering/input and Android build checks; physical Android peripherals and touch remain unverified. Earlier reports below refer to their recorded source revisions.
+
 # StarDroid 1.1 original menu hotkeys and help formatting
 
 Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

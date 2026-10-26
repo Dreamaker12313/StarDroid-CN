@@ -6,13 +6,13 @@
   "nativeCardCount": 230,
   "nativeCorpusSha256": "0846b8028238d1526a638b28fe6a64a99fcb3c764962c8ddd0c2a3840f7efb9f",
   "sourceSha256": {
-    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "be867b26c51449be5d435594e7239c29f67030b83005574d5851b2407cc2d013",
+    "app/src/main/java/org/openbw/androidtest/NativeHud.java": "4e7c3af4fcecb16ef2572b1cfbbbcef338be9b1c0afac568745ab650333b17b9",
     "app/src/main/java/org/openbw/androidtest/CommandHint.java": "cac62546a9c9fdb3fe0ae76ba6657c600b55527969ce26c0eade114d80b2a1f3",
     "app/src/main/java/org/openbw/androidtest/CommandSlots.java": "a4889396488cb5e84a000700e4762b8a83e0587ebf595414506803b310d51b04",
     "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
     "app/src/main/java/org/openbw/androidtest/PortText.java": "715d49b416621a93b488e553f53fb317ef378707795f2d927523e1fa89e2b971",
     "app/src/main/assets/native/commands.json": "29fb6aea657c1fb557d20dbdf704dd5995026ad45f6dc5dce40d64da2e0e3509",
-    "app/src/main/assets/native/ui-languages.tsv": "41f3a642596a9dbbdffbf0969ad448b2be6cf9e7d99c38ebb153bc89332f44bf",
+    "app/src/main/assets/native/ui-languages.tsv": "ef08365128db72e311b9dea09f9ea99a44b3a635650f91bfde2d4143619cb284",
     "tests/run_hotkey_tooltips11.py": "1f52d912df6289add37c4f776a82c68ce63716ad537e10a87e96f8767d3c8d9b"
   }
 }

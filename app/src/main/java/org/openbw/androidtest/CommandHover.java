@@ -70,7 +70,8 @@ final class CommandHover {
 
   private static boolean sameAction(NativeHud.Hit a, NativeHud.Hit b) {
     if (a == null || b == null) return false;
-    if (a.cancel != b.cancel || a.selectUnit != b.selectUnit || a.more != b.more) return false;
+    if (a.cancel != b.cancel || a.selectUnit != b.selectUnit || a.more != b.more
+        || a.terrainToggle != b.terrainToggle) return false;
     if (a.fields == null || b.fields == null)
       return a.fields == b.fields && java.util.Objects.equals(a.help, b.help);
     for (int index : new int[] {0, 1, 3, 11, 12}) {
