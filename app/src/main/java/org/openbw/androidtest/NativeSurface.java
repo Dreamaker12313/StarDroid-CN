@@ -53,7 +53,7 @@ final class NativeSurface extends SurfaceView
       instant = false,
       activeGame = false;
   private float zoom = 1, effects = 1, music = .65f;
-  private boolean muted, musicEnabled = true, orderLines, oneShotSelect, nearbyDefenders = true;
+  private boolean muted, orderLines, oneShotSelect, nearbyDefenders = true;
   private String selectedProfile = "Player";
   private final ArrayList<String> profiles = new ArrayList<String>();
   private final CampaignProgress campaignProgress;
@@ -196,8 +196,7 @@ final class NativeSurface extends SurfaceView
     descriptionPercent = ControlSettings.clamp(prefs.getInt("description-percent", 100), 100, 150);
     touchPercent = ControlSettings.clamp(prefs.getInt("touch-percent", 100), 100, 150);
     speed = prefs.getFloat("frame-ms", prefs.getInt("speed", 42));
-    muted = prefs.getBoolean("muted", false);
-    musicEnabled = prefs.getBoolean("music-enabled", true);
+    loadAudioSettings();
     orderLines = prefs.getBoolean("order-lines", false);
     nearbyDefenders = prefs.getBoolean("nearby-defenders", true);
     networkStats = prefs.getBoolean("network-stats", false);
@@ -214,8 +213,6 @@ final class NativeSurface extends SurfaceView
     overCamera = prefs.getBoolean("wide-over-camera", false);
     zoomOut = prefs.getBoolean("zoom-out", true);
     zoom = prefs.getFloat("zoom", 1);
-    effects = prefs.getFloat("effects", 1);
-    music = prefs.getFloat("music", .65f);
     getHolder().addCallback(this);
     setFocusableInTouchMode(true);
     setKeepScreenOn(true);
@@ -988,14 +985,14 @@ final class NativeSurface extends SurfaceView
   }
 
   private void advanceMusic() {
-    if (musicPhase.equals("game") && musicEnabled && !NativeBridge.playing(63)) {
+    if (musicPhase.equals("game") && music > 0 && !NativeBridge.playing(63)) {
       musicIndex++;
       music("game");
     }
   }
 
   private boolean canNextMusicTrack() {
-    return musicPhase.equals("game") && musicEnabled && !muted && music > 0
+    return musicPhase.equals("game") && !muted && music > 0
         && NativeBridge.playing(63);
   }
 
@@ -1011,10 +1008,9 @@ final class NativeSurface extends SurfaceView
 
   private void drawSoundSettings(Canvas c, float x, float y) {
     toggle(c, "Mute all sound", muted, x + 26, y + 60, () -> {muted = !muted; saveSettings();});
-    toggle(c, "Play original music", musicEnabled, x + 26, y + 102, () -> {musicEnabled = !musicEnabled; saveSettings();});
-    slider(c, "Effects", effects, x + 26, y + 154, v -> {effects = v; saveSettings();});
-    slider(c, "Music", music, x + 26, y + 206, v -> {music = v; saveSettings();});
-    menuButton(c, "Next track", x + 26, y + 252, 320, 28, this::nextMusicTrack, canNextMusicTrack());
+    slider(c, "Effects", effects, x + 26, y + 120, v -> {effects = v; saveSettings();});
+    slider(c, "Music", music, x + 26, y + 180, v -> {music = v; saveSettings();});
+    menuButton(c, "Next track", x + 26, y + 240, 320, 28, this::nextMusicTrack, canNextMusicTrack());
   }
 
   private void tick(double dt) {
@@ -1102,6 +1098,27 @@ final class NativeSurface extends SurfaceView
     }
   }
 
+  private void drawCommandFeedback(Canvas c) {
+    if (!modal.isEmpty()) return;
+    NativeHud.Hit hover = commandHover.tooltip(hud.hits, android.os.SystemClock.uptimeMillis());
+    int targeting = NativeBridge.value(0, 0);
+    String status = !commandError.isEmpty() && clock < commandErrorUntil ? commandError
+        : targeting == 1 || targeting == 4 ? "Select target" : "";
+    float tooltipBottom = Float.POSITIVE_INFINITY;
+    if (!status.isEmpty()) {
+      hud.commandError(c, status, logicalWidth);
+      // Keep both messages visible: the status keeps its normal position and
+      // inspection moves above it instead of replacing or covering it.
+      tooltipBottom = hud.commandErrorTop(status, logicalWidth) - 8;
+    }
+    if (hover != null) {
+      hud.tooltip(c, hud.hint(hover), logicalWidth,
+          hover.fields == null ? hud.race : NativeHud.number(hover.fields, 15, hud.race), tooltipBottom);
+    } else if (!hint.isEmpty() && clock < hintUntil) {
+      hud.tooltip(c, hint, logicalWidth, hintSupplyRace < 0 ? hud.race : hintSupplyRace, tooltipBottom);
+    }
+  }
+
   private void renderCanvas(Canvas c, double dt) {
     c.drawColor(Color.BLACK);
     float scale = Math.min(c.getWidth() / (float)logicalWidth, c.getHeight() / 480f);
@@ -1184,18 +1201,7 @@ final class NativeSurface extends SurfaceView
               controls.controlGroups ? Math.round(6+(controlGroupRows()*32-2)*controlGroupScale()) : resourcePercent > 125 ? 36 : 3, 128, 1, 2, 0);
       }
       if (placement && NativeBridge.value(0, 0) != 2) placement = false;
-      if (modal.isEmpty()) {
-        NativeHud.Hit hover = commandHover.tooltip(hud.hits, android.os.SystemClock.uptimeMillis());
-        if (!commandError.isEmpty() && clock < commandErrorUntil) {
-          hud.commandError(c, commandError, logicalWidth);
-        } else if (NativeBridge.value(0, 0) == 1 || NativeBridge.value(0, 0) == 4) {
-          hud.commandError(c, "Select target", logicalWidth);
-        } else if (hover != null) {
-          hud.tooltip(c, hud.hint(hover), logicalWidth,
-              hover.fields == null ? hud.race : NativeHud.number(hover.fields, 15, hud.race));
-        } else if (!hint.isEmpty() && clock < hintUntil)
-          hud.tooltip(c, hint, logicalWidth, hintSupplyRace < 0 ? hud.race : hintSupplyRace);
-      }
+      drawCommandFeedback(c);
     } else if (page.equals("movie")) {
       cinematic.draw(
           c,
@@ -2157,7 +2163,7 @@ final class NativeSurface extends SurfaceView
     boolean settingsPause = modal.startsWith("gamepad")
         && Arrays.asList("movie", "story", "briefing", "results").contains(page);
     NativeBridge.audio(!foreground || settingsPause || (audio != null && !audio.canPlay()), muted ? 0 : effects,
-        muted || !musicEnabled ? 0 : music * speechMusicGain);
+        muted ? 0 : music * speechMusicGain);
   }
 
   private void navigate(Runnable next) {
@@ -2744,6 +2750,18 @@ final class NativeSurface extends SurfaceView
     return Math.max(0, height - box.h);
   }
 
+  private void loadAudioSettings() {
+    muted = prefs.getBoolean("muted", false);
+    effects = prefs.getFloat("effects", 1);
+    music = prefs.getFloat("music", .65f);
+    // Preserve the old off setting as zero volume once. After migration, raising
+    // the slider must work without an invisible switch turning music off again.
+    if (prefs.contains("music-enabled")) {
+      if (!prefs.getBoolean("music-enabled", true)) music = 0;
+      prefs.edit().putFloat("music", music).remove("music-enabled").apply();
+    }
+  }
+
   private void saveSettings() {
     syncAudio();
     prefs
@@ -2755,7 +2773,7 @@ final class NativeSurface extends SurfaceView
         .putInt("touch-percent", touchPercent)
         .putFloat("frame-ms", (float) speed)
         .putBoolean("muted", muted)
-        .putBoolean("music-enabled", musicEnabled)
+        .remove("music-enabled")
         .putBoolean("order-lines", orderLines)
         .putBoolean("nearby-defenders", nearbyDefenders)
         .putBoolean("network-stats", networkStats)

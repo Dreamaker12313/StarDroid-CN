@@ -34,7 +34,7 @@ public final class NativePolishInstrumentation extends NativeInstrumentation {
       check(game != null, "Native surface missing");
       task(() -> {
         set(game, "wide", false); set(game, "zoom", 1f); set(game, "muted", false);
-        set(game, "musicEnabled", true); set(game, "effects", 1f); set(game, "music", .65f);
+        set(game, "effects", 1f); set(game, "music", .65f);
         invoke("syncAudio");
       });
       screenshot("title");

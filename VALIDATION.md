@@ -1,3 +1,13 @@
+# StarDroid 1.1 sound controls and simultaneous feedback
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- The redundant music-enable toggle is removed. Production preference tests cover fresh defaults, old on/off settings, persistent one-time migration, reopening, actual slider changes, mute/gains/ducking/focus and end-of-track recovery from volume 0. Next track and all-race soundtrack/seek coverage remain intact. [Music volume](validation/music-volume11.json).
+- Production hover/held-hint dispatch and HUD rendering show descriptions together with command errors or target prompts. Tests cover race palettes, 640/960 layouts, enlarged description/command sizes, five UI languages, multiline messages, expiry, disabled tooltips and modal guards. Status pixels remain intact and normal tooltip placement is unchanged when no status is present. [Hover/error rendering](validation/hover-errors11.json).
+- Signed APK checks reuse the exact verified native libraries from the prior score revision because native sources are unchanged. Signature, JNI exports, 16 KiB alignment, permissions, assets and Android lint are checked again. [Package proof](validation/package-sound-hover11.json).
+
+These are host/rendering/audio and Android build checks; physical-phone installation, touch and listening were not tested. Earlier reports below refer to their own recorded source versions.
+
 # StarDroid 1.1 score, replay-menu and music revision
 
 Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

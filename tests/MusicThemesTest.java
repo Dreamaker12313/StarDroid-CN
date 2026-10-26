@@ -61,8 +61,7 @@ public final class MusicThemesTest {
     check(h.nextButton()&&h.currentMusicPath.equals(prefix+"2.wav"),"Already-playing original theme was repeated");
     int starts=NativeBridge.starts,seeks=NativeBridge.seeks;
     h.muted=true;check(!h.nextButton(),"Muted Next track was enabled");h.nextAction.run();
-    h.muted=false;h.musicEnabled=false;check(!h.nextButton(),"Disabled music Next track was enabled");h.nextAction.run();
-    h.musicEnabled=true;h.music=0;check(!h.nextButton(),"Zero volume Next track was enabled");h.nextAction.run();
+    h.muted=false;h.music=0;check(!h.nextButton(),"Zero volume Next track was enabled");h.nextAction.run();
     check(NativeBridge.starts==starts&&NativeBridge.seeks==seeks,"Disabled settings button changed playback");
     h.music=1;
     for(String phase:new String[]{"title","briefing","victory","defeat"}) {

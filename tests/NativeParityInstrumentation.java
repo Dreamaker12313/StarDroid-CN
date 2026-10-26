@@ -80,7 +80,7 @@ public final class NativeParityInstrumentation extends NativeInstrumentation {
       game = (NativeSurface) field(activity, "game");
       task(() -> {
         check(game != null, "Native surface missing"); set(game, "wide", false); set(game, "zoom", 1f); set(game, "speed", 42.);
-        set(game, "muted", false); set(game, "musicEnabled", true); set(game, "orderLines", false);
+        set(game, "muted", false); set(game, "music", .65f); set(game, "orderLines", false);
       });
       if (!touchOnly) {
       screenshot("title"); glueTap(3); screenshot("chooser");

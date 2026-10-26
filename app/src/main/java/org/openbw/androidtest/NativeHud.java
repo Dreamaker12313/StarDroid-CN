@@ -325,13 +325,18 @@ final class NativeHud implements AutoCloseable {
     }
   }
 
-  void commandError(Canvas c, String message, int width) {
-    // Ordinary in-game text, centered above the console, with no tooltip panel.
+  float commandErrorTop(String message, int width) {
     int textWidth = Math.min(460, Math.round((width - 80) / descriptionScale));
     int lines = small.lines(message, textWidth).size();
     float bottom = Math.min(WORLD_BOTTOM - 12, 480 - 126 * commandScale - 8);
+    return bottom - lines * 14 * descriptionScale;
+  }
+
+  void commandError(Canvas c, String message, int width) {
+    // Ordinary in-game text, centered above the console, with no tooltip panel.
+    int textWidth = Math.min(460, Math.round((width - 80) / descriptionScale));
     c.save();
-    c.translate((width - textWidth * descriptionScale) / 2f, bottom - lines * 14 * descriptionScale);
+    c.translate((width - textWidth * descriptionScale) / 2f, commandErrorTop(message, width));
     c.scale(descriptionScale, descriptionScale);
     errorShadow.draw(c, message, 1, 1, textWidth, 1, 2, 14);
     small.draw(c, message, 0, 0, textWidth, 1, 2, 14);
@@ -624,6 +629,10 @@ final class NativeHud implements AutoCloseable {
   }
 
   void tooltip(Canvas canvas, String text, int width, int supplyRace) {
+    tooltip(canvas, text, width, supplyRace, Float.POSITIVE_INFINITY);
+  }
+
+  void tooltip(Canvas canvas, String text, int width, int supplyRace, float bottomLimit) {
     int boxWidth=260,lineHeight=Math.max(15,small.height+3);
     List<String> rows=new ArrayList<String>();
     for(String row:text.replace("\r\n","\n").replace('\r','\n').split("\n",-1)) {
@@ -639,7 +648,7 @@ final class NativeHud implements AutoCloseable {
       }else rows.addAll(small.lines(row,boxWidth-16));
     }
     int height=rows.size()*lineHeight+14;
-    float bottom=Math.min(346,480-126*commandScale-8);
+    float bottom=Math.min(Math.min(346,480-126*commandScale-8),Math.max(16,bottomLimit));
     float scale=Math.min(descriptionScale,Math.min((width-16f)/boxWidth,(bottom-8f)/height));
     float left=width-boxWidth*scale-8,top=bottom-height*scale;
     Paint ink=new Paint();canvas.save();canvas.translate(left,top);canvas.scale(scale,scale);
