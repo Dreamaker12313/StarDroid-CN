@@ -992,7 +992,10 @@ final class NativeSurface extends SurfaceView
                         ? prefix + "vict"
                         : phase.equals("defeat") ? prefix + "defeat" : race + (musicIndex % 3 + 1))
             + ".wav";
-    if (name.equals(currentMusicPath) && expansion == currentMusicExpansion && NativeBridge.playing(63)) return;
+    // The title track continues across front-end expansion changes. Other
+    // phases still reload the matching game's archive, even for the same path.
+    if (name.equals(currentMusicPath) && (phase.equals("title") || expansion == currentMusicExpansion)
+        && NativeBridge.playing(63)) return;
     currentMusicPath = name;
     currentMusicExpansion = expansion;
     musicThemeBoundary = 0;
@@ -3086,7 +3089,7 @@ final class NativeSurface extends SurfaceView
         () -> {
           campaign.replay();
           lastBriefRevision = -1;
-        },false);
+        });
   }
 
   private int lastBriefRevision = -1;

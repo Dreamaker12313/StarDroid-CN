@@ -89,7 +89,41 @@ public final class Music79Test {
  void play(String phase){music(phase);}
 ''' + music + '''
  static void check(boolean b,String message){if(!b)throw new AssertionError(message);}
+ static void menuContinuity(){
+  for(boolean startingExpansion:new boolean[]{false,true}){
+   Music79Test h=new Music79Test();h.expansion=startingExpansion;NativeBridge.active=false;h.music("title");
+   check(NativeBridge.active&&NativeBridge.loop,"Title track did not start");
+   NativeBridge.position=123456;int starts=NativeBridge.starts,reads=NativeBridge.assetReads;
+   for(boolean expansion:new boolean[]{!startingExpansion,startingExpansion,!startingExpansion}){
+    h.expansion=expansion;h.music("title");
+    check(NativeBridge.starts==starts&&NativeBridge.position==123456,"Changing expansions restarted the title track");
+    check(NativeBridge.assetReads==reads,"Changing expansions needlessly reloaded title audio");
+   }
+   h.muted=true;h.music=0;h.expansion=startingExpansion;h.music("title");
+   check(NativeBridge.starts==starts&&NativeBridge.position==123456,"Muted/zero-volume menu music restarted");
+   NativeBridge.active=false;h.music("title");
+   check(NativeBridge.starts==starts+1&&NativeBridge.active&&NativeBridge.position==0,"Stopped title music failed to recover");
+   for(int race=0;race<3;race++){
+    h.missionRace=race;h.expansion=false;h.music("briefing");starts=NativeBridge.starts;NativeBridge.position=87654;
+    check(h.currentMusicPath.endsWith("rdyroom.wav")&&NativeBridge.slot==5,"Briefing did not replace the menu track");
+    h.expansion=true;h.music("briefing");
+    check(NativeBridge.starts==starts+1&&NativeBridge.slot==6&&NativeBridge.position==0,"Briefing kept the wrong expansion source");
+    h.music("game");starts=NativeBridge.starts;NativeBridge.position=65432;h.expansion=false;h.music("game");
+    check(NativeBridge.starts==starts+1&&NativeBridge.slot==5&&NativeBridge.position==0,"Game music kept the wrong expansion source");
+    h.music("title");check(NativeBridge.loop&&h.currentMusicPath.equals("music/title.wav"),"Return to menu failed to restore title music");
+   }
+  }
+  Music79Test h=new Music79Test();h.expansion=true;NativeBridge.active=false;NativeBridge.missingExpansion=true;h.music("title");
+  check(NativeBridge.active&&NativeBridge.slot==5,"Missing expansion title did not use original audio");
+  int starts=NativeBridge.starts;NativeBridge.position=32100;h.expansion=false;h.music("title");
+  check(NativeBridge.starts==starts&&NativeBridge.position==32100,"Fallback title restarted on expansion change");
+  NativeBridge.missingExpansion=false;NativeBridge.missingAll=true;NativeBridge.active=false;h.music("title");
+  check(!NativeBridge.active,"Absent title music should stay silent");
+  NativeBridge.missingAll=false;h.music("title");check(NativeBridge.active,"Newly available title music failed to start");
+  System.out.println("PASS title music continuity: both expansion directions, repeated menu calls, preserved playback position/no reload, mute/zero volume, stopped/missing-track recovery, original fallback and all-race briefing/game source transitions");
+ }
  public static void main(String[] args)throws Exception{
+  menuContinuity();
   Music79Test h=new Music79Test();
   // The same production method serves campaigns, custom games and Nearby games.
   for(boolean bw:new boolean[]{false,true})for(int race=0;race<3;race++){
@@ -150,10 +184,10 @@ final class FakePreferences {
 }
 final class NativeBridge {
  static boolean paused;static float effectsGain,musicGain;static void audio(boolean pause,float effects,float music){paused=pause;effectsGain=effects;musicGain=music;}
- static boolean active,loop,missingExpansion,missingAll,failOriginal;static int slot,starts,seeks;static double position;
+ static boolean active,loop,missingExpansion,missingAll,failOriginal;static int slot,starts,seeks,assetReads;static double position;
  static final HashMap<String,byte[]> fixtures=new HashMap<String,byte[]>();
  static boolean playing(int channel){return active;}
- static byte[] asset(int archive,String name){if(archive==5&&failOriginal)throw new IllegalStateException("Damaged reference archive");if(missingAll||(archive==6&&missingExpansion))return null;return fixtures.getOrDefault(archive+":"+name,new byte[]{(byte)archive});}
+ static byte[] asset(int archive,String name){assetReads++;if(archive==5&&failOriginal)throw new IllegalStateException("Damaged reference archive");if(missingAll||(archive==6&&missingExpansion))return null;return fixtures.getOrDefault(archive+":"+name,new byte[]{(byte)archive});}
  static int sound(byte[] data,int channel,boolean repeat){active=data!=null;loop=repeat;position=0;starts++;if(data!=null&&data.length==1)slot=data[0];return 0;}
  static double soundPosition(int channel){return position;}
  static void seekSound(int channel,int ms){position=ms;seeks++;}
@@ -184,7 +218,8 @@ if android_jar.exists():
 files = [src/'NativeSurface.java',src/'MusicData.java',src/'MusicThemes.java',src/'MissionBundle.java',src/'NativeData.java',r/'native/audio.h',r/'native/runtime.cpp',Path(__file__),r/'tests/native_music79.cpp',r/'tests/MusicThemesTest.java',r/'tests/AudioVolume11Test.java']
 a.report.write_text(json.dumps({
     'passed': True, 'physicalAndroid': False, 'originalArchivesTested': bool(a.data_dir),
-    'version':'1.1','androidSdk35JavaCompile':sdk_compile,'gameEntrySourceRoutingChecks':routes,'scope':'All three races: production Java music selection, campaign/custom/Nearby routing audit, original import bytes, full native WAV decode and EOF, embedded-original comparison, production sound-settings button activation, individual-theme skipping, one-time old-toggle preference migration and volume/mute gain controls, exact native JNI seek entry points and sample-accurate PCM output after seeking. No physical Android audio test.',
+    'version':'1.1','androidSdk35JavaCompile':sdk_compile,'gameEntrySourceRoutingChecks':routes,
+    'scope':'Production Java title-music continuity, all-race music selection and source routing, sound-settings Next track callbacks with synthetic audio boundaries, preference migration and volume/mute controls. '+('Original archive import, native PCM decode/EOF/seek and embedded-theme comparison are also tested.' if a.data_dir else 'Original archive import and native PCM decode/seek are not rerun in this focused regression.')+' No physical Android audio test.',
     'availability':'Four themes per race require imported original Brood War soundtrack files; missing expansion files fall back to the original soundtrack.',
     'checks': [s for s in outputs if s],
     'sourceSha256': {str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}

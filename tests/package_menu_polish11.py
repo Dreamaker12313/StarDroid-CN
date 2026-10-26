@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the frozen 1.1 navigation-only menu-hotkey update with verified unchanged native libraries.
+"""Package the frozen 1.1 briefing-hotkey and menu-music update with verified unchanged native libraries.
 
 Usage: release signing environment variables + python3 tests/package_menu_polish11.py PREVIOUS_APK
 The SDK/NDK and Gradle 8.9 must already be bootstrapped by scripts/build.py.
@@ -11,13 +11,13 @@ import urllib.parse, xml.etree.ElementTree as ET, zipfile
 ROOT=Path(__file__).resolve().parents[1]
 PREVIOUS=Path(sys.argv[1]).resolve()
 TOOLS=Path(os.environ.get('STARDROID_ANDROID_TOOLS',ROOT/'.tools'))
-OUT=ROOT/'build-native/menu-navigation11-release'
+OUT=ROOT/'build-native/briefing-music11-release'
 VERIFIED_LIBS=ROOT/'build-native/hotkeys11-release/native-libs-rebuilt'
 OUT.mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 for name in ('STARDROID_KEYSTORE','STARDROID_STORE_PASSWORD','STARDROID_KEY_ALIAS','STARDROID_KEY_PASSWORD'):
     if not os.environ.get(name):raise RuntimeError('Missing release signing variable: '+name)
-assert sha(PREVIOUS)=='c23a428af395ba7756dbdb9b447e692938e49ffe0cabc1151aade9ba12057709'
+assert sha(PREVIOUS)=='d3965181c1b475f6642e111194aff7e372177c06ffcbc425448b8242c013658d'
 proof_path=ROOT/'validation/native-build-hotkeys11.json'
 proof_digest=sha(proof_path)
 proof=json.loads(proof_path.read_text())
@@ -26,7 +26,7 @@ for name,digest in proof['sourceSha256'].items():assert sha(ROOT/name)==digest,n
 sources=[p for p in (ROOT/'app/src/main').rglob('*') if p.is_file()]
 sources += [ROOT/n for n in ('app/build.gradle','build.gradle','settings.gradle','gradle.properties','scripts/build_nearby.py','tests/package_menu_polish11.py')]
 before={str(p.relative_to(ROOT)):sha(p) for p in sources}
-work=Path(tempfile.mkdtemp(prefix='stardroid-menu-navigation11-')); assets=work/'assets';libs=work/'libs';assets.mkdir();libs.mkdir()
+work=Path(tempfile.mkdtemp(prefix='stardroid-briefing-music11-')); assets=work/'assets';libs=work/'libs';assets.mkdir();libs.mkdir()
 for name in ('native','missions'):shutil.copytree(ROOT/'app/src/main/assets'/name,assets/name)
 for name in ('COPYING','NOTICE.txt'):shutil.copyfile(ROOT/'vendor/libsmacker'/name,assets/('libsmacker-'+name))
 for name,digest in proof['librarySha256'].items():

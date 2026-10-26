@@ -1,3 +1,14 @@
+# StarDroid 1.1 briefing Replay shortcut and uninterrupted menu music
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Briefing Replay is an explicit exception to navigation-only menu shortcuts. It retains the imported original highlighted letter (R in English); actual production keyboard, mouse and touch callbacks replay the briefing and reset its text. All three race briefing layouts preserve their authored glyphs, with the existing menu transition guards intact. [Input checks](validation/desktop-input11.json), [original menu fonts](validation/menu-hotkeys11.json).
+- Changing between StarCraft and Brood War no longer reloads an already-playing title track. Its current position is retained, including when muted or at zero music volume. Missing/stopped title audio can still recover; entering a briefing or game still loads the correct expansion soundtrack. Production selection tests verify both change directions, repeated calls, missing-audio fallback and all three race phase/source changes. Existing Next track and volume/mute cases pass. [Music callbacks](validation/music-settings-navigation11.json).
+- Production input validation passes 9,229 checks. Original menu/font validation passes 1,443 checks, including Replay in all three briefing rooms and all five UI languages. Full Android SDK35 compilation passes.
+- Final APK uses the original signing identity, unchanged assets and verified unchanged native libraries. Version, permissions, 47 JNI methods, both ABIs, 16 KiB alignment and Android lint are checked by the [package proof](validation/package-menu-polish11.json).
+
+These are host input/rendering, music-selection and Android build checks. Physical Android sound and input were not tested. Earlier sections refer to their recorded source revisions.
+
 # StarDroid 1.1 navigation-only menu hotkeys
 
 Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

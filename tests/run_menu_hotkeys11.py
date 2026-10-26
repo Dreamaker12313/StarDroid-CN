@@ -15,8 +15,8 @@ extract=r/'build-native/reign79/extract'
 archives=[(0,r.parent/'reign-data/StarDat.mpq'),(1,r.parent/'reign-data/BrooDat.mpq'),(2,r.parent/'reign-data/patch_rt.mpq'),(4,r.parent/'reign-data/StarCraft.mpq'),(4,r.parent/'reign-data/BroodWar.mpq')]
 names={'font/font.gid'}
 menus=['glumain','glucmpgn','gluexpcmpgn','glulogin','gamemenu','options','abrtmenu','glucustm','gluload']
-names.update('rez/'+name+'.bin' for name in menus+['glurdyt'])
-names.update('glue/'+pal+'/'+name for pal in ['palmm','palcs','palnl','palrt']for name in ['backgnd.pcx','tfont.pcx','teffect.pcx','dlg.grp','tile.grp'])
+names.update('rez/'+name+'.bin' for name in menus+['glurdyt','glurdyz','glurdyp'])
+names.update('glue/'+pal+'/'+name for pal in ['palmm','palcs','palnl','palrt','palrz','palrp']for name in ['backgnd.pcx','tfont.pcx','teffect.pcx','dlg.grp','tile.grp'])
 def load(name):
  for slot,archive in archives:
   target=assets/str(slot)/name;target.parent.mkdir(parents=True,exist_ok=True)
@@ -130,12 +130,13 @@ public class MenuHotkeys11Test {
   ImageIO.write(preview.image,"png",output.resolve("replay-shortcut-tint.png").toFile());
  }
  static void resolvedCaption(NativeArt art)throws Exception {
-  try(NativeGlue glue=new NativeGlue(art,"glurdyt","palrt",false)){
+  for(String race:new String[]{"t","z","p"})try(NativeGlue glue=new NativeGlue(art,"glurdy"+race,"palr"+race,false)){
    glue.elapsed=1000;glue.animationElapsed=1000;glue.hot=-1;NativeArt.Widget replay=glue.layout.get(20);
    check(replay!=null&&glue.labelVisible(20),"Actual briefing Replay fixture missing");NativeArt.Font f=font(glue,replay);
    check(!f.fallback,"Briefing replay uses substitute font");
    for(String language:new String[]{"en","ru","de","es","fr"}){PortText.select(language);
-    String authored=MenuLabels.forWidget("glurdyt",20,replay,null),plain=NativeArt.clean(authored);
+    String authored=MenuLabels.forWidget(glue.name,20,replay,null),plain=NativeArt.clean(authored);
+    if(language.equals("en"))check(MenuLabels.mnemonic(authored)=='r',"Original briefing Replay key is not R: "+race);
     Bitmap normal=Bitmap.createBitmap(640,480,Bitmap.Config.ARGB_8888);Recorded rendered=new Recorded(normal,f,plain);glue.labelCaption(rendered,20,plain,true);
     check(rendered.bright==0&&rendered.normal>0,"Resolved plain Replay restores the authored shortcut: "+language);
     Bitmap original=Bitmap.createBitmap(640,480,Bitmap.Config.ARGB_8888);Recorded nativeLabel=new Recorded(original,f,authored);glue.label(nativeLabel,20,null,true);
@@ -148,7 +149,7 @@ public class MenuHotkeys11Test {
  }
  public static void main(String[]args)throws Exception {
   NativeBridge.root=Paths.get(args[0]);PortText.load(Files.newInputStream(Paths.get(args[2])));textCases();NativeArt art=new NativeArt();screens(art,Paths.get(args[1]));replayTint(art,Paths.get(args[1]));resolvedCaption(art);
-  System.out.println("PASS "+checks+" checks; "+labels+" real BIN captions; "+highlighted+" surviving mnemonics; "+renders+" original-font renders; nine dialogs plus actual briefing Replay, five UI languages, exact resolved captions do not restore excluded shortcuts, enabled/disabled/hover, exact authored colors, overrides, fitting, bracket preservation and distinct green replay shortcut ramps");
+  System.out.println("PASS "+checks+" checks; "+labels+" real BIN captions; "+highlighted+" surviving mnemonics; "+renders+" original-font renders; nine dialogs plus all three original briefing Replay buttons, five UI languages, exact resolved captions do not restore excluded shortcuts, enabled/disabled/hover, exact authored colors, overrides, fitting, bracket preservation and distinct green replay shortcut ramps");
  }
 }'''
 for name,text in sources.items():

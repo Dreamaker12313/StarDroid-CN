@@ -2,9 +2,9 @@
   "passed": true,
   "version": "1.1",
   "versionCode": 83,
-  "apkSha256": "d3965181c1b475f6642e111194aff7e372177c06ffcbc425448b8242c013658d",
-  "apkBytes": 2466774,
-  "previousApkSha256": "c23a428af395ba7756dbdb9b447e692938e49ffe0cabc1151aade9ba12057709",
+  "apkSha256": "5eab998531d4576b10318362f51aef689faa03a2301ed07ffdada603eb1a6e43",
+  "apkBytes": 2466750,
+  "previousApkSha256": "d3965181c1b475f6642e111194aff7e372177c06ffcbc425448b8242c013658d",
   "certificateSha256": "40e172ca11ff8be42888388f51b94ffb824382dce5235c5f1bd5683b4bb8876e",
   "originalReleaseSigningIdentity": true,
   "nativeEngineRebuilt": false,
@@ -154,7 +154,7 @@
     "app/src/main/java/org/openbw/androidtest/MusicThemes.java": "94730541abde3a431433f8680d32bfb3dee7a5b1799be8192001730dc953477c",
     "app/src/main/java/org/openbw/androidtest/NativeCampaign.java": "9204fd27ebe687d25c5b3a02910f6feefd31b3d55201616cacd373c81f074b73",
     "app/src/main/java/org/openbw/androidtest/NativeMaps.java": "c1e60a0d6f679c5acca0f46dae41cf1b5399779a8e3e565800bf18e972f3f58c",
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8c1ddece3ec87fa212ea1f8edf106d0910e3030a5f08ac2d6f7ab98c8e3100cb",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "f3889113eebe7426add06e0320404eb7425ac5252d2a8a1c8b57658889be1f34",
     "app/src/main/java/org/openbw/androidtest/DesktopGuide.java": "1e972622857a83465a5640e2ac23d2ea60c7eefbb092a686ec76c4f8a1e83c2f",
     "app/src/main/java/org/openbw/androidtest/NativeHud.java": "4e7c3af4fcecb16ef2572b1cfbbbcef338be9b1c0afac568745ab650333b17b9",
     "app/src/main/java/org/openbw/androidtest/NativeMapCheck.java": "82caa4ae945471367741e54fe1a190d9a88db016cc0ce64fe3eecd3e11d91f3d",
@@ -224,6 +224,6 @@
     "settings.gradle": "3445ce1d97bf70a20ffe1b43dbddb3eb3d5733c6b50d1b454e978df690bf38e3",
     "gradle.properties": "76f29cfe154e62c3a7bd5679b02bf4caba4258c1298f8643361d00e943e1be5e",
     "scripts/build_nearby.py": "797456424ba4b16a356dfe592357fc5c3001a18b316574b267a3a083420d49c3",
-    "tests/package_menu_polish11.py": "e2dfe9fc0052ecdcebc011c5b437321ef33c4ac7b4cc0426f2c0f1f91ada45a1"
+    "tests/package_menu_polish11.py": "417e21d40cfa5b01e7b404e666c55d8fc42ed24dee36965e66f72a65e7c4318d"
   }
 }

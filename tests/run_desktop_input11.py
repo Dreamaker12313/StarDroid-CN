@@ -145,6 +145,10 @@ public class DesktopInput11Test extends SurfaceBase{
 caption_start=surface.index('  private static final class MenuCaption {')
 harness+=surface[caption_start:surface.index('\n  }',caption_start)+4]+'\n'
 harness+='\n'.join(methods(surface,n)for n in names)
+# Compile the actual briefing Replay call and callback, not a copied binding.
+briefing=method(surface,'drawBriefing')
+replay_call=briefing[briefing.rindex('    glueButton('):briefing.rindex('\n  }')]
+harness+='\nstatic class Campaign {int replays;void replay(){replays++;}}\nfinal Campaign campaign=new Campaign();int lastBriefRevision=42;\nvoid briefingReplay(Canvas c){\n'+replay_call+'\n}\n'
 
 def finish():
  for name,content in sources.items():
@@ -386,6 +390,22 @@ harness+=r'''
   }
   PortText.select("en");
  }
+ static void briefingReplayChecks(){
+  Canvas c=new Canvas();
+  for(String race:new String[]{"glurdyt","glurdyz","glurdyp"})for(String language:new String[]{"en","ru","de","es","fr"}){
+   PortText.select(language);DesktopInput11Test h=new DesktopInput11Test();h.page="briefing";h.glue=new NativeGlue();h.glue.name=race;
+   h.glue.layout.widgets.add(widget(20,"r\u0004R\u0001eplay"));h.briefingReplay(c);h.flushMenuButtons();
+   int key=MenuLabels.mnemonic(NativeArt.lastLabel);check(key!=0&&h.buttons.get(0).key==key,"Briefing Replay has no visible bound hotkey: "+race+"/"+language);
+   if(language.equals("en"))check(key=='r',"Briefing Replay changed original R shortcut");
+   NativeBridge.clear();pressLetter(h,key);check(h.campaign.replays==1&&h.lastBriefRevision==-1,"Briefing shortcut did not replay/reset text: "+race+"/"+language);
+   check(NativeBridge.count(32)==0&&NativeBridge.count(35)==0,"Briefing Replay leaked a gameplay key");
+   h.buttons.clear();h.glue.elapsed=0;h.lastBriefRevision=42;h.briefingReplay(c);h.flushMenuButtons();pressLetter(h,key);
+   check(h.buttons.get(0).key==0&&h.campaign.replays==1&&h.lastBriefRevision==42,"Briefing Replay shortcut active before menu entrance finishes");
+   h.glue.elapsed=1000;h.buttons.clear();h.briefingReplay(c);h.flushMenuButtons();
+   click(h,100,42,MotionEvent.BUTTON_PRIMARY,1000);check(h.campaign.replays==2,"Briefing Replay mouse click failed");
+   touch(h,MotionEvent.ACTION_DOWN,100,42,2000);touch(h,MotionEvent.ACTION_UP,100,42,2040);check(h.campaign.replays==3,"Briefing Replay touch failed");
+  }PortText.select("en");
+ }
  static void menuBatchChecks(){
   DesktopInput11Test h=new DesktopInput11Test();Canvas c=new Canvas();h.modal="options";NativeArt.labels.clear();
   h.menuButton(c,"Save Game",0,0,180,28,()->h.actions++,true);h.menuButton(c,"\u0004S\u0001ound",0,40,180,28,()->h.actions+=10,true);h.flushMenuButtons();
@@ -430,7 +450,7 @@ harness+=r'''
    h.buttons.clear();h.page="results";h.activeGame=false;h.modal="";h.addMenuButton(new RectF(20,30,200,58),()->h.actions++,true,save);check(h.buttons.get(0).key==0,"Save Replay bound an unadvertised letter");int before=h.actions;pressLetter(h,'s');check(h.actions==before,"Save Replay still activates through S");click(h,100,42,MotionEvent.BUTTON_PRIMARY,4000);check(h.actions==before+1,"Save Replay mouse action stopped working");
   }PortText.select("en");
  }
- public static void main(String[]args){InputDevice.devices.put(1,new InputDevice(InputDevice.SOURCE_KEYBOARD));InputDevice.devices.put(2,new InputDevice(InputDevice.SOURCE_MOUSE));InputDevice.devices.put(3,new InputDevice(InputDevice.SOURCE_GAMEPAD|InputDevice.SOURCE_JOYSTICK));run("touch regression",DesktopInput11Test::touchRegression);run("gamepad regression",DesktopInput11Test::gamepadRegression);run("typing",DesktopInput11Test::typingRegression);run("mouse world",DesktopInput11Test::worldMouseChecks);run("HUD and menus",DesktopInput11Test::hudMenuChecks);run("terrain toggle input",DesktopInput11Test::terrainToggleChecks);run("navigation",DesktopInput11Test::navigationChecks);run("keyboard",DesktopInput11Test::keyboardChecks);run("lifecycle",DesktopInput11Test::lifecycleChecks);run("Activity routing",DesktopInput11Test::activityChecks);run("input transitions",DesktopInput11Test::transitionChecks);run("grid hotkeys",DesktopInput11Test::gridChecks);run("desktop options",DesktopInput11Test::optionChecks);run("settings persistence and access",DesktopInput11Test::settingsChecks);run("menu mnemonic routing",DesktopInput11Test::menuMnemonicChecks);run("menu label binding",DesktopInput11Test::menuLabelBindingChecks);run("menu batching and replay routing",DesktopInput11Test::menuBatchChecks);run("navigation-only menu shortcuts",DesktopInput11Test::menuActionPolicyChecks);if(failures>0)throw new AssertionError(failures+" groups failed after "+checks+" checks");System.out.println("PASS "+checks+" production Java routing checks");}
+ public static void main(String[]args){InputDevice.devices.put(1,new InputDevice(InputDevice.SOURCE_KEYBOARD));InputDevice.devices.put(2,new InputDevice(InputDevice.SOURCE_MOUSE));InputDevice.devices.put(3,new InputDevice(InputDevice.SOURCE_GAMEPAD|InputDevice.SOURCE_JOYSTICK));run("touch regression",DesktopInput11Test::touchRegression);run("gamepad regression",DesktopInput11Test::gamepadRegression);run("typing",DesktopInput11Test::typingRegression);run("mouse world",DesktopInput11Test::worldMouseChecks);run("HUD and menus",DesktopInput11Test::hudMenuChecks);run("terrain toggle input",DesktopInput11Test::terrainToggleChecks);run("navigation",DesktopInput11Test::navigationChecks);run("keyboard",DesktopInput11Test::keyboardChecks);run("lifecycle",DesktopInput11Test::lifecycleChecks);run("Activity routing",DesktopInput11Test::activityChecks);run("input transitions",DesktopInput11Test::transitionChecks);run("grid hotkeys",DesktopInput11Test::gridChecks);run("desktop options",DesktopInput11Test::optionChecks);run("settings persistence and access",DesktopInput11Test::settingsChecks);run("menu mnemonic routing",DesktopInput11Test::menuMnemonicChecks);run("menu label binding",DesktopInput11Test::menuLabelBindingChecks);run("briefing Replay hotkey",DesktopInput11Test::briefingReplayChecks);run("menu batching and replay routing",DesktopInput11Test::menuBatchChecks);run("navigation-only menu shortcuts",DesktopInput11Test::menuActionPolicyChecks);if(failures>0)throw new AssertionError(failures+" groups failed after "+checks+" checks");System.out.println("PASS "+checks+" production Java routing checks");}
 }
 '''
 sources['org/openbw/androidtest/DesktopInput11Test.java']=harness
