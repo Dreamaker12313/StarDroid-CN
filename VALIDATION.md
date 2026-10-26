@@ -1,3 +1,15 @@
+# StarDroid 1.1 mouse and keyboard controls
+
+Public version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Physical mouse input has independent left-selection/box-drag, double-click and Ctrl-click selection, context-sensitive right orders, Shift queues, minimap interaction, wheel zoom/list scrolling and middle/edge camera movement. Hardware keyboard input uses physical command keys, held modifiers, arrow-camera movement and assign/append/recall control groups. [Input policy](validation/desktop-policy11.json) covers 260 assertions and actual Android SDK35 compilation.
+- Production Android event-routing tests cover 273 assertions, including duplicate Android mouse edges, held releases, foreign-layout hotkeys, HUD/menu isolation, text-dialog mouse buttons, focus/device cleanup, transitions, widescreen/zoom/letterbox transforms, and the Activity handoff. Existing touch/gamepad checks remain passing. [Routing](validation/desktop-input11.json), [gamepad/settings regression](validation/gamepad-v81.json).
+- Native engine tests cover 125 assertions, including same-frame modifier snapshots, queued commands, group assignment/append/recall, selection and cancellation, multiplayer input validation, and a deterministic replay roundtrip. Paused replays permit inspection without accepting gameplay commands; checkpoint rewind retains that behavior. Ordinary paused games stay blocked. [Native input](validation/desktop-native-1.1.json).
+- The original-style Controls/App Options guide is translated into all five UI languages. Guide checks explicitly load the original font metadata: 265 body checks and 2,270 complete-panel checks cover 110 settings renders. [Guide layout](validation/desktop-guide11.json).
+- Both Android ABIs are rebuilt from the changed native sources. Signed APK checks verify the original update identity, 47 JNI exports, 16 KiB alignment, unchanged permissions and intended assets only. Lint reports zero errors and 13 warnings. [Native build](validation/native-build-desktop11.json), [package](validation/package-desktop11.json).
+
+These are host event/simulation/rendering checks and Android SDK/build checks. Physical USB/Bluetooth peripherals, phone installation and Android OS event delivery have not been tested. Historical reports below remain tied to their recorded sources; some older artwork fixtures omitted font.gid and therefore exercised the styled fallback font. The new guide fixture verifies original-font loading explicitly.
+
 # StarDroid 1.1 sound controls and simultaneous feedback
 
 Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

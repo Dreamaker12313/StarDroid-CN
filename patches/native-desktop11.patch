@@ -1,0 +1,183 @@
+--- a/web/wasm_backend.cpp
++++ b/web/wasm_backend.cpp
+@@ -25,13 +25,25 @@
+ // ---------------------------------------------------------------------------
+ namespace native_window {
+ 
++struct queued_event : event_t {
++	uint8_t modifiers = 0;
++	queued_event(const event_t& value, uint8_t mask) : event_t(value), modifiers(mask) {}
++};
++
+ struct window_impl {
+ 	int width = 0, height = 0;
+ 	std::vector<uint8_t> framebuffer;                 // width*height*4 RGBA
+-	std::deque<event_t> events;
++	std::deque<queued_event> events;
+ 	std::array<bool, 512> keys{};
+ 	int mouse_x = 0, mouse_y = 0;
+ 	int button_state = 0;                             // bit (1<<(button-1))
++	void enqueue(const event_t& e) {
++		// Input is buffered until render. A Shift/Ctrl press, click and release
++		// may all arrive in one frame; the click must retain its own modifiers.
++		uint8_t mask = (keys[224] ? 1 : 0) | (keys[225] ? 2 : 0)
++			| (keys[228] ? 4 : 0) | (keys[229] ? 8 : 0);
++		events.emplace_back(e, mask);
++	}
+ };
+ 
+ // The single live window; the JS input exports target it.
+@@ -64,6 +76,9 @@
+ bool window::peek_message(event_t& e) {
+ 	if (!impl || impl->events.empty()) return false;
+ 	e = impl->events.front();
++	uint8_t mask = impl->events.front().modifiers;
++	impl->keys[224] = (mask & 1) != 0; impl->keys[225] = (mask & 2) != 0;
++	impl->keys[228] = (mask & 4) != 0; impl->keys[229] = (mask & 8) != 0;
+ 	impl->events.pop_front();
+ 	return true;
+ }
+@@ -112,12 +127,12 @@
+ 	e.type = ev_t::type_mouse_motion;
+ 	e.mouse_x = x; e.mouse_y = y;
+ 	e.button_state = g_window->button_state;
+-	g_window->events.push_back(e);
++	g_window->enqueue(e);
+ }
+ 
+ // button: SDL-style 1=left, 2=middle, 3=right
+ OPENBW_EXPORT(openbw_mouse_button) void openbw_mouse_button(int down, int button, int x, int y, int clicks) {
+-	if (!g_window) return;
++	if (!g_window || button < 1 || button > 3) return;
+ 	g_window->mouse_x = x;
+ 	g_window->mouse_y = y;
+ 	int bit = 1 << (button - 1);
+@@ -129,7 +144,7 @@
+ 	e.mouse_x = x; e.mouse_y = y;
+ 	e.button_state = g_window->button_state;
+ 	e.clicks = clicks;
+-	g_window->events.push_back(e);
++	g_window->enqueue(e);
+ }
+ 
+ OPENBW_EXPORT(openbw_key) void openbw_key(int down, int sym, int scancode) {
+@@ -139,7 +154,7 @@
+ 	e.type = down ? ev_t::type_key_down : ev_t::type_key_up;
+ 	e.sym = sym;
+ 	e.scancode = scancode;
+-	g_window->events.push_back(e);
++	g_window->enqueue(e);
+ }
+ 
+ // ---------------------------------------------------------------------------
+@@ -331,3 +346,11 @@
+     }
+     g_window->button_state = 0;
+ }
++
++// Focus/device transitions must not leave held modifiers or a queued click.
++extern "C" void openbw_reset_input() {
++    if (!g_window) return;
++    g_window->events.clear();
++    g_window->keys.fill(false);
++    g_window->button_state = 0;
++}
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -261,6 +261,7 @@
+ 	bool campaign_control_lock = false;
+ 	bool campaign_speech_muted = false;
+ 	bool paused = false;                          // frozen: ignore game input (camera still ok)
++	bool paused_replay_inspection = false;         // host enables only for read-only replay playback
+ 	int mouse_x = -1, mouse_y = -1;   // off-screen until the first move, so edge-scroll stays idle at startup
+ 	uint32_t sound_rotation = 0x739ad25bu;         // local voice RNG; never simulation RNG
+     int previous_ack_sound = -1;
+@@ -363,7 +364,7 @@
+ 	bool key_shift() { return wnd.get_key_state(225) || wnd.get_key_state(229); }
+ 	bool key_ctrl() { return wnd.get_key_state(224) || wnd.get_key_state(228); }
+ 
+-	// Control groups (classic hotkeys): Ctrl+digit assigns, digit recalls, and
++	// Control groups: Ctrl+digit assigns, Shift+digit appends, digit recalls, and
+ 	// pressing the same group again centers the camera on it.
+ 	std::array<a_vector<unit_id>, 10> groups;
+ 	int last_recalled_group = -1;
+@@ -397,6 +398,23 @@
+ 			if (u && u->owner == my_player) g.push_back(uid);
+ 		}
+ 		last_recalled_group = -1;   // next tap of n selects, not centers
++	}
++
++	void append_group(int n) {
++		if (n < 0 || n >= 10) return;
++		prune_selection();
++		auto& group = groups[n];
++		group.erase(std::remove_if(group.begin(), group.end(), [&](unit_id id) {
++			auto* u = get_unit(id);
++			return !u || unit_dying(u) || u_loaded(u) || u->owner != my_player;
++		}), group.end());
++		for (auto id : current_selection) {
++			if (group.size() >= 12) break;
++			auto* u = get_unit(id);
++			if (u && u->owner == my_player && std::find(group.begin(), group.end(), id) == group.end())
++				group.push_back(id);
++		}
++		last_recalled_group = -1;
+ 	}
+ 
+ 	// Put the camera's centre on a map position (clamped to the map by ui.update()).
+@@ -3453,14 +3471,27 @@
+ 	bool handle_game_input(const native_window::event_t& e) override {
+ 		using ev = native_window::event_t;
+ 		if (e.type == ev::type_mouse_motion) { mouse_x = e.mouse_x; mouse_y = e.mouse_y; return false; }
++		// These affect only the view, including while paused or watching a replay.
++		if (e.type == ev::type_key_down && e.scancode == 44) {
++			if (have_last_event) center_on(last_event_pos);
++			return true;
++		}
++		if (e.type == ev::type_key_down && e.scancode == 43) {
++			minimap_terrain = !minimap_terrain;
++			return true;
++		}
+ 
+ 		if (paused || campaign_control_lock) {
+ 			// No selection, orders, or hotkeys (nor their sounds/markers) while paused;
+ 			// let the base still pan (minimap click, arrow keys, edge scroll).
+ 			if (e.type == ev::type_mouse_button_down && e.button == 1) {
++				// Inspection is local UI state. Never pass this click through the
++				// placement/target-order handlers, even if a stale mode existed.
++				if (paused_replay_inspection && spectator && !campaign_control_lock) return false;
+ 				xy p; return minimap_point(e.mouse_x, e.mouse_y, p) ? false : true;
+ 			}
+ 			if (e.type == ev::type_mouse_button_down) return true;
++			if (e.type == ev::type_key_down) return true;
+ 			return false;
+ 		}
+ 
+@@ -3507,20 +3538,17 @@
+ 			run_command('\x1b');
+ 			return true;
+ 		}
+-		if (e.type == ev::type_key_down && e.scancode == 44) {   // Space: jump to the most recent alert
+-			if (have_last_event) center_on(last_event_pos);
+-			return true;
+-		}
+-		if (e.type == ev::type_key_down && e.scancode == 43) {   // Tab: toggle minimap terrain
+-			minimap_terrain = !minimap_terrain;
+-			return true;
+-		}
+ 		if (e.type == ev::type_key_down && e.sym >= '0' && e.sym <= '9') {
+ 			int n = e.sym - '0';
+-			if (key_ctrl()) assign_group(n); else recall_group(n);
++			if (key_ctrl()) assign_group(n); else if (key_shift()) append_group(n); else recall_group(n);
+ 			return true;
+ 		}
+-		if (e.type == ev::type_key_down && e.sym > 0) return run_command((char)e.sym);
++		if (e.type == ev::type_key_down && e.sym > 0) {
++			// Unavailable command hotkeys must not fall through to the base
++			// renderer's debug pause/speed/replay shortcuts on native builds.
++			run_command((char)e.sym);
++			return true;
++		}
+ 		return false;
+ 	}
+ };

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "androidApiCompile": 35,
+  "physicalAndroid": false,
+  "limitation": "Policy tests use host event shims with real SDK constants; physical USB/Bluetooth input needs device testing.",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/DesktopControls.java": "5c91f04f24a71c4ad2ab9a0a3c91500ba1ee4c006d0b6bc9b097b695eee1db0a",
+    "tests/DesktopControls11Test.java": "7d9ee89e3d0ff50da8ff6bd9d0d111414976833311ed3dcf87b53bf2c7821d0c",
+    "tests/run_desktop_policy11.py": "43dcdb023a46eaa12b13e14ee959d18b3402ffa950ba8d299abcc2b411b659d9"
+  },
+  "checks": [
+    "PASS source policy preserves touch, stylus, controller D-pad and keyboard Back",
+    "PASS physical hotkeys, repeat suppression, modifiers and focus cleanup",
+    "PASS mouse transition deduplication, left/right/middle, chords and focus cleanup",
+    "PASS 260 desktop input policy assertions"
+  ],
+  "reference": [
+    "https://developer.android.com/reference/android/view/MotionEvent",
+    "https://source.android.com/docs/core/interaction/input/touch-devices"
+  ]
+}

@@ -3,8 +3,10 @@
 No physical controller or Android device is simulated; tests verify routing and lifecycle.
 """
 from pathlib import Path
-import ast,hashlib,json,re,subprocess,shutil
+import ast,hashlib,json,os,re,subprocess,shutil
 r=Path(__file__).resolve().parents[1];src=r/'app/src/main/java/org/openbw/androidtest'
+jdk=r/'.tools/jdk17/usr/lib/jvm/java-17-openjdk-amd64/bin'
+if (jdk/'javac').is_file():os.environ['PATH']=str(jdk)+os.pathsep+os.environ['PATH']
 b=r/'build-native/gamepad81';b.mkdir(parents=True,exist_ok=True)
 assets=b/'assets';shutil.copytree(r/'build-native/map-scroll79/assets',assets,dirs_exist_ok=True)
 for asset in ['dlgs/terran.grp','tileset/badlands.wpe','game/tfontgam.pcx','game/icons.grp']:
@@ -57,9 +59,9 @@ def production(name):
  return text[m.start():end]
 names=['font','text','panel','body','fallback','uiLine','openGamepadSettings','gamepadSettingsBack','changeGamepad','gamepadLine','gamepadOption','gamepadToggle','gamepadSlider','drawGamepadSettings','controlGroupScale','controlGroup','controlGroupRows','drawControlGroups','reloadGamepadSettings','handleGamepadKey','handleGamepadMotion','gamepadDirection','activateGamepad','gamepadActionHeld','gamepadButton','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag','resetGamepad','advanceGamepad']
 harness+='\n'.join(production(n) for n in names)
-key_start=text.index('    if (!modal.isEmpty() || !page.equals("game")) return super.onKeyDown(key, event);')
-key_end=text.index('    int chr = event.getUnicodeChar();',key_start)
-harness+='\n boolean keyboardGroup(int key,KeyEvent event){\n'+text[key_start:key_end].replace('super.onKeyDown(key, event)','false')+'return false;}\n'
+# Physical keyboard routing moved to the production event suite in
+# run_desktop_input11.py; do not emulate the old instantaneous group shortcut.
+harness+='\n void resetDesktop(boolean hide){} boolean drawDesktopSettings(Canvas c){return false;}\n'
 
 harness+='''
  void redrawGroups(){buttons.clear();drawControlGroups(new Canvas(Bitmap.createBitmap(640,480,Bitmap.Config.ARGB_8888)));}
@@ -159,11 +161,7 @@ harness+='''
  }
  h.controls.controlGroups=false;h.redrawGroups();check(h.buttons.isEmpty(),"Hidden groups still receive input");
  h.controls.controlGroups=true;h.commandPercent=h.resourcePercent=100;
- // The actual keyboard group branch must preserve Ctrl, suppress repeat, and obey modals.
- NativeBridge.selection=9;KeyEvent keyboard=new KeyEvent(KeyEvent.KEYCODE_4,0,0);keyboard.ctrl=true;
- check(h.keyboardGroup(KeyEvent.KEYCODE_4,keyboard),"Ctrl+digit not handled");h.flush();check(NativeBridge.groups[4]==9,"Ctrl modifier lost while assigning");
- NativeBridge.selection=1;keyboard.ctrl=false;check(h.keyboardGroup(KeyEvent.KEYCODE_4,keyboard),"Digit recall not handled");h.flush();check(NativeBridge.selection==9,"Keyboard group recall failed");
- h.modal="menu";check(!h.keyboardGroup(KeyEvent.KEYCODE_4,keyboard),"Keyboard group bypassed modal");h.modal="";
+ // Keyboard groups are covered by run_desktop_input11.py and native-desktop11.
  // Controller prefs, limits, and every physical binding survive a round-trip.
  GamepadControls c=new GamepadControls();c.pointerSpeed=2.5f;c.cameraSpeed=.5f;c.deadZone=.3f;c.swapSticks=true;
  for(int i=0;i<c.bindings.length;i++)c.bindings[i]=(i+3)%GamepadControls.ACTION_LABELS.length;c.save(h.prefs);
@@ -257,6 +255,12 @@ while depth:
  if activity_source[i]=='{':depth+=1
  elif activity_source[i]=='}':depth-=1
  i+=1
+control_start=activity_source.index('  private void requestControlSettings(boolean desktop) {')
+control_end=activity_source.index('{',control_start)+1;depth=1
+while depth:
+ if activity_source[control_end]=='{':depth+=1
+ elif activity_source[control_end]=='}':depth-=1
+ control_end+=1
 sources['org/openbw/androidtest/MainActivityRoute81.java']='''package org.openbw.androidtest;
 final class MainActivityRoute81 {
  boolean optionsVisible=true,finishing,working,prepared=true;int refresh;
@@ -265,7 +269,7 @@ final class MainActivityRoute81 {
  void refreshDisplayArea(){refresh++;}
  static class Root{int removes,adds;Object view;void removeAllViews(){removes++;view=null;}void addView(Object v,FrameLayout.LayoutParams p){adds++;view=v;}}
  static class FrameLayout{static class LayoutParams{LayoutParams(int w,int h){}}}
-''' + activity_source[a:i] + '''
+''' + activity_source[a:i] + activity_source[control_start:control_end] + '''
  static void check(boolean b){if(!b)throw new AssertionError("App Options gamepad routing");}
  static int test(){
   MainActivityRoute81 a=new MainActivityRoute81();a.game=new NativeSurface(a);NativeSurface existing=a.game;
@@ -278,7 +282,7 @@ final class MainActivityRoute81 {
  }
 }
 final class NativeSurface {int opens,resumes,focus;boolean fromApp;NativeSurface(MainActivityRoute81 a){}
- void resume(){resumes++;}void requestFocus(){focus++;}void openGamepadSettings(boolean b){fromApp=b;opens++;}}
+ void resume(){resumes++;}void requestFocus(){focus++;}void openGamepadSettings(boolean b){fromApp=b;opens++;}void openDesktopSettings(boolean b){fromApp=b;opens++;}}
 '''
 for name,text in sources.items():
  target=b/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_text(text)

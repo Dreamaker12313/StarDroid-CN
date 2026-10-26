@@ -237,7 +237,7 @@ static void open(const uint8_t* data,size_t size) {
    need(native_save::assets_signature(*g_ui,g_campaign)==r.signature,"Replay needs the same game data used to record it.");
    need(uint64_t(bwgame::sim_checksum(g_ui->st))==r.initial,"Replay initial state does not match this build.");
   }
-  g_ui->rep_on=false;g_ui->spectator=true;g_ui->competitive=false;g_ui->outcome=0;g_ui->wnd.create("StarDroid Replay",0,0,640,480);g_ui->resize(640,480);g_ui->set_image_data();
+  g_ui->rep_on=false;g_ui->spectator=true;g_ui->paused_replay_inspection=true;g_ui->competitive=false;g_ui->outcome=0;g_ui->wnd.create("StarDroid Replay",0,0,640,480);g_ui->resize(640,480);g_ui->set_image_data();
   g_ui->center_on(g_ui->game_st.start_locations[owner]);g_ui->outgoing.clear();active=true;set_view(-1);openbw_set_external_cursor(1);openbw_mouse_move(-100,-100);remember_checkpoint();
  }catch(...){close_game();throw;}
 }

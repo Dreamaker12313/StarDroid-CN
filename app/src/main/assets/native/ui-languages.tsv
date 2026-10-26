@@ -710,3 +710,20 @@ Cannot read game data.	Не удалось прочитать игровые д�
 Cannot prepare game data move.	Не удалось подготовить перемещение игровых данных.	Das Verschieben der Spieldaten konnte nicht vorbereitet werden.	No se pudo preparar el traslado de los datos del juego.	Impossible de préparer le déplacement des données du jeu.
 Move game data	Переместить игровые данные	Spieldaten verschieben	Mover datos del juego	Déplacer les données du jeu
 Unable to reopen game data	Не удалось снова открыть игровые данные	Spieldaten konnten nicht erneut geöffnet werden	No se pudieron volver a abrir los datos del juego	Impossible de rouvrir les données du jeu
+
+# Mouse and keyboard controls
+Mouse & keyboard	Мышь и клавиатура	Maus und Tastatur	Ratón y teclado	Souris et clavier
+Mouse guide	Мышь	Mausbedienung	Guía del ratón	Guide de la souris
+Keyboard guide	Клавиатура	Tastaturbedienung	Guía del teclado	Guide du clavier
+Left click selects; drag a box to select a group.	Левая кнопка выбирает; выделите рамкой группу.	Linksklick wählt aus; Ziehen wählt eine Gruppe aus.	Clic izquierdo para seleccionar; arrastra un recuadro para un grupo.	Clic gauche pour sélectionner ; glissez un cadre pour un groupe.
+Right click moves, attacks or interacts.	Правая кнопка: движение, атака или взаимодействие.	Rechtsklick bewegt, greift an oder interagiert.	Clic derecho para mover, atacar o interactuar.	Clic droit pour déplacer, attaquer ou interagir.
+Shift-click adds to selection; Shift-orders queue.	Shift+щелчок добавляет к выбору; Shift ставит приказы в очередь.	Umschalt+Klick erweitert die Auswahl; Umschalt reiht Befehle ein.	Mayús+clic añade a la selección; Mayús pone órdenes en cola.	Maj+clic ajoute à la sélection ; Maj met les ordres en file.
+Double-click or Ctrl-click selects the same type.	Двойной щелчок или Ctrl+щелчок выбирает тот же тип.	Doppelklick oder Strg+Klick wählt Einheiten gleichen Typs.	Doble clic o Ctrl+clic selecciona unidades del mismo tipo.	Double-clic ou Ctrl+clic sélectionne les unités du même type.
+Arrow keys, screen edges or middle-drag move the camera.	Стрелки, края экрана или средняя кнопка двигают камеру.	Pfeiltasten, Bildschirmränder oder Ziehen mit mittlerer Maustaste bewegen die Kamera.	Las flechas, los bordes o arrastrar con el botón central mueven la cámara.	Les flèches, les bords ou le glissement avec le bouton central déplacent la caméra.
+Wheel zooms the battlefield or scrolls menu lists.	Колесо меняет масштаб поля боя или прокручивает списки.	Das Mausrad zoomt das Schlachtfeld oder scrollt Menüs.	La rueda acerca el campo de batalla o desplaza listas.	La molette zoome sur le champ de bataille ou fait défiler les listes.
+Use the command card's letter hotkeys.	Используйте буквенные горячие клавиши команд.	Nutze die Buchstabenkürzel der Befehlsleiste.	Usa las letras de acceso rápido del panel de órdenes.	Utilisez les raccourcis par lettre du panneau de commandes.
+Ctrl+0-9 assigns a group; 0-9 recalls it.	Ctrl+0-9 сохраняет группу; 0-9 выбирает её.	Strg+0-9 weist eine Gruppe zu; 0-9 ruft sie auf.	Ctrl+0-9 asigna un grupo; 0-9 lo selecciona.	Ctrl+0-9 affecte un groupe ; 0-9 le sélectionne.
+Press a group number twice to center the camera.	Нажмите номер группы дважды, чтобы навести камеру.	Zweimal die Gruppennummer drücken, um die Kamera zu zentrieren.	Pulsa dos veces el número del grupo para centrar la cámara.	Appuyez deux fois sur le numéro du groupe pour centrer la caméra.
+Space jumps to the latest alert. Tab toggles terrain.	Пробел: последнее событие. Tab: рельеф мини-карты.	Leertaste zeigt den letzten Alarm. Tab schaltet das Gelände um.	Espacio muestra la última alerta. Tab alterna el terreno.	Espace affiche la dernière alerte. Tab bascule le terrain.
+Escape cancels or goes back. F10 opens the game menu.	Escape отменяет или возвращает назад. F10 открывает меню.	Esc bricht ab oder geht zurück. F10 öffnet das Spielmenü.	Esc cancela o vuelve atrás. F10 abre el menú del juego.	Échap annule ou revient en arrière. F10 ouvre le menu du jeu.
+Enter opens multiplayer chat.	Enter открывает сетевой чат.	Enter öffnet den Mehrspielerchat.	Intro abre el chat multijugador.	Entrée ouvre le chat multijoueur.

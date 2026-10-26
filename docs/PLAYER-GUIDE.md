@@ -88,6 +88,18 @@ Enable **Show control-group buttons** under **Selection settings**. Tap an empty
 
 Interface-size options adjust resources, command buttons, descriptions, and selection/move controls. **Commands & control groups** scales both together. Hover and held-command descriptions can appear alongside command errors or target prompts, with space between the two. Control-group buttons at 100% now match their previous 120% size; choosing 120% enlarges them further. They wrap when necessary to avoid overlapping resources. Sound options retain mute and separate effects/music volume sliders. Set Music to **0** to turn music off. The former music-enable switch is removed; an existing disabled setting becomes volume 0 once. Music follows your race automatically. **Next track** skips to the next in-game theme while music is audible; it does not interrupt title, briefing or victory/defeat music. There is no manual track picker or sound-preview control. With the original music imports available, Brood War campaigns, custom games, and Nearby matches play four themes for each race: the expansion theme and original first theme share one complete file, followed by the original second and third themes. Missing expansion music falls back to the imported original soundtrack. **Miscellaneous → Cheats** contains single-player controls including **Invincibility** and **Force victory (end match)**. Invincibility protects your units from combat damage, leaves scripted mission deaths intact, and resets after loading or starting a game.
 
+### Mouse and keyboard
+
+Open **App Options → Mouse & keyboard**, or **Controls → Mouse & keyboard** during a game, for the guide. Mouse and keyboard controls work alongside touch and gamepad controls.
+
+- **Left click** selects a unit; drag a selection box to select several. **Double-click** or **Ctrl-click** selects units of the same type. **Shift-click** adds to the selection.
+- **Right click** gives a context-sensitive move, attack, gather or interaction order. Hold **Shift** to queue orders. Left click confirms a targeted command or building placement; right click or **Escape** cancels it.
+- **Arrow keys**, moving the pointer to a screen edge, or dragging with the **middle mouse button** move the camera. The **wheel** zooms the battlefield and scrolls menu lists.
+- Use the command card's letter hotkeys. **Ctrl+0–9** assigns a control group; **Shift+0–9** adds the current selection to it; **0–9** recalls it. Press the same number twice quickly to center the camera on that group.
+- **Space** jumps to the latest alert; **Tab** toggles minimap terrain. **Escape** cancels or goes back; **F10** opens the game menu. **Enter** opens Nearby multiplayer chat.
+
+Typing a player name or chat message does not issue game commands. Losing focus or disconnecting an input device clears held input, so the camera or a modifier key cannot remain stuck.
+
 ### Gamepad controls
 
 Open **App Options → Gamepad controls**, or **Controls → Gamepad controls** during a game. By default, the left stick moves the pointer, the right stick/D-pad pans the camera, A/Cross selects, B/Circle issues right-click orders, X/Square targets an attack, and Y/Triangle cancels. Hold A/Cross while moving the pointer to box-select. Left shoulder slows the pointer for precision; triggers choose a control group, right shoulder recalls it, and left-stick press assigns it. Start opens the game menu.

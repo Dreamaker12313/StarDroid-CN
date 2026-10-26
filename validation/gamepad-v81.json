@@ -35,15 +35,15 @@
     "advanceGamepad",
     "touch"
   ],
-  "result": "PASS 4184 production group/controller checks: redraw and touch jitter, assign/recall/cancel, UI scale/resource overlap, preferences, sticks/deadzone/swap, left-drag/right-click, HUD routing, rebinding, duplicate trigger lifecycle, modal isolation, reset and disconnect, native settings and all bindings, five languages, preserved App Options game lifecycle",
+  "result": "PASS 4179 production group/controller checks: redraw and touch jitter, assign/recall/cancel, UI scale/resource overlap, preferences, sticks/deadzone/swap, left-drag/right-click, HUD routing, rebinding, duplicate trigger lifecycle, modal isolation, reset and disconnect, native settings and all bindings, five languages, preserved App Options game lifecycle",
   "sourceSha256": {
-    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "b2de3ecfa967bfa0900fc37a8206f9f16a6b7ca51ded99d75b6c5e32e2854a86",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "b137b878df5b8f09c9abdae5d0d41e6c2089e35e102fb04aedd066df4eedcda9",
     "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "e753454718d383b78d943a7b85e992e08c13f9e7ed4519e7f2bad78a5d9777c3",
-    "app/src/main/assets/native/ui-languages.tsv": "bf1aa7bbfcb0f065508c92bea231f801277c7520ef142012c2776de59d1e6b51",
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "9a7394decd9071d5b1fb1159f5f07a5fb1d2dc9e1fceaff496e03de6e6a3b94e",
+    "app/src/main/assets/native/ui-languages.tsv": "ccb2695f6a05063bb1c1efe872b803a3abca0aade3d77454224ac17a7cc0f87d",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "a217d133571cf5f9516e9bde429f24aa6a4f9c36be8f5a36e6b22f2d06d7f58a",
     "app/src/main/java/org/openbw/androidtest/GamepadControls.java": "dd03141a97a2790c2cc4daef904f7605da25da5f080c7e5ace82f41865da000b",
     "app/src/main/java/org/openbw/androidtest/GamepadSettings.java": "495c62d64248babb8430dbb2dee03c71800da0b8b31fa136e06da9aa884a239f",
-    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "4fb15794964d6cc3fd346ffa0c1242a65c41664a5c8dd9bc63a228ea76261649",
-    "tests/run_gamepad81.py": "f21a62d973f08970f7797b171f17084a4aa11cb4b61932302718d3bb3f47e349"
+    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "befe03fa10c41265cb0e16aabb13f9e57266b0d457bd8f5abecdbf2fae22fadd",
+    "tests/run_gamepad81.py": "14f0ffad44502eac16bc61381790540b2bb6a5599b189152383150a4ff912872"
   }
 }

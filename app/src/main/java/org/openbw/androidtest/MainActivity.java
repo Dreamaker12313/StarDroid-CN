@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.content.res.ColorStateList;
+import android.hardware.input.InputManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,6 +74,13 @@ public final class MainActivity extends Activity {
   private FrameLayout root;
   private NativeSurface game;
   private boolean optionsVisible = true, activityResumed;
+  private InputManager inputManager;
+  private boolean inputDevicesRegistered;
+  private final InputManager.InputDeviceListener inputDevices = new InputManager.InputDeviceListener() {
+    @Override public void onInputDeviceAdded(int deviceId) {}
+    @Override public void onInputDeviceChanged(int deviceId) {}
+    @Override public void onInputDeviceRemoved(int deviceId) { resetPhysicalInput(); }
+  };
   private boolean importing;
   private GameDataOperation.Lease dataLease;
   private boolean waitingForDataOperation, storageSuspendedGame;
@@ -102,6 +110,7 @@ public final class MainActivity extends Activity {
   @Override
   public void onCreate(Bundle state) {
     super.onCreate(state);
+    inputManager = (InputManager) getSystemService(INPUT_SERVICE);
     AppDiagnostics.install(this);
     NativeCache.beginSession(getCacheDir());
     try { PortText.load(getAssets().open("native/ui-languages.tsv")); }
@@ -245,6 +254,7 @@ public final class MainActivity extends Activity {
     button(language, languageName(), this::chooseLanguage).setEnabled(!busy());
     text(language, "Game voices and campaign text use the language of the imported files.", 13, 0xff8da4cf);
     LinearLayout input = section(panel, "Controls");
+    button(input, "Mouse & keyboard", this::requestDesktopSettings).setEnabled(!busy() && ready());
     button(input, "Gamepad controls", this::requestGamepadSettings).setEnabled(!busy() && ready());
     noticeView = notice.isEmpty() ? null : text(panel, notice, 14, 0xffc5cfeb);
     LinearLayout storage = section(panel, "Game data storage");
@@ -695,6 +705,14 @@ public final class MainActivity extends Activity {
   }
 
   void requestGamepadSettings() {
+    requestControlSettings(false);
+  }
+
+  void requestDesktopSettings() {
+    requestControlSettings(true);
+  }
+
+  private void requestControlSettings(boolean desktop) {
     if (isFinishing() || busy() || !ready()) return;
     final boolean fromAppOptions = optionsVisible;
     if (fromAppOptions) {
@@ -706,17 +724,37 @@ public final class MainActivity extends Activity {
       game.resume();
       game.requestFocus();
     }
-    game.openGamepadSettings(fromAppOptions);
+    if (desktop) game.openDesktopSettings(fromAppOptions);
+    else game.openGamepadSettings(fromAppOptions);
   }
 
   @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent event) {
-    if (!optionsVisible && game != null && game.handleGamepadMotion(event)) return true;
+    if (!optionsVisible && game != null) {
+      if (game.handleDesktopMotion(event)) return true;
+      if (game.handleGamepadMotion(event)) return true;
+    }
     return super.dispatchGenericMotionEvent(event);
   }
 
   @Override public boolean dispatchKeyEvent(android.view.KeyEvent event) {
-    if (!optionsVisible && game != null && game.handleGamepadKey(event)) return true;
+    if (!optionsVisible && game != null) {
+      if (game.handleGamepadKey(event)) return true;
+      if (game.handleDesktopKey(event)) return true;
+    }
     return super.dispatchKeyEvent(event);
+  }
+
+  private void resetPhysicalInput() {
+    if (game == null) return;
+    game.resetDesktopInput();
+    game.resetGamepadInput();
+  }
+
+  private void watchInputDevices(boolean watch) {
+    if (inputManager == null || inputDevicesRegistered == watch) return;
+    if (watch) inputManager.registerInputDeviceListener(inputDevices, null);
+    else inputManager.unregisterInputDeviceListener(inputDevices);
+    inputDevicesRegistered = watch;
   }
 
   void requestExit() {
@@ -860,12 +898,13 @@ public final class MainActivity extends Activity {
   public void onWindowFocusChanged(boolean focus) {
     super.onWindowFocusChanged(focus);
     if (focus) fullscreen();
-    else if (game != null) game.resetGamepadInput();
+    else resetPhysicalInput();
   }
 
   @Override
   protected void onPause() {
     activityResumed = false;
+    watchInputDevices(false);
     AppDiagnostics.foreground(false);
     if (game != null) game.suspend();
     super.onPause();
@@ -875,6 +914,7 @@ public final class MainActivity extends Activity {
   protected void onResume() {
     super.onResume();
     activityResumed = true;
+    watchInputDevices(true);
     AppDiagnostics.foreground(true);
     if(busy())showHome();
     else if (!GameDataStorage.available(this))showStorageUnavailable();
@@ -885,6 +925,7 @@ public final class MainActivity extends Activity {
 
   @Override
   protected void onDestroy() {
+    watchInputDevices(false);
     unregisterReceiver(storageReceiver);
     root.removeCallbacks(operationRefresh);
     if (game != null) game.shutdown();

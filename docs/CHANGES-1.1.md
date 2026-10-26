@@ -1,5 +1,7 @@
 # StarDroid 1.1 — build 83
 
+- Added mouse and keyboard controls: selection boxes, context-sensitive right-click orders, queued orders, camera movement, wheel zoom/list scrolling, original command hotkeys and control groups. The original-style Controls menu includes a mouse/keyboard guide. Touch and gamepad controls remain available.
+
 - Hover and touch-hold descriptions stay visible while a command error or target prompt is shown. The description sits above the message with a gap, including enlarged interfaces and widescreen.
 - Removed **Play original music**. Music volume **0** turns music off; **Mute all sound**, separate Effects/Music sliders and **Next track** remain. An old disabled-music setting migrates to volume 0 once, so updating does not unexpectedly turn music on.
 

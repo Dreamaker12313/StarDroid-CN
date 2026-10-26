@@ -34,6 +34,7 @@ int openbw_framebuffer_height();
 void openbw_mouse_move(int,int);
 void openbw_mouse_button(int,int,int,int,int);
 void openbw_key(int,int,int);
+void openbw_reset_input();
 void js_read_data(int index,void* dst,unsigned offset,unsigned n){if(index<0||index>=11)throw std::runtime_error("Invalid archive index");archives[index].read(dst,offset,n);}
 unsigned js_file_size(int i){return i>=0&&i<11?unsigned(archives[i].size):0;}
 int js_sound_load(const void* data,unsigned n){return naudio::add(data,n);}
@@ -128,12 +129,19 @@ static void command(int op,int a,int b,int c,int d){
   if(op==31){native_replay::set_view(a);return;}
   if(op==4)d=1;
   if(op==1&&b!=1)return;
-  if(op!=0&&op!=1&&op!=3&&op!=4&&op!=5&&op!=6&&op!=8&&op!=19&&op!=21&&op!=22&&op!=26&&op!=27&&op!=28)return;
+  if(op==33&&b!=1)return;
+  if(op==32&&a&&c!=224&&c!=225&&c!=228&&c!=229&&c!=43&&c!=44)return;
+  if(op!=0&&op!=1&&op!=3&&op!=4&&op!=5&&op!=6&&op!=8&&op!=19&&op!=21&&op!=22&&op!=26&&op!=27&&op!=28&&op!=32&&op!=33&&op!=34)return;
  }
  if(net_active && ((op>=9&&op<=18&&op!=12)||op==20||op==23||op==29||op==30))return;
  if(g_ui&&(op==9||op==11||op==13||op==15||op==16||op==17||op==18))g_ui->rep_on=false;
  switch(op){
  case 0:openbw_mouse_move(a,b);break;case 1:openbw_mouse_button(a,b,c,d,1);break;case 2:openbw_key(1,a,b);openbw_key(0,a,b);break;case 3:openbw_pan(a,b);break;
+ // Desktop input keeps real press/release lifetimes and double-click counts.
+ // Coordinates come from op 0; input still uses the existing BW command stream.
+ case 32:openbw_key(a!=0,b,c);break;
+ case 33:if(g_ui&&(b==1||b==3)){int x,y;g_ui->wnd.get_cursor_pos(&x,&y);openbw_mouse_button(a!=0,b,x,y,c>=2?2:1);}break;
+ case 34:openbw_reset_input();openbw_touch_cancel();if(g_ui)g_ui->is_moving_replay_slider=false;break;
  case 4:{
   if(!d&&touch_beacon_move(a,b))break;
   if (g_ui) if (auto* near=g_ui->touch_selection_near(a,b,std::max(0,int(touch_radius/std::max(.5,g_ui->minimap_scale))),d!=0)) {

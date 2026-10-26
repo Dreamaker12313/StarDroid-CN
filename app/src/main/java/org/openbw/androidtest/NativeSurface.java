@@ -271,6 +271,7 @@ final class NativeSurface extends SurfaceView
     enqueue(
         () -> {
           accumulator = 0;
+          resetDesktop(true);
           resetGamepad();
           cancelGesture();
           if (audio != null) audio.foreground(false);
@@ -339,6 +340,7 @@ final class NativeSurface extends SurfaceView
 
   @Override
   public void surfaceDestroyed(SurfaceHolder h) {
+    resetDesktopInput();resetGamepadInput();
     // Wait for any outstanding Canvas post before Android destroys the surface.
     synchronized (surfaceGate) {
       surface = false;
@@ -1019,7 +1021,8 @@ final class NativeSurface extends SurfaceView
     syncAudio();
     advanceLists(dt);
     advanceGamepad(dt);
-    if (modal.startsWith("gamepad") && !page.equals("game")) {
+    advanceDesktop(dt);
+    if ((modal.startsWith("gamepad") || modal.equals("control-desktop")) && !page.equals("game")) {
       if (page.equals("movie")) cinematicStart += dt;
       return;
     }
@@ -1127,7 +1130,7 @@ final class NativeSurface extends SurfaceView
     c.scale(scale,scale);
     c.clipRect(0,0,logicalWidth,480);
     buttons.clear();
-    try {draw(c,dt);drawGamepadCursor(c);} finally {c.restoreToCount(save);}
+    try {draw(c,dt);drawGamepadCursor(c);if(desktopMouseActive&&desktopInside)drawPointer(c,desktopX,desktopY,desktopPrimary.equals("world")||gamepadWorld(desktopX,desktopY));} finally {c.restoreToCount(save);}
   }
 
   private void draw(Canvas c, double dt) {
@@ -1137,7 +1140,7 @@ final class NativeSurface extends SurfaceView
       results.canSave = NativeBridge.value(15, 0) != 0;
       results.hot = hoverButton;
       results.draw(c, !modal.isEmpty() ? 0 : dt);
-      if (modal.startsWith("gamepad")) {buttons.clear(); drawGamepadSettings(c); return;}
+      if (modal.startsWith("gamepad")||modal.equals("control-desktop")) {buttons.clear(); drawGamepadSettings(c); return;}
       if(modal.startsWith("replay-")){buttons.clear();drawReplayDialog(c);return;}
       if (!results.ready() || pendingScreen != null) return;
       NativeArt.Widget save = results.layout.get(61);
@@ -2160,7 +2163,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void syncAudio() {
-    boolean settingsPause = modal.startsWith("gamepad")
+    boolean settingsPause = (modal.startsWith("gamepad") || modal.equals("control-desktop"))
         && Arrays.asList("movie", "story", "briefing", "results").contains(page);
     NativeBridge.audio(!foreground || settingsPause || (audio != null && !audio.canPlay()), muted ? 0 : effects,
         muted ? 0 : music * speechMusicGain);
@@ -2502,6 +2505,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void modalBack() {
+    if(modal.equals("control-desktop")){desktopSettingsBack();return;}
     if (modal.equals("replay-delete")||modal.equals("replay-notice")) {modal="";return;}
     if (modal.startsWith("gamepad")) { gamepadSettingsBack(); return; }
     if (modal.equals("control-timing")) { modal = "control-select"; return; }
@@ -2620,6 +2624,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private boolean drawGamepadSettings(Canvas c) {
+    if(drawDesktopSettings(c))return true;
     if (!modal.startsWith("gamepad")) return false;
     float x = (logicalWidth - 440) / 2f, y = 40;
     paint.setColor(0x80000000); c.drawRect(0, 0, logicalWidth, 480, paint);
@@ -2698,11 +2703,12 @@ final class NativeSurface extends SurfaceView
 
   private void drawControls(Canvas c, float x, float y) {
     if (modal.equals("controls")) {
-      option(c, "Selection settings", x + 22, y + 55, 324, () -> modal = "control-select");
-      option(c, "Camera settings", x + 22, y + 103, 324, () -> modal = "control-camera");
-      option(c, "Command settings", x + 22, y + 151, 324, () -> modal = "control-orders");
-      option(c, "Gesture guide", x + 22, y + 199, 324, () -> modal = "control-help");
-      option(c,"Gamepad controls",x+22,y+247,324,()->openGamepadSettings(false));
+      option(c, "Selection settings", x + 22, y + 48, 324, () -> modal = "control-select");
+      option(c, "Camera settings", x + 22, y + 88, 324, () -> modal = "control-camera");
+      option(c, "Command settings", x + 22, y + 128, 324, () -> modal = "control-orders");
+      option(c, "Gesture guide", x + 22, y + 168, 324, () -> modal = "control-help");
+      option(c,"Gamepad controls",x+22,y+208,324,()->openGamepadSettings(false));
+      option(c,"Mouse & keyboard",x+22,y+248,324,()->openDesktopSettings(false));
     } else if (modal.equals("control-select")) {
       toggle(c, "Original larvae selection", controls.originalLarvae, x + 22, y + 44, () -> changeControls(() -> controls.originalLarvae = !controls.originalLarvae));
       toggle(c, "One larva morph per press", controls.singleLarvaMorph, x + 22, y + 78, () -> changeControls(() -> controls.singleLarvaMorph = !controls.singleLarvaMorph));
@@ -3300,11 +3306,12 @@ final class NativeSurface extends SurfaceView
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
+    if(handleDesktopMotion(event))return true;
     MotionEvent copy = MotionEvent.obtain(event);
     enqueue(
         () -> {
           try {
-            if(copy.getActionMasked()==MotionEvent.ACTION_DOWN)resetGamepad();
+            if(copy.getActionMasked()==MotionEvent.ACTION_DOWN){resetDesktop(true);resetGamepad();}
             touch(copy);
           } finally {
             copy.recycle();
@@ -3318,6 +3325,7 @@ final class NativeSurface extends SurfaceView
 
   @Override
   public boolean onHoverEvent(MotionEvent event) {
+    if(handleDesktopMotion(event))return true;
     final float x = event.getX(), y = event.getY();
     final boolean leave = event.getActionMasked() == MotionEvent.ACTION_HOVER_EXIT;
     enqueue(() -> updateHover(lx(x), ly(y), leave));
@@ -3773,6 +3781,242 @@ final class NativeSurface extends SurfaceView
 
   void resetGamepadInput() { enqueue(this::resetGamepad); }
 
+  // Physical mouse and keyboard events use held native input, never touch tap-to-order.
+  private final DesktopControls desktop = new DesktopControls();
+  private int desktopMouseDevice=-1,desktopKeyboardDevice=-1,desktopNativeButtons,desktopClicks=1;
+  private boolean desktopMouseActive,desktopInside,desktopShift,desktopCtrl,desktopTextEditing;
+  private float desktopX,desktopY,desktopLastClickX,desktopLastClickY;
+  private long desktopDownAt,desktopLastClickAt;
+  private String desktopPrimary="",desktopPage="",desktopModal="";
+  private NativeHud.Hit desktopHudHit;
+  private boolean desktopGuideKeyboard,desktopReturnAppOptions;
+  private String desktopReturnModal="";
+
+  void resetDesktopInput(){enqueue(()->resetDesktop(true));}
+
+  private void resetDesktop(boolean hidePointer){
+    boolean hadDesktop=desktopMouseActive||desktopKeyboardDevice!=-1;
+    boolean hadInput=desktop.releaseKeys().length>0||desktop.buttons!=0||desktopNativeButtons!=0||desktopShift||desktopCtrl;
+    desktop.releaseButtons();
+    if(desktopPrimary.equals("ui")){pressed=null;gesture="";scrollingList="";listVelocity=0;}
+    desktopPrimary="";desktopHudHit=null;desktopNativeButtons=0;desktopShift=desktopCtrl=false;
+    desktopKeyboardDevice=-1;desktopLastClickAt=0;
+    if((hadInput||hidePointer&&hadDesktop)&&activeGame)NativeBridge.command(34,0,0,0,0);
+    if(hidePointer){desktopMouseActive=desktopInside=false;desktopMouseDevice=-1;updateHover(0,0,true);}
+    desktopPage=page;desktopModal=modal;desktopTextEditing=profileEditing||chatEditing;
+  }
+
+  private void syncDesktopModifiers(boolean shift,boolean ctrl){
+    if(!activeGame||!page.equals("game")||!modal.isEmpty())return;
+    if(desktopShift!=shift){NativeBridge.command(32,shift?1:0,0,225,0);desktopShift=shift;}
+    if(desktopCtrl!=ctrl){NativeBridge.command(32,ctrl?1:0,0,224,0);desktopCtrl=ctrl;}
+  }
+
+  boolean handleDesktopMotion(MotionEvent event){
+    if(!DesktopControls.mouseSource(event.getSource())||event.getToolType(0)==MotionEvent.TOOL_TYPE_STYLUS)return false;
+    int action=event.getActionMasked();
+    if(action!=MotionEvent.ACTION_DOWN&&action!=MotionEvent.ACTION_UP&&action!=MotionEvent.ACTION_MOVE
+        &&action!=MotionEvent.ACTION_HOVER_MOVE&&action!=MotionEvent.ACTION_HOVER_ENTER&&action!=MotionEvent.ACTION_HOVER_EXIT
+        &&action!=MotionEvent.ACTION_BUTTON_PRESS&&action!=MotionEvent.ACTION_BUTTON_RELEASE
+        &&action!=MotionEvent.ACTION_SCROLL&&action!=MotionEvent.ACTION_CANCEL)return false;
+    MotionEvent copy=MotionEvent.obtain(event);
+    enqueue(()->{try{desktopMotion(copy);}finally{copy.recycle();}});return true;
+  }
+
+  private void desktopMotion(MotionEvent event){
+    if(padActive)resetGamepad();
+    if(desktopMouseDevice!=-1&&desktopMouseDevice!=event.getDeviceId())resetDesktop(true);
+    if(!desktopPage.equals(page)||!desktopModal.equals(modal)||desktopTextEditing!=(profileEditing||chatEditing))resetDesktop(false);
+    desktopMouseDevice=event.getDeviceId();desktopMouseActive=true;
+    int action=event.getActionMasked();
+    float oldX=desktopX,oldY=desktopY;
+    desktopX=lx(event.getX());desktopY=ly(event.getY());
+    desktopInside=desktopX>=0&&desktopX<logicalWidth&&desktopY>=0&&desktopY<480&&action!=MotionEvent.ACTION_HOVER_EXIT;
+    if(action==MotionEvent.ACTION_CANCEL){resetDesktop(true);return;}
+    updateHover(desktopX,desktopY,!desktopInside);
+    if(action==MotionEvent.ACTION_HOVER_EXIT)return; // Also sent just before a mouse press.
+    if(!profileEditing&&!chatEditing)syncDesktopModifiers(desktop.shift()||(event.getMetaState()&KeyEvent.META_SHIFT_ON)!=0,desktop.ctrl()||(event.getMetaState()&KeyEvent.META_CTRL_ON)!=0);
+    if(action==MotionEvent.ACTION_SCROLL){desktopWheel(event.getAxisValue(MotionEvent.AXIS_VSCROLL));return;}
+    int changed=desktop.updateButtons(action,event.getButtonState(),event.getActionButton());
+    int released=changed&~desktop.buttons,pressedButtons=changed&desktop.buttons;
+    desktopCursor();
+    if((released&MotionEvent.BUTTON_PRIMARY)!=0)desktopPrimary(false,event.getEventTime());
+    if((released&MotionEvent.BUTTON_SECONDARY)!=0&& (desktopNativeButtons&MotionEvent.BUTTON_SECONDARY)!=0){
+      NativeBridge.command(33,0,3,1,0);desktopNativeButtons&=~MotionEvent.BUTTON_SECONDARY;
+    }
+    if((pressedButtons&MotionEvent.BUTTON_PRIMARY)!=0)desktopPrimary(true,event.getEventTime());
+    if((pressedButtons&MotionEvent.BUTTON_SECONDARY)!=0)desktopSecondary();
+    if(action==MotionEvent.ACTION_MOVE||action==MotionEvent.ACTION_HOVER_MOVE){
+      if(desktopPrimary.equals("world")&&Math.hypot(desktopX-desktopLastClickX,desktopY-desktopLastClickY)>6)desktopLastClickAt=0;
+      if(desktopPrimary.equals("ui"))desktopTouch(MotionEvent.ACTION_MOVE,event.getEventTime());
+      else if(desktopPrimary.equals("mini"))mini(desktopX,desktopY,false);
+      if((desktop.buttons&MotionEvent.BUTTON_TERTIARY)!=0&&!profileEditing&&!chatEditing&&activeGame&&page.equals("game")&&modal.isEmpty()&&pendingScreen==null)
+        panCamera((oldX-desktopX)*controls.panFactor()/zoom,(oldY-desktopY)*controls.panFactor()/zoom);
+    }
+  }
+
+  private void desktopCursor(){
+    if(!activeGame||!page.equals("game")||!modal.isEmpty())return;
+    if(!profileEditing&&!chatEditing&&(desktopPrimary.equals("world")||desktopInside&&gamepadWorld(desktopX,desktopY))){
+      float x=Math.max(0,Math.min(logicalWidth-1,desktopX));
+      float y=Math.max(0,Math.min(cameraBottom(x)-1,desktopY));
+      NativeBridge.command(0,(int)(x/zoom),(int)(y/zoom),0,0);
+    }else NativeBridge.command(0,-100,-100,0,0);
+  }
+
+  private void desktopPrimary(boolean down,long now){
+    if(down){
+      if(!desktopInside||pendingScreen!=null)return;
+      desktopDownAt=now;desktopPage=page;desktopModal=modal;
+      if(!profileEditing&&!chatEditing&&gamepadWorld(desktopX,desktopY)){
+        desktopPrimary="world";
+        int clicks=desktopLastClickAt>0&&now-desktopLastClickAt<=300&&Math.hypot(desktopX-desktopLastClickX,desktopY-desktopLastClickY)<=6?2:1;
+        desktopLastClickAt=clicks==2?0:now;desktopLastClickX=desktopX;desktopLastClickY=desktopY;
+        desktopClicks=clicks;NativeBridge.command(33,1,1,clicks,0);desktopNativeButtons|=MotionEvent.BUTTON_PRIMARY;
+      }else{
+        desktopLastClickAt=0;
+        boolean ui=false;for(Button button:buttons)if(button.rect.contains(desktopX,desktopY)){ui=true;break;}
+        if(!ui&&(profileEditing||chatEditing)){desktopPrimary="";return;}
+        if(!ui&&activeGame&&page.equals("game")&&modal.isEmpty()&&hud!=null){
+          if(hud.minimap.contains(desktopX,desktopY)){desktopPrimary="mini";mini(desktopX,desktopY,false);return;}
+          desktopHudHit=hud.hit(desktopX,desktopY);
+          if(desktopHudHit!=null){desktopPrimary="hud";return;}
+          // Blank console area cannot issue battlefield orders.
+          desktopPrimary="";return;
+        }
+        desktopPrimary="ui";desktopTouch(MotionEvent.ACTION_DOWN,now);
+      }
+    }else{
+      if(desktopPrimary.equals("world")&&(desktopNativeButtons&MotionEvent.BUTTON_PRIMARY)!=0){
+        NativeBridge.command(33,0,1,desktopClicks,0);desktopNativeButtons&=~MotionEvent.BUTTON_PRIMARY;
+      }else if(desktopPrimary.equals("ui"))desktopTouch(MotionEvent.ACTION_UP,now);
+      else if(desktopPrimary.equals("hud")&&desktopHudHit!=null&&desktopHudHit.rect.contains(desktopX,desktopY))activateDesktopHud(desktopHudHit);
+      desktopPrimary="";desktopHudHit=null;
+    }
+  }
+
+  private void desktopSecondary(){
+    if(profileEditing||chatEditing||!desktopInside||!activeGame||!page.equals("game")||!modal.isEmpty()||pendingScreen!=null)return;
+    String card=NativeBridge.text(0);
+    if(NativeBridge.value(0,0)>0||card.startsWith("Build\t")||card.startsWith("Advanced Build\t")||placement){
+      NativeBridge.command(2,27,41,0,0);placement=false;commandHover.cancel();return;
+    }
+    if(hud!=null&&hud.minimap.contains(desktopX,desktopY)){mini(desktopX,desktopY,true);return;}
+    if(gamepadWorld(desktopX,desktopY)){
+      NativeBridge.command(33,1,3,1,0);desktopNativeButtons|=MotionEvent.BUTTON_SECONDARY;
+    }
+  }
+
+  private void activateDesktopHud(NativeHud.Hit hit){
+    if(hit.unload>=0){NativeBridge.command(24,hit.unload,0,0,0);return;}
+    if(hit.more){hud.page++;return;}
+    if(hit.help!=null){hint=hit.help;hintUntil=clock+3600;return;}
+    if(hit.selectUnit>=0){NativeBridge.command(14,hit.selectUnit,0,0,0);return;}
+    sfx("button");
+    if(hit.cancel>=0)NativeBridge.command(7,hit.cancel,0,0,0);
+    else if(hit.fields!=null){
+      String[] f=hit.fields;String requirement=hud.requirement(f);
+      hint=f[2].equals("0")?CommandHint.describe(f,requirement):"";
+      hintSupplyRace=NativeHud.number(f,15,hud.race);hintUntil=clock+2400;
+      int key=f[0].charAt(0);NativeBridge.command(2,key,key==27?41:0,0,0);NativeBridge.frame(world,0,clock);
+    }
+  }
+
+  private void desktopTouch(int action,long now){
+    float scale=physicalScale();
+    MotionEvent event=MotionEvent.obtain(desktopDownAt,now,action,
+        desktopX*scale+(physicalWidth-logicalWidth*scale)/2,desktopY*scale+(physicalHeight-480*scale)/2,0);
+    try{touch(event);}finally{event.recycle();}
+  }
+
+  private void desktopWheel(float amount){
+    if(!desktopInside||pendingScreen!=null||amount==0)return;
+    listVelocity=0;
+    if(modal.equals("missions")&&missionViewport.contains(desktopX,desktopY))missionOffset=Math.max(0,Math.min(missionMaxOffset(),missionOffset-amount*57));
+    else if(modal.isEmpty()&&page.equals("custom")&&mapViewport.contains(desktopX,desktopY))mapOffset=Math.max(0,Math.min(mapMaxOffset(),mapOffset-amount*66));
+    else if(modal.isEmpty()&&page.equals("replays")&&replayListBounds().contains(desktopX,desktopY))replayOffset=Math.max(0,Math.min(replayMaxOffset(),replayOffset-amount*66));
+    else if(modal.isEmpty()&&page.equals("registry")&&profileViewport.contains(desktopX,desktopY))profileOffset=Math.max(0,Math.min(Math.max(0,profiles.size()-9)*23,profileOffset-amount*69));
+    else if(modal.isEmpty()&&page.equals("briefing")&&glue!=null){
+      NativeArt.Widget box=glue.layout.get(65526);
+      if(box!=null&&box.rect().contains(desktopX,desktopY)){briefManual=Math.max(0,Math.min(briefScrollLimit(box),briefScroll-amount*57));briefScroll=briefManual;briefManualUntil=clock+2500;}
+    }else if(!profileEditing&&!chatEditing&&gamepadWorld(desktopX,desktopY)&&desktop.buttons==0){
+      float next=Math.max(zoomOut?.5f:1f,Math.min(3,zoom+amount*.1f));
+      if(next!=zoom){zoom=next;resizeWorld();saveSettings();desktopCursor();}
+    }
+  }
+
+  boolean handleDesktopKey(KeyEvent event){
+    if(DesktopControls.mouseBack(event))return true;
+    if(!DesktopControls.keyboard(event)||profileEditing||chatEditing)return false;
+    int key=event.getKeyCode(),symbol=DesktopControls.symbol(key,event.getUnicodeChar());
+    if(event.getAction()!=KeyEvent.ACTION_DOWN&&event.getAction()!=KeyEvent.ACTION_UP)return false;
+    if(symbol==0&&!DesktopControls.modifierKey(key)&&!DesktopControls.cameraKey(key)&&key!=KeyEvent.KEYCODE_F10)return false;
+    final boolean down=event.getAction()==KeyEvent.ACTION_DOWN,shift=event.isShiftPressed(),ctrl=event.isCtrlPressed();
+    final int repeat=event.getRepeatCount(),device=event.getDeviceId();
+    enqueue(()->desktopKey(key,symbol,down,repeat,device,shift,ctrl));return true;
+  }
+
+  private void desktopKey(int key,int symbol,boolean down,int repeat,int device,boolean shift,boolean ctrl){
+    if(pendingScreen!=null){resetDesktop(false);return;}
+    if(profileEditing||chatEditing){resetDesktop(false);return;}
+    if(!desktopPage.equals(page)||!desktopModal.equals(modal)||desktopTextEditing!=(profileEditing||chatEditing))resetDesktop(false);
+    if(desktopKeyboardDevice!=-1&&desktopKeyboardDevice!=device)resetDesktop(false);
+    desktopKeyboardDevice=device;
+    if(!desktop.key(key,down,repeat))return;
+    // Canonical modifier state also accepts mouse/key metadata when Android omitted a modifier edge.
+    boolean modifier=DesktopControls.modifierKey(key);
+    syncDesktopModifiers(desktop.shift()||(!modifier&&shift),desktop.ctrl()||(!modifier&&ctrl));
+    if(modifier||DesktopControls.cameraKey(key))return;
+    if(key==KeyEvent.KEYCODE_F10){if(down&&activeGame&&page.equals("game")){resetDesktop(false);if(modal.isEmpty())openMenu();else modalBack();}return;}
+    if(key==KeyEvent.KEYCODE_ESCAPE&&(!activeGame||!page.equals("game")||!modal.isEmpty())){if(down){resetDesktop(false);back();}return;}
+    if(symbol==13){if(down&&activeGame&&page.equals("game")&&modal.isEmpty()){resetDesktop(false);openChat();}return;}
+    if(activeGame&&page.equals("game")&&modal.isEmpty())NativeBridge.command(32,down?1:0,symbol,DesktopControls.scanCode(key),0);
+  }
+
+  private void advanceDesktop(double milliseconds){
+    if(!desktopPage.equals(page)||!desktopModal.equals(modal)||desktopTextEditing!=(profileEditing||chatEditing)){resetDesktop(false);return;}
+    if(profileEditing||chatEditing)return;
+    if(desktopMouseDevice>=0&&InputDevice.getDevice(desktopMouseDevice)==null
+        ||desktopKeyboardDevice>=0&&InputDevice.getDevice(desktopKeyboardDevice)==null){resetDesktop(true);return;}
+    if(!activeGame||!page.equals("game")||!modal.isEmpty()||pendingScreen!=null)return;
+    double dt=Math.max(0,Math.min(100,milliseconds))/1000.;
+    int x=desktop.cameraX(),y=desktop.cameraY();
+    if(desktopMouseActive&&desktopInside&&!desktopPrimary.equals("ui")&&!desktopPrimary.equals("mini")&&!desktopPrimary.equals("hud")&&(desktop.buttons&MotionEvent.BUTTON_TERTIARY)==0){
+      if(desktopX<6)x--;else if(desktopX>=logicalWidth-6)x++;
+      if(desktopY<6)y--;else if(desktopY>=474)y++;
+    }
+    if(x!=0||y!=0)panCamera(Math.max(-1,Math.min(1,x))*480*controls.panSpeed*dt/zoom,Math.max(-1,Math.min(1,y))*480*controls.panSpeed*dt/zoom);
+    if(desktopMouseActive)desktopCursor();
+  }
+
+  @Override public PointerIcon onResolvePointerIcon(MotionEvent event,int pointerIndex){
+    if(DesktopControls.mouseSource(event.getSource()))return PointerIcon.getSystemIcon(getContext(),PointerIcon.TYPE_NULL);
+    return super.onResolvePointerIcon(event,pointerIndex);
+  }
+
+  @Override public boolean onKeyUp(int key,KeyEvent event){return handleDesktopKey(event)||super.onKeyUp(key,event);}
+
+  void openDesktopSettings(boolean fromAppOptions){
+    enqueue(()->{resetDesktop(false);resetGamepad();cancelGesture();desktopGuideKeyboard=false;
+      desktopReturnModal=modal;desktopReturnAppOptions=fromAppOptions;modal="control-desktop";});
+  }
+
+  private void desktopSettingsBack(){
+    resetDesktop(false);modal=desktopReturnModal;desktopReturnModal="";
+    if(desktopReturnAppOptions){desktopReturnAppOptions=false;suspend();activity.runOnUiThread(activity::requestAppOptions);}
+  }
+
+  private boolean drawDesktopSettings(Canvas c){
+    if(!modal.equals("control-desktop"))return false;
+    float x=(logicalWidth-368)/2f,y=40;
+    paint.setColor(0x80000000);c.drawRect(0,0,logicalWidth,480,paint);panel(c,x,y,368,384);
+    text(c,"Mouse & keyboard",x+12,y+12,344,1,2);
+    gamepadOption(c,"Mouse guide",null,x+22,y+48,158,30,!desktopGuideKeyboard,()->desktopGuideKeyboard=false);
+    gamepadOption(c,"Keyboard guide",null,x+188,y+48,158,30,desktopGuideKeyboard,()->desktopGuideKeyboard=true);
+    body(c,desktopGuideKeyboard?DesktopGuide.KEYBOARD_GUIDE:DesktopGuide.MOUSE_GUIDE,x+22,y+92,324,224);
+    gamepadOption(c,"Previous",null,x+76,y+338,216,30,false,this::desktopSettingsBack);return true;
+  }
+
   void reloadGamepadSettings() { enqueue(()->{resetGamepad();gamepad.load(prefs);}); }
 
   boolean handleGamepadMotion(MotionEvent event) {
@@ -3810,7 +4054,7 @@ final class NativeSurface extends SurfaceView
   }
 
   @Override public boolean onGenericMotionEvent(MotionEvent event) {
-    return handleGamepadMotion(event)||super.onGenericMotionEvent(event);
+    return handleDesktopMotion(event)||handleGamepadMotion(event)||super.onGenericMotionEvent(event);
   }
 
   private static boolean gamepadDirection(int key) {
@@ -3819,6 +4063,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void activateGamepad(int device) {
+    resetDesktop(true);
     if(padDevice!=device)resetGamepad();
     padDevice=device;padActive=true;
     padX=GamepadControls.limit(padX,logicalWidth);padY=GamepadControls.limit(padY,480);
@@ -3938,12 +4183,16 @@ final class NativeSurface extends SurfaceView
 
   private void drawGamepadCursor(Canvas canvas) {
     if(!padActive||!gamepad.enabled)return;
-    if(activeGame&&page.equals("game")&&modal.isEmpty()&&(padNativeDrag||gamepadWorld(padX,padY))){
+    drawPointer(canvas,padX,padY,padNativeDrag||gamepadWorld(padX,padY));
+  }
+
+  private void drawPointer(Canvas canvas,float x,float y,boolean nativeWorld){
+    if(activeGame&&page.equals("game")&&modal.isEmpty()&&nativeWorld){
       try{
         int box=NativeBridge.value(23,0);
         if(box>0&&box<=256){
           if(padCursor==null||padCursor.getWidth()!=box){if(padCursor!=null)padCursor.recycle();padCursor=Bitmap.createBitmap(box,box,Bitmap.Config.ARGB_8888);}
-          if(NativeBridge.cursor(padCursor)){canvas.drawBitmap(padCursor,padX-box/2f,padY-box/2f,NativeArt.PIXELS);return;}
+          if(NativeBridge.cursor(padCursor)){canvas.drawBitmap(padCursor,x-box/2f,y-box/2f,NativeArt.PIXELS);return;}
         }
       }catch(Exception ignored){} // Missing cursor artwork must not disable the controller.
     }
@@ -3966,10 +4215,10 @@ final class NativeSurface extends SurfaceView
     }
     if(padArrows!=null&&padArrows.length>0){
       int frame=(int)(clock/100)%padArrows.length;
-      if(padArrows[frame]!=null){canvas.drawBitmap(padArrows[frame],padX+padArrowX[frame],padY+padArrowY[frame],NativeArt.PIXELS);return;}
+      if(padArrows[frame]!=null){canvas.drawBitmap(padArrows[frame],x+padArrowX[frame],y+padArrowY[frame],NativeArt.PIXELS);return;}
     }
     // A small high-contrast arrow remains usable with incomplete data imports.
-    Path arrow=new Path();arrow.moveTo(padX,padY);arrow.lineTo(padX+1,padY+18);arrow.lineTo(padX+6,padY+13);arrow.lineTo(padX+13,padY+13);arrow.close();
+    Path arrow=new Path();arrow.moveTo(x,y);arrow.lineTo(x+1,y+18);arrow.lineTo(x+6,y+13);arrow.lineTo(x+13,y+13);arrow.close();
     Paint pointer=new Paint(Paint.ANTI_ALIAS_FLAG);pointer.setColor(Color.BLACK);pointer.setStyle(Paint.Style.STROKE);pointer.setStrokeWidth(3);canvas.drawPath(arrow,pointer);
     pointer.setStyle(Paint.Style.FILL);pointer.setColor(0xff8fdb55);canvas.drawPath(arrow,pointer);
   }
@@ -3993,22 +4242,7 @@ final class NativeSurface extends SurfaceView
       back();
       return true;
     }
-    if (key == android.view.KeyEvent.KEYCODE_ESCAPE) {back(); return true;}
-    if (key == android.view.KeyEvent.KEYCODE_F10) {
-      enqueue(() -> {if (page.equals("game")) {if (modal.isEmpty()) openMenu(); else modal = "";}});
-      return true;
-    }
-    if (!modal.isEmpty() || !page.equals("game")) return super.onKeyDown(key, event);
-    if(key>=KeyEvent.KEYCODE_0&&key<=KeyEvent.KEYCODE_9){
-      final int group=key-KeyEvent.KEYCODE_0;final boolean assign=event.isCtrlPressed();
-      if(event.getRepeatCount()==0)enqueue(()->{cancelGesture();NativeBridge.command(25,group,assign?1:0,0,0);});
-      return true;
-    }
-    int chr = event.getUnicodeChar();
-    if (chr > 0) {
-      enqueue(() -> NativeBridge.command(2, chr, 0, 0, 0));
-      return true;
-    }
+    if(handleDesktopKey(event))return true;
     return super.onKeyDown(key, event);
   }
 }
