@@ -29,6 +29,11 @@ def method(text,name):
   end+=1
  return text[m.start():end]
 
+def methods(text,name):
+ """Include production overloads so routing helpers keep their real policy."""
+ pattern=r'^  +(?:@Override )?(?:(?:public|private|protected|static|final|synchronized) )*(?:void|boolean|int|float|double|String|Hit) '+name+r'\('
+ return '\n'.join(method(text[m.start():],name) for m in re.finditer(pattern,text,re.M))
+
 sources={
  'android/graphics/RectF.java':'''package android.graphics;public class RectF{
  public float left,top,right,bottom;public RectF(){this(0,0,0,0);}public RectF(float l,float t,float r,float b){set(l,t,r,b);}public void set(float l,float t,float r,float b){left=l;top=t;right=r;bottom=b;}public void set(RectF r){set(r.left,r.top,r.right,r.bottom);}public float width(){return right-left;}public float height(){return bottom-top;}public boolean contains(float x,float y){return x>=left&&x<right&&y>=top&&y<bottom;}public void offset(float x,float y){left+=x;right+=x;top+=y;bottom+=y;}}
@@ -37,7 +42,7 @@ sources={
  public int left,top,right,bottom;public Rect(int l,int t,int r,int b){left=l;top=t;right=r;bottom=b;}public int width(){return right-left;}public int height(){return bottom-top;}}
 ''',
  'android/graphics/Bitmap.java':'package android.graphics;public class Bitmap{}',
- 'android/graphics/Canvas.java':'package android.graphics;public class Canvas{public static final java.util.List<String>glyphs=new java.util.ArrayList<>();public static final java.util.List<Integer>colors=new java.util.ArrayList<>();public void drawText(String s,float x,float y,Paint p){glyphs.add(s);colors.add(p.color);}public void drawBitmap(Bitmap b,float x,float y,Object p){}public void save(){}public void restore(){}public void clipRect(float a,float b,float c,float d){}public void translate(float x,float y){}public void scale(float x,float y){}}',
+ 'android/graphics/Canvas.java':'package android.graphics;public class Canvas{public static final java.util.List<String>glyphs=new java.util.ArrayList<>();public static final java.util.List<Integer>colors=new java.util.ArrayList<>();public void drawText(String s,float x,float y,Paint p){glyphs.add(s);colors.add(p.color);}public void drawBitmap(Bitmap b,float x,float y,Object p){}public void drawRect(float l,float t,float r,float b,Paint p){}public void save(){}public void restore(){}public void clipRect(float a,float b,float c,float d){}public void translate(float x,float y){}public void scale(float x,float y){}}',
  'android/graphics/Paint.java':'package android.graphics;public class Paint{public int color;public void setTextSize(float n){}public void setTypeface(Typeface t){}public float measureText(String s){return s.length()*8f;}public void setColor(int c){color=c;}}',
  'android/graphics/Typeface.java':'package android.graphics;public class Typeface{public static final Typeface SANS_SERIF=new Typeface();}',
  'android/content/SharedPreferences.java':'''package android.content;public class SharedPreferences{public final java.util.Map<String,String>values=new java.util.HashMap<>();public String getString(String k,String d){return values.getOrDefault(k,d);}public Editor edit(){return new Editor();}public class Editor{public Editor putString(String k,String v){values.put(k,v);return this;}public void apply(){}}}''',
@@ -74,9 +79,9 @@ sources={
  }
 ''',
  'org/openbw/androidtest/NativeGlue.java':'''package org.openbw.androidtest;import java.util.*;import android.graphics.*;class NativeGlue{
- static final int ENTER_MS=500;int hot;String name="glumain";boolean exiting,slide=true,visible=true;double elapsed=1000;NativeArt.Dialog layout=new NativeArt.Dialog();NativeArt.Font large=new NativeArt.Font();
+ static final int ENTER_MS=500;int hot;String name="glumain";boolean exiting,slide=true,visible=true;double elapsed=1000;NativeArt.Dialog layout=new NativeArt.Dialog();NativeArt.Font large=new NativeArt.Font(),dialogue=new NativeArt.Font(),small=new NativeArt.Font();
  float shift(NativeArt.Widget w){return 0;}boolean campaignChoice(int id){return name.equals("glucmpgn")&&(id==6||id==7||id==8);}boolean labelVisible(int id){return visible;}Bitmap panel(int w,int h,boolean button){return new Bitmap();}
- void label(Canvas c,int id,String override,boolean enabled){String s=MenuLabels.forWidget(name,id,layout.get(id),override);NativeArt.lastLabel=enabled?s:NativeArt.clean(s);}}
+ void label(Canvas c,int id,String override,boolean enabled){labelCaption(c,id,MenuLabels.forWidget(name,id,layout.get(id),override),enabled);}void labelCaption(Canvas c,int id,String shown,boolean enabled){NativeArt.lastLabel=enabled?shown:NativeArt.clean(shown);}}
 ''',
  'org/openbw/androidtest/CommandHint.java':'package org.openbw.androidtest;class CommandHint{static String describe(String[]f,String requirement){return f[1];}}',
 }
@@ -85,10 +90,21 @@ sources={
 # action recording. Rendering, OS device delivery and native game results are
 # covered by separate suites and must not be inferred from these host checks.
 surface=(src/'NativeSurface.java').read_text()
-sources['org/openbw/androidtest/NativeResults.java']='package org.openbw.androidtest;class NativeResults{'+method((src/'NativeResults.java').read_text(),'fit')+'}'
+results=(src/'NativeResults.java').read_text()
+sources['org/openbw/androidtest/NativeResults.java']='package org.openbw.androidtest;import java.util.*;class NativeResults{NativeArt.Dialog layout=new NativeArt.Dialog();final MenuHotkeys menuHotkeys=new MenuHotkeys();final Map<Integer,String>buttonCaptions=new HashMap<>();'+''.join(method(results,n)for n in ['fit','prepareButtonCaptions','buttonCaption'])+'}'
 sources['org/openbw/androidtest/NativeHud.java']=sources['org/openbw/androidtest/NativeHud.java'].rsplit('}',1)[0]+method((src/'NativeHud.java').read_text(),'terrainHit')+'}'
 names=['physicalScale','lx','ly','onTouchEvent','onKeyUp','onKeyDown','onHoverEvent','onGenericMotionEvent','touch','setListOffset','placeBuilding','placementButtonAt','blockPlacementTouch','cameraBottom','panCamera','aim','mini','handleGamepadMotion','handleGamepadKey','gamepadDirection','activateGamepad','gamepadActionHeld','gamepadButton','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag','resetGamepad','advanceGamepad']
-names+=['resetDesktopInput','resetGamepadInput','resetDesktop','syncDesktopModifiers','handleDesktopMotion','desktopMotion','desktopCursor','desktopPrimary','desktopSecondary','activateDesktopHud','desktopTouch','desktopWheel','handleDesktopKey','desktopKey','advanceDesktop','desktopGridCommand','changeDesktop','openDesktopSettings','desktopSettingsBack','openGamepadSettings','desktopMenuCommand','add','addMenuButton','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','menuButton','originalMenuButton','replayMenuAction','glueButton','button','uiLine','fallbackMenu']
+names+=['resetDesktopInput','resetGamepadInput','resetDesktop','syncDesktopModifiers','handleDesktopMotion','desktopMotion','desktopCursor','desktopPrimary','desktopSecondary','activateDesktopHud','desktopTouch','desktopWheel','handleDesktopKey','desktopKey','advanceDesktop','desktopGridCommand','changeDesktop','openDesktopSettings','desktopSettingsBack','openGamepadSettings','desktopMenuCommand','add','addMenuButton','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','menuButton','menuActionButton','originalMenuButton','replayMenuAction','glueButton','button','uiLine','fallbackMenu']
+names+=['redButton','redNavigationButton','redBorder','menuColor','menuHot']
+# Bound policy checks cover the actual custom/lobby call sites, while the
+# compiled helper tests below exercise rendering metadata and input delivery.
+custom=method(surface,'drawCustom')+method(surface,'drawMapBrowser');lobby=method(surface,'drawNearby')
+policy_sites=[
+ 'redButton(c,"Import maps/ZIP"','redButton(c,"Hero Mode: "','redButton(c,setup.mode()',
+ 'redButton(c,name,','redButton(c,active?','redButton(c,new String[]{"Easy","Medium","Hard"}',
+ 'redButton(c,"Speed: "']
+for site in policy_sites:assert site in custom, 'Custom in-place policy changed: '+site
+assert 'player,false,' in lobby and 'MatchSetup.RACES[setup.races[i]],false,' in lobby, 'Lobby slot/race queue regained navigation shortcuts'
 harness=r'''package org.openbw.androidtest;
 import android.view.*;import android.graphics.*;import java.util.*;
 class SurfaceBase{public boolean onTouchEvent(MotionEvent e){return false;}public boolean onHoverEvent(MotionEvent e){return false;}public boolean onGenericMotionEvent(MotionEvent e){return false;}public boolean onKeyDown(int key,KeyEvent e){return false;}public boolean onKeyUp(int key,KeyEvent e){return false;}}
@@ -96,7 +112,6 @@ public class DesktopInput11Test extends SurfaceBase{
  static int checks,failures;static void run(String name,Runnable test){try{test.run();System.out.println("PASS "+name);}catch(AssertionError e){failures++;System.err.println("FAIL "+name+": "+e.getMessage());}}static void check(boolean b,String why){checks++;if(!b)throw new AssertionError(why);}static void near(double a,double b,String why){check(Math.abs(a-b)<.01,why+": "+a+" != "+b);}
  final List<Runnable>queue=new ArrayList<>();void enqueue(Runnable a){queue.add(a);}void flush(){while(!queue.isEmpty())queue.remove(0).run();}
  static class Button{RectF rect;Runnable action,longAction;boolean enabled=true,vertical,placementButton,controlGroup;int key;String page,modal;java.util.function.Consumer<Float>slider;Button(RectF r,Runnable a){this(r,a,true);}Button(RectF r,Runnable a,boolean e){rect=r;action=a;enabled=e;}}
- static class MenuCaption{final Button button;final MenuHotkeys.Entry entry;final boolean highlight;final java.util.function.Consumer<String>draw;MenuCaption(Button b,MenuHotkeys.Entry e,boolean h,java.util.function.Consumer<String>d){button=b;entry=e;highlight=h;draw=d;}}
  final MenuHotkeys menuHotkeys=new MenuHotkeys(),backgroundMenuHotkeys=new MenuHotkeys();final ArrayList<MenuCaption>menuCaptions=new ArrayList<>();boolean menuBehindModal;final Paint paint=new Paint();
  static class Controls{float pinchSpeed=1,panSpeed=1,placementOffset;boolean pinchZoom=true,confirmBuild,minimapOrders,doubleTap,holdSelect,placementScroll;long miniHoldMs=400,doubleTapMs=250,holdMs=450;float panFactor(){return 1;}String dragGesture(long t){return "pan";}}
  static class Activity{void runOnUiThread(Runnable r){r.run();}void requestAppOptions(){}void requestGamepadSettings(){}}
@@ -127,7 +142,9 @@ public class DesktopInput11Test extends SurfaceBase{
 
 '''
 
-harness+='\n'.join(method(surface,n)for n in names)
+caption_start=surface.index('  private static final class MenuCaption {')
+harness+=surface[caption_start:surface.index('\n  }',caption_start)+4]+'\n'
+harness+='\n'.join(methods(surface,n)for n in names)
 
 def finish():
  for name,content in sources.items():
@@ -138,7 +155,7 @@ def finish():
  call=subprocess.run(['java','-cp',str(b/'classes')+':'+str(jar),'org.openbw.androidtest.DesktopInput11Test'],cwd=r,capture_output=True,text=True)
  print(call.stdout+call.stderr,end='');call.check_returncode()
  files=[src/'NativeSurface.java',src/'MainActivity.java',src/'NativeResults.java',src/'NativeHud.java',r/'app/src/main/assets/native/ui-languages.tsv',*real,Path(__file__)]
- (r/'validation/desktop-input11.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'nativeEngine':False,'scope':'Production Java physical mouse and keyboard event routing with recorded native calls; Android event-delivery and native simulation are not emulated','methods':names,'activityMethods':activity_names,'output':call.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest()for f in files}},indent=2)+'\n')
+ (r/'validation/desktop-input11.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'nativeEngine':False,'scope':'Production Java physical mouse and keyboard event routing with recorded native calls; Android event-delivery and native simulation are not emulated','methods':names,'activityMethods':activity_names,'navigationPolicySites':len(policy_sites)+2,'output':call.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest()for f in files}},indent=2)+'\n')
 
 harness+=r'''
  static MotionEvent pointer(DesktopInput11Test h,int action,float x,float y,int buttons,int actionButton,long time){float scale=h.physicalScale();MotionEvent e=new MotionEvent(action,x*scale+(h.physicalWidth-h.logicalWidth*scale)/2,y*scale+(h.physicalHeight-480*scale)/2,time);e.buttons=buttons;e.actionButton=actionButton;return e;}
@@ -377,16 +394,43 @@ harness+=r'''
   int first=h.buttons.get(0).key,second=h.buttons.get(1).key;h.buttons.clear();NativeArt.labels.clear();h.menuButton(c,"Save Game",0,0,180,28,()->h.actions++,false);h.menuButton(c,"\u0004S\u0001ound",0,40,180,28,()->h.actions+=10,true);h.menuButton(c,"Game Options",0,80,180,28,()->h.actions+=100,true);h.flushMenuButtons();
   int third=h.buttons.get(2).key;check(h.buttons.get(0).key==0&&h.buttons.get(1).key==second&&third!=first&&third!=second,"Disabled caption released its reserved key or changed another binding");
   pressLetter(h,first);check(h.actions==0,"Disabled reserved key still activates");pressLetter(h,third);check(h.actions==100,"Assigned third button dispatched wrong action");
-  h.buttons.clear();h.modal="video";h.menuButton(c,"View zoom: 100%",0,0,180,28,()->h.actions++,true);h.flushMenuButtons();int valueKey=h.buttons.get(0).key;h.buttons.clear();h.menuButton(c,"View zoom: 125%",0,0,180,28,()->h.actions++,true);h.flushMenuButtons();check(h.buttons.get(0).key==valueKey,"Setting value changed its shortcut");
-  h.buttons.clear();h.modal="";h.replayGame=true;h.desktopSettings.gridHotkeys=true;marked(h,"Pause",()->h.actions++,true);int replayKey=h.buttons.get(0).key;NativeBridge.clear();int before=h.actions;pressLetter(h,replayKey);check(h.actions==before+1&&NativeBridge.count(32)==0&&NativeBridge.count(35)==0,"Replay overlay mnemonic leaked into gameplay or failed to activate");
+  h.buttons.clear();h.modal="video";h.menuActionButton(c,"View zoom: 100%",0,0,180,28,()->h.actions++,true);h.flushMenuButtons();check(h.buttons.get(0).key==0&&MenuLabels.mnemonic(NativeArt.lastLabel)==0,"In-place zoom setting advertises a shortcut");h.buttons.clear();h.menuActionButton(c,"View zoom: 125%",0,0,180,28,()->h.actions++,true);h.flushMenuButtons();check(h.buttons.get(0).key==0&&MenuLabels.mnemonic(NativeArt.lastLabel)==0,"Changing setting value introduced a shortcut");
+  h.buttons.clear();h.modal="";h.replayGame=true;h.desktopSettings.gridHotkeys=true;marked(h,"Restart",()->h.actions++,true);int replayKey=h.buttons.get(0).key;NativeBridge.clear();int before=h.actions;pressLetter(h,replayKey);check(h.actions==before+1&&NativeBridge.count(32)==0&&NativeBridge.count(35)==0,"Replay navigation mnemonic leaked into gameplay or failed to activate");
   for(boolean grid:new boolean[]{false,true})for(boolean paused:new boolean[]{false,true}){
    h.desktopSettings.gridHotkeys=grid;h.replayPaused=paused;
    for(int[] view:new int[][]{{KeyEvent.KEYCODE_TAB,9},{KeyEvent.KEYCODE_SPACE,32},{KeyEvent.KEYCODE_ESCAPE,27}}){NativeBridge.clear();keyboard(h,view[0],true,view[1],0,0);keyboard(h,view[0],false,0,0,0);check(NativeBridge.count(32,1,view[1])==1&&NativeBridge.count(32,0,view[1])==1&&NativeBridge.count(35)==0&&h.actions==before+1,"Replay view key swallowed or remapped: "+view[1]+" grid="+grid+" paused="+paused);}
   }
   NativeBridge.clear();keyboard(h,KeyEvent.KEYCODE_SHIFT_LEFT,true,0,KeyEvent.META_SHIFT_ON,0);keyboard(h,KeyEvent.KEYCODE_TAB,true,9,KeyEvent.META_SHIFT_ON,0);keyboard(h,KeyEvent.KEYCODE_TAB,false,0,KeyEvent.META_SHIFT_ON,0);keyboard(h,KeyEvent.KEYCODE_SHIFT_LEFT,false,0,0,0);check(NativeBridge.calls.get(0)[0]==32&&NativeBridge.calls.get(0)[3]==225&&NativeBridge.count(32,1,9)==1&&NativeBridge.count(32,0,9)==1&&NativeBridge.last(32)[1]==0&&NativeBridge.last(32)[3]==225,"Replay view key lost Shift modifier ordering/release");
-  h.buttons.clear();h.replayGame=false;marked(h,"Pause",()->h.actions++,true);check(h.buttons.get(0).key==0,"Live-game overlay advertises menu shortcut over grid controls");
+  h.buttons.clear();h.replayGame=false;marked(h,"Game Options",()->h.actions++,true);check(h.buttons.get(0).key==0,"Live-game overlay advertises menu shortcut over grid controls");
  }
- public static void main(String[]args){InputDevice.devices.put(1,new InputDevice(InputDevice.SOURCE_KEYBOARD));InputDevice.devices.put(2,new InputDevice(InputDevice.SOURCE_MOUSE));InputDevice.devices.put(3,new InputDevice(InputDevice.SOURCE_GAMEPAD|InputDevice.SOURCE_JOYSTICK));run("touch regression",DesktopInput11Test::touchRegression);run("gamepad regression",DesktopInput11Test::gamepadRegression);run("typing",DesktopInput11Test::typingRegression);run("mouse world",DesktopInput11Test::worldMouseChecks);run("HUD and menus",DesktopInput11Test::hudMenuChecks);run("terrain toggle input",DesktopInput11Test::terrainToggleChecks);run("navigation",DesktopInput11Test::navigationChecks);run("keyboard",DesktopInput11Test::keyboardChecks);run("lifecycle",DesktopInput11Test::lifecycleChecks);run("Activity routing",DesktopInput11Test::activityChecks);run("input transitions",DesktopInput11Test::transitionChecks);run("grid hotkeys",DesktopInput11Test::gridChecks);run("desktop options",DesktopInput11Test::optionChecks);run("settings persistence and access",DesktopInput11Test::settingsChecks);run("menu mnemonic routing",DesktopInput11Test::menuMnemonicChecks);run("menu label binding",DesktopInput11Test::menuLabelBindingChecks);run("menu batching and replay routing",DesktopInput11Test::menuBatchChecks);if(failures>0)throw new AssertionError(failures+" groups failed after "+checks+" checks");System.out.println("PASS "+checks+" production Java routing checks");}
+ static void menuActionPolicyChecks(){
+  String[]labels={"\u0004I\u0001mport maps/ZIP","Hero Mode: Off","Melee","Hard","Speed: Fastest","Computer","Closed","Terran","Slowest","2x Fastest","View zoom: 100%","Next track","Original","Grid (QWE/ASD/ZXC)","Reset to defaults","Import Replay","Export","\u0004P\u0001ause","Everyone"};
+  for(String language:new String[]{"en","ru","de","es","fr"}){
+   PortText.select(language);
+   for(int index=0;index<labels.length;index++){String label=labels[index];
+    DesktopInput11Test h=new DesktopInput11Test();h.modal="speed";
+    if(index<8){h.page="custom";h.activeGame=false;h.modal="";h.glue=new NativeGlue();h.redButton(new Canvas(),label,20,30,560,28,()->h.actions++,true);}
+    else h.queueMenuButton(new RectF(20,30,200,58),()->h.actions++,true,label,false,shown->NativeArt.lastLabel=shown);
+    h.flushMenuButtons();
+    check(h.buttons.size()==1&&h.buttons.get(0).key==0,"In-place action registered a shortcut: "+language+" / "+label);
+    check(MenuLabels.mnemonic(NativeArt.lastLabel)==0&&NativeArt.clean(NativeArt.lastLabel).equals(NativeArt.clean(PortText.text(label))),"In-place action kept a highlighted letter or added a suffix: "+language+" / "+label);
+    NativeBridge.clear();for(int key='a';key<='z';key++)pressLetter(h,key);for(int key='0';key<='9';key++)pressLetter(h,key);
+    check(h.actions==0&&NativeBridge.count(32)==0&&NativeBridge.count(35)==0,"In-place action responds to an unadvertised key or leaks through modal: "+language+" / "+label);
+    click(h,100,42,MotionEvent.BUTTON_PRIMARY,1000);check(h.actions==1,"Removing shortcut disabled mouse action: "+language+" / "+label);
+    touch(h,MotionEvent.ACTION_DOWN,100,42,2000);touch(h,MotionEvent.ACTION_UP,100,42,2040);check(h.actions==2,"Removing shortcut disabled touch action: "+language+" / "+label);
+   }
+  }
+  PortText.select("en");DesktopInput11Test h=new DesktopInput11Test();h.modal="speed";Canvas c=new Canvas();
+  h.menuActionButton(c,"\u0004P\u0001ause",20,30,180,28,()->h.actions++,true);h.menuButton(c,"Previous",20,90,180,28,()->h.actions+=10,true);h.flushMenuButtons();
+  check(h.buttons.get(0).key==0&&h.buttons.get(1).key=='p',"In-place authored mnemonic consumed navigation key");pressLetter(h,'p');check(h.actions==10,"Navigation shortcut invoked in-place action");
+  h.buttons.clear();h.menuActionButton(c,"\u0004S\u0001lowest",20,30,180,28,()->h.actions++,false);h.flushMenuButtons();check(h.buttons.get(0).key==0&&MenuLabels.mnemonic(NativeArt.lastLabel)==0,"Disabled action retained mnemonic");click(h,100,42,MotionEvent.BUTTON_PRIMARY,3000);check(h.actions==10,"Disabled in-place action activated on click");
+  for(String language:new String[]{"en","ru","de","es","fr"}){PortText.select(language);NativeResults results=new NativeResults();results.prepareButtonCaptions();Set<Integer>keys=new HashSet<>();
+   for(int id:new int[]{3,4,5,6,7})check(keys.add(MenuLabels.mnemonic(results.buttonCaption(id)))&&!keys.contains(0),"Score tab/OK lost a unique navigation key: "+language);
+   String save=results.buttonCaption(61);check(MenuLabels.mnemonic(save)==0&&NativeArt.clean(save).equals(PortText.text("Save Replay")),"Save Replay still has a highlighted key: "+language);
+   h.buttons.clear();h.page="results";h.activeGame=false;h.modal="";h.addMenuButton(new RectF(20,30,200,58),()->h.actions++,true,save);check(h.buttons.get(0).key==0,"Save Replay bound an unadvertised letter");int before=h.actions;pressLetter(h,'s');check(h.actions==before,"Save Replay still activates through S");click(h,100,42,MotionEvent.BUTTON_PRIMARY,4000);check(h.actions==before+1,"Save Replay mouse action stopped working");
+  }PortText.select("en");
+ }
+ public static void main(String[]args){InputDevice.devices.put(1,new InputDevice(InputDevice.SOURCE_KEYBOARD));InputDevice.devices.put(2,new InputDevice(InputDevice.SOURCE_MOUSE));InputDevice.devices.put(3,new InputDevice(InputDevice.SOURCE_GAMEPAD|InputDevice.SOURCE_JOYSTICK));run("touch regression",DesktopInput11Test::touchRegression);run("gamepad regression",DesktopInput11Test::gamepadRegression);run("typing",DesktopInput11Test::typingRegression);run("mouse world",DesktopInput11Test::worldMouseChecks);run("HUD and menus",DesktopInput11Test::hudMenuChecks);run("terrain toggle input",DesktopInput11Test::terrainToggleChecks);run("navigation",DesktopInput11Test::navigationChecks);run("keyboard",DesktopInput11Test::keyboardChecks);run("lifecycle",DesktopInput11Test::lifecycleChecks);run("Activity routing",DesktopInput11Test::activityChecks);run("input transitions",DesktopInput11Test::transitionChecks);run("grid hotkeys",DesktopInput11Test::gridChecks);run("desktop options",DesktopInput11Test::optionChecks);run("settings persistence and access",DesktopInput11Test::settingsChecks);run("menu mnemonic routing",DesktopInput11Test::menuMnemonicChecks);run("menu label binding",DesktopInput11Test::menuLabelBindingChecks);run("menu batching and replay routing",DesktopInput11Test::menuBatchChecks);run("navigation-only menu shortcuts",DesktopInput11Test::menuActionPolicyChecks);if(failures>0)throw new AssertionError(failures+" groups failed after "+checks+" checks");System.out.println("PASS "+checks+" production Java routing checks");}
 }
 '''
 sources['org/openbw/androidtest/DesktopInput11Test.java']=harness

@@ -50,6 +50,9 @@ def production(name, text=surface):
         elif text[end] == '}': depth -= 1
         end += 1
     return text[match.start():end]
+def productions(name, text=surface):
+    pattern = r'^  (?:private |public |protected )?(?:static )?[\w.<>]+ ' + name + r'\('
+    return '\n'.join(production(name, text[m.start():]) for m in re.finditer(pattern, text, re.M))
 sources['org/openbw/androidtest/NativeHud.java'] = '''package org.openbw.androidtest;
 import android.graphics.*;import java.util.*;
 class NativeHud {
@@ -111,6 +114,7 @@ public class DesktopSettings11Test {
  final Controls controls=new Controls();final Settings desktopSettings=new Settings();final Object prefs=new Object();NativeGlue glue;NativeHud hud;Paint paint=new Paint();Button pressed;List<Button>buttons=new ArrayList<>();
  final MenuHotkeys menuHotkeys=new MenuHotkeys(),backgroundMenuHotkeys=new MenuHotkeys();final ArrayList<MenuCaption>menuCaptions=new ArrayList<>();boolean menuBehindModal,replayGame;
  String page="game",modal="control-desktop",hint="";int logicalWidth=640,returns;double hintUntil;String language="en";
+ double speed=42,accumulator;int settingsSaves;void saveSettings(){settingsSaves++;}
  void openDesktopSettings(){modal="control-desktop";}
  void openGamepadSettings(){modal="gamepad";}
  void desktopSettingsBack(){returns++;modal="controls";}void modalBack(){modal="options";}
@@ -119,17 +123,19 @@ public class DesktopSettings11Test {
 '''
 caption_start = surface.index('  private static final class MenuCaption {')
 settings += surface[caption_start:surface.index('\n  }', caption_start) + 4] + '\n'
-for name in ['font','text','panel','fallback','fallbackMenu','body','gamepadLine','gamepadOption','gamepadSlider','menuButton','add','addMenuButton','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','desktopToggle','changeDesktop','desktopGuideHeading','drawDesktopGuide','drawDesktopSettings','drawControls','option','controlOption','toggle','uiLine']:
-    code = production(name)
+for name in ['font','text','panel','fallback','fallbackMenu','body','gamepadLine','gamepadOption','gamepadChoice','gamepadSlider','menuButton','add','addMenuButton','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','desktopToggle','changeDesktop','desktopGuideHeading','drawDesktopGuide','drawDesktopSettings','drawControls','option','navigationOption','controlOption','toggle','uiLine']:
+    code = productions(name)
     if name == 'uiLine':
         brace = code.index('{') + 1
-        code = code[:brace] + '\ncheck(NativeResults.fit(font,label,width).equals(NativeArt.clean(PortText.text(label)).replace(\'\\n\',\' \')), "Truncated button: "+language+" / "+label+" in "+width);\n' + code[brace:]
+        code = code[:brace] + '\ncheck(NativeResults.fit(font,label,width).equals(NativeArt.clean(PortText.text(label)).replace(\'\\n\',\' \')), "Truncated button: "+language+" / "+label+" in "+width);\nif(modal.equals("speed")&&y<300)check(MenuLabels.mnemonic(label)==0,"Speed choice has a highlighted letter: "+label);\n' + code[brace:]
     settings += code + '\n'
 classic = production('drawClassicMenu')
 x = classic[classic.index('    float x = (logicalWidth - (sheet ?'):classic.index('    if (modal.equals("outcome"))')]
 header = classic[classic.index('    panel(c, x, y, sheet ?'):classic.index('    if (modal.equals("menu") && replayGame)')]
 footer = classic[classic.index('    if (!modal.equals("menu")) menuButton'):classic.rindex('    return true;')]
 settings += 'void controlsSheet(Canvas c){boolean sheet=true;\n' + x + header + 'drawControls(c,x,y);\n' + footer + '}\n'
+speed_body = classic[classic.index('      double[] values ='):classic.index('    } else if (modal.equals("video"))')]
+settings += 'void speedSheet(Canvas c){boolean sheet=true;\n' + x + header + speed_body + footer + '}\n'
 settings += r'''
  Bitmap draw(boolean controlsScreen){buttons.clear();Bitmap b=Bitmap.createBitmap(logicalWidth,480,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);
   Paint bg=new Paint();bg.setColor(0xff080b0b);c.drawRect(0,0,logicalWidth,480,bg);
@@ -139,7 +145,8 @@ settings += r'''
   for(int i=0;i<buttons.size();i++){RectF r=buttons.get(i).rect;check(r.left>=left&&r.right<=left+width&&r.top>=top&&r.bottom<=bottom,"Button escapes panel");
    for(int j=0;j<i;j++){RectF o=buttons.get(j).rect;check(r.right<=o.left||r.left>=o.right||r.bottom<=o.top||r.top>=o.bottom,"Buttons overlap");}}
   Set<Integer>keys=new HashSet<>();for(Button button:buttons)if(button.key!=0)check(keys.add(button.key),"Duplicate menu shortcut");
-  check(keys.size()==(controlsScreen?7:3),"Text buttons missing highlighted menu shortcuts");
+  check(keys.size()==(controlsScreen?7:1),"Only navigation buttons should have highlighted shortcuts");
+  if(!controlsScreen)for(int i=0;i<7;i++)check(buttons.get(i).key==0,"In-place keyboard choice/toggle has shortcut");
  }
  void contrast(Bitmap frame){
   for(int i=0;i<buttons.size();i++){RectF r=buttons.get(i).rect;int pixels=0;
@@ -163,6 +170,14 @@ settings += r'''
   check(desktopSettings.saves==saved+8,"Settings actions failed to persist");
   buttons.get(7).action.run();check(modal.equals("controls"),"Settings footer did not return");
  }
+ Bitmap speedScreen(){
+  buttons.clear();modal="speed";Bitmap b=Bitmap.createBitmap(logicalWidth,480,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);Paint bg=new Paint();bg.setColor(0xff080b0b);c.drawRect(0,0,logicalWidth,480,bg);speedSheet(c);flushMenuButtons();
+  check(buttons.size()==12,"Speed sheet lost choices or Previous");
+  for(int i=0;i<11;i++)check(buttons.get(i).key==0,"Speed choice gained a letter shortcut");
+  check(buttons.get(11).key!=0,"Speed Previous lost its navigation shortcut");
+  int before=settingsSaves;double prior=speed;buttons.get(7).action.run();check(speed!=prior&&speed==21&&settingsSaves==before+1&&modal.equals("speed"),"Speed choice no longer applies in place");
+  buttons.get(11).action.run();check(modal.equals("options"),"Speed Previous no longer returns to options");return b;
+ }
  public static void main(String[]args)throws Exception{
   NativeBridge.root=Paths.get(args[0]);Path output=Paths.get(args[1]);PortText.load(Files.newInputStream(Paths.get(args[2])));NativeArt art=new NativeArt();
   for(String language:new String[]{"en","ru","de","es","fr"})for(int width:new int[]{640,854})for(int style=0;style<3;style++){
@@ -180,8 +195,9 @@ settings += r'''
    }
    h.modal="controls";Bitmap b=h.draw(true);h.geometry(true);h.contrast(b);h.buttons.get(5).action.run();check(h.modal.equals("control-desktop"),"Sixth row did not open desktop settings");screens++;
    ImageIO.write(b.image,"png",output.resolve("controls-"+language+"-"+width+"-"+style+".png").toFile());
+   h.speed=42;b=h.speedScreen();screens++;ImageIO.write(b.image,"png",output.resolve("speed-"+language+"-"+width+"-"+style+".png").toFile());
   }
-  System.out.println("PASS "+checks+" full settings-sheet checks; "+screens+" renders across five languages, three race styles, both hotkey modes and two aspect ratios; text-button shortcuts are unique with contrasting yellow/white glyph pixels, labels including bracketed keys fit, separate help blocks have bold colon headings and a blank separator, settings controls persist and remain inside panels");
+  System.out.println("PASS "+checks+" full settings-sheet checks; "+screens+" renders across five languages, three race styles, both hotkey modes and two aspect ratios; only navigation buttons have unique contrasting yellow/white shortcuts, speed and keyboard mode choices remain unmarked and apply in place, labels including bracketed keys fit, help blocks have bold colon headings and a blank separator, settings controls persist and remain inside panels");
  }
 }'''
 sources['org/openbw/androidtest/DesktopSettings11Test.java'] = settings

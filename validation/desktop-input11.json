@@ -60,12 +60,18 @@
     "queueMenuButtonVisual",
     "flushMenuButtons",
     "menuButton",
+    "menuActionButton",
     "originalMenuButton",
     "replayMenuAction",
     "glueButton",
     "button",
     "uiLine",
-    "fallbackMenu"
+    "fallbackMenu",
+    "redButton",
+    "redNavigationButton",
+    "redBorder",
+    "menuColor",
+    "menuHot"
   ],
   "activityMethods": [
     "dispatchGenericMotionEvent",
@@ -74,11 +80,12 @@
     "onWindowFocusChanged",
     "onInputDeviceRemoved"
   ],
-  "output": "PASS touch regression\nPASS gamepad regression\nPASS typing\nPASS mouse world\nPASS HUD and menus\nPASS terrain toggle input\nPASS navigation\nPASS keyboard\nPASS lifecycle\nPASS Activity routing\nPASS input transitions\nPASS grid hotkeys\nPASS desktop options\nPASS settings persistence and access\nPASS menu mnemonic routing\nPASS menu label binding\nPASS menu batching and replay routing\nPASS 1467 production Java routing checks",
+  "navigationPolicySites": 9,
+  "output": "PASS touch regression\nPASS gamepad regression\nPASS typing\nPASS mouse world\nPASS HUD and menus\nPASS terrain toggle input\nPASS navigation\nPASS keyboard\nPASS lifecycle\nPASS Activity routing\nPASS input transitions\nPASS grid hotkeys\nPASS desktop options\nPASS settings persistence and access\nPASS menu mnemonic routing\nPASS menu label binding\nPASS menu batching and replay routing\nPASS navigation-only menu shortcuts\nPASS 9046 production Java routing checks",
   "sourceSha256": {
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "a6845d7119fdbd5cbcbae58e0f8adbad88394670e60936ffc9daf1268b9363de",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8c1ddece3ec87fa212ea1f8edf106d0910e3030a5f08ac2d6f7ab98c8e3100cb",
     "app/src/main/java/org/openbw/androidtest/MainActivity.java": "c24bd1374b16b27b92cf1a4e8a7ec27f2e026a4983d0566d1f9f62793003cd61",
-    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "ad587572e08cbead5633cdf79a6c656ea03938ffb8aadae473606fdf3468dda9",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "1604620279baeb2687ba29fda3fe27b13588f59e0399c090e2fd8cd2e1c38f91",
     "app/src/main/java/org/openbw/androidtest/NativeHud.java": "4e7c3af4fcecb16ef2572b1cfbbbcef338be9b1c0afac568745ab650333b17b9",
     "app/src/main/assets/native/ui-languages.tsv": "ef08365128db72e311b9dea09f9ea99a44b3a635650f91bfde2d4143619cb284",
     "app/src/main/java/org/openbw/androidtest/DesktopControls.java": "5c91f04f24a71c4ad2ab9a0a3c91500ba1ee4c006d0b6bc9b097b695eee1db0a",
@@ -89,6 +96,6 @@
     "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "6524d413cc8d23c1d7ce4dfd94b344ef8d87d76173e7e55931e0d70b5befa1d9",
     "app/src/main/java/org/openbw/androidtest/MenuHotkeys.java": "6687d5928efc58d7b9f7c5d1d4f29b0ce572f87e4566a2e9790d5bf8214d4b32",
     "app/src/main/java/org/openbw/androidtest/PortText.java": "715d49b416621a93b488e553f53fb317ef378707795f2d927523e1fa89e2b971",
-    "tests/run_desktop_input11.py": "e506273d6d3313518294c23281f7d5c91746486a48360edd3505a6e129b9d4e6"
+    "tests/run_desktop_input11.py": "74fe33c194884f0ddef910943d48ffb060862876d9512ffcda721fcb66fa608b"
   }
 }

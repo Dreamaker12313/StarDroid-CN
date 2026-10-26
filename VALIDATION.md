@@ -1,3 +1,15 @@
+# StarDroid 1.1 navigation-only menu hotkeys
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Menu shortcuts are now limited to navigation: opening a menu, returning/back, switching a results tab, confirming/closing a dialog or launching a game/replay. In-place controls do not reserve keys, dispatch letter shortcuts or highlight a letter. This covers custom/Nearby match values, slots/races/teams, speed choices, import/export/save actions, replay pause/rate/view choices, Next track, briefing replay, tip cycling and keyboard mode choices. Touch and mouse activation remain intact.
+- Exact resolved captions bypass the original BIN mnemonic remapping when drawn. This prevents the briefing Replay highlight from reappearing after it is intentionally removed. Normal original navigation captions retain their authored colors and hotkeys. [Original artwork/font checks](validation/menu-hotkeys11.json).
+- Production input checks cover the pictured custom-game controls in all five UI languages, no hidden dispatch, preserved touch/mouse actions, score Save Replay exclusion and navigation keys. Production settings renders cover speed choices with only Previous marked, and keyboard mode choices without shortcut letters. [Input routing](validation/desktop-input11.json), [settings rendering](validation/desktop-guide11.json).
+- Existing gamepad, command-grid hotkeys and race-colored hover help remain passing. The Next track callback still advances music for each race and the sound settings retain their volume/mute behavior. [Gamepad](validation/gamepad-v81.json), [command tooltips](validation/hotkey-tooltips11.json), [hover help](validation/hover-errors11.json), [music settings callbacks](validation/music-settings-navigation11.json).
+- Final signed APK reuses the verified native libraries, with every bundled asset unchanged. Version, original signing identity, permissions, 47 JNI methods, both ABIs and 16 KiB alignment pass; Android lint reports zero errors and 13 warnings. [Package proof](validation/package-menu-polish11.json).
+
+These are host rendering/input, Android build and lint checks. Physical Android peripherals and touch remain unverified. Earlier sections describe their recorded revisions.
+
 # StarDroid 1.1 menu button shortcuts and race tooltip borders
 
 Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the frozen 1.1 menu-hotkey/minimap-tooltip update with verified unchanged native libraries.
+"""Package the frozen 1.1 navigation-only menu-hotkey update with verified unchanged native libraries.
 
 Usage: release signing environment variables + python3 tests/package_menu_polish11.py PREVIOUS_APK
 The SDK/NDK and Gradle 8.9 must already be bootstrapped by scripts/build.py.
@@ -11,13 +11,13 @@ import urllib.parse, xml.etree.ElementTree as ET, zipfile
 ROOT=Path(__file__).resolve().parents[1]
 PREVIOUS=Path(sys.argv[1]).resolve()
 TOOLS=Path(os.environ.get('STARDROID_ANDROID_TOOLS',ROOT/'.tools'))
-OUT=ROOT/'build-native/menu-polish11-release'
+OUT=ROOT/'build-native/menu-navigation11-release'
 VERIFIED_LIBS=ROOT/'build-native/hotkeys11-release/native-libs-rebuilt'
 OUT.mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 for name in ('STARDROID_KEYSTORE','STARDROID_STORE_PASSWORD','STARDROID_KEY_ALIAS','STARDROID_KEY_PASSWORD'):
     if not os.environ.get(name):raise RuntimeError('Missing release signing variable: '+name)
-assert sha(PREVIOUS)=='5a92768f531e96caaaec0c4052b8b826da7a5b36abfda56a34615e82341aa62d'
+assert sha(PREVIOUS)=='c23a428af395ba7756dbdb9b447e692938e49ffe0cabc1151aade9ba12057709'
 proof_path=ROOT/'validation/native-build-hotkeys11.json'
 proof_digest=sha(proof_path)
 proof=json.loads(proof_path.read_text())
@@ -26,7 +26,7 @@ for name,digest in proof['sourceSha256'].items():assert sha(ROOT/name)==digest,n
 sources=[p for p in (ROOT/'app/src/main').rglob('*') if p.is_file()]
 sources += [ROOT/n for n in ('app/build.gradle','build.gradle','settings.gradle','gradle.properties','scripts/build_nearby.py','tests/package_menu_polish11.py')]
 before={str(p.relative_to(ROOT)):sha(p) for p in sources}
-work=Path(tempfile.mkdtemp(prefix='stardroid-menu-polish11-')); assets=work/'assets';libs=work/'libs';assets.mkdir();libs.mkdir()
+work=Path(tempfile.mkdtemp(prefix='stardroid-menu-navigation11-')); assets=work/'assets';libs=work/'libs';assets.mkdir();libs.mkdir()
 for name in ('native','missions'):shutil.copytree(ROOT/'app/src/main/assets'/name,assets/name)
 for name in ('COPYING','NOTICE.txt'):shutil.copyfile(ROOT/'vendor/libsmacker'/name,assets/('libsmacker-'+name))
 for name,digest in proof['librarySha256'].items():
@@ -67,9 +67,7 @@ with zipfile.ZipFile(apk)as z,zipfile.ZipFile(PREVIOUS)as old:
     entries={n for n in z.namelist()if n.startswith(('assets/','lib/')) and not n.endswith('/')}
     old_entries={n for n in old.namelist()if n.startswith(('assets/','lib/')) and not n.endswith('/')}
     assert entries==old_entries
-    for n in entries:
-        if n!='assets/native/ui-languages.tsv':assert z.read(n)==old.read(n),n
-        if n=='assets/native/ui-languages.tsv':assert z.read(n)==(ROOT/'app/src/main/assets/native/ui-languages.tsv').read_bytes()
+    for n in entries:assert z.read(n)==old.read(n),n
     assert not any(n.lower().endswith(('.mpq','.p12','.jks','.keystore','.gid','.fnt','.wasm','.html','.js'))for n in z.namelist())
     for name,digest in proof['librarySha256'].items():
         binary=z.read('lib/'+name);assert hashlib.sha256(binary).hexdigest()==digest,name
@@ -86,7 +84,7 @@ shutil.copyfile(lint,OUT/lint.name)
 report={'passed':True,'version':'1.1','versionCode':83,'apkSha256':sha(dest),'apkBytes':dest.stat().st_size,
     'previousApkSha256':sha(PREVIOUS),'certificateSha256':cert,'originalReleaseSigningIdentity':True,
     'nativeEngineRebuilt':False,'verifiedNativeLibrariesReused':True,'nativeLibrariesUnchangedFromPreviousApk':True,'replaySimulationRules':84,'nearbyProtocolBuild':84,'librarySha256':proof['librarySha256'],'nativeProofSha256':sha(proof_path),
-    'jniMethodsVerified':len(methods),'unchangedAssetsExceptTranslations':True,'permissionsUnchanged':True,'loadAlignmentBytes':16384,
+    'jniMethodsVerified':len(methods),'unchangedAssets':True,'permissionsUnchanged':True,'loadAlignmentBytes':16384,
     'lintErrors':0,'lintWarnings':len([i for i in issues if i.get('severity')=='Warning']),
     'physicalDevicesTested':False,'sourceSha256':before}
 (ROOT/'validation/package-menu-polish11.json').write_text(json.dumps(report,indent=2)+'\n')

@@ -78,7 +78,7 @@ public final class Music79Test {
  Runnable nextAction;boolean nextEnabled;String nextLabel;float nextX,nextY,nextWidth,nextHeight;
  void toggle(Canvas c,String name,boolean enabled,float x,float y,Runnable action){toggles.add(name);muteAction=action;}
  void slider(Canvas c,String name,float value,float x,float y,java.util.function.Consumer<Float> action){sliders.add(name);if(name.equals("Music"))musicSlider=action;else if(name.equals("Effects"))effectsSlider=action;}
- void menuButton(Canvas c,String label,float x,float y,float w,float h,Runnable action,boolean enabled){nextLabel=label;nextX=x;nextY=y;nextWidth=w;nextHeight=h;nextAction=action;nextEnabled=enabled;}
+ void menuActionButton(Canvas c,String label,float x,float y,float w,float h,Runnable action,boolean enabled){nextLabel=label;nextX=x;nextY=y;nextWidth=w;nextHeight=h;nextAction=action;nextEnabled=enabled;}
  void renderSettings(){toggles.clear();sliders.clear();drawSoundSettings(new Canvas(),136,32);check(toggles.equals(Arrays.asList("Mute all sound")),"Obsolete music switch remains");check(sliders.equals(Arrays.asList("Effects","Music")),"Volume sliders missing");}
  boolean nextButton(){renderSettings();check("Next track".equals(nextLabel),"Wrong settings button");check(nextX==162&&nextY==272&&nextWidth==320&&nextHeight==28,"Button geometry changed");if(nextEnabled)nextAction.run();return nextEnabled;}
  void volume(float value){renderSettings();musicSlider.accept(value);}

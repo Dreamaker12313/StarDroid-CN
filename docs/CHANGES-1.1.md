@@ -1,6 +1,6 @@
 # StarDroid 1.1 — build 83
 
-- Menu text buttons show highlighted shortcut letters, including in-game menus. Original keys take priority; buttons use a visible **[key]** suffix when the shortcut cannot be highlighted in their caption. App Options and the battlefield MENU button retain their normal labels.
+- Menu navigation buttons show highlighted shortcut letters, including in-game menus. Buttons that open another menu, go back or switch screens keep these shortcuts; settings, speed choices, lobby slots and race choices, imports/exports, Save Replay and in-place replay controls use plain labels. Original navigation keys take priority; a visible **[key]** suffix is used when the shortcut cannot be highlighted in the caption. App Options and the battlefield MENU button retain their normal labels.
 - The minimap terrain button has a hover/touch-hold description and shows its **Tab** shortcut. Tooltip borders match the player's race: blue for Terran, red for Zerg and yellow for Protoss.
 - Mouse and keyboard help uses bold **Mouse:** and **Keyboard:** headings, with a blank line between the sections.
 

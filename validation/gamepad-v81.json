@@ -17,6 +17,7 @@
     "changeGamepad",
     "gamepadLine",
     "gamepadOption",
+    "gamepadChoice",
     "gamepadToggle",
     "gamepadSlider",
     "drawGamepadSettings",
@@ -43,21 +44,21 @@
   "sourceSha256": {
     "app/src/main/java/org/openbw/androidtest/MainActivity.java": "c24bd1374b16b27b92cf1a4e8a7ec27f2e026a4983d0566d1f9f62793003cd61",
     "app/src/main/assets/native/ui-languages.tsv": "ef08365128db72e311b9dea09f9ea99a44b3a635650f91bfde2d4143619cb284",
-    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "a6845d7119fdbd5cbcbae58e0f8adbad88394670e60936ffc9daf1268b9363de",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8c1ddece3ec87fa212ea1f8edf106d0910e3030a5f08ac2d6f7ab98c8e3100cb",
     "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "befe03fa10c41265cb0e16aabb13f9e57266b0d457bd8f5abecdbf2fae22fadd",
     "app/src/main/java/org/openbw/androidtest/NativeHud.java": "4e7c3af4fcecb16ef2572b1cfbbbcef338be9b1c0afac568745ab650333b17b9",
     "app/src/main/java/org/openbw/androidtest/DesktopSettings.java": "0d91d0b330e7ceabe7ba197597d3ce9ec4de8e35258186b970dbe9ae6e95095c",
     "app/src/main/java/org/openbw/androidtest/GamepadControls.java": "dd03141a97a2790c2cc4daef904f7605da25da5f080c7e5ace82f41865da000b",
     "app/src/main/java/org/openbw/androidtest/GamepadSettings.java": "495c62d64248babb8430dbb2dee03c71800da0b8b31fa136e06da9aa884a239f",
     "app/src/main/java/org/openbw/androidtest/NativeArt.java": "5eb4088196305b3227475d98877b188394ae60cf8c0909ea5516cfac1bb3b3d7",
-    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "e186ca85e4b45ea036d44e6514a00211aebb1a4172792fe016918f4f34a25b80",
-    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "ad587572e08cbead5633cdf79a6c656ea03938ffb8aadae473606fdf3468dda9",
+    "app/src/main/java/org/openbw/androidtest/NativeGlue.java": "63576cee68570ca6ff8e4f8df79d383f4dc7dacad025fab879a9de1b05c7ab04",
+    "app/src/main/java/org/openbw/androidtest/NativeResults.java": "1604620279baeb2687ba29fda3fe27b13588f59e0399c090e2fd8cd2e1c38f91",
     "app/src/main/java/org/openbw/androidtest/CommandHint.java": "cac62546a9c9fdb3fe0ae76ba6657c600b55527969ce26c0eade114d80b2a1f3",
     "app/src/main/java/org/openbw/androidtest/MenuLabels.java": "6524d413cc8d23c1d7ce4dfd94b344ef8d87d76173e7e55931e0d70b5befa1d9",
     "app/src/main/java/org/openbw/androidtest/MenuHotkeys.java": "6687d5928efc58d7b9f7c5d1d4f29b0ce572f87e4566a2e9790d5bf8214d4b32",
     "app/src/main/java/org/openbw/androidtest/ClassicFontCipher.java": "ebabcdf34074db16f9bda7e2283ac5eddd6b6b115430d9ee4aa6602cd00b04f2",
     "app/src/main/java/org/openbw/androidtest/GameLanguage.java": "adb682e53c454c4b295e7c8693ce79295b9ce3601dd02061d1eeaad4ff27c179",
     "app/src/main/java/org/openbw/androidtest/PortText.java": "715d49b416621a93b488e553f53fb317ef378707795f2d927523e1fa89e2b971",
-    "tests/run_gamepad81.py": "8aa74a72dbe0fa02e2ca5f9cda741b8acb6fb9443ff5a01fd2e11b50d5872573"
+    "tests/run_gamepad81.py": "7a2ca0719190bbe99ad42c179b811958690891d66f33cfc050bcd5cddc6bd2b8"
   }
 }

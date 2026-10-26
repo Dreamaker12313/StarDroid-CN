@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "physicalAndroid": false,
+  "originalArchivesTested": false,
+  "version": "1.1",
+  "androidSdk35JavaCompile": true,
+  "gameEntrySourceRoutingChecks": {
+    "campaign": true,
+    "custom": true,
+    "nearby": true,
+    "replay": true,
+    "savedGame": true,
+    "automaticEndOfTrack": true,
+    "soundButton": true,
+    "audioMigration": true
+  },
+  "scope": "Production Java music selection and source routing, sound-settings Next track callbacks for all three races with synthetic audio boundaries, preference migration and volume/mute behavior, plus SDK35 Java compilation. Original archive import, native PCM decode/seek and physical Android audio were not rerun in this focused regression.",
+  "availability": "Four themes per race require imported original Brood War soundtrack files; missing expansion files fall back to the original soundtrack.",
+  "checks": [
+    "PASS 97 production audio preference/slider checks: one-time old off/on migration, persisted volume, restarts, no hidden toggle, mute/effects, all music phases, EOF recovery and focus/ducking\nPASS race 0 actual settings button: four-theme order, rapid presses, embedded seeking, automatic EOF, mute/disabled/zero-volume and phase guards\nPASS race 1 actual settings button: four-theme order, rapid presses, embedded seeking, automatic EOF, mute/disabled/zero-volume and phase guards\nPASS race 2 actual settings button: four-theme order, rapid presses, embedded seeking, automatic EOF, mute/disabled/zero-volume and phase guards\nPASS all races retain both themes in the combined file, then tracks2/3, then repeat; no seeks/skips; detection rejects unknown/silent/malformed variants\nPASS production music selection: all races, original/Brood War loops, source fallback, missing assets, expansion switching and phase isolation; manual picker/preview removed; tested Next track button retained",
+    "PASS all production Android Java compiles against SDK35 / Java8"
+  ],
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "8c1ddece3ec87fa212ea1f8edf106d0910e3030a5f08ac2d6f7ab98c8e3100cb",
+    "app/src/main/java/org/openbw/androidtest/MusicData.java": "bd192578dccc51adfab7df8a1b6746ea1f8d1ce4f21af70011a96afdcfe1a421",
+    "app/src/main/java/org/openbw/androidtest/MusicThemes.java": "94730541abde3a431433f8680d32bfb3dee7a5b1799be8192001730dc953477c",
+    "app/src/main/java/org/openbw/androidtest/MissionBundle.java": "c55926c62c6b67c41c17653d6ffe291555546ddf83c4980513e2b3475a19de89",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "88f07e13cf83fccc0061fab68597d763bd3cacff2019720e8cb1b75fffdbae53",
+    "native/audio.h": "000f98ed0b3866a3c09f9c73c26e9f1b8a5f3f67765519d7c3921236f7483fa0",
+    "native/runtime.cpp": "3738ced9a8a65b4947d47408c9797be17e2cac47eaaa052de4133bf20e4a9824",
+    "tests/run_music79.py": "2c51c5f0947761bc353a6bc9dc0dfbb3725bf3602ce48bda691a45ea38e3a8fe",
+    "tests/native_music79.cpp": "d313e911686e9572acee65d89d77f1d2842f6a16250fb61b897828401e562080",
+    "tests/MusicThemesTest.java": "cc4a63727fe46011c8f5ffae271a818fb2e0b56ce92132eeb8e6134fe7b5bf8a",
+    "tests/AudioVolume11Test.java": "efcd20dcba64c670dfdc800c38d505e32d0e3e975ce50b18735dc0a1a959f6cb"
+  }
+}

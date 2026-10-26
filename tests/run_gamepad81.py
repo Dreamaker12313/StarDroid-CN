@@ -46,22 +46,24 @@ harness=harness.replace('int selections,imports;','''int selections,imports,comm
  void back(){backs++;}void openMenu(){menus++;modal="menu";}
  float cameraBottom(float x){return 376;}boolean gamepadWorldOverride;
  boolean replayGame;
- static class MenuCaption{final Button button;final MenuHotkeys.Entry entry;final boolean highlight;final java.util.function.Consumer<String>draw;MenuCaption(Button b,MenuHotkeys.Entry e,boolean h,java.util.function.Consumer<String>d){button=b;entry=e;highlight=h;draw=d;}}
  final MenuHotkeys menuHotkeys=new MenuHotkeys(),backgroundMenuHotkeys=new MenuHotkeys();boolean menuBehindModal;final ArrayList<MenuCaption>menuCaptions=new ArrayList<>();
 ''')
 # Existing touch coordinates are logical in this shim. Gamepad uses physical-coordinate events.
 harness=harness.replace('float lx(float x){return x;}float ly(float y){return y;}','float lx(float x){return x/3;}float ly(float y){return y/3;}')
 harness=harness.replace('void touch(int type,float x,float y,long time){touch(new MotionEvent(type,x,y,time));}','void touch(int type,float x,float y,long time){touch(new MotionEvent(type,x*3,y*3,time));}')
 text=(src/'NativeSurface.java').read_text()
-def production(name):
- m=re.search(r'^  (?:private )?(?:static )?(?:void|boolean|int|float|NativeArt.Font) '+name+r'\(',text,re.M);assert m,name
- end=text.index('{',m.end())+1;depth=1
+def block(start):
+ end=text.index('{',start)+1;depth=1
  while depth:
   if text[end]=='{':depth+=1
   elif text[end]=='}':depth-=1
   end+=1
- return text[m.start():end]
-names=['font','text','panel','body','fallback','uiLine','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','fallbackMenu','openGamepadSettings','gamepadSettingsBack','changeGamepad','gamepadLine','gamepadOption','gamepadToggle','gamepadSlider','drawGamepadSettings','controlGroupScale','controlGroup','controlGroupRows','drawControlGroups','reloadGamepadSettings','handleGamepadKey','handleGamepadMotion','gamepadDirection','activateGamepad','gamepadActionHeld','gamepadButton','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag','resetGamepad','advanceGamepad']
+ return text[start:end]
+def production(name):
+ matches=list(re.finditer(r'^  (?:private )?(?:static )?(?:void|boolean|int|float|NativeArt.Font) '+name+r'\(',text,re.M));assert matches,name
+ return '\n'.join(block(m.start()) for m in matches)
+harness+=block(text.index('  private static final class MenuCaption {'))
+names=['font','text','panel','body','fallback','uiLine','queueMenuButton','queueMenuButtonVisual','flushMenuButtons','fallbackMenu','openGamepadSettings','gamepadSettingsBack','changeGamepad','gamepadLine','gamepadOption','gamepadChoice','gamepadToggle','gamepadSlider','drawGamepadSettings','controlGroupScale','controlGroup','controlGroupRows','drawControlGroups','reloadGamepadSettings','handleGamepadKey','handleGamepadMotion','gamepadDirection','activateGamepad','gamepadActionHeld','gamepadButton','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag','resetGamepad','advanceGamepad']
 harness+='\n'.join(production(n) for n in names)
 # Physical keyboard routing moved to the production event suite in
 # run_desktop_input11.py; do not emulate the old instantaneous group shortcut.

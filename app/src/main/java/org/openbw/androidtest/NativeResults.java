@@ -121,12 +121,14 @@ final class NativeResults {
   }
 
   void prepareButtonCaptions(){
-    String[] labels={"Overview","Units","Structures","Resources","OK","Save Replay"};
-    int[] ids={3,4,5,6,7,61};ArrayList<MenuHotkeys.Entry> entries=new ArrayList<>();
+    String[] labels={"Overview","Units","Structures","Resources","OK"};
+    int[] ids={3,4,5,6,7};ArrayList<MenuHotkeys.Entry> entries=new ArrayList<>();
     for(int i=0;i<ids.length;i++)entries.add(new MenuHotkeys.Entry(Integer.toString(ids[i]),
         MenuLabels.forWidget("gluscore",ids[i],layout.get(ids[i]),labels[i])));
     menuHotkeys.assign("score",entries);buttonCaptions.clear();
     for(int i=0;i<ids.length;i++)buttonCaptions.put(ids[i],entries.get(i).shown);
+    // Saving is an in-place file action, not a menu-navigation shortcut.
+    buttonCaptions.put(61,NativeArt.clean(PortText.text("Save Replay")));
   }
 
   String buttonCaption(int id){return buttonCaptions.getOrDefault(id,"");}

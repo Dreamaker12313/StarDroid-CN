@@ -166,9 +166,9 @@ final class NativeSurface extends SurfaceView
     final Button button;
     final MenuHotkeys.Entry entry;
     final java.util.function.Consumer<String> draw;
-    final boolean highlight;
-    MenuCaption(Button button,MenuHotkeys.Entry entry,boolean highlight,java.util.function.Consumer<String> draw){
-      this.button=button;this.entry=entry;this.highlight=highlight;this.draw=draw;
+    final boolean highlight, navigation;
+    MenuCaption(Button button,MenuHotkeys.Entry entry,boolean highlight,boolean navigation,java.util.function.Consumer<String> draw){
+      this.button=button;this.entry=entry;this.highlight=highlight;this.navigation=navigation;this.draw=draw;
     }
   }
 
@@ -734,8 +734,8 @@ final class NativeSurface extends SurfaceView
       // Never cover it with the unrelated generic blue dialog panel.
       drawReplayDetails(c,410,58,190,244);
     }
-    replayButton(c,"Import Replay",44,332,164,22,()->activity.runOnUiThread(activity::pickReplay),true);
-    replayButton(c,"Export",218,332,136,22,()->{
+    replayActionButton(c,"Import Replay",44,332,164,22,()->activity.runOnUiThread(activity::pickReplay),true);
+    replayActionButton(c,"Export",218,332,136,22,()->{
       try{byte[] data=replays.read(selectedReplay);final long request=replayBrowserGeneration;activity.runOnUiThread(()->activity.saveReplay(data,this,request));}
       catch(Exception e){replayMessage("Replay could not be saved: "+e.getMessage());}
     },selectedReplay!=null);
@@ -864,16 +864,24 @@ final class NativeSurface extends SurfaceView
     // Keep the original OK/Cancel artwork, hit box and font metrics intact.
     boolean available=enabled&&action!=null&&pendingScreen==null;
     queueMenuButtonVisual(widget.hit(),action,available,enabled&&action!=null,MenuLabels.forWidget(glue.name,id,widget,label),
-        shown->glue.label(c,id,shown,enabled&&action!=null));
+        shown->glue.labelCaption(c,id,shown,enabled&&action!=null));
   }
 
   private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
+    replayButton(c,label,x,y,width,height,action,enabled,true);
+  }
+
+  private void replayActionButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
+    replayButton(c,label,x,y,width,height,action,enabled,false);
+  }
+
+  private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled,boolean navigation) {
     if(page.equals("replays")&&glue!=null){
       // Transparent menu controls use the original wide button font. Long
       // translations fit exactly as native menu labels do, without smaller fonts.
       redBorder(c,x,y,width,height,false);
       NativeArt.Font font=glue.button;
-      queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,shown->{
+      queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,navigation,shown->{
         int layoutWidth=NativeGlue.labelWidth(font,shown,width-8,height);
         int textHeight=font.lines(shown,layoutWidth).size()*font.height;
         c.save();c.clipRect(x+4,y,x+width-4,y+height);
@@ -886,7 +894,7 @@ final class NativeSurface extends SurfaceView
     redBorder(c,x,y,width,height,hot&&enabled);
     NativeArt.Font large=replayFont(true),small=replayFont(false);
     final NativeArt.Font font=large!=null&&large.measure(label)>width-8?small:large;
-    queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,
+    queueMenuButton(new RectF(x,y,x+width,y+height),action,enabled,label,navigation,
         shown->{if(font!=null)uiLine(c,shown,font,x+4,y,width-8,height,1,enabled?hot?4:3:5);
           else fallbackMenu(c,shown,x+4,y,width-8,height,enabled?3:5);});
   }
@@ -913,10 +921,10 @@ final class NativeSurface extends SurfaceView
     for(int row=-6;row<=5;row++){int inset=Math.abs(row)>=5?2:Math.abs(row)>=3?1:0;
       c.drawRect(cx-6+inset,380+row,cx-5+inset,381+row,paint);c.drawRect(cx+6-inset,380+row,cx+7-inset,381+row,paint);}
     Button seek=new Button(new RectF(left,370,right,390),()->{},end>0);seek.slider=this::seekReplay;buttons.add(seek);
-    replayButton(c,replayPaused?"Play":"Pause",x+6,398,104,21,()->{if(NativeBridge.value(8,0)<NativeBridge.value(26,0)||NativeBridge.value(28,0)!=0)replayPaused=!replayPaused;},true);
-    replayButton(c,replayRate+"x",x+116,398,32,21,()->{replayRate=replayRate==8?1:replayRate*2;accumulator=0;},true);
+    replayActionButton(c,replayPaused?"Play":"Pause",x+6,398,104,21,()->{if(NativeBridge.value(8,0)<NativeBridge.value(26,0)||NativeBridge.value(28,0)!=0)replayPaused=!replayPaused;},true);
+    replayActionButton(c,replayRate+"x",x+116,398,32,21,()->{replayRate=replayRate==8?1:replayRate*2;accumulator=0;},true);
     int owner=NativeBridge.value(27,0);
-    replayButton(c,owner<0?"Everyone":"Player "+(owner+1),x+6,425,142,21,()->{
+    replayActionButton(c,owner<0?"Everyone":"Player "+(owner+1),x+6,425,142,21,()->{
       int at=replayPlayers.indexOf(NativeBridge.value(27,0))+1;
       NativeBridge.command(31,at>=replayPlayers.size()?-1:replayPlayers.get(at),0,0,0);
       if(at<replayRaces.size()&&missionRace!=replayRaces.get(at)){missionRace=replayRaces.get(at);hud.close();hud=new NativeHud(art,missionRace,commandMaps);music("game");}
@@ -1033,7 +1041,7 @@ final class NativeSurface extends SurfaceView
     toggle(c, "Mute all sound", muted, x + 26, y + 60, () -> {muted = !muted; saveSettings();});
     slider(c, "Effects", effects, x + 26, y + 120, v -> {effects = v; saveSettings();});
     slider(c, "Music", music, x + 26, y + 180, v -> {music = v; saveSettings();});
-    menuButton(c, "Next track", x + 26, y + 240, 320, 28, this::nextMusicTrack, canNextMusicTrack());
+    menuActionButton(c, "Next track", x + 26, y + 240, 320, 28, this::nextMusicTrack, canNextMusicTrack());
   }
 
   private void tick(double dt) {
@@ -1360,12 +1368,17 @@ final class NativeSurface extends SurfaceView
       float h,
       Runnable action,
       boolean enabled) {
+    button(c,label,x,y,w,h,action,enabled,true);
+  }
+
+  private void button(Canvas c,String label,float x,float y,float w,float h,
+      Runnable action,boolean enabled,boolean navigation) {
     if (page.equals("game") && hud != null)
       c.drawBitmap(hud.panel(Math.round(w), Math.round(h), true, enabled), x, y, NativeArt.PIXELS);
     else if (glue != null) c.drawBitmap(glue.panel(Math.round(w), Math.round(h), true), x, y, NativeArt.PIXELS);
     else panel(c, x, y, w, h);
     NativeArt.Font f = font();
-    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,navigation,
         shown->{if(f!=null)uiLine(c,shown,f,x+3,y,(int)w-6,(int)h,1,enabled?3:5);
           else fallbackMenu(c,shown,x+3,y,(int)w-6,(int)h,enabled?3:5);});
   }
@@ -1383,11 +1396,21 @@ final class NativeSurface extends SurfaceView
 
   private void queueMenuButton(RectF rect,Runnable run,boolean enabled,String label,
       java.util.function.Consumer<String> drawCaption) {
-    queueMenuButtonVisual(rect,run,enabled,enabled,label,drawCaption);
+    queueMenuButton(rect,run,enabled,label,true,drawCaption);
+  }
+
+  private void queueMenuButton(RectF rect,Runnable run,boolean enabled,String label,
+      boolean navigation,java.util.function.Consumer<String> drawCaption) {
+    queueMenuButtonVisual(rect,run,enabled,enabled,label,navigation,drawCaption);
   }
 
   private void queueMenuButtonVisual(RectF rect,Runnable run,boolean enabled,boolean highlight,String label,
       java.util.function.Consumer<String> drawCaption) {
+    queueMenuButtonVisual(rect,run,enabled,highlight,label,true,drawCaption);
+  }
+
+  private void queueMenuButtonVisual(RectF rect,Runnable run,boolean enabled,boolean highlight,String label,
+      boolean navigation,java.util.function.Consumer<String> drawCaption) {
     if(run==null){drawCaption.accept(NativeArt.clean(PortText.text(label)));return;}
     if(page.equals("game")&&modal.isEmpty()&&!replayGame){
       drawCaption.accept(NativeArt.clean(PortText.text(label)));
@@ -1396,26 +1419,33 @@ final class NativeSurface extends SurfaceView
     Button button=new Button(rect,run,enabled);button.page=page;button.modal=modal;
     buttons.add(button);
     String id=Math.round(rect.left)+":"+Math.round(rect.top)+":"+Math.round(rect.width())+":"+Math.round(rect.height());
-    menuCaptions.add(new MenuCaption(button,new MenuHotkeys.Entry(id,label),highlight,drawCaption));
+    menuCaptions.add(new MenuCaption(button,new MenuHotkeys.Entry(id,label),highlight,navigation,drawCaption));
   }
 
   private void flushMenuButtons() {
     if(menuCaptions.isEmpty())return;
     ArrayList<MenuHotkeys.Entry> entries=new ArrayList<>();
-    for(MenuCaption caption:menuCaptions)if(buttons.contains(caption.button))entries.add(caption.entry);
+    // Only navigation participates in mnemonic allocation. In-place settings and
+    // actions keep normal text and must not reserve or respond to letter keys.
+    for(MenuCaption caption:menuCaptions)if(caption.navigation&&buttons.contains(caption.button))entries.add(caption.entry);
     (menuBehindModal?backgroundMenuHotkeys:menuHotkeys).assign(page+"|"+(menuBehindModal?"":modal),entries);
     for(MenuCaption caption:menuCaptions)if(buttons.contains(caption.button)){
-      caption.button.key=caption.button.enabled?caption.entry.key:0;
-      caption.draw.accept(caption.highlight?caption.entry.shown:NativeArt.clean(caption.entry.shown));
+      caption.button.key=caption.navigation&&caption.button.enabled?caption.entry.key:0;
+      String shown=caption.navigation?caption.entry.shown:MenuHotkeys.decorate(caption.entry.label,0);
+      caption.draw.accept(caption.highlight?shown:NativeArt.clean(shown));
     }
     menuCaptions.clear();
   }
 
   private void glueButton(Canvas c, int id, String label, Runnable run) {
+    glueButton(c,id,label,run,true);
+  }
+
+  private void glueButton(Canvas c, int id, String label, Runnable run, boolean navigation) {
     if (glue == null) {
       int n = buttons.size();
       button(c, label == null ? MenuLabels.forButton(page, id) : label,
-          205, 120 + n * 42, 230, 32, run, true);
+          205, 120 + n * 42, 230, 32, run, true,navigation);
       return;
     }
     NativeArt.Widget w = glue.layout.get(id);
@@ -1423,8 +1453,8 @@ final class NativeSurface extends SurfaceView
     boolean enabled=run!=null&&pendingScreen==null&&(glue.elapsed>=NativeGlue.ENTER_MS||!glue.slide);
     RectF r = w.hit();
     r.offset(glue.shift(w), 0);
-    queueMenuButtonVisual(r,run,enabled,run!=null,MenuLabels.forWidget(glue.name,id,w,label),
-        shown->glue.label(c,id,shown,run!=null));
+    queueMenuButtonVisual(r,run,enabled,run!=null,MenuLabels.forWidget(glue.name,id,w,label),navigation,
+        shown->glue.labelCaption(c,id,shown,run!=null));
   }
 
   private void message(String text) {
@@ -1540,8 +1570,8 @@ final class NativeSurface extends SurfaceView
       add(new RectF(x+24,y+65,x+356,y+97),()->{profileEditing=true;activity.runOnUiThread(()->showTextKeyboard(profileInput));},true);
       uiLine(c,profiles.size()>=32?"32 IDs saved. Delete one to add another.":"Enter a name (up to 24 characters).",glue.small,x+24,y+102,332,22,0,2);
     }else body(c,"Delete "+profileDelete+"?",x+24,y+65,332,54);
-    redButton(c,create?"OK":"Delete",x+24,y+142,154,30,this::confirmProfileDialog,!create||!profileDraft.trim().isEmpty()&&(profiles.size()<32||profiles.contains(profileDraft.trim())));
-    redButton(c,"Cancel",x+202,y+142,154,30,this::cancelProfileDialog,true);
+    redNavigationButton(c,create?"OK":"Delete",x+24,y+142,154,30,this::confirmProfileDialog,!create||!profileDraft.trim().isEmpty()&&(profiles.size()<32||profiles.contains(profileDraft.trim())));
+    redNavigationButton(c,"Cancel",x+202,y+142,154,30,this::cancelProfileDialog,true);
   }
 
   private void drawRegistry(Canvas c) {
@@ -1553,8 +1583,8 @@ final class NativeSurface extends SurfaceView
         fallbackMenu(c,NativeArt.clean((name.equals(selectedProfile)?"> ":"")+name),123,rowY,394,28,3);
         add(new RectF(120,rowY,520,rowY+28),()->{selectedProfile=name;saveProfiles();},true);
       }
-      button(c, "Up", 120, 320, 94, 28, () -> profileScroll=Math.max(0,first-6), first>0);
-      button(c, "Down", 226, 320, 94, 28, () -> profileScroll=first+6, first+6<profiles.size());
+      button(c, "Up", 120, 320, 94, 28, () -> profileScroll=Math.max(0,first-6), first>0,false);
+      button(c, "Down", 226, 320, 94, 28, () -> profileScroll=first+6, first+6<profiles.size(),false);
       button(c, "New ID", 120, 360, 190, 32, this::newProfile, profiles.size()<32);
       button(c, "Delete ID", 330, 360, 190, 32, this::deleteProfile, profiles.contains(selectedProfile));
       button(c, "OK", 120, 402, 190, 32, () -> {
@@ -1803,8 +1833,8 @@ final class NativeSurface extends SurfaceView
       uiLine(c,nearbyWifi?"Bluetooth + Wi-Fi Direct":"Bluetooth",glue.dialogue,380,90,224,36,1,4);
       body(c,nearbyWifi?"Find nearby devices over Bluetooth. Each connection switches to Wi-Fi Direct when available.":"Connect nearby devices directly over Bluetooth.",380,140,222,110);
       customLabel(c,14,"Multiplayer",glue.large,0);
-      redButton(c,"Host Game",58,284,262,30,()->navigate(this::hostCustom),true);
-      redButton(c,"Join Game",58,322,262,30,()->navigate(this::joinNearby),true);
+      redNavigationButton(c,"Host Game",58,284,262,30,()->navigate(this::hostCustom),true);
+      redNavigationButton(c,"Join Game",58,322,262,30,()->navigate(this::joinNearby),true);
       glueButton(c,9,"Load Saved",()->{multiplayerSaves=true;openSaves(false);});
       glueButton(c,10,null,()->navigate(this::showMain));return;
     }
@@ -1831,13 +1861,13 @@ final class NativeSurface extends SurfaceView
       String player=setup.controllers[i]==0?"Closed":setup.controllers[i]==2?"Computer":nearby!=null&&nearby.occupants[i]>=0?nearby.names[i]:"Player (Open)";
       uiLine(c,Integer.toString(i+1),glue.dialogue,29,y,21,24,0,2);
       redBorder(c,52,y,setup.teamGame?141:184,24,movingSlot==i);
-      queueMenuButton(new RectF(52,y,setup.teamGame?193:236,y+24),()->lobbySlot(slot),editable&&host,player,
+      queueMenuButton(new RectF(52,y,setup.teamGame?193:236,y+24),()->lobbySlot(slot),editable&&host,player,false,
           shown->uiLine(c,shown,glue.dialogue,57,y,setup.teamGame?131:174,24,0,editable&&host?menuColor(52,y,setup.teamGame?141:184,24,true):2));
       float raceX=setup.teamGame?201:244;int raceW=setup.teamGame?85:112;
       redBorder(c,raceX,y,raceW,24,false);
       boolean raceEnabled=editable&&!nearby.resuming&&setup.controllers[i]!=0&&(host||i==nearby.localSlot);
       queueMenuButton(new RectF(raceX,y,raceX+raceW,y+24),()->{try{nearby.changeRace(slot);}catch(Exception e){nearby.fail(e.getMessage());}},raceEnabled,
-          setup.controllers[i]==0?"":MatchSetup.RACES[setup.races[i]],shown->uiLine(c,shown,glue.dialogue,raceX+5,y,raceW-10,24,0,menuColor(raceX,y,raceW,24,raceEnabled)));
+          setup.controllers[i]==0?"":MatchSetup.RACES[setup.races[i]],false,shown->uiLine(c,shown,glue.dialogue,raceX+5,y,raceW-10,24,0,menuColor(raceX,y,raceW,24,raceEnabled)));
       if(setup.teamGame)redButton(c,"T"+setup.teams[i],294,y,62,24,()->{try{nearby.setup.teams[slot]=nearby.setup.teams[slot]%8+1;nearby.settingsChanged();}catch(Exception e){nearby.fail(e.getMessage());}},editable&&host&&!nearby.resuming&&setup.controllers[i]!=0);
     }
     redButton(c,"Hero Mode: "+(setup.heroMode?"On":"Off"),410,57,190,20,()->changeLobbySetting(3),editable&&host&&!nearby.resuming);
@@ -1860,7 +1890,7 @@ final class NativeSurface extends SurfaceView
     redButton(c,"Send",313,455,45,18,this::sendChat,nearby!=null&&!nearby.closed&&!chatDraft.trim().isEmpty());
     if(host) {
       NativeArt.Widget w=glue.layout.get(7);boolean enabled=nearby!=null&&nearby.ready&&nearby.countdown==0&&!nearby.closed;
-      if(w!=null)queueMenuButton(w.hit(),()->nearby.start(),enabled,MenuLabels.forWidget(glue.name,7,w,"Start Game"),caption->glue.label(c,7,caption,enabled));
+      if(w!=null)queueMenuButton(w.hit(),()->nearby.start(),enabled,MenuLabels.forWidget(glue.name,7,w,"Start Game"),caption->glue.labelCaption(c,7,caption,enabled));
     }else customLabel(c,7,"Waiting for host",glue.dialogue,1);
     glueButton(c,8,null,()->navigate(this::showNearby));
   }
@@ -1890,10 +1920,18 @@ final class NativeSurface extends SurfaceView
     for(int i=1;i<3;i++){c.drawRect(x+3-i,y+i,x+4-i,y+i+1,paint);c.drawRect(x+w-4+i,y+i,x+w-3+i,y+i+1,paint);c.drawRect(x+3-i,y+h-i-1,x+4-i,y+h-i,paint);c.drawRect(x+w-4+i,y+h-i-1,x+w-3+i,y+h-i,paint);}
   }
   private void redButton(Canvas c,String label,float x,float y,int w,int h,Runnable action,boolean enabled){
+    redButton(c,label,x,y,w,h,action,enabled,false);
+  }
+
+  private void redNavigationButton(Canvas c,String label,float x,float y,int w,int h,Runnable action,boolean enabled){
+    redButton(c,label,x,y,w,h,action,enabled,true);
+  }
+
+  private void redButton(Canvas c,String label,float x,float y,int w,int h,Runnable action,boolean enabled,boolean navigation){
     NativeArt.Font preferred=h<28?glue.dialogue:glue.large;
     final NativeArt.Font font=preferred.measure(label)>w-8?glue.small:preferred;
     redBorder(c,x,y,w,h,false);
-    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,navigation,
         shown->uiLine(c,shown,font,x+4,y,w-8,h,1,menuColor(x,y,w,h,enabled)));
   }
 
@@ -2008,7 +2046,7 @@ final class NativeSurface extends SurfaceView
     NativeArt.Widget w = glue.layout.get(id);
     if (w == null) return;
     redBorder(c,w.x,w.y,w.w,w.h,false);
-    queueMenuButton(w.rect(),action,true,label,
+    queueMenuButton(w.rect(),action,true,label,false,
         shown->uiLine(c,shown,glue.dialogue,w.x+3,w.y,w.w-6,w.h,0,action==null?2:menuColor(w.x,w.y,w.w,w.h,true)));
   }
 
@@ -2139,7 +2177,7 @@ final class NativeSurface extends SurfaceView
             45,
             30,
             () -> listScroll = Math.max(0, listScroll - 5),
-            listScroll > 0);
+            listScroll > 0,false);
         button(
             c,
             "Down",
@@ -2148,7 +2186,7 @@ final class NativeSurface extends SurfaceView
             45,
             30,
             () -> listScroll = Math.min(Math.max(0, visibleMissions.size() - 7), listScroll + 5),
-            end < visibleMissions.size());
+            end < visibleMissions.size(),false);
         button(c, "Back", x + 212, 353, 136, 30, () -> modal = "", true);
         break;
       case "skirmish":
@@ -2164,7 +2202,7 @@ final class NativeSurface extends SurfaceView
             298,
             32,
             () -> activity.runOnUiThread(activity::pickNativeMap),
-            true);
+            true,false);
         button(c, "Back", x + 80, 365, 208, 30, () -> modal = "", true);
         break;
       default:
@@ -2361,9 +2399,19 @@ final class NativeSurface extends SurfaceView
 
   private void menuButton(Canvas c, String label, float x, float y, float w, float h,
       Runnable action, boolean enabled) {
+    menuButton(c,label,x,y,w,h,action,enabled,true);
+  }
+
+  private void menuActionButton(Canvas c, String label, float x, float y, float w, float h,
+      Runnable action, boolean enabled) {
+    menuButton(c,label,x,y,w,h,action,enabled,false);
+  }
+
+  private void menuButton(Canvas c, String label, float x, float y, float w, float h,
+      Runnable action, boolean enabled, boolean navigation) {
     c.drawBitmap(hud.panel(Math.round(w), Math.round(h), true, enabled), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + w / 2, y + h / 2);
-    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,
+    queueMenuButton(new RectF(x,y,x+w,y+h),action,enabled,label,navigation,
         shown->uiLine(c,shown,hud.large,x+4,y,(int)w-8,(int)h,1,enabled?hot?2:3:5));
   }
 
@@ -2375,10 +2423,18 @@ final class NativeSurface extends SurfaceView
   }
 
   private void option(Canvas c, String label, float x, float y, float width, Runnable action) {
+    option(c,label,x,y,width,action,false);
+  }
+
+  private void navigationOption(Canvas c, String label, float x, float y, float width, Runnable action) {
+    option(c,label,x,y,width,action,true);
+  }
+
+  private void option(Canvas c, String label, float x, float y, float width, Runnable action, boolean navigation) {
     c.drawBitmap(hud.panel(Math.round(width), 28, true, true), x, y, NativeArt.PIXELS);
     boolean hot = pressed != null && pressed.rect.contains(x + width / 2, y + 14);
     boolean selected = label.startsWith("> ");
-    queueMenuButton(new RectF(x,y,x+width,y+28),action,true,selected?label.substring(2):label,
+    queueMenuButton(new RectF(x,y,x+width,y+28),action,true,selected?label.substring(2):label,navigation,
         shown->uiLine(c,shown,hud.small,x+8,y,(int)width-16,28,1,hot?4:selected?7:2));
   }
 
@@ -2454,8 +2510,8 @@ final class NativeSurface extends SurfaceView
         toggle(c, "Show Tips at Startup", prefs.getBoolean("show-tips", true), x + 20, y + 192,
             () -> prefs.edit().putBoolean("show-tips", !prefs.getBoolean("show-tips", true)).apply());
         menuButton(c, "OK", x + 20, y + 216, 104, 28, () -> {modal = startupTips ? "" : "menu"; startupTips = false;}, true);
-        menuButton(c, "Previous Tip", x + 140, y + 216, 104, 28, () -> tipIndex = (tipIndex + tips.length - 1) % tips.length, tips.length > 0);
-        menuButton(c, "Next Tip", x + 260, y + 216, 104, 28, () -> tipIndex = (tipIndex + 1) % tips.length, tips.length > 0);
+        menuActionButton(c, "Previous Tip", x + 140, y + 216, 104, 28, () -> tipIndex = (tipIndex + tips.length - 1) % tips.length, tips.length > 0);
+        menuActionButton(c, "Next Tip", x + 260, y + 216, 104, 28, () -> tipIndex = (tipIndex + 1) % tips.length, tips.length > 0);
       } else menuButton(c, "Previous (Esc)", x + 80, y + 216, 224, 28, this::modalBack, true);
       return true;
     }
@@ -2526,11 +2582,11 @@ final class NativeSurface extends SurfaceView
         zoom = next; resizeWorld(); saveSettings();
       });
       option(c, "Frame rate: " + fps, x + 26, y + 214, 320, () -> {fps = fps == 30 ? 60 : fps == 60 ? 90 : fps == 90 ? 120 : 30; saveSettings();});
-      option(c, "Interface sizes", x + 26, y + 253, 320, () -> modal = "ui-sizes");
+      navigationOption(c, "Interface sizes", x + 26, y + 253, 320, () -> modal = "ui-sizes");
     } else if (modal.equals("network")) {
       toggle(c,"Show network overlay",networkStats,x+26,y+48,()->{networkStats=!networkStats;saveSettings();});
       body(c,(nearby==null?"No active match":nearby.summary())+"\n"+String.format(Locale.ROOT,"Display: %.1f FPS\nDrawing: %.2f ms/frame\nTotal frame work: %.2f ms/frame",displayFps,drawMs,frameMs)+"\nInput buffer: "+(nearby==null?168:nearby.setup.frameMs()*4)+" ms.\nWait: blocked on other devices.\nValues retain the last active sample.",x+26,y+88,320,142);
-      option(c,"View / copy diagnostics",x+26,y+240,320,()->activity.runOnUiThread(activity::requestDiagnostics));
+      navigationOption(c,"View / copy diagnostics",x+26,y+240,320,()->activity.runOnUiThread(activity::requestDiagnostics));
     } else if (modal.equals("ui-sizes")) {
       option(c, "Resources: " + resourcePercent + "%", x + 26, y + 48, 320, () -> {resourcePercent = resourcePercent >= 150 ? 100 : resourcePercent + 25; saveSettings();});
       option(c, "Commands & control groups: " + commandPercent + "%", x + 26, y + 92, 320, () -> {commandPercent = commandPercent >= 120 ? 100 : commandPercent + 10; saveSettings();});
@@ -2542,12 +2598,12 @@ final class NativeSurface extends SurfaceView
         nearbyDefenders = !nearbyDefenders; syncControls(); saveSettings();
       });
       body(c, "When enabled, attacked bases call nearby idle combat units to help.\n\nScripted mission attacks still run.", x + 22, y + 93, 324, 100);
-      option(c, "Cheats", x + 22, y + 207, 324, () -> modal = "testing");
+      navigationOption(c, "Cheats", x + 22, y + 207, 324, () -> modal = "testing");
     } else if (modal.equals("testing")) {
       option(c, "+10,000 minerals and gas", x + 26, y + 46, 320, () -> NativeBridge.command(9, 0, 0, 0, 0));
       toggle(c, "Instant production", instant, x + 26, y + 84, () -> {instant = !instant; NativeBridge.command(10, instant ? 1 : 0, 0, 0, 0);});
       option(c, "Reveal map", x + 26, y + 116, 320, () -> NativeBridge.command(11, 0, 0, 0, 0));
-      option(c, "Force victory (end match)", x + 26, y + 158, 320, () -> {NativeBridge.command(13, 1, 0, 0, 0); modal = "";});
+      navigationOption(c, "Force victory (end match)", x + 26, y + 158, 320, () -> {NativeBridge.command(13, 1, 0, 0, 0); modal = "";});
       toggle(c,"Invincibility",NativeBridge.value(22,0)!=0,x+26,y+200,
           ()->NativeBridge.command(29,NativeBridge.value(22,0)==0?1:0,0,0,0));
       toggle(c,"Unlimited supply (200)",NativeBridge.value(24,0)!=0,x+26,y+238,
@@ -2649,6 +2705,16 @@ final class NativeSurface extends SurfaceView
 
   private void gamepadOption(Canvas c, String label, String detail, float x, float y,
       int width, int height, boolean selected, Runnable action) {
+    gamepadOption(c,label,detail,x,y,width,height,selected,action,true);
+  }
+
+  private void gamepadChoice(Canvas c, String label, String detail, float x, float y,
+      int width, int height, boolean selected, Runnable action) {
+    gamepadOption(c,label,detail,x,y,width,height,selected,action,false);
+  }
+
+  private void gamepadOption(Canvas c, String label, String detail, float x, float y,
+      int width, int height, boolean selected, Runnable action, boolean navigation) {
     if (page.equals("game") && hud != null)
       c.drawBitmap(hud.panel(width, height, true, true), x, y, NativeArt.PIXELS);
     else if (glue != null) c.drawBitmap(glue.panel(width, height, true), x, y, NativeArt.PIXELS);
@@ -2658,7 +2724,7 @@ final class NativeSurface extends SurfaceView
     if (detail != null) {
       gamepadLine(c, detail, x + 8, y + 20, width - 16, height - 22, 1, color);
     }
-    queueMenuButton(new RectF(x,y,x+width,y+height),action,true,label,
+    queueMenuButton(new RectF(x,y,x+width,y+height),action,true,label,navigation,
         shown->gamepadLine(c,shown,x+8,detail==null?y:y+2,width-16,detail==null?height:18,1,detail==null?color:2));
   }
 
@@ -2731,7 +2797,7 @@ final class NativeSurface extends SurfaceView
     } else if (modal.equals("gamepad-action")) {
       for (int i = 0; i < GamepadControls.ACTION_LABELS.length; i++) {
         final int action = i;
-        gamepadOption(c, GamepadControls.ACTION_LABELS[i], null,
+        gamepadChoice(c, GamepadControls.ACTION_LABELS[i], null,
             x + 24 + (i % 2) * 200, y + 46 + (i / 2) * 35, 192, 32,
             gamepad.bindings[gamepadBinding] == action,
             () -> { changeGamepad(() -> gamepad.bindings[gamepadBinding] = action); modal = "gamepad-bindings"; });
@@ -2774,12 +2840,12 @@ final class NativeSurface extends SurfaceView
 
   private void drawControls(Canvas c, float x, float y) {
     if (modal.equals("controls")) {
-      option(c, "Selection settings", x + 22, y + 48, 324, () -> modal = "control-select");
-      option(c, "Camera settings", x + 22, y + 88, 324, () -> modal = "control-camera");
-      option(c, "Command settings", x + 22, y + 128, 324, () -> modal = "control-orders");
-      option(c, "Gesture guide", x + 22, y + 168, 324, () -> modal = "control-help");
-      option(c,"Gamepad controls",x+22,y+208,324,this::openGamepadSettings);
-      option(c,"Mouse & keyboard",x+22,y+248,324,this::openDesktopSettings);
+      navigationOption(c, "Selection settings", x + 22, y + 48, 324, () -> modal = "control-select");
+      navigationOption(c, "Camera settings", x + 22, y + 88, 324, () -> modal = "control-camera");
+      navigationOption(c, "Command settings", x + 22, y + 128, 324, () -> modal = "control-orders");
+      navigationOption(c, "Gesture guide", x + 22, y + 168, 324, () -> modal = "control-help");
+      navigationOption(c,"Gamepad controls",x+22,y+208,324,this::openGamepadSettings);
+      navigationOption(c,"Mouse & keyboard",x+22,y+248,324,this::openDesktopSettings);
     } else if (modal.equals("control-select")) {
       toggle(c, "Original larvae selection", controls.originalLarvae, x + 22, y + 44, () -> changeControls(() -> controls.originalLarvae = !controls.originalLarvae));
       toggle(c, "One larva morph per press", controls.singleLarvaMorph, x + 22, y + 78, () -> changeControls(() -> controls.singleLarvaMorph = !controls.singleLarvaMorph));
@@ -2787,7 +2853,7 @@ final class NativeSurface extends SurfaceView
       toggle(c, "Double tap selects same type", controls.doubleTap, x + 22, y + 146, () -> changeControls(() -> controls.doubleTap = !controls.doubleTap));
       controlOption(c, "Selection button: " + new String[]{"Off", "Left", "Right"}[controls.selectionButton], x, y + 180, () -> controls.selectionButton = (controls.selectionButton + 1) % 3);
       toggle(c, "Show control group buttons", controls.controlGroups, x + 22, y + 214, () -> changeControls(() -> controls.controlGroups = !controls.controlGroups));
-      option(c, "Timing & accuracy", x + 22, y + 248, 324, () -> modal = "control-timing");
+      navigationOption(c, "Timing & accuracy", x + 22, y + 248, 324, () -> modal = "control-timing");
     } else if (modal.equals("control-timing")) {
       controlOption(c, "Drag: " + (controls.dragMode == 0 ? "Pan / hold to select" : "Select / two fingers pan"), x, y + 45, () -> controls.dragMode = 1 - controls.dragMode);
       controlOption(c, "Selection hold: " + controls.holdMs + " ms", x, y + 76, () -> controls.holdMs = controls.holdMs >= 500 ? 100 : controls.holdMs + 50);
@@ -3020,7 +3086,7 @@ final class NativeSurface extends SurfaceView
         () -> {
           campaign.replay();
           lastBriefRevision = -1;
-        });
+        },false);
   }
 
   private int lastBriefRevision = -1;
@@ -4155,9 +4221,9 @@ final class NativeSurface extends SurfaceView
     paint.setColor(0x80000000);c.drawRect(0,0,logicalWidth,480,paint);panel(c,x,y,604,464);
     text(c,"Mouse & keyboard",x+12,y+10,580,1,2);
     gamepadLine(c,"Command hotkeys",x+22,y+44,160,28,0,2);
-    gamepadOption(c,"Original",null,x+190,y+43,120,28,!desktopSettings.gridHotkeys,
+    gamepadChoice(c,"Original",null,x+190,y+43,120,28,!desktopSettings.gridHotkeys,
         ()->changeDesktop(()->desktopSettings.gridHotkeys=false));
-    gamepadOption(c,"Grid (QWE/ASD/ZXC)",null,x+318,y+43,264,28,desktopSettings.gridHotkeys,
+    gamepadChoice(c,"Grid (QWE/ASD/ZXC)",null,x+318,y+43,264,28,desktopSettings.gridHotkeys,
         ()->changeDesktop(()->desktopSettings.gridHotkeys=true));
     desktopToggle(c,"Mouse edge scrolling",desktopSettings.edgeScroll,x+22,y+80,()->desktopSettings.edgeScroll=!desktopSettings.edgeScroll);
     desktopToggle(c,"Mouse wheel zoom",desktopSettings.wheelZoom,x+318,y+80,()->desktopSettings.wheelZoom=!desktopSettings.wheelZoom);
