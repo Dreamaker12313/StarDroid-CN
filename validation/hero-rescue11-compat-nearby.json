@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "physicalRadioTested": false,
+  "result": "PASS 158 nearby compatibility checks: mixed simulation builds rejected before gameplay, matching peers advance",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/NearbyProtocol.java": "c994ce42e0a017ac1ee24688a9d1f650e2dbd864f5d7ddd21fb8c5868a392851",
+    "app/src/main/java/org/openbw/androidtest/NearbyMatch.java": "264848393ef493c88cc325510bf3032c8fbab25736d03e6867d2b230dbc2d1a4",
+    "app/src/main/java/org/openbw/androidtest/MatchSetup.java": "2131d7d524735f4f32ce185101d5d2c9c9ef5d701863c134cdac11b028df2db7",
+    "app/src/main/java/org/openbw/androidtest/MatchSnapshot.java": "eee215c45747736472340fbac989231e585ac85002f54b915932b2589611e4e4",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCodec.java": "e0ba711990daa662cddf78a660adec3492a0a3558d19c254ada4f4b7f8ed4628",
+    "app/src/main/java/org/openbw/androidtest/NearbyMapCache.java": "2f49e859ea90f02d7547b9c6329ca10b1c59f586b3614f1ee1999890dbc250f2",
+    "app/src/main/java/org/openbw/androidtest/NativeData.java": "88f07e13cf83fccc0061fab68597d763bd3cacff2019720e8cb1b75fffdbae53",
+    "tests/NearbyProtocolTest.java": "fb22d630f60f01bddf4326b5626108613b8f9d60dad4692a6a889d31953ed2f6",
+    "tests/NearbyCompatibility11Test.java": "946c92f6fb439742c105f23585b0383a97c1c5cbc3072ddffdbeabe3a47c3f5c",
+    "tests/run_compat11.py": "d0a618b563245904e92ea5ed0c56e18d1b220df5b2661853769ec506670fe5ca"
+  }
+}

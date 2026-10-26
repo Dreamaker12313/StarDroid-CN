@@ -54,7 +54,7 @@ final class NativeSurface extends SurfaceView
       activeGame = false;
   private float zoom = 1, effects = 1, music = .65f;
   private boolean muted, musicEnabled = true, orderLines, oneShotSelect, nearbyDefenders = true;
-  private String musicTrack = "auto", selectedProfile = "Player";
+  private String selectedProfile = "Player";
   private final ArrayList<String> profiles = new ArrayList<String>();
   private final CampaignProgress campaignProgress;
   private String campaignProfile = "";
@@ -134,8 +134,7 @@ final class NativeSurface extends SurfaceView
   private String commandError = "";
   private double commandErrorUntil;
   private String musicPhase = "", currentMusicPath = "";
-  private int musicThemeBoundary;
-  private final HashMap<String, Integer> musicThemeStarts = new HashMap<String, Integer>();
+  private boolean currentMusicExpansion;
   private float speechMusicGain = 1;
   private final ArrayList<Button> buttons = new ArrayList<Button>();
   private final ArrayList<JSONObject> visibleMissions = new ArrayList<JSONObject>();
@@ -200,7 +199,6 @@ final class NativeSurface extends SurfaceView
     orderLines = prefs.getBoolean("order-lines", false);
     nearbyDefenders = prefs.getBoolean("nearby-defenders", true);
     networkStats = prefs.getBoolean("network-stats", false);
-    musicTrack = prefs.getString("music-track", "auto");
     expansion = prefs.getBoolean("expansion", false);
     selectedProfile = prefs.getString("profile", "Player");
     try {
@@ -930,8 +928,9 @@ final class NativeSurface extends SurfaceView
     if (!musicPhase.equals(phase)) musicIndex = 0;
     musicPhase = phase;
     // Classic BroodWar.mpq stores the expansion theme followed by the original
-    // first theme in race1.wav. Play the whole file before race2/race3; appending
-    // StarCraft's race1.wav would play that original theme twice per cycle.
+    // first theme in race1.wav for ALL three races. Playing each complete file
+    // before race2/race3 gives four themes per loop in campaigns, custom games
+    // and Nearby matches; adding StarCraft race1 again would duplicate it.
     String race = new String[] {"zerg", "terran", "protoss"}[missionRace],
         prefix = new String[] {"z", "t", "p"}[missionRace];
     String name =
@@ -944,39 +943,17 @@ final class NativeSurface extends SurfaceView
                         ? prefix + "vict"
                         : phase.equals("defeat") ? prefix + "defeat" : race + (musicIndex % 3 + 1))
             + ".wav";
-    if (phase.equals("game") && !musicTrack.equals("auto")) name = "music/" + musicTrack + ".wav";
-    if (name.equals(currentMusicPath) && NativeBridge.playing(63)) return;
+    if (name.equals(currentMusicPath) && expansion == currentMusicExpansion && NativeBridge.playing(63)) return;
     currentMusicPath = name;
-    musicThemeBoundary = 0;
+    currentMusicExpansion = expansion;
     try {
       byte[] b = expansion ? NativeBridge.asset(6, name) : null;
-      if (b != null && phase.equals("game") && name.matches("music/(terran|zerg|protoss)1\\.wav")) {
-        Integer boundary = musicThemeStarts.get(name);
-        if (boundary == null) {
-          try { boundary = MusicThemes.appendedThemeMs(b, NativeBridge.asset(5, name)); }
-          catch (Exception ignored) { boundary = 0; } // Optional reference must not block valid music.
-          musicThemeStarts.put(name, boundary);
-        }
-        musicThemeBoundary = boundary;
-      }
       if (b == null) b = NativeBridge.asset(5, name);
       if (b != null) NativeBridge.sound(b, 63, !phase.equals("game") && !phase.equals("victory") && !phase.equals("defeat"));
       else NativeBridge.sound(null, 63, false);
     } catch (Exception e) {
       failure = "Music: " + e.getMessage();
     }
-  }
-
-  private void nextMusicTrack() {
-    // The first Brood War file contains two themes. Expose its verified second
-    // theme to Next Track without duplicating it in the natural playback loop.
-    boolean embedded = musicTrack.equals("auto") && musicPhase.equals("game")
-        && musicThemeBoundary > 0 && NativeBridge.playing(63)
-        && NativeBridge.soundPosition(63) < musicThemeBoundary;
-    musicTrack = "auto";
-    if (embedded) NativeBridge.seekSound(63, musicThemeBoundary);
-    else { musicIndex++; music("game"); }
-    saveSettings();
   }
 
   private void tick(double dt) {
@@ -2317,20 +2294,6 @@ final class NativeSurface extends SurfaceView
     buttons.add(b);
   }
 
-  private static final String[] MUSIC_TRACKS = {"auto", "terran1", "terran2", "terran3",
-      "zerg1", "zerg2", "zerg3", "protoss1", "protoss2", "protoss3", "title",
-      "trdyroom", "zrdyroom", "prdyroom", "tvict", "zvict", "pvict", "tdefeat", "zdefeat", "pdefeat"};
-
-  private String trackLabel(String track) {
-    if (track.equals("auto")) return "Automatic (your race)";
-    String name = track.replace("rdyroom", " briefing").replace("vict", " victory")
-        .replace("defeat", " defeat").replaceAll("([a-z])([123])", "$1 $2");
-    if (name.startsWith("t ")) name = "Terran" + name.substring(1);
-    if (name.startsWith("z ")) name = "Zerg" + name.substring(1);
-    if (name.startsWith("p ")) name = "Protoss" + name.substring(1);
-    return Character.toUpperCase(name.charAt(0)) + name.substring(1);
-  }
-
   private boolean drawClassicMenu(Canvas c) {
     if (!page.equals("game") || hud == null) return false;
     if (modal.equals("tips") || modal.equals("objectives")) {
@@ -2350,7 +2313,7 @@ final class NativeSurface extends SurfaceView
       } else menuButton(c, "Previous (Esc)", x + 80, y + 216, 224, 28, this::modalBack, true);
       return true;
     }
-    boolean sheet = Arrays.asList("sound", "speed", "video", "ui-sizes", "network", "misc", "testing", "controls", "control-select", "control-timing", "control-camera", "control-orders", "control-help", "objectives", "tracks").contains(modal);
+    boolean sheet = Arrays.asList("sound", "speed", "video", "ui-sizes", "network", "misc", "testing", "controls", "control-select", "control-timing", "control-camera", "control-orders", "control-help", "objectives").contains(modal);
     if (!sheet && !Arrays.asList("menu", "options", "end", "quit", "restart", "exit", "outcome").contains(modal)) return false;
     float x = (logicalWidth - (sheet ? 368 : 264)) / 2f - (sheet ? 0 : 4), y = 32;
     if (modal.equals("outcome")) {
@@ -2366,7 +2329,7 @@ final class NativeSurface extends SurfaceView
         : modal.equals("ui-sizes") ? "Interface Sizes" : modal.equals("network") ? "Network Diagnostics" : modal.equals("video") ? "Video Options" : modal.equals("misc") ? "Miscellaneous" : modal.equals("testing") ? "Cheats"
         : modal.equals("control-select") ? "Selection Settings" : modal.equals("control-timing") ? "Timing & accuracy" : modal.equals("control-camera") ? "Camera Settings"
         : modal.equals("control-orders") ? "Command Settings" : modal.startsWith("control") ? "Controls" : modal.equals("objectives") ? "Mission Objectives"
-        : modal.equals("tracks") ? "Music Track" : modal.equals("restart") ? "Restart Mission" : "End Mission";
+        : modal.equals("restart") ? "Restart Mission" : "End Mission";
     text(c, title, x, y + 8, sheet ? 368 : 264, 1, 2);
     final float left = x;
     if (modal.equals("menu") && replayGame) {
@@ -2394,25 +2357,10 @@ final class NativeSurface extends SurfaceView
       originalMenuButton(c, "abrtmenu", 2, null, x, y, () -> modal = "quit", true);
       originalMenuButton(c, "abrtmenu", 3, null, x, y, () -> modal = "exit", true);
     } else if (modal.equals("sound")) {
-      toggle(c, "Mute all sound", muted, x + 26, y + 48, () -> {muted = !muted; saveSettings();});
-      toggle(c, "Play original music", musicEnabled, x + 26, y + 80, () -> {musicEnabled = !musicEnabled; saveSettings();});
-      slider(c, "Effects", effects, x + 26, y + 120, v -> {effects = v; saveSettings();});
-      slider(c, "Music", music, x + 26, y + 160, v -> {music = v; saveSettings();});
-      option(c, trackLabel(musicTrack), x + 26, y + 204, 320, () -> modal = "tracks");
-      option(c, "Next track", x + 26, y + 243, 150, this::nextMusicTrack);
-      option(c, "Preview sound", x + 196, y + 243, 150, () -> {syncAudio(); sfx("button");});
-    } else if (modal.equals("tracks")) {
-      for (int i = 0; i < MUSIC_TRACKS.length; i++) {
-        final String track = MUSIC_TRACKS[i];
-        float bx = x + 20 + (i % 2) * 165, by = y + 38 + (i / 2) * 24;
-        boolean hot = pressed != null && pressed.rect.contains(bx + 80, by + 10);
-        if (track.equals(musicTrack) || hot) {
-          paint.setColor(hot ? 0xff223b69 : 0xff15274f);
-          c.drawRect(bx, by, bx + 160, by + 23, paint);
-        }
-        hud.small.draw(c, trackLabel(track), bx + 3, by + 5, 155, 0, track.equals(musicTrack) ? 7 : 2, 0);
-        add(new RectF(bx, by, bx + 160, by + 23), () -> {musicTrack = track; music(musicPhase); saveSettings(); modal = "sound";}, true);
-      }
+      toggle(c, "Mute all sound", muted, x + 26, y + 60, () -> {muted = !muted; saveSettings();});
+      toggle(c, "Play original music", musicEnabled, x + 26, y + 102, () -> {musicEnabled = !musicEnabled; saveSettings();});
+      slider(c, "Effects", effects, x + 26, y + 154, v -> {effects = v; saveSettings();});
+      slider(c, "Music", music, x + 26, y + 206, v -> {music = v; saveSettings();});
     } else if (modal.equals("speed")) {
       double[] values = {167, 111, 83, 67, 56, 48, 42, 21, 10.5, 5.25, 2.625};
       String[] labels = {"Slowest", "Slower", "Slow", "Normal", "Fast", "Faster", "Fastest (1x)", "2x Fastest", "4x Fastest", "8x Fastest", "16x Fastest"};
@@ -2501,7 +2449,6 @@ final class NativeSurface extends SurfaceView
     if (modal.startsWith("save-")) {modal=saveMode;return;}
     if (modal.equals("outcome")) {showResults(); return;}
     if (modal.equals("tips")) {modal = startupTips ? "" : "menu"; startupTips = false;}
-    else if (modal.equals("tracks")) modal = "sound";
     else if (modal.startsWith("control-")) modal = "controls";
     else if (modal.equals("ui-sizes")) modal = "video";
     else if (modal.equals("testing")) modal = "misc";
@@ -2757,7 +2704,7 @@ final class NativeSurface extends SurfaceView
         .putBoolean("order-lines", orderLines)
         .putBoolean("nearby-defenders", nearbyDefenders)
         .putBoolean("network-stats", networkStats)
-        .putString("music-track", musicTrack)
+        .remove("music-track")
         .putFloat("music", music)
         .putFloat("effects", effects)
         .putFloat("zoom", zoom)

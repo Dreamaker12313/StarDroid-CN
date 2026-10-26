@@ -85,6 +85,21 @@ int main(int argc, char** argv) {
                 std::cout << "PASS " << (version ? "BroodWar " : "StarCraft ") << race
                           << "1 imported byte-identically; full native duration="
                           << double(frames) / clip->rate << " seconds; tail and end-of-track verified\n";
+                // The other two complete files finish each four-theme BW loop.
+                for (int track = 2; track <= 3; ++track) {
+                    name = std::string("music\\") + race + std::to_string(track) + ".wav";
+                    source(original, name.c_str()); imported(retained, name.c_str());
+                    require(original == retained, "Import altered a later race theme");
+                    auto later = naudio::wav(retained.data(), retained.size());
+                    size_t total = later->pcm.size() / later->channels;
+                    require(total > size_t(later->rate * 30), "Later race theme missing or shortened");
+                    require(std::any_of(later->pcm.begin(), later->pcm.end(), [](float v) { return v != 0; }), "Later race theme is silent");
+                    naudio::play_clip(later, 63); naudio::voices[63].position = total - 1;
+                    naudio::mix(tail, 1, later->rate); require(naudio::playing(63), "Later theme final sample discarded");
+                    naudio::mix(tail, 1, later->rate); require(!naudio::playing(63), "Later theme did not advance at EOF");
+                    std::cout << "PASS " << (version ? "BroodWar " : "StarCraft ") << race << track
+                              << " imported byte-identically, decoded and played through EOF; duration=" << double(total) / later->rate << " seconds\n";
+                }
                 ++raceIndex;
             }
         }

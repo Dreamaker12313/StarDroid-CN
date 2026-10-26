@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "scope": "Host native replay parse/open compatibility guards; current metadata accepted, old/future rules rejected before live state mutation",
+  "result": "PASS 16 replay rules compatibility checks: current84 metadata, old81/future rejection, read-only failure, classic human metadata",
+  "embeddedChkBytes": 93562,
+  "sourceSha256": {
+    "tests/native_compat11.cpp": "0f11dd1bffd9843863ea2a5f1ce84bf71aa4c810b2e48ba7464745902fb8e007",
+    "tests/native_replay81.cpp": "a75da61db7eb4f83b22f1cfb55747a62c69a519237a981f64b5af399776c8bd1",
+    "tests/run_compat11.py": "d0a618b563245904e92ea5ed0c56e18d1b220df5b2661853769ec506670fe5ca",
+    "native/replay.h": "73e9c496af735df8fecea21c18dfc600a8374ea5054be42a754f5fd0186bcb76",
+    "native/runtime.cpp": "67c14be28d79fca7f7f6fdf706f754a1893c9bdf12714b07cee9825bbce6bbde",
+    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "befe03fa10c41265cb0e16aabb13f9e57266b0d457bd8f5abecdbf2fae22fadd"
+  }
+}

@@ -35,7 +35,7 @@ public final class NativePolishInstrumentation extends NativeInstrumentation {
       task(() -> {
         set(game, "wide", false); set(game, "zoom", 1f); set(game, "muted", false);
         set(game, "musicEnabled", true); set(game, "effects", 1f); set(game, "music", .65f);
-        set(game, "musicTrack", "terran1"); invoke("syncAudio");
+        invoke("syncAudio");
       });
       screenshot("title");
       task(() -> {
@@ -70,10 +70,9 @@ public final class NativePolishInstrumentation extends NativeInstrumentation {
       task(() -> {
         check(((NativeAudio) field(game, "audio")).canPlay(), "Foreground failed to reacquire audio");
         set(game, "missionRace", 0); music("briefing");
-        check(field(game, "currentMusicPath").equals("music/zrdyroom.wav") && NativeBridge.playing(63), "Manual track replaced briefing music");
-        music("victory"); check(field(game, "currentMusicPath").equals("music/zvict.wav"), "Manual track replaced victory music");
-        music("game"); check(field(game, "currentMusicPath").equals("music/terran1.wav"), "Battle music selection ignored");
-        check(call(game, "trackLabel", new Class<?>[] {String.class}, "prdyroom").equals("Protoss briefing"), "Track name unclear");
+        check(field(game, "currentMusicPath").equals("music/zrdyroom.wav") && NativeBridge.playing(63), "Briefing music missing");
+        music("victory"); check(field(game, "currentMusicPath").equals("music/zvict.wav"), "Victory music missing");
+        music("game"); check(field(game, "currentMusicPath").equals("music/zerg1.wav"), "Automatic race music ignored");
         passed("phaseAwareMusic"); invoke("showTitle");
       });
       glueTap(3); settle();
@@ -158,7 +157,7 @@ public final class NativePolishInstrumentation extends NativeInstrumentation {
       task(() -> {check(field(game, "modal").equals("outcome"), "Victory modal missing"); check(!NativeBridge.playing(63), "Battle music continues over victory cue"); passed("victoryStopsBattleMusic");});
       screenshot("victory");
       game.back(); settle();
-      task(() -> {check(field(game, "page").equals("results") && field(game, "currentMusicPath").equals("music/zvict.wav"), "Results music incorrect"); passed("resultsMusic"); invoke("showTitle"); set(game, "musicTrack", "auto"); invoke("saveSettings");});
+      task(() -> {check(field(game, "page").equals("results") && field(game, "currentMusicPath").equals("music/zvict.wav"), "Results music incorrect"); passed("resultsMusic"); invoke("showTitle"); invoke("saveSettings");});
       settle();
       runOnMainSync(activity::requestAppOptions);
       Thread.sleep(1800); waitForIdleSync();

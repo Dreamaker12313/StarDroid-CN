@@ -3,7 +3,7 @@ package org.openbw.androidtest;
 import java.nio.file.*;
 import java.util.*;
 
-/** Exercises production Next Track with synthetic variants and private original music. */
+/** Audits all four themes using automatic playback and private original music. */
 public final class MusicThemesTest {
   static void check(boolean value, String message) { if (!value) throw new AssertionError(message); }
   static void put(byte[] b,int p,int value,int n) { for(int i=0;i<n;i++) b[p+i]=(byte)(value>>(8*i)); }
@@ -32,20 +32,17 @@ public final class MusicThemesTest {
   static void cycle(int race,byte[] combined,byte[] original,int boundary) {
     Music79Test h=begin(race,combined,original);
     String prefix="music/"+new String[]{"zerg","terran","protoss"}[race];
-    check(h.musicThemeBoundary==boundary,"Unverified/wrong boundary");
+    check(MusicThemes.appendedThemeMs(combined,original)==boundary,"Unverified/wrong original theme boundary");
     check(NativeBridge.position==0&&NativeBridge.starts==1,"Natural playback must start the complete combined file");
-    h.next();check(h.musicIndex==0&&NativeBridge.position==boundary&&NativeBridge.starts==1,"Next skipped embedded original theme");
-    h.next();check(h.currentMusicPath.equals(prefix+"2.wav")&&NativeBridge.position==0,"Next failed second file");
-    h.next();check(h.currentMusicPath.equals(prefix+"3.wav"),"Next failed third file");
-    h.next();check(h.currentMusicPath.equals(prefix+"1.wav")&&NativeBridge.position==0,"Four-theme loop did not restart");
-    check(NativeBridge.starts==4&&NativeBridge.seeks==1,"Four stops must use three files and one seek");
-    NativeBridge.position=boundary+1000;h.next();
-    check(h.currentMusicPath.equals(prefix+"2.wav"),"Next replayed already-playing original theme");
-    h=begin(race,combined,original);NativeBridge.position=boundary+30000;
+    NativeBridge.position=boundary+30000;h.play("game");
+    check(NativeBridge.starts==1&&NativeBridge.position==boundary+30000,"Original embedded theme restarted or skipped");
     NativeBridge.active=false;h.musicIndex++;h.play("game");
-    check(h.currentMusicPath.equals(prefix+"2.wav")&&NativeBridge.seeks==0,"Natural loop duplicated original theme");
-    h=begin(race,combined,original);h.musicTrack="terran1";h.next();
-    check(h.musicIndex==1&&h.musicTrack.equals("auto")&&NativeBridge.seeks==0,"Manual selection no longer returns to automatic race loop");
+    check(h.currentMusicPath.equals(prefix+"2.wav")&&NativeBridge.position==0,"Natural loop failed second file");
+    NativeBridge.active=false;h.musicIndex++;h.play("game");
+    check(h.currentMusicPath.equals(prefix+"3.wav"),"Natural loop failed third file");
+    NativeBridge.active=false;h.musicIndex++;h.play("game");
+    check(h.currentMusicPath.equals(prefix+"1.wav")&&NativeBridge.position==0,"Four-theme loop did not restart");
+    check(NativeBridge.starts==4&&NativeBridge.seeks==0,"Automatic loop must retain three complete files without seeking");
   }
   static void runSynthetic() {
     int rate=4000;byte[] original=wave(rate,60*rate,42),combined=append(original,rate,37);
@@ -59,16 +56,13 @@ public final class MusicThemesTest {
     byte[] bad=combined.clone();put(bad,20,17,2);
     check(MusicThemes.appendedThemeMs(bad,original)==0,"Unsupported WAV codec accepted");
     for(int length:new int[]{0,12,44,2000})check(MusicThemes.appendedThemeMs(Arrays.copyOf(combined,length),original)==0,"Truncated WAV accepted");
-    for(byte[] variant:new byte[][]{null,wave(rate,97*rate,91),bad}) {
-      Music79Test h=begin(1,variant,original);h.next();
-      check(h.currentMusicPath.equals("music/terran2.wav")&&NativeBridge.seeks==0,"Unknown variant must retain safe full-file loop");
-    }
+    // The optional original archive must not be read to play valid BW music.
     Music79Test h=begin(1,combined,original);NativeBridge.failOriginal=true;
-    h.musicThemeStarts.clear();NativeBridge.active=false;h.play("game");
-    check(NativeBridge.active&&h.musicThemeBoundary==0&&h.failure.isEmpty(),"Damaged optional original archive blocked valid expansion music");
+    NativeBridge.active=false;h.play("game");
+    check(NativeBridge.active&&h.failure.isEmpty(),"Damaged optional original archive blocked valid expansion music");
     NativeBridge.failOriginal=false;
     NativeBridge.fixtures.clear();NativeBridge.active=false;
-    System.out.println("PASS Next Track: four theme stops for every race; natural playback/manual selection preserved; unknown, missing, silent, malformed and unsupported variants never guessed");
+    System.out.println("PASS all races retain both themes in the combined file, then tracks2/3, then repeat; no seeks/skips; detection rejects unknown/silent/malformed variants");
   }
   public static void main(String[] args)throws Exception {
     if(args.length!=1)throw new IllegalArgumentException("Expected extracted private music directory");
@@ -78,7 +72,7 @@ public final class MusicThemesTest {
       int boundary=MusicThemes.appendedThemeMs(combined,original);
       check(boundary>0,"Actual "+name+" original theme was not detected");
       cycle(race,combined,original,boundary);
-      System.out.println("PASS actual "+name+" four Next Track stops; verified embedded theme starts at "+boundary+" ms");
+      System.out.println("PASS actual "+name+" four-theme automatic loop; verified original first theme starts at "+boundary+" ms");
       NativeBridge.fixtures.clear();
     }
   }

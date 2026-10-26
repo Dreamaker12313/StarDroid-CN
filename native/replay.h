@@ -148,7 +148,7 @@ static Parsed parse(const uint8_t* data,size_t size) {
  if(base.left()) {
   need(base.get<uint64_t>()==MAGIC,"Unsupported replay extension or Remastered replay.");
   auto engine=base.get<uint32_t>();
-  need(engine==ENGINE,engine<ENGINE?"This replay was recorded with older simulation rules. Use the build that recorded it.":"This replay needs the StarDroid build that recorded it.");
+  need(engine==ENGINE,"The selected replay was recorded with a different version of the app.");
   auto& r=p.rules;r.present=true;r.signature=base.get<uint64_t>();r.initial=base.get<uint64_t>();r.ai=base.get<uint32_t>();
   r.difficulty=base.get<uint8_t>();r.player=base.get<uint8_t>();auto boolean=[&](){unsigned v=base.get<uint8_t>();need(v<=1,"Invalid replay flags.");return v!=0;};r.heroes=boolean();r.teams=boolean();r.defenders=boolean();
   need(r.ai<256&&r.difficulty<=2&&r.player<8,"Invalid replay setup.");

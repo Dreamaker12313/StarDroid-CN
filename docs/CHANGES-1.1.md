@@ -1,5 +1,14 @@
 # StarDroid 1.1 — build 83
 
+- A replay made with different app rules now reports: “The selected replay was recorded with a different version of the app.” The message is translated in all five UI languages.
+- Hero Mode completion sounds use the hero's race-specific campaign rescue cue. This includes all 18 trainable heroes and the merged Tassadar/Zeratul Archon. Duke's siege changes do not replay the spawn cue; normal unit and campaign sounds remain unchanged.
+- Sound Settings retains mute, music enable, effects volume and music volume. The track picker, Next track and sound preview controls are removed; old manual track choices no longer override automatic playback.
+- Verified the four-theme Brood War loop for Terran, Zerg and Protoss using the supplied classic archives. Each expansion `race1.wav` contains the Brood War theme followed by the original first theme, then `race2.wav` and `race3.wav` complete the loop. Campaigns, custom games and nearby matches share automatic playback. Missing expansion imports fall back to the original soundtrack.
+
+This sound/menu revision keeps version **1.1 / code 83** and simulation compatibility **84**. It does not introduce another replay or multiplayer compatibility break.
+
+Earlier fixes in this revision:
+
 - Minerals, neutral geysers and originally protected campaign objects keep their DAT protection during map initialization. Explicit mission invincibility triggers still work; refineries and destructible objectives remain attackable.
 - Dylarian Shipyards' bunker command uses the complete trigger region. Shared AI maintains eligible nearby garrisons without taking troops from human orders, scripted movements, attack waves or transports.
 - Active computer towns stock nuclear silos through normal paid production. Computer silos finish and link their missiles correctly, and stored missiles follow their silo when ownership changes. This fixes the missing stock behind Dylarian Shipyards' four-nuke reward; ordinary supply, training time and mission restrictions still apply.

@@ -1,3 +1,14 @@
+# StarDroid 1.1 sound and replay-message revision
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- Hero Mode audio: actual training and rebuilding of all 18 heroes, hero Archon completion, Duke siege transitions and saved announcement state, unchanged selection/order/campaign voices, and no simulation checksum or RNG changes. [Hero sound report](validation/hero-rescue-1.1.json).
+- Brood War music: all 18 supplied race WAVs survive production import byte-for-byte and decode/play to their ends. Each expansion first track includes the matching original theme, verified for all three races. Automatic selection and game-entry routing cover campaign, custom, nearby, replay and saved games. Manual controls/overrides are removed, and Android SDK compilation passes. [Music report](validation/music11.json).
+- Replay mismatch errors use the requested wording for both older and future rule versions while retaining current-format acceptance and safe rejection. [Native guard report](validation/hero-rescue11-compat-native.json), [nearby guard report](validation/hero-rescue11-compat-nearby.json).
+- Both ABI rebuilds and signed APK packaging are recorded separately: [native proof](validation/native-build-hero-rescue11.json), [package proof](validation/package-hero-rescue11.json).
+
+These are host/data and build checks; physical-device listening and touch testing were not performed. Older reports below remain tied to their recorded sources.
+
 # StarDroid 1.1 campaign, storage and wireframe revision
 
 Public version remains 1.1 / Android code 83; simulation compatibility is 84.
