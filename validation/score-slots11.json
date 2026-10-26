@@ -1,0 +1,1104 @@
+{
+  "passed": true,
+  "version": "1.1",
+  "replayEngine": 84,
+  "physicalAndroid": false,
+  "campaignMapCount": 64,
+  "checks": 4983,
+  "limits": [
+    "This verifies score presentation and original map metadata, not full campaign playthroughs.",
+    "Two genuine AI players with the same force name remain separate score rows."
+  ],
+  "results": [
+    {
+      "mission": "terrantutorial",
+      "code": 50,
+      "result": "PASS 63 score roster checks; mission 50; participants 2",
+      "slots": [
+        1,
+        3
+      ],
+      "factions": [
+        "Colonial Militia",
+        "Unidentified Creatures"
+      ],
+      "fixtureSha256": "aabfff36d0c51068a145b0968611f9a92bbce46ffd10ba35a1c8a07b992e163b"
+    },
+    {
+      "mission": "terran01",
+      "code": 1,
+      "result": "PASS 63 score roster checks; mission 1; participants 2",
+      "slots": [
+        1,
+        4
+      ],
+      "factions": [
+        "Colonial Militia",
+        "Unidentified Creatures"
+      ],
+      "fixtureSha256": "efdeefd2036c4f6f0a42c815033648f82ea96ffc6ad4826345de06422d3b3eaf"
+    },
+    {
+      "mission": "terran02",
+      "code": 2,
+      "result": "PASS 63 score roster checks; mission 2; participants 2",
+      "slots": [
+        1,
+        4
+      ],
+      "factions": [
+        "Colonial Militia",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "58ddea315c0606c2d0fdd33548777cfb869c0ebfef526a2f6d988797dfef9e28"
+    },
+    {
+      "mission": "terran03",
+      "code": 3,
+      "result": "PASS 63 score roster checks; mission 3; participants 2",
+      "slots": [
+        1,
+        4
+      ],
+      "factions": [
+        "Colonial Militia",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "5e22e9dcc0e49e69c248a2115bbd893f467ed29bcd26227cfdb1a788ddfe706e"
+    },
+    {
+      "mission": "terran04",
+      "code": 4,
+      "result": "PASS 72 score roster checks; mission 4; participants 3",
+      "slots": [
+        0,
+        3,
+        6
+      ],
+      "factions": [
+        "Sons of Korhal",
+        "Zerg Swarm",
+        "Confederacy"
+      ],
+      "fixtureSha256": "57ed6ffcc12f963b81d1712e6bbbcdb1e76b72eb6c9d4fc17aeb5f9085556b1c"
+    },
+    {
+      "mission": "terran05",
+      "code": 5,
+      "result": "PASS 63 score roster checks; mission 5; participants 2",
+      "slots": [
+        0,
+        6
+      ],
+      "factions": [
+        "Sons of Korhal",
+        "Confederacy"
+      ],
+      "fixtureSha256": "7f2a21d4a8be1855b70e334702adb901fda421a0e0837b75420b1e7c51997d82"
+    },
+    {
+      "mission": "terran06",
+      "code": 6,
+      "result": "PASS 72 score roster checks; mission 6; participants 3",
+      "slots": [
+        0,
+        1,
+        4
+      ],
+      "factions": [
+        "Sons of Korhal",
+        "Zerg Swarm",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "3b1060de9a70db4026c739dd2024c55cf0fabec0c443ef08c8c81ceee91ddb6d"
+    },
+    {
+      "mission": "terran08",
+      "code": 8,
+      "result": "PASS 63 score roster checks; mission 8; participants 2",
+      "slots": [
+        0,
+        4
+      ],
+      "factions": [
+        "Sons of Korhal",
+        "Confederacy"
+      ],
+      "fixtureSha256": "4660d6c9f170a9e0c02e2e889f205784e908696ef3302256b9280892d95436f1"
+    },
+    {
+      "mission": "terran09",
+      "code": 9,
+      "result": "PASS 72 score roster checks; mission 9; participants 3",
+      "slots": [
+        0,
+        4,
+        5
+      ],
+      "factions": [
+        "Sons of Korhal",
+        "Confederacy",
+        "Confederacy"
+      ],
+      "fixtureSha256": "daefe3ee47edfc0484a9ad8d46dbd6aaaa7712c91b333b485ac08e4957173e07"
+    },
+    {
+      "mission": "terran11",
+      "code": 11,
+      "result": "PASS 72 score roster checks; mission 11; participants 3",
+      "slots": [
+        0,
+        1,
+        3
+      ],
+      "factions": [
+        "Sons of Korhal",
+        "Expeditionary Force",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "82754bec309e1058da04715bd0820d92a00be4237fd7047c19e1aa719e571031"
+    },
+    {
+      "mission": "terran12",
+      "code": 12,
+      "result": "PASS 72 score roster checks; mission 12; participants 3",
+      "slots": [
+        0,
+        1,
+        6
+      ],
+      "factions": [
+        "Sons of Korhal",
+        "Former Colonial Militia",
+        "Sons of Korhal"
+      ],
+      "fixtureSha256": "d9422dd98c54753d207b75b68f889b676365ddf42c61fb4e698fd5bb2e57a1ee"
+    },
+    {
+      "mission": "zerg01",
+      "code": 101,
+      "result": "PASS 63 score roster checks; mission 101; participants 2",
+      "slots": [
+        3,
+        5
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Remnants of the Confederacy"
+      ],
+      "fixtureSha256": "83d741c2f3d0e7c277cdb0418bd2c09fa7e9f57ed262d72949a067145fb573be"
+    },
+    {
+      "mission": "zerg02",
+      "code": 102,
+      "result": "PASS 63 score roster checks; mission 102; participants 2",
+      "slots": [
+        1,
+        3
+      ],
+      "factions": [
+        "Expeditionary Force",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "07beb4f715fed783eec5e3c36abba6cd29ee5c0022efc91d2d3d05347fe26104"
+    },
+    {
+      "mission": "zerg03",
+      "code": 103,
+      "result": "PASS 63 score roster checks; mission 103; participants 2",
+      "slots": [
+        3,
+        6
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Terran Dominion"
+      ],
+      "fixtureSha256": "181a4fdcb76852b48fc31b1e442f43d9209690d523d2385e2a6fed629c03bbd9"
+    },
+    {
+      "mission": "zerg04",
+      "code": 104,
+      "result": "PASS 72 score roster checks; mission 104; participants 3",
+      "slots": [
+        1,
+        2,
+        3
+      ],
+      "factions": [
+        "Former Colonial Militia",
+        "Former Colonial Militia",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "010456fbb46522f6c0f3610b4bdaba4351e512958f25bac3c8962649207893d0"
+    },
+    {
+      "mission": "zerg05",
+      "code": 105,
+      "result": "PASS 63 score roster checks; mission 105; participants 2",
+      "slots": [
+        3,
+        6
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Terran Dominion"
+      ],
+      "fixtureSha256": "638a078c259f09a78412b00900ce59674ab6289d7c362a1e039a7411784f1d87"
+    },
+    {
+      "mission": "zerg06",
+      "code": 106,
+      "result": "PASS 72 score roster checks; mission 106; participants 3",
+      "slots": [
+        1,
+        2,
+        3
+      ],
+      "factions": [
+        "Fleet of the Executor",
+        "Fleet of the Executor",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "2f8b5ab1ed34c047dc749df57cc81fc71f8547b0c4740caddad323eb2f85cb82"
+    },
+    {
+      "mission": "zerg07",
+      "code": 107,
+      "result": "PASS 63 score roster checks; mission 107; participants 2",
+      "slots": [
+        3,
+        4
+      ],
+      "factions": [
+        "Zerg Swarm",
+        ""
+      ],
+      "fixtureSha256": "682167a2cfa104e784be479512de64903f529021b323141c9f204b86bad6703d"
+    },
+    {
+      "mission": "zerg08",
+      "code": 108,
+      "result": "PASS 72 score roster checks; mission 108; participants 3",
+      "slots": [
+        1,
+        2,
+        3
+      ],
+      "factions": [
+        "Expeditionary Force",
+        "Expeditionary Force",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "87899331eb1aa2a53350123058870b59767e21cee73186bd276a4fb4f8628e14"
+    },
+    {
+      "mission": "zerg09",
+      "code": 109,
+      "result": "PASS 81 score roster checks; mission 109; participants 4",
+      "slots": [
+        2,
+        3,
+        4,
+        7
+      ],
+      "factions": [
+        "Vanguard of Aiur",
+        "Zerg Swarm",
+        "Vanguard of Aiur",
+        "Vanguard of Aiur"
+      ],
+      "fixtureSha256": "09c3d718b361279c76014cd4fddf4047508d703ba87c4dd10985afa38642b987"
+    },
+    {
+      "mission": "zerg10",
+      "code": 110,
+      "result": "PASS 81 score roster checks; mission 110; participants 4",
+      "slots": [
+        0,
+        2,
+        3,
+        7
+      ],
+      "factions": [
+        "Vanguard of Aiur",
+        "Vanguard of Aiur",
+        "Zerg Swarm",
+        "Vanguard of Aiur"
+      ],
+      "fixtureSha256": "a82ccf5bbb3025cea5f628b5279388d143b9faa966b48621014c772b2f8d78c8"
+    },
+    {
+      "mission": "protoss01",
+      "code": 201,
+      "result": "PASS 63 score roster checks; mission 201; participants 2",
+      "slots": [
+        0,
+        7
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "0c7f91863bf4abc4b611a834dac4b917ca767fb9d834fc05de9fb895990e9411"
+    },
+    {
+      "mission": "protoss02",
+      "code": 202,
+      "result": "PASS 63 score roster checks; mission 202; participants 2",
+      "slots": [
+        6,
+        7
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "67e7bb9478f0f4a612025454c30c92f84020c8f0d80c5ad4013014721c05ade9"
+    },
+    {
+      "mission": "protoss03",
+      "code": 203,
+      "result": "PASS 72 score roster checks; mission 203; participants 3",
+      "slots": [
+        0,
+        6,
+        7
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "86a5e04ea9c8e02814d15ad26bfff88c265a1562a38d7bc552142f2b4530ec51"
+    },
+    {
+      "mission": "protoss04",
+      "code": 204,
+      "result": "PASS 72 score roster checks; mission 204; participants 3",
+      "slots": [
+        0,
+        3,
+        7
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "6098086dc853f9780c26af59180786a277718b461bedf9c505e71cf696d8c6e3"
+    },
+    {
+      "mission": "protoss05",
+      "code": 205,
+      "result": "PASS 81 score roster checks; mission 205; participants 4",
+      "slots": [
+        3,
+        4,
+        6,
+        7
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Terran Dominion",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "c7f1255e8b0c7c2cc6bef16e8f01a61507caf475394909ecfda69eda46515d9e"
+    },
+    {
+      "mission": "protoss06",
+      "code": 206,
+      "result": "PASS 72 score roster checks; mission 206; participants 3",
+      "slots": [
+        3,
+        6,
+        7
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "a1b7c3ae79605c17d9b9093f610aaf1d2736cfd48c16df5ce9b2d7b6b6662a83"
+    },
+    {
+      "mission": "protoss07",
+      "code": 207,
+      "result": "PASS 72 score roster checks; mission 207; participants 3",
+      "slots": [
+        0,
+        4,
+        7
+      ],
+      "factions": [
+        "Vanguard of Aiur",
+        "Vanguard of Aiur",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "55579240a285b31485e5c9c0b6c265f0e748d385893ba107143e060fe60eb37f"
+    },
+    {
+      "mission": "protoss08",
+      "code": 208,
+      "result": "PASS 72 score roster checks; mission 208; participants 3",
+      "slots": [
+        0,
+        3,
+        7
+      ],
+      "factions": [
+        "Vanguard of Aiur",
+        "Vanguard of Aiur",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "4a6f3fd07df0ce69b9dd24cad9bc6f0bbe09dcdd52465b87b5b0af7e99457f22"
+    },
+    {
+      "mission": "protoss09",
+      "code": 209,
+      "result": "PASS 81 score roster checks; mission 209; participants 4",
+      "slots": [
+        0,
+        5,
+        6,
+        7
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Fleet of the Executor"
+      ],
+      "fixtureSha256": "9b437bb71d3e8dab6916a8ca9f92844474f1a88e010b19d29a49aa601f362afc"
+    },
+    {
+      "mission": "protoss10",
+      "code": 210,
+      "result": "PASS 72 score roster checks; mission 210; participants 3",
+      "slots": [
+        0,
+        1,
+        3
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Fleet of the Executor",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "53761a8e7e1fbaabe811959747aaac95998d2fdfc21794e3fe27b53513fe48cf"
+    },
+    {
+      "mission": "expprotoss01",
+      "code": 301,
+      "result": "PASS 75 score roster checks; mission 301; participants 3",
+      "slots": [
+        2,
+        3,
+        4
+      ],
+      "factions": [
+        "Khalai Survivors",
+        "Zerg Swarm ",
+        "Zerg Swarm "
+      ],
+      "fixtureSha256": "3407a3169a4ae9d7adb65938e951005db5aceb09470a687fd15f1e2607afb464"
+    },
+    {
+      "mission": "expprotoss02",
+      "code": 302,
+      "result": "PASS 84 score roster checks; mission 302; participants 4",
+      "slots": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "factions": [
+        "Protoss Warband",
+        "Renegade Zerg",
+        "Renegade Zerg",
+        "Protoss Refugees"
+      ],
+      "fixtureSha256": "19ff8d841768731768881a11d10acd3c9ffe1fc6d5675b6f9362836bddfb15b1"
+    },
+    {
+      "mission": "expprotoss03",
+      "code": 303,
+      "result": "PASS 75 score roster checks; mission 303; participants 3",
+      "slots": [
+        1,
+        3,
+        4
+      ],
+      "factions": [
+        "Fleet of the Matriarch",
+        "Zerg Swarm",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "7db2019620097f19d8fc88efe1ec602ad7889ab03af68fee5f68a4db05875d69"
+    },
+    {
+      "mission": "expprotoss04",
+      "code": 304,
+      "result": "PASS 75 score roster checks; mission 304; participants 3",
+      "slots": [
+        0,
+        1,
+        5
+      ],
+      "factions": [
+        "Dominion Planetary Defense",
+        "Protoss Expeditionary Force",
+        "Dominion Planetary Defense"
+      ],
+      "fixtureSha256": "9e2401d9275ffe81b3e10bc70b419c8ff1c87a2609aefdda96208af7a6eea590"
+    },
+    {
+      "mission": "expprotoss05",
+      "code": 305,
+      "result": "PASS 75 score roster checks; mission 305; participants 3",
+      "slots": [
+        1,
+        6,
+        7
+      ],
+      "factions": [
+        "Protoss Reconnaissance Force",
+        "UED Blockade",
+        "UED Blockade"
+      ],
+      "fixtureSha256": "6b79bf86f9f7d1d4b7b7cb5f56c517bcc5e8c1e66ec35ec81dd0de3aabbf019c"
+    },
+    {
+      "mission": "expprotoss06",
+      "code": 306,
+      "result": "PASS 75 score roster checks; mission 306; participants 3",
+      "slots": [
+        1,
+        4,
+        5
+      ],
+      "factions": [
+        "Fleet of the Matriarch",
+        "Renegade Zerg",
+        "Renegade Zerg"
+      ],
+      "fixtureSha256": "1ab0cf98726a5d892d5e4b20532b846e4ee2b29342b3f3db3922fc84dfe3adc4"
+    },
+    {
+      "mission": "expprotoss07",
+      "code": 307,
+      "result": "PASS 75 score roster checks; mission 307; participants 3",
+      "slots": [
+        1,
+        3,
+        5
+      ],
+      "factions": [
+        "Fleet of the Matriarch",
+        "Zerg Swarm",
+        "Khalai Insurgents"
+      ],
+      "fixtureSha256": "39830b2a6b380578bd638c1fa134cb75c16d1317196e1384792613669e434825"
+    },
+    {
+      "mission": "expprotoss08",
+      "code": 308,
+      "result": "PASS 84 score roster checks; mission 308; participants 4",
+      "slots": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "factions": [
+        "Renegade Zerg",
+        "Fleet of the Matriarch",
+        "Renegade Zerg",
+        "Renegade Zerg"
+      ],
+      "fixtureSha256": "7973bd2ffe8c8ea1b105180346595df511ac639dfae224fb13833e8430282652"
+    },
+    {
+      "mission": "expterran01",
+      "code": 401,
+      "result": "PASS 66 score roster checks; mission 401; participants 2",
+      "slots": [
+        0,
+        5
+      ],
+      "factions": [
+        "Terran Dominion",
+        "UED Strike Team"
+      ],
+      "fixtureSha256": "106eff14a7c4604f6913f5b3a593e074115fa8e8f165d1f110d951b18ea2170c"
+    },
+    {
+      "mission": "expterran02",
+      "code": 402,
+      "result": "PASS 66 score roster checks; mission 402; participants 2",
+      "slots": [
+        0,
+        6
+      ],
+      "factions": [
+        "Dylarian Orbital Defense",
+        "UED Strike Team"
+      ],
+      "fixtureSha256": "33a18643a563b7183e7e25a15ebccc0b322cc8e791bcdfbed0b0f804efea1796"
+    },
+    {
+      "mission": "expterran03",
+      "code": 403,
+      "result": "PASS 93 score roster checks; mission 403; participants 5",
+      "slots": [
+        0,
+        3,
+        4,
+        5,
+        6
+      ],
+      "factions": [
+        "Renegade Zerg",
+        "Renegade Zerg",
+        "Renegade Zerg",
+        "Renegade Zerg",
+        "UED Strike Team"
+      ],
+      "fixtureSha256": "05f78c3cef5ee38bba4b3b33cbb7d6c681f18fac4382ce32107948f9663860c7"
+    },
+    {
+      "mission": "expterran04",
+      "code": 404,
+      "result": "PASS 75 score roster checks; mission 404; participants 3",
+      "slots": [
+        0,
+        1,
+        6
+      ],
+      "factions": [
+        "Terran Dominion",
+        "Terran Dominion",
+        "UED Strike Team"
+      ],
+      "fixtureSha256": "40b4557790bf9458e0238b672ba6acfc814eda9e141246e9fb866cb216ee55e8"
+    },
+    {
+      "mission": "expterran05a",
+      "code": 405,
+      "result": "PASS 75 score roster checks; mission 405; participants 3",
+      "slots": [
+        0,
+        1,
+        6
+      ],
+      "factions": [
+        "Terran Dominion",
+        "Terran Dominion",
+        "UED Strike Force"
+      ],
+      "fixtureSha256": "1ef717f2db1a04712144235af1f4eb803fc6d7787f5ff721899d9f95d9c771d9"
+    },
+    {
+      "mission": "expterran05b",
+      "code": 415,
+      "result": "PASS 75 score roster checks; mission 415; participants 3",
+      "slots": [
+        0,
+        1,
+        6
+      ],
+      "factions": [
+        "Terran Dominion",
+        "Terran Dominion",
+        "UED Strike Force"
+      ],
+      "fixtureSha256": "19d7218d1006cefdf08eb844c3b487eb4919dcd5de1cbe1d32dfb4a726940c7e"
+    },
+    {
+      "mission": "expterran06",
+      "code": 406,
+      "result": "PASS 102 score roster checks; mission 406; participants 6",
+      "slots": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Protoss Refugees",
+        "UED Strike Team",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "UED Strike Team"
+      ],
+      "fixtureSha256": "359d094ab18b3a5aff5dd588fb2b2afc98ee544b0c5c54f5f997cbe120cf09ca"
+    },
+    {
+      "mission": "expterran07",
+      "code": 407,
+      "result": "PASS 102 score roster checks; mission 407; participants 6",
+      "slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "factions": [
+        "Stukov's Elite Guard",
+        "UED Commando Force",
+        "Zerg Swarm",
+        "Zerg Swarm",
+        "Stukov's Elite Guard",
+        "UED Commando Force "
+      ],
+      "fixtureSha256": "7186796ae3b0d52f30f4d6e56d82cc808eeefbf83d80b7603a2eb6d53be83f7d"
+    },
+    {
+      "mission": "expterran08",
+      "code": 408,
+      "result": "PASS 84 score roster checks; mission 408; participants 4",
+      "slots": [
+        0,
+        4,
+        5,
+        6
+      ],
+      "factions": [
+        "Renegade Zerg",
+        "Renegade Zerg",
+        "Renegade Zerg",
+        "UED Strike Force"
+      ],
+      "fixtureSha256": "cc9f8e6b7e294cd06dd6b1cf935c35f96b9995942f97f949cfd3af4b3c65bb1e"
+    },
+    {
+      "mission": "expzerg01",
+      "code": 501,
+      "result": "PASS 87 score roster checks; mission 501; participants 3",
+      "slots": [
+        3,
+        4,
+        5
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "Renegade Zerg",
+        "Renegade Zerg"
+      ],
+      "fixtureSha256": "7a5b17e7493cba990d01f6821acf7cdbef04e27e7060c4c31e848aa1dcf5f897"
+    },
+    {
+      "mission": "expzerg02",
+      "code": 502,
+      "result": "PASS 84 score roster checks; mission 502; participants 4",
+      "slots": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "factions": [
+        "Raynor's Raiders",
+        "Zerg Swarm",
+        "Renegade Zerg",
+        "UED Defense Garrison"
+      ],
+      "fixtureSha256": "dc9afb94706628dd683e38f378035a300f0b6f5cdc60a920a23deb50509618fd"
+    },
+    {
+      "mission": "expzerg03",
+      "code": 503,
+      "result": "PASS 111 score roster checks; mission 503; participants 7",
+      "slots": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "factions": [
+        "Kel-Morian Combine",
+        "Kel-Morian Combine",
+        "Zerg Swarm",
+        "Kel-Morian Combine",
+        "Kel-Morian Combine",
+        "Kel-Morian Combine",
+        "Kel-Morian Combine"
+      ],
+      "fixtureSha256": "31c55a9a9460cd9c3637406361a6f87cba50944340b43d7e9d122264927faa0f"
+    },
+    {
+      "mission": "expzerg04a",
+      "code": 504,
+      "result": "PASS 84 score roster checks; mission 504; participants 4",
+      "slots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "factions": [
+        "UED Planetary Garrison",
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Planetary Garrison"
+      ],
+      "fixtureSha256": "e1efc01abeed91b70c495006a742f5cfed247d6fa319e68c6fe1e84d8ac6e2f9"
+    },
+    {
+      "mission": "expzerg04b",
+      "code": 514,
+      "result": "PASS 84 score roster checks; mission 514; participants 4",
+      "slots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "factions": [
+        "UED Planetary Garrison",
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Planetary Garrison"
+      ],
+      "fixtureSha256": "64431437966c072e943e58bd7ff6a602fb4333319d0f0dff54a44d6d174ffbb6"
+    },
+    {
+      "mission": "expzerg04c",
+      "code": 524,
+      "result": "PASS 84 score roster checks; mission 524; participants 4",
+      "slots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "factions": [
+        "UED Planetary Garrison",
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Planetary Garrison"
+      ],
+      "fixtureSha256": "aca89be246a6cb17e9a12ead8c6df83731563d3c8c65c31869cb48d71f02cb87"
+    },
+    {
+      "mission": "expzerg04d",
+      "code": 534,
+      "result": "PASS 84 score roster checks; mission 534; participants 4",
+      "slots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "factions": [
+        "UED Planetary Garrison",
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Planetary Garrison"
+      ],
+      "fixtureSha256": "14b142ad27b6ef903c6ea898e7563508d9dad02fd98d7646cfdc6bb91637b0ac"
+    },
+    {
+      "mission": "expzerg04e",
+      "code": 544,
+      "result": "PASS 84 score roster checks; mission 544; participants 4",
+      "slots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "factions": [
+        "UED Planetary Garrison",
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Planetary Garrison"
+      ],
+      "fixtureSha256": "fb7dec71024ab53fa4e44200ee6cdbf38571bfa4c2375f95771fb038729e57bc"
+    },
+    {
+      "mission": "expzerg04f",
+      "code": 554,
+      "result": "PASS 84 score roster checks; mission 554; participants 4",
+      "slots": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "factions": [
+        "UED Planetary Garrison",
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Planetary Garrison"
+      ],
+      "fixtureSha256": "c635c9873d4760c584c537e1724a5d0099d012a52d7124b40d1b1187ec8a366e"
+    },
+    {
+      "mission": "expzerg05",
+      "code": 505,
+      "result": "PASS 84 score roster checks; mission 505; participants 4",
+      "slots": [
+        0,
+        1,
+        3,
+        4
+      ],
+      "factions": [
+        "Terran Dominion",
+        "Raynor's Raiders",
+        "Zerg Swarm",
+        "Zerg Swarm"
+      ],
+      "fixtureSha256": "af2db381fddb29880b12128d7871a5d2a8254f474e114f77083796315f7d8c1c"
+    },
+    {
+      "mission": "expzerg06",
+      "code": 506,
+      "result": "PASS 84 score roster checks; mission 506; participants 4",
+      "slots": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Slave Brood",
+        "UED Science Corps"
+      ],
+      "fixtureSha256": "00d703d737eb765a90e8d2abcd1f32411a1577234fef3dadb099e95691cbf6e6"
+    },
+    {
+      "mission": "expzerg07",
+      "code": 507,
+      "result": "PASS 75 score roster checks; mission 507; participants 3",
+      "slots": [
+        1,
+        3,
+        5
+      ],
+      "factions": [
+        "Telemantros Defenders",
+        "Zerg Swarm",
+        "Telemantros Defenders"
+      ],
+      "fixtureSha256": "76d7df0f6c716c6632263cbf6b2ac74e2092cb6f5eec90f4fd0f11608808838c"
+    },
+    {
+      "mission": "expzerg08",
+      "code": 508,
+      "result": "PASS 75 score roster checks; mission 508; participants 3",
+      "slots": [
+        3,
+        4,
+        6
+      ],
+      "factions": [
+        "Zerg Swarm",
+        "UED Slave Brood",
+        "UED Command Fleet"
+      ],
+      "fixtureSha256": "e350daf2f55b216a6f3d3414704d70166a04f1a27008619fd0d5b2496725f3f3"
+    },
+    {
+      "mission": "expzerg09",
+      "code": 509,
+      "result": "PASS 84 score roster checks; mission 509; participants 4",
+      "slots": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "factions": [
+        "Protoss Warband",
+        "Protoss Warband",
+        "Zerg Swarm",
+        "UED Remnants"
+      ],
+      "fixtureSha256": "9dea4654fa692d55d0834b8d0dc5a4b64005f8d5c7568b53a49466cc92f376fb"
+    },
+    {
+      "mission": "expzerg10",
+      "code": 510,
+      "result": "PASS 84 score roster checks; mission 510; participants 4",
+      "slots": [
+        0,
+        1,
+        3,
+        6
+      ],
+      "factions": [
+        "Terran Dominion",
+        "Fleet of the Executor",
+        "Zerg Swarm",
+        "UED Battle Fleet"
+      ],
+      "fixtureSha256": "3e8beb2b10d241dcc4d3050df49fdd66d073b7197e28f38063db735139d0e31f"
+    },
+    {
+      "mission": "expbonus",
+      "code": 599,
+      "result": "PASS 84 score roster checks; mission 599; participants 4",
+      "slots": [
+        0,
+        1,
+        2,
+        5
+      ],
+      "factions": [
+        "Clandestine Mercenaries",
+        "Protoss Warband",
+        "Protoss Warband",
+        "Clandestine Mercenaries"
+      ],
+      "fixtureSha256": "3039bf4c32c84cb16f69345c2b938ec5b36e9f27344b9d6a88e997f7863f69ca"
+    },
+    {
+      "mission": "custom-nearby",
+      "code": 0,
+      "result": "PASS 120 custom/Nearby score roster checks; saves, defeat, all controller categories, eight-row UI fixture",
+      "slots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "factions": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "fixtureSha256": "754b8444c94672c6f78382c1e3075cf02b0058659f5645ecfeefd49809006f22"
+    }
+  ],
+  "sourceSha256": {
+    "patches/native-score-slots11.patch": "a04a01483b8e20992b1d069b14a4e6935d273cd84342910e44f58634d10c0e48",
+    "scripts/prepare_native.py": "462a20e720fb4999e6e556085ee105f927be6f37293b87809ee9955b1057aaa9",
+    "tests/native_score_slots11.cpp": "5f00c34e1ff71986f3ddf89fc04bc240ee18344f64ddae89ebd7391cc2c70bb6",
+    "tests/run_score_slots11.py": "cadcc1809cdbc26f62ebb33f8d7267e07b278b6da906b05ab32eeb1ae7e92bd6",
+    "app/src/main/assets/native/missions.json": "96b8a781ef517e72afda0bb09a311b30d681686862c4370bd04ce0c9d17ccb57",
+    "native/save_state.h": "6d86ac14f28f73f89b9c15c1f87f671bd4d90bffe3c80c8d052b9cf85687c482"
+  }
+}

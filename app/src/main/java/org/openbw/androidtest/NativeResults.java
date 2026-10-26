@@ -7,7 +7,7 @@ import java.util.*;
 final class NativeResults {
   final NativeArt.Dialog layout;
   final NativeArt.PCX background, main, inset, scorebox, tabArt;
-  final NativeArt.Font tiny, small, large, title;
+  final NativeArt.Font tiny, small, medium, large, title;
   final boolean won;
   boolean canSave, exiting, counting, audioCounting;
   static final int COUNT_MS=2200;
@@ -38,6 +38,7 @@ final class NativeResults {
     // Match the glue menus' inter-glyph spacing, including the fallback font.
     tiny = art.font("8", tint, background.palette, 1);
     small = art.font("10", tint, background.palette, 1);
+    medium = art.font("14", tint, background.palette, 1);
     large = art.font("16", tint, background.palette, 1);
     title = art.font("16x", tint, background.palette, 1);
     layout = new NativeArt.Dialog(art.read("rez/gluscore.bin"));
@@ -82,6 +83,29 @@ final class NativeResults {
       float x, float y, int width, int height) {
     c.save(); c.clipRect(x, y, x + width, y + height);
     font.draw(c, fit(font, text, width), x, y + Math.max(0, (height-font.height)/2), width, align, color, 0);
+    c.restore();
+  }
+
+  NativeArt.Font nameFont(String text, int width) {
+    for (NativeArt.Font font : new NativeArt.Font[] {large, medium, small})
+      if (font.measure(text) <= width) return font;
+    return tiny;
+  }
+
+  // Campaign factions and player IDs must remain complete. Use the largest
+  // original bitmap font that fits, rather than hiding the end with an ellipsis.
+  // Exceptionally long custom/localized names can still fit without crossing
+  // the score columns; ordinary campaign names need no bitmap scaling.
+  void nameLine(Canvas c, String text, NativeArt.Font font, int color,
+      float x, float y, int width, int height) {
+    text = NativeArt.clean(PortText.text(text)).replace('\n', ' ').trim();
+    int measured = font.measure(text);
+    float scale = Math.min(1f, width / (float)Math.max(1, measured));
+    c.save(); c.clipRect(x, y, x + width, y + height);
+    c.translate(x, y + Math.max(0, (height-font.height*scale)/2));
+    c.scale(scale, scale);
+    // Width zero keeps a name on one line; the outer transform owns its fit.
+    font.draw(c, text, 0, 0, 0, 0, color, 0);
     c.restore();
   }
 
@@ -142,10 +166,15 @@ final class NativeResults {
       NativeArt.Widget name = layout.get(base+1);
       if (name != null) {
         // The BIN name widget extends under score columns; its content must not.
-        line(c, rowName(i), large, r[0] != 0 ? 4 : 2, 0, name.x, name.y, 144, 19);
+        NativeArt.Widget firstScore = layout.get(base+2);
+        int width = Math.max(1, Math.min(name.w,
+            firstScore != null ? firstScore.x-name.x-8 : 144));
+        String player = rowName(i);
+        nameLine(c, player, nameFont(player, width), r[0] != 0 ? 4 : 2,
+            name.x, name.y, width, 19);
         String subtitle=r[0]!=0&&!factionNames.get(i).isEmpty()?factionNames.get(i)
             :new String[]{"Zerg","Terran","Protoss"}[Math.max(0,Math.min(2,r[1]))];
-        line(c, subtitle, tiny, 2, 0, name.x, name.y+19, 144, 14);
+        nameLine(c, subtitle, tiny, 2, name.x, name.y+19, width, 14);
       }
       int[] v = values(r);
       for (int j = 0; j < 3; j++) {

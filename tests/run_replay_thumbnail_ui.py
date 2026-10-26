@@ -4,9 +4,13 @@ Uses original locally imported artwork through the existing bounded AWT/Android 
 Native replay parsing/playback are covered separately; metadata/clock are mocked here.
 """
 from pathlib import Path
-import ast,hashlib,json,re,subprocess,shutil,tempfile
+import argparse,ast,hashlib,json,re,subprocess,shutil,tempfile
 r=Path(__file__).resolve().parents[1];src=r/'app/src/main/java/org/openbw/androidtest'
-b=r/'build-native/replay-thumbnail-ui';b.mkdir(parents=True,exist_ok=True)
+parser=argparse.ArgumentParser()
+parser.add_argument('--report-prefix',default='replay-thumbnail-ui')
+args=parser.parse_args()
+assert re.fullmatch(r'[a-z0-9-]+',args.report_prefix), 'Invalid report prefix'
+b=r/'build-native'/args.report_prefix;b.mkdir(parents=True,exist_ok=True)
 assets=b/'assets';shutil.copytree(r/'build-native/replay-ui81/assets',assets,dirs_exist_ok=True)
 archives=[(0,r/'build-native/reign79/core/STARDAT.MPQ'),(1,r/'build-native/reign79/core/BROODAT.MPQ'),(2,r/'build-native/reign79/core/patch_rt.mpq'),(4,r.parent/'reign-data/StarCraft.mpq')]
 def get(name):
@@ -62,7 +66,7 @@ def production(name):
   elif text[end]=='}':depth-=1
   end+=1
  return text[m.start():end]
-names=['font','text','panel','body','fallback','uiLine','redBorder','menuHot','menuColor','redButton','glueButton','button','menuButton','replayListBounds','replayMaxOffset','replayTime','selectReplay','refreshReplays','drawReplayBrowser','drawReplayDetails','drawReplayScrollbar','replayFont','replayPanel','replayMessage','drawReplayDialog','replayImported','saveCurrentReplay','replayRecorded','replayExported','presentReplayAcknowledgement','replayButton','openSelectedReplay','seekReplay','drawReplayControls','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag']
+names=['font','text','panel','body','fallback','uiLine','redBorder','menuHot','menuColor','redButton','glueButton','button','menuButton','replayListBounds','replayMaxOffset','replayTime','selectReplay','refreshReplays','drawReplayBrowser','drawReplayDetails','drawReplayScrollbar','replayFont','replayPanel','replayMessage','drawReplayDialog','replayImported','saveCurrentReplay','replayRecorded','replayExported','presentReplayAcknowledgement','replayMenuAction','replayButton','openSelectedReplay','seekReplay','drawReplayControls','gamepadWorld','gamepadClick','gamepadTouch','resetGamepadDrag']
 harness+='\n'.join(production(n) for n in names)
 harness+='''
  Bitmap browser(){presentReplayAcknowledgement();buttons.clear();Bitmap b=Bitmap.createBitmap(640,480,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);glue.draw(c,1000);drawReplayBrowser(c);
@@ -101,12 +105,37 @@ harness+='''
    h.tap(box.left+20,box.bottom-3,now+=100);if(count*22>box.height())check(h.selectedReplay.equals(h.replayFiles.get(count-1)),"Final replay not selectable");
   }
   h.fixtures(out,40);check(h.replayThumbnail!=null&&!h.replayPreviewUnavailable,"No embedded map thumbnail");
+  for(String lang:new String[]{"en","ru","de","es","fr"}){
+   PortText.select(lang);Bitmap browser=h.browser();
+   Button deletion=h.target(180,430);near((deletion.rect.left+deletion.rect.right)/2,180,"Delete not centered in left panel");
+   check(deletion.rect.top>h.target(100,343).rect.bottom&&deletion.rect.top>h.target(280,343).rect.bottom,"Delete not below Import/Export");
+   check(deletion.rect.bottom<460,"Delete leaves lower artwork");
+   Bitmap expected=base(glue);int ok=legacy?12:4,cancel=legacy?13:5;
+   glue.label(new Canvas(expected),ok,"OK",true);glue.label(new Canvas(expected),cancel,"Cancel",true);
+   unchanged(expected,browser,glue.layout.get(ok).rect(),"Replay OK differs from original button font/artwork");
+   unchanged(expected,browser,glue.layout.get(cancel).rect(),"Replay Cancel differs from original button font/artwork");
+   save(browser,out.resolve((legacy?"legacy-":"new-")+"buttons-"+lang+".png"));
+   for(boolean enabled:new boolean[]{false,true})for(boolean hover:new boolean[]{false,true})
+    for(String label:new String[]{"Import Replay","Export","Delete"}){
+     int x=44,y=332,w=164,hh=22;h.buttons.clear();h.menuHoverX=hover?x+10:-1;h.menuHoverY=hover?y+10:-1;
+     Bitmap actual=base(glue);h.replayButton(new Canvas(actual),label,x,y,w,hh,()->{},enabled);
+     // Independent reference: the original menu's BIN-style label renderer.
+     NativeArt.Widget reference=new NativeArt.Widget();reference.id=32000;reference.type=14;
+     reference.x=x;reference.y=y;reference.w=w;reference.h=hh;reference.tx=4;reference.rw=w-4;reference.rh=hh;
+     reference.flags=0x2204008;glue.layout.widgets.add(reference);glue.hot=hover?reference.id:-1;
+     Bitmap referenceShot=base(glue);glue.label(new Canvas(referenceShot),reference.id,label,enabled);
+     unchanged(referenceShot,actual,new RectF(x+4,y+1,x+w-4,y+hh-1),"Replay button is filled or differs from original font/color");
+     glue.layout.widgets.remove(reference);glue.hot=-1;
+    }
+   h.menuHoverX=h.menuHoverY=-1;
+  }
+  PortText.select("en");h.browser();
   int reads=NativeBridge.scenarioReads;Bitmap held=h.replayThumbnail;for(int i=0;i<20;i++)h.browser();check(NativeBridge.scenarioReads==reads&&held==h.replayThumbnail,"Preview regenerated on render");
   h.selectReplay(null);check(h.replayThumbnail==null&&!h.replayValid,"Empty selection retained thumbnail");h.refreshReplays();
   byte[] unavailable=new byte[32];unavailable[0]=(byte)253;File noPreview=h.replays.save(unavailable,"No preview");h.selectReplay(noPreview);check(h.replayThumbnail==null&&h.replayPreviewUnavailable&&h.replayValid,"Missing preview prevents playback or retains previous map");h.replays.delete(noPreview);h.refreshReplays();
-  File selected=h.selectedReplay;h.browser();h.activate(100,376);check(h.modal.equals("replay-delete"),"DELETE opens no confirmation");
+  File selected=h.selectedReplay;h.browser();h.activate(180,430);check(h.modal.equals("replay-delete"),"DELETE opens no confirmation");
   save(h.browser(),out.resolve((legacy?"legacy-":"new-")+"delete.png"));h.activate(420,296);check(selected.exists()&&h.modal.isEmpty(),"Cancel deleted replay");
-  h.browser();h.activate(100,376);h.browser();h.activate(220,296);check(!selected.exists()&&h.replays.list().size()==39,"DELETE failed");
+  h.browser();h.activate(180,430);h.browser();h.activate(220,296);check(!selected.exists()&&h.replays.list().size()==39,"DELETE failed");
   h.browser();h.activate(100,343);h.activate(280,343);check(h.activity.imports==1&&h.activity.exports==1,"Import/export adjacent routing");
   h.activate(500,393);check(h.started.equals(h.selectedReplay),"OK targets wrong file");
   byte[] bad=new byte[32];bad[0]=(byte)255;File invalid=h.replays.save(bad,"Broken replay");h.selectReplay(invalid);check(!h.replayValid&&h.replayThumbnail==null&&h.modal.equals("replay-notice"),"Invalid replay error retained previous thumbnail");h.browser();h.activate(320,296);check(h.modal.isEmpty(),"Error OK did not dismiss");h.replays.delete(invalid);h.refreshReplays();
@@ -138,7 +167,7 @@ harness+='''
    NativeBridge.seeking=0;h.playingReplay=h.selectedReplay;h.activate(x+60,462);check(h.started.equals(h.playingReplay),"Restart wrong replay");
   }
  }
- System.out.println("PASS "+checks+" replay thumbnail UI checks: original and legacy import artwork; in-window list/text/rail/touch bounds; long names; 0–40 files; arrows/track/thumb drag; errors/delete/save/export modals; stale/deferred async acknowledgments; real touch and gamepad seek dispatch; pause/rate/view/restart; five languages; 640/960 layouts");
+ System.out.println("PASS "+checks+" replay thumbnail UI checks: transparent original-font buttons, native OK/Cancel pixel equality, centered title-case Delete, five-language enabled/disabled/hover parity; original and legacy import artwork; in-window list/text/rail/touch bounds; long names; 0–40 files; arrows/track/thumb drag; errors/delete/save/export modals; stale/deferred async acknowledgments; real touch and gamepad seek dispatch; pause/rate/view/restart; five languages; 640/960 layouts");
  }
 
 }
@@ -175,4 +204,4 @@ with tempfile.TemporaryDirectory(prefix='stardroid-replay-thumbnail-ui-') as fix
  result=subprocess.run(['java','-Djava.awt.headless=true','-cp',str(b/'classes'),'org.openbw.androidtest.ReplayThumbnailUiTest',str(assets),str(b),str(r/'app/src/main/assets/native/ui-languages.tsv'),fixture_root,str(legacy)],capture_output=True,text=True)
 print(result.stdout+result.stderr,end='');result.check_returncode()
 files=[src/'MainActivity.java',src/'NativeSurface.java',src/'NativeReplays.java',src/'NativeMapPreview.java',src/'NativeArt.java',src/'NativeGlue.java',r/'app/src/main/assets/native/ui-languages.tsv',Path(__file__)]
-(r/'validation/replay-thumbnail-ui.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'canvas':'AWT shim using production native artwork/menu/input methods; replay parser/clock mocked','methods':names+['touch'],'result':result.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}},indent=2)+'\n')
+(r/'validation'/f'{args.report_prefix}.json').write_text(json.dumps({'passed':True,'physicalAndroid':False,'canvas':'AWT shim using production native artwork/menu/input methods; replay parser/clock mocked','methods':names+['touch'],'result':result.stdout.strip(),'sourceSha256':{str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}},indent=2)+'\n')

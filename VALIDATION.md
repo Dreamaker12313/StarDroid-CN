@@ -1,3 +1,15 @@
+# StarDroid 1.1 score, replay-menu and music revision
+
+Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.
+
+- All 64 original campaign maps were audited independently: 208 participant slots and 99 neutral/rescue helpers. Native score queries match the original human/computer roster, retain zero-score and defeated/left participants, omit helpers after controller changes, preserve distinct same-faction opponents and survive save/load. Queries leave simulation state/RNG unchanged. [Map audit](validation/score-roster-audit11.json), [native roster checks](validation/score-slots11.json).
+- Score names use complete original faction strings and adaptive bitmap font sizes within the name column. Pixel/layout checks cover all campaign force names, the five reported mission rosters, all race/victory backgrounds, tabs, supported UI languages, localized data and eight-player rows. [Score layout](validation/score-layout11.json).
+- Replay buttons use transparent interiors and original menu font/color/size. Original OK/Cancel rendering is retained; Delete is title case and centered at the bottom. Pixel/input checks cover both menu layouts, five languages, enabled/disabled/hover states, list/thumbnail/scrollbar, confirmations and replay controls. [Replay menu](validation/replay-buttons11-ui.json).
+- Next track invokes the actual settings-button callback and skips each of the four Brood War themes. A reproduced 32-bit overflow in native music seeking is fixed before multiplication. Exact JNI seek/position functions and PCM samples are checked at all three real embedded-theme boundaries. Automatic EOF, rapid presses, missing assets, phase/mute guards, all 18 music imports/decodes and SDK compilation also pass. [Music checks](validation/music-next11.json).
+- Both Android ABIs and the signed update APK have separate source-bound proofs: [native build](validation/native-build-score-polish11.json), [package](validation/package-score-polish11.json).
+
+These checks use original data, host simulation/rendering/audio and Android build tools. Physical-device listening/touch and original-executable score-screen parity were not tested. Historical reports below remain tied to their recorded sources.
+
 # StarDroid 1.1 sound and replay-message revision
 
 Version 1.1 / Android code 83 and simulation compatibility 84 remain unchanged.

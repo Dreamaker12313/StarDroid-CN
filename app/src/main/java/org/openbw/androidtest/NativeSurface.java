@@ -135,6 +135,8 @@ final class NativeSurface extends SurfaceView
   private double commandErrorUntil;
   private String musicPhase = "", currentMusicPath = "";
   private boolean currentMusicExpansion;
+  private int musicThemeBoundary;
+  private final HashMap<String, Integer> musicThemeStarts = new HashMap<String, Integer>();
   private float speechMusicGain = 1;
   private final ArrayList<Button> buttons = new ArrayList<Button>();
   private final ArrayList<JSONObject> visibleMissions = new ArrayList<JSONObject>();
@@ -473,6 +475,7 @@ final class NativeSurface extends SurfaceView
   }
 
   private void loadArchives() throws Exception {
+    musicThemeStarts.clear();
     String[] core = {"STARDAT.MPQ", "BROODAT.MPQ", "patch_rt.mpq"};
     for (int i = 0; i < 3; i++)
       NativeBridge.open(i, new File(new File(gameFiles, "mpq"), core[i]).getPath());
@@ -720,9 +723,9 @@ final class NativeSurface extends SurfaceView
       try{byte[] data=replays.read(selectedReplay);final long request=replayBrowserGeneration;activity.runOnUiThread(()->activity.saveReplay(data,this,request));}
       catch(Exception e){replayMessage("Replay could not be saved: "+e.getMessage());}
     },selectedReplay!=null);
-    replayButton(c,"DELETE",44,366,164,22,()->modal="replay-delete",selectedReplay!=null);
-    replayButton(c,"OK",441,383,152,22,this::openSelectedReplay,replayValid);
-    replayButton(c,"Cancel",477,419,132,22,()->navigate(this::showCampaign),true);
+    replayButton(c,"Delete",98,419,164,22,()->modal="replay-delete",selectedReplay!=null);
+    replayMenuAction(c,glue.name.equals("gluload")?4:12,"OK",this::openSelectedReplay,replayValid);
+    replayMenuAction(c,glue.name.equals("gluload")?5:13,"Cancel",()->navigate(this::showCampaign),true);
   }
 
   private void openSelectedReplay() {
@@ -793,7 +796,7 @@ final class NativeSurface extends SurfaceView
     if(messageFont!=null)messageFont.draw(c,message,x+28,178,360,deleting?0:1,2,20);else fallback(c,message,x+28,178,14,0xffc5cce3);
     c.restore();
     if(deleting){
-      replayButton(c,"DELETE",x+28,282,160,28,()->{try{replays.delete(selectedReplay);modal="";refreshReplays();}catch(Exception e){replayMessage(e.getMessage());}},selectedReplay!=null);
+      replayButton(c,"Delete",x+28,282,160,28,()->{try{replays.delete(selectedReplay);modal="";refreshReplays();}catch(Exception e){replayMessage(e.getMessage());}},selectedReplay!=null);
       replayButton(c,"Cancel",x+228,282,160,28,()->modal="",true);
     }else replayButton(c,"OK",x+128,282,160,28,()->modal="",true);
     return true;
@@ -839,10 +842,28 @@ final class NativeSurface extends SurfaceView
     }catch(Exception e){showReplays();replayMessage(e.getMessage());}
   }
 
+  private void replayMenuAction(Canvas c,int id,String label,Runnable action,boolean enabled) {
+    NativeArt.Widget widget=glue.layout.get(id);
+    if(widget==null)return;
+    // Keep the original OK/Cancel artwork, hit box and font metrics intact.
+    glue.label(c,id,label,enabled);
+    add(widget.hit(),action,enabled&&pendingScreen==null);
+  }
+
   private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
+    if(page.equals("replays")&&glue!=null){
+      // Transparent menu controls use the original wide button font. Long
+      // translations fit exactly as native menu labels do, without smaller fonts.
+      redBorder(c,x,y,width,height,false);
+      NativeArt.Font font=glue.button;
+      int layoutWidth=NativeGlue.labelWidth(font,label,width-8,height);
+      int textHeight=font.lines(label,layoutWidth).size()*font.height;
+      c.save();c.clipRect(x+4,y,x+width-4,y+height);
+      c.translate(x+4,y+(height-textHeight)/2f);c.scale((width-8)/(float)layoutWidth,1);
+      font.draw(c,label,0,0,layoutWidth,1,menuColor(x,y,width,height,enabled),0);c.restore();
+      add(new RectF(x,y,x+width,y+height),action,enabled);return;
+    }
     paint.setColor(Color.BLACK);c.drawRect(x,y,x+width,y+height,paint);
-    // Browser buttons use the same original palette and states as other menus.
-    if(page.equals("replays")&&glue!=null){redButton(c,label,x,y,width,height,action,enabled);return;}
     boolean hot=pressed!=null&&pressed.rect.contains(x+width/2f,y+height/2f);
     redBorder(c,x,y,width,height,hot&&enabled);
     NativeArt.Font font=replayFont(true),small=replayFont(false);
@@ -946,14 +967,54 @@ final class NativeSurface extends SurfaceView
     if (name.equals(currentMusicPath) && expansion == currentMusicExpansion && NativeBridge.playing(63)) return;
     currentMusicPath = name;
     currentMusicExpansion = expansion;
+    musicThemeBoundary = 0;
     try {
       byte[] b = expansion ? NativeBridge.asset(6, name) : null;
+      if (b != null && phase.equals("game") && name.matches("music/(terran|zerg|protoss)1\\.wav")) {
+        Integer boundary = musicThemeStarts.get(name);
+        if (boundary == null) {
+          try { boundary = MusicThemes.appendedThemeMs(b, NativeBridge.asset(5, name)); }
+          catch (Exception ignored) { boundary = 0; } // A reference file must not block valid music.
+          musicThemeStarts.put(name, boundary);
+        }
+        musicThemeBoundary = boundary;
+      }
       if (b == null) b = NativeBridge.asset(5, name);
       if (b != null) NativeBridge.sound(b, 63, !phase.equals("game") && !phase.equals("victory") && !phase.equals("defeat"));
       else NativeBridge.sound(null, 63, false);
     } catch (Exception e) {
       failure = "Music: " + e.getMessage();
     }
+  }
+
+  private void advanceMusic() {
+    if (musicPhase.equals("game") && musicEnabled && !NativeBridge.playing(63)) {
+      musicIndex++;
+      music("game");
+    }
+  }
+
+  private boolean canNextMusicTrack() {
+    return musicPhase.equals("game") && musicEnabled && !muted && music > 0
+        && NativeBridge.playing(63);
+  }
+
+  private void nextMusicTrack() {
+    if (!canNextMusicTrack()) return;
+    // Brood War's first WAV contains two complete themes. Skip to the verified
+    // second theme before moving to race2/race3; natural playback stays intact.
+    double position = NativeBridge.soundPosition(63);
+    if (musicThemeBoundary > 0 && position >= 0 && position < musicThemeBoundary)
+      NativeBridge.seekSound(63, musicThemeBoundary);
+    else { musicIndex++; music("game"); }
+  }
+
+  private void drawSoundSettings(Canvas c, float x, float y) {
+    toggle(c, "Mute all sound", muted, x + 26, y + 60, () -> {muted = !muted; saveSettings();});
+    toggle(c, "Play original music", musicEnabled, x + 26, y + 102, () -> {musicEnabled = !musicEnabled; saveSettings();});
+    slider(c, "Effects", effects, x + 26, y + 154, v -> {effects = v; saveSettings();});
+    slider(c, "Music", music, x + 26, y + 206, v -> {music = v; saveSettings();});
+    menuButton(c, "Next track", x + 26, y + 252, 320, 28, this::nextMusicTrack, canNextMusicTrack());
   }
 
   private void tick(double dt) {
@@ -1037,10 +1098,7 @@ final class NativeSurface extends SurfaceView
         sfx(outcome == 1 ? "youwin" : "youlose");
         cancelGesture();
       }
-      if (musicPhase.equals("game") && musicEnabled && !NativeBridge.playing(63)) {
-        musicIndex++;
-        music("game");
-      }
+      advanceMusic();
     }
   }
 
@@ -2357,10 +2415,7 @@ final class NativeSurface extends SurfaceView
       originalMenuButton(c, "abrtmenu", 2, null, x, y, () -> modal = "quit", true);
       originalMenuButton(c, "abrtmenu", 3, null, x, y, () -> modal = "exit", true);
     } else if (modal.equals("sound")) {
-      toggle(c, "Mute all sound", muted, x + 26, y + 60, () -> {muted = !muted; saveSettings();});
-      toggle(c, "Play original music", musicEnabled, x + 26, y + 102, () -> {musicEnabled = !musicEnabled; saveSettings();});
-      slider(c, "Effects", effects, x + 26, y + 154, v -> {effects = v; saveSettings();});
-      slider(c, "Music", music, x + 26, y + 206, v -> {music = v; saveSettings();});
+      drawSoundSettings(c, x, y);
     } else if (modal.equals("speed")) {
       double[] values = {167, 111, 83, 67, 56, 48, 42, 21, 10.5, 5.25, 2.625};
       String[] labels = {"Slowest", "Slower", "Slow", "Normal", "Fast", "Faster", "Fastest (1x)", "2x Fastest", "4x Fastest", "8x Fastest", "16x Fastest"};

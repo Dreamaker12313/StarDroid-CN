@@ -1,11 +1,15 @@
 # StarDroid 1.1 — build 83
 
+- Campaign results show actual player slots and omit neutral/rescue-only map helpers. The starting roster remains stable after capture, defeat and save/load; zero-score participants and separate opponents sharing a faction name remain visible. All 64 campaign maps were audited.
+- Long faction and player names use the largest original font that fits the name column, keeping the complete name clear of the score bars.
+- Replay buttons are transparent and use the original wide menu font, size and colors. Import and Export remain side by side; **Delete** is centered at the bottom of the left panel. Original OK/Cancel artwork and placement are retained.
+
 - A replay made with different app rules now reports: “The selected replay was recorded with a different version of the app.” The message is translated in all five UI languages.
 - Hero Mode completion sounds use the hero's race-specific campaign rescue cue. This includes all 18 trainable heroes and the merged Tassadar/Zeratul Archon. Duke's siege changes do not replay the spawn cue; normal unit and campaign sounds remain unchanged.
-- Sound Settings retains mute, music enable, effects volume and music volume. The track picker, Next track and sound preview controls are removed; old manual track choices no longer override automatic playback.
+- Sound Settings retains mute, music enable, effects volume and music volume. **Next track** advances the current in-game soundtrack, including the second theme embedded in each race’s first Brood War music file. Long-track seeking also fixes an integer overflow that previously jumped to the wrong position. The manual track picker and sound preview remain removed; old manual track choices no longer override automatic playback.
 - Verified the four-theme Brood War loop for Terran, Zerg and Protoss using the supplied classic archives. Each expansion `race1.wav` contains the Brood War theme followed by the original first theme, then `race2.wav` and `race3.wav` complete the loop. Campaigns, custom games and nearby matches share automatic playback. Missing expansion imports fall back to the original soundtrack.
 
-This sound/menu revision keeps version **1.1 / code 83** and simulation compatibility **84**. It does not introduce another replay or multiplayer compatibility break.
+This score/menu/sound revision keeps version **1.1 / code 83** and simulation compatibility **84**. It does not introduce another replay or multiplayer compatibility break.
 
 Earlier fixes in this revision:
 

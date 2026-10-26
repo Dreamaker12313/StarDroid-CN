@@ -22,8 +22,8 @@ start = surface.index('  private void music(String phase) {')
 end = surface.index('\n  private ', start + 1)
 music = surface[start:end]
 # Obsolete manual picks must not survive invisibly after removing their controls.
-assert 'nextMusicTrack' not in surface and 'musicTrack' not in surface
-assert '"Next track"' not in surface and '"Preview sound"' not in surface and '"tracks"' not in surface
+assert 'musicTrack' not in surface
+assert '"Next track"' in surface and '"Preview sound"' not in surface and '"tracks"' not in surface
 assert '.remove("music-track")' in surface
 # These are routing checks, not Android activity instrumentation.
 def method(name):
@@ -40,10 +40,19 @@ routes={
  'nearby': 'missionRace=settings.races[slot];expansion=bw;' in surface and 'public void started(){closeChat();activeGame=true;startMission();}' in surface,
  'replay': 'expansion=replayExpansion;' in method('startReplay') and 'music("game")' in method('startReplay'),
  'savedGame': 'skirmishExpansion' in method('loadSlot') and 'music("game")' in method('loadSlot'),
- 'automaticEndOfTrack': 'musicIndex++;\n        music("game");' in surface,
+ 'automaticEndOfTrack': 'advanceMusic();' in method('tick') and 'musicIndex++;' in method('advanceMusic'),
+ 'soundButton': 'drawSoundSettings(c, x, y);' in method('drawGameModal') if re.search(r'private void drawGameModal\(',surface) else 'drawSoundSettings(c, x, y);' in surface,
 }
 assert all(routes.values()),routes
 assert 'Sound options retain mute' in (r/'docs/PLAYER-GUIDE.md').read_text()
+for name in ['advanceMusic','canNextMusicTrack','nextMusicTrack','drawSoundSettings']:
+    match=re.search(r'^  private (?:void|boolean) '+name+r'\(',surface,re.M);assert match,name
+    begin=match.start();start=surface.index('{',match.end())+1;end=start;depth=1
+    while depth:
+        if surface[end]=='{':depth+=1
+        elif surface[end]=='}':depth-=1
+        end+=1
+    music+='\n'+surface[begin:end]
 outputs = []
 java_home=Path(os.environ.get('JAVA_HOME',r/'.tools/jdk17/usr/lib/jvm/java-17-openjdk-amd64'))
 
@@ -58,7 +67,14 @@ harness = b/'Music79Test.java'
 harness.write_text('''package org.openbw.androidtest;
 import java.util.*;import java.io.*;
 public final class Music79Test {
- int musicIndex,missionRace;boolean expansion,currentMusicExpansion;String musicPhase="",currentMusicPath="",failure="";
+ int musicIndex,missionRace,musicThemeBoundary;boolean expansion,currentMusicExpansion,muted,musicEnabled=true;float music=1,effects=1;
+ String musicPhase="",currentMusicPath="",failure="";final HashMap<String,Integer> musicThemeStarts=new HashMap<>();
+ Runnable nextAction;boolean nextEnabled;String nextLabel;float nextX,nextY,nextWidth,nextHeight;
+ void toggle(Canvas c,String name,boolean enabled,float x,float y,Runnable action){}
+ void slider(Canvas c,String name,float value,float x,float y,java.util.function.Consumer<Float> action){}
+ void menuButton(Canvas c,String label,float x,float y,float w,float h,Runnable action,boolean enabled){nextLabel=label;nextX=x;nextY=y;nextWidth=w;nextHeight=h;nextAction=action;nextEnabled=enabled;}
+ boolean nextButton(){drawSoundSettings(new Canvas(),136,32);check("Next track".equals(nextLabel),"Wrong settings button");check(nextX==162&&nextY==284&&nextWidth==320&&nextHeight==28,"Button geometry changed");if(nextEnabled)nextAction.run();return nextEnabled;}
+ void finish(){NativeBridge.active=false;advanceMusic();}
  void saveSettings(){}
  void play(String phase){music(phase);}
 ''' + music + '''
@@ -88,7 +104,7 @@ public final class Music79Test {
   h.music("victory");check(h.currentMusicPath.equals("music/tvict.wav")&&!NativeBridge.loop,"Victory phase failed");
   h.music("defeat");check(h.currentMusicPath.equals("music/tdefeat.wav")&&!NativeBridge.loop,"Defeat phase failed");
   MusicThemesTest.runSynthetic();
-  System.out.println("PASS production music selection: all races, original/Brood War loops, source fallback, missing assets, expansion switching and phase isolation; manual picker/next/preview removed");
+  System.out.println("PASS production music selection: all races, original/Brood War loops, source fallback, missing assets, expansion switching and phase isolation; manual picker/preview removed; tested Next track button retained");
   if(args.length==2){
    File data=new File(args[0]),out=new File(args[1]);
    for(String name:new String[]{"StarCraft","BroodWar"}){
@@ -103,6 +119,7 @@ public final class Music79Test {
   }
  }
 }
+final class Canvas {}
 final class NativeBridge {
  static boolean active,loop,missingExpansion,missingAll,failOriginal;static int slot,starts,seeks;static double position;
  static final HashMap<String,byte[]> fixtures=new HashMap<String,byte[]>();
@@ -118,7 +135,13 @@ run(['javac','-cp',jar,'-d',b/'classes',*[src/(name+'.java') for name in product
 run(['java','-Xmx64m','-cp',str(b/'classes')+':'+str(jar),'org.openbw.androidtest.Music79Test',
      *([a.data_dir,b] if a.data_dir else [])])
 if a.data_dir:
-    run(['g++','-std=c++17','-O2','-pthread','-I'+str(r/'native-engine'),r/'tests/native_music79.cpp','-o',b/'native-music79'])
+    runtime=(r/'native/runtime.cpp').read_text()
+    seek_lines=[]
+    for name in ['seekSound','soundPosition']:
+        line=re.search(r'^JNI\('+name+r'\)[^\n]+',runtime,re.M);assert line,name
+        seek_lines.append(line.group(0))
+    (b/'music-seek-jni.h').write_text('#include <jni.h>\n#define JNI(name)\n'+'\n'.join(seek_lines)+'\n#undef JNI\n')
+    run(['g++','-std=c++17','-O2','-pthread','-DSTARDROID_NEXT_TRACK_TEST','-I'+str(r/'native-engine'),'-I'+str(b),'-I'+str(java_home/'include'),'-I'+str(java_home/'include/linux'),r/'tests/native_music79.cpp','-o',b/'native-music79'])
     run([b/'native-music79',a.data_dir/'StarCraft.mpq',a.data_dir/'BroodWar.mpq',b/'StarCraft.mpq',b/'BroodWar.mpq',b])
     run(['java','-Xmx128m','-cp',str(b/'classes'),'org.openbw.androidtest.MusicThemesTest',b])
 sdk_compile=False
@@ -129,10 +152,10 @@ if android_jar.exists():
     run(['javac','-source','8','-target','8','-encoding','UTF-8','-cp',android_jar,'-d',target,stub,*sorted(src.glob('*.java'))])
     sdk_compile=True
     outputs.append('PASS all production Android Java compiles against SDK35 / Java8')
-files = [src/'NativeSurface.java',src/'MusicData.java',src/'MusicThemes.java',src/'MissionBundle.java',src/'NativeData.java',r/'native/audio.h',Path(__file__),r/'tests/native_music79.cpp',r/'tests/MusicThemesTest.java']
+files = [src/'NativeSurface.java',src/'MusicData.java',src/'MusicThemes.java',src/'MissionBundle.java',src/'NativeData.java',r/'native/audio.h',r/'native/runtime.cpp',Path(__file__),r/'tests/native_music79.cpp',r/'tests/MusicThemesTest.java']
 a.report.write_text(json.dumps({
     'passed': True, 'physicalAndroid': False, 'originalArchivesTested': bool(a.data_dir),
-    'version':'1.1','androidSdk35JavaCompile':sdk_compile,'gameEntrySourceRoutingChecks':routes,'scope':'All three races: production Java music selection, campaign/custom/Nearby routing audit, original import bytes, full native WAV decode and EOF, embedded-original comparison. No physical Android audio test.',
+    'version':'1.1','androidSdk35JavaCompile':sdk_compile,'gameEntrySourceRoutingChecks':routes,'scope':'All three races: production Java music selection, campaign/custom/Nearby routing audit, original import bytes, full native WAV decode and EOF, embedded-original comparison, production sound-settings button activation, individual-theme skipping, exact native JNI seek entry points and sample-accurate PCM output after seeking. No physical Android audio test.',
     'availability':'Four themes per race require imported original Brood War soundtrack files; missing expansion files fall back to the original soundtrack.',
     'checks': [s for s in outputs if s],
     'sourceSha256': {str(f.relative_to(r)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}

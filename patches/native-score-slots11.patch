@@ -1,0 +1,40 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -1890,11 +1890,24 @@
+ 		++(ut_building(u) ? score_razed : score_killed)[owner];
+ 		(ut_building(u) ? score_razings : score_kills)[owner] += u->unit_type->destroy_score;
+ 	}
++	// A simulation-active slot can be neutral scenery or rescuable units. It is
++	// not necessarily a participant in the score screen. The replay header keeps
++	// the starting roster even after defeat, leaving, capture or neutral hostility;
++	// native saves already preserve it. Do not infer participation from score totals.
++	bool score_player_visible(int owner) const {
++		if(owner<0||owner>=8)return false;
++		const auto& p=rep.slot_count>0?rep.players[owner]:st.players[owner];
++		if(!p.initially_active)return false;
++		return p.controller==player_t::controller_occupied
++			||p.controller==player_t::controller_computer_game
++			||p.controller==player_t::controller_user_left
++			||p.controller==player_t::controller_computer_defeated;
++	}
+ 	virtual a_string score_faction_name(int owner) const {return {};}
+ 	const char* stats_text() {
+ 		stats_out = format("%d\t%d", outcome, (int)st.current_frame);
+ 		for (int i = 0; i != 8; ++i) {
+-			if (!st.players[i].initially_active) continue;
++			if (!score_player_visible(i)) continue;
+ 			stats_out += format("\n%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
+ 				i == my_player ? 1 : 0, (int)st.players[i].race, st.players[i].color,
+ 				st.total_non_buildings_ever_completed[i], st.total_buildings_ever_completed[i],
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -20,6 +20,9 @@
+         if(force<1||force>4)return {};
+         const auto& name=game_st.forces[force-1].name;
+         if(name=="<null string>"||name=="<invalid string index>"||name=="<invalid string offset>")return {};
++        // Some maps deliberately leave a force unnamed using dashes (The
++        // Culling). Keep its participant row and use the normal fallback label.
++        if(name.find_first_not_of(" \t\r\n-")==a_string::npos)return {};
+         return name;
+     }
+     int unit_portrait(UnitTypes id) const override {
