@@ -6,15 +6,15 @@
 
 StarDroid adapts the OpenBW engine for Android devices. Play campaigns, set up custom battles against computer opponents, or host a nearby multiplayer match. The interface uses the classic artwork, fonts, music, and sounds imported from your own game files.
 
-**Latest release 1.0.10 · Android 8.0+ · ARM64 and x86-64**
+**Latest release 1.1 · Android 8.0+ · ARM64 and x86-64**
 
 Put together by **ToadWarrior**.
 
-[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/StarDroid-1.0.10.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.0.10) · [Download source](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/StarDroid-1.0.10-source.zip) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
+[Download the APK](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.1/StarDroid-1.1.apk) · [Release notes](https://github.com/kinopiowarrior/StarDroid/releases/tag/v1.1) · [Download source](https://api.github.com/repos/kinopiowarrior/StarDroid/zipball/v1.1) · [Discord community](https://discord.gg/F2FnjUrtQ) · [Player guide](docs/PLAYER-GUIDE.md) · [Build from source](docs/BUILDING.md) · [Report a bug](https://github.com/kinopiowarrior/StarDroid/issues/new/choose)
 
-Version **1.0.10** adds gamepad controls and invincibility, fixes worker cancellation and AI ammunition production, and substantially reduces content-cache storage. Install `StarDroid-1.0.10.apk` over the existing app. [Released changes](docs/CHANGES-1.0.10.md).
+Version **1.1** adds replays, mouse and keyboard controls, campaign completion marks, and SD-card data storage, plus campaign, audio, and UI fixes. Install `StarDroid-1.1.apk` over the existing app. [Released changes](docs/CHANGES-1.1.md).
 
-The current source targets **1.1 / build 83**, with campaign object/bunker/nuclear fixes, original wireframe colors, SD-card import storage and replay map thumbnails. [Development changes](docs/CHANGES-1.1.md). **Diagnostics / credits** remains available.
+**Diagnostics / credits** remains available in the app.
 
 ## Features
 
@@ -31,7 +31,7 @@ StarDroid is an unofficial fan project. **Game data is not included.** You need 
 
 ## Install
 
-1. Download **[StarDroid-1.0.10.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/StarDroid-1.0.10.apk)** on your Android device. The source-code ZIP is for development, not installation.
+1. Download **[StarDroid-1.1.apk](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.1/StarDroid-1.1.apk)** on your Android device. The source-code ZIP is for development, not installation.
 2. Open the APK on your Android device. If Android asks, allow the browser or file manager you are using to install apps from that source.
 3. Launch **StarDroid**. The import screen appears automatically when required files are missing.
 4. Tap **Import game files**, choose the files below, and let importing finish. You can select multiple files if your file picker supports it.
@@ -62,7 +62,7 @@ This release targets classic game data. A modern launcher installation or Remast
 - Enough free space for imported archives and campaign/media content; these are much larger than the APK.
 - Bluetooth for local multiplayer. Wi-Fi Direct is optional and depends on Android version and hardware support.
 
-The [download checksums](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.0.10/SHA256SUMS.txt) record the SHA-256 of the published APK and source archive.
+The [download checksum](https://github.com/kinopiowarrior/StarDroid/releases/download/v1.1/SHA256SUMS.txt) records the SHA-256 of the published APK.
 
 ## Quick start
 
@@ -136,13 +136,13 @@ Tassadar and Zeratul can merge into their hero Archon. Both hero slots remain oc
 - If a device cannot find the host, check Bluetooth permissions and pairing prompts, use **Search Again**, or try Bluetooth-only mode. Older Android versions can require Location permission and Location services for discovery.
 - For missing content, check **App Options → Installed content** and reimport the relevant original archive.
 - If an APK will not install over an existing app, check CPU architecture and signing identity. Independently signed builds cannot replace the distributed APK in place.
-- Build 81 adds **Load Replay**, local replay storage and **DELETE**. See [replay controls and compatibility](docs/PLAYER-GUIDE.md#replays).
+- Use **Load Replay** to watch, import, export, or delete replays. See [replay controls and compatibility](docs/PLAYER-GUIDE.md#replays).
 
 More details: [player guide](docs/PLAYER-GUIDE.md) · [current source changes](docs/CHANGES-1.1.md) · [1.0 changes](docs/FIXES-1.0.md) · [validation record](VALIDATION.md).
 
 ## Development
 
-The current source targets **1.1 / build 83**. It fixes replay layouts for both current and older imports, adds working timeline seeking, and refines pixel controls and campaign transitions. See [1.1 changes](docs/CHANGES-1.1.md), [build 82 changes](docs/CHANGES-1.0.12.md), [build 81 changes](docs/CHANGES-1.0.11.md), [build 80 changes](docs/CHANGES-1.0.10.md), and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
+The **1.1 release uses build 83**. It fixes replay layouts for both current and older imports, adds working timeline seeking, and refines pixel controls and campaign transitions. See [1.1 changes](docs/CHANGES-1.1.md), [build 82 changes](docs/CHANGES-1.0.12.md), [build 81 changes](docs/CHANGES-1.0.11.md), [build 80 changes](docs/CHANGES-1.0.10.md), and the [OpenSnowstorm review](docs/OPENSNOWSTORM-REVIEW.md).
 
 The current Android app uses a native C++ engine, JNI, Android Canvas, and AudioTrack. The older web implementation remains as historical source and is not shipped in the APK.
 
