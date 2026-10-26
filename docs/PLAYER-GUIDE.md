@@ -6,7 +6,7 @@
 
 Follow the [installation instructions](../README.md#install) to import the three core MPQs and the campaign/media archives. **App Options** is also the screen shown when game files are missing. It has one import action, the file guide, and **Installed content** counts.
 
-Importing copies content into private app storage. Keep the original archives elsewhere: uninstalling StarDroid or clearing Android app data removes local imports, settings, and saves. Android backup is disabled for this app. Update by installing the matching signed APK over the existing app.
+Importing copies content into the selected app storage. Keep the original archives elsewhere: uninstalling StarDroid or clearing Android app data removes local imports, settings, and saves, including app-specific SD-card files. Android backup is disabled for this app. Update by installing the matching signed APK over the existing app.
 
 Use **Import maps / ZIP…** in the custom-game or host map selector for `.scm`, `.scx`, and ZIP map collections. Campaign bundles belong in **Import game files**. The included community map is **Weave**; additional game maps are not bundled.
 
@@ -98,6 +98,12 @@ The settings use the same original game panels and fonts as the other settings. 
 
 The cache holds working copies of imported content. Build 80 removes empty archive space and prepares movies only when played. Existing movie caches are reclaimed automatically. With the tested classic archives, normal content cache is about 235 MB plus the active mission; a movie temporarily needs extra space while opening. Your original imports and saves are preserved.
 
+### Imported data on an SD card
+
+Open **App Options → Game data storage → Change data storage** from the main menu. Select a detected writable removable SD card or internal storage. Existing imported archives, campaign content and custom maps are copied and verified before switching locations and removing the old copies. Future imports use the selected location. Saves, replays, profiles, settings and working caches stay internal.
+
+The SD-card folder is `Android/data/org.openbw.androidtest/files/game-data`. Android removes app-specific files when the app is uninstalled. Keep your original archives separately. Moving requires free space for the copied files plus a small reserve and is unavailable during a match, replay or multiplayer connection. If the selected card is removed, reinsert it before playing or moving the data back. The app does not silently start using a different folder.
+
 ### Saving and campaign progress
 
 Use the in-game **Save Game** and **Load Saved** controls. Save-file import and export are not provided.
@@ -118,6 +124,8 @@ During playback, pause or resume, choose 1×–8× speed, switch between everyon
 
 Use the same StarDroid build and game data for StarDroid recordings. Older computer recordings without AI settings, campaign recordings, resumed saves and cheated matches are not supported. Classic human-only Melee/Free-for-All files are accepted, but original-executable parity has not been verified. Remastered extensions and other game types are rejected with an explanation.
 
+The campaign-fix revision of **1.1** changes simulation rules. Earlier StarDroid recordings need the APK that recorded them; their files are retained. Both nearby multiplayer devices must use this revised APK, even when both display version 1.1.
+
 Older interface imports may not include the original load-menu artwork. The replay browser fits the available original menu layout automatically, including its filename list, scrollbar and information window. Import and Export sit side by side, with DELETE below. Importing the original StarCraft or Brood War CD archive again supplies the load-menu assets automatically. Saving or exporting a replay shows an in-game red confirmation with OK.
 
 ### Campaign objects and voices
@@ -129,6 +137,10 @@ fixes neutral-owned objectives such as the psi emitter in Reign of Fire.
 Mission dialogue has its own audio channel and overlapping transmission lines
 queue; game effects cannot replace it. Leaving the mission or loading a save
 intentionally resets the old world's audio.
+
+With movable units selected, a normal tap on a visible beacon sends them to its center and keeps the selection. Explicit selection gestures still select objects. Minerals, unoccupied geysers and protected campaign objects retain their original protection when starting a map. Mission triggers may deliberately change protection; ordinary refineries and destructible mission structures remain attackable. A save made before this fix can retain the old object flags, so restart the affected mission to apply the corrected initialization.
+
+Reign of Fire explicitly plays the Terran rescue cue when its triggers give the normal Zerglings and Drones to the player. Hunter Killers use the normal Zerg rescue cue. This authored difference is preserved; normal rescue cues follow the rescued unit's race.
 
 ## Local multiplayer
 

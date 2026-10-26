@@ -1,0 +1,136 @@
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -76,6 +76,19 @@
+             }
+             return;
+         }
++        // The stock EnBk script is enter_bunker; stop. Its selection is the
++        // complete trigger location, including Anywhere, not a radius around
++        // the location's center (which misses most of Dylarian's garrisons).
++        // Execute this location built-in directly rather than losing its bounds
++        // in the town interpreter, whose position is only a placement anchor.
++        if (id==0x6b426e45u) { // EnBk
++            if(location==0)ai_enter_bunkers(owner,map_bounds());
++            else if(location>0 && size_t(location)<=st.locations.size()) {
++                const auto& region=st.locations[location-1];
++                ai_enter_bunkers(owner,region.area,false,region.elevation_flags);
++            }
++            return;
++        }
+         thread t; t.owner=owner; t.id=id;
+         t.pos=game_st.start_locations[owner];
+         if (location>0 && size_t(location)<=st.locations.size()) { auto a=st.locations[location-1].area; t.pos=(a.from+a.to)/2; }
+@@ -108,12 +121,17 @@
+         // A morphed Zerg depot/spire also satisfies its prerequisite building.
+         return actual==type || (type==5 && actual==30) || (type==131 && (actual==132 || actual==133)) || (type==132 && actual==133) || (type==141 && actual==137);
+     }
++    bool ai_bunker_troop(unit_t* u) {
++        auto* bunker=u_loaded(u)?u->connected_unit:
++            (u->order_type->id==Orders::EnterTransport?u->order_target.unit:nullptr);
++        return bunker&&!unit_dying(bunker)&&bunker->owner==u->owner&&unit_is(bunker,UnitTypes::Terran_Bunker);
++    }
+     int ai_count(int owner,int type,bool complete=false,bool home=false) {
+         if (type<0 || type>=228) return 0;
+         int n=0;
+         for (auto* u:ptr(st.player_units[owner])) {
+             if (unit_dying(u) || ut_turret(u)) continue;
+-            if (home && ai_attacking(towns[owner],u)) continue;
++            if (home && (ai_attacking(towns[owner],u)||ai_bunker_troop(u))) continue;
+             if (ai_type(u,type) && (!complete || u_completed(u))) ++n;
+             if (!complete) {
+                 size_t start=u->current_build_unit ? 1:0;
+@@ -269,7 +287,7 @@
+         int sent=0;
+         for(auto* u:ptr(st.player_units[owner])) {
+             int type=int(u->unit_type->id);
+-            if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||u_loaded(u)||us_hidden(u)||unit_is_fighter(u)||type>=228||ai_attacking(a,u))continue;
++            if(unit_dying(u)||!u_completed(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||u_loaded(u)||us_hidden(u)||unit_is_fighter(u)||type>=228||ai_attacking(a,u)||ai_bunker_troop(u))continue;
+             if (!u->unit_type->ground_weapon && !u->unit_type->air_weapon && !unit_is_carrier(u) && !unit_is_reaver(u) && !ut_has_energy(u)) continue;
+             if(!all && need[type]<=0)continue;
+             if(all&&melee_ai&&ai_count(owner,type,true,true)<=a.defence[type])continue;
+@@ -314,20 +332,8 @@
+                 for(auto* u:ptr(st.player_units[t.owner]))if(u_completed(u)&&!unit_dying(u)&&!ut_turret(u)&&!u_loaded(u))
+                     set_unit_order(u,get_order_type(Orders::RescuePassive));
+                 t.done=true;break;
+-            case 41: { // enter_bunker: load nearby infantry into the local garrison.
+-                a_unordered_map<unsigned,int> reserved;
+-                for(auto* u:ptr(st.player_units[t.owner])) {
+-                    if(unit_dying(u)||!u_completed(u)||u_loaded(u)||us_hidden(u)||ut_building(u)||ut_worker(u)||ut_turret(u)||u_flying(u))continue;
+-                    if(xy_length(u->sprite->position-t.pos)>320)continue;
+-                    unit_t* best=nullptr;int distance=0x7fffffff;
+-                    for(auto* bunker:ptr(st.player_units[t.owner]))if(unit_is(bunker,UnitTypes::Terran_Bunker)&&!unit_dying(bunker)&&unit_can_load_target(bunker,u)) {
+-                        if(reserved[get_unit_id(bunker).raw_value]+int(u->unit_type->space_required)>int(unit_space_left(bunker)))continue;
+-                        int d=xy_length(bunker->sprite->position-u->sprite->position);
+-                        if(d<distance && d<=320){best=bunker;distance=d;}
+-                    }
+-                    if(best){issue_order(u,false,get_order_type(Orders::EnterTransport),{best->sprite->position,best});reserved[get_unit_id(best).raw_value]+=u->unit_type->space_required;}
+-                }break;
+-            }
++            case 41: // enter_bunker in a town script uses the local town area.
++                ai_enter_bunkers(t.owner,square_at(t.pos,320));break;
+             case 47: // Clear this town's attack bookkeeping after its base falls.
+                 a.attackers.clear();a.wave.fill(0);break;
+             case 46: ai_read(t,2);break; // max_force: script armies are already bounded to 200 per type
+@@ -385,6 +391,53 @@
+         auto o=u->order_type->id;
+         return o==Orders::PlayerGuard || o==Orders::Guard || o==Orders::ComputerAI || o==Orders::Stop || o==Orders::Nothing;
+     }
++    void ai_enter_bunkers(int owner,rect region,bool idle_only=false,int elevation_flags=0) {
++        if(owner<0||owner>=8)return;
++        a_unordered_map<unsigned,int> reserved;
++        // Orders already travelling to a bunker occupy a future seat. Repeated
++        // triggers/ticks must not redirect them or overbook the same four slots.
++        for(auto* u:ptr(st.player_units[owner])) {
++            auto* bunker=u->order_target.unit;
++            if(!unit_dying(u)&&!u_loaded(u)&&u->order_type->id==Orders::EnterTransport
++                &&bunker&&!unit_dying(bunker)&&unit_is(bunker,UnitTypes::Terran_Bunker)
++                &&unit_can_load_target(bunker,u))
++                reserved[get_unit_id(bunker).raw_value]+=u->unit_type->space_required;
++        }
++        for(auto* u:find_units(region)) {
++            if(u->owner!=owner||unit_dying(u)||!u_completed(u)||u_loaded(u)||us_hidden(u)
++                ||ut_building(u)||ut_worker(u)||ut_turret(u)||u_flying(u)||u_burrowed(u)
++                ||unit_is_disabled(u)||u_order_not_interruptible(u)||u_iscript_nobrk(u)
++                ||u->order_type->id==Orders::EnterTransport||ai_lifting(owner,u)
++                ||!unit_is_at_elevation_flags(u,elevation_flags))continue;
++            // Town maintenance only uses idle local defenders. A mission's
++            // explicit EnBk action may also order compatible non-firing troops.
++            if(idle_only&&(!ai_idle(u)||!unit_can_fire_from_bunker(u)
++                ||ai_attacking(towns[owner],u)||!u->order_queue.empty()||ut_hero(u)))continue;
++            // Preserve troops already requested for the next scripted wave.
++            // Garrisoned/bunker-bound units are not available attack reserves.
++            int type=int(u->unit_type->id);
++            if(idle_only&&type<228&&towns[owner].wave[type]>0
++                &&ai_count(owner,type,true,true)<=towns[owner].wave[type])continue;
++            unit_t* best=nullptr;int distance=0x7fffffff;
++            for(auto* bunker:ptr(st.player_units[owner])) {
++                if(!unit_is(bunker,UnitTypes::Terran_Bunker)||unit_dying(bunker)
++                    ||!unit_can_load_target(bunker,u)
++                    ||reserved[get_unit_id(bunker).raw_value]+int(u->unit_type->space_required)>int(unit_space_left(bunker)))continue;
++                int d=xy_length(bunker->position-u->position);
++                if(d<distance&&d<=320&&is_reachable(u,bunker->position)){best=bunker;distance=d;}
++            }
++            if(best) {
++                issue_order(u,false,get_order_type(Orders::EnterTransport),{best->position,best});
++                reserved[get_unit_id(best).raw_value]+=u->unit_type->space_required;
++                ++towns[owner].orders;
++            }
++        }
++    }
++    void ai_garrison(int owner) {
++        if(owner<0||owner>=8||owner==my_player||!towns[owner].active||scenario_units_paused()||campaign_control_lock
++            ||st.players[owner].controller!=player_t::controller_computer_game)return;
++        ai_enter_bunkers(owner,map_bounds(),true);
++    }
+     a_vector<unit_t*> ai_depots(int owner) {
+         a_vector<unit_t*> out;
+         for(auto* u:ptr(st.player_units[owner]))if(!unit_dying(u)&&u_completed(u)&&u_grounded_building(u)&&ut_resource_depot(u))out.push_back(u);
+@@ -1402,7 +1455,7 @@
+         if(!spawned.empty()){threads.insert(threads.end(),spawned.begin(),spawned.end());spawned.clear();}
+         if(ai_clock%12==0)for(int p=0;p<8;++p)
+             if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_lurkers(p);ai_tanks(p);if(ai_clock%24==0){ai_combat_abilities(p);ai_fighter_production(p);}}
+-        if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_defend(p);ai_manage(p);}
++        if(ai_clock%24==0)for(int p=0;p<8;++p)if(p!=my_player && st.players[p].controller==player_t::controller_computer_game){ai_defend(p);ai_manage(p);ai_garrison(p);}
+     }
+     a_string ai_status() {
+         a_string s="";

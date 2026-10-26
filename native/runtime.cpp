@@ -106,6 +106,23 @@ static bwgame::a_vector<uint8_t> read_asset(int index,const std::string& filenam
 static const char* text_query(int id){if(id==1&&native_replay::is_active())return native_replay::resources();if(id==0&&native_replay::is_active()){static std::string name;name=openbw_card();name=name.substr(0,name.find('\n'));return name.c_str();}switch(id){
  case 0:return openbw_card();case 1:return openbw_resources();case 2:return openbw_status();case 3:return openbw_wires();case 4:return openbw_unit_details();case 5:return openbw_campaign_events();case 6:return openbw_campaign_status();case 7:return openbw_campaign_timer();case 8:return openbw_error();case 9:return openbw_stats();case 10:return openbw_debug_units();case 11:return openbw_campaign_ai_error();case 12:return openbw_messages();case 13:return openbw_debug_dump();case 14:return g_ui?g_ui->cargo_status():"";default:return "";}}
 static int value_query(int id,int n){if(native_replay::is_active()&&id==0)return 0;switch(id){case 25:return native_replay::is_active();case 26:return native_replay::playing.frames;case 27:return native_replay::viewpoint;case 28:return native_replay::seeking;case 29:return native_replay::seek_target;case 0:return openbw_cursor();case 1:return openbw_selected_type();case 2:return openbw_production_icon();case 3:return openbw_production_kind();case 4:return openbw_production_queue_type(n);case 5:return openbw_selected_race();case 6:return openbw_wire_box();case 7:return openbw_outcome();case 8:return openbw_frame();case 9:return openbw_map_w();case 10:return openbw_map_h();case 11:return openbw_portrait_for_type(n);case 12:return openbw_portrait_talking();case 13:return openbw_map_tileset();case 14:return openbw_minimap_terrain();case 16:return openbw_placement_valid((n>>16)&65535,n&65535);case 17:return openbw_touch_action((n>>16)&65535,n&65535);case 18:return g_ui&&g_ui->show_order_lines;case 19:return int(naudio::position_ms(n));case 20:return nearby_defenders;case 21:return g_ui?g_ui->group_count(n):0;case 22:return g_ui&&g_ui->test_invincible;case 23:return openbw_cursor_box();case 24:return g_ui&&g_ui->test_unlimited_supply;default:return 0;}}
+static bool touch_beacon_move(int x,int y){
+ if(!g_ui||g_ui->paused||g_ui->campaign_control_lock||g_ui->spectator||g_ui->pending_build||g_ui->targeting)return false;
+ auto* beacon=g_ui->select_get_unit_at(g_ui->screen_to_map(x,y));
+ if(!beacon||!beacon->sprite||g_ui->unit_hidden_by_fog(beacon)||!g_ui->unit_is_special_beacon(beacon))return false;
+ auto* selected=g_ui->primary_selected();
+ if(!selected||selected->owner!=g_ui->my_player||g_ui->unit_dying(selected))return false;
+ g_ui->refresh_card();
+ bool mobile=false;for(const auto& c:g_ui->card)if(c.act==bwgame::play_ui::C_MOVE&&c.enabled)mobile=true;
+ if(!mobile)return false;
+ // Beacons are destinations, including owned ones. Use their center rather
+ // than a unit-target Follow order, which can stop outside the trigger area.
+ auto destination=beacon->sprite->position;
+ g_ui->sync_selection();g_ui->cmd_order(bwgame::Orders::Move,destination,nullptr,g_ui->key_shift());
+ g_ui->show_marker(destination);
+ g_ui->play_unit_ack(selected,selected->unit_type->first_yes_sound,selected->unit_type->last_yes_sound);
+ return true;
+}
 static void command(int op,int a,int b,int c,int d){
  if(native_replay::is_active()){
   if(op==31){native_replay::set_view(a);return;}
@@ -118,6 +135,7 @@ static void command(int op,int a,int b,int c,int d){
  switch(op){
  case 0:openbw_mouse_move(a,b);break;case 1:openbw_mouse_button(a,b,c,d,1);break;case 2:openbw_key(1,a,b);openbw_key(0,a,b);break;case 3:openbw_pan(a,b);break;
  case 4:{
+  if(!d&&touch_beacon_move(a,b))break;
   if (g_ui) if (auto* near=g_ui->touch_selection_near(a,b,std::max(0,int(touch_radius/std::max(.5,g_ui->minimap_scale))),d!=0)) {
    g_ui->current_selection_clear();g_ui->current_selection_add(near);
    if(c && near->owner==g_ui->my_player && !g_ui->ut_building(near))

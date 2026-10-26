@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "physicalSdCardTested": false,
+  "androidSdk35JavaCompile": true,
+  "storageTranslations": "en, ru, de, es, fr",
+  "scope": "Pure Java verified migration, real filesystem; Android integration checked separately by Android SDK Java compilation",
+  "result": "PASS 171 storage checks: all campaign names; legacy imports; private-file isolation; bidirectional verified move; space/conflict/unplug/commit/corruption/symlink failures; safe retry and postcommit preservation",
+  "lifecycle": "PASS production lifecycle methods: card removal/reinsertion preserves live match; inactive start; recreated-Activity native startup gate",
+  "sourceSha256": {
+    "app/src/main/java/org/openbw/androidtest/GameDataOperation.java": "29f73773df9449635de1521c9389cd99e290b7e2a0c00c7280780b9a8699f97d",
+    "app/src/main/java/org/openbw/androidtest/ImportedDataMove.java": "9a7f3b3880cf91dd1437049ea89290276d4b11d51ae902273e49ee9c3f4820ac",
+    "app/src/main/java/org/openbw/androidtest/GameDataStorage.java": "c4fafb1539e9ca5e977e66988262427f0877aba60bd7f1b71546bb7c3f44847e",
+    "app/src/main/java/org/openbw/androidtest/MainActivity.java": "51cb1b6557eb9f1c3ae903b43ad6c022acb128fee27a6e4f8a33b643ba05fbf5",
+    "app/src/main/java/org/openbw/androidtest/NativeSurface.java": "cd513e205ff90bec4a07593dfb2fb3041ef68fdd8841dda88923bc07c7044896",
+    "app/src/main/assets/native/ui-languages.tsv": "cd1bed5e9f3996d6f186cea2650639c722f67fe41ca30e97c6a5c529eb68ac12",
+    "tests/run_data_storage11.py": "baa5bec1d8977012a4c6c79b9a0bf237c3d3dc3f6b33048f885be57512ce2244"
+  }
+}

@@ -13,7 +13,7 @@ import org.json.*;
 final class NativeSurface extends SurfaceView
     implements SurfaceHolder.Callback, Choreographer.FrameCallback {
   private final MainActivity activity;
-  private final File files, cache;
+  private final File files, gameFiles, cache;
   private final SharedPreferences prefs;
   private final ControlSettings controls = new ControlSettings();
   private final GamepadControls gamepad = new GamepadControls();
@@ -183,6 +183,7 @@ final class NativeSurface extends SurfaceView
     super(a);
     activity = a;
     files = a.getFilesDir();
+    gameFiles = a.gameDataDir();
     replays = new NativeReplays(files);
     cache = new File(a.getCacheDir(), "native-mpq");
     prefs = a.getSharedPreferences("native-settings", 0);
@@ -251,6 +252,23 @@ final class NativeSurface extends SurfaceView
         });
   }
 
+  // A remounted card invalidates old mmap-backed archive handles. Reopen data
+  // on the engine worker without ending or rebuilding the live simulation.
+  void reopenStorage(Runnable ready,java.util.function.Consumer<String> failed) {
+    enqueue(()->{
+      try {
+        if(!GameDataStorage.available(activity,gameFiles))throw new IOException("Game data storage is unavailable.");
+        loadArchives();
+        if(activeMapSource!=null)NativeBridge.open(3,activeMapSource.getPath());
+        lastTime=0;accumulator=0;
+        activity.runOnUiThread(ready);
+      }catch(Exception e){
+        AppDiagnostics.recordFailure("Reopen game data after storage removal",e);
+        activity.runOnUiThread(()->failed.accept(e.getMessage()));
+      }
+    });
+  }
+
   void suspend() {
     foreground = false;
     enqueue(
@@ -285,6 +303,17 @@ final class NativeSurface extends SurfaceView
     synchronized (gate) {
       gate.notifyAll();
     }
+  }
+
+  void checkDataMove(java.util.function.Consumer<Boolean> callback) {
+    if(worker==null||!worker.isAlive()){callback.accept(true);return;}
+    enqueue(()->{boolean allowed=!activeGame && nearby==null && nearbyRadio==null && pendingScreen==null && !page.equals("loading") && !page.equals("briefing") && !page.equals("story") && !page.equals("cinematic");
+      activity.runOnUiThread(()->callback.accept(allowed));});
+  }
+
+  void awaitShutdown() throws java.io.IOException {
+    try {if(worker!=null)worker.join();}
+    catch(InterruptedException e){Thread.currentThread().interrupt();throw new java.io.IOException("Game shutdown interrupted.",e);}
   }
 
   String diagnostics() {
@@ -448,7 +477,7 @@ final class NativeSurface extends SurfaceView
   private void loadArchives() throws Exception {
     String[] core = {"STARDAT.MPQ", "BROODAT.MPQ", "patch_rt.mpq"};
     for (int i = 0; i < 3; i++)
-      NativeBridge.open(i, new File(new File(files, "mpq"), core[i]).getPath());
+      NativeBridge.open(i, new File(new File(gameFiles, "mpq"), core[i]).getPath());
     GameLanguage.russianData = GameLanguage.isRussian(NativeBridge.asset(-1, "rez/stat_txt.tbl"));
     prefs.edit().putBoolean("russian-data", GameLanguage.russianData).apply();
     String[] bundle = {
@@ -462,7 +491,7 @@ final class NativeSurface extends SurfaceView
     };
     availableMovies.clear();
     for (int i = 0; i < bundle.length; i++) {
-      File source = ProjectFiles.existing(files, bundle[i]);
+      File source = ProjectFiles.existing(gameFiles, bundle[i]);
       if (i < 5) {
         File p = NativeData.prepare(source, cache, "content" + i);
         NativeBridge.open(4 + i, p == null ? "" : p.getPath());
@@ -512,7 +541,7 @@ final class NativeSurface extends SurfaceView
       NativeBridge.sound(null, 63, false);
       int movieSlot = broodwar ? 10 : 9;
       try {
-        File source = ProjectFiles.existing(files, broodwar ? StoryData.EXP_MOVIES : StoryData.MOVIES);
+        File source = ProjectFiles.existing(gameFiles, broodwar ? StoryData.EXP_MOVIES : StoryData.MOVIES);
         File movie = NativeData.prepareEntry(source, cache, "cinematic", path);
         if (movie == null) throw new IOException("Imported cinematic is unavailable");
         NativeBridge.open(movieSlot, movie.getPath());
@@ -1551,7 +1580,7 @@ final class NativeSurface extends SurfaceView
   private void showNearby() {
     closeNearby();nearbyResume=null;nearbyResuming=false;multiplayerSetup=false;multiplayerSaves=true;
     NativeBridge.endGame();activeGame=false;multiplayerGame=false;campaign=null;currentMission=null;lastOutcome=0;
-    nearbySetup=new MatchSetup(true);customMaps=NativeMaps.list(files);if(customRace<0)customRace=1;
+    nearbySetup=new MatchSetup(true);customMaps=NativeMaps.list(gameFiles);if(customRace<0)customRace=1;
     nearbyStage="connection";screen("nearby","gluconn","palnl",true);sfx("swishin");
     nearbyStatus="Choose a connection, then host or join a game.";
   }
@@ -1744,7 +1773,7 @@ final class NativeSurface extends SurfaceView
   private void showCustom() {
     screen("custom", "glucustm", "palnl", true);
     sfx("swishin");
-    customMaps = NativeMaps.list(files); mapOffset = 0; mapImportStatus = "";
+    customMaps = NativeMaps.list(gameFiles); mapOffset = 0; mapImportStatus = "";
     customBotSlot = 1;
     if(multiplayerSetup)nearbySetup=new MatchSetup(true);else customSetup=new MatchSetup(false);
     String last = prefs.getString("custom-map", "");
@@ -1858,7 +1887,7 @@ final class NativeSurface extends SurfaceView
 
   private boolean installed(JSONObject m) {
     if (m.has("cinematic")) return availableMovies.contains(m.optString("cinematic"));
-    return ProjectFiles.existing(files, CampaignData.filename(m.optString("id"))).isFile();
+    return ProjectFiles.existing(gameFiles, CampaignData.filename(m.optString("id"))).isFile();
   }
 
   private void chooseGame(int option) {
@@ -2769,7 +2798,7 @@ final class NativeSurface extends SurfaceView
       expansion = mission.optString("game").equals("broodwar");
       File mpq =
           NativeData.prepare(
-              ProjectFiles.existing(files, CampaignData.filename(mission.getString("id"))), cache, "mission");
+              ProjectFiles.existing(gameFiles, CampaignData.filename(mission.getString("id"))), cache, "mission");
       NativeBridge.open(3, mpq.getPath());
       releaseSavedMap(); activeMapSource = mpq;
       NativeBridge.init(640, 480, missionCode, missionRace);
@@ -2978,6 +3007,7 @@ final class NativeSurface extends SurfaceView
       closeGlue(); closeBriefMovies();
       results = new NativeResults(art, missionRace, lastOutcome == 1, NativeBridge.text(9));
       results.playerName = selectedProfile;
+      if(nearby!=null)for(int i=0;i<8;i++)if(nearby.occupants[i]>=0)results.slotNames[i]=nearby.names[i];
       music(lastOutcome == 1 ? "victory" : "defeat");
       page = "results";
       modal = "";

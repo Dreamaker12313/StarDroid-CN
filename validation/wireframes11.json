@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "result": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nGRP 0 frames=228 indices=192,193,208,209,210,211,215,216,217,218,219,\nGRP 1 frames=131 indices=192,193,208,209,210,211,216,217,218,219,\nGRP 2 frames=106 indices=192,193,208,209,210,211,216,217,218,219,\nPASS 710610 wireframe checks: original GRPs for single/group/cargo, original palette endpoints and damage/shield transitions",
+  "scope": "Original MPQ GRPs: all single, group and transport frames; full/critical palette pixels, HP and shield transitions; live single/group/cargo selection entry points and redraw state; captured original frame pixels.",
+  "limitation": "Palette remaps use original assets and documented index tables. Exact classic damage thresholds and randomized part ordering remain approximated; no physical Android device tested.",
+  "references": [
+    "https://github.com/andreas-volz/stargus/wiki/Starcraft-Palettes"
+  ],
+  "sourceSha256": {
+    "patches/native-wireframes11.patch": "763547e1ab053ee612665718e5810d35fcbe39263a8308960e4fedd3a75ac25a",
+    "tests/native_wireframes11.cpp": "bf55eef419a9b2e9fd935f36a2c6b535d4743f316a53409d907475ec55b1d773",
+    "tests/run_wireframes11.py": "d7204d3518955e4a40f2a0d313facc4d5ec9d7b68cdcbb0f7a106b5e262468aa"
+  },
+  "captureSha256": "651043ab4b91ba77e711c2f4735e274e7ecfd688b8b5f3e22cd09230a56dbb23",
+  "originalDataSha256": {
+    "STARDAT.MPQ": "dede48dd9b313817b118a4c117101c9a70cf19264756e9db4e9be1af7f852e9a",
+    "BROODAT.MPQ": "5315b4f166bd4cbb125e5009883e52975cac9a669860abc92ab718341c569a35",
+    "patch_rt.mpq": "58bd856aac2328b42af4b9538c248367150c876e57ec596a9f30e3e81d8ddf11"
+  }
+}

@@ -14,7 +14,7 @@ Put together by **ToadWarrior**.
 
 Version **1.0.10** adds gamepad controls and invincibility, fixes worker cancellation and AI ammunition production, and substantially reduces content-cache storage. Install `StarDroid-1.0.10.apk` over the existing app. [Released changes](docs/CHANGES-1.0.10.md).
 
-The current source targets **1.1 / build 83**, with replay map thumbnails, matching menu button colors and sounds, and a centered launcher icon. [Development changes](docs/CHANGES-1.1.md). **Diagnostics / credits** remains available.
+The current source targets **1.1 / build 83**, with campaign object/bunker/nuclear fixes, original wireframe colors, SD-card import storage and replay map thumbnails. [Development changes](docs/CHANGES-1.1.md). **Diagnostics / credits** remains available.
 
 ## Features
 

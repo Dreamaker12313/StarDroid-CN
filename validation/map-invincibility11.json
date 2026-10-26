@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "scope": "Original DAT defaults for all 228 unit types; live resource attack orders, glaive target rejection, splash/direct damage, campaign crystals, normal enemy buildings, explicit protection and harvesting by all three races.",
+  "baseline": "Before the patch, the same map loader reported runtime invincible=false for every Weave mineral/geyser while its original units.dat invincible flag was true.",
+  "limitation": "Tests initialize maps and UPRP properties. Existing saved runtime state is not rewritten, so old saves containing already-unprotected objects require a mission restart.",
+  "result": "openbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS all228 DAT defaults; innate types=38; explicit map protection retained; refineries/destructible objectives remain normal\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS map resources, direct/right-click attacks, live glaive bounce, damage/splash guards, crystals, normal enemy, refineries, destructible objectives, critter and trigger-controlled building\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=9, fog_player=0\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nopenbw_init: map 'Weave v1' 2048x2048, slot 0 of 1, units=5, fog_player=0\nPASS SCV,Drone,Probe harvest protected mineral fields\nPASS 1233 map-invincibility checks",
+  "sourceSha256": {
+    "patches/native-map-invincibility11.patch": "2bfc8910d558e87ec2b7fec9115bc95ba061f860c6254bff797a267cfa1935f8",
+    "tests/native_map_invincibility11.cpp": "7139954ce756db349de45238392abebe4d1e43b2695403418dcb153e4e3749f0",
+    "tests/run_map_invincibility11.py": "0184a285f7f09f56b8d75cfefb4f405bff53aedf2a278d63d16ef4c4c14e4a96"
+  },
+  "originalDataSha256": {
+    "STARDAT.MPQ": "dede48dd9b313817b118a4c117101c9a70cf19264756e9db4e9be1af7f852e9a",
+    "BROODAT.MPQ": "5315b4f166bd4cbb125e5009883e52975cac9a669860abc92ab718341c569a35",
+    "patch_rt.mpq": "58bd856aac2328b42af4b9538c248367150c876e57ec596a9f30e3e81d8ddf11"
+  },
+  "mapSha256": "1956cdf864ca30a5f5e6c438857ba715d07bfb80988077cbefae8431c63e0a94"
+}

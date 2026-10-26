@@ -14,6 +14,8 @@ final class NativeResults {
   double countElapsed;
   final Bitmap[][] barParts=new Bitmap[12][6];
   String playerName = "Player";
+  final String[] slotNames = new String[8];
+  final List<String> factionNames = new ArrayList<String>();
   final List<int[]> rows = new ArrayList<int[]>();
   final int elapsed;
   int tab = 0, hot = -1;
@@ -42,12 +44,20 @@ final class NativeResults {
     String[] lines = raw.split("\n");
     elapsed = Math.max(0, NativeHud.number(lines[0].split("\t"), 1, 0) / 24);
     for (int i = 1; i < lines.length && rows.size() < 8; i++) {
-      String[] fields = lines[i].split("\t");
+      String[] fields = lines[i].split("\t", -1);
       if (fields.length < 16) continue;
       int[] row = new int[19];
       for (int j = 0; j < row.length; j++) row[j] = NativeHud.number(fields, j, 0);
       rows.add(row);
+      factionNames.add(fields.length > 19 ? NativeArt.clean(fields[19]).trim() : "");
     }
+  }
+
+  String rowName(int index) {
+    int[] row=rows.get(index);if(row[0]!=0)return playerName;
+    String faction=factionNames.get(index);if(!faction.isEmpty())return faction;
+    int slot=row[16];String participant=slot>=0&&slot<slotNames.length?slotNames[slot]:null;
+    return participant!=null&&!participant.trim().isEmpty()?participant:"Computer";
   }
 
   boolean ready() {return !exiting && animationElapsed >= NativeGlue.ENTER_MS;}
@@ -132,8 +142,10 @@ final class NativeResults {
       NativeArt.Widget name = layout.get(base+1);
       if (name != null) {
         // The BIN name widget extends under score columns; its content must not.
-        line(c, r[0] != 0 ? playerName : "Computer", large, r[0] != 0 ? 4 : 2, 0, name.x, name.y, 144, 19);
-        line(c, new String[]{"Zerg","Terran","Protoss"}[Math.max(0,Math.min(2,r[1]))], tiny, 2, 0, name.x, name.y+19, 144, 14);
+        line(c, rowName(i), large, r[0] != 0 ? 4 : 2, 0, name.x, name.y, 144, 19);
+        String subtitle=r[0]!=0&&!factionNames.get(i).isEmpty()?factionNames.get(i)
+            :new String[]{"Zerg","Terran","Protoss"}[Math.max(0,Math.min(2,r[1]))];
+        line(c, subtitle, tiny, 2, 0, name.x, name.y+19, 144, 14);
       }
       int[] v = values(r);
       for (int j = 0; j < 3; j++) {

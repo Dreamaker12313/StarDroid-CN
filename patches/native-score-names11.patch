@@ -1,0 +1,38 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -1890,6 +1890,7 @@
+ 		++(ut_building(u) ? score_razed : score_killed)[owner];
+ 		(ut_building(u) ? score_razings : score_kills)[owner] += u->unit_type->destroy_score;
+ 	}
++	virtual a_string score_faction_name(int owner) const {return {};}
+ 	const char* stats_text() {
+ 		stats_out = format("%d\t%d", outcome, (int)st.current_frame);
+ 		for (int i = 0; i != 8; ++i) {
+@@ -1905,6 +1906,9 @@
+ 				std::max(0,st.total_minerals_gathered[i]-(int)st.current_minerals[i]),
+ 				std::max(0,st.total_gas_gathered[i]-(int)st.current_gas[i]),
+ 				i,(int)st.players[i].victory_state,(int)st.players[i].controller);
++			// One optional name column; keep map bytes for the archive-aware Java decoder.
++			a_string name=score_faction_name(i);stats_out += "\t";
++			for(unsigned char c:name)if(c>=32&&c!=127)stats_out += char(c);
+ 		}
+ 		return stats_out.c_str();
+ 	}
+--- a/web/campaign.h
++++ b/web/campaign.h
+@@ -13,6 +13,15 @@
+ 		if (owner == my_player && state && !outcome) outcome = state >= 3 ? 1 : 2;
+ 	}
+     int presentation_mission = 0;
++    a_string score_faction_name(int owner) const override {
++        // Melee slot names come from participants, never the map editor's forces.
++        if(melee_ai||owner<0||owner>=8)return {};
++        int force=st.players[owner].force;
++        if(force<1||force>4)return {};
++        const auto& name=game_st.forces[force-1].name;
++        if(name=="<null string>"||name=="<invalid string index>"||name=="<invalid string offset>")return {};
++        return name;
++    }
+     int unit_portrait(UnitTypes id) const override {
+         // These original missions reuse a combat unit for another character.
+         // Route only its portrait to the character's imported DAT/SMK entry;

@@ -1,0 +1,14 @@
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -17516,7 +17516,10 @@
+ 	}
+ 
+     void apply_map_unit_flags(unit_t* u,int valid,int flags) {
+-        if (valid&16) u_set_status_flag(u,unit_t::status_flag_invincible,flags&16);
++        // An unchecked map/UPRP property is not permission to remove the
++        // unit type's innate protection (resources, crystals, doors, etc.).
++        // Later Set Invincibility trigger actions still change runtime state.
++        if (valid&16) u_set_status_flag(u,unit_t::status_flag_invincible,ut_invincible(u)||(flags&16));
+         // CHK UNIT and trigger UPRP both use bit 4 for an already airborne
+         // building. Apply before subsequent Move/Give actions, without waiting
+         // for a player-issued lift-off order or shifting the map position.

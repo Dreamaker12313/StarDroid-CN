@@ -1,0 +1,53 @@
+--- a/web/campaign_ai.h
++++ b/web/campaign_ai.h
+@@ -1211,6 +1211,20 @@
+         for(auto id:a.attackers) {auto* u=get_unit(id);if(u&&!u_loaded(u)&&!ai_lifting(owner,u)&&ai_idle(u)&&!u_burrowed(u)&&is_reachable(u,ai_target(owner,u->position)))issue_order(u,false,get_order_type(Orders::AttackMove),{ai_target(owner,u->sprite->position),nullptr});}
+         bool reserveExpansion=false;
+         ai_hero_requests(owner,req);ai_spell_research(owner);
++        // A running town stocks each completed silo through ordinary production.
++        // Stock campaign scripts (including TB2B) rely on this implicit manager
++        // behaviour, not an explicit build(Nuclear Missile) instruction. Keep
++        // cost, supply, build time, capacity and map availability checks in the
++        // same production path as requested units; never grant free ammunition.
++        int empty_silos=0;
++        for(auto* u:ptr(st.player_units[owner]))
++            if(unit_is(u,UnitTypes::Terran_Nuclear_Silo)&&u_completed(u)
++                &&!unit_dying(u)&&!u_hallucination(u)&&!u->building.silo.nuke
++                &&!u->current_build_unit&&u->build_queue.empty())++empty_silos;
++        // A missile already in flight is still in the owner's unit count; it
++        // must not prevent an empty silo from starting its replacement.
++        if(empty_silos)ai_request(req,int(UnitTypes::Terran_Nuclear_Missile),
++            ai_count(owner,int(UnitTypes::Terran_Nuclear_Missile))+empty_silos,90);
+         auto allowed_requests=[&](){req.erase(std::remove_if(req.begin(),req.end(),[&](const request& r){return !game_st.unit_type_allowed[owner][UnitTypes(r.type)];}),req.end());};
+         for(int type=0;type<228;++type)if(a.wave[type]||a.defence[type]) ai_request(req,type,a.wave[type]+a.defence[type],50);
+         if(melee_ai && st.players[owner].race==race_t::terran) {
+--- a/bwgame.h
++++ b/bwgame.h
+@@ -3017,6 +3017,14 @@
+ 		if (unit_race(u) == race_t::protoss && u_grounded_building(u)) st.update_psionic_matrix = true;
+ 		unit_t* turret = unit_turret(u);
+ 		if (turret) set_unit_owner(u->subunit, owner, increment_score);
++        // Stored ammunition follows its silo through capture, scripted handover
++        // and addon reconnection. A launched missile is already linked to its
++        // Ghost instead and must not change sides with its former silo.
++        if (unit_is(u, UnitTypes::Terran_Nuclear_Silo) && u->building.silo.nuke
++            && u->building.silo.nuke->connected_unit == u) {
++            set_unit_owner(u->building.silo.nuke, owner, increment_score);
++            if (owner < 8) set_sprite_owner(u->building.silo.nuke, owner);
++        }
+ 		update_unit_speed_upgrades(u);
+ 		if (ut_worker(u) && u->worker.gather_target && unit_is(u->worker.gather_target, UnitTypes::Powerup_Flag)) {
+ 			if (owner >= 8 || owner == u->worker.gather_target->owner) drop_carried_items(u);
+@@ -8305,7 +8313,11 @@
+ 			error("CTFCOP2");
+ 			break;
+ 		case Orders::ComputerAI:
+-			set_unit_order(u, get_order_type(Orders::PlayerGuard));
++            // The stock DAT sends computer-owned silos through ComputerAI.
++            // They still need the same missile-link/readiness bookkeeping as
++            // human silos while their secondary Train order runs.
++			set_unit_order(u, get_order_type(unit_is(u, UnitTypes::Terran_Nuclear_Silo)
++                ? Orders::NukeTrain : Orders::PlayerGuard));
+ 			break;
+ 		case Orders::AtkMoveEP:
+ 			error("AtkMoveEP");

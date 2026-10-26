@@ -1,3 +1,20 @@
+# StarDroid 1.1 campaign, storage and wireframe revision
+
+Public version remains 1.1 / Android code 83; simulation compatibility is 84.
+
+- Original-data resource and crystal tests cover map/trigger initialization, real attacks, mutalisk bounce, splash, explicit protection toggles and mining by every worker race: [report](validation/map-invincibility11.json).
+- Original Dylarian Shipyards garrisons change from zero occupants to 45 troops across 12 bunkers. Region, capacity, replacement, attack-wave, transport and save-continuation checks: [report](validation/bunker-ai11.json).
+- Nuclear production, silo readiness, original reward triggers, ownership transfer and Ghost firing are covered in [nuclear checks](validation/nukes11.json). The test respects original costs, supply and training time; it is not a full mission playthrough.
+- Beacon input covers all six types, three owners, workers/combat units/civilians, explicit selection/targeting, queues, fog and replay guards: [report](validation/beacon-1.1.json).
+- Wireframe tests inspect all 228 single, 131 group and 106 transport frames, compare pixels against imported GRP/remap data, and exercise live selection and damage redraws: [report](validation/wireframes11.json). Host contact sheets were inspected; exact original damage thresholds remain an approximation.
+- All 64 campaign force-name mappings and rescue-sound references were inspected. Native/Java score-name and rescue tests use the original archives: [score names](validation/score-names11.json), [rescue sounds](validation/rescue-sound-1.1.json).
+- SD migration tests cover verified copies, internal-only personal files, failure/retry paths, process-wide operation ownership and preserved resume behavior: [report](validation/data-storage11.json). They use real host files and Android API compilation, not physical removable media.
+- Replay and nearby compatibility guards reject different simulation rules without replacing the current world: [native](validation/compat11-native.json), [nearby](validation/compat11-nearby.json). Combined linear/seek parity is recorded separately in [replay regression](validation/replay-campaign11.json).
+
+- Both Android ABIs were rebuilt from the frozen patch stack. Signed APK checks verify the original update certificate, all 47 JNI exports, unchanged permissions, 16 KiB alignment and only the intended translation-asset changes. Lint reports zero errors and 13 warnings. See [native build](validation/native-build-campaign11.json) and [package proof](validation/package-campaign11.json).
+
+Physical Android installation, removable-card interruption/remount, touch/controller use and radio interoperability remain unverified. Earlier validation records below remain historical and refer to their own recorded sources.
+
 # StarDroid 1.0.8 validation (build 78)
 
 Current reports: [map imports](validation/maps-v78.json), [native AI and larva input](validation/native-v78.json), [languages](validation/languages-v78.json), [speech/preferences](validation/presentation-v78.json), [saves](validation/saves-v78.json), [protocol](validation/protocol-v78.json) and [APK](validation/package-v78.json).

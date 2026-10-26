@@ -1,0 +1,189 @@
+--- a/web/sandbox.h
++++ b/web/sandbox.h
+@@ -2724,23 +2724,19 @@
+ 		return icon_rgba.data();
+ 	}
+ 
+-	// --- Group wireframes (unit\wirefram\grpwire.grp): the multi-selection row, as in BW's
+-	// console. Frame index = unit type id. A frame's pixels use only a few fixed palette
+-	// indices — 192/193 (outline/detail pair) plus 208-211 or 216-219 (one per damage-tracked
+-	// part) — which the original recolors by damage state; the RGB never comes from a palette,
+-	// so we map them straight to our own colors and don't need the UI palette we lack. Parts
+-	// turn yellow→orange→red as HP drops, in an order seeded by the unit's
+-	// wireframe_randomizer (an approximation of BW's exact rule). Shields tint the outline blue.
++	// Original wireframe GRPs encode shield, mechanical-part and Zerg heatmap bands.
++	// twire.pcx remaps these bands into the active tileset palette. Damage thresholds
++	// and part ordering remain a deterministic approximation of the classic renderer.
+ 	grp_t wire_grp;       // grpwire.grp: 32x32 group tiles (131 frames, multi-selectable ids)
+ 	grp_t wire_transport_grp; // Original 32x32, 32x64 and 64x64 passenger silhouettes.
+ 	grp_t wire_big_grp;   // wirefram.grp: 64x64 single-unit wireframes (all 228 unit types)
+ 	bool wire_grp_loaded = false;
++	std::array<uint8_t,24> wire_colors{};
+ 	a_string wires_text;
+ 	a_vector<uint8_t> wire_index, wire_rgba;
+ 
+ 	bool load_wire_grp() {
+ 		if (!wire_grp_loaded) {
+-			wire_grp_loaded = true;
+ 			a_vector<uint8_t> data;
+ 			load_data_file(data, "unit\\wirefram\\grpwire.grp");
+ 			wire_grp = read_grp(data_loading::data_reader_le(data.data(), data.data() + data.size()));
+@@ -2748,6 +2744,11 @@
+ 			wire_big_grp = read_grp(data_loading::data_reader_le(data.data(), data.data() + data.size()));
+             load_data_file(data, "unit\\wirefram\\tranwire.grp");
+             wire_transport_grp = read_grp(data_loading::data_reader_le(data.data(), data.data() + data.size()));
++            load_data_file(data, "game\\twire.pcx");
++            auto colors=load_pcx_data(data);
++            if(colors.width!=24||colors.height!=1)error("twire.pcx must be 24x1");
++            std::copy(colors.data.begin(),colors.data.end(),wire_colors.begin());
++            wire_grp_loaded=true;
+ 		}
+ 		return !wire_grp.frames.empty();
+ 	}
+@@ -2762,20 +2763,21 @@
+ 		return nullptr;
+ 	}
+ 
+-	// Damage summary for a unit, OG-style: only green, yellow, and red. Each of the 4 parts
+-	// has two steps (green→yellow→red); `steps` (0..8) is dealt round-robin across the parts
+-	// in wireframe_randomizer order, so light damage shows a couple of yellow parts and reds
+-	// accumulate as HP drops. The outline pair follows overall HP thirds (`oc`), so a
+-	// near-dead unit reads fully red. Also the JS change signature — redraw only when moved.
+-	void wire_state(unit_t* u, int& steps, bool& shield) {
+-		// Exact fp8 compare: ANY damage must show — a wireframe is all-green only at 100%.
+-		bool damaged = u->hp < u->unit_type->hitpoints;
+-		double r = u->unit_type->hitpoints.raw_value
+-			? (double)u->hp.raw_value / u->unit_type->hitpoints.raw_value : 1.0;
+-		steps = damaged ? (int)((1.0 - r) * 8) + 1 : 0;   // ceil-like: at least one yellow part
+-		if (steps > 8) steps = 8;
+-		shield = u->unit_type->has_shield && u->shield_points.integer_part() > 0;
+-	}
++	// Use fixed-point health so small damage/healing is not rounded away. The
++	// region order is stable for this unit and never consumes simulation RNG.
++    int wire_damage_band(int64_t current,int64_t maximum,int bands) const {
++        if(maximum<=0)return 0;
++        int64_t missing=maximum-std::max<int64_t>(0,std::min(current,maximum));
++        return std::min(bands-1,int(missing*bands/maximum));
++    }
++    void wire_state(unit_t* u,int& steps,int& heat,int& shield) const {
++        int64_t maximum=u->unit_type->hitpoints.raw_value;
++        int64_t missing=maximum-std::max<int64_t>(0,std::min<int64_t>(u->hp.raw_value,maximum));
++        steps=maximum>0?int((missing*8+maximum-1)/maximum):0;
++        heat=wire_damage_band(u->hp.raw_value,maximum,6);
++        shield=u->unit_type->has_shield?
++            wire_damage_band(u->shield_points.raw_value,int64_t(u->unit_type->shield_points)*256,8):7;
++    }
+ 
+ 	// One line per selected unit: "id \t name \t hp \t maxhp \t state". `state` changes iff
+ 	// the tile must be redrawn. Shown for single selections too, as in the original.
+@@ -2787,21 +2789,21 @@
+ 			unit_t* u = get_unit(uid);
+ 			if (!u) continue;
+ 			if (n++ == 12) break;
+-			int steps; bool shield;
+-			wire_state(u, steps, shield);
++			int steps,heat,shield;
++			wire_state(u,steps,heat,shield);
+ 			// Morphing preserves the unit ID and often HP; include the type in redraws.
+ 			int frame = u_hallucination(u) ? 31 : ut_hero(u) ? 19 : u->parasite_flags ? 25 : 13;
+ 			wires_text += format("%u\t%s\t%d\t%d\t%d\t%d\t%d\n", (unsigned)get_unit_id(u).raw_value,
+ 				unit_name(u->unit_type->id), u->hp.ceil().integer_part(),
+-				u->unit_type->hitpoints.ceil().integer_part(), (steps << 1) | (int)shield, (int)u->unit_type->id, frame);
++				u->unit_type->hitpoints.ceil().integer_part(), steps | (heat << 4) | (shield << 7), (int)u->unit_type->id, frame);
+ 		}
+ 		return wires_text.c_str();
+ 	}
+ 
+ 	// Render the i-th selected unit's wireframe as RGBA in a wire_box()-sized square:
+ 	// 64x64 (wirefram.grp, all 228 types) for a single selection, 32x32 (grpwire.grp)
+-	// tiles for a group. Active Protoss shields draw as a blue ring hugging the
+-	// silhouette — the wireframe itself keeps its damage colors, as in the original.
++	// tiles for a group. Shield strength changes its blue outline independently
++	// of the damaged body regions, including in transport silhouettes.
+ 	const uint8_t* render_wireframe(size_t i) {
+ 		if (!load_wire_grp()) return nullptr;
+ 		unit_t* u = selected_nth(i);
+@@ -2827,54 +2829,35 @@
+ 		// dst pointer (mis-passing it as the crop pushed every wireframe off-center).
+ 		draw_frame(f, false, wire_index.data() + (size_t)f.offset.y * box + f.offset.x, box,
+ 		           0, 0, f.size.x, f.size.y, [](uint8_t c, uint8_t) { return c; });
+-		int steps; bool shield;
+-		wire_state(u, steps, shield);
+-		int rnd = u->wireframe_randomizer & 3;
+-		// Overall damage class for whole-frame tinting: green / yellow / red by HP thirds.
+-		int cls = steps == 0 ? 0 : steps <= 5 ? 1 : 2;   // healthy / hurt / critical (~thirds)
+-		// OG tri-color part states (208-211 frames): 0 green, 1 yellow, 2 red.
+-		static const uint8_t PART[3][3] = { {44,228,52}, {232,208,16}, {216,24,24} };
+-		// Zerg frames (216-219) are a 4-shade concentric gradient of ONE organism (216 =
+-		// core, 219 = body/outline). In the original a HEALTHY drone is mostly red with a
+-		// green core, and a dying one is dark blue with a magenta core — damage slides the
+-		// 4-index window along a green→red→purple→blue cycle.
+-		static const uint8_t ZGRAD[8][3] = {
+-			{64,240,64},    // bright green core
+-			{150,220,40},   // green-yellow
+-			{232,140,20},   // orange
+-			{228,50,24},    // bright red
+-			{200,70,170},   // magenta
+-			{110,60,190},   // purple
+-			{50,50,160},    // blue
+-			{28,28,100},    // dark blue
+-		};
+-		wire_rgba.assign(box * box * 4, 0);
+-		for (size_t p = 0; p != box * box; ++p) {
+-			uint8_t c = wire_index[p];
+-			if (!c) continue;
+-			uint8_t* o = &wire_rgba[p * 4];
+-			if (c == 192 || c == 193) {
+-				// The 192/193 band IS the shield-ring layer baked into the GRP: the original
+-				// draws it blue while shields hold and hides it entirely otherwise. (Evidence:
+-				// the Zerg-only frames — a race with no shields — don't contain these indices.)
+-				if (!shield) continue;
+-				if (c == 192) { o[0] = 72; o[1] = 136; o[2] = 255; }
+-				else          { o[0] = 48; o[1] = 92;  o[2] = 190; }
+-			} else if (c >= 216 && c <= 219) {
+-				int gi = (c - 216) + 2 * cls;   // damage slides the window along the cycle
+-				if (gi > 7) gi = 7;
+-				o[0] = ZGRAD[gi][0]; o[1] = ZGRAD[gi][1]; o[2] = ZGRAD[gi][2];
+-			} else {
+-				// Mechanical line art: damage-tracked parts (208-211), low 2 bits pick the
+-				// part. Its rank in the degradation order is randomizer-seeded; `steps` deals
+-				// one step per part round-robin, so each part is green, yellow, or red.
+-				int rank = ((int)(c & 3) + rnd) % 4;
+-				int st = steps / 4 + (rank < steps % 4 ? 1 : 0);
+-				if (st > 2) st = 2;
+-				o[0] = PART[st][0]; o[1] = PART[st][1]; o[2] = PART[st][2];
+-			}
+-			o[3] = 255;
+-		}
++        int steps,heat,shield;
++        wire_state(u,steps,heat,shield);
++        int rnd=u->wireframe_randomizer&3;
++        // twire PCX positions documented by the Stargus palette investigation:
++        // github.com/andreas-volz/stargus/wiki/Starcraft-Palettes
++        static const uint8_t parts[]={1,0,10};
++        static const uint8_t shields[2][8]={{3,4,5,6,7,8,9,2},{4,5,6,7,8,9,2,2}};
++        static const uint8_t heatmap[4][6]={
++            {0,1,1,19,19,14},{1,18,18,11,11,6},
++            {18,20,20,10,13,7},{10,12,16,16,6,8}};
++        wire_rgba.assign(box*box*4,0);
++        for(size_t p=0;p<box*box;++p){
++            uint8_t c=wire_index[p];if(!c)continue;
++            int palette=c;
++            if(c==192||c==193){
++                if(!u->unit_type->has_shield)continue;
++                palette=wire_colors[shields[c-192][shield]];
++            }else if(c>=216&&c<=219){
++                palette=wire_colors[heatmap[c-216][heat]];
++            }else if(c>=208&&c<=211){
++                int rank=((c-208)+rnd)%4;
++                int state=std::min(2,steps/4+(rank<steps%4?1:0));
++                palette=wire_colors[parts[state]];
++            }
++            uint8_t* o=&wire_rgba[p*4];
++            o[0]=tileset_img.wpe[palette*4];
++            o[1]=tileset_img.wpe[palette*4+1];
++            o[2]=tileset_img.wpe[palette*4+2];o[3]=255;
++        }
+ 		return wire_rgba.data();
+ 	}
+ 

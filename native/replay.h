@@ -4,7 +4,8 @@
 namespace native_replay {
 constexpr size_t MAX_FILE=32u*1024*1024, MAX_ACTIONS=16u*1024*1024, MAX_MAP=16u*1024*1024;
 constexpr uint64_t MAGIC=0x3130505244445453ull; // STDDRP01
-constexpr uint32_t ENGINE=81;
+// Simulation rules changed: map protection and campaign bunker orders.
+constexpr uint32_t ENGINE=84;
 struct Rules {
  bool present=false,heroes=false,teams=false,defenders=true;int difficulty=2,player=0;unsigned ai=0;
  uint64_t signature=0,initial=0;
@@ -146,7 +147,8 @@ static Parsed parse(const uint8_t* data,size_t size) {
  validate_map(p);validate_actions(p);
  if(base.left()) {
   need(base.get<uint64_t>()==MAGIC,"Unsupported replay extension or Remastered replay.");
-  need(base.get<uint32_t>()==ENGINE,"This replay needs the StarDroid version that recorded it.");
+  auto engine=base.get<uint32_t>();
+  need(engine==ENGINE,engine<ENGINE?"This replay was recorded with older simulation rules. Use the build that recorded it.":"This replay needs the StarDroid build that recorded it.");
   auto& r=p.rules;r.present=true;r.signature=base.get<uint64_t>();r.initial=base.get<uint64_t>();r.ai=base.get<uint32_t>();
   r.difficulty=base.get<uint8_t>();r.player=base.get<uint8_t>();auto boolean=[&](){unsigned v=base.get<uint8_t>();need(v<=1,"Invalid replay flags.");return v!=0;};r.heroes=boolean();r.teams=boolean();r.defenders=boolean();
   need(r.ai<256&&r.difficulty<=2&&r.player<8,"Invalid replay setup.");
