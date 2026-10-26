@@ -243,6 +243,9 @@ JNI(scoreSound) jint JNICALL Java_org_openbw_androidtest_NativeBridge_scoreSound
  }catch(const std::exception& x){fail(e,x);return 0;}}
 JNI(replay) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replay(JNIEnv* e,jclass){try{auto b=native_replay::save();return b.empty()?nullptr:bytes(e,b.data(),b.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(replayInfo) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replayInfo(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);auto info=native_replay::info(b.data(),b.size());return bytes(e,reinterpret_cast<const uint8_t*>(info.data()),info.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
+// Read-only preview: use the same bounded decoder/validation as playback,
+// without opening a game, mounting a map or changing the active replay.
+JNI(replayScenario) jbyteArray JNICALL Java_org_openbw_androidtest_NativeBridge_replayScenario(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);auto replay=native_replay::parse(b.data(),b.size());return bytes(e,replay.map.data(),replay.map.size());}catch(const std::exception& x){fail(e,x);return nullptr;}}
 JNI(replayOpen) void JNICALL Java_org_openbw_androidtest_NativeBridge_replayOpen(JNIEnv* e,jclass,jbyteArray data){try{auto b=net_java_bytes(e,data,native_replay::MAX_FILE);native_replay::open(b.data(),b.size());}catch(const std::exception& x){fail(e,x);}}
 JNI(replaySeek) void JNICALL Java_org_openbw_androidtest_NativeBridge_replaySeek(JNIEnv* e,jclass,jint target){try{native_replay::seek(target);}catch(const std::exception& x){fail(e,x);}}
 JNI(replayCancelSeek) void JNICALL Java_org_openbw_androidtest_NativeBridge_replayCancelSeek(JNIEnv* e,jclass){try{native_replay::cancel_seek();}catch(const std::exception& x){fail(e,x);}}

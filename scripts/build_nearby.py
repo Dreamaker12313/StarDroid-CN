@@ -34,6 +34,6 @@ run(gradle/'bin/gradle',*proxy,'--no-daemon','--console=plain','clean','assemble
 apk=ROOT/'app/build/outputs/apk/release/app-release.apk'
 run('java','-jar',TOOLS/'android-15/lib/apksigner.jar','verify','--verbose','--print-certs',apk)
 run(TOOLS/'android-15/zipalign','-c','-P','16','4',apk)
-out=ROOT/'dist';out.mkdir(exist_ok=True);target=out/'StarDroid-1.0.12.apk';shutil.copyfile(apk,target)
+out=ROOT/'dist';out.mkdir(exist_ok=True);target=out/'StarDroid-1.1.apk';shutil.copyfile(apk,target)
 (out/'SHA256SUMS.txt').write_text(hashlib.sha256(target.read_bytes()).hexdigest()+'  '+target.name+'\n')
 print(target)

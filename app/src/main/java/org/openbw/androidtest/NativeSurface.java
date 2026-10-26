@@ -63,6 +63,8 @@ final class NativeSurface extends SurfaceView
   private final List<Integer> replayPlayers=new ArrayList<Integer>();
   private final List<Integer> replayRaces=new ArrayList<Integer>();
   private File selectedReplay,playingReplay;
+  private Bitmap replayThumbnail;
+  private boolean replayPreviewUnavailable;
   private String replayDetails="",replayNotice="";
   private float replayOffset;
   private boolean replayGame,replayPaused,replayExpansion,replayReturnExpansion,replayValid;
@@ -543,6 +545,8 @@ final class NativeSurface extends SurfaceView
   }
 
   private void closeGlue() {
+    if(replayThumbnail!=null){replayThumbnail.recycle();replayThumbnail=null;}
+    replayPreviewUnavailable=false;
     hoverButton = -1;
     commandHover.cancel();
     if (glue != null) {
@@ -623,6 +627,7 @@ final class NativeSurface extends SurfaceView
     results=null;multiplayerGame=false;multiplayerSaves=false;
     screen("replays","gluload","palnl",true);
     if(glue==null)screen("replays","glucustm","palnl",true);
+    if(glue!=null)sfx("swishin");
     music("title");refreshReplays();
   }
 
@@ -631,7 +636,7 @@ final class NativeSurface extends SurfaceView
       replayFiles=replays.list();
       if(selectedReplay==null||!replayFiles.contains(selectedReplay))selectedReplay=replayFiles.isEmpty()?null:replayFiles.get(0);
       replayOffset=Math.min(replayOffset,replayMaxOffset());selectReplay(selectedReplay);
-    } catch(Exception e){replayFiles=Collections.emptyList();selectedReplay=null;replayMessage(e.getMessage());}
+    } catch(Exception e){replayFiles=Collections.emptyList();selectReplay(null);replayMessage(e.getMessage());}
   }
 
   private RectF replayListBounds() {
@@ -640,14 +645,18 @@ final class NativeSurface extends SurfaceView
   }
   private float replayMaxOffset(){return Math.max(0,replayFiles.size()*22-replayListBounds().height());}
   private void selectReplay(File file) {
+    if(replayThumbnail!=null)replayThumbnail.recycle();replayThumbnail=null;replayPreviewUnavailable=false;
     selectedReplay=file;replayDetails="";replayValid=false;replayPlayers.clear();replayRaces.clear();replayNotice="";
     if(file==null)return;
     try {
-      String[] rows=GameLanguage.decode(NativeBridge.replayInfo(replays.read(file))).split("\n");
+      byte[] data=replays.read(file);
+      String[] rows=GameLanguage.decode(NativeBridge.replayInfo(data)).split("\n");
       String[] info=rows[0].split("\t",-1);replayExpansion=info[1].equals("1");
       replayDetails=info[3]+"\n"+(replayExpansion?"Brood War":"StarCraft")+"\n"+replayTime(Integer.parseInt(info[0]));
       for(int i=1;i<rows.length;i++){String[] player=rows[i].split("\t",-1);replayPlayers.add(Integer.parseInt(player[0]));replayRaces.add(Integer.parseInt(player[1]));replayDetails+="\n"+player[2]+" · "+MatchSetup.RACES[Integer.parseInt(player[1])%3];}
       replayValid=true;
+      try {replayThumbnail=mapPreviews.create(NativeBridge.replayScenario(data));}
+      catch(Exception unavailable){replayPreviewUnavailable=true;}
     }catch(Exception e){replayMessage(e.getMessage());}
   }
 
@@ -685,14 +694,33 @@ final class NativeSurface extends SurfaceView
       catch(Exception e){replayMessage("Replay could not be saved: "+e.getMessage());}
     },selectedReplay!=null);
     replayButton(c,"DELETE",44,366,164,22,()->modal="replay-delete",selectedReplay!=null);
-    replayButton(c,"OK",441,383,152,22,()->startReplay(selectedReplay),replayValid);
+    replayButton(c,"OK",441,383,152,22,this::openSelectedReplay,replayValid);
     replayButton(c,"Cancel",477,419,132,22,()->navigate(this::showCampaign),true);
   }
 
+  private void openSelectedReplay() {
+    if(!replayValid||selectedReplay==null)return;
+    final File file=selectedReplay;
+    navigate(()->startReplay(file));
+  }
+
   private void drawReplayDetails(Canvas c,int x,int y,int width,int height) {
-    NativeArt.Font font=glue.small;int lines=font.lines(replayDetails,width).size(),lineHeight=16;
-    if(lines*lineHeight>height){font=glue.tiny;lines=font.lines(replayDetails,width).size();lineHeight=Math.max(font.height,Math.min(14,height/Math.max(1,lines)));}
-    c.save();c.clipRect(x,y,x+width,y+height);font.draw(c,replayDetails,x,y,width,0,2,lineHeight);c.restore();
+    c.save();c.clipRect(x,y,x+width,y+height);
+    if(replayValid) {
+      final int thumbnailHeight=96;
+      paint.setColor(0xff05080c);c.drawRect(x+(width-96)/2f,y,x+(width+96)/2f,y+thumbnailHeight,paint);
+      if(replayThumbnail!=null) {
+        float scale=Math.min(96f/replayThumbnail.getWidth(),96f/replayThumbnail.getHeight());
+        float w=replayThumbnail.getWidth()*scale,h=replayThumbnail.getHeight()*scale;
+        c.drawBitmap(replayThumbnail,null,new RectF(x+(width-w)/2f,y+(thumbnailHeight-h)/2f,x+(width+w)/2f,y+(thumbnailHeight+h)/2f),NativeArt.PIXELS);
+      }else if(replayPreviewUnavailable)uiLine(c,"Preview unavailable",glue.small,x,y+38,width,20,1,2);
+      y+=104;height-=104;
+    }
+    String[] rows=replayDetails.split("\n");NativeArt.Font font=glue.small;int lineHeight=14;
+    if(rows.length*lineHeight>height){font=glue.tiny;lineHeight=Math.max(font.height,Math.min(12,height/Math.max(1,rows.length)));}
+    // A single fitted row per player keeps all eight players below the preview.
+    for(int i=0;i<rows.length&&i*lineHeight<height;i++)uiLine(c,rows[i],font,x,y+i*lineHeight,width,lineHeight,0,2);
+    c.restore();
   }
 
   private void drawReplayScrollbar(Canvas c,RectF box) {
@@ -786,6 +814,8 @@ final class NativeSurface extends SurfaceView
 
   private void replayButton(Canvas c,String label,float x,float y,int width,int height,Runnable action,boolean enabled) {
     paint.setColor(Color.BLACK);c.drawRect(x,y,x+width,y+height,paint);
+    // Browser buttons use the same original palette and states as other menus.
+    if(page.equals("replays")&&glue!=null){redButton(c,label,x,y,width,height,action,enabled);return;}
     boolean hot=pressed!=null&&pressed.rect.contains(x+width/2f,y+height/2f);
     redBorder(c,x,y,width,height,hot&&enabled);
     NativeArt.Font font=replayFont(true),small=replayFont(false);

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "scope": "Host native parser used by replayScenario; JNI exports checked separately during APK packaging",
+  "result": "PASS 20 native embedded-map checks: exact CHK equality, repeated read-only extraction, malformed/truncated/oversized replay rejection",
+  "embeddedChkBytes": 93562,
+  "sourceSha256": {
+    "tests/native_replay_thumbnail.cpp": "4f23f8fa8ef5f8d4b2158a471b584fcf61757ca891659a0f3d04edb201d1532f",
+    "tests/native_replay81.cpp": "a75da61db7eb4f83b22f1cfb55747a62c69a519237a981f64b5af399776c8bd1",
+    "tests/run_replay_thumbnail_native.py": "688d921d3ef8fce6bc8130c9d17f0016c964b1cb50595aec20bbd99de8ba5489",
+    "native/replay.h": "4dab763f6122b44f0803934e9be145a863a3f12b5133d46c16dcab7a1a471e8c",
+    "native/runtime.cpp": "2f5acd8a31a08a1e3feb3d395ea6ec01551a98eb205581c7526d035eb06079d6",
+    "app/src/main/java/org/openbw/androidtest/NativeBridge.java": "befe03fa10c41265cb0e16aabb13f9e57266b0d457bd8f5abecdbf2fae22fadd"
+  }
+}
